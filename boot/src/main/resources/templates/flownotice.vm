@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>国槐金融</title>
+	</head>
+
+	<body style="margin: 0; font-size: 14px; font-family: -apple-system, 'Helvetica Neue, 'roboto', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'STHeiti', 'Microsoft YaHei', sans-serif;">
+		<div style="width: 700px; margin: 0 auto; color: #333;">
+
+			<div style="height: 75px; background-color: #e4511e; position: relative;">
+				<img src="${logo}" style="position: absolute; top: 15px; left: 15px;">
+				<p style="padding-right: 15px; margin: 0; text-align: right; color: #fff; line-height: 75px;">
+					致力于资金端资产端的高效撮合交易
+				</p>
+			</div>
+
+			<p style="margin: 0; line-height: 60px; font-weight: bold;">
+				<span style="margin-right: 10px; color: #e4511e;">关注人</span> 您好！
+			</p>
+
+			<p style="margin: 0; line-height: 25px;">
+				以下是由<b>${content.fundAdminCompany}</b>针对<b>${content.assetAdminCompany}</b>发行的<b>“${content.assetName}”</b>资产在（${content.timestamp}）时间做的操作，具体操作明细如下：
+			</p>
+
+			<table style="width: 100%; background-color: #f3f3f3; margin-top: 30px; font-weight: bold;">
+				<tr>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							<tr>
+								<td style="width: 70px;">资产名称：</td>
+								<td>${content.assetName}</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">发件人：</td>
+								<td>${content.fundAdminCompany}</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">发行机构：</td>
+								<td>${content.assetAdminCompany}</td>
+							</tr>
+							#if(${content.volume})
+							<tr>
+								<td style="width: 70px;">投资金额：</td>
+								<td>${content.volume}万</td>
+							</tr>
+							#end
+							#if(${content.date})
+							<tr>
+								<td style="width: 70px;">投资时间：</td>
+								<td>${content.date}</td>
+							</tr>
+							#end
+						</table>
+					</td>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							#if(${content.file})
+							<tr>
+								<td style="width: 70px;">相关附件：</td>
+								<td colspan="2"></td>
+							</tr>
+							#foreach( ${f} in ${content.file} )
+							<tr style="font-weight: normal;">
+								<td style="width: 280px;" colspan="2">
+									<a href="#" style="text-decoration: none; color: #333;">${f.name}(${f.sizeh})</a>
+								</td>
+								<td style="width: 30px;">
+									<a href="${yupload}${f.furl}?realname=${f.name}" target="_blank" style="color: #e4511e;">下载</a>
+								</td>
+							</tr>
+							#end
+							#end
+							#if(${content.sms})
+							<tr>
+								<td style="width: 70px;">备注：</td>
+								<td style="font-weight: normal;" colspan="2">
+									${content.sms}
+								</td>
+							</tr>
+							#end
+						</table>
+					</td>
+				</tr>
+			</table>
+
+			<h4 style="margin: 30px 0 0 0; line-height: 40px; border-bottom: 1px solid #ddd;">资产信息</h4>
+
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							<tr>
+								<td>资产名称：${content.assetName}</td>
+							</tr>
+							#if(${content.assetSetDate})
+							<tr>
+								<td>拟成立日期：${content.assetSetDate}</td>
+							</tr>
+							#else
+							<tr>
+								<td>拟成立日期：--</td>
+							</tr>
+							#end
+							<tr>
+								<td>预计年化收益：${content.assetExpAror}</td>
+							</tr>
+							<tr>
+								<td>资产期限：${content.assetLife}</td>
+							</tr>
+							<tr>
+								<td>资产规模：${content.assetRaiseScope}</td>
+							</tr>
+							<tr>
+								<td>资产类型：${content.assetType}</td>
+							</tr>
+							<tr>
+								<td>付息方式：${content.assetAccrualCycle}</td>
+							</tr>
+							#if(${content.assetFloorVolume})
+							<tr>
+								<td>起购金额：${content.assetFloorVolume}万</td>
+							</tr>
+							#end
+							<tr>
+								<td>额外增信：${content.assetReveal}</td>
+							</tr>
+						</table>
+					</td>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							#if(${content.assetFile})
+							<tr>
+								<td style="width: 70px;" colspan="2">附件：</td>
+							</tr>
+							#foreach( ${f} in ${content.assetFile} )
+							<tr style="font-weight: normal;">
+								<td style="width: 280px;">
+									<a href="#" style="text-decoration: none; color: #333;">${f.name}(${f.sizeh})</a>
+								</td>
+								<td style="width: 30px;">
+									<a href="${yupload}${f.furl}?realname=${f.name}" style="color: #e4511e;">下载</a>
+								</td>
+							</tr>
+							#end
+							<tr>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							#end
+							<tr>
+								<td colspan="2">用途：${content.assetUsages}</td>
+							</tr>
+							<tr>
+								<td colspan="2">风控：${content.assetRisk}</td>
+							</tr>
+							<tr>
+								<td colspan="2">说明：${content.assetComment}</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+
+			<p style="margin: 10px 0 0 0; line-height: 40px;">
+				<span style="color: #e4511e;">*</span> 如有任何疑问，请及时与我们联系，我们将第一时间为您解答：
+			</p>
+
+			<div style="padding: 15px; background-color: #f3f3f3; font-size: 12px; font-weight: bold; color: #666;">
+				<p style="margin: 0; line-height: 25px;">
+					专属热线：021-60348509
+				</p>
+				<p style="margin: 0; line-height: 25px;">
+					Email：kf@guohuaigroup.com
+				</p>
+				<p style="margin: 0; line-height: 25px;">
+					QQ：2565301759
+				</p>
+			</div>
+
+			<p style="margin: 0 0 30px 0; line-height: 80px; text-align: right; font-size: 12px; font-weight: bold;">
+				为保证邮件正常接收，请将<span style="color: #e4511e;">amp@guohuaigroup.com</span>添加进您的通讯录
+			</p>
+
+		</div>
+	</body>
+
+</html>
