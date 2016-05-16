@@ -68,7 +68,9 @@ function baseAjax (type, url, options, success, failure) {
 }
 
 function errorHandle (err) {
-  console.log(err.errorMessage)
+  toastr.error(err.errorMessage, '错误信息', {
+    timeOut: 3600000
+  })
   switch (err.errorCode) {
     case 10000:
       //location.href = 'login.html'

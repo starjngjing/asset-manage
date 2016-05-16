@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="plugins/datepicker/datepicker.css">
     <link rel="stylesheet" href="plugins/select2/select2.min.css">
     <link rel="stylesheet" href="plugins/iCheck/minimal/blue.css">
-    <link rel="stylesheet" href="plugins/bootstrap-toastr/toastr.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/2.1.2/toastr.min.css">
     <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
     <link rel="stylesheet" href="assets/css/skin-blue.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
@@ -202,7 +202,7 @@
     </div><!-- ./wrapper -->
 
     <!-- jQuery 2.1.4 -->
-    <script src="plugins/jQuery/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
     <!-- jQuery-form -->
@@ -212,7 +212,7 @@
     <!-- iCheck -->
     <script src="plugins/iCheck/icheck.min.js"></script>
     <!-- toastr -->
-    <script src="plugins/bootstrap-toastr/toastr.min.js"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/2.1.2/toastr.min.js"></script>
     <!-- Bootstrap-table -->
     <script src="plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
@@ -265,6 +265,7 @@
             })
           })
 
+          // 获取hash，通过hash定位到当前页面，hash中 '?' 及以后的部分作为参数内容，不作为页面判断依据
           var hash = location.hash.indexOf('?') >= 0 ?
                      location.hash.substring(1, location.hash.indexOf('?')) :
                      location.hash.substr(1)
@@ -285,7 +286,7 @@
                       requireModules[key].init()
                     }
                   }
-                  // select2与icheck全局初始化
+                  // icheck与select2全局初始化
                   $$.csInit($(document))
                 })
               location.hash = route
