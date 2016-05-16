@@ -1,0 +1,223 @@
+/* global */
+body{
+  font-size: 12px;
+  font-family: -apple-system, "Helvetica Neue", "roboto", "Arial", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: -apple-system, "Helvetica Neue", "roboto", "Arial", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", sans-serif;
+}
+
+/* nav */
+.sidebar-menu{
+  font-size: 14px;
+}
+
+/* logo */
+.logo-img{
+  width: 131px;
+  height: 35px;
+}
+
+.logo-mini-img{
+  width: 131px;
+  height: 35px;
+  margin-left: 6px;
+}
+
+.login-logo{
+  height: 60px;
+}
+
+/* page */
+.content-header > h1{
+  font-size: 20px;
+}
+
+/* table */
+.box-header .box-title{
+  font-size: 16px;
+}
+
+.thumb-area{
+  display: block;
+  position: relative;
+}
+
+.thumb-area > span{
+  cursor: pointer;
+}
+
+.thumb-area > img{
+  width: 300px;
+  position: absolute;
+  top: 0;
+  right: 100%;
+  display: none;
+}
+
+.thumb-area:hover > img,
+.thumb-area > img:hover{
+  display: block;
+}
+
+.func-area{
+  position: relative;
+}
+
+.func-area > a,
+.func-area > .btn,
+.func-area > .btn-group{
+  margin-left: 10px;
+}
+
+.func-area > a:first-child,
+.func-area > .btn:first-child,
+.func-area > .btn-group:first-child{
+  margin-left: 0;
+}
+
+.func-area > .btn-group > .btn+.dropdown-toggle{
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.func-area > .btn-group > .dropdown-menu{
+  min-width: auto;
+  font-size: 12px;
+}
+
+.popover{
+  min-width: 180px;
+}
+
+.popover.bottomLeft{
+  margin-top: 30px;
+  left: auto;
+  right: 0;
+}
+
+.popover.bottomLeft > .arrow{
+  top: -11px;
+  left: 100%;
+  margin-left: -30px;
+  border-top-width: 0;
+  border-bottom-color: rgba(0,0,0,.25);
+}
+
+.popover.bottomLeft > .arrow:after{
+  top: 1px;
+  margin-left: -10px;
+  content: ' ';
+  border-top-width: 0;
+  border-bottom-color: #fff;
+}
+
+.popover.bottomLeft p{
+  text-align: center;
+}
+
+.popover .popover-btn{
+  margin: 0 -5px;
+}
+
+.popover .popover-btn > .unit{
+  width: 50%;
+  padding: 0 5px;
+  list-style-type: none;
+  float: left;
+}
+
+/* form */
+
+.form-control.datepicker{
+  background-color: #fff;
+}
+
+.input-group.range:after{
+  width: 10px;
+  height: 0;
+  border-top: 1px solid #bbb; 
+  position: absolute;
+  top: 15px;
+  left: -20px;
+  content: ' ';
+}
+
+@media screen and (max-width:767px) {
+  .input-group.range:after{
+    display: none;
+  }
+}
+
+/* treetable */
+table.treetable span.indenter {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+
+  /* Force content-box box model for indenter (Bootstrap compatibility) */
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+
+  width: 19px;
+}
+
+table.treetable span.indenter a {
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  font: normal 14px FontAwesome;
+  width: 19px;
+}
+
+table.treetable tr.collapsed span.indenter a:before {
+  content: '\f0da';
+}
+
+table.treetable tr.expanded span.indenter a:before {
+  content: '\f0d7';
+}
+
+/* modal */
+.modal .nav-tabs-custom{
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.modal .nav-tabs-custom > .nav-tabs > li:first-of-type.active{
+  border-left: 1px solid #f4f4f4;
+}
+
+.modal .nav-tabs-custom .tab-content{
+  padding: 15px;
+  border-left: 1px solid #f4f4f4;
+  border-bottom: 1px solid #f4f4f4;
+  border-right: 1px solid #f4f4f4;
+}
+
+.modal .nav-tabs-custom .tab-content .btn-area{
+  padding-top: 15px;
+  text-align: right;
+}
+
+.modal .nav-tabs-custom .tab-content .btn-area .btn{
+  margin-left: 5px;
+}

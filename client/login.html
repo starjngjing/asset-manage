@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>登录 -- 国槐金融管理后台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="hold-transition login-page">
+    <div class="login-box">
+      <div class="login-logo">
+        <a href="javascript:void(0)">
+          <img src="assets/images/logo2.png" alt="国槐金融" class="login-logo">
+        </a>
+      </div><!-- /.login-logo -->
+      <div class="login-box-body">
+        <p class="login-box-msg text-red">
+          <span id="loginErrorMessage"></span>
+        </p>
+        <div class="form-group has-feedback">
+          <input id="loginAccount" type="text" class="form-control" placeholder="账户名 / 邮箱 / 手机">
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input id="loginPassword" type="password" class="form-control" placeholder="密码">
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="checkbox icheck">
+              <label>
+                <input id="loginRememberMe" type="checkbox"> 记住我
+              </label>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <button id="doLogin" type="button" class="btn btn-primary btn-block btn-flat">登 录</button>
+          </div>
+        </div>
+
+        <p>
+          <a href="#">忘记密码？</a>
+          <a href="register.html" class="pull-right">注册新账户</a>
+        </p>
+
+      </div><!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="plugins/iCheck/icheck.min.js"></script>
+    <!-- requirejs -->
+    <script src="http://cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+    <script>
+
+      requirejs.config({
+        baseUrl: 'assets/js'
+      })
+
+      requirejs([
+        'http',
+        'config'
+      ],
+      function (http, config) {
+
+        $(document).ready(function () {
+
+          // '账户名'的 focus 和 blur 事件
+          $('#loginAccount')
+            .on('focus', function () {
+              $(document).on('keyup', function (e) {
+                if (e.keyCode === 13) {
+                  if (!this.value.trim()){
+                    return false
+                  } else if (!$('#loginPassword').val().trim()) {
+                    $('#loginPassword').focus()
+                  } else {
+                    doLogin()
+                  }
+                }
+              }.bind(this))
+            })
+            .on('blur', function () {
+              $(document).off('keyup')
+            })
+
+          // '密码'的 focus 和 blur 事件
+          $('#loginPassword')
+            .on('focus', function () {
+              $(document).on('keyup', function (e) {
+                if (e.keyCode === 13) {
+                  if (!this.value.trim()){
+                    return false
+                  } else {
+                    doLogin()
+                  }
+                }
+              }.bind(this))
+            })
+            .on('blur', function () {
+              $(document).off('keyup')
+            })
+
+          // '登录'按钮
+          $('#doLogin').on('click', function () {
+            doLogin()
+          })
+
+          // '记住我' iCheck 初始化
+          $('#loginRememberMe').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+          })
+
+          // 登录方法
+          function doLogin () {
+            var account = $('#loginAccount')
+            var password = $('#loginPassword')
+            var errorMessage = $('#loginErrorMessage')
+
+            if (!account.val().trim()) {
+              account.focus()
+              return false
+            }
+            if (!password.val().trim()){
+              password.focus()
+              return false
+            }
+            errorMessage.html('')
+            http.post(config.api.login, {
+              data: {
+                account: account.val().trim(),
+                password: password.val().trim(),
+                system: 'MONEY'
+              },
+              contentType: 'form'
+            }, function (rlt) {
+              location.href = 'index.html'
+            }, function (err) {
+              errorMessage.html('<i class="fa fa-exclamation-triangle"></i> ' + err.errorMessage)
+            })
+          }
+
+        })
+
+      })
+
+    </script>
+  </body>
+</html>
