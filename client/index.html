@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>国槐金融管理后台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="plugins/datepicker/datepicker.css">
+    <link rel="stylesheet" href="plugins/select2/select2.min.css">
+    <link rel="stylesheet" href="plugins/iCheck/minimal/blue.css">
+    <link rel="stylesheet" href="plugins/bootstrap-toastr/toastr.min.css">
+    <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="assets/css/skin-blue.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <link rel="shortcut icon" href="favicon.ico" /> </head>
+  </head>
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="javascript:void(0)" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini">
+            <img src="assets/images/logo.png" alt="国槐金融" class="logo-mini-img">
+          </span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg">
+            <img src="assets/images/logo.png" alt="国槐金融" class="logo-img">
+          </span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account: style can be found in dropdown.less -->
+              <li id="userMenu" class="dropdown user user-menu">
+                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="hidden-xs userName"></span>
+                </a>
+              </li>
+              <li>
+                <a id="logout" href="javascript:void(0)" data-toggle="control-sidebar">
+                  <i class="fa fa-sign-out"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- search form -->
+          <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="搜索导航栏">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+          <!-- /.search form -->
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul id="sidebarMenu" class="sidebar-menu">
+            <li class="header">渠道管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-adn"></i>
+                <span>渠道管理</span>
+              </a>
+            </li>
+
+            <li class="header">投资标的管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-adn"></i>
+                <span>标的申请管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-amazon"></i>
+                <span>标的会前审查</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-android"></i>
+                <span>标的过会管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-angellist"></i>
+                <span>标的过会表决</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-apple"></i>
+                <span>投资标的备选库</span>
+              </a>
+            </li>
+            <li class="header">产品管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-behance"></i>
+                <span>产品申请管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-bitbucket"></i>
+                <span>审核列表</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-bitcoin"></i>
+                <span>复核列表</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-black-tie"></i>
+                <span>产品准入管理</span>
+              </a>
+            </li>
+            <li class="header">运营管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-buysellads"></i>
+                <span>产品运营管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-cc-amex"></i>
+                <span>持有人名册管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-cc-visa"></i>
+                <span>未确认持有人订单管理</span>
+              </a>
+            </li>
+            <li class="header">资金管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-chrome"></i>
+                <span>资金流管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-codepen"></i>
+                <span>备付金管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-connectdevelop"></i>
+                <span>日常出入金管理</span>
+              </a>
+            </li>
+            <li class="header">订单管理</li>
+            <li>
+              <a href="javascript:void(0)">
+                <i class="fa fa-connectdevelop"></i>
+                <span>销售平台订单管理</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div id="mainContent" class="content-wrapper"></div>
+
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <b>Version</b> 0.1.0
+        </div>
+        <strong>Copyright &copy; 2015-2016 <a href="http://www.guohuaigroup.com">国槐金融</a> </strong> 版权所有
+      </footer>
+    </div><!-- ./wrapper -->
+
+    <!-- jQuery 2.1.4 -->
+    <script src="plugins/jQuery/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery-form -->
+    <script src="plugins/jQuery-form/jquery.form.js"></script>
+    <!-- Select2 -->
+    <script src="plugins/select2/select2.full.min.js"></script>
+    <!-- iCheck -->
+    <script src="plugins/iCheck/icheck.min.js"></script>
+    <!-- toastr -->
+    <script src="plugins/bootstrap-toastr/toastr.min.js"></script>
+    <!-- Bootstrap-table -->
+    <script src="plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!-- treetable -->
+    <script src="plugins/jQuery-treetable/jquery.treetable.js"></script>
+    <!-- Datepicker -->
+    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <!-- validator -->
+    <script src="plugins/bootstrap-validator/validator.js"></script>
+    <!-- SlimScroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="assets/js/app.min.js"></script>
+    <!-- requirejs -->
+    <script src="http://cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+    <script>
+      $(document).ready (function () {
+        requirejs.config({
+          baseUrl: 'assets/js',
+          paths: {
+            moment: '../../plugins/moment',
+            page: '../../pages'
+          }
+        })
+        // 为满足断点调试需求，前期将资源全部require进来，$.getScript无法满足断点调试
+        var navSource = []
+        var navRequire = (function () {
+          var arr = ['config', 'extension', 'http', 'util', 'moment/moment.min']
+          navSource.forEach(function (item) {
+            arr.push('page/' + item + '/' + item)
+          })
+          return arr
+        })()
+
+        requirejs(navRequire, function () {
+          var requireModules = arguments
+          var config = requireModules[0]
+          var $$ = requireModules[1]
+          var http = requireModules[2]
+          /**
+           * 登出
+           */
+          $('#logout').on('click', function () {
+            http.post(config.api.logout, function () {
+              location.href = 'login.html'
+            })
+          })
+
+          var hash = location.hash.indexOf('?') >= 0 ?
+                     location.hash.substring(1, location.hash.indexOf('?')) :
+                     location.hash.substr(1)
+          /**
+           * 左侧菜单点击load右侧页面初始化
+           */
+          $('#sidebarMenu')
+            .find('[data-gh-route]')
+            .on('click', function () {
+              $('#sidebarMenu').find('.active').removeClass('active')
+              $(this).parent().addClass('active')
+              var route = $(this).attr('data-gh-route')
+              $('#mainContent')
+                .empty()
+                .load('pages/' + route + '/' + route + '.html', function () {
+                  for (var key in requireModules) {
+                    if (requireModules[key].name === route) {
+                      requireModules[key].init()
+                    }
+                  }
+                  // select2与icheck全局初始化
+                  $$.csInit($(document))
+                })
+              location.hash = route
+            })
+            .each(function (index, item) {
+              if (!hash) {
+                if (index === 1) {
+                  $(item).click()
+                  return
+                }
+              } else {
+                if ($(item).attr('data-gh-route') === hash) {
+                  $(item).click()
+                  return
+                }
+              }
+            })
+
+          /**
+           * 获取登录用户信息
+           */
+          http.post(config.api.userInfo, {
+            contentType: 'form'
+          }, function (userInfo) {
+            $('#userMenu').find('.userName').html(userInfo.name)
+          })
+
+          // fix select2在bootstrap modal中input无法focus的问题
+          // https://github.com/select2/select2/issues/1436
+          $.fn.modal.Constructor.prototype.enforceFocus = function() {}
+
+        })
+      })
+    </script>
+  </body>
+</html>
