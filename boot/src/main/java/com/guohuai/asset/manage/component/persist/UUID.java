@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.component.persist;
 
+import java.io.Serializable;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 //JPA 基类的标识
 @MappedSuperclass
-public abstract class UUID {
+public abstract class UUID implements Cloneable, Serializable {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid.hex")
