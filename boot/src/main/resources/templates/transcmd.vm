@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>国槐金融</title>
+	</head>
+	<body style="margin: 0; font-size: 14px; font-family: -apple-system, 'Helvetica Neue, 'roboto', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'STHeiti', 'Microsoft YaHei', sans-serif;">
+		<div style="width: 700px; margin: 0 auto; color: #333;">
+			<div style="height: 75px; background-color: #e4511e; position: relative;">
+				<img src="${logo}" style="position: absolute; top: 15px; left: 15px;">
+				<p style="padding-right: 15px; margin: 0; text-align: right; color: #fff; line-height: 75px;">致力于资金端资产端的高效撮合交易</p>
+			</div>
+			<p style="margin: 0; line-height: 60px; font-weight: bold;"><span style="margin-right: 10px; color: #e4511e">托管行</span> 您好！</p>
+			<p style="margin: 0; line-height: 25px;">
+				以下是由<b>${content.fundAdminCompany}</b>针对<b>${content.assetAdminCompany}</b>发行的<b>“${content.assetName}”</b>资产在（${content.timestamp}）时间发来的${content.opname}
+			</p>
+			<p style="margin: 0; line-height: 60px;">请您点击“查看完整指令”查看指令详情，谢谢！</p>
+			<table style="width: 100%; background-color: #f3f3f3; font-weight: bold;">
+				<tr>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							<tr>
+								<td style="width: 70px;">资产名称：</td>
+								<td>${content.assetName}</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">发行机构：</td>
+								<td>${content.assetAdminCompany}</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">指令类型：</td>
+								<td>${content.opname}</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">投资金额：</td>
+								<td>${content.volume}万</td>
+							</tr>
+							<tr>
+								<td style="width: 70px;">投资时间：</td>
+								<td>${content.date}</td>
+							</tr>
+						</table>
+					</td>
+					<td style="width: 50%; padding: 10px 15px;" valign="top">
+						<table style="width: 100%; line-height: 23px; font-size: 12px;">
+							#if(${content.file})
+							<tr>
+								<td style="width: 70px;">相关附件：</td>
+								<td colspan="2"></td>
+							</tr>
+								#foreach( ${f} in ${content.file} )
+								<tr style="font-weight: normal;">
+									<td style="width: 280px;" colspan="2">
+										<a href="#" style="text-decoration: none; color: #333;">${f.name}(${f.sizeh})</a>
+									</td>
+									<td style="width: 30px;">
+										<a href="${yupload}${f.furl}?realname=${f.name}" target="_blank" style="color: #e4511e;">下载</a>
+									</td>
+								</tr>
+								#end
+							#end
+							#if(${content.sms})
+							<tr>
+								<td style="width: 70px;">备注：</td>
+								<td style="font-weight: normal;" colspan="2">
+									${content.sms}
+								</td>
+							</tr>
+							#end
+						</table>
+					</td>
+				</tr>
+			</table>
+
+			<p style="margin: 0; line-height: 60px;">
+				<span style="color: #e4511e;">*</span>为保证数据安全，查看指令时请输入验证码：<span style="color: #e4511e;">${content.pin}</span>
+			</p>
+
+			<a href="${bankCmdLink}?oid=${ekey}&cipher=${content.cipher}" style="width: 120px; height: 40px; background-color: #e4511e; line-height: 40px; text-align: center; color: #fff; display: block; text-decoration: none;">查看完整指令</a>
+
+			<p style="margin: 10px 0 0 0; line-height: 40px;">
+				<span style="color: #e4511e;">*</span>如果您无法连接外网，无法下载相关附件，请及时与我们联系：
+			</p>
+
+			<div style="padding: 15px; background-color: #f3f3f3; font-size: 12px; font-weight: bold; color: #666;">
+				<p style="margin: 0; line-height: 25px;">
+					专属热线：021-60348509
+				</p>
+				<p style="margin: 0; line-height: 25px;">
+					Email：kf@guohuaigroup.com
+				</p>
+				<p style="margin: 0; line-height: 25px;">
+					QQ：2565301759
+				</p>
+				</div>
+			<p style="margin: 0 0 30px 0; line-height: 80px; text-align: right; font-size: 12px; font-weight: bold;">
+				为保证邮件正常接收，请将<span style="color: #e4511e;">amp@guohuaigroup.com</span>添加进您的通讯录
+			</p>
+
+		</div>
+	</body>
+
+</html>
