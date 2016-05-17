@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.dict.Dict;
 
 import lombok.AllArgsConstructor;
@@ -121,6 +122,9 @@ public class Product implements Serializable {
 	private String instruction;//产品说明
 	private String riskLevel;//风险等级
 	private String fileKeys;//附加文件
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
+	private AssetPoolEntity assetPool;//资产配置
 	
 	private String state;//产品状态
 	private Timestamp createTime;//创建时间
@@ -138,7 +142,7 @@ public class Product implements Serializable {
 	private Timestamp endTime;//产品清算（结束）时间
 	private Timestamp durationRepaymentTime;//存续期内还款时间
 	private String stems;//来源
-	private boolean isDeleted;
+	private String isDeleted;
 	
 	private String auditState;//审核状态
 	private String auditor;//审核人
