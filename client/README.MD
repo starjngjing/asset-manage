@@ -2,7 +2,7 @@
 
 ## 插件列表及文档地址
 * [Bootstrap](http://v3.bootcss.com/)
-* [Bootstrap Table](http://bootstrap-table.wenzhixin.net.cn/)
+* [Bootstrap Table](http://bootstrap-table.wenzhixin.net.cn/zh-cn/)
 * [Bootstrap Validator](http://1000hz.github.io/bootstrap-validator/)
 * [Bootstrap Datepicker](http://bootstrap-datepicker.readthedocs.io/en/latest/)
 * [jQuery form](http://malsup.com/jquery/form/)

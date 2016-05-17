@@ -78,7 +78,7 @@
           <ul id="sidebarMenu" class="sidebar-menu">
             <li class="header">渠道管理</li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="channel">
                 <i class="fa fa-adn"></i>
                 <span>渠道管理</span>
               </a>
@@ -86,31 +86,31 @@
 
             <li class="header">投资标的管理</li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="targetApply">
                 <i class="fa fa-adn"></i>
                 <span>标的申请管理</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="targetAccess">
                 <i class="fa fa-amazon"></i>
                 <span>标的会前审查</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="targetConvention">
                 <i class="fa fa-android"></i>
                 <span>标的过会管理</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="targetVote">
                 <i class="fa fa-angellist"></i>
                 <span>标的过会表决</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="targetStorage">
                 <i class="fa fa-apple"></i>
                 <span>投资标的备选库</span>
               </a>
@@ -242,7 +242,14 @@
           }
         })
         // 为满足断点调试需求，前期将资源全部require进来，$.getScript无法满足断点调试
-        var navSource = []
+        var navSource = [
+          'channel',
+          'targetApply',
+          'targetAccess',
+          'targetConvention',
+          'targetVote',
+          'targetStorage'
+        ]
         var navRequire = (function () {
           var arr = ['config', 'extension', 'http', 'util', 'moment/moment.min']
           navSource.forEach(function (item) {
@@ -266,9 +273,17 @@
           })
 
           // 获取hash，通过hash定位到当前页面，hash中 '?' 及以后的部分作为参数内容，不作为页面判断依据
-          var hash = location.hash.indexOf('?') >= 0 ?
-                     location.hash.substring(1, location.hash.indexOf('?')) :
-                     location.hash.substr(1)
+          // 参数内容暂存在params中，仅在初次载入页面时有效，点击导航栏按钮切换页面后失效
+          var hash = ''
+          var params =  {
+            value : ''
+          }
+          if (location.hash.indexOf('?') >= 0) {
+            hash = location.hash.substring(1, location.hash.indexOf('?'))
+            params.value = location.hash.substr(location.hash.indexOf('?') + 1)
+          } else {
+            hash = location.hash.substr(1)
+          }
           /**
            * 左侧菜单点击load右侧页面初始化
            */
@@ -289,11 +304,12 @@
                   // icheck与select2全局初始化
                   $$.csInit($(document))
                 })
-              location.hash = route
+              location.hash = params.value ? route + '?' + params.value : route
+              params.value = ''
             })
             .each(function (index, item) {
               if (!hash) {
-                if (index === 1) {
+                if (!index) {
                   $(item).click()
                   return
                 }
