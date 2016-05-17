@@ -3,6 +3,7 @@ package com.guohuai.asset.manage.boot.Duration.assetPool.impl;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolEntity;
@@ -10,6 +11,7 @@ import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolForm;
 import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
+@Service
 public class AssetPoolServiceImpl implements AssetPoolService {
 
 	@Override
