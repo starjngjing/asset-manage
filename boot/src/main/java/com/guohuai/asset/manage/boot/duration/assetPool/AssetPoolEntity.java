@@ -25,7 +25,6 @@ public class AssetPoolEntity implements Serializable {
 	@Id
 	private String oid;
 	private String name;
-	private String type;
 	// 资产规模
 	private BigDecimal scale;
 	// 现金比例
