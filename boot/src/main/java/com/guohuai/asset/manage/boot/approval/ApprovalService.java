@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.approval;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +54,9 @@ public class ApprovalService {
 	public Approval save(Approval approv) {
 		if (null == approv)
 			throw AMPException.getException("底层项目不能为空");
+		if (StringUtils.isBlank(approv.getTargetOid())) {
+			throw AMPException.getException("关联标的不能为空");
+		}
 		return this.approvalDao.save(approv);
 	}
 
