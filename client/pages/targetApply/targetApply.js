@@ -13,6 +13,10 @@ define([
       $('#targetAdd').on('click', function () {
         $('#addTargetModal').modal('show')
       })
+      // 新建底层资产按钮点击事件
+      $('#assetAdd').on('click', function () {
+        $('#addAssetModal').modal('show')
+      })
     }
   }
 })
