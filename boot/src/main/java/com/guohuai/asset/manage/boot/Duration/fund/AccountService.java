@@ -7,13 +7,16 @@ import java.util.List;
  * @author star.zhu
  * 2016年5月16日
  */
-public interface AccountService {
+public class AccountService {
 
 	/**
 	 * 获取所有的出入金明细
 	 * @return
 	 */
-	public List<AccountForm> getAllList();
+	public List<AccountForm> getAllList() {
+		
+		return null;
+	}
 	
 	
 }
