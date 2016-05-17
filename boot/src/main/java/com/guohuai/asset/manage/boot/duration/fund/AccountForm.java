@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.fund;
+package com.guohuai.asset.manage.boot.duration.fund;
 
 import java.math.BigDecimal;
 import java.util.Date;

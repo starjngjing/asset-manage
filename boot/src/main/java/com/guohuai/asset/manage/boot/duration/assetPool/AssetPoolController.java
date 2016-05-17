@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.assetPool;
+package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class AssetPoolController extends BaseController {
 	 * 获取所有的资产池列表
 	 * @return
 	 */
-	@RequestMapping(value = "/getAll", method = { RequestMethod.GET})
+	@RequestMapping(value = "/getAll", method = { RequestMethod.GET })
 	public @ResponseBody ResponseEntity<Response> getAll() {
 		List<AssetPoolForm> list = assetPoolService.getAllList();
 		Response r = new Response();

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Table(name = "T_GAM_INVESTMENT_MEETING_ASSET")
+@Table(name = "T_GAM_CONFERENCE_TARGET")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,13 +36,13 @@ public class InvestmentMeetingAsset extends UUID implements Serializable {
 	 * 投资标的
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "investmentOid", referencedColumnName = "oid")
+	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	private Investment investment;
 	/**
 	 * 会议
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "meetingOid", referencedColumnName = "oid")
+	@JoinColumn(name = "conferenceOid", referencedColumnName = "oid")
 	private InvestmentMeeting InvestmentMeeting;
 
 }

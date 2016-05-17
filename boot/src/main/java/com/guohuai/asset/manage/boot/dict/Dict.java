@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "T_REEF_DICT")
+@Table(name = "T_GAM_DICT")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

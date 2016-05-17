@@ -1,18 +1,24 @@
-package com.guohuai.asset.manage.boot.Duration.assetPool.impl;
+package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolEntity;
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolForm;
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
-public class AssetPoolServiceImpl implements AssetPoolService {
-
-	@Override
+/**
+ * 存续期--资产池服务接口
+ * @author star.zhu
+ * 2016年5月16日
+ */
+@Service
+public class AssetPoolService {
+	
+	/**
+	 * 新建资产池
+	 */
 	public void createPool(AssetPoolForm form) {
 		AssetPoolEntity entity = new AssetPoolEntity();
 		try {
@@ -22,31 +28,40 @@ public class AssetPoolServiceImpl implements AssetPoolService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
-
-	@Override
+	
+	/**
+	 * 新建审核
+	 */
 	public void auditPool() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	/**
+	 * 获取所有资产池列表
+	 * @return
+	 */
 	public List<AssetPoolForm> getAllList() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
-
-	@Override
+	
+	/**
+	 * 获取所有资产池的名称列表，包含id
+	 * @return
+	 */
 	public List<JSONObject> getAllNameList() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
-
-	@Override
+	
+	/**
+	 * 根据资产池id获取对应的资产池详情
+	 * @param pid
+	 * @return
+	 */
 	public AssetPoolForm getById(String pid) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
-
 }

@@ -54,24 +54,24 @@ public class ProjectService {
 	public Project save(Project approv) {
 		if (null == approv)
 			throw AMPException.getException("底层项目不能为空");
-		if (StringUtils.isBlank(approv.getTargetOid())) {
-			throw AMPException.getException("关联标的不能为空");
-		}
+//		if (StringUtils.isBlank(approv.getTargetOid())) {
+//			throw AMPException.getException("关联标的不能为空");
+//		}
 		return this.approvalDao.save(approv);
 	}
 
 	/**
 	 * 通过标的id查询底层项目
 	 * 
-	 * @Title: findByInvestmentId
+	 * @Title: findByTargetId
 	 * @author vania
 	 * @version 1.0
 	 * @see:
 	 * @param targetOid
 	 * @return
-	 * @return List<Approval> 返回类型
+	 * @return List<Project> 返回类型
 	 */
-	public List<Project> findByInvestmentId(String targetOid) {
+	public List<Project> findByTargetId(String targetOid) {
 		return this.approvalDao.findByTargetOid(targetOid);
 	}
 

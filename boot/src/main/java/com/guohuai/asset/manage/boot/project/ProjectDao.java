@@ -3,20 +3,13 @@ package com.guohuai.asset.manage.boot.project;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpecificationExecutor<Project> {
 
 
-	@Query(value="update T_GAM_APPROVAL set state = 'DELETED' where oid=?1", nativeQuery = true)
-	@Modifying
-	@Transactional
-	public void delete_(String oid);
 	
 	/**
 	 * 根据投资标的id查询底层项目
@@ -28,6 +21,7 @@ public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpe
 	 * @return
 	 * @return List<Approval>    返回类型 
 	 */
+	@Query(value = "from Project p where p.investment.oid = ?1")
 	public List<Project> findByTargetOid(String targetOid);
 	
 }

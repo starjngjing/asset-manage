@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Table(name = "T_GAM_INVESTMENT_MEETING_VOTE")
+@Table(name = "T_GAM_CONFERENCE_VOTE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,18 +47,18 @@ public class InvestmentMeetingVote extends UUID implements Serializable {
 	 * 投资标的
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "investmentOid", referencedColumnName = "oid")
+	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	private Investment investment;
 	/**
 	 * 参会人
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userOid", referencedColumnName = "oid")
+	@JoinColumn(name = "participantOid", referencedColumnName = "oid")
 	private InvestmentMeetingUser investmentMeetingUser;
 	/**
 	 * 投票状态
 	 */
-	private String voteStatus;
+	private String state;
 	/**
 	 * 投票时间
 	 */
@@ -66,10 +66,10 @@ public class InvestmentMeetingVote extends UUID implements Serializable {
 	/**
 	 * 备注
 	 */
-	private String voteRemarks;
+	private String suggest;
 	/**
 	 * 附件
 	 */
-	private String enclosure;
+	private String file;
 
 }

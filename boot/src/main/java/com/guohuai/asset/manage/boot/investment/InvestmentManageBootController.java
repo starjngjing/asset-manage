@@ -15,7 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
@@ -30,15 +34,16 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  */
 @RestController
 @RequestMapping(value = "/asset/boot/investmentManage", produces = "application/json;charset=UTF-8")
-public class InvestmentManageBootController {
+public class InvestmentManageBootController extends BaseController {
 
 	@Autowired
 	private InvestmentService investmentService;
 
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
-	public ResponseEntity<InvestmentListResp> list(HttpServletRequest request,
-			@And({ @Spec(path = "investmentCode", spec = Equal.class),
-					@Spec(path = "investmentName", spec = Like.class) }) Specification<Investment> spec,
+	public @ResponseBody ResponseEntity<InvestmentListResp> list(HttpServletRequest request,
+			@And({ @Spec(path = "investmentName", spec = Like.class),
+					@Spec(path = "investmentType", spec = Equal.class),
+					@Spec(path = "status", spec = Equal.class) }) Specification<Investment> spec,
 			@RequestParam int page, @RequestParam int rows,
 			@RequestParam(required = false, defaultValue = "updateTime") String sortField,
 			@RequestParam(required = false, defaultValue = "desc") String sort) {
@@ -50,5 +55,12 @@ public class InvestmentManageBootController {
 		Page<Investment> entitys = investmentService.getInvestmentList(spec, pageable);
 		InvestmentListResp resps = new InvestmentListResp(entitys);
 		return new ResponseEntity<InvestmentListResp>(resps, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "add", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<BaseResp> add(Investment investment) {
+		String operator = "test";
+		investmentService.saveInvestment(investment, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 }
