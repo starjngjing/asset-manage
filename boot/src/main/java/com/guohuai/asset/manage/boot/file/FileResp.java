@@ -1,8 +1,9 @@
 package com.guohuai.asset.manage.boot.file;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import com.guohuai.asset.manage.component.util.DateUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FileResp {
 
+	public FileResp(File file) {
+		super();
+		this.oid = file.getOid();
+		this.name = file.getName();
+		this.furl = file.getFurl();
+		this.size = file.getSize();
+		this.sizeh = file.getSizeh();
+		this.operator = file.getOperator();
+		this.createTime = DateUtil.formatDate(file.getCreateTime().getTime());
+	}
+	
 	public FileResp(SaveFileForm form) {
 		super();
 		this.oid = form.getOid();
@@ -29,6 +41,8 @@ public class FileResp {
 	private String furl;
 	private long size;
 	private String sizeh;
+	private String operator;
+	private String createTime;
 	private String fversion;
 
 	private String calcSizeh(long size) {
@@ -45,10 +59,6 @@ public class FileResp {
 			// 超过1G的, 按G转化
 			return new BigDecimal(size).divide(new BigDecimal(1073741824L), 2, RoundingMode.HALF_UP).toString() + "G";
 		}
-	}
-
-	public FileResp(File f) {
-		// TODO Auto-generated constructor stub
 	}
 
 }

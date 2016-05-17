@@ -2,7 +2,6 @@ package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import lombok.Data;
@@ -19,9 +18,6 @@ public class AssetPoolForm implements Serializable {
 
 	private String id;
 	private String name;
-	private String type;
-	// 成立日
-	private Date setUpDate;
 	// 资产规模
 	private BigDecimal scale;
 	// 现金比例

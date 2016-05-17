@@ -3,9 +3,11 @@ package com.guohuai.asset.manage.boot.duration.assetPool;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 /**
@@ -16,16 +18,22 @@ import com.guohuai.asset.manage.component.util.StringUtil;
 @Service
 public class AssetPoolService {
 	
+	@Autowired
+	private AssetPoolDao assetPoolDao;
+	
 	/**
 	 * 新建资产池
 	 */
-	public void createPool(AssetPoolForm form) {
+	public void createPool(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = new AssetPoolEntity();
 		try {
 			entity.setOid(StringUtil.uuid());
 			BeanUtils.copyProperties(entity, form);
+			entity.setCreater(uid);
+			entity.setCreateTime(DateUtil.getSqlCurrentDate());
+			
+			assetPoolDao.save(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

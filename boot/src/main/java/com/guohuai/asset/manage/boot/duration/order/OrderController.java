@@ -3,11 +3,11 @@ package com.guohuai.asset.manage.boot.duration.order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.component.web.view.Response;
 
@@ -16,7 +16,8 @@ import com.guohuai.asset.manage.component.web.view.Response;
  * @author star.zhu
  * 2016年5月17日
  */
-@Controller
+@RestController
+@RequestMapping(value = "/ams/duration/order", produces = "application/json;charset=utf-8")
 public class OrderController {
 	
 	@Autowired
@@ -29,7 +30,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/purchaseForFund", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> purchaseForFund(@RequestBody FundForm form) {
-		orderService.purchaseForFund(form);
+		orderService.purchaseForFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -41,7 +42,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/redeem", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> redeem(@RequestBody FundForm form) {
-		orderService.redeem(form);
+		orderService.redeem(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -54,7 +55,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/purchaseForTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> purchaseForTrust(@RequestBody TrustForm form) {
-		orderService.purchaseForTrust(form);
+		orderService.purchaseForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -79,7 +80,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditFund", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditFund(@RequestBody FundForm form) {
-		orderService.auditFund(form);
+		orderService.auditFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -92,7 +93,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditTrust(@RequestBody TrustForm form) {
-		orderService.auditTrust(form);
+		orderService.auditTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -105,7 +106,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/cashAppointMentForFund", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> cashAppointMentForFund(@RequestBody FundForm form) {
-		orderService.cashAppointMentForFund(form);
+		orderService.cashAppointMentForFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -118,7 +119,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/cashAppointMentForTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> cashAppointMentForTrust(@RequestBody TrustForm form) {
-		orderService.cashAppointMentForTrust(form);
+		orderService.cashAppointMentForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
