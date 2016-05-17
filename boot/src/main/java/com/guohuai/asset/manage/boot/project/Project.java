@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName: Approval
- * @Description: 立项实体
+ * @ClassName: Project
+ * @Description: 底层项目实体
  * @author vania
  * @date 2016年5月16日 上午10:15:56
  *

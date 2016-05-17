@@ -7,7 +7,7 @@
  * you entered into with Founder.   
  *   
  */
-package com.guohuai.asset.manage.boot.cashtools;
+package com.guohuai.asset.manage.boot.cashtool;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -31,13 +31,13 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Table(name = "T_GAM_CASHMNGTOOL")
+@Table(name = "T_GAM_CASHTOOL")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashMngTool extends UUID {
+public class CashTool extends UUID {
 
 	private static final long serialVersionUID = -3696995771339594216L;
 

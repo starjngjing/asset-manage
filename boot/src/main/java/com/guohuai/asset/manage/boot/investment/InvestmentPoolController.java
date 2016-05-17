@@ -38,7 +38,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  * @created 2016年5月17日 上午9:24:14   
  */
 @RestController
-@RequestMapping("/asset/hill/investmentPool")
+@RequestMapping("/asset/boot/investmentPool")
 @Api("投资标的库操作相关接口")
 public class InvestmentPoolController extends BaseController {
 	@Autowired
@@ -102,8 +102,8 @@ public class InvestmentPoolController extends BaseController {
 	}
 	
 	/**
-	 * 标的成立
-	 * @Title: establish 
+	 * 标的不成立
+	 * @Title: unEstablish 
 	 * @author vania
 	 * @version 1.0
 	 * @see: 
