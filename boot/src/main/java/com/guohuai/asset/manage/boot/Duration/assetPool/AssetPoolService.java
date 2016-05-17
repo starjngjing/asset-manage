@@ -15,6 +15,11 @@ public interface AssetPoolService {
 	 * 新建资产池
 	 */
 	public void createPool(AssetPoolForm form);
+	
+	/**
+	 * 新建审核
+	 */
+	public void auditPool();
 
 	/**
 	 * 获取所有资产池列表

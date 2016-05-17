@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -43,7 +44,22 @@ public class InvestmentPoolController extends BaseController {
 	@Autowired
 	InvestmentService investmentService;
 		
-
+	/**
+	 * 标的成立管理列表
+	 * @Title: listinvestment 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param request
+	 * @param spec
+	 * @param page
+	 * @param size
+	 * @param sortDirection
+	 * @param sortField
+	 * @return
+	 * @return ResponseEntity<InvestmentListResp>    返回类型 
+	 * @throws
+	 */
 	@RequestMapping(value = "listinvestment", method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "标的成立管理列表", extensions = {
 			@Extension(properties = { @ExtensionProperty(name = "x-code", value = "1001,1002"),
@@ -61,11 +77,45 @@ public class InvestmentPoolController extends BaseController {
 		}
 		Pageable pageable = new PageRequest(page, size);
 		
-		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);
-		
+		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);		
 		
 		InvestmentListResp resp = new InvestmentListResp(pageData);
 		return new ResponseEntity<InvestmentListResp>(resp, HttpStatus.OK);
 	}
 	
+	/**
+	 * 标的成立
+	 * @Title: establish 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @return
+	 * @return CommonResp    返回类型 
+	 * @throws
+	 */
+	@RequestMapping("establish")
+	@ApiOperation(value = "标的成立", extensions = {
+			@Extension(properties = { @ExtensionProperty(name = "x-code", value = "1001,1002"),
+					@ExtensionProperty(name = "x-ref", value = "innerResp") }) })
+	public CommonResp establish() {
+		return CommonResp.builder().errorCode(1).errorMessage("标的成立成功！").attached("").build();
+	}
+	
+	/**
+	 * 标的成立
+	 * @Title: establish 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @return
+	 * @return CommonResp    返回类型 
+	 * @throws
+	 */
+	@RequestMapping("unEstablish")
+	@ApiOperation(value = "标的成立", extensions = {
+			@Extension(properties = { @ExtensionProperty(name = "x-code", value = "1001,1002"),
+					@ExtensionProperty(name = "x-ref", value = "innerResp") }) })
+	public CommonResp unEstablish() {
+		return CommonResp.builder().errorCode(1).errorMessage("标的不成立成功！").attached("").build();
+	}
 }
