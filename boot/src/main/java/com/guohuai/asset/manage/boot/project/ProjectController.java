@@ -98,7 +98,7 @@ public class ProjectController extends BaseController {
 
 	/**
 	 * 根据标的id查询底层项目
-	 * @Title: getByInvestmentId 
+	 * @Title: getByTargetId 
 	 * @author vania
 	 * @version 1.0
 	 * @see: 
@@ -107,9 +107,9 @@ public class ProjectController extends BaseController {
 	 * @return CommonResp    返回类型 
 	 */
 	@ApiOperation(value = "根据标的id查询底层项目")
-	@RequestMapping(value = "getByInvestmentId")
-	public CommonResp getByInvestmentId(@RequestParam(required = true) String targetOid) {
-		List<Project> list = this.projectService.findByInvestmentId(targetOid);
+	@RequestMapping(value = "getByTargetId")
+	public CommonResp getByTargetId(@RequestParam(required = true) String targetOid) {
+		List<Project> list = this.projectService.findByTargetId(targetOid);
 		return CommonResp.builder().errorCode(1).errorMessage("保存成功！").rows(list).total(null == list ? 0 : list.size()).build();
 	}
 
