@@ -13,20 +13,14 @@ import lombok.NoArgsConstructor;
 public class DictResp {
 
 	public DictResp(Dict dict) {
-		this.oid = dict.getOid();
-		this.cate = dict.getCate();
-		this.name = dict.getName();
-		this.rank = dict.getRank();
-		this.poid = dict.getPoid();
-		this.subs = new ArrayList<DictResp>();
+		this.id = dict.getOid();
+		this.text = dict.getName();
+		this.children = new ArrayList<DictResp>();
 	}
 
-	private String oid;
-	private String cate;
-	private String name;
-	private String rank;
-	private String poid;
+	private String id;
+	private String text;
 
-	private List<DictResp> subs;
+	private List<DictResp> children;
 
 }
