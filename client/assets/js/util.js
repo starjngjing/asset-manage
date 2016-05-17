@@ -3,9 +3,7 @@
  * amd模块，使用requirejs载入
  */
 
-define([
-  'moment/moment.min'
-],function (moment) {
+define([],function () {
   return {
     /**
      * table操作实用工具
