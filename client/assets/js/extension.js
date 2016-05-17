@@ -138,15 +138,16 @@ define({
     }
   },
   /**
-   * iCheck 与 select2 区域内初始化
+   * iCheck select2 datetimepicker 区域内初始化
    * 参数 parent：要进行初始化的区域 jquery对象
    */
-  csInit: function (parent) {
+  inputPluginsInit: function (parent) {
     parent.find('.icheck').iCheck({
       checkboxClass: 'icheckbox_minimal-blue',
       radioClass: 'iradio_minimal-blue'
     })
     parent.find('.select2').select2()
+    parent.find('.datepicker').datetimepicker()
   }
 
 })

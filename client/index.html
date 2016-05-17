@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="plugins/bootstrap-table/bootstrap-table.css">
-    <link rel="stylesheet" href="plugins/datepicker/datepicker.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="plugins/select2/select2.min.css">
     <link rel="stylesheet" href="plugins/iCheck/minimal/blue.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/2.1.2/toastr.min.css">
@@ -205,6 +205,9 @@
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Moment 2.10.6 -->
+    <script src="http://cdn.bootcss.com/moment.js/2.10.6/moment.min.js"></script>
+    <script src="http://cdn.bootcss.com/moment.js/2.10.6/locale/zh-cn.js"></script>
     <!-- jQuery-form -->
     <script src="plugins/jQuery-form/jquery.form.js"></script>
     <!-- Select2 -->
@@ -218,9 +221,8 @@
     <script src="plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
     <!-- treetable -->
     <script src="plugins/jQuery-treetable/jquery.treetable.js"></script>
-    <!-- Datepicker -->
-    <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-    <script src="plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <!-- Datetimepicker -->
+    <script src="http://cdn.bootcss.com/bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.min.js"></script>
     <!-- validator -->
     <script src="plugins/bootstrap-validator/validator.js"></script>
     <!-- SlimScroll -->
@@ -237,7 +239,6 @@
         requirejs.config({
           baseUrl: 'assets/js',
           paths: {
-            moment: '../../plugins/moment',
             page: '../../pages'
           }
         })
@@ -256,7 +257,7 @@
           'productOperating'
         ]
         var navRequire = (function () {
-          var arr = ['config', 'extension', 'http', 'util', 'moment/moment.min']
+          var arr = ['config', 'extension', 'http', 'util']
           navSource.forEach(function (item) {
             arr.push('page/' + item + '/' + item)
           })
@@ -306,8 +307,8 @@
                       requireModules[key].init()
                     }
                   }
-                  // icheck与select2全局初始化
-                  $$.csInit($(document))
+                  // icheck select2 datetimepicker全局初始化
+                  $$.inputPluginsInit($(document))
                 })
               location.hash = params.value ? route + '?' + params.value : route
               params.value = ''
