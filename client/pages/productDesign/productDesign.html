@@ -19,7 +19,7 @@
         <div class="box-header">
           <h3 class="box-title">产品申请列表</h3>
           <div class="box-tools">
-            <button id="eventAdd" class="btn btn-default btn-sm">
+            <button id="productAdd" class="btn btn-default btn-sm">
               <i class="fa fa-plus"></i> 新建产品
             </button>
           </div>
@@ -72,4 +72,480 @@
     </div>
   </div>
 </section>
+
+<!-- 新建产品弹窗 -->
+<div id="addProductModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">新建标的</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 新增/编辑事件表单 -->
+        <form id="addProductForm" name="addProductForm" method="post">
+          <p class="form-header">产品概况</p>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>产品名称</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="产品名称">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>产品简称</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="产品简称">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>产品全称</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="产品全称">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>产品类型</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">封闭式</option>
+                  <option>开放式</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>产品管理人</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="产品管理人">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>管理人简称</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="管理人简称">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label>预期年化收益</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="text"
+                         class="form-control"
+                         placeholder="从">
+                  <span class="input-group-addon">%</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <div class="input-group input-group-sm range">
+                  <input name="title" type="text"
+                         class="form-control"
+                         placeholder="到">
+                  <span class="input-group-addon">%</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>额外增信</label>
+                <div class="row form-style">
+                  <div class="col-sm-4">
+                    <input name="radio1" type="radio" value="a" class="icheck" checked> 有
+                  </div>
+                  <div class="col-sm-4">
+                    <input name="radio1" type="radio" value="a" class="icheck"> 无
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>币种</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">1</option>
+                  <option>2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>收益计算基础</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="text"
+                         class="form-control"
+                         placeholder="收益计算基础">
+                  <span class="input-group-addon">天</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>把管费率</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="text"
+                         class="form-control"
+                         placeholder="把管费率">
+                  <span class="input-group-addon">%每年</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>固定管理费率</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="text"
+                         class="form-control"
+                         placeholder="固定管理费率">
+                  <span class="input-group-addon">%每年</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 封闭式产品显示/隐藏层 -->
+          <div>
+            <p class="form-header">封闭式产品信息</p>
+            <div class="row">
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>募集开始时间</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">固定时间</option>
+                    <option>与首次渠道上架时间相同</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="请填写时间">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>募集期</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">自然日</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>起息日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">募集满额后</span>
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">个自然日</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>存续期</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">自然日</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>募集份额</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">份</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>到期最晚还本付息日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">存续期结束后第</span>
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">个自然日内</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 开放式产品显示/隐藏层 -->
+          <div>
+            <p class="form-header">开放式产品信息</p>
+            <div class="row">
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>成立时间</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">固定时间</option>
+                    <option>与首次渠道上架时间相同</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="请填写时间">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>收益结转周期</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">日</option>
+                    <option>周</option>
+                    <option>月</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>付息方式</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">每日</option>
+                    <option>每周</option>
+                    <option>每月</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">号</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>锁定期</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">自然日</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>起息日</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">自然日</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>申购确认日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">申购订单确认日后第</span>
+                    <input name="title" type="number"
+                           class="form-control">
+                    <div class="input-group-btn open">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        自然日
+                        <span class="fa fa-caret-down"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="javascirpt:void(0)">自然日</a>
+                        </li>
+                        <li>
+                          <a href="javascirpt:void(0)">交易日</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>单日净赎回上限</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">份</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>单笔赎回下限</label>
+                  <div class="input-group input-group-sm">
+                    <input name="title" type="number"
+                           class="form-control">
+                    <span class="input-group-addon">个自然日内</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>赎回确认日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">赎回订单确认日后第</span>
+                    <input name="title" type="number"
+                           class="form-control">
+                    <div class="input-group-btn open">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        自然日
+                        <span class="fa fa-caret-down"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="javascirpt:void(0)">自然日</a>
+                        </li>
+                        <li>
+                          <a href="javascirpt:void(0)">交易日</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <div class="form-group">
+                  <label>批量赎回定时任务</label>
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-btn open">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        每自然日
+                        <span class="fa fa-caret-down"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a href="javascirpt:void(0)">每自然日</a>
+                        </li>
+                        <li>
+                          <a href="javascirpt:void(0)">每交易日</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <input name="newsDate" type="text"
+                           class="form-control datepicker"
+                           placeholder="请选择时间"
+                           data-provide="datepicker">
+                    <span class="input-group-addon">发起代付指令</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>单笔投资最低份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="number"
+                         class="form-control">
+                  <span class="input-group-addon">份</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>单笔投资最高份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="number"
+                         class="form-control">
+                  <span class="input-group-addon">份</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>单笔投资追加份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="number"
+                         class="form-control">
+                  <span class="input-group-addon">份</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>单位份额净值</label>
+                <div class="input-group input-group-sm">
+                  <input name="title" type="text"
+                         class="form-control">
+                  <span class="input-group-addon">元</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="form-header">其他信息</p>
+          <div class="form-group">
+            <label>产品说明</label>
+              <textarea name="content" rows="3"
+                        class="form-control input-sm"
+                        placeholder="产品说明"></textarea>
+          </div>
+          <div class="form-group">
+            <label>投资标的</label>
+              <textarea name="content" rows="3"
+                        class="form-control input-sm"
+                        placeholder="投资标的"></textarea>
+          </div>
+          <div class="form-group">
+            <label>风控等级</label>
+            <select class="form-control input-sm">
+              <option selected="selected">1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>
 

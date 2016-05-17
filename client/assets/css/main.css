@@ -149,6 +149,10 @@ h6,
   line-height: 40px;
 }
 
+.form-style{
+  line-height: 30px;
+}
+
 .form-control.datepicker{
   background-color: #fff;
 }
