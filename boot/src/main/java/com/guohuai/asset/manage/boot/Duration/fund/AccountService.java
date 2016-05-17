@@ -14,4 +14,6 @@ public interface AccountService {
 	 * @return
 	 */
 	public List<AccountForm> getAllList();
+	
+	
 }
