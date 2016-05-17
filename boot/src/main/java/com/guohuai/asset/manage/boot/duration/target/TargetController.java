@@ -24,7 +24,7 @@ import com.guohuai.asset.manage.component.web.view.Response;
  * 2016年5月17日
  */
 @RestController
-@RequestMapping(value = "/assetManagement/duration/product", produces = "application/json;charset=utf-8")
+@RequestMapping(value = "/ams/duration/product", produces = "application/json;charset=utf-8")
 public class TargetController {
 	
 	@Autowired

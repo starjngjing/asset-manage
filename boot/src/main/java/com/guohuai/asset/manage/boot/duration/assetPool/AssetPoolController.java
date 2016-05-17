@@ -21,7 +21,7 @@ import com.guohuai.asset.manage.component.web.view.Response;
  * 2016年5月16日
  */
 @RestController
-@RequestMapping(value = "/assetManagement/duration/assetPool", produces = "application/json;charset=utf-8")
+@RequestMapping(value = "/ams/duration/assetPool", produces = "application/json;charset=utf-8")
 public class AssetPoolController extends BaseController {
 	
 	@Autowired
