@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InvestmentEntity extends UUID implements Serializable {
+public class Investment extends UUID implements Serializable {
 
 	private static final long serialVersionUID = 7108314017534718240L;
 
