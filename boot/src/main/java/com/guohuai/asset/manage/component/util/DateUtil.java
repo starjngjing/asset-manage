@@ -12,8 +12,9 @@ import com.guohuai.asset.manage.component.exception.AMPException;
 
 public class DateUtil {
 
-	private static String datePattern = "yyyy-MM-dd";
-	private static String datetimePattern = "yyyy-MM-dd HH:mm:ss";
+	public static String datePattern = "yyyy-MM-dd";
+	public static String datetimePattern = "yyyy-MM-dd HH:mm:ss";
+	public static String timePattern = "HH:mm:ss";
 
 	public static boolean same(java.sql.Date param0, java.sql.Date param1) {
 		Calendar c0 = Calendar.getInstance();

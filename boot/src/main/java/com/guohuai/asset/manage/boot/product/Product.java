@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.sql.Date;
 import java.sql.Time;
 
 /**
@@ -39,6 +40,9 @@ public class Product implements Serializable {
 	public static final String YES = "YES";
 	public static final String NO = "NO";
 	
+	/**
+	 * 	状态status：
+	 */
 	public static final String STATE_Create = "CREATE";//新建
 	public static final String STATE_Update = "UPDATE";//提交修改
 	public static final String STATE_Notstartraise = "NOTSTARTRAISE";//未开始募集
@@ -48,12 +52,36 @@ public class Product implements Serializable {
 	public static final String STATE_Subsist = "SUBSIST";//存续期
 	public static final String STATE_Subsistend = "SUBSISTEND";//存续期结束(还本付息期)
 	public static final String STATE_Liquidation = "LIQUIDATION";//已清算
+	/**
+	 * 	状态status：
+	 *  waitPutOn:未排期
+	 *  putOnShelf:已排期
+	 *  collecting:募集期
+	 *  putOffShelf:下架
+	 *  collectingUnreached:募集未满
+	 *  running:运行期
+	 *  abortionWaitCalc:流标结算中
+	 *  endWaitCacl:到期结算中
+	 *  abortionEnd:流标终止
+	 *  end:到期完成
+	 */
+	public static final String PRODUCT_STATUS_waitPutOn = "waitPutOn";
+	public static final String PRODUCT_STATUS_putOnShelf = "putOnShelf";
+	public static final String PRODUCT_STATUS_collecting = "collecting";
+	public static final String PRODUCT_STATUS_putOffShelf = "putOffShelf";
+	public static final String PRODUCT_STATUS_collectingUnreached = "collectingUnreached";
+	public static final String PRODUCT_STATUS_running = "running";
+	public static final String PRODUCT_STATUS_abortionWaitCalc = "abortionWaitCalc";
+	public static final String PRODUCT_STATUS_endWaitCalc = "endWaitCalc";
+	public static final String PRODUCT_STATUS_abortionEnd = "abortionEnd";
+	public static final String PRODUCT_STATUS_end = "end";
+	
+	
+	
+	
 
 	public static final String RETURN_CYCLE_Month = "MONTH";//按月
 	public static final String RETURN_CYCLE_Day = "DAY";//按日
-	
-	public static final String REDEEM_TYPE_Single = "SINGLE";//单个
-	public static final String REDEEM_TYPE_Batch = "BATCH";//批量
 	
 	public static final String DATE_TYPE_Natrue = "NATRUE";//自然日
 	public static final String DATE_TYPE_Trade = "TRADE";//交易日
@@ -63,7 +91,9 @@ public class Product implements Serializable {
 	public static final String RISK_LEVEL_High = "HIGH";//低
 	
 	public static final String AUDIT_STATE_Nocommit = "NOCOMMIT";//未提交审核
-	public static final String AUDIT_STATE_Auditing = "AUDITING";//待审核(已经提交:审核)
+	public static final String AUDIT_STATE_Auditing = "AUDITING";//待审核(已经提交:审核中)
+	public static final String AUDIT_STATE_Reviewing = "REVIEWING";//待复核(已经提交复核:复核中)
+	public static final String AUDIT_STATE_Approvaling = "APPROVALING";//待批准(已经提交批准申请:批准申请中)
 	public static final String AUDIT_STATE_Approval = "APPROVAL";//批准
 	public static final String AUDIT_STATE_Reject = "REJECT";//驳回
 	
@@ -130,12 +160,7 @@ public class Product implements Serializable {
 	private String instruction;//产品说明
 	private String riskLevel;//风险等级
 	private String fileKeys;//附加文件
-	private String state;//产品状态
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
-	private AssetPoolEntity assetPool;//资产配置
-	
+	private String status;//产品状态
 	
 	private Timestamp createTime;//创建时间
 	private Timestamp updateTime;//更新时间
@@ -152,11 +177,16 @@ public class Product implements Serializable {
 	private Timestamp accrualLastDate;//到期还款时间
 	private String isOpenPurchase;//是否开放申购期
 	private String isOpenRemeed;//是否开放赎回期
-	private Timestamp endTime;//产品清算（结束）时间
+	private Date endDate;//产品清算（结束）时间
 	private Timestamp durationRepaymentTime;//存续期内还款时间
 	private String stems;//来源
 	private String isDeleted;
 	
+	private String state;//产品状态
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
+	private AssetPoolEntity assetPool;//资产配置
+	private Timestamp endTime;//产品清算（结束）时间
 	private String auditState;//审核状态
 
 }
