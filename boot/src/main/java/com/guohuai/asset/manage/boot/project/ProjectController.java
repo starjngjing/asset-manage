@@ -1,5 +1,5 @@
 
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -26,19 +26,19 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
 /**
- * @ClassName: ApprovalController
+ * @ClassName: ProjectController
  * @Description: 立项管理
- * @author xueyunlong
+ * @author vania
  * @date 2016年3月25日 上午10:08:44
  *
  */
 @RestController
-@RequestMapping("/asset/hill/approv")
-public class ApprovalController extends BaseController {
+@RequestMapping("/asset/hill/project")
+public class ProjectController extends BaseController {
 	@Autowired
-	private ApprovalDao approvalDao;
+	private ProjectDao approvalDao;
 	@Autowired
-	private ApprovalService approvalService;
+	private ProjectService approvalService;
 
 	@RequestMapping(value = "get", method = RequestMethod.POST)
 	public CommonResp get(String oid) {
@@ -49,9 +49,9 @@ public class ApprovalController extends BaseController {
 	}
 
 	@RequestMapping(value = "orderlist", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<ApprovalListResp> orderlist(HttpServletRequest request,
+	public @ResponseBody ResponseEntity<ProjectListResp> orderlist(HttpServletRequest request,
 			@And({ @Spec(path = "projectName", spec = Like.class), @Spec(path = "projectManager", spec = Equal.class),
-					@Spec(path = "pjType", params = "pjType", spec = Equal.class) }) Specification<Approval> spec,
+					@Spec(path = "pjType", params = "pjType", spec = Equal.class) }) Specification<Project> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int size, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
 		if (page < 1) {
@@ -60,19 +60,19 @@ public class ApprovalController extends BaseController {
 		if (size <= 0) {
 			size = 50;
 		}
-		Page<Approval> pagedata = approvalService.list(spec, page - 1, size, sortDirection, sortField);
-		ApprovalListResp resp = new ApprovalListResp(pagedata);
-		return new ResponseEntity<ApprovalListResp>(resp, HttpStatus.OK);
+		Page<Project> pagedata = approvalService.list(spec, page - 1, size, sortDirection, sortField);
+		ProjectListResp resp = new ProjectListResp(pagedata);
+		return new ResponseEntity<ProjectListResp>(resp, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public CommonResp save(ApprovalReq approvalReq) {
+	public CommonResp save(ProjectReq approvalReq) {
 
 		String oid = approvalReq.getOid();
 		if (oid != null && !"".equals(oid.trim())) {
-			Approval asOld = approvalDao.findOne(oid);
+			Project asOld = approvalDao.findOne(oid);
 		
-			Approval asNew = Approval.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
+			Project asNew = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
 					.endUseAmount(new BigDecimal(approvalReq.getEndUseAmount())).financialType1(approvalReq.getFinancialType1())
 					.financialType2(approvalReq.getFinancialType2()).isPhasedrelease(approvalReq.getIsPhasedrelease()).isStockCoopOrg(approvalReq.getIsStockCoopOrg()).orgName(approvalReq.getOrgName())
 					.pjSources(approvalReq.getPjSources()).projectType(approvalReq.getPjType()).relatedParty(approvalReq.getRelatedParty()).subsCount(approvalReq.getSubsCount())
@@ -83,7 +83,7 @@ public class ApprovalController extends BaseController {
 			approvalService.save(asNew);
 			return CommonResp.builder().errorCode(1).errorMessage("更新成功").build();
 		} else {
-			Approval approval = Approval.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
+			Project approval = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
 					.endUseAmount(new BigDecimal(approvalReq.getEndUseAmount())).financialType1(approvalReq.getFinancialType1())
 					.financialType2(approvalReq.getFinancialType2()).isPhasedrelease(approvalReq.getIsPhasedrelease()).isStockCoopOrg(approvalReq.getIsStockCoopOrg()).orgName(approvalReq.getOrgName())
 					.pjSources(approvalReq.getPjSources()).projectType(approvalReq.getPjType()).relatedParty(approvalReq.getRelatedParty()).subsCount(approvalReq.getSubsCount())

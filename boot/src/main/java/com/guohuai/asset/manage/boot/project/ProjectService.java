@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.util.List;
 
@@ -17,22 +17,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 @Service
-public class ApprovalService {
+public class ProjectService {
 
 	@Autowired
-	private ApprovalDao approvalDao;
+	private ProjectDao approvalDao;
 
 	@Transactional
-	public Page<Approval> list(Specification<Approval> spec, int page, int size, String sortDirection, String sortField) {
+	public Page<Project> list(Specification<Project> spec, int page, int size, String sortDirection, String sortField) {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page, size, new Sort(order));
-		Page<Approval> pagedata = this.approvalDao.findAll(spec, pageable);
+		Page<Project> pagedata = this.approvalDao.findAll(spec, pageable);
 		return pagedata;
 	}
 
 	@Transactional
-	public Approval get(String oid) {
-		Approval approv = this.approvalDao.findOne(oid);
+	public Project get(String oid) {
+		Project approv = this.approvalDao.findOne(oid);
 		if (null == approv) {
 			throw AMPException.getException("未知的项目ID");
 		}
@@ -51,7 +51,7 @@ public class ApprovalService {
 	 * @return Approval 返回类型
 	 */
 	@Transactional
-	public Approval save(Approval approv) {
+	public Project save(Project approv) {
 		if (null == approv)
 			throw AMPException.getException("底层项目不能为空");
 		if (StringUtils.isBlank(approv.getTargetOid())) {
@@ -71,7 +71,7 @@ public class ApprovalService {
 	 * @return
 	 * @return List<Approval> 返回类型
 	 */
-	public List<Approval> findListByInvestmentId(String targetOid) {
+	public List<Project> findListByInvestmentId(String targetOid) {
 		return this.approvalDao.findByTargetOid(targetOid);
 	}
 

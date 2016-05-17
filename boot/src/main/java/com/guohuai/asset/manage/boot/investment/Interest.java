@@ -20,6 +20,7 @@ import com.guohuai.asset.manage.component.persist.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -34,9 +35,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "T_GAM_INTEREST")
 @Data
+@Builder
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Interest extends UUID {
 
 	private static final long serialVersionUID = 4793726996152893232L;

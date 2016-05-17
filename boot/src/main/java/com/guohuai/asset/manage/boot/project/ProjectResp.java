@@ -1,39 +1,51 @@
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import com.guohuai.asset.manage.component.persist.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * @ClassName: Approval
- * @Description: 立项实体
- * @author vania
- * @date 2016年5月16日 上午10:15:56
- *
- */
-@Entity
-@Table(name = "T_GAM_APPROVAL")
 @Data
-@Builder
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Approval extends UUID {
+@Builder
+public class ProjectResp {
 
-	private static final long serialVersionUID = -8451087996991540133L;
+	public ProjectResp(Project appr) {
+		super();
+		this.projectName = appr.getProjectName();
+		this.projectManager = appr.getProjectManager();
+		this.projectType = appr.getProjectType();
+		this.pjSources = appr.getPjSources();
+		this.projectCity = appr.getProjectCity();
+		this.businesstype = appr.getBusinesstype();
+		this.relatedParty = appr.getRelatedParty();
+		this.isStockCoopOrg = appr.getIsStockCoopOrg();
+		this.usedAmount = appr.getUsedAmount();
+		this.endUseAmount = appr.getEndUseAmount();
+		this.orgName = appr.getOrgName();
+		this.financialType1 = appr.getFinancialType1();
+		this.financialType2 = appr.getFinancialType2();
+		this.isPhasedrelease = appr.getIsPhasedrelease();
+		this.subsCount = appr.getSubsCount();
+		this.tradeCredit = appr.getTradeCredit();
+		this.state = appr.getState();
+		// 记录人
+		this.recordMan = appr.getRecordMan();
+		// 操作人
+		this.operator = appr.getOperator();
 
-	// 关联投资标的id
-	private String targetOid;
+		this.contractState = appr.getContractState();
+		this.createTime = appr.getCreateTime();
+		this.updateTime = appr.getUpdateTime();
+		this.oid = appr.getOid();
+	}
+
+	String oid;
+
 	// 项目名称
 	private String projectName;
 	// 项目类型
@@ -113,8 +125,4 @@ public class Approval extends UUID {
 
 	private Timestamp submitTime, updateTime, createTime;
 
-	// @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy =
-	// "approval")
-	// @BatchSize (size = 5)
-	// private List <ApprovalRisk> orders = new ArrayList <ApprovalRisk> ();
 }
