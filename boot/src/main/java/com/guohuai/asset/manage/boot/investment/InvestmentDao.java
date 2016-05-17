@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface InvestmentDao
 		extends JpaRepository<Investment, String>, JpaSpecificationExecutor<Investment> {
-
+ 
 }
