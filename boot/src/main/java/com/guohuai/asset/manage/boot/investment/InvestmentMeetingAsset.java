@@ -1,7 +1,6 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.guohuai.asset.manage.boot.investment.InvestmentMeeting.InvestmentMeetingBuilder;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +22,13 @@ import lombok.NoArgsConstructor;
  * @author lirong
  *
  */
-
+@Entity
+@Table(name = "T_GAM_CONFERENCE_TARGET")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(callSuper = false)
 public class InvestmentMeetingAsset extends UUID implements Serializable {
 
 	private static final long serialVersionUID = -5306960536423543505L;
