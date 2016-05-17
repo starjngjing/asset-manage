@@ -24,20 +24,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName: CashMngTools
+ * @ClassName: CashMngTool
  * @Description: 现金管理工具实体
  * @author vania
  * @date 2016年5月16日 上午10:15:56
  *
  */
 @Entity
-@Table(name = "T_GAM_CASHMNGTOOLS")
+@Table(name = "T_GAM_CASHMNGTOOL")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashMngTools extends UUID {
+public class CashMngTool extends UUID {
 
 	private static final long serialVersionUID = -3696995771339594216L;
 
