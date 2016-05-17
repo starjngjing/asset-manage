@@ -86,7 +86,7 @@ public class Investment extends UUID implements Serializable {
 	/**
 	 * 标的限期
 	 */
-	private Integer lift;
+	private Integer life;
 	/**
 	 * 标的限期单位
 	 */
