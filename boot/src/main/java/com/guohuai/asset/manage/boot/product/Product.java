@@ -14,20 +14,30 @@ import com.guohuai.asset.manage.boot.dict.Dict;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Time;
 
+/**
+ * 产品实体
+ * @author wangyan
+ *
+ */
 @Entity
 @Table(name = "T_GAM_PRODUCT")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Product implements Serializable {
-
-	private static final long serialVersionUID = 625488295497843434L;
+	
+	private static final long serialVersionUID = 7767000944338560987L;
+	
+	public static final String YES = "YES";
+	public static final String NO = "NO";
 	
 	public static final String STATE_Create = "CREATE";//新建
 	public static final String STATE_Update = "UPDATE";//提交修改
@@ -49,12 +59,11 @@ public class Product implements Serializable {
 	public static final String DATE_TYPE_Trade = "TRADE";//交易日
 	
 	public static final String RISK_LEVEL_Low = "LOW";//低
-	public static final String RISK_LEVEL_Mid = "MID";//低
+	public static final String RISK_LEVEL_Mid = "MID";//
 	public static final String RISK_LEVEL_High = "HIGH";//低
 	
-	public static final String AUDIT_STATE_Create = "CREATE";//新建
-	public static final String AUDIT_STATE_Update = "UPDATE";//提交修改
-	public static final String AUDIT_STATE_Auditing = "AUDITING";//待审核
+	public static final String AUDIT_STATE_Nocommit = "NOCOMMIT";//未提交审核
+	public static final String AUDIT_STATE_Auditing = "AUDITING";//待审核(已经提交:审核)
 	public static final String AUDIT_STATE_Approval = "APPROVAL";//批准
 	public static final String AUDIT_STATE_Reject = "REJECT";//驳回
 	
@@ -90,9 +99,9 @@ public class Product implements Serializable {
 	@JoinColumn(name = "accrualCycleOid", referencedColumnName = "oid")
 	private Dict accrualCycle;//收益结转周期
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "accrualCycleOid", referencedColumnName = "oid")
+	@JoinColumn(name = "payModeOid", referencedColumnName = "oid")
 	private Dict payMode;//付利方式
-	private String payModeDate;//付利具体几号
+	private int payModeDate;//付利具体几号
 	private String raiseStartDateType;//募集开始时间类型
 	private Timestamp raiseStartDate;//募集开始时间
 	private int raisePeriod;//募集期:()个自然日
@@ -114,7 +123,6 @@ public class Product implements Serializable {
 	private String redeemConfirmDateType;//赎回确认日类型:自然日或交易日
 	private String setupDateType;//产品成立时间类型
 	private Timestamp setupDate;//产品成立时间（存续期开始时间）
-//	private String redeemType;//赎回类型
 	private int redeemTimingTaskDate;//赎回定时任务天数	 默认每日
 	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
 	private Time redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
@@ -122,31 +130,33 @@ public class Product implements Serializable {
 	private String instruction;//产品说明
 	private String riskLevel;//风险等级
 	private String fileKeys;//附加文件
+	private String state;//产品状态
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
 	private AssetPoolEntity assetPool;//资产配置
 	
-	private String state;//产品状态
+	
 	private Timestamp createTime;//创建时间
 	private Timestamp updateTime;//更新时间
 	private String operator;//操作员
+	private String publisher;//发行人
+	private int currentVolume;//当前份额
+	private int collectedVolume;//已募份额
+	private int purchaseNum;//已投次数
+	private int lockCollectedVolume;//锁定已募份额
 	
-	private Timestamp lockStartDate;//锁定开始时间
-	private Timestamp lockEndDate;//锁定结束时间
 	private Timestamp raiseEndDate;//募集结束时间
 	private Timestamp raiseFailDate;//募集宣告失败时间
 	private Timestamp durationPeriodEndDate;//存续期结束时间
 	private Timestamp accrualLastDate;//到期还款时间
-	private int isOpenPurchase;//开放申购期
-	private int isOpenRemeed;//开放赎回期
+	private String isOpenPurchase;//是否开放申购期
+	private String isOpenRemeed;//是否开放赎回期
 	private Timestamp endTime;//产品清算（结束）时间
 	private Timestamp durationRepaymentTime;//存续期内还款时间
 	private String stems;//来源
 	private String isDeleted;
 	
 	private String auditState;//审核状态
-	private String auditor;//审核人
-	private String auditComment;//审核备注
-	private Timestamp auditTime;//审核时间
 
 }
