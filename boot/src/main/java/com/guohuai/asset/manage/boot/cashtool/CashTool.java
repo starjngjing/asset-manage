@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName: CashMngTool
+ * @ClassName: CashTool
  * @Description: 现金管理工具实体
  * @author vania
  * @date 2016年5月16日 上午10:15:56
