@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApprovalResp {
+public class ProjectResp {
 
-	public ApprovalResp(Approval appr) {
+	public ProjectResp(Project appr) {
 		super();
 		this.projectName = appr.getProjectName();
 		this.projectManager = appr.getProjectManager();

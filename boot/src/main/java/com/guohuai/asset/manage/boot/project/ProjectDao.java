@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ApprovalDao extends JpaRepository<Approval, Serializable>, JpaSpecificationExecutor<Approval> {
+public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpecificationExecutor<Project> {
 
 
 	@Query(value="update T_GAM_APPROVAL set state = 'DELETED' where oid=?1", nativeQuery = true)
@@ -28,6 +28,6 @@ public interface ApprovalDao extends JpaRepository<Approval, Serializable>, JpaS
 	 * @return
 	 * @return List<Approval>    返回类型 
 	 */
-	public List<Approval> findByTargetOid(String targetOid);
+	public List<Project> findByTargetOid(String targetOid);
 	
 }

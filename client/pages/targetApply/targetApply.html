@@ -281,4 +281,445 @@
   </div>
 </div>
 
+<!-- 底层资产管理弹窗 -->
+<div id="assetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">底层资产管理</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <!-- 主体Grid -->
+            <div id="assetGrid" class="box box-primary">
+              <!-- Grid头部 -->
+              <div class="box-header">
+                <h3 class="box-title"></h3>
+                <div class="box-tools">
+                  <button id="assetAdd" class="btn btn-default btn-sm">
+                    <i class="fa fa-plus"></i> 新建底层资产
+                  </button>
+                </div>
+              </div>
+              <!-- Grid内容体 -->
+              <div class="box-body">
+                <!-- 搜索项表单 -->
+                <form id="assetSearchForm" name="searchForm" method="post" class="search-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label>资产名称</label>
+                        <input name="email" type="text"
+                               class="form-control input-sm"
+                               placeholder="搜索资产名称">
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <!-- 主体数据表格 -->
+                <table id="assetTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>项目经理</th>
+                    <th>类型</th>
+                    <th>城市</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 新建底层资产弹窗 -->
+<div id="addAssetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">新建底层资产</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 新增/编辑事件表单 -->
+        <form id="addAssetForm" name="addTargetForm" method="post">
+          <p class="form-header">项目概况</p>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>项目名称</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="项目名称">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>项目经理</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="项目经理">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>项目类型</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">请选择</option>
+                  <option>B</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">请选择</option>
+                  <option>B</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="说明">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>城市</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="城市">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>已默认认购期数</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="项目经理">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>资金方所在地</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="资金方所在地">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>资金用途</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="资金用途">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>项目还款来源</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="项目还款来源">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>外部信用增级措施</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">请选择</option>
+                  <option>B</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">请选择</option>
+                  <option>B</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="说明">
+              </div>
+            </div>
+          </div>
+          <!-- 金融类项目显示/隐藏层 -->
+          <div id="addAssetIsFinancial">
+            <p class="form-header">金融类项目</p>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>房地产项目所在地</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="房地产项目所在地">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>开发商排名</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="开发商排名">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>完工情况</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="完工情况">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>房地产项目属性</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">请选择</option>
+                    <option>B</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">请选择</option>
+                    <option>B</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="说明">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="addAssetIsProperty">
+            <p class="form-header">地产类项目</p>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>政府层级</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="政府层级">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>融资方</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="融资方">
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="form-header">担保人信息</p>
+          <div class="form-group">
+            <label>担保人</label>
+            <div class="row form-style">
+              <div class="col-sm-2">
+                <input name="radio1" type="radio" value="a" class="icheck" checked> 是
+              </div>
+              <div class="col-sm-2">
+                <input name="radio1" type="radio" value="a" class="icheck"> 否
+              </div>
+            </div>
+          </div>
+          <div id="addAssetHasSponsor">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>担保人所在地</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="担保人所在地">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>担保人总资产</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="担保人总资产">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>担保人负债</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="担保人负债">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>保证方式</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">请选择</option>
+                    <option>B</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="form-header">抵押信息</p>
+          <div class="form-group">
+            <label>抵押</label>
+            <div class="row form-style">
+              <div class="col-sm-2">
+                <input name="radio2" type="radio" value="a" class="icheck" checked> 是
+              </div>
+              <div class="col-sm-2">
+                <input name="radio2" type="radio" value="a" class="icheck"> 否
+              </div>
+            </div>
+          </div>
+          <div id="addAssetHasMortgage">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>抵押人</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="质押人">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>受益人</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="受益人">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>质押</label>
+            <div class="row form-style">
+              <div class="col-sm-2">
+                <input name="radio2" type="radio" value="a" class="icheck" checked> 是
+              </div>
+              <div class="col-sm-2">
+                <input name="radio2" type="radio" value="a" class="icheck"> 否
+              </div>
+            </div>
+          </div>
+          <div id="addAssetHasPledge">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>质押人</label>
+                  <input name="title" type="text"
+                         class="form-control input-sm"
+                         placeholder="质押人">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>质押方式</label>
+                  <select class="form-control input-sm">
+                    <option selected="selected">请选择</option>
+                    <option>B</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="form-header">其他信息</p>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>项目规模</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="项目规模">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>融资成本</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="融资成本">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>委托采购主体（SPV）</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="委托采购主体（SPV）">
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label>SPV通道费</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="SPV通道费">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 

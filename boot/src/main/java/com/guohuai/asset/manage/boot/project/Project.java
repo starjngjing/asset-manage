@@ -1,11 +1,17 @@
-package com.guohuai.asset.manage.boot.approval;
+package com.guohuai.asset.manage.boot.project;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -15,25 +21,28 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName: Approval
- * @Description: 立项实体
+ * @ClassName: Project
+ * @Description: 底层项目实体
  * @author vania
  * @date 2016年5月16日 上午10:15:56
  *
  */
 @Entity
-@Table(name = "T_GAM_APPROVAL")
+@Table(name = "T_GAM_PROJECT")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Approval extends UUID {
+public class Project extends UUID {
 
 	private static final long serialVersionUID = -8451087996991540133L;
 
 	// 关联投资标的id
-	private String targetOid;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
+	@JsonBackReference
+	private Investment investment;
 	// 项目名称
 	private String projectName;
 	// 项目类型
