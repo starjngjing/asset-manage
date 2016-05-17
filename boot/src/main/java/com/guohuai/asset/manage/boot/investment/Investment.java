@@ -13,10 +13,11 @@ import com.guohuai.asset.manage.component.persist.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 投资标的
+ * 投资标的实体类
  * 
  * @author Administrator
  *
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = false)
 public class Investment extends UUID implements Serializable {
 
 	private static final long serialVersionUID = 7108314017534718240L;
@@ -91,7 +93,7 @@ public class Investment extends UUID implements Serializable {
 	/**
 	 * 标的限期（日）
 	 */
-	private Date deadlineDate;
+	private Integer deadlineCal;
 	/**
 	 * 合同年天数
 	 */
