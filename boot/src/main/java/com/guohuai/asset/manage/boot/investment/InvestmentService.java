@@ -15,7 +15,7 @@ import com.guohuai.asset.manage.component.util.DateUtil;
 public class InvestmentService {
 
 	@Autowired
-	private InvestmentDao investmentDao; 
+	private InvestmentDao investmentDao;
 
 	/**
 	 * 获得投资标的列表

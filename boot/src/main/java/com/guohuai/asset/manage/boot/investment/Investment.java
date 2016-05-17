@@ -209,5 +209,4 @@ public class Investment extends UUID implements Serializable {
 	 */
 	private Timestamp updateTime;
 
-	
 }
