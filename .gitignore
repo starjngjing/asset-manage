@@ -4,3 +4,6 @@ node_modules
 gulpfile.js
 package.json
 *.log.*
+*.log
+.factorypath
+.project
