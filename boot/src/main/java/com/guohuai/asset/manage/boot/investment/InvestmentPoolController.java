@@ -52,12 +52,21 @@ public class InvestmentPoolController extends BaseController {
 	InterestService interestService;
 
 	/**
-	 * 标的成立管理列表 @Title: listinvestment @author vania @version 1.0 @see: @param
-	 * request @param spec @param page @param size @param sortDirection @param
-	 * sortField @return @return ResponseEntity<InvestmentListResp> 返回类型 @throws
+	 * 标的成立管理列表
+	 *  @Title: listinvestment 
+	 *  @author vania 
+	 *  @version 1.0 
+	 *  @see: 
+	 *  @param request 
+	 *  @param spec 
+	 *  @param page 
+	 *  @param size 
+	 *  @param sortDirection 
+	 *  @param sortField 
+	 *  @return ResponseEntity<InvestmentListResp> 返回类型 
 	 */
 	@RequestMapping(value = "listinvestment", method = { RequestMethod.POST, RequestMethod.GET })
-	@ApiOperation(value = "标的成立管理列表", extensions = { @Extension(properties = { @ExtensionProperty(name = "x-code", value = "1001,1002"), @ExtensionProperty(name = "x-ref", value = "innerResp") }) })
+	@ApiOperation(value = "标的成立管理列表")
 	public @ResponseBody ResponseEntity<InvestmentListResp> listinvestment(HttpServletRequest request,
 			@And({ @Spec(path = "projectName", spec = Like.class), @Spec(path = "projectManager", spec = Equal.class),
 					@Spec(path = "pjType", params = "pjType", spec = Equal.class) }) Specification<Investment> spec,
@@ -78,17 +87,24 @@ public class InvestmentPoolController extends BaseController {
 	}
 
 	/**
-	 * 标的成立 @Title: establish @author vania @version 1.0 @see: @return @return
-	 * CommonResp 返回类型 @throws
+	 * 标的成立 
+	 * @Title: establish 
+	 * @author vania 
+	 * @version 1.0 @see: 
+	 * @return CommonResp 返回类型
 	 */
 	@RequestMapping("establish")
-	@ApiOperation(value = "标的成立", extensions = { @Extension(properties = { @ExtensionProperty(name = "x-code", value = "1001,1002"), @ExtensionProperty(name = "x-ref", value = "innerResp") }) })
+	@ApiOperation(value = "标的成立")
 	public CommonResp establish() {
 		return CommonResp.builder().errorCode(1).errorMessage("标的成立成功！").attached("").build();
 	}
 
 	/**
-	 * 标的不成立 @Title: unEstablish @author vania @version 1.0 @see: @return
+	 * 标的不成立 
+	 * @Title: unEstablish 
+	 * @author vania 
+	 * @version 1.0 
+	 * @see: @return
 	 * CommonResp 返回类型 @throws
 	 */
 	@RequestMapping("unEstablish")
