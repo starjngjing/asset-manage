@@ -117,32 +117,32 @@
             </li>
             <li class="header">产品管理</li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="productDesign">
                 <i class="fa fa-behance"></i>
                 <span>产品申请管理</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="productAudit">
                 <i class="fa fa-bitbucket"></i>
                 <span>审核列表</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="productReview">
                 <i class="fa fa-bitcoin"></i>
                 <span>复核列表</span>
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="productAccess">
                 <i class="fa fa-black-tie"></i>
                 <span>产品准入管理</span>
               </a>
             </li>
             <li class="header">运营管理</li>
             <li>
-              <a href="javascript:void(0)">
+              <a href="javascript:void(0)" data-gh-route="productOperating">
                 <i class="fa fa-buysellads"></i>
                 <span>产品运营管理</span>
               </a>
@@ -248,7 +248,12 @@
           'targetAccess',
           'targetConvention',
           'targetVote',
-          'targetStorage'
+          'targetStorage',
+          'productDesign',
+          'productAudit',
+          'productReview',
+          'productAccess',
+          'productOperating'
         ]
         var navRequire = (function () {
           var arr = ['config', 'extension', 'http', 'util', 'moment/moment.min']
