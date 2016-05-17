@@ -3,9 +3,15 @@ package com.guohuai.asset.manage.boot.project;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -33,7 +39,10 @@ public class Project extends UUID {
 	private static final long serialVersionUID = -8451087996991540133L;
 
 	// 关联投资标的id
-	private String targetOid;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
+	@JsonBackReference
+	private Investment investment;
 	// 项目名称
 	private String projectName;
 	// 项目类型

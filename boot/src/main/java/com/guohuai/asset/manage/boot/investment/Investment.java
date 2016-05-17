@@ -35,16 +35,18 @@ public class Investment extends UUID implements Serializable {
 
 	/**
 	 * 投资标的状态status waitPretrial 等待预审 pretrial 预审中 waitMeeting 待过会 metting 过会中
-	 * collecting 募集期 running 成立（运营期） reject 驳回 invalid 作废
+	 * collecting 募集期 （运营期） reject 驳回 invalid 作废 
 	 */
 	public static final String INVESTMENT_STATUS_waitPretrial = "waitPretrial";
 	public static final String INVESTMENT_STATUS_pretrial = "pretrial";
 	public static final String INVESTMENT_STATUS_waitMeeting = "waitMeeting";
 	public static final String INVESTMENT_STATUS_metting = "metting";
 	public static final String INVESTMENT_STATUS_collecting = "collecting";
-	public static final String INVESTMENT_STATUS_running = "running";
-	public static final String INVESTMENT_STATUS_reject = "reject";
-	public static final String INVESTMENT_STATUS_invalid = "invalid";
+	public static final String INVESTMENT_STATUS_establish = "establish"; // 成立
+	public static final String INVESTMENT_STATUS_unEstablish = "unEstablish"; //成立失败
+	public static final String INVESTMENT_STATUS_reject = "reject"; //  reject 驳回 
+	public static final String INVESTMENT_STATUS_overdue = "overdue"; // overdue逾期
+	public static final String INVESTMENT_STATUS_invalid = "invalid"; //invalid 作废 
 
 	/**
 	 * 标的编号

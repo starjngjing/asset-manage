@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -48,6 +49,7 @@ public class RequestParamConfig {
 	}
 
 	@Bean
+	@Primary
 	public Jackson2ObjectMapperFactoryBean jackson2ObjectMapperFactoryBeanConfig() {
 		Jackson2ObjectMapperFactoryBean bean = new Jackson2ObjectMapperFactoryBean();
 
