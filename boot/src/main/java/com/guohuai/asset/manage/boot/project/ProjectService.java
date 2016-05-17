@@ -63,7 +63,7 @@ public class ProjectService {
 	/**
 	 * 通过标的id查询底层项目
 	 * 
-	 * @Title: findListByInvestmentId
+	 * @Title: findByInvestmentId
 	 * @author vania
 	 * @version 1.0
 	 * @see:
@@ -71,7 +71,7 @@ public class ProjectService {
 	 * @return
 	 * @return List<Approval> 返回类型
 	 */
-	public List<Project> findListByInvestmentId(String targetOid) {
+	public List<Project> findByInvestmentId(String targetOid) {
 		return this.approvalDao.findByTargetOid(targetOid);
 	}
 

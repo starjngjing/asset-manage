@@ -18,6 +18,6 @@ public class CommonResp {
 	int total, errorCode;
 //	String erroMsg;
 	String errorMessage;
-	List<Object> rows = new ArrayList<>();
+	List rows = new ArrayList<>();
 	String attached;
 }

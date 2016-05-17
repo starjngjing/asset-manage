@@ -3,6 +3,7 @@ package com.guohuai.asset.manage.boot.project;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.web.BaseController;
 
+import io.swagger.annotations.ApiOperation;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -36,15 +38,16 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 @RequestMapping("/asset/hill/project")
 public class ProjectController extends BaseController {
 	@Autowired
-	private ProjectDao approvalDao;
+	private ProjectDao projectDao;
 	@Autowired
-	private ProjectService approvalService;
+	private ProjectService projectService;
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "get", method = RequestMethod.POST)
 	public CommonResp get(String oid) {
 		CommonResp cr = new CommonResp();
 		cr.setErrorCode(1);
-		cr.getRows().add(approvalDao.findOne(oid));
+		cr.getRows().add((Project) projectDao.findOne(oid));
 		return cr;
 	}
 
@@ -60,7 +63,7 @@ public class ProjectController extends BaseController {
 		if (size <= 0) {
 			size = 50;
 		}
-		Page<Project> pagedata = approvalService.list(spec, page - 1, size, sortDirection, sortField);
+		Page<Project> pagedata = projectService.list(spec, page - 1, size, sortDirection, sortField);
 		ProjectListResp resp = new ProjectListResp(pagedata);
 		return new ResponseEntity<ProjectListResp>(resp, HttpStatus.OK);
 	}
@@ -70,7 +73,7 @@ public class ProjectController extends BaseController {
 
 		String oid = approvalReq.getOid();
 		if (oid != null && !"".equals(oid.trim())) {
-			Project asOld = approvalDao.findOne(oid);
+			Project asOld = projectDao.findOne(oid);
 		
 			Project asNew = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
 					.endUseAmount(new BigDecimal(approvalReq.getEndUseAmount())).financialType1(approvalReq.getFinancialType1())
@@ -79,8 +82,7 @@ public class ProjectController extends BaseController {
 					.tradeCredit(approvalReq.getTradeCredit()).usedAmount(new BigDecimal(approvalReq.getUsedAmount())).updateTime(new Timestamp(System.currentTimeMillis())).build();
 			asNew.setOid(asOld.getOid());
 			asNew.setCreateTime(asOld.getCreateTime());
-//			approvalDao.save(asNew);
-			approvalService.save(asNew);
+			projectService.save(asNew);
 			return CommonResp.builder().errorCode(1).errorMessage("更新成功").build();
 		} else {
 			Project approval = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
@@ -89,10 +91,26 @@ public class ProjectController extends BaseController {
 					.pjSources(approvalReq.getPjSources()).projectType(approvalReq.getPjType()).relatedParty(approvalReq.getRelatedParty()).subsCount(approvalReq.getSubsCount())
 					.tradeCredit(approvalReq.getTradeCredit()).usedAmount(new BigDecimal(approvalReq.getUsedAmount())).createTime(new Timestamp(System.currentTimeMillis()))
 					.businesstype(approvalReq.getBusinesstype()).build();
-//			approvalDao.save(approval);
-			approvalService.save(approval);
+			projectService.save(approval);
 			return CommonResp.builder().errorCode(1).errorMessage("保存成功！").attached(approval.getOid()).build();
 		}
+	}
+
+	/**
+	 * 根据标的id查询底层项目
+	 * @Title: getByInvestmentId 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param targetOid
+	 * @return
+	 * @return CommonResp    返回类型 
+	 */
+	@ApiOperation(value = "根据标的id查询底层项目")
+	@RequestMapping(value = "getByInvestmentId")
+	public CommonResp getByInvestmentId(@RequestParam(required = true) String targetOid) {
+		List<Project> list = this.projectService.findByInvestmentId(targetOid);
+		return CommonResp.builder().errorCode(1).errorMessage("保存成功！").rows(list).total(null == list ? 0 : list.size()).build();
 	}
 
 }

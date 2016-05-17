@@ -43,6 +43,8 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 public class InvestmentPoolController extends BaseController {
 	@Autowired
 	InvestmentService investmentService;
+	@Autowired
+	InterestService interestService;
 		
 	/**
 	 * 标的成立管理列表
@@ -117,5 +119,22 @@ public class InvestmentPoolController extends BaseController {
 					@ExtensionProperty(name = "x-ref", value = "innerResp") }) })
 	public CommonResp unEstablish() {
 		return CommonResp.builder().errorCode(1).errorMessage("标的不成立成功！").attached("").build();
+	}
+
+	/**
+	 * 投资标的本息兑付
+	 * 
+	 * @Title: interestSave
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param interest
+	 * @return
+	 * @return CommonResp 返回类型
+	 */
+	@RequestMapping("interestSave")
+	public CommonResp interestSave(Interest interest) {
+		interest = interestService.save(interest);
+		return CommonResp.builder().errorCode(1).errorMessage("投资标的本息兑付成功！").attached(interest.getOid()).build();
 	}
 }
