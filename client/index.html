@@ -311,6 +311,7 @@
                 })
               location.hash = params.value ? route + '?' + params.value : route
               params.value = ''
+              document.body.scrollTop = 0
             })
             .each(function (index, item) {
               if (!hash) {

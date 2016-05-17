@@ -14,29 +14,69 @@
   <div class="row">
     <div class="col-xs-12">
       <!-- 主体Grid -->
-      <div id="dataGrid" class="box box-primary">
+      <div id="targetConventionGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
+          <h3 class="box-title">会议列表</h3>
           <div class="box-tools">
             <button id="eventAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 新建
+              <i class="fa fa-plus"></i> 新建会议
             </button>
           </div>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
+          <!-- 搜索项表单 -->
+          <form id="searchForm" name="searchForm" method="post" class="search-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>会议编号</label>
+                  <input name="email" type="text"
+                         class="form-control input-sm"
+                         placeholder="搜索会议编号">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>会议主题</label>
+                  <input name="email" type="text"
+                         class="form-control input-sm"
+                         placeholder="搜索会议主题">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>标的类型</label>
+                  <select name="validState" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="ok">已验证</option>
+                    <option value="no">未验证</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>状态</label>
+                  <select name="infoState" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="isWrite">已填写</option>
+                    <option value="noWrite">未填写</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
           <!-- 主体数据表格 -->
-          <table id="dataTable" class="table table-bordered table-striped">
+          <table id="targetConventionTable" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th></th>
-              <th>姓名</th>
-              <th>性别</th>
-              <th>年龄</th>
-              <th>进度</th>
-              <th>完成度</th>
-              <th>公司</th>
+              <th>编号</th>
+              <th>主题</th>
+              <th>与会人</th>
+              <th>召开时间</th>
+              <th>状态</th>
+              <th>更新时间</th>
               <th>操作</th>
             </tr>
             </thead>

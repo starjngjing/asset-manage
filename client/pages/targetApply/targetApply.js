@@ -8,6 +8,7 @@ define([
     name: 'targetApply',
     init: function () {
       // js逻辑写在这里
+
     }
   }
 })

@@ -20,26 +20,45 @@
           <h3 class="box-title">标题</h3>
           <div class="box-tools">
             <button id="eventAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 按钮1
-            </button>
-            <button id="historyShow" class="btn btn-default btn-sm">
-              <i class="fa fa-history"></i> 按钮2
+              <i class="fa fa-plus"></i> 新建渠道
             </button>
           </div>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
+          <!-- 搜索项表单 -->
+          <form id="searchForm" name="searchForm" method="post" class="search-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>渠道名称</label>
+                  <input name="email" type="text"
+                         class="form-control input-sm"
+                         placeholder="搜索渠道名称">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>渠道状态</label>
+                  <select name="validState" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="ok">已验证</option>
+                    <option value="no">未验证</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
           <!-- 主体数据表格 -->
           <table id="dataTable" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th></th>
-              <th>姓名</th>
-              <th>性别</th>
-              <th>年龄</th>
-              <th>进度</th>
-              <th>完成度</th>
-              <th>公司</th>
+              <th>标识</th>
+              <th>名称</th>
+              <th>机构名称</th>
+              <th>接入方式</th>
+              <th>费率</th>
+              <th>状态</th>
               <th>操作</th>
             </tr>
             </thead>

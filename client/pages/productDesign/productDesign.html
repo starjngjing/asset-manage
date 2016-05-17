@@ -14,32 +14,55 @@
   <div class="row">
     <div class="col-xs-12">
       <!-- 主体Grid -->
-      <div id="dataGrid" class="box box-primary">
+      <div id="productDesignGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
+          <h3 class="box-title">产品申请列表</h3>
           <div class="box-tools">
             <button id="eventAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 按钮1
-            </button>
-            <button id="historyShow" class="btn btn-default btn-sm">
-              <i class="fa fa-history"></i> 按钮2
+              <i class="fa fa-plus"></i> 新建产品
             </button>
           </div>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
+          <!-- 搜索项表单 -->
+          <form id="searchForm" name="searchForm" method="post" class="search-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>产品名称</label>
+                  <input name="email" type="text"
+                         class="form-control input-sm"
+                         placeholder="搜索产品名称">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>产品类型</label>
+                  <select name="validState" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="ok">已验证</option>
+                    <option value="no">未验证</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
           <!-- 主体数据表格 -->
-          <table id="dataTable" class="table table-bordered table-striped">
+          <table id="productDesignTable" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th></th>
-              <th>姓名</th>
-              <th>性别</th>
-              <th>年龄</th>
-              <th>进度</th>
-              <th>完成度</th>
-              <th>公司</th>
+              <th>编号</th>
+              <th>名称</th>
+              <th>类型</th>
+              <th>管理人</th>
+              <th>期限</th>
+              <th>预期年化收益</th>
+              <th>份额</th>
+              <th>单位份额净值</th>
+              <th>渠道数量</th>
+              <th>创建时间</th>
               <th>操作</th>
             </tr>
             </thead>

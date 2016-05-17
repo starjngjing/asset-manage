@@ -14,24 +14,24 @@
   <div class="row">
     <div class="col-xs-12">
       <!-- 主体Grid -->
-      <div id="dataGrid" class="box box-primary">
+      <div id="targetAccessGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
+          <h3 class="box-title">会前审查列表</h3>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
           <!-- 主体数据表格 -->
-          <table id="dataTable" class="table table-bordered table-striped">
+          <table id="targetAccessTable" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th></th>
-              <th>姓名</th>
-              <th>性别</th>
-              <th>年龄</th>
-              <th>进度</th>
-              <th>完成度</th>
-              <th>公司</th>
+              <th>编号</th>
+              <th>名称</th>
+              <th>付息方式</th>
+              <th>拟成立日</th>
+              <th>标的类型</th>
+              <th>资产规模</th>
+              <th>预期年化收益</th>
               <th>操作</th>
             </tr>
             </thead>
@@ -41,3 +41,36 @@
     </div>
   </div>
 </section>
+
+<!-- 预审弹窗 -->
+<div id="accessModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">默认大小</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="accessFrom" name="accessFrom" method="post">
+          <!-- 预审意见 -->
+          <div class="form-group">
+            <label>预审意见</label>
+                  <textarea name="content" rows="3"
+                            class="form-control input-sm"
+                            placeholder="请输入预审意见"></textarea>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button type="button" class="btn btn-warning btn-submit accessSubmit">驳 回</button>
+        <button type="button" class="btn btn-primary btn-submit accessSubmit">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>

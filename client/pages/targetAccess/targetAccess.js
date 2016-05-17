@@ -8,6 +8,7 @@ define([
     name: 'targetAccess',
     init: function () {
       // js逻辑写在这里
+
     }
   }
 })
