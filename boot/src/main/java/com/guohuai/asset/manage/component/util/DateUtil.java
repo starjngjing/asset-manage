@@ -334,6 +334,15 @@ public class DateUtil {
 		
 		return parseDate(sdate, datePattern);
 	}
+	
+	/**
+	 * 获取系统当前SQL类型的Timestamp
+	 * 
+	 * @return 当前时间
+	 */
+	public static Timestamp getSqlCurrentDate() {
+		return new Timestamp(Clock.DEFAULT.getCurrentTimeInMillis());
+	}
 
 	/**
 	 * 获取当前日期的当前日历
