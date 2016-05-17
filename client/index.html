@@ -142,9 +142,15 @@
             </li>
             <li class="header">运营管理</li>
             <li>
-              <a href="javascript:void(0)" data-gh-route="productOperating">
+              <a href="javascript:void(0)" data-gh-route="AssetPool">
                 <i class="fa fa-buysellads"></i>
-                <span>产品运营管理</span>
+                <span>资产池管理</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" data-gh-route="AssetPoolDuration">
+                <i class="fa fa-buysellads"></i>
+                <span>资产池存续期管理</span>
               </a>
             </li>
             <li>
@@ -254,7 +260,8 @@
           'productAudit',
           'productReview',
           'productAccess',
-          'productOperating'
+          'AssetPool',
+          'AssetPoolDuration'
         ]
         var navRequire = (function () {
           var arr = ['config', 'extension', 'http', 'util']
@@ -269,14 +276,6 @@
           var config = requireModules[0]
           var $$ = requireModules[1]
           var http = requireModules[2]
-          /**
-           * 登出
-           */
-          $('#logout').on('click', function () {
-            http.post(config.api.logout, function () {
-              location.href = 'login.html'
-            })
-          })
 
           // 获取hash，通过hash定位到当前页面，hash中 '?' 及以后的部分作为参数内容，不作为页面判断依据
           // 参数内容暂存在params中，仅在初次载入页面时有效，点击导航栏按钮切换页面后失效
@@ -307,6 +306,20 @@
                       requireModules[key].init()
                     }
                   }
+                  // 全局阻止form默认input焦点回车提交表单事件
+                  $('form')
+                    .find('input')
+                    .on('focus', function () {
+                      $(document).on('keydown.formInput', function (e) {
+                        if (e.keyCode === 13) {
+                          e.preventDefault()
+                          return false
+                        }
+                      })
+                    })
+                    .on('blur', function () {
+                      $(document).off('keydown.formInput')
+                    })
                   // icheck select2 datetimepicker全局初始化
                   $$.inputPluginsInit($(document))
                 })
@@ -335,6 +348,27 @@
             contentType: 'form'
           }, function (userInfo) {
             $('#userMenu').find('.userName').html(userInfo.name)
+          })
+
+          /**
+           * 获取枚举值信息存到config中，并首次全局初始化
+           */
+          http.post(config.api.dictList, {
+            contentType: 'form'
+          }, function (enums) {
+            for (var key in enums) {
+              config[key] = enums[key]
+            }
+            $$.enumSourceInit($(document))
+          })
+
+          /**
+           * 登出
+           */
+          $('#logout').on('click', function () {
+            http.post(config.api.logout, function () {
+              location.href = 'login.html'
+            })
           })
 
           // fix select2在bootstrap modal中input无法focus的问题

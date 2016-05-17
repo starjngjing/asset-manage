@@ -12,7 +12,7 @@ define(function () {
      * api 接口提供与服务器异步交互地址
      */
     api: {
-
+      dictList: this.host + '/ams/dict/list'                // 枚举值获取接口
     },
     /**
      * targetStates 标的状态
