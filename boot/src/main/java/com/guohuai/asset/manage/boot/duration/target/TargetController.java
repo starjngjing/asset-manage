@@ -1,15 +1,15 @@
-package com.guohuai.asset.manage.boot.duration.product;
+package com.guohuai.asset.manage.boot.duration.target;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolForm;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
@@ -23,11 +23,12 @@ import com.guohuai.asset.manage.component.web.view.Response;
  * @author star.zhu
  * 2016年5月17日
  */
-@Controller
-public class ProductController {
+@RestController
+@RequestMapping(value = "/assetManagement/duration/product", produces = "application/json;charset=utf-8")
+public class TargetController {
 	
 	@Autowired
-	private ProductService productService;
+	private TargetService productService;
 	@Autowired
 	private AssetPoolService assetPoolService;
 	@Autowired

@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.duration.product;
+package com.guohuai.asset.manage.boot.duration.target;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import com.guohuai.asset.manage.boot.duration.order.TrustForm;
  * 2016年5月17日
  */
 @Service
-public class ProductService {
+public class TargetService {
 
 	/**
 	 * 根据 oid 获取 货币基金（现金类管理工具） 详情
