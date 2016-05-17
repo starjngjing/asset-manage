@@ -32,7 +32,6 @@ import lombok.NoArgsConstructor;
 public class Investment extends UUID implements Serializable {
 
 	private static final long serialVersionUID = 7108314017534718240L;
-
 	/**
 	 * 投资标的状态status waitPretrial 等待预审 pretrial 预审中 waitMeeting 待过会 metting 过会中
 	 * collecting 募集期 （运营期） reject 驳回 invalid 作废 

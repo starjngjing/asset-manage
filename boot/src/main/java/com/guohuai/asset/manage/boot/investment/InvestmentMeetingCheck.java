@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Entity
-@Table(name = "T_GAM_INVESTMENT_MEETING_CHECK")
+@Table(name = "T_GAM_TARGET_CHECKLIST")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,34 +45,34 @@ public class InvestmentMeetingCheck extends UUID implements Serializable {
 	 * 投资标的
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "investmentOid", referencedColumnName = "oid")
+	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	private Investment investment;
 	/**
 	 * 会议
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "meetingOid", referencedColumnName = "oid")
+	@JoinColumn(name = "conferenceOid", referencedColumnName = "oid")
 	private InvestmentMeeting InvestmentMeeting;
 	/**
 	 * 检查项名称
 	 */
-	private String checkTitle;
+	private String title;
 	/**
 	 * 检查状态
 	 */
-	private String status;
+	private String state;
 	/**
 	 * 检查成功说明
 	 */
-	private String checkSucDet;
+	private String checkDesc;
 	/**
-	 * 检查成功说明
+	 * 检查成功附件
 	 */
-	private String checkSucEnclosure;
+	private String checkFile;
 	/**
 	 * 检查人
 	 */
-	private String checkUser;
+	private String checker;
 	/**
 	 * 检查时间
 	 */

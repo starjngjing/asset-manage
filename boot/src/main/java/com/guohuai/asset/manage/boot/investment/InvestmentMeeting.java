@@ -1,11 +1,14 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.guohuai.asset.manage.boot.investment.Investment.InvestmentBuilder;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -20,8 +23,9 @@ import lombok.NoArgsConstructor;
  * @author Administrator
  *
  */
+
 @Entity
-@Table(name = "T_GAM_INVESTMENT_MEETING")
+@Table(name = "T_GAM_CONFERENCE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,10 +34,10 @@ import lombok.NoArgsConstructor;
 public class InvestmentMeeting extends UUID implements Serializable {
 
 	private static final long serialVersionUID = -248787174503909861L;
-	private String meetingCode;
-	private String meetingName;
-	private String status;
-	private Timestamp meetingTime;
+	private String sn;
+	private String title;
+	private String tate;
+	private Timestamp conferenceTime;
 	private String creator;
 	private String operator;
 	private Timestamp createTime;
