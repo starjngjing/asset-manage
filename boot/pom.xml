@@ -13,17 +13,45 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.1.RELEASE</version>
+		<version>1.3.5.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
+		<activiti.version>5.20.0</activiti.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<start-class>com.guohuai.AssetPlatformBoot</start-class>
 	</properties>
 
 	<dependencies>
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-spring-boot-starter-basic</artifactId>
+		    <version>${activiti.version}</version>
+		    <exclusions>
+				<exclusion>
+					<groupId>commons-dbcp</groupId>
+					<artifactId>commons-dbcp</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>		
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring-boot-starter-actuator</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring-boot-starter-jpa</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring-boot-starter-rest-api</artifactId>
+			<version>${activiti.version}</version>
+		</dependency> -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
