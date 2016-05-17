@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.fund;
+package com.guohuai.asset.manage.boot.duration.fund;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

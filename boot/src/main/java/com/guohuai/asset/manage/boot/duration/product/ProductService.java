@@ -1,9 +1,9 @@
-package com.guohuai.asset.manage.boot.Duration.product;
+package com.guohuai.asset.manage.boot.duration.product;
 
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.Duration.order.FundForm;
-import com.guohuai.asset.manage.boot.Duration.order.TrustForm;
+import com.guohuai.asset.manage.boot.duration.order.FundForm;
+import com.guohuai.asset.manage.boot.duration.order.TrustForm;
 
 /**
  * 存续期--产品服务接口

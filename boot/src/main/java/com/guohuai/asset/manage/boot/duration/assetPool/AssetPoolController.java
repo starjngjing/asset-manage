@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.assetPool;
+package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.util.List;
 

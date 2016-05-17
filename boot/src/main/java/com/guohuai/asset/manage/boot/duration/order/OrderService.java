@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.order;
+package com.guohuai.asset.manage.boot.duration.order;
 
 import java.util.List;
 

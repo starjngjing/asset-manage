@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.order;
+package com.guohuai.asset.manage.boot.duration.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

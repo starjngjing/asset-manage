@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.Duration.product;
+package com.guohuai.asset.manage.boot.duration.product;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolForm;
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolService;
-import com.guohuai.asset.manage.boot.Duration.order.FundForm;
-import com.guohuai.asset.manage.boot.Duration.order.OrderService;
-import com.guohuai.asset.manage.boot.Duration.order.TrustForm;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolForm;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
+import com.guohuai.asset.manage.boot.duration.order.FundForm;
+import com.guohuai.asset.manage.boot.duration.order.OrderService;
+import com.guohuai.asset.manage.boot.duration.order.TrustForm;
 import com.guohuai.asset.manage.component.web.view.Response;
 
 /**

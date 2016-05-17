@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.guohuai.asset.manage.boot.Duration.assetPool.AssetPoolEntity;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.dict.Dict;
 
 import lombok.AllArgsConstructor;
