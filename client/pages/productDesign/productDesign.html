@@ -22,6 +22,12 @@
             <button id="productAdd" class="btn btn-default btn-sm">
               <i class="fa fa-plus"></i> 新建产品
             </button>
+            <button id="productAudit" class="btn btn-default btn-sm">
+              <i class="fa fa-plus"></i> 提交审核
+            </button>
+            <button id="productAssetPool" class="btn btn-default btn-sm">
+              <i class="fa fa-plus"></i> 选择资产池
+            </button>
           </div>
         </div>
         <!-- Grid内容体 -->
@@ -32,7 +38,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>产品名称</label>
-                  <input name="email" type="text"
+                  <input name="name" type="text"
                          class="form-control input-sm"
                          placeholder="搜索产品名称">
                 </div>
@@ -40,7 +46,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>产品类型</label>
-                  <select name="validState" class="form-control input-sm">
+                  <select name="type" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE" data-enum-text="全部">
                     <option value="" selected>不限</option>
                     <option value="ok">已验证</option>
                     <option value="no">未验证</option>
@@ -53,13 +59,14 @@
           <table id="productDesignTable" class="table table-bordered table-striped">
             <thead>
             <tr>
+            	<th></th>
               <th>编号</th>
               <th>名称</th>
               <th>类型</th>
               <th>管理人</th>
-              <th>期限</th>
+              <th>期限(天)</th>
               <th>预期年化收益</th>
-              <th>份额</th>
+              <th>总份额</th>
               <th>单位份额净值</th>
               <th>渠道数量</th>
               <th>创建时间</th>
@@ -82,7 +89,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">新建标的</h4>
+        <h4 class="modal-title">新建产品</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
@@ -92,16 +99,16 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
-                <label>产品名称</label>
-                <input name="title" type="text"
+                <label>产品编码</label>
+                <input name="code" type="text"
                        class="form-control input-sm"
-                       placeholder="产品名称">
+                       placeholder="产品编码">
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
                 <label>产品简称</label>
-                <input name="title" type="text"
+                <input name="name" type="text"
                        class="form-control input-sm"
                        placeholder="产品简称">
               </div>
@@ -109,7 +116,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>产品全称</label>
-                <input name="title" type="text"
+                <input name="fullName" type="text"
                        class="form-control input-sm"
                        placeholder="产品全称">
               </div>
@@ -119,26 +126,24 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>产品类型</label>
-                <select class="form-control input-sm">
-                  <option selected="selected">封闭式</option>
-                  <option>开放式</option>
+                <select id="typeSelect" name="typeOid" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE">
                 </select>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
                 <label>产品管理人</label>
-                <input name="title" type="text"
+                <input name="administrator" type="text"
                        class="form-control input-sm"
                        placeholder="产品管理人">
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label>管理人简称</label>
-                <input name="title" type="text"
-                       class="form-control input-sm"
-                       placeholder="管理人简称">
+                <label>资产池配置</label>
+                <select name="assetPoolOid" class="form-control input-sm" id="currencyTypeSelect">
+                  
+                </select>
               </div>
             </div>
           </div>
@@ -147,7 +152,7 @@
               <div class="form-group">
                 <label>预期年化收益</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="text"
+                  <input name="expAror" type="text"
                          class="form-control"
                          placeholder="从">
                   <span class="input-group-addon">%</span>
@@ -158,7 +163,7 @@
               <div class="form-group">
                 <label>&nbsp;</label>
                 <div class="input-group input-group-sm range">
-                  <input name="title" type="text"
+                  <input name="expArorSec" type="text"
                          class="form-control"
                          placeholder="到">
                   <span class="input-group-addon">%</span>
@@ -170,10 +175,10 @@
                 <label>额外增信</label>
                 <div class="row form-style">
                   <div class="col-sm-4">
-                    <input name="radio1" type="radio" value="a" class="icheck" checked> 有
+                    <input name="reveal" type="radio" value="YES" class="icheck" checked> 有
                   </div>
                   <div class="col-sm-4">
-                    <input name="radio1" type="radio" value="a" class="icheck"> 无
+                    <input name="reveal" type="radio" value="NO" class="icheck"> 无
                   </div>
                 </div>
               </div>
@@ -181,9 +186,15 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>币种</label>
-                <select class="form-control input-sm">
-                  <option selected="selected">1</option>
-                  <option>2</option>
+                <select name="currency" class="form-control input-sm" id="currencyTypeSelect">
+                  <option selected="selected" value="CNY">人民币</option>
+                  <option value="USD">美元</option>
+                  <option value="EUR">欧元</option>
+                  <option value="JPY">日元</option>
+                  <option value="GBP">英镑</option>
+                  <option value="HKD">港币</option>
+                  <option value="SGD">新元</option>
+                  <option value="AUD">澳元</option>
                 </select>
               </div>
             </div>
@@ -193,7 +204,7 @@
               <div class="form-group">
                 <label>收益计算基础</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="text"
+                  <input name="incomeCalcBasis" type="text"
                          class="form-control"
                          placeholder="收益计算基础">
                   <span class="input-group-addon">天</span>
@@ -202,11 +213,11 @@
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label>把管费率</label>
+                <label>托管费率</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="text"
+                  <input name="manageRate" type="text"
                          class="form-control"
-                         placeholder="把管费率">
+                         placeholder="托管费率">
                   <span class="input-group-addon">%每年</span>
                 </div>
               </div>
@@ -215,7 +226,7 @@
               <div class="form-group">
                 <label>固定管理费率</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="text"
+                  <input name="fixedManageRate" type="text"
                          class="form-control"
                          placeholder="固定管理费率">
                   <span class="input-group-addon">%每年</span>
@@ -230,25 +241,27 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>募集开始时间</label>
-                  <select class="form-control input-sm">
-                    <option selected="selected">固定时间</option>
-                    <option>与首次渠道上架时间相同</option>
+                  <select name="raiseStartDateType" class="form-control input-sm" id="raiseStartDateTypeSelect">
+                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
+                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
                   </select>
+                  
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <input name="title" type="text"
-                         class="form-control input-sm"
-                         placeholder="请填写时间">
+                  <input id="raiseStatrtDateInput" name="raiseStatrtDate" type="text"
+                           class="form-control datepicker"
+                           placeholder="请填写时间"
+                           data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
                   <label>募集期</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="raisePeriod" type="number"
                            class="form-control">
                     <span class="input-group-addon">自然日</span>
                   </div>
@@ -259,7 +272,7 @@
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">募集满额后</span>
-                    <input name="title" type="number"
+                    <input name="interestsFirstDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
                   </div>
@@ -271,7 +284,7 @@
                 <div class="form-group">
                   <label>存续期</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="durationPeriod" type="number"
                            class="form-control">
                     <span class="input-group-addon">自然日</span>
                   </div>
@@ -279,9 +292,9 @@
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
-                  <label>募集份额</label>
+                  <label>募集总份额</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="raisedTotalNumber" type="number"
                            class="form-control">
                     <span class="input-group-addon">份</span>
                   </div>
@@ -292,7 +305,7 @@
                   <label>到期最晚还本付息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">存续期结束后第</span>
-                    <input name="title" type="number"
+                    <input name="accrualDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日内</span>
                   </div>
@@ -307,24 +320,25 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>成立时间</label>
-                  <select class="form-control input-sm">
-                    <option selected="selected">固定时间</option>
-                    <option>与首次渠道上架时间相同</option>
+                  <select name="setupDateType" class="form-control input-sm" id="setupDateTypeSelect">
+                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
+                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
                   </select>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label>&nbsp;</label>
-                  <input name="title" type="text"
-                         class="form-control input-sm"
-                         placeholder="请填写时间">
+                  <label>&nbsp;</label>               
+                  <input name="setupDate" type="text"
+                           class="form-control datepicker"
+                           placeholder="请填写时间"
+                           data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
                   <label>收益结转周期</label>
-                  <select class="form-control input-sm">
+                  <select name="accrualCycleOid" class="form-control input-sm">
                     <option selected="selected">日</option>
                     <option>周</option>
                     <option>月</option>
@@ -334,7 +348,7 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>付息方式</label>
-                  <select class="form-control input-sm">
+                  <select name="payModeOid" class="form-control input-sm">
                     <option selected="selected">每日</option>
                     <option>每周</option>
                     <option>每月</option>
@@ -345,7 +359,7 @@
                 <div class="form-group">
                   <label>&nbsp;</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="payModeDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">号</span>
                   </div>
@@ -357,7 +371,7 @@
                 <div class="form-group">
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="lockPeriod" type="number"
                            class="form-control">
                     <span class="input-group-addon">自然日</span>
                   </div>
@@ -367,7 +381,7 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="interestsFirstDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">自然日</span>
                   </div>
@@ -380,8 +394,8 @@
                   <label>申购确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">申购订单确认日后第</span>
-                    <input name="title" type="number"
-                           class="form-control">
+                    <input name="purchaseConfirmDate" type="number"
+                           class="form-control">                     
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         自然日
@@ -395,6 +409,7 @@
                           <a href="javascirpt:void(0)">交易日</a>
                         </li>
                       </ul>
+                      <input name="purchaseConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
                 </div>
@@ -403,7 +418,7 @@
                 <div class="form-group">
                   <label>单日净赎回上限</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="netMaxRredeemDay" type="number"
                            class="form-control">
                     <span class="input-group-addon">份</span>
                   </div>
@@ -413,7 +428,7 @@
                 <div class="form-group">
                   <label>单笔赎回下限</label>
                   <div class="input-group input-group-sm">
-                    <input name="title" type="number"
+                    <input name="minRredeem" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日内</span>
                   </div>
@@ -426,7 +441,7 @@
                   <label>赎回确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">赎回订单确认日后第</span>
-                    <input name="title" type="number"
+                    <input name="redeemConfirmDate" type="number"
                            class="form-control">
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -441,6 +456,7 @@
                           <a href="javascirpt:void(0)">交易日</a>
                         </li>
                       </ul>
+                      <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
                 </div>
@@ -462,8 +478,9 @@
                           <a href="javascirpt:void(0)">每交易日</a>
                         </li>
                       </ul>
+                      <input name="redeemTimingTaskDateType" value="NATRUE" type="hidden">
                     </div>
-                    <input name="newsDate" type="text"
+                    <input name="redeemTimingTaskTime" type="text"
                            class="form-control datepicker"
                            placeholder="请选择时间"
                            data-date-format="HH:mm:ss">
@@ -478,7 +495,7 @@
               <div class="form-group">
                 <label>单笔投资最低份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="number"
+                  <input name="investMin" type="number"
                          class="form-control">
                   <span class="input-group-addon">份</span>
                 </div>
@@ -486,19 +503,19 @@
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label>单笔投资最高份额</label>
+                <label>投资最高份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="number"
+                  <input name="investMax" type="number"
                          class="form-control">
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
-            </div>
+            </div> 
             <div class="col-sm-4">
               <div class="form-group">
-                <label>单笔投资追加份额</label>
+                <label>申购上限</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="number"
+                  <input name="purchaseLimit" type="number"
                          class="form-control">
                   <span class="input-group-addon">份</span>
                 </div>
@@ -508,9 +525,19 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
+                <label>单笔投资追加份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="investAdditional" type="number"
+                         class="form-control">
+                  <span class="input-group-addon">份</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
                 <label>单位份额净值</label>
                 <div class="input-group input-group-sm">
-                  <input name="title" type="text"
+                  <input name="netUnitShare" type="text"
                          class="form-control">
                   <span class="input-group-addon">元</span>
                 </div>
@@ -520,22 +547,26 @@
           <p class="form-header">其他信息</p>
           <div class="form-group">
             <label>产品说明</label>
-              <textarea name="content" rows="3"
+              <textarea name="instruction" rows="3"
                         class="form-control input-sm"
                         placeholder="产品说明"></textarea>
           </div>
           <div class="form-group">
             <label>投资标的</label>
-              <textarea name="content" rows="3"
+              <textarea name="investComment" rows="3"
                         class="form-control input-sm"
                         placeholder="投资标的"></textarea>
           </div>
           <div class="form-group">
             <label>风控等级</label>
-            <select class="form-control input-sm">
-              <option selected="selected">1</option>
-              <option>2</option>
-              <option>3</option>
+            <select name="riskLevel" class="form-control input-sm">
+                  <option value="R1">R1(谨慎型)</option>
+                  <option value="R2">R2(稳健型)</option>
+                  <option value="R3">R3(平衡型)</option>
+                  <option value="R4">R4(进取型)</option>
+                  <option value="R5">R5(激进型)</option>
+                </select>
+                
             </select>
           </div>
         </form>
@@ -543,7 +574,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="saveProductSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
