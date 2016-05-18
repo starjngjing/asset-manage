@@ -207,12 +207,13 @@
 			<artifactId>spring-boot-starter-cloud-connectors</artifactId>
 		</dependency>
 
+		<!-- 
 		<dependency>
 			<groupId>com.guohuai</groupId>
 			<artifactId>workflow-activiti</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-
+		 -->
 	</dependencies>
 
 	<build>
