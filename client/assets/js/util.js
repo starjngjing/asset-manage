@@ -116,11 +116,13 @@ define([
        * 转换（类似vue/angular中的filter）
        */
       transform: function (enumName, val) {
+    	var rlt = ''
         config[enumName].forEach(function (item) {
           if (item.id === val) {
-            return item.text
+            rlt = item.text
           }
         })
+        return rlt
       }
     }
   }
