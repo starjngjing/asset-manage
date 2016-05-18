@@ -7,11 +7,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TimestampPropertyEditor extends PropertyEditorSupport {
+public class CustomTimestampEditor extends PropertyEditorSupport {
 
-	private static TimestampPropertyEditor editor = new TimestampPropertyEditor();
+	private static CustomTimestampEditor editor = new CustomTimestampEditor();
 
-	public static TimestampPropertyEditor getInstance() {
+	public static CustomTimestampEditor getInstance() {
 		return editor;
 	}
 
@@ -21,15 +21,15 @@ public class TimestampPropertyEditor extends PropertyEditorSupport {
 	public void setAsText(String text) throws IllegalArgumentException {
 
 		if (null == text || text.trim().equals("")) {
-			super.setAsText(null);
+			super.setValue(null);
+			return;
 		}
 
 		try {
-			Timestamp value = new Timestamp(df.parse(text).getTime());
+			Timestamp value = new Timestamp(this.df.parse(text).getTime());
 			super.setValue(value);
 		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 
 	}

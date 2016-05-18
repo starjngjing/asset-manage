@@ -70,7 +70,6 @@ public class InvestmentPoolController extends BaseController {
 					@Spec(params = "type", path = "type", spec = Equal.class) }) Specification<Investment> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
-		
 		if (page < 1) {
 			page = 1;
 		}

@@ -14,24 +14,21 @@ define([
 
         // 分页配置
         var pageOptions = {
-          number: 1,
-          size: 10
+        		page: 1,
+          rows: 10
         }
         // 数据表格配置
         var tableConfig = {
           ajax: function (origin) {
             http.post(config.api.listinvestment, {
-              data: {
-                page: pageOptions.number,
-                rows: pageOptions.size
-              },
+              data: pageOptions,
               contentType: 'form'
             }, function (rlt) {
               origin.success(rlt)
             })
           },
-          pageNumber: pageOptions.number,
-          pageSize: pageOptions.size,
+          pageNumber: pageOptions.page,
+          pageSize: pageOptions.rows,
           pagination: true,
           sidePagination: 'server',
           pageList: [10, 20, 30, 50, 100],
@@ -63,6 +60,7 @@ define([
 //            	width: 60,
               field: 'type',
               formatter: function (val) {
+            	  //config.INVESTMENT_TYPE
                 return val;
               }
             },
@@ -100,8 +98,8 @@ define([
               formatter: function (val) {
             	  return '<div class="func-area">' +
                   '<a href="javascript:void(0)" class="item-update">成立</a>' +
-                  '<a href="javascript:void(0)" class="item-update">编辑</a>' +
-                  '<a href="javascript:void(0)" class="item-delete">删除</a>' +
+                  '<a href="javascript:void(0)" class="item-update">不成立</a>' +
+                  '<a href="javascript:void(0)" class="item-update">详情</a>' +
                   '</div>'
                }
             }
@@ -115,8 +113,10 @@ define([
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.size = val.limit
-          pageOptions.number = parseInt(val.offset / val.limit) + 1
+          pageOptions.name = form.name.value;
+          pageOptions.life = form.life.value;
+          pageOptions.rows = val.limit
+          pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val
         }
       
