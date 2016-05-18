@@ -69,7 +69,7 @@ public class InvestmentManageBootController extends BaseController {
 		InvestmentListResp resps = new InvestmentListResp(entitys);
 		return new ResponseEntity<InvestmentListResp>(resps, HttpStatus.OK);
 	}
- 
+
 	/**
 	 * 投资标的详情
 	 * 
