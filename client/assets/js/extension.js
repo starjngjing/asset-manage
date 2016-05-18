@@ -232,7 +232,16 @@ define([
         if (isEnum) {
           propValue = util.enum.transform(isEnum, propValue)
         }
-        $(item).html(propValue || '--')
+        switch (Object.prototype.toString.call(item)) {
+          case '[object HTMLDivElement]':
+        	$(item).html(propValue || '--')
+        	break
+          case '[object HTMLInputElement]':
+        	$(item).val(propValue || '--')
+          	break
+          default:
+        	break
+        }
       })
     }
   }
