@@ -1,5 +1,0 @@
-#set( $email = "测试中文" )
-${email}
-$email
-$email 111
-$user

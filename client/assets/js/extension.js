@@ -188,7 +188,34 @@ define([
             $(item).append(options)
         }
       })
+    },
+    /**
+     * 表单自动填充
+     * @param form 操作表单 jquery对象
+     * @param source 数据源对象 json object
+     */
+    formAutoFix: function (form, source) {
+      var domForm = form[0]
+      for (var key in source) {
+        var domElm = domForm[key]
+        switch (Object.prototype.toString.call(domElm)) {
+          case '[object HTMLInputElement]':
+          case '[object HTMLTextAreaElement]':
+          case '[object HTMLSelectElement]':
+            domElm.value = source[key]
+            break
+          case '[object RadioNodeList]':
+            domElm.forEach(function (item) {
+              if (item.value === source[key]) {
+                item.checked = true
+              }
+            })
+            break
+          default:
+            break
+        }
+      }
+      this.inputPluginsInit(form)
     }
-
   }
 })

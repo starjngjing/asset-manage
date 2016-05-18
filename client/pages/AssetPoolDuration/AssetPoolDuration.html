@@ -12,67 +12,138 @@
 <!-- 主要内容 -->
 <section class="content">
   <div class="row">
-    <div class="col-md-8">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-aqua">
-              <i class="fa fa-jpy"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">现金</div>
-              <div class="info-box-number">100万</div>
-            </div>
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header">
+          <div class="box-title">
+            <i class="fa fa-bar-chart-o"></i> 资金构成
+          </div>
+          <div class="box-tools">
+            <button id="buyAsset" class="btn btn-default btn-sm">
+              <i class="fa fa-shopping-cart"></i> 资产申购
+            </button>
+            <button id="showAccountDetail" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> 出入金明细
+            </button>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-red">
-              <i class="fa fa-lock"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">冻结资金</div>
-              <div class="info-box-number">0万</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-green">
-              <i class="fa fa-rocket"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">在途资金</div>
-              <div class="info-box-number">0万</div>
-            </div>
-          </div>
+        <div class="box-body">
+          <div id="barChart" style="height: 200px;"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div id="pieChart" class="info-box"></div>
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header">
+          <div class="box-title">
+            <i class="fa fa-pie-chart"></i> 其他占比
+          </div>
+        </div>
+        <div class="box-body">
+          <div id="pieChart" style="height: 200px;"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <!-- 主体Grid -->
-      <div id="dataGrid" class="box box-primary">
+      <!-- 预约中现金管理工具Grid -->
+      <div id="orderingToolGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
-          <div class="box-tools">
-            <button id="eventAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 按钮1
-            </button>
-            <button id="historyShow" class="btn btn-default btn-sm">
-              <i class="fa fa-history"></i> 按钮2
-            </button>
-          </div>
+          <h3 class="box-title">预约中现金管理工具</h3>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
           <!-- 主体数据表格 -->
-          <table id="dataTable" class="table table-bordered table-striped">
+          <table id="orderingToolTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 预约中信托计划Grid -->
+      <div id="orderingTrustGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">预约中信托计划</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="orderingTrustTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 现金管理工具Grid -->
+      <div id="toolGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">现金管理工具</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="toolTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 信托计划Grid -->
+      <div id="trustGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">信托计划</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="trustTable" class="table table-bordered table-striped">
             <thead>
             <tr>
               <th></th>
@@ -92,3 +163,86 @@
   </div>
 </section>
 
+<!-- 资产申购弹窗 -->
+<!-- 默认大小窗体（有tabs栏） -->
+<div id="buyAssetModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">默认大小</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- tabs -->
+        <div class="nav-tabs-custom">
+          <!-- tab页签定义，注意对应 href 对应的 id -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#buyAssetToolArea" role="tab" data-toggle="tab">现金管理工具</a>
+            </li>
+            <li role="presentation">
+              <a href="#buyAssetTrustArea" role="tab" data-toggle="tab">信托计划</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <!-- 文本框panel id要与上方对应 -->
+            <div class="tab-pane active" role="tabpanel" id="buyAssetToolArea">
+              <div class="form-group">
+                <label>投资标的名称</label>
+                <select class="form-control input-sm"></select>
+              </div>
+              <!-- 文本框 -->
+              <div class="form-group">
+                <label>文本框</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="文本框">
+              </div>
+            </div>
+            <!-- 扩展类panel id要与上方对应 -->
+            <div class="tab-pane" role="tabpanel" id="buyAssetTrustArea">
+              <!-- 下拉菜单 -->
+              <div class="form-group">
+                <label>下拉菜单</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>
+                </select>
+              </div>
+              <!-- 多选菜单 -->
+              <div class="form-group">
+                <label>多选菜单</label>
+                <select class="form-control input-sm select2"
+                        multiple="multiple"
+                        data-placeholder="Select a State"
+                        style="width: 100%;">
+                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>
