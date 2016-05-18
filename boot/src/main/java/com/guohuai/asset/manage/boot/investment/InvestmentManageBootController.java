@@ -33,20 +33,33 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  *
  */
 @RestController
-@RequestMapping(value = "/asset/boot/investmentManage", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/ams/target/targetManage", produces = "application/json;charset=UTF-8")
 public class InvestmentManageBootController extends BaseController {
 
 	@Autowired
 	private InvestmentService investmentService;
 
+	/**
+	 * 投资标的列表
+	 * 
+	 * @param request
+	 * @param spec
+	 * @param page
+	 * @param rows
+	 * @param sortField
+	 * @param sort
+	 * @return
+	 */
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<InvestmentListResp> list(HttpServletRequest request,
 			@And({ @Spec(path = "investmentName", spec = Like.class),
 					@Spec(path = "investmentType", spec = Equal.class),
 					@Spec(path = "status", spec = Equal.class) }) Specification<Investment> spec,
-			@RequestParam int page, @RequestParam int rows,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
 			@RequestParam(required = false, defaultValue = "updateTime") String sortField,
 			@RequestParam(required = false, defaultValue = "desc") String sort) {
+
 		Direction sortDirection = Direction.DESC;
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
@@ -57,10 +70,61 @@ public class InvestmentManageBootController extends BaseController {
 		return new ResponseEntity<InvestmentListResp>(resps, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "add", method = RequestMethod.POST)
+	/**
+	 * 投资标的详情
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "detail", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentDetResp> detail(String oid) {
+		Investment entity = investmentService.getInvestmentDet(oid);
+		InvestmentDetResp resp = new InvestmentDetResp(entity);
+		return new ResponseEntity<InvestmentDetResp>(resp, HttpStatus.OK);
+	}
+
+	/**
+	 * 新建投资标的
+	 * 
+	 * @param investment
+	 * @return
+	 */
+	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(Investment investment) {
-		String operator = "test";
+		System.out.println(investment.getSn());
+		// String operator = super.getLoginAdmin();
+		String operator = "admin";
+		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
 		investmentService.saveInvestment(investment, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
+
+	/**
+	 * 提交预审
+	 * 
+	 * @param investment
+	 * @return
+	 */
+	@RequestMapping(value = "toExamine", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> toExamine(String oid) {
+		Investment entity = investmentService.getInvestmentDet(oid);
+		entity.setState(Investment.INVESTMENT_STATUS_waitMeeting);
+		investmentService.saveInvestment(entity, super.getLoginAdmin());
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	/**
+	 * 作废
+	 * 
+	 * @param investment
+	 * @return
+	 */
+	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
+		Investment entity = investmentService.getInvestmentDet(oid);
+		entity.setState(Investment.INVESTMENT_STATUS_invalid);
+		investmentService.saveInvestment(entity, super.getLoginAdmin());
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
 }
