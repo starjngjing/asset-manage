@@ -103,6 +103,12 @@ public class Investment extends UUID implements Serializable {
 	 * 起购金额
 	 */
 	private BigDecimal floorVolume;
+	
+	/**
+	 * 持有份额
+	 */
+	private BigDecimal holdAmount;
+	
 	/**
 	 * 收益说明
 	 */

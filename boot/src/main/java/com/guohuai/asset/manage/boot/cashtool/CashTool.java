@@ -187,6 +187,11 @@ public class CashTool extends UUID {
 	private BigDecimal weeklyYield;
 
 	/**
+	 * 持有份额
+	 */
+	private BigDecimal holdAmount;
+	
+	/**
 	 * 风险等级
 	 */
 	private String riskLevel;
