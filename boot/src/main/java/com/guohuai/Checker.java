@@ -13,7 +13,7 @@ public class Checker {
 
 	@RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD })
 	public @ResponseBody ResponseEntity<Long> check() {
-
+		
 		return new ResponseEntity<Long>(System.currentTimeMillis(), HttpStatus.OK);
 	}
 

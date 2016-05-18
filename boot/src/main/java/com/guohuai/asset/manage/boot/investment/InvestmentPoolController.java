@@ -22,8 +22,6 @@ import com.guohuai.asset.manage.component.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Extension;
-import io.swagger.annotations.ExtensionProperty;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -43,7 +41,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  * @created 2016年5月17日 上午9:24:14
  */
 @RestController
-@RequestMapping("/asset/boot/investmentPool")
+@RequestMapping("/ams/boot/investmentPool")
 @Api("投资标的库操作相关接口")
 public class InvestmentPoolController extends BaseController {
 	@Autowired

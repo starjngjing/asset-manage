@@ -35,7 +35,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  *
  */
 @RestController
-@RequestMapping("/asset/hill/project")
+@RequestMapping("/ams/boot/project")
 public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectDao projectDao;

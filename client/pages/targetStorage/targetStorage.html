@@ -27,7 +27,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>标的名称</label>
-                  <input name="email" type="text"
+                  <input name="name" type="text"
                          class="form-control input-sm"
                          placeholder="搜索标的名称">
                 </div>
@@ -35,7 +35,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>标的类型</label>
-                  <select name="validState" class="form-control input-sm">
+                  <select name="type" class="form-control input-sm">
                     <option value="" selected>不限</option>
                     <option value="ok">已验证</option>
                     <option value="no">未验证</option>
@@ -47,19 +47,19 @@
               <label>标的规模</label>
               <div class="row form-style">
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> <100万
+                  <input type="checkbox" name="raiseScope" value="a" class="icheck"> <100万
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 100万 - 1000万
+                  <input type="checkbox" name="raiseScope" value="b" class="icheck"> 100万 - 1000万
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 1000万 - 1亿
+                  <input type="checkbox" name="raiseScope" value="c" class="icheck"> 1000万 - 1亿
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 1亿 - 10亿
+                  <input type="checkbox" name="raiseScope" value="d" class="icheck"> 1亿 - 10亿
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> >10 亿
+                  <input type="checkbox" name="raiseScope" value="e" class="icheck"> >10 亿
                 </div>
               </div>
             </div>
@@ -67,19 +67,19 @@
               <label>标的期限</label>
               <div class="row form-style">
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> <1个月
+                  <input type="checkbox" name="life" value="1" class="icheck"> <1个月
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 1 - 3个月
+                  <input type="checkbox" name="life" value="2" class="icheck"> 1 - 3个月
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 3 - 6个月
+                  <input type="checkbox" name="life" value="3" class="icheck"> 3 - 6个月
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 6 - 12个月
+                  <input type="checkbox" name="life" value="4" class="icheck"> 6 - 12个月
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> >12个月
+                  <input type="checkbox" name="life" value="5" class="icheck"> >12个月
                 </div>
               </div>
             </div>
@@ -87,19 +87,19 @@
               <label>预期年化收益</label>
               <div class="row form-style">
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> <3%
+                  <input type="checkbox" name="expAror" value="1" class="icheck"> <3%
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 3% - 6%
+                  <input type="checkbox" name="expAror" value="2" class="icheck"> 3% - 6%
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 6% - 10%
+                  <input type="checkbox" name="expAror" value="3" class="icheck"> 6% - 10%
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> 10% - 15%
+                  <input type="checkbox" name="expAror" value="4" class="icheck"> 10% - 15%
                 </div>
                 <div class="col-sm-2">
-                  <input type="checkbox" value="a" class="icheck"> >15%
+                  <input type="checkbox" name="expAror" value="5" class="icheck"> >15%
                 </div>
               </div>
             </div>
