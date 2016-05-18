@@ -16,6 +16,11 @@ define([
       // 柱状图生成
       var barChart = echarts.init(document.getElementById('barChart'))
       barChart.setOption(getBarOptions(config))
+
+      // 资产申购按钮点击事件
+      $('#buyAsset').on('click', function () {
+        $('#buyAssetModal').modal('show')
+      })
     }
   }
 })

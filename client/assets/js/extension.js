@@ -216,6 +216,18 @@ define([
         }
       }
       this.inputPluginsInit(form)
+    },
+    /**
+     * 详情内容自动填充
+     * @param parent 操作区域 jquery对象
+     * @param source 数据源对象 json object
+     */
+    detailAutoFix: function (parent, source) {
+      var details = parent.find('[data-detail-fetch]')
+      details.each(function (index, item) {
+        var prop = $(item).attr('data-detail-fetch')
+        $(item).html(source[prop] || '--')
+      })
     }
   }
 })

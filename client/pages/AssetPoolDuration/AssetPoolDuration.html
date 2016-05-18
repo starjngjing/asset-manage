@@ -164,7 +164,6 @@
 </section>
 
 <!-- 资产申购弹窗 -->
-<!-- 默认大小窗体（有tabs栏） -->
 <div id="buyAssetModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -173,7 +172,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">默认大小</h4>
+        <h4 class="modal-title">资产申购</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
@@ -193,14 +192,24 @@
             <div class="tab-pane active" role="tabpanel" id="buyAssetToolArea">
               <div class="form-group">
                 <label>投资标的名称</label>
+                <select class="form-control input-sm select2"
+                        style="width: 100%;"></select>
+              </div>
+              <div class="form-group">
+                <label>资产类型</label>
                 <select class="form-control input-sm"></select>
               </div>
-              <!-- 文本框 -->
               <div class="form-group">
-                <label>文本框</label>
+                <label>当日年化收益</label>
                 <input name="title" type="text"
                        class="form-control input-sm"
-                       placeholder="文本框">
+                       placeholder="当日年化收益">
+              </div>
+              <div class="form-group">
+                <label>每万份收入</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="每万份收入">
               </div>
             </div>
             <!-- 扩展类panel id要与上方对应 -->
@@ -208,15 +217,7 @@
               <!-- 下拉菜单 -->
               <div class="form-group">
                 <label>下拉菜单</label>
-                <select class="form-control input-sm">
-                  <option selected="selected">Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
+                <select class="form-control input-sm select2"></select>
               </div>
               <!-- 多选菜单 -->
               <div class="form-group">
