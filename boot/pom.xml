@@ -18,40 +18,13 @@
 	</parent>
 
 	<properties>
-		<activiti.version>5.20.0</activiti.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<start-class>com.guohuai.AssetPlatformBoot</start-class>
 	</properties>
 
 	<dependencies>
-		<dependency>
-		    <groupId>org.activiti</groupId>
-		    <artifactId>activiti-spring-boot-starter-basic</artifactId>
-		    <version>${activiti.version}</version>
-		    <exclusions>
-				<exclusion>
-					<groupId>commons-dbcp</groupId>
-					<artifactId>commons-dbcp</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>		
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring-boot-starter-actuator</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring-boot-starter-jpa</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
-		<!-- <dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring-boot-starter-rest-api</artifactId>
-			<version>${activiti.version}</version>
-		</dependency> -->
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -223,7 +196,7 @@
 			<artifactId>gh-commons</artifactId>
 			<version>4.1.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-mail</artifactId>
@@ -249,7 +222,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>						
+				<configuration>
 					<skip>true</skip><!-- 跳过测试 -->
 				</configuration>
 			</plugin>
