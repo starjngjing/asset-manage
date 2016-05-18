@@ -4,8 +4,9 @@
  */
 
 define([
-  'config'
-], function (config) {
+  'config',
+  'util'
+], function (config, util) {
   return {
     /**
      * confirm方法，使用 $$.confirm 将一段html结构变成confirm功能弹窗
@@ -226,7 +227,12 @@ define([
       var details = parent.find('[data-detail-fetch]')
       details.each(function (index, item) {
         var prop = $(item).attr('data-detail-fetch')
-        $(item).html(source[prop] || '--')
+        var propValue = source[prop]
+        var isEnum = $(item).attr('data-enum-transform')
+        if (isEnum) {
+          propValue = util.enum.transform(isEnum, propValue)
+        }
+        $(item).html(propValue || '--')
       })
     }
   }
