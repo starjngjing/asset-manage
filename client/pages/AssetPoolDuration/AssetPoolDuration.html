@@ -12,67 +12,138 @@
 <!-- 主要内容 -->
 <section class="content">
   <div class="row">
-    <div class="col-md-8">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-aqua">
-              <i class="fa fa-jpy"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">现金</div>
-              <div class="info-box-number">100万</div>
-            </div>
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header">
+          <div class="box-title">
+            <i class="fa fa-bar-chart-o"></i> 资金构成
+          </div>
+          <div class="box-tools">
+            <button id="buyAsset" class="btn btn-default btn-sm">
+              <i class="fa fa-shopping-cart"></i> 资产申购
+            </button>
+            <button id="showAccountDetail" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> 出入金明细
+            </button>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-red">
-              <i class="fa fa-lock"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">冻结资金</div>
-              <div class="info-box-number">0万</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="info-box">
-            <div class="info-box-icon bg-green">
-              <i class="fa fa-rocket"></i>
-            </div>
-            <div class="info-box-content">
-              <div class="info-box-text">在途资金</div>
-              <div class="info-box-number">0万</div>
-            </div>
-          </div>
+        <div class="box-body">
+          <div id="barChart" style="height: 200px;"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div id="pieChart" class="info-box"></div>
+    <div class="col-sm-6">
+      <div class="box box-primary">
+        <div class="box-header">
+          <div class="box-title">
+            <i class="fa fa-pie-chart"></i> 其他占比
+          </div>
+        </div>
+        <div class="box-body">
+          <div id="pieChart" style="height: 200px;"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <!-- 主体Grid -->
-      <div id="dataGrid" class="box box-primary">
+      <!-- 预约中现金管理工具Grid -->
+      <div id="orderingToolGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
-          <div class="box-tools">
-            <button id="eventAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 按钮1
-            </button>
-            <button id="historyShow" class="btn btn-default btn-sm">
-              <i class="fa fa-history"></i> 按钮2
-            </button>
-          </div>
+          <h3 class="box-title">预约中现金管理工具</h3>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
           <!-- 主体数据表格 -->
-          <table id="dataTable" class="table table-bordered table-striped">
+          <table id="orderingToolTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 预约中信托计划Grid -->
+      <div id="orderingTrustGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">预约中信托计划</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="orderingTrustTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 现金管理工具Grid -->
+      <div id="toolGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">现金管理工具</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="toolTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th></th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>年龄</th>
+              <th>进度</th>
+              <th>完成度</th>
+              <th>公司</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 信托计划Grid -->
+      <div id="trustGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">信托计划</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="trustTable" class="table table-bordered table-striped">
             <thead>
             <tr>
               <th></th>
