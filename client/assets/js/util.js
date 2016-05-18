@@ -3,7 +3,9 @@
  * amd模块，使用requirejs载入
  */
 
-define([],function () {
+define([
+  'config'
+],function (config) {
   return {
     /**
      * table操作实用工具
@@ -104,6 +106,21 @@ define([],function () {
           format += '</div>'
           return format
         }
+      }
+    },
+    /**
+     * 枚举值操作实用工具
+     */
+    enum: {
+      /**
+       * 转换（类似vue/angular中的filter）
+       */
+      transform: function (enumName, val) {
+        config[enumName].forEach(function (item) {
+          if (item.id === val) {
+            return item.text
+          }
+        })
       }
     }
   }

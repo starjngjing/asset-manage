@@ -21,6 +21,17 @@ define([
       $('#buyAsset').on('click', function () {
         $('#buyAssetModal').modal('show')
       })
+
+      // 资产申购类型radio change事件
+      $(document.buyAssetForm.type).on('ifChecked', function () {
+        if (this.value === 'fund') {
+          $('#showFund').show()
+          $('#showTrust').hide()
+        } else {
+          $('#showFund').hide()
+          $('#showTrust').show()
+        }
+      })
     }
   }
 })

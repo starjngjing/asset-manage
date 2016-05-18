@@ -176,68 +176,59 @@
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
-        <!-- tabs -->
-        <div class="nav-tabs-custom">
-          <!-- tab页签定义，注意对应 href 对应的 id -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-              <a href="#buyAssetToolArea" role="tab" data-toggle="tab">现金管理工具</a>
-            </li>
-            <li role="presentation">
-              <a href="#buyAssetTrustArea" role="tab" data-toggle="tab">信托计划</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <!-- 文本框panel id要与上方对应 -->
-            <div class="tab-pane active" role="tabpanel" id="buyAssetToolArea">
-              <div class="form-group">
-                <label>投资标的名称</label>
-                <select class="form-control input-sm select2"
-                        style="width: 100%;"></select>
+        <form id="buyAssetForm" name="buyAssetForm" method="post">
+          <div class="form-group">
+            <label>申购类型</label>
+            <div class="row form-style">
+              <div class="col-sm-4">
+                <input name="type" type="radio" value="fund" class="icheck" checked> 现金管理工具
               </div>
-              <div class="form-group">
-                <label>资产类型</label>
-                <select class="form-control input-sm"></select>
-              </div>
-              <div class="form-group">
-                <label>当日年化收益</label>
-                <input name="title" type="text"
-                       class="form-control input-sm"
-                       placeholder="当日年化收益">
-              </div>
-              <div class="form-group">
-                <label>每万份收入</label>
-                <input name="title" type="text"
-                       class="form-control input-sm"
-                       placeholder="每万份收入">
-              </div>
-            </div>
-            <!-- 扩展类panel id要与上方对应 -->
-            <div class="tab-pane" role="tabpanel" id="buyAssetTrustArea">
-              <!-- 下拉菜单 -->
-              <div class="form-group">
-                <label>下拉菜单</label>
-                <select class="form-control input-sm select2"></select>
-              </div>
-              <!-- 多选菜单 -->
-              <div class="form-group">
-                <label>多选菜单</label>
-                <select class="form-control input-sm select2"
-                        multiple="multiple"
-                        data-placeholder="Select a State"
-                        style="width: 100%;">
-                  <option selected="selected">Alabama</option>
-                  <option>Alaska</option>
-                  <option>California</option>
-                  <option>Delaware</option>
-                  <option>Tennessee</option>
-                  <option>Texas</option>
-                  <option>Washington</option>
-                </select>
+              <div class="col-sm-4">
+                <input name="type" type="radio" value="trust" class="icheck"> 信托计划
               </div>
             </div>
           </div>
-        </div>
+          <div id="showFund">
+            <div class="form-group">
+              <label>投资标的名称</label>
+              <select class="form-control input-sm select2"
+                      style="width: 100%;"></select>
+            </div>
+            <div class="form-group">
+              <label>资产类型</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     placeholder="当日年化收益"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>当日年化收益</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     placeholder="当日年化收益"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>每万份收入</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     placeholder="每万份收入"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>申购额度</label>
+              <div class="input-group input-group-sm">
+                <input name="title" type="text"
+                       class="form-control"
+                       placeholder="申购额度">
+                <span class="input-group-addon">万</span>
+              </div>
+            </div>
+          </div>
+          <div id="showTrust">
+            asd
+          </div>
+        </form>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
