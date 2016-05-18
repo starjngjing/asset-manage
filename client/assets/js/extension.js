@@ -56,9 +56,10 @@ define([
      * 参数 table：搜索表单对应的表格 jquery对象
      */
     searchInit: function (form, table) {
-      var commonInputs = form.find('input[type=text]:not(.datepicker)')
-      var datepickers = form.find('input[type=text].datepicker')
+      var commonInputs = form.find('input:text:not(.datepicker)')
+      var datepickers = form.find('input:text.datepicker')
       var selects = form.find('select')
+      var radios = form.find('input:radio')
 
       commonInputs.each(function (index, item) {
         $(item)
@@ -86,6 +87,13 @@ define([
 
       selects.each(function (index, item) {
         $(item).on('change.gridSearch', function () {
+          table.bootstrapTable('refresh')
+        })
+      })
+
+      radios.each(function (index, item) {
+        // icheck checked事件
+        $(item).on('ifChecked', function (e) {
           table.bootstrapTable('refresh')
         })
       })
