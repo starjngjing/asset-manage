@@ -7,8 +7,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,7 +86,9 @@ public class InvestmentPoolController extends BaseController {
 	@RequestMapping(value = "listinvestment", method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "标的成立管理列表")
 	public @ResponseBody ResponseEntity<InvestmentListResp> listinvestment(HttpServletRequest request,
-			@And({ @Spec(params = "name", path = "name", spec = Like.class), @Spec(params = "type", path = "type", spec = Equal.class) }) Specification<Investment> spec,
+			@And({	@Spec(params = "name", path = "name", spec = Like.class), 
+					@Spec(params = "type", path = "type", spec = Equal.class) }) 
+					Specification<Investment> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
 		if (page < 1) {
@@ -147,8 +151,12 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("establish")
 	@ApiOperation(value = "标的成立")
-	public CommonResp establish() {
-		return CommonResp.builder().errorCode(1).errorMessage("标的成立成功！").attached("").build();
+	public CommonResp establish(@Valid EstablishForm form) {
+		log.debug("投资标的成立接口!!!");
+		Investment ist = new Investment();
+		BeanUtils.copyProperties(form, ist);
+//		this.investmentService.establish(ist);
+		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
 	}
 
 	/**
@@ -162,7 +170,7 @@ public class InvestmentPoolController extends BaseController {
 	@RequestMapping("unEstablish")
 	@ApiOperation(value = "标的不成立")
 	public CommonResp unEstablish() {
-		return CommonResp.builder().errorCode(1).errorMessage("标的不成立成功！").attached("").build();
+		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
 	}
 
 	/**
@@ -179,7 +187,7 @@ public class InvestmentPoolController extends BaseController {
 	@ApiOperation(value = "投资标的本息兑付")
 	public CommonResp interestSave(Interest interest) {
 		interest = interestService.save(interest);
-		return CommonResp.builder().errorCode(1).errorMessage("投资标的本息兑付成功！").attached(interest.getOid()).build();
+		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(interest.getOid()).build();
 	}
 
 	/**
@@ -198,7 +206,7 @@ public class InvestmentPoolController extends BaseController {
 	@ApiOperation(value = "标的逾期")
 	public CommonResp overdue(Integer days, Double rate, BigDecimal overdueFine) {
 
-		return CommonResp.builder().errorCode(1).errorMessage("标的逾期登记成功！").attached("").build();
+		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
 	}
 
 }
