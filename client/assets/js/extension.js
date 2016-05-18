@@ -165,16 +165,16 @@ define([
      * 参数 parent：要进行初始化的区域 jquery对象
      */
     enumSourceInit: function (parent) {
-      parent.find('[data-enum-fetch]').forEach(function (index, item) {
+      parent.find('[data-enum-fetch]').each(function (index, item) {
         var enu = $(item).attr('data-enum-fetch')
         switch (item.nodeName){
           case 'SELECT':
-            item.empty()
-            var options = ''
-            config[enu].each(function (index, item) {
-              options += '<option value="' + item.id + '" ' + (!index ? 'selected' : '') + '>' + item.text + '</option>'
+            $(item).empty()
+            var options = '<option value="">全部</option>'
+            $(config[enu]).each(function (index, item) {
+              options += '<option value="' + item.id + '">' + item.text + '</option>'
             })
-            item.append(options)
+            $(item).append(options)
         }
       })
     }
