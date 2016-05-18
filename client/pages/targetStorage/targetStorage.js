@@ -60,7 +60,7 @@ define([
 //            	width: 60,
               field: 'type',
               formatter: function (val) {
-            	return util.enum.transform('TARGETTYPE', val);            	
+            	return util.enum.transform('TARGETTYPE', val);
               }
             },
             {// 收益率
@@ -87,9 +87,9 @@ define([
             	}
             },
             { // 已购份额
-            	field: 'state',
+            	field: 'holdAmount',
             	formatter: function (val) {
-            		return '已购份额';
+            		return val;
             	}
             },
             {
@@ -119,11 +119,21 @@ define([
               },
               events: {
                   'click .item-establish': function (e, value, row) {
-                	http.get('pages/targetStorage/test.json',
-                	  {},
+                	http.post(config.api.targetDetQuery, {
+                        data: {
+                        	oid:row.oid
+                        },
+                        contentType: 'form'
+                      },
                 	  function (obj) {
-                	  $$.detailAutoFix($('#updateForm'), obj);	// 自动填充详情
-                	  $$.formAutoFix($('#updateForm'), obj); // 自动填充表单
+                    	  var data  = obj.investment;
+                    	  if(!data){
+                    		  toastr.error('标的详情数据不存在', '错误信息', {
+                    			    timeOut: 10000
+                    			  });
+                    	  }
+                	  $$.detailAutoFix($('#updateForm'), data);	// 自动填充详情
+                	  $$.formAutoFix($('#updateForm'), data); // 自动填充表单
                 	});
                 	$('#updateModal').modal('show');
                   },
@@ -168,6 +178,19 @@ define([
         $('#dataTable').bootstrapTable(tableConfig)
         // 搜索表单初始化
         $$.searchInit($('#searchForm'), $('#dataTable'))
+        
+        // 修改按钮点击事件
+        $("#updateSubmit").click(function(){
+        	$("#updateForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+                //dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.establish,
+        		success:function(data) {
+        			$('#updateModal').modal('hide');
+        		}
+        	});
+        	
+        });
 
         function getQueryParams (val) {
           var form = document.searchForm

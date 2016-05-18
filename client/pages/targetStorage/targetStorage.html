@@ -193,57 +193,96 @@
 	      			</div>
 	      		</div>
 	      	</div>
-	      	
-          <div class="form-group">
-            <label>风控</label>
-            <textarea name="risk" rows="3"
-                      class="form-control input-sm"
-                      placeholder="请输入内容" required></textarea>
+	      	<div class="row">
+	      		<div class="col-sm-12">
+	      			<div class="form-group">
+	            <label>风控</label>
+	            <textarea name="risk" rows="3"
+	                      class="form-control input-sm"
+	                      placeholder="请输入内容" required></textarea>
+          		</div>
+	      		</div>
+	      	</div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益起始日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="">
+			          </div>
+			        </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益截止日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="">
+			          </div>
+			        </div>          		
+          	</div>
           </div>
-	        <div class="form-group">
-	          <label>成立日期</label>
-	          <div class="input-group input-group-sm">
-	            <div class="input-group-addon">
-	              <i class="fa fa-calendar"></i>
-	            </div>
-	            <input name="setDate" type="text"
-	                   class="form-control datepicker"
-	                   placeholder="">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label>收益起始日</label>
-	          <div class="input-group input-group-sm">
-	            <div class="input-group-addon">
-	              <i class="fa fa-calendar"></i>
-	            </div>
-	            <input name="arorFirstDate" type="text"
-	                   class="form-control datepicker"
-	                   placeholder="">
-	          </div>
-	        </div>
-	        <div class="form-group">
-	          <label>收益截止日</label>
-	          <div class="input-group input-group-sm">
-	            <div class="input-group-addon">
-	              <i class="fa fa-calendar"></i>
-	            </div>
-	            <input name="arorFirstDate" type="text"
-	                   class="form-control datepicker"
-	                   placeholder="">
-	          </div>
-	        </div>
-          <div class="form-group">
-            <label>成立日期</label>
-            <div class="row">
-              <div class="col-sm-2">
-                <input name="life" type="radio" value="3" class="icheck"> 是
-              </div>
-              <div class="col-sm-2">
-                <input name="life" type="radio" value="1" class="icheck"> 否
-              </div>
-            </div>
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>首付息日:</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="首付息日">
+			          </div>
+			        </div>
+		        </div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>付息日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa">T+</i>			              
+			            </div>
+			            <input name="accrualDate" type="text"
+			                   type="text" class="form-control input-sm"
+			                   placeholder="付息日" required>
+			            <span class="input-group-addon">工作日以内</span>
+			          </div>
+			        </div>          		
+          	</div>
           </div>
+	        
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>募集期收益:</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="collectIncomeRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="募集期收益" required>
+			            <span class="input-group-addon">%</span>
+			          </div>
+			        </div>
+		        </div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          
+			        </div>          		
+          	</div>
+          </div>
+	        
+	        
+	        
+          
           <input name="oid" type="hidden" data-detail-fetch="oid">
         </form>
       </div>

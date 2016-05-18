@@ -110,7 +110,7 @@ public class ProjectController extends BaseController {
 	@RequestMapping(value = "getByTargetId")
 	public CommonResp getByTargetId(@RequestParam(required = true) String targetOid) {
 		List<Project> list = this.projectService.findByTargetId(targetOid);
-		return CommonResp.builder().errorCode(1).errorMessage("保存成功！").rows(list).total(null == list ? 0 : list.size()).build();
+		return CommonResp.builder().errorMessage("保存成功！").rows(list).total(null == list ? 0 : list.size()).build();
 	}
 
 }

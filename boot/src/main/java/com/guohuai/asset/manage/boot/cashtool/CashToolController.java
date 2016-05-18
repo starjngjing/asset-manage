@@ -48,6 +48,6 @@ public class CashToolController {
 	@ApiOperation(value = "现金管理工具保存")
 	public CommonResp save(CashTool cashTool){
 		cashTool = cashToolService.save(cashTool);
-		return CommonResp.builder().errorCode(1).attached(cashTool.getOid()).build();
+		return CommonResp.builder().errorMessage("现金管理工具保存成功!").attached(cashTool.getOid()).build();
 	}
 }
