@@ -39,7 +39,7 @@ public class Project extends UUID {
 	private static final long serialVersionUID = -8451087996991540133L;
 
 	// 关联投资标的id
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	@JsonBackReference
 	private Investment investment;

@@ -205,8 +205,8 @@ define([
             domElm.value = source[key]
             break
           case '[object RadioNodeList]':
-            domElm.forEach(function (item) {
-              if (item.value === source[key]) {
+            $(domElm).each(function (index, item) {
+              if (item.value === (source[key] + '')) {
                 item.checked = true
               }
             })

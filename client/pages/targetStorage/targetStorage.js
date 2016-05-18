@@ -95,13 +95,51 @@ define([
             },
             {
 //              field: 'operator',
+              width: 200,
               formatter: function (val) {
             	  return '<div class="func-area">' +
-                  '<a href="javascript:void(0)" class="item-update">成立</a>' +
-                  '<a href="javascript:void(0)" class="item-update">不成立</a>' +
-                  '<a href="javascript:void(0)" class="item-update">详情</a>' +
+                  '<a href="javascript:void(0)" class="item-establish">成立</a>' +
+                  '<a href="javascript:void(0)" class="item-unestablish">不成立</a>' +
+                  '<a href="javascript:void(0)" class="item-detail">详情</a>' +
                   '</div>'
-               }
+              },
+              events: {
+                  'click .item-establish': function (e, value, row) {
+                    $('#updateModal').modal('show')
+                  },
+                  'click .item-detail': function (e, value, row) {
+                    http.post(config.api.applyGetUserInfo, {
+                      data: {
+                        aoid: row.oid
+                      },
+                      contentType: 'form'
+                    }, function (result) {
+                      $('#detailModal')
+                      .find('.detail-property')
+                      .each(function (index, item) {
+                        switch (index) {
+                          case 0:
+                            item.innerText = result.name || '--'
+                            break
+                          case 1:
+                            item.innerText = result.sex || '--'
+                            break
+                          case 2:
+                            item.innerText = result.company || '--'
+                            break
+                          case 3:
+                            item.innerText = result.position || '--'
+                            break
+                          case 4:
+                            item.innerText = result.phone || '--'
+                            break
+                        }
+                      })
+                      $('#detailModal').modal('show')
+                    })
+                  }
+                
+              }
             }
           ]
         }
@@ -114,7 +152,10 @@ define([
         function getQueryParams (val) {
           var form = document.searchForm
           pageOptions.name = form.name.value;
-          pageOptions.life = form.life.value;
+          pageOptions.type = form.type.value;
+          pageOptions.raiseScope = form.raiseScope.value;
+          pageOptions.lifed = form.lifed.value;
+          pageOptions.expAror = form.expAror.value;
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val
