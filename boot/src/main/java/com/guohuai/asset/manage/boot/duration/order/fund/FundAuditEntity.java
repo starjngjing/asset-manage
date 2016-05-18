@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "T_GAM_PRODUCT_CASHTOOL_ORDER_LOG")
+@Table(name = "T_GAM_ASSETPOOL_CASHTOOL_ORDER_LOG")
 public class FundAuditEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
