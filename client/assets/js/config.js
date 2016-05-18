@@ -19,7 +19,13 @@ define(function () {
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment",
     	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 		targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
-		targetAdd: this.host + '/ams/target/targetManage/add' //新建标的
+		targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
+		productApplyList: this.host + "/ams/product/apply/list",//查询产品申请列表
+		productAuditList: this.host + "/ams/product/audit/list",//查询产品审核列表
+		productCheckList: this.host + "/ams/product/check/list",//查询产品复核列表
+		productApproveList: this.host + "/ams/product/approve/list",//查询产品批准列表
+    	savePeriodic: this.host + "/ams/product/save/periodic",//新加定期产品
+    	saveCurrent: this.host + "/ams/product/save/current"//新加活期产品
     },
     /**
      * targetStates 标的状态

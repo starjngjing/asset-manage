@@ -10,6 +10,7 @@
 package com.guohuai.asset.manage.boot.cashtool;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
@@ -104,17 +105,17 @@ public class CashTool extends UUID {
 	/**
 	 * 成立日期
 	 */
-	private Timestamp establishDate;
+	private Date establishDate;
 
 	/**
 	 * 上市日期
 	 */
-	private Timestamp listDate;
+	private Date listDate;
 
 	/**
 	 * 终止上市日期
 	 */
-	private Timestamp delistDate;
+	private Date delistDate;
 
 	/**
 	 * 基金管理人编码
@@ -174,7 +175,7 @@ public class CashTool extends UUID {
 	/**
 	 * 万份收益日（日期）
 	 */
-	private Timestamp dailyProfitDate;
+	private Date dailyProfitDate;
 
 	/**
 	 * 万份收益

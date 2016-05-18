@@ -2,12 +2,14 @@ package com.guohuai.asset.manage.boot.investment;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
 @Service
@@ -62,5 +64,24 @@ public class InvestmentService {
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
 		return this.investmentDao.save(entity);
+	}
+	
+	/**
+	 * 标的成立
+	 * @Title: establish 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param entity
+	 * @param operator
+	 * @return Investment    返回类型
+	 */
+	public Investment establish(Investment entity, String operator) {
+		Investment old = this.investmentDao.findOne(entity.getOid());
+		if(null == old)
+			throw AMPException.getException("未知的投资标的ID");
+		BeanUtils.copyProperties(entity, old);
+		this.investmentDao.save(old);
+		return entity;
 	}
 }

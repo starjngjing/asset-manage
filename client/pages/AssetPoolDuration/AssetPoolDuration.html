@@ -188,19 +188,19 @@
               </div>
             </div>
           </div>
-          <div id="showFund">
-            <div class="form-group">
-              <label>投资标的名称</label>
-              <select class="form-control input-sm select2"
-                      style="width: 100%;"></select>
-            </div>
-            <div class="form-group">
-              <label>资产类型</label>
-              <input name="title" type="text"
-                     class="form-control input-sm"
-                     placeholder="当日年化收益"
-                     readonly="readonly">
-            </div>
+          <div class="form-group">
+            <label>标的名称</label>
+            <select class="form-control input-sm select2"
+                    style="width: 100%;"></select>
+          </div>
+          <div class="form-group">
+            <label>标的类型</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   placeholder="当日年化收益"
+                   readonly="readonly">
+          </div>
+          <div id="buyAssetShowFund">
             <div class="form-group">
               <label>当日年化收益</label>
               <input name="title" type="text"
@@ -215,25 +215,464 @@
                      placeholder="每万份收入"
                      readonly="readonly">
             </div>
+          </div>
+          <div id="buyAssetShowTrust" style="display: none;">
             <div class="form-group">
-              <label>申购额度</label>
+              <label>收益率</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     placeholder="收益率"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>投资日</label>
               <div class="input-group input-group-sm">
-                <input name="title" type="text"
-                       class="form-control"
-                       placeholder="申购额度">
-                <span class="input-group-addon">万</span>
+                <input name="newsDate" type="text"
+                       class="form-control datepicker"
+                       placeholder="请选择时间"
+                       data-date-format="YYYY-MM-DD">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>起息日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control datepicker"
+                       placeholder="请选择时间"
+                       data-date-format="YYYY-MM-DD">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>收益截止日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control datepicker"
+                       placeholder="请选择时间"
+                       data-date-format="YYYY-MM-DD">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
               </div>
             </div>
           </div>
-          <div id="showTrust">
-            asd
+          <div class="form-group">
+            <label>申购额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     placeholder="申购额度">
+              <span class="input-group-addon">万</span>
+            </div>
           </div>
         </form>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button type="button" class="btn btn-primary btn-submit">提交审核</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 申购审核弹窗 -->
+<div id="assetCheckModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">申购审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="assetCheckForm" name="assetCheckForm" method="post">
+          <div class="form-group">
+            <label>标的名称</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="form-group">
+            <label>标的类型</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div id="assetCheckShowFund" style="display: none;">
+            <div class="form-group">
+              <label>当日年化收益</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>每万份收入</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+          </div>
+          <div id="assetCheckShowTrust" style="display: none;">
+            <div class="form-group">
+              <label>收益率</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>投资日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>起息日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>收益截止日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>申购额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>审核额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     placeholder="审核额度">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default">不通过</button>
+        <button type="button" class="btn btn-primary btn-submit">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 资金预约弹窗 -->
+<div id="appointmentModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">申购审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="appointmentForm" name="appointmentForm" method="post">
+          <div class="form-group">
+            <label>标的名称</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="form-group">
+            <label>标的类型</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div id="appointmentShowFund" style="display: none;">
+            <div class="form-group">
+              <label>当日年化收益</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>每万份收入</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+          </div>
+          <div id="appointmentShowTrust" style="display: none;">
+            <div class="form-group">
+              <label>收益率</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>投资日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>起息日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>收益截止日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>申购额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>审核额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>预约额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     placeholder="预约额度">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default">失 败</button>
+        <button type="button" class="btn btn-primary btn-submit">成 功</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 订单确认弹窗 -->
+<div id="orderConfirmModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">申购审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="orderConfirmForm" name="orderConfirmForm" method="post">
+          <div class="form-group">
+            <label>标的名称</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="form-group">
+            <label>标的类型</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div id="orderConfirmShowFund" style="display: none;">
+            <div class="form-group">
+              <label>当日年化收益</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>每万份收入</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+          </div>
+          <div id="orderConfirmShowTrust" style="display: none;">
+            <div class="form-group">
+              <label>收益率</label>
+              <input name="title" type="text"
+                     class="form-control input-sm"
+                     readonly="readonly">
+            </div>
+            <div class="form-group">
+              <label>投资日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>起息日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>收益截止日</label>
+              <div class="input-group input-group-sm">
+                <input name="newsDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>申购额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>审核额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>预约额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     readonly="readonly">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>确认额度</label>
+            <div class="input-group input-group-sm">
+              <input name="title" type="text"
+                     class="form-control"
+                     placeholder="确认额度">
+              <span class="input-group-addon">万</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">失 败</button>
+        <button type="button" class="btn btn-primary btn-submit">成 功</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 出入金明细弹窗 -->
+<div id="accountDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class=" modal-title">出入金明细</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <!-- 出入金明细Grid -->
+            <div id="accountDetailGrid" class="box box-primary">
+              <div class="box-body">
+                <!-- 出入金明细数据表格 -->
+                <table id="accountDetailTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>操作</th>
+                    <th>金额</th>
+                    <th>标的名称</th>
+                    <th>账户信息</th>
+                    <th>状态</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

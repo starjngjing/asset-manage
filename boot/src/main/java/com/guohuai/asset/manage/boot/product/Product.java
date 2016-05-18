@@ -115,7 +115,6 @@ public class Product implements Serializable {
 	private String code;//产品编号
 	private String name;//产品名称
 	private String fullName;//产品全称
-	private String manager;//产品管理人简称
 	private String administrator;//产品管理人
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "typeOid", referencedColumnName = "oid")
@@ -144,9 +143,11 @@ public class Product implements Serializable {
 	private BigDecimal netUnitShare;//单位份额净值
 	private int investMin;//单笔投资最低份额
 	private int investMax;//单笔投资最高份额
+	private int purchaseLimit;//申购上限
 	private int investAdditional;//单笔投资追加份额
 	private int accrualDate;//还本付息日 存续期结束后第()个自然日
 	private int netMaxRredeemDay;//单日净赎回上限
+	private int minRredeem;//单笔净赎回下限
 	private int purchaseConfirmDate;//申购确认日:()个
 	private String purchaseConfirmDateType;//申购确认日类型:自然日或交易日
 	private int redeemConfirmDate;//赎回确认日:()个
@@ -182,11 +183,9 @@ public class Product implements Serializable {
 	private String stems;//来源
 	private String isDeleted;
 	
-	private String state;//产品状态
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
 	private AssetPoolEntity assetPool;//资产配置
-	private Timestamp endTime;//产品清算（结束）时间
 	private String auditState;//审核状态
 
 }

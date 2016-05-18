@@ -32,8 +32,6 @@ public class SaveCurrentProductForm implements Serializable {
 	@NotBlank
 	private String fullName;//产品全称
 	@NotBlank
-	private String manager;//产品管理人简称
-	@NotBlank
 	private String administrator;//管理人
 	@NotBlank
 	private String typeOid;//产品类型
@@ -76,11 +74,13 @@ public class SaveCurrentProductForm implements Serializable {
 	private int investMin;//单笔投资最低份额
 	@Digits(integer = 12, fraction = 0, message = "单笔投资最高份额参数错误")
 	private int investMax;//单笔投资最高份额
+	@Digits(integer = 12, fraction = 0, message = "申购上限参数错误")
+	private int purchaseLimit;//申购上限
 	@Digits(integer = 12, fraction = 0, message = "单笔投资追加份额参数错误")
 	private int investAdditional;//单笔投资追加份额
 	@Digits(integer = 12, fraction = 0, message = "单日净赎回上限参数错误")
 	@Min(value = 1, message = "单日净赎回上限参数错误")
-	@NotBlank(message = "单日净赎回上限不可为空")
+//	@NotBlank(message = "单日净赎回上限不可为空")
 	private int netMaxRredeemDay;//单日净赎回上限
 	@Range(min = 1, max = 240, message = "申购确认日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "申购确认日参数错误")

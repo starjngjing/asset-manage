@@ -10,7 +10,7 @@ define([
   return {
     /**
      * confirm方法，使用 $$.confirm 将一段html结构变成confirm功能弹窗
-     * 参数 options
+     * @param options
      *      -- options.container：弹窗div，jquery对象
      *      -- options.trigger：点击trigger呼出弹窗，domNode对象
      *      -- options.position：弹窗出现位置，string，目前仅支持'bottomLeft'
@@ -27,7 +27,7 @@ define([
 
       confirm
       .css({
-        top: document.body.scrollTop + trigger.getBoundingClientRect().top,
+        top: document.body.scrollTop + trigger.getBoundingClientRect().bottom + 10,
         right: document.documentElement.clientWidth - trigger.getBoundingClientRect().right
       })
       .addClass(position)
@@ -53,8 +53,8 @@ define([
     },
     /**
      * 搜索表单初始化，使用 $$.searchInit 将grid中的搜索表单键盘事件绑定表格刷新
-     * 参数 form：搜索表单 jquery对象
-     * 参数 table：搜索表单对应的表格 jquery对象
+     * @param form：搜索表单 jquery对象
+     * @param table：搜索表单对应的表格 jquery对象
      */
     searchInit: function (form, table) {
       var commonInputs = form.find('input:text:not(.datepicker)')
@@ -101,9 +101,9 @@ define([
     },
     /**
      * treetable初始化
-     * 参数 source：数据源 数组
-     * 参数 table：表格 jquery对象
-     * 参数 columns：单元格配置，同bootstrap配置中的culumns 数组
+     * @param source：数据源 数组
+     * @param table：表格 jquery对象
+     * @param columns：单元格配置，同bootstrap配置中的culumns 数组
      */
     treetableInit: function (source, table, columns) {
       console.log(source)
@@ -158,7 +158,7 @@ define([
     },
     /**
      * iCheck select2 datetimepicker 区域内初始化
-     * 参数 parent：要进行初始化的区域 jquery对象
+     * @param parent：要进行初始化的区域 jquery对象
      */
     inputPluginsInit: function (parent) {
       parent.find('.icheck').iCheck({
@@ -170,7 +170,7 @@ define([
     },
     /**
      * 枚举值填充表单元素 区域内初始化
-     * 参数 parent：要进行初始化的区域 jquery对象
+     * @param parent：要进行初始化的区域 jquery对象
      */
     enumSourceInit: function (parent) {
       parent.find('[data-enum-fetch]').each(function (index, item) {

@@ -22,14 +22,19 @@ define([
         $('#buyAssetModal').modal('show')
       })
 
+      // 出入金明细按钮点击事件
+      $('#showAccountDetail').on('click', function () {
+        $('#accountDetailModal').modal('show')
+      })
+
       // 资产申购类型radio change事件
       $(document.buyAssetForm.type).on('ifChecked', function () {
         if (this.value === 'fund') {
-          $('#showFund').show()
-          $('#showTrust').hide()
+          $('#buyAssetShowFund').show()
+          $('#buyAssetShowTrust').hide()
         } else {
-          $('#showFund').hide()
-          $('#showTrust').show()
+          $('#buyAssetShowFund').hide()
+          $('#buyAssetShowTrust').show()
         }
       })
     }
