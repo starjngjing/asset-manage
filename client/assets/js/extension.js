@@ -27,7 +27,7 @@ define([
 
       confirm
       .css({
-        top: document.body.scrollTop + trigger.getBoundingClientRect().top,
+        top: document.body.scrollTop + trigger.getBoundingClientRect().bottom + 10,
         right: document.documentElement.clientWidth - trigger.getBoundingClientRect().right
       })
       .addClass(position)
