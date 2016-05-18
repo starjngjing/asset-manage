@@ -76,13 +76,12 @@ define([
 
       datepickers.each(function (index, item) {
         $(item)
-        .datetimepicker({
-          format: 'YYY-MM-DD',
-          autoclose: true
-        })
-        .on('hide', function () {
-          table.bootstrapTable('refresh')
-        })
+          .datetimepicker({
+            showClear: true
+          })
+          .on('dp.hide', function () {
+            table.bootstrapTable('refresh')
+          })
       })
 
       selects.each(function (index, item) {
