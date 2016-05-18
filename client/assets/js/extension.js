@@ -177,7 +177,11 @@ define([
         switch (item.nodeName){
           case 'SELECT':
             $(item).empty()
-            var options = '<option value="">全部</option>'
+            var options = ''
+            var defaultText = $(item).attr('data-enum-text')
+            if (defaultText) {
+              options += '<option value="">' + defaultText + '</option>'
+            }
             $(config[enu]).each(function (index, item) {
               options += '<option value="' + item.id + '">' + item.text + '</option>'
             })
