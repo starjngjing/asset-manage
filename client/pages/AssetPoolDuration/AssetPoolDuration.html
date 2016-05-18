@@ -163,3 +163,86 @@
   </div>
 </section>
 
+<!-- 资产申购弹窗 -->
+<!-- 默认大小窗体（有tabs栏） -->
+<div id="buyAssetModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">默认大小</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- tabs -->
+        <div class="nav-tabs-custom">
+          <!-- tab页签定义，注意对应 href 对应的 id -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#buyAssetToolArea" role="tab" data-toggle="tab">现金管理工具</a>
+            </li>
+            <li role="presentation">
+              <a href="#buyAssetTrustArea" role="tab" data-toggle="tab">信托计划</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <!-- 文本框panel id要与上方对应 -->
+            <div class="tab-pane active" role="tabpanel" id="buyAssetToolArea">
+              <div class="form-group">
+                <label>投资标的名称</label>
+                <select class="form-control input-sm"></select>
+              </div>
+              <!-- 文本框 -->
+              <div class="form-group">
+                <label>文本框</label>
+                <input name="title" type="text"
+                       class="form-control input-sm"
+                       placeholder="文本框">
+              </div>
+            </div>
+            <!-- 扩展类panel id要与上方对应 -->
+            <div class="tab-pane" role="tabpanel" id="buyAssetTrustArea">
+              <!-- 下拉菜单 -->
+              <div class="form-group">
+                <label>下拉菜单</label>
+                <select class="form-control input-sm">
+                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>
+                </select>
+              </div>
+              <!-- 多选菜单 -->
+              <div class="form-group">
+                <label>多选菜单</label>
+                <select class="form-control input-sm select2"
+                        multiple="multiple"
+                        data-placeholder="Select a State"
+                        style="width: 100%;">
+                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button type="button" class="btn btn-primary btn-submit">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,7 @@ define([
       // 饼图生成
       var pieChart = echarts.init(document.getElementById('pieChart'))
       pieChart.setOption(getPieOptions(config))
+      // 柱状图生成
       var barChart = echarts.init(document.getElementById('barChart'))
       barChart.setOption(getBarOptions(config))
     }
