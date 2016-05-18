@@ -4,15 +4,19 @@
  */
  
 define(function () {
-  this.host = 'http://www.guohuaigroup.com'
+//  this.host = 'http://www.guohuaigroup.com'
+  this.host = ''
   
   return {
     host: this.host,
     /**
      * api 接口提供与服务器异步交互地址
+     * 
      */
     api: {
-      dictList: this.host + '/ams/dict/list'                // 枚举值获取接口
+      dictList: this.host + '/ams/dict/list',                // 枚举值获取接口
+    	establish: this.host + "/ams" + "/boot/investmentPool/establish",
+    	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment"
     },
     /**
      * targetStates 标的状态

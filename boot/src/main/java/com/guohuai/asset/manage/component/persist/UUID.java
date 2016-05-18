@@ -10,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.GenericGenerator;
 
 //JPA 基类的标识
+@SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class UUID implements Cloneable, Serializable {
 

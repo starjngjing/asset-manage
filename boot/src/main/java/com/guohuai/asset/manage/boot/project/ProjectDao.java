@@ -19,7 +19,7 @@ public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpe
 	 * @see: 
 	 * @param targetOid
 	 * @return
-	 * @return List<Approval>    返回类型 
+	 * @return List<Project>    返回类型 
 	 */
 	@Query(value = "from Project p where p.investment.oid = ?1")
 	public List<Project> findByTargetOid(String targetOid);
