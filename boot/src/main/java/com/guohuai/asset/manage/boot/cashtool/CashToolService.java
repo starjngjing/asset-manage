@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.investment.InvestmentDao;
+
 
 /**    
  * <p>Title: CashToolService.java</p>    
@@ -31,7 +33,13 @@ public class CashToolService {
 
 	@Autowired
 	private CashToolDao cashToolDao;
+	
+	@Autowired
+	private InvestmentDao investmentDao;
 
+	public CashTool save(CashTool cashTool) {
+		return this.cashToolDao.save(cashTool);
+	}
 	/**
 	 * 分页查询现金管理工具
 	 * @Title: getCashToolList 
