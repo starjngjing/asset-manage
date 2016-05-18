@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.context.request.WebRequest;
 
+import com.guohuai.asset.manage.component.web.parameter.CustomTimestampEditor;
+import com.guohuai.asset.manage.component.web.parameter.CustomerJavaDateEditor;
+import com.guohuai.asset.manage.component.web.parameter.CustomerSqlDateEditor;
+import com.guohuai.asset.manage.component.web.parameter.CustomerTimeEditor;
+
 @ControllerAdvice
 public class GlobalBindingInitializer {
 
