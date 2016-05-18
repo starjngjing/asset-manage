@@ -29,6 +29,10 @@ define(function () {
      */
     conventionStates: {
 
-    }
+    },
+    /**
+     * 图标所用到的主题颜色
+     */
+    colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
   }
 })
