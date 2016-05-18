@@ -7,7 +7,7 @@
  * you entered into with Founder.   
  *   
  */
-package com.guohuai.asset.manage.boot.investment;
+package com.guohuai.asset.manage.boot.cashtool;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -28,48 +28,46 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-
-/**    
- * 本息兑付实体
- * <p>Title: Interest.java</p>    
- * <p>Description: 描述 </p>   
- * @author vania      
- * @version 1.0    
- * @created 2016年5月17日 上午11:35:30   
- */   
+/**
+ * @ClassName: CashToolRevenue
+ * @Description: 现金管理工具 收益率实体
+ * @author vania
+ * @date 2016年5月16日 上午10:15:56
+ *
+ */
 @Entity
-@Table(name = "T_GAM_INTEREST")
+@Table(name = "T_GAM_CASHTOOL_REVENUE")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Interest extends UUID {
+public class CashToolRevenue extends UUID {
 
-	private static final long serialVersionUID = 4793726996152893232L;
+	private static final long serialVersionUID = -3696995771339594216L;
 
 	/**
-	 * 关联投资标的
+	 * 关联现金管理工具
 	 */
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
+	@JoinColumn(name = "cashtoolOid", referencedColumnName = "oid")
 	@JsonBackReference
-	private Investment investment;
+	private CashTool cashTool;
+	
+	/**
+	 * 交易日期
+	 */
+	private Timestamp dailyProfitDate;
 
 	/**
-	 * 兑付期数
+	 * 万份收益
 	 */
-	private Integer seq;
+	private BigDecimal dailyProfit;
 
 	/**
-	 * 实际收益
+	 * 7日年化收益率
 	 */
-	private BigDecimal incomeRate;
-
-	/**
-	 * 收益支付日
-	 */
-	private Timestamp incomeDate;
+	private BigDecimal weeklyYield;
 
 	/**
 	 * 操作员
