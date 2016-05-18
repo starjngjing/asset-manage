@@ -15,14 +15,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.guohuai.asset.manage.component.web.parameter.DateParam.DateArgumentResolver;
 import com.guohuai.asset.manage.component.web.parameter.JavaDateJsonDeserializer;
 import com.guohuai.asset.manage.component.web.parameter.JavaDateJsonSerializer;
 import com.guohuai.asset.manage.component.web.parameter.SqlDateJsonDeserializer;
 import com.guohuai.asset.manage.component.web.parameter.SqlDateJsonSerializer;
 import com.guohuai.asset.manage.component.web.parameter.TimestampJsonDeserializer;
 import com.guohuai.asset.manage.component.web.parameter.TimestampJsonSerializer;
-import com.guohuai.asset.manage.component.web.parameter.TimestampParam.TimestampArgumentResolver;
 
 import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 
@@ -38,8 +36,6 @@ public class RequestParamConfig {
 			public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 				argumentResolvers.add(new SpecificationArgumentResolver());
 				argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
-				argumentResolvers.add(new DateArgumentResolver());
-				argumentResolvers.add(new TimestampArgumentResolver());
 			}
 
 		};
