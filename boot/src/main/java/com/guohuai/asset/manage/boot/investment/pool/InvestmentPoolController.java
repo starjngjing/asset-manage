@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.investment;
+package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
 
@@ -26,6 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.investment.Interest;
+import com.guohuai.asset.manage.boot.investment.InterestService;
+import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
+import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;

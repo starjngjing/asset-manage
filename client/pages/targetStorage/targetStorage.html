@@ -118,7 +118,7 @@
             <thead>
             <tr>
               <th>名称</th>
-              <th>类型</th>
+              <th>标的类型</th>
               <th>收益率</th>
               <th>标的规模</th>
               <th>期限</th>
@@ -144,30 +144,107 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">编辑</h4>
+        <h4 class="modal-title">成立</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
         <!-- 编辑表单 -->
         <form id="updateForm" name="updateForm" method="post">
-          <div class="form-group">
-            <label>是否开通</label>
-            <div class="row">
-              <div class="col-sm-2">
-                <input name="openstate" type="radio" value="ok" class="icheck"> 是
-              </div>
-              <div class="col-sm-2">
-                <input name="openstate" type="radio" value="no" class="icheck"> 否
-              </div>
-            </div>
+        	<p class="form-header">标的概况</p>
+        	<div class="form-group">
+            <label>标的名称</label>
+            <input data-detail-fetch="name" type="text"
+                   class="form-control input-sm"
+                   disabled="disabled">
           </div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的类型</label>
+		            <input data-detail-fetch="type" data-enum-transform="TARGETTYPE"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的规模</label>
+		            <input data-detail-fetch="raiseScope"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          </div>
+	      	<div class="row">
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>年化收益率:</lable>
+	      				<input data-detail-fetch="expArorSec"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>标的期限:</lable>
+	      				<input data-detail-fetch="lifed"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      	</div>
+	      	
           <div class="form-group">
-            <label>内容</label>
-            <textarea name="remark" rows="3"
+            <label>风控</label>
+            <textarea name="risk" rows="3"
                       class="form-control input-sm"
                       placeholder="请输入内容" required></textarea>
           </div>
-          <input name="oid" type="hidden">
+	        <div class="form-group">
+	          <label>成立日期</label>
+	          <div class="input-group input-group-sm">
+	            <div class="input-group-addon">
+	              <i class="fa fa-calendar"></i>
+	            </div>
+	            <input name="setDate" type="text"
+	                   class="form-control datepicker"
+	                   placeholder="">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label>收益起始日</label>
+	          <div class="input-group input-group-sm">
+	            <div class="input-group-addon">
+	              <i class="fa fa-calendar"></i>
+	            </div>
+	            <input name="arorFirstDate" type="text"
+	                   class="form-control datepicker"
+	                   placeholder="">
+	          </div>
+	        </div>
+	        <div class="form-group">
+	          <label>收益截止日</label>
+	          <div class="input-group input-group-sm">
+	            <div class="input-group-addon">
+	              <i class="fa fa-calendar"></i>
+	            </div>
+	            <input name="arorFirstDate" type="text"
+	                   class="form-control datepicker"
+	                   placeholder="">
+	          </div>
+	        </div>
+          <div class="form-group">
+            <label>成立日期</label>
+            <div class="row">
+              <div class="col-sm-2">
+                <input name="life" type="radio" value="3" class="icheck"> 是
+              </div>
+              <div class="col-sm-2">
+                <input name="life" type="radio" value="1" class="icheck"> 否
+              </div>
+            </div>
+          </div>
+          <input name="oid" type="hidden" data-detail-fetch="oid">
         </form>
       </div>
       <!-- 模态窗底部 -->
