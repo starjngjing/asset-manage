@@ -66,17 +66,18 @@ public class InvestmentPoolController extends BaseController {
 	@RequestMapping(value = "listinvestment", method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "标的成立管理列表")
 	public @ResponseBody ResponseEntity<InvestmentListResp> listinvestment(HttpServletRequest request,
-			@And({ @Spec(path = "projectName", spec = Like.class), @Spec(path = "projectManager", spec = Equal.class),
-					@Spec(path = "pjType", params = "pjType", spec = Equal.class) }) Specification<Investment> spec,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int size, @RequestParam(defaultValue = "desc") String sortDirection,
+			@And({ @Spec(params="name", path = "name", spec = Like.class),
+					@Spec(params = "type", path = "type", spec = Equal.class) }) Specification<Investment> spec,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
+		
 		if (page < 1) {
 			page = 1;
 		}
-		if (size <= 0) {
-			size = 50;
+		if (rows <= 0) {
+			rows = 50;
 		}
-		Pageable pageable = new PageRequest(page, size);
+		Pageable pageable = new PageRequest(page - 1, rows);
 
 		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);
 

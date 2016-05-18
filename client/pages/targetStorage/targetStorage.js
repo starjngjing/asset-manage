@@ -37,9 +37,9 @@ define([
           pageList: [10, 20, 30, 50, 100],
           queryParams: getQueryParams,
           onLoadSuccess: function () {
-            http.post(config.api.listinvestment, {
-              contentType: 'form'
-            }, function (result) {
+          //  http.post(config.api.listinvestment, {
+           //   contentType: 'form'
+           // }, function (result) {
 //              $('#clubData').html('会员机构：' + result.clubData + '家')
 //              $('#platAssetData').html('平台资产：' + result.platAssetData + '项')
 //              $('#assetSizeData').html('资产规模：' + result.assetSizeData + '亿')
@@ -50,37 +50,60 @@ define([
 //              $('#clubDataForm').validator()
 //              $('#platAssetDataForm').validator()
 //              $('#assetSizeDataForm').validator()
-            })
+            //})
           },
           columns: [
-            {
-              width: 30,
-              align: 'center',
-              formatter: function (val, row, index) {
-                return index + 1
-              }
+            {// 名称
+            	field: 'name',
+//              width: 60,
+              align: 'center'
+              
             },
-            {
-              field: 'dataKind',
+            {// 类型
+//            	width: 60,
+              field: 'type',
               formatter: function (val) {
-                switch (val) {
-                  case 'assetsize': return '资产规模'
-                  case 'platasset': return '平台资产'
-                  case 'club': return '会员机构'
-                }
+                return val;
               }
             },
-            {
-              field: 'data'
+            {// 收益率
+            	field: 'expAror',
+            	formatter: function (val) {
+            		return val+"%";
+            	}
             },
             {
-              field: 'updateTime',
+            	// 标的规模
+            	field: 'raiseScope',
+            	formatter: function (val) {
+            		return val;
+            	}
+            },
+            { // 标的限期（日）
+              field: 'lifed',
+              
+            },
+            { // 状态
+            	field: 'state',
+            	formatter: function (val) {
+            		return val;
+            	}
+            },
+            { // 已购份额
+            	field: 'state',
+            	formatter: function (val) {
+            		return '已购份额';
+            	}
+            },
+            {
+//              field: 'operator',
               formatter: function (val) {
-                return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD')
-              }
-            },
-            {
-              field: 'operator'
+            	  return '<div class="func-area">' +
+                  '<a href="javascript:void(0)" class="item-update">成立</a>' +
+                  '<a href="javascript:void(0)" class="item-update">编辑</a>' +
+                  '<a href="javascript:void(0)" class="item-delete">删除</a>' +
+                  '</div>'
+               }
             }
           ]
         }
