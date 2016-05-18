@@ -2,18 +2,20 @@ package com.guohuai.asset.manage.boot.product;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
+import com.guohuai.asset.manage.boot.file.SaveFileForm;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.component.web.parameter.validation.Enumerations;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
@@ -23,14 +25,13 @@ public class SavePeriodicProductForm implements Serializable {
 	private static final long serialVersionUID = 6251184821616489757L;
 
 	private String oid;
+	@NotNull
 	@NotBlank(message = "产品编号不能为空！")
 	private String code;
 	@NotBlank
 	private String name;//产品简称
 	@NotBlank
 	private String fullName;//产品全称
-	@NotBlank
-	private String manager;//产品管理人简称
 	@NotBlank
 	private String administrator;//管理人
 	@NotBlank
@@ -46,6 +47,7 @@ public class SavePeriodicProductForm implements Serializable {
 	private String manageRate;//托管费率
 	@Digits(integer = 4, fraction = 4, message = "固定管理费率参数错误")
 	private String fixedManageRate;//固定管理费率
+	@Enumerations(values = { "MANUALINPUT", "FIRSTRACKTIME" }, message = "募集开始时间类型参数错误")
 	@NotBlank
 	private String raiseStartDateType;//募集开始时间类型
 	@DateTimeFormat(pattern = "YYYY-MM-DD HH:MM:SS")
@@ -66,7 +68,7 @@ public class SavePeriodicProductForm implements Serializable {
 	private String expArorSec;//预期年化收益率区间
 	@Digits(integer = 12, fraction = 0, message = "募集总份额参数错误")
 	@Min(value = 1, message = "募集总份额参数错误")
-	@NotBlank(message = "募集总份额不可为空")
+//	@NotBlank(message = "募集总份额不可为空")
 	private int raisedTotalNumber;//募集总份额
 	@Digits(integer = 12, fraction = 4, message = "单位份额净值参数错误")
 	@NotBlank(message = "单位份额净值不可为空")
@@ -76,6 +78,8 @@ public class SavePeriodicProductForm implements Serializable {
 	private int investMin;//单笔投资最低份额
 	@Digits(integer = 12, fraction = 0, message = "单笔投资最高份额参数错误")
 	private int investMax;//单笔投资最高份额
+	@Digits(integer = 12, fraction = 0, message = "申购上限参数错误")
+	private int purchaseLimit;//申购上限
 	@Digits(integer = 12, fraction = 0, message = "单笔投资追加份额参数错误")
 	private int investAdditional;//单笔投资追加份额
 	@Range(min = 1, max = 240, message = "还本付息日参数错误")

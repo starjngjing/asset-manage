@@ -46,7 +46,7 @@ public class ProductService {
 
 		Product.ProductBuilder pb = Product.builder().oid(StringUtil.uuid());
 		{
-			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).manager(form.getManager()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
+			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
 		}
 		{
 			// 产品类型 
@@ -54,7 +54,7 @@ public class ProductService {
 			pb.type(assetType);
 		}
 		{
-			pb.reveal(form.getReveal()).currency(form.getCurrency());
+			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
@@ -92,7 +92,7 @@ public class ProductService {
 			}
 		}
 		{
-			pb.raisedTotalNumber(form.getRaisedTotalNumber()).investMin(form.getInvestMin()).investMax(form.getInvestMax()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).accrualDate(form.getAccrualDate());
+			pb.raisedTotalNumber(form.getRaisedTotalNumber()).investMin(form.getInvestMin()).investMax(form.getInvestMax()).purchaseLimit(form.getPurchaseLimit()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).accrualDate(form.getAccrualDate());
 		}
 		{
 			pb.investComment(form.getInvestComment()).instruction(form.getInstruction()).riskLevel(form.getRiskLevel()).stems(Product.STEMS_Userdefine).auditState(Product.AUDIT_STATE_Nocommit);
@@ -112,7 +112,7 @@ public class ProductService {
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
-		{
+		if (null != form.getFiles() && form.getFiles().size() > 0) {
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
@@ -128,7 +128,7 @@ public class ProductService {
 
 		Product.ProductBuilder pb = Product.builder().oid(StringUtil.uuid());
 		{
-			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).manager(form.getManager()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
+			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
 		}
 		{
 			// 产品类型 
@@ -145,7 +145,7 @@ public class ProductService {
 			pb.payModeDate(form.getPayModeDate());
 		}
 		{
-			pb.reveal(form.getReveal()).currency(form.getCurrency());
+			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
@@ -180,7 +180,7 @@ public class ProductService {
 			}
 		}
 		{
-			pb.investMin(form.getInvestMin()).investMax(form.getInvestMax()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).netMaxRredeemDay(form.getNetMaxRredeemDay());
+			pb.investMin(form.getInvestMin()).investMax(form.getInvestMax()).purchaseLimit(form.getPurchaseLimit()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).netMaxRredeemDay(form.getNetMaxRredeemDay());
 		}
 		{
 			pb.isOpenPurchase(Product.NO).isOpenRemeed(Product.NO);
@@ -281,11 +281,11 @@ public class ProductService {
 			product.setCode(form.getCode());
 			product.setName(form.getName());
 			product.setFullName(form.getFullName());
-			product.setManager(form.getManager());
 			product.setAdministrator(form.getAdministrator());
 			product.setStatus(Product.STATE_Update);
 			product.setReveal(form.getReveal());
 			product.setCurrency(form.getCurrency());
+			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
@@ -330,6 +330,7 @@ public class ProductService {
 			product.setRaisedTotalNumber(form.getRaisedTotalNumber());
 			product.setInvestMin(form.getInvestMin());
 			product.setInvestMax(form.getInvestMax());
+			product.setPurchaseLimit(form.getPurchaseLimit());
 			product.setInvestAdditional(form.getInvestAdditional());
 			product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
 			product.setAccrualDate(form.getAccrualDate());
@@ -389,11 +390,11 @@ public class ProductService {
 			product.setCode(form.getCode());
 			product.setName(form.getName());
 			product.setFullName(form.getFullName());
-			product.setManager(form.getManager());
 			product.setAdministrator(form.getAdministrator());
 			product.setStatus(Product.STATE_Update);
 			product.setReveal(form.getReveal());
 			product.setCurrency(form.getCurrency());
+			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
 		}	
 		
 		{
@@ -441,6 +442,7 @@ public class ProductService {
 		{
 			product.setInvestMin(form.getInvestMin());
 			product.setInvestMax(form.getInvestMax());
+			product.setPurchaseLimit(form.getPurchaseLimit());
 			product.setInvestAdditional(form.getInvestAdditional());
 			product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
 			product.setNetMaxRredeemDay(form.getNetMaxRredeemDay());

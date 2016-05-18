@@ -21,7 +21,9 @@ public class ProductResp extends BaseResp {
 
 	public ProductResp(Product p) {
 		this.oid = p.getOid();
+		this.code = p.getCode();
 		this.name = p.getName();
+		this.fullName = p.getFullName();
 		this.administrator = p.getAdministrator();//管理人
 		if (null != p.getType()) {
 			this.typeOid = p.getType().getOid();//产品类型
@@ -39,6 +41,7 @@ public class ProductResp extends BaseResp {
 		this.investMax = p.getInvestMax();//单笔投资最高份额
 		this.investAdditional = p.getInvestAdditional();//单笔投资追加份额
 		this.netMaxRredeemDay = p.getNetMaxRredeemDay();//单日净赎回上限
+		this.minRredeem = p.getMinRredeem();
 		if (null != p.getAccrualCycle()) {
 			this.accrualCycleOid = p.getAccrualCycle().getOid();
 			this.accrualCycleName = p.getAccrualCycle().getName();
@@ -54,7 +57,7 @@ public class ProductResp extends BaseResp {
 		this.instruction = p.getInstruction();//产品说明
 		this.riskLevel = p.getRiskLevel();//风险等级
 		this.fileKeys = p.getFileKeys();//附加文件
-		this.state = p.getState();//产品状态
+		this.status = p.getStatus();//产品状态
 		this.createTime = DateUtil.formatDate(p.getCreateTime().getTime());//创建时间
 		this.updateTime = DateUtil.formatDate(p.getUpdateTime().getTime());//更新时间
 		this.operator = p.getOperator();//操作员
@@ -65,7 +68,9 @@ public class ProductResp extends BaseResp {
 	}
 
 	private String oid;
+	private String code;
 	private String name;//产品名称
+	private String fullName;//产品全称
 	private String administrator;//管理人
 	private String typeOid;//产品类型
 	private String typeName;//产品类型
@@ -81,6 +86,7 @@ public class ProductResp extends BaseResp {
 	private int investMax;//单笔投资最高份额
 	private int investAdditional;//单笔投资追加份额
 	private int netMaxRredeemDay;//单日净赎回上限
+	private int minRredeem;//单笔净赎回下限
 	private String accrualCycleOid;//收益结转周期
 	private String accrualCycleName;//收益结转周期
 	private int purchaseConfirmDate;//申购确认日:()个
@@ -94,7 +100,7 @@ public class ProductResp extends BaseResp {
 	private String instruction;//产品说明
 	private String riskLevel;//风险等级
 	private String fileKeys;//附加文件
-	private String state;//产品状态
+	private String status;//产品状态
 	private String createTime;//创建时间
 	private String updateTime;//更新时间
 	private String operator;//操作员
