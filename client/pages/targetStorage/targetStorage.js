@@ -60,8 +60,7 @@ define([
 //            	width: 60,
               field: 'type',
               formatter: function (val) {
-            	  //config.INVESTMENT_TYPE
-                return val;
+            	return util.enum.transform('TARGETTYPE', val);            	
               }
             },
             {// 收益率
@@ -96,16 +95,37 @@ define([
             {
 //              field: 'operator',
               width: 200,
+              align: 'center',
               formatter: function (val) {
-            	  return '<div class="func-area">' +
-                  '<a href="javascript:void(0)" class="item-establish">成立</a>' +
-                  '<a href="javascript:void(0)" class="item-unestablish">不成立</a>' +
-                  '<a href="javascript:void(0)" class="item-detail">详情</a>' +
-                  '</div>'
+            	  var buttons = [
+            	    {
+            	      text: '成立',
+            	      type: 'button',
+            	      class: 'item-establish',
+            	      isRender: true
+            	    },
+            	    {
+              	      text: '不成立',
+              	      type: 'button',
+              	      class: 'item-unestablish'
+              	    },
+              	  {
+              	      text: '详情',
+              	      type: 'button',
+              	      class: 'item-detail'
+              	    }
+            	  ];
+            	  return util.table.formatter.generateButton(buttons);
               },
               events: {
                   'click .item-establish': function (e, value, row) {
-                    $('#updateModal').modal('show')
+                	http.get('pages/targetStorage/test.json',
+                	  {},
+                	  function (obj) {
+                	  $$.detailAutoFix($('#updateForm'), obj);	// 自动填充详情
+                	  $$.formAutoFix($('#updateForm'), obj); // 自动填充表单
+                	});
+                	$('#updateModal').modal('show');
                   },
                   'click .item-detail': function (e, value, row) {
                     http.post(config.api.applyGetUserInfo, {
