@@ -239,7 +239,9 @@ define([
         checkboxClass: 'icheckbox_minimal-blue',
         radioClass: 'iradio_minimal-blue'
       })
-      parent.find('.datepicker').datetimepicker()
+      parent.find('.datepicker').datetimepicker({
+        showClear: true
+      })
     },
     /**
      * 枚举值填充表单元素 区域内初始化
