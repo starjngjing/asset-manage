@@ -29,6 +29,8 @@ define([
 					formatter: function(val, row) {
 						return row.highScore + ' - ' + row.lowScore;
 					}
+				}, {
+					
 				}]
 			}
 
