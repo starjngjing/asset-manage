@@ -135,11 +135,9 @@ public class ProductService {
 			Dict type = this.dictService.get(form.getTypeOid());
 			pb.type(type);
 			// 收益结转周期
-			Dict accrualCycle = this.dictService.get(form.getAccrualCycleOid());
-			pb.accrualCycle(accrualCycle);
+			pb.accrualCycleOid(form.getAccrualCycleOid());
 			// 付利方式
-			Dict payMode = this.dictService.get(form.getPayModeOid());
-			pb.payMode(payMode);
+			pb.payModeOid(form.getPayModeOid());
 		}
 		{
 			pb.payModeDate(form.getPayModeDate());
@@ -399,11 +397,9 @@ public class ProductService {
 		
 		{
 			//收益结转周期
-			Dict accrualCycle = this.dictService.get(form.getAccrualCycleOid());
-			product.setAccrualCycle(accrualCycle);
+			product.setAccrualCycleOid(form.getAccrualCycleOid());
 			// 付利方式
-			Dict payMode = this.dictService.get(form.getPayModeOid());
-			product.setPayMode(payMode);
+			product.setPayModeOid(form.getPayModeOid());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
@@ -478,12 +474,17 @@ public class ProductService {
 		return response;
 	}
 	
+	/**
+	 * 产品详情
+	 * @param oid
+	 * @return
+	 */
 	@Transactional
-	public ProductResp read(String oid) {
+	public ProductDetailResp read(String oid) {
 		Product product = this.getProductById(oid);
-		ProductResp pr = new ProductResp(product);
+		ProductDetailResp pr = new ProductDetailResp(product);
 
-		if (null != product.getFileKeys()) {
+		if (!StringUtil.isEmpty(product.getFileKeys())) {
 			List<File> files = this.fileService.list(product.getFileKeys(), File.STATE_Valid);
 			if (files.size() > 0) {
 				pr.setFiles(new ArrayList<FileResp>());
