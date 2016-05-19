@@ -54,6 +54,9 @@ public class TargetService {
 		Investment entity = investmentService.getInvestmentDet(oid);
 		if (null != entity) {
 			form.setTargetOid(entity.getSn());
+			form.setTargetName(entity.getName());
+			form.setType(entity.getType());
+			form.setIncomeRate(entity.getExpAror());
 		}
 		
 		return form;
