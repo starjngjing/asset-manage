@@ -8,7 +8,7 @@ define([
     name: 'targetConvention',
     init: function () {
       // js逻辑写在这里
-
+$('#targetConventionReportModal').modal('show')
       // 新建会议按钮点击事件
       $('#targetConventionAdd').on('click', function () {
         $('#addTargetConventionModal').modal('show')
