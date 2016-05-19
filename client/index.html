@@ -331,11 +331,13 @@
           var http = requireModules[2]
 
           // 获取hash，通过hash定位到当前页面，hash中 '?' 及以后的部分作为参数内容，不作为页面判断依据
-          // 参数内容暂存在params中，仅在初次载入页面时有效，点击导航栏按钮切换页面后失效
           var hash = ''
+          // 参数内容暂存在params中，仅在初次载入页面时有效，点击导航栏按钮切换页面后失效
           var params =  {
             value : ''
           }
+          // currentHash用于存储点击后的hash，防止进行重复点击
+          var currentHash = ''
           if (location.hash.indexOf('?') >= 0) {
             hash = location.hash.substring(1, location.hash.indexOf('?'))
             params.value = location.hash.substr(location.hash.indexOf('?') + 1)
@@ -348,9 +350,10 @@
           $('#sidebarMenu')
             .find('[data-gh-route]')
             .on('click', function () {
+              var route = $(this).attr('data-gh-route')
+              if (route === currentHash) return
               $('#sidebarMenu').find('.active').removeClass('active')
               $(this).parent().addClass('active')
-              var route = $(this).attr('data-gh-route')
               $('#mainContent')
                 .empty()
                 .load('pages/' + route + '/' + route + '.html', function () {
@@ -377,6 +380,7 @@
                   $$.inputPluginsInit($(document))
                 })
               location.hash = params.value ? route + '?' + params.value : route
+              currentHash = route
               params.value = ''
               document.body.scrollTop = 0
             })
