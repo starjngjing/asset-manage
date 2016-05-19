@@ -43,6 +43,8 @@ public class TrustForm implements Serializable {
 	private int seq;
 	// 实际收益
 	private BigDecimal income; 
+	// 是否返还本金
+	private int capitalFlag;
 	// 本金返还
 	private BigDecimal capital;
 }

@@ -18,22 +18,30 @@ public class FundForm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String oid;
-	// 关联投资标的
-	private String targetOid;
+	// 关联产品现金管理工具
+	private String assetPoolCashtoolOid;
 	// 关联资产池
 	private String assetPoolOid;
+	// 产品现金管理工具名称
+	private String name;
+	// 产品现金管理工具类型
+	private String type;
 	// 投资日
 	private Date investDate; 
 	// 起息日
 	private Date incomeDate; 
 	// 申购额度
 	private BigDecimal volume;
+	// 是否全部赎回
+	private String allFlag;
 	// 发起赎回日
 	private Date redeemDate; 
 	// 资金到账日
 	private Date backDate; 
+	// 收益截止日
+	private Date endYield;
 	// 赎回金额
-	private BigDecimal return_amount;
+	private BigDecimal returnAmount;
 	// 年化收益率
 	private BigDecimal incomeRate;
 	// 每万份收益

@@ -176,7 +176,7 @@ public class ProductController extends BaseController {
 	}
 	
 	/**
-	 * 产品审核查询
+	 * 产品查询
 	 * @param request
 	 * @param spec
 	 * @param page 第几页
@@ -234,8 +234,7 @@ public class ProductController extends BaseController {
 			spec = Specifications.where(spec).and(typeSpec);
 		}
 		
-//			field: 'applicant'
-//			field: 'applyTime',
+		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
 		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
@@ -244,7 +243,7 @@ public class ProductController extends BaseController {
 	
 	
 	/**
-	 * 产品复核查询
+	 * 产品查询
 	 * @param request
 	 * @param spec
 	 * @param page 第几页
@@ -302,10 +301,7 @@ public class ProductController extends BaseController {
 			spec = Specifications.where(spec).and(typeSpec);
 		}
 		
-//		field: 'applicant'
-//		field: 'applyTime',
-//		field: 'auditor'
-//		field: 'auditTime',
+		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
 		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
@@ -313,7 +309,7 @@ public class ProductController extends BaseController {
 	}
 	
 	/**
-	 * 产品批准查询
+	 * 产品查询
 	 * @param request
 	 * @param spec
 	 * @param page 第几页
@@ -371,12 +367,7 @@ public class ProductController extends BaseController {
 			spec = Specifications.where(spec).and(typeSpec);
 		}
 		
-//		field: 'applicant'
-//		field: 'applyTime',
-//		field: 'auditor'
-//		field: 'auditTime',
-//		field: 'review'
-//		field: 'reviewTime',
+		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
 		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
