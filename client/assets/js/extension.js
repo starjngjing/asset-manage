@@ -41,12 +41,16 @@ define([
         }
       })
 
-      confirm.find('.accept').on('click', function () {
+      confirm.find('.accept')
+      .off('click')
+      .on('click', function () {
         if (acceptCallback) acceptCallback()
         confirm.hide()
       })
 
-      confirm.find('.cancel').on('click', function () {
+      confirm.find('.cancel')
+      .off('click')
+      .on('click', function () {
         if (cancelCallback) cancelCallback()
         confirm.hide()
       })
