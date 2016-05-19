@@ -64,20 +64,26 @@ define([
         			width: 30,
         			align: 'center',
         			formatter: function (val, row, index) {
-          				return index + 1
+          				return "不固定"
         			}
       			},
       			{
         			field: 'expAror',
         			formatter: function (val, row, index) {
         				if(row.expArorSec!=null && row.expAror!=row.expArorSec) {
-        					return row.expArorSec+"%"+"~"+row.expArorSec+"%";
+        					return row.expArorSec+"%"+"~"+row.expArorSec+"%"
         				}
           				return row.expAror+"%";
         			}
       			},      
       			{
-        			field: 'raisedTotalNumber'
+        			field: 'raisedTotalNumber',
+        			formatter: function (val) {
+        				if(val!=null && val>0) {
+        					return val;
+        				}
+          				return "不限"
+          			}
       			},
       			{
         			field: 'netUnitShare'

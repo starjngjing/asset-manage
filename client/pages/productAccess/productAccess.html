@@ -27,7 +27,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>产品名称</label>
-                  <input name="email" type="text"
+                  <input name="name" type="text"
                          class="form-control input-sm"
                          placeholder="搜索产品名称">
                 </div>
@@ -35,7 +35,7 @@
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>产品类型</label>
-                  <select name="validState" class="form-control input-sm">
+                  <select name="type" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE" data-enum-text="全部">
                     <option value="" selected>不限</option>
                     <option value="ok">已验证</option>
                     <option value="no">未验证</option>
@@ -52,12 +52,14 @@
               <th>名称</th>
               <th>类型</th>
               <th>管理人</th>
-              <th>期限</th>
               <th>预期年化收益</th>
-              <th>份额</th>
+              <th>总份额</th>
               <th>单位份额净值</th>
               <th>渠道数量</th>
-              <th>创建时间</th>
+              <th>申请人</th>
+              <th>申请时间</th>
+              <th>审核人</th>
+              <th>审核时间</th>
               <th>操作</th>
             </tr>
             </thead>
