@@ -222,26 +222,90 @@ define([
 								})
 							},
 							'click .item-project': function(e, value, row) {
-								http.post(config.api.targetDetQuery, {
-			                		  data: {
-			                			  oid:row.oid
-			                		  },
-			                		  contentType: 'form'
-			                	  },
-			                	  function (obj) {
-			                		  var data  = obj.investment;
-			                		  if(!data){
-			                			  toastr.error('标的详情数据不存在', '错误信息', {
-			                				  timeOut: 10000
-			                			  });
-			                		  }
-			                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
-			                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
-			                		  
-			                		  $$.detailAutoFix($('#projectForm'), data);	// 自动填充详情
-			                		  $$.formAutoFix($('#projectForm'), data); // 自动填充表单
-			                		  $('#projectModal').modal('show');
-			                	  });
+								var projectTableConfig = {
+									ajax: function(origin) {
+										http.post(config.api.targetListQuery, {
+											data: {
+												page: pageOptions.number,
+												rows: pageOptions.size,
+												name: pageOptions.targetName,
+												type: pageOptions.targetType,
+												state: pageOptions.state
+											},
+											contentType: 'form'
+										}, function(rlt) {
+											origin.success(rlt)
+										})
+									},
+									pageNumber: pageOptions.number,
+									pageSize: pageOptions.size,
+									pagination: true,
+									sidePagination: 'server',
+									pageList: [10, 20, 30, 50, 100],
+									queryParams: getQueryParams,
+									columns: [
+									  {
+										  //编号
+										 field: 'oid',
+										 width:60,
+									  },
+									  {
+										  //项目名称
+										  field: 'projectName',
+									  },
+									  {
+										  //项目项目经理
+										  field: 'projectManager',
+									  },
+									  {
+										  //项目项目类型
+										  field: 'projectType',
+									  },
+									  {
+										  //城市
+										  field: 'projectCity',
+									  },
+									  {
+										  //创建时间
+										  field: 'createTime',
+									  },{
+										  //操作
+										  align: 'center',
+										  formatter: function(val, row) {
+										  var buttons = [
+							            	    {
+							            	      text: '删除',
+							            	      type: 'button',
+							            	      class: 'item-delete',
+							            	      isRender: true
+							            	    }
+							            	  ];
+						            	  return util.table.formatter.generateButton(buttons);
+										},
+										events: {
+											'click .item-delete': function(e, value, row) { // 删除底层项目
+												http.post(config.api.targetProjectDelete, {
+													data: {
+														targetOid: row.targetOid,
+														oid: row.oid
+													},
+													contentType: 'form'
+												}, function(result) {
+													if (result.errorCode == 0) {
+														
+														$('#projectTable').bootstrapTable('refresh');
+													} else {
+														alert('删除底层项目失败');
+													}
+												})
+											}
+										}
+									  }
+									]
+								};
+								// 初始化底层项目表格
+								$('#projectTable').bootstrapTable(projectTableConfig)
+								$('#projectModal').modal('show');
 							}
 						}
 					}]
@@ -250,11 +314,8 @@ define([
 			$('#targetApplyTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-				// 新建标的按钮点击事件
-			$('#targetAdd').on('click', function() {
-					$('#addTargetModal').modal('show')
-				})
-				// 新建底层资产按钮点击事件
+			
+				
 			$('#assetAdd').on('click', function() {
 				$('#addAssetModal').modal('show')
 			})
@@ -262,7 +323,12 @@ define([
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
-			$('#projectSubmit').on('click', function() {
+			
+			// 新建底层项目按钮点击事件
+			$('#projectAdd').on('click', function() {
+				$('#projectModal').modal('show');
+			})
+			$('#projectSubmit').on('click', function() { 
 				saveProject();
 			})
 			for (var i = 0; i < config.targetStates.name.length; i++) {

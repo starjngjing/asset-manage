@@ -23,9 +23,8 @@ public interface TargetLogDao
 	 * @version 1.0
 	 * @see: 
 	 * @param targetOid
-	 * @return
-	 * @return List<Interest>    返回类型 
+	 * @return List<TargetIncome>    返回类型 
 	 */
-	@Query(value = "from TargetIncome p where p.investment.oid = ?1")
+	@Query(value = "from TargetLog p where p.investment.oid = ?1")
 	public List<TargetIncome> findByTargetOid(String targetOid);
 }
