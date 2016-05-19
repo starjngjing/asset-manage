@@ -34,6 +34,8 @@ define(function () {
 		productApproveList: this.host + "/ams/product/approve/list",//查询产品批准列表
     	savePeriodic: this.host + "/ams/product/save/periodic",//新加定期产品
     	saveCurrent: this.host + "/ams/product/save/current",//新加活期产品
+    	productDetail: this.host + "/ams/product/detail",//产品详情
+    	productInvalid: this.host + "/ams/product/delete",//产品作废
     	system: {
     		config: {
     			ccp: {
