@@ -10,6 +10,7 @@ define([
 	return {
 		name: 'targetApply',
 		init: function() {
+
 			// js逻辑写在这里
 			// 分页配置
 			var pageOptions = {
@@ -284,20 +285,29 @@ define([
 										},
 										events: {
 											'click .item-delete': function(e, value, row) { // 删除底层项目
-												http.post(config.api.targetProjectDelete, {
-													data: {
-														targetOid: row.targetOid,
-														oid: row.oid
-													},
-													contentType: 'form'
-												}, function(result) {
-													if (result.errorCode == 0) {
-														
-														$('#projectTable').bootstrapTable('refresh');
-													} else {
-														alert('删除底层项目失败');
+												$("#confirmTitle").html("确定删除底层项目？")
+												$$.confirm({
+													container: $('#doConfirm'),
+													trigger: this,
+													accept: function() {
+														http.post(config.api.targetProjectDelete, {
+															data: {
+																targetOid: row.targetOid,
+																oid: row.oid
+															},
+															contentType: 'form'
+														}, function(result) {
+															if (result.errorCode == 0) {
+																
+																$('#projectTable').bootstrapTable('refresh');
+															} else {
+																alert('删除底层项目失败');
+															}
+														})
 													}
-												})
+												})						
+												
+												
 											}
 										}
 									  }
@@ -306,6 +316,7 @@ define([
 								// 初始化底层项目表格
 								$('#projectTable').bootstrapTable(projectTableConfig)
 								$('#projectModal').modal('show');
+
 							}
 						}
 					}]
@@ -334,8 +345,8 @@ define([
 			for (var i = 0; i < config.targetStates.name.length; i++) {
 				$("[name='targetStatus']").append('<option value="' + config.targetStates.value[i] + '">' + config.targetStates.name[i] + '</option>')
 			}
-//
-			$(projectForm.projectType).change(function() { // 项目类型
+
+			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if(ptt === 'PROJECTTYPE_01') { // 金融
 					$("#estateDiv").hide();
@@ -348,10 +359,9 @@ define([
 					$("#financeDiv").hide();
 				}
 			});
-//			$("#projectForm :radio[name='warrantor']").click(function() { // 是否有担保人
-			$(projectForm.warrantor).each(function (index, item){
-				console.log(item)
-				$(item).on('ifChecked', function() { // 是否有担保人
+
+			$(document.projectForm.warrantor).each(function (index, item){
+				$(item).on('ifChecked', function(e) { // 是否有担保人
 					console.log('aasd')
 					if($(this).val() === 'yes' )
 						$('#prjWarrantorInfo').show();
@@ -359,6 +369,7 @@ define([
 						$('#prjWarrantorInfo').hide();
 				});
 			})
+
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit

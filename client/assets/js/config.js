@@ -52,6 +52,18 @@ define(function () {
     					update: this.host + "/ams/system/ccp/warrantor/update",
     					delete: this.host + "/ams/system/ccp/warrantor/delete",
     					search: this.host + "/ams/system/ccp/warrantor/search"
+    				},
+    				warrantyMode: {
+    					create: this.host + "/ams/system/ccp/warrantyMode/create",
+    					update: this.host + "/ams/system/ccp/warrantyMode/update",
+    					delete: this.host + "/ams/system/ccp/warrantyMode/delete",
+    					search: this.host + "/ams/system/ccp/warrantyMode/search"
+    				},
+    				warrantyExpire: {
+    					create: this.host + "/ams/system/ccp/warrantyExpire/create",
+    					update: this.host + "/ams/system/ccp/warrantyExpire/update",
+    					delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
+    					search: this.host + "/ams/system/ccp/warrantyExpire/search"
     				}
     			}
     		}
