@@ -1,14 +1,11 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.guohuai.asset.manage.boot.investment.Investment.InvestmentBuilder;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;

@@ -9,8 +9,6 @@
  */
 package com.guohuai.asset.manage.boot.investment;
 
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
@@ -31,21 +29,21 @@ import lombok.NoArgsConstructor;
 
 
 /**    
- * 本息兑付实体
- * <p>Title: TargetIncome.java</p>    
+ * 投资标的操作日志实体
+ * <p>Title: TargetLog.java</p>    
  * <p>Description: 描述 </p>   
  * @author vania      
  * @version 1.0    
  * @created 2016年5月17日 上午11:35:30   
  */   
 @Entity
-@Table(name = "T_GAM_TARGET_INCOME")
+@Table(name = "T_GAM_TARGET_LOG")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetIncome extends UUID {
+public class TargetLog extends UUID {
 
 	private static final long serialVersionUID = 4793726996152893232L;
 
@@ -56,35 +54,8 @@ public class TargetIncome extends UUID {
 	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	@JsonBackReference
 	private Investment investment;
-
-	/**
-	 * 兑付期数
-	 */
-	private Integer seq;
-
-	/**
-	 * 实际收益
-	 */
-	private BigDecimal incomeRate;
-
-	/**
-	 * 收益支付日
-	 */
-	private Date incomeDate;
-
-	/**
-	 * 操作员
-	 */
+	private Timestamp eventTime;
 	private String operator;
-
-	/**
-	 * 创建时间
-	 */
-	private Timestamp createTime;
-
-	/**
-	 * 修改时间
-	 */
-	private Timestamp updateTime;
+	private String eventType;
 
 }

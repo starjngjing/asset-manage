@@ -14,7 +14,7 @@ import com.guohuai.asset.manage.component.exception.AMPException;
 
 /**
  * 
- * <p>Title: InterestService.java</p>    
+ * <p>Title: TargetIncomeService.java</p>    
  * <p>本息兑付Service </p>   
  * @author vania      
  * @version 1.0    
