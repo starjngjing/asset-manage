@@ -21,6 +21,10 @@ public class TrustForm implements Serializable {
 	private String targetOid;
 	// 关联资产池
 	private String assetPoolOid;
+	// 标的名称
+	private String targetName;
+	// 类型
+	private String type;
 	// 投资日
 	private Date investDate; 
 	// 起息日
