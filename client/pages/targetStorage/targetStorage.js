@@ -115,14 +115,22 @@ define([
               	    {
               	    	text: '本息兑付',
               	    	type: 'button',
-              	    	class: 'item-interest',
-              	    	isRender: true
+              	    	class: 'item-targetIncome',
+//              	    	isRender: row.state == 'establish',
+              	    	isRender: true,
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
                   'click .item-establish': function (e, value, row) {
+                	  // 初始化   付息日 
+                      for ( var i = 1; i <= 30; i++) {
+	                      	var option = $("<option>").val(i).text(i);
+	                      	$(establishForm.accrualDate).append(option);
+	              		}
+                      $(establishForm.accrualDate).val(10); // 默认10个工作日
+                	  
                 	http.post(config.api.targetDetQuery, {
                         data: {
                         	oid:row.oid
@@ -160,7 +168,7 @@ define([
                 	  });
                 	  $('#unEstablishModal').modal('show');
                   },
-                  'click .item-interest': function (e, value, row) {
+                  'click .item-targetIncome': function (e, value, row) {
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -174,10 +182,10 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
-                		  $$.detailAutoFix($('#interestForm'), data);	// 自动填充详情
-                		  $$.formAutoFix($('#interestForm'), data); // 自动填充表单
+                		  $$.detailAutoFix($('#targetIncomeForm'), data);	// 自动填充详情
+                		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
-                	  $('#interestModal').modal('show');
+                	  $('#targetIncomeModal').modal('show');
                   }
                 
               }
@@ -190,7 +198,8 @@ define([
         // 搜索表单初始化
         $$.searchInit($('#searchForm'), $('#dataTable'))
         
-        // 修改按钮点击事件
+        
+        // 成立 按钮点击事件
         $("#establishSubmit").click(function(){
         	$("#establishForm").ajaxSubmit({
         		type:"post",  //提交方式  
@@ -205,7 +214,7 @@ define([
         	
         });
         
-        // 修改按钮点击事件
+        // 不成立 按钮点击事件
         $("#unEstablishSubmit").click(function(){
         	$("#unEstablishForm").ajaxSubmit({
         		type:"post",  //提交方式  
@@ -214,6 +223,21 @@ define([
         		success:function(data) {
         			$('#unEstablishForm').clearForm();
         			$('#unEstablishModal').modal('hide');
+        			$('#dataTable').bootstrapTable('refresh');
+        		}
+        	});
+        	
+        });
+        
+        // 本息兑付 按钮点击事件
+        $("#targetIncomeSubmit").click(function(){
+        	$("#targetIncomeForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.targetIncomeSave,
+        		success:function(data) {
+        			$('#targetIncomeSubmit').clearForm();
+        			$('#targetIncomeModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});
