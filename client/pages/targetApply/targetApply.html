@@ -969,17 +969,17 @@
   <div class="arrow"></div>
   <h3 class="popover-title">提示</h3>
   <div class="popover-content">
-  <p id="confirmTitle"></p>
-  <div class="popover-btn clearfix">
-    <div class="unit">
-      <button class="btn btn-block btn-primary accept">确 定</button>
-    </div>
-    <div class="unit">
-      <button class="btn btn-block btn-default cancel">取 消</button>
-    </div>
-  </div>
+	  <p id="confirmTitle"></p>
+	  <div class="popover-btn clearfix">
+	    <div class="unit">
+	      <button class="btn btn-block btn-primary accept">确 定</button>
+	    </div>
+	    <div class="unit">
+	      <button class="btn btn-block btn-default cancel">取 消</button>
+	    </div>
+	  </div>
+	</div>
 </div>
-
 
 <!-- 新建底层项目弹窗 -->
 <div id="projectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
@@ -990,31 +990,65 @@
 				<button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-				<h4 class="modal-title">新建标的</h4>
+				<h4 class="modal-title">底层项目</h4>
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
-				<!-- 新增/编辑事件表单 -->
-				<form id="addTargetForm" name="addTargetForm" method="post">
+				<div class="row " id="targetDetail">
 					<p class="form-header">标的概况</p>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>标的编号</label>
+							<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" disabled>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>标的名称</label>
+							<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" disabled>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>标的类型</label>
+							<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE" disabled>
+            				</select>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>付息方式</label>
+							<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式" disabled>
+						</div>
+					</div>
+				</div>
+				<!-- 新增/编辑事件表单 -->
+				<form id="projectForm" name="projectForm" method="post">
+					<p class="form-header">项目概况</p>
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号">
+								<label>项目编号</label>
+								<input name="sn" type="text" class="form-control input-sm" placeholder="项目编号">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称">
+								<label>项目名称</label>
+								<input name="name" type="text" class="form-control input-sm" placeholder="项目名称">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的类型</label>
-								<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE">
-                </select>
+								<label>项目经理</label>
+								<input name="projectManager" type="text" class="form-control input-sm" placeholder="项目经理">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>项目类型</label>
+								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE">
+                				</select>
 							</div>
 						</div>
 						<div class="col-sm-4">

@@ -220,6 +220,28 @@ define([
 										alert(查询失败);
 									}
 								})
+							},
+							'click .item-project': function(e, value, row) {
+								http.post(config.api.targetDetQuery, {
+			                		  data: {
+			                			  oid:row.oid
+			                		  },
+			                		  contentType: 'form'
+			                	  },
+			                	  function (obj) {
+			                		  var data  = obj.investment;
+			                		  if(!data){
+			                			  toastr.error('标的详情数据不存在', '错误信息', {
+			                				  timeOut: 10000
+			                			  });
+			                		  }
+			                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
+			                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
+			                		  
+//			                		  $$.detailAutoFix($('#projectForm'), data);	// 自动填充详情
+//			                		  $$.formAutoFix($('#projectForm'), data); // 自动填充表单
+			                		  $('#projectModal').modal('show');
+			                	  });
 							}
 						}
 					}]
