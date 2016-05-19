@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.boot.investment.Interest;
-import com.guohuai.asset.manage.boot.investment.InterestService;
+import com.guohuai.asset.manage.boot.investment.TargetIncome;
+import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
@@ -66,7 +66,7 @@ public class InvestmentPoolController extends BaseController {
 	@Autowired
 	InvestmentService investmentService;
 	@Autowired
-	InterestService interestService;
+	TargetIncomeService targetIncomeService;
 
 	/**
 	 * 标的成立管理列表
@@ -185,14 +185,21 @@ public class InvestmentPoolController extends BaseController {
 	 * @Title: interestSave
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see: 
 	 * @param interest
 	 * @return CommonResp 返回类型
 	 */
-	@RequestMapping("interestSave")
+	@RequestMapping("targetIncomeSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public CommonResp interestSave(Interest interest) {
-		interest = interestService.save(interest);
+	public CommonResp interestSave(@Valid TargetIncomeForm interestForm) {
+		String loginId = null;
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			log.error("获取操作员失败, 原因: " + e.getMessage());
+		}
+		interestForm.setOperator(loginId);
+		TargetIncome interest = targetIncomeService.save(interestForm);
 		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(interest.getOid()).build();
 	}
 

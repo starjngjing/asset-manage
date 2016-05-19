@@ -10,6 +10,7 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
@@ -39,13 +40,13 @@ import lombok.NoArgsConstructor;
  * @created 2016年5月17日 上午11:35:30   
  */   
 @Entity
-@Table(name = "T_GAM_INTEREST")
+@Table(name = "T_GAM_TARGET_INCOME")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Interest extends UUID {
+public class TargetIncome extends UUID {
 
 	private static final long serialVersionUID = 4793726996152893232L;
 
@@ -70,7 +71,7 @@ public class Interest extends UUID {
 	/**
 	 * 收益支付日
 	 */
-	private Timestamp incomeDate;
+	private Date incomeDate;
 
 	/**
 	 * 操作员
