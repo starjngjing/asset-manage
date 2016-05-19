@@ -87,7 +87,9 @@ public class ProjectController extends BaseController {
 		} catch (Exception e) {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
-		Project prj = projectService.save(approvalReq, loginId, loginId);
+		approvalReq.setCreator(loginId);
+		approvalReq.setOperator(loginId);
+		Project prj = projectService.save(approvalReq);
 		return CommonResp.builder().errorCode(1).errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
 	}
 

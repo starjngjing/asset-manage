@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,9 +38,9 @@ public class CCPWarrantorController extends BaseController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<BaseResp> delete(@Valid CCPWarrantorForm form) {
+	public @ResponseBody ResponseEntity<BaseResp> delete(@RequestParam String oid) {
 		super.checkLogin();
-		this.ccpWarrantorService.delete(form);
+		this.ccpWarrantorService.delete(oid);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

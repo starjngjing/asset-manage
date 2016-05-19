@@ -69,6 +69,7 @@
               <th>总份额</th>
               <th>单位份额净值</th>
               <th>渠道数量</th>
+              <th>资产池</th>
               <th>创建时间</th>
               <th>操作</th>
             </tr>
@@ -263,7 +264,7 @@
                   <div class="input-group input-group-sm">
                     <input name="raisePeriod" type="number"
                            class="form-control">
-                    <span class="input-group-addon">自然日</span>
+                    <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
               </div>
@@ -271,7 +272,7 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">募集满额后</span>
+                    <span class="input-group-addon">募集满额后第</span>
                     <input name="interestsFirstDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
@@ -286,7 +287,7 @@
                   <div class="input-group input-group-sm">
                     <input name="durationPeriod" type="number"
                            class="form-control">
-                    <span class="input-group-addon">自然日</span>
+                    <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
               </div>
@@ -304,7 +305,7 @@
                 <div class="form-group">
                   <label>到期最晚还本付息日</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">存续期结束后第</span>
+                    <span class="input-group-addon">存续期结束后</span>
                     <input name="accrualDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日内</span>
@@ -339,9 +340,9 @@
                 <div class="form-group">
                   <label>收益结转周期</label>
                   <select name="accrualCycleOid" class="form-control input-sm">
-                    <option selected="selected">日</option>
-                    <option>周</option>
-                    <option>月</option>
+                    <option value="DAY" selected="selected">每日</option>
+                    <option value="WEEK">每周</option>
+                    <option value="MONTH">每月</option>
                   </select>
                 </div>
               </div>
@@ -349,9 +350,9 @@
                 <div class="form-group">
                   <label>付息方式</label>
                   <select name="payModeOid" class="form-control input-sm">
-                    <option selected="selected">每日</option>
-                    <option>每周</option>
-                    <option>每月</option>
+                    <option value="DAY" selected="selected">每日</option>
+                    <option value="WEEK">每周</option>
+                    <option value="MONTH">每月</option>
                   </select>
                 </div>
               </div>
@@ -371,9 +372,10 @@
                 <div class="form-group">
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
+                    <span class="input-group-addon">一旦申购，将冻结此金额</span>
                     <input name="lockPeriod" type="number"
                            class="form-control">
-                    <span class="input-group-addon">自然日</span>
+                    <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
               </div>
@@ -383,7 +385,7 @@
                   <div class="input-group input-group-sm">
                     <input name="interestsFirstDate" type="number"
                            class="form-control">
-                    <span class="input-group-addon">自然日</span>
+                    <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
               </div>
@@ -393,20 +395,20 @@
                 <div class="form-group">
                   <label>申购确认日</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">申购订单确认日后第</span>
+                    <span class="input-group-addon">申购订单确认日后</span>
                     <input name="purchaseConfirmDate" type="number"
                            class="form-control">                     
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        自然日
+                        个自然日内
                         <span class="fa fa-caret-down"></span>
                       </button>
                       <ul class="dropdown-menu">
                         <li>
-                          <a href="javascirpt:void(0)">自然日</a>
+                          <a href="javascirpt:void(0)">个自然日内</a>
                         </li>
                         <li>
-                          <a href="javascirpt:void(0)">交易日</a>
+                          <a href="javascirpt:void(0)">个交易日内</a>
                         </li>
                       </ul>
                       <input name="purchaseConfirmDateType" value="NATRUE" type="hidden">
@@ -430,7 +432,7 @@
                   <div class="input-group input-group-sm">
                     <input name="minRredeem" type="number"
                            class="form-control">
-                    <span class="input-group-addon">个自然日内</span>
+                    <span class="input-group-addon">份</span>
                   </div>
                 </div>
               </div>
@@ -440,20 +442,20 @@
                 <div class="form-group">
                   <label>赎回确认日</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">赎回订单确认日后第</span>
+                    <span class="input-group-addon">赎回订单确认日后</span>
                     <input name="redeemConfirmDate" type="number"
                            class="form-control">
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        自然日
+                        个自然日内
                         <span class="fa fa-caret-down"></span>
                       </button>
                       <ul class="dropdown-menu">
                         <li>
-                          <a href="javascirpt:void(0)">自然日</a>
+                          <a href="javascirpt:void(0)">个自然日内</a>
                         </li>
                         <li>
-                          <a href="javascirpt:void(0)">交易日</a>
+                          <a href="javascirpt:void(0)">交易日内</a>
                         </li>
                       </ul>
                       <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
@@ -558,7 +560,7 @@
                         placeholder="投资标的"></textarea>
           </div>
           <div class="form-group">
-            <label>风控等级</label>
+            <label>风险等级</label>
             <select name="riskLevel" class="form-control input-sm">
               <option value="R1">R1(谨慎型)</option>
               <option value="R2">R2(稳健型)</option>
@@ -604,6 +606,416 @@
   </div>
 </div>
 
+<!-- 标的详情弹窗 -->
+<form id="productDetailForm" name="productDetailForm" method="post">
+<div id="productDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">产品详情</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<p class="form-header">产品概况</p>
+				<div class="row">
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品编号:</dt>
+							<dd id="detcode">
+								<div data-detail-fetch="code"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品简称:</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品全称:</dt>
+							<dd>
+								<div data-detail-fetch="fullName"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品类型:</dt>
+							<dd>
+								<div data-detail-fetch="typeName"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品管理人:</dt>
+							<dd>
+								<div data-detail-fetch="administrator"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>资产池配置:</dt>
+							<dd>
+								<div data-detail-fetch="investment"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>预期年化收益:</dt>
+							<dd>
+								<div data-detail-fetch="expectedRate"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>额外增信:</dt>
+							<dd>
+								<div data-detail-fetch="revealStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>币种:</dt>
+							<dd>
+								<div data-detail-fetch="currencyStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>收益计算基础:</dt>
+							<dd>
+								<div data-detail-fetch="incomeCalcBasisStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>托管费率:</dt>
+							<dd>
+								<div data-detail-fetch="manageRateStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>固定管理费率:</dt>
+							<dd>
+								<div data-detail-fetch="fixedManageRateStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<!-- 封闭式产品显示/隐藏层 -->
+          <div>
+						<p class="form-header">封闭式产品信息</p>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集开始时间:</dt>
+								<dd>
+									<div data-detail-fetch="raiseStartDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集期:</dt>
+								<dd>
+									<div data-detail-fetch="raisePeriodStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>起息日:</dt>
+								<dd>
+									<div data-detail-fetch="interestsFirstDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+									<dt>存续期:</dt>
+								<dd>
+									<div data-detail-fetch="durationPeriodStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集总份额:</dt>
+									<dd>
+									<div data-detail-fetch="raisedTotalNumberStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>到期最晚还本付息日:</dt>
+								<dd>
+									<div data-detail-fetch="accrualDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+          </div>
+          <!-- 开放式产品显示/隐藏层 -->
+          <div>
+            <p class="form-header">开放式产品信息</p>
+            <div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>成立时间:</dt>
+								<dd>
+									<div data-detail-fetch="setupDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>收益结转周期:</dt>
+								<dd>
+									<div data-detail-fetch="accrualCycleName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>付息方式:</dt>
+								<dd>
+									<div data-detail-fetch="payModeNameStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>锁定期:</dt>
+								<dd>
+									<div data-detail-fetch="lockPeriodStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>起息日:</dt>
+								<dd>
+									<div data-detail-fetch="interestsFirstDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>申购确认日:</dt>
+								<dd>
+									<div data-detail-fetch="purchaseConfirmDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>单日净赎回上限:</dt>
+								<dd>
+									<div data-detail-fetch="netMaxRredeemDayStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>单笔赎回下限:</dt>
+								<dd>
+									<div data-detail-fetch="minRredeemStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>赎回确认日:</dt>
+								<dd>
+									<div data-detail-fetch="redeemConfirmDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>批量赎回定时任务:</dt>
+								<dd>
+									<div data-detail-fetch="redeemTimingTaskTimeStr"></div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>单笔投资最低份额:</dt>
+							<dd>
+								<div data-detail-fetch="investMinStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>投资最高份额:</dt>
+							<dd>
+								<div data-detail-fetch="investMaxStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>申购上限:</dt>
+							<dd>
+								<div data-detail-fetch="purchaseLimitStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>笔投资追加份额:</dt>
+							<dd>
+								<div data-detail-fetch="investAdditionalStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>单位份额净值:</dt>
+							<dd>
+								<div data-detail-fetch="netUnitShareStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div>
+            <p class="form-header">其他信息</p>
+            <div class="col-sm-6">
+			  			<dl class="dl-horizontal">
+				  			<dt>产品说明:</dt>
+					  		<dd>
+						  		<div data-detail-fetch="instruction"></div>
+							  </dd>
+  						</dl>
+	  				</div>
+		  			<div class="col-sm-6">
+		  				<dl class="dl-horizontal">
+		  					<dt>投资标的:</dt>
+		  					<dd>
+		  						<div data-detail-fetch="investComment"></div>
+		  					</dd>
+		  				</dl>
+		  			</div>
+		  			<div class="col-sm-6">
+		  				<dl class="dl-horizontal">
+		  					<dt>投资标的:</dt>
+		  					<dd>
+		  						<div data-detail-fetch="investComment"></div>
+		  					</dd>
+		  				</dl>
+		  			</div>
+		  			<div class="col-sm-6">
+		  				<dl class="dl-horizontal">
+		  					<dt>风险等级:</dt>
+		  					<dd>
+		  						<div data-detail-fetch="riskLevel"></div>
+		  					</dd>
+		  				</dl>
+		  			</div>
+		  		</div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>
+</from>
+<!-- 底层渠道详情弹窗 -->
+<div id="assetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">底层资产管理</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- 主体Grid -->
+						<div id="assetGrid" class="box box-primary">
+							<!-- Grid头部 -->
+							<div class="box-header">
+								<h3 class="box-title"></h3>
+								<div class="box-tools">
+									<button id="assetAdd" class="btn btn-default btn-sm">
+                    <i class="fa fa-plus"></i> 新建底层资产
+                  </button>
+								</div>
+							</div>
+							<!-- Grid内容体 -->
+							<div class="box-body">
+								<!-- 搜索项表单 -->
+								<form id="assetSearchForm" name="searchForm" method="post" class="search-body">
+									<div class="row">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>资产名称</label>
+												<input name="email" type="text" class="form-control input-sm" placeholder="搜索资产名称">
+											</div>
+										</div>
+									</div>
+								</form>
+								<!-- 主体数据表格 -->
+								<table id="assetTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>编号</th>
+											<th>名称</th>
+											<th>项目经理</th>
+											<th>类型</th>
+											<th>城市</th>
+											<th>创建时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+<div id="doConfirm" class="popover func-delete-popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">提示</h3>
+  <div class="popover-content">
+	  <p id="confirmTitle"></p>
+	  <p id="confirmTitle1"></p>
+	  <div class="popover-btn clearfix">
+	    <div class="unit">
+	      <button class="btn btn-block btn-primary accept">确 定</button>
+	    </div>
+	    <div class="unit">
+	      <button class="btn btn-block btn-default cancel">取 消</button>
+	    </div>
+	  </div>
+	</div>
+</div>
+			
+			
 <!-- 选择资产池弹窗 -->
 <div id="assetPoolModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">

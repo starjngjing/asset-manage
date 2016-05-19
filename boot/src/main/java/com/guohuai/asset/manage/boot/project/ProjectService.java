@@ -55,11 +55,11 @@ public class ProjectService {
 	 * @return
 	 * @return Approval 返回类型
 	 */	
-	public Project save(ProjectForm approv, String creator, String operator) {
+	public Project save(ProjectForm approv) {
 		if (null == approv)
 			throw AMPException.getException("底层项目不能为空");
 		String targetOid = approv.getTargetOid();
-		if (StringUtils.isBlank(approv.getTargetOid()))
+		if (StringUtils.isBlank(targetOid))
 			throw AMPException.getException("投资标的id不能为空");
 
 		Project prj = new Project();
@@ -70,8 +70,6 @@ public class ProjectService {
 			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
 		prj.setInvestment(investment);
 		
-		prj.setCreator(creator);
-		prj.setOperator(operator);
 		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 

@@ -9,45 +9,106 @@
  */
 package com.guohuai.asset.manage.boot.cashtool;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.component.resp.CommonResp;
+import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.component.util.DateUtil;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
-
-/**    
- * <p>Title: CashToolController.java</p>    
- * <p>现金管理工具操作相关接口 </p>   
- * @author vania      
- * @version 1.0    
- * @created 2016年5月17日 下午2:39:04   
- */   
+/**
+ * <p>
+ * Title: CashToolController.java
+ * </p>
+ * <p>
+ * 现金管理工具操作相关接口
+ * </p>
+ * 
+ * @author vania
+ * @version 1.0
+ * @created 2016年5月17日 下午2:39:04
+ */
 @RestController
 @RequestMapping(value = "/ams/boot/cashTool")
 @Api("现金管理工具操作相关接口")
 public class CashToolController {
-	@Autowired
-	CashToolDao cashToolDao;
+
 	@Autowired
 	CashToolService cashToolService;
 
-	/**
-	 * 现金管理工具保存
-	 * @Title: save 
-	 * @author vania
-	 * @version 1.0
-	 * @see: 
-	 * @param cashTool
-	 * @return CommonResp    返回类型
-	 */
-	@RequestMapping("save")
-	@ApiOperation(value = "现金管理工具保存")
-	public CommonResp save(CashTool cashTool){
-		cashTool = cashToolService.save(cashTool);
-		return CommonResp.builder().errorMessage("现金管理工具保存成功!").attached(cashTool.getOid()).build();
+	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<CashToolListResp> list(HttpServletRequest request,
+			@And({ @Spec(params = "ticker", path = "ticker", spec = Equal.class),
+					@Spec(params = "secShortName", path = "secShortName", spec = Like.class),
+					@Spec(params = "etfLof", path = "etfLof", spec = Equal.class),
+					@Spec(params = "state", path = "state", spec = Equal.class) }) Specification<CashTool> spec,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
+			@RequestParam(required = false, defaultValue = "updateTime") String sortField,
+			@RequestParam(required = false, defaultValue = "desc") String sort) {
+
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		Page<CashTool> entitys = cashToolService.getCashToolList(spec, pageable);
+		CashToolListResp resps = new CashToolListResp(entitys);
+		return new ResponseEntity<CashToolListResp>(resps, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "detail", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<CashToolDetResp> detail(String oid) {
+		CashTool entity = cashToolService.findByOid(oid);
+		CashToolDetResp resp = new CashToolDetResp(entity);
+		return new ResponseEntity<CashToolDetResp>(resp, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> add(@Valid CashToolManageForm form) {
+		// String operator = super.getLoginAdmin();
+		System.out.println(form.getTicker());
+		String operator = "admin";
+		CashTool cashTool = cashToolService.createInvestment(form);
+		cashTool.setState(CashTool.CASHTOOL_STATE_waitPretrial);
+		cashTool.setOperator(operator);
+		cashTool.setCreateTime(DateUtil.getSqlCurrentDate());
+		cashTool = cashToolService.save(cashTool);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
+		// String operator = super.getLoginAdmin();
+		String operator = "admin";
+		CashTool entity = cashToolService.findByOid(oid);
+		entity.setState(Investment.INVESTMENT_STATUS_pretrial);
+		entity.setOperator(operator);
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		cashToolService.save(entity);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
 }
