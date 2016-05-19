@@ -2,9 +2,7 @@
  * 配置项，提供全局使用各项配置
  * amd模块，使用requirejs载入
  */
-<<<<<<< HEAD
-=======
- 
+
 define(function () {
 //  this.host = 'http://www.guohuaigroup.com'
   this.host = ''
