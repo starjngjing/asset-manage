@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.system.config.project.warrantyMode;
+package com.guohuai.asset.manage.boot.system.config.project.warrantyExpire;
 
 import java.io.Serializable;
 
