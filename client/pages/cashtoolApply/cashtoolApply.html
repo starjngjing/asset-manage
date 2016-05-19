@@ -17,54 +17,56 @@
 			<div id="targetApplyGrid" class="box box-primary">
 				<!-- Grid头部 -->
 				<div class="box-header">
-					<h3 class="box-title">投资标的列表</h3>
+					<h3 class="box-title">现金类管理工具列表</h3>
 					<div class="box-tools">
-						<button id="targetAdd" class="btn btn-default btn-sm">
-              <i class="fa fa-plus"></i> 新建标的
+						<button id="cashToolAdd" class="btn btn-default btn-sm">
+              <i class="fa fa-plus"></i> 新建
             </button>
 					</div>
 				</div>
 				<!-- Grid内容体 -->
 				<div class="box-body">
 					<!-- 搜索项表单 -->
-					<form id="targetSearchForm" name="targetSearchForm" method="post" class="search-body">
+					<form id="cashToolSearchForm" name="cashToolSearchForm" method="post" class="search-body">
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>标的名称</label>
-									<input name="searchName" type="text" class="form-control input-sm" placeholder="搜索标的名称">
+									<label>基金代码</label>
+									<input name="ticker" type="text" class="form-control input-sm" placeholder="搜索基金代码">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>标的类型</label>
-									<select name="targetType" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
-                  </select>
+									<label>基金名称</label>
+									<input name="secShortName" type="text" class="form-control input-sm" placeholder="搜索基金名称">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>标的状态</label>
-									<select name="targetStatus" class="form-control input-sm">
-                    <option value="" selected>全部</option>
-                  </select>
+									<label>基金类型</label>
+									<select name="etfLof" class="form-control input-sm" data-enum-fetch="CASHTOOLTYPE" data-enum-text="全部">
+                  					</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>基金状态</label>
+									<select name="state" class="form-control input-sm" data-enum-fetch="cashtoolStates" data-enum-text="全部">
+                  					</select>
 								</div>
 							</div>
 						</div>
 					</form>
 					<!-- 主体数据表格 -->
-					<table id="targetApplyTable" class="table table-bordered table-striped">
+					<table id="cashToolApplyTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>编号</th>
-								<th>名称</th>
-								<th>付息方式</th>
-								<th>拟成立日</th>
-								<th>标的类型</th>
-								<th>资产规模</th>
-								<th>资产期限</th>
-								<th>预计收益</th>
-								<th>预期年化收益</th>
+								<th>基金代码</th>
+								<th>基金名称</th>
+								<th>基金类型</th>
+								<th>分红方式</th>
+								<th>业绩比较基准</th>
+								<th>风险等级</th>
 								<th>状态</th>
 								<th>操作</th>
 							</tr>
@@ -76,8 +78,8 @@
 	</div>
 </section>
 
-<!-- 新建标的弹窗 -->
-<div id="addTargetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+<!-- 新建现金管理类工具弹窗 -->
+<div id="addCashToolModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<!-- 模态窗头部 -->
@@ -85,1213 +87,166 @@
 				<button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-				<h4 class="modal-title">新建标的</h4>
+				<h4 class="modal-title">新建现金管理类工具</h4>
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
 				<!-- 新增/编辑事件表单 -->
-				<form id="addTargetForm" name="addTargetForm" method="post">
-					<p class="form-header">标的概况</p>
+				<form id="addCashToolForm" name="addCashToolForm" method="post">
+					<p class="form-header">现金管理类工具概况</p>
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号">
+								<label>基金代码</label>
+								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称">
+								<label>基金名称</label>
+								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>标的类型</label>
-								<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE">
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>付息方式</label>
-								<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>投资方向</label>
-								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资产规模</label>
-								<div class="input-group input-group-sm">
-									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模">
-									<span class="input-group-addon">万</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资产期限单位</label>
-								<select name='lifeUnit' class="form-control input-sm">
-									<option value="day">日</option>
-									<option value="month">月</option>
-									<option value="year">年</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>预计收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益">
-									<span class="input-group-addon">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-2">
-							<div class="form-group">
-								<label>预计年化收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expAror" type="text" class="form-control" placeholder="最小收益">
-									<span class="input-group-addon">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-2">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<div class="input-group input-group-sm range">
-									<input name="expArorSec" type="text" class="form-control" placeholder="最大收益">
-									<span class="input-group-addon">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>起购金额</label>
-								<div class="input-group input-group-sm">
-									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额">
-									<span class="input-group-addon">元</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>拟成立日</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>募集起始日</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>募集截至日</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>主体评级</label>
-								<input name="subjectRating" type="text" class="form-control input-sm" placeholder="主题评级">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>评级机构</label>
-								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>评级时间</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="ratingTime" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD HH:mm:ss">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>收益说明</label>
-								<textarea name="expArorDesc" rows="1" class="form-control input-sm" placeholder="收益说明"></textarea>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>优先级</label>
-								<div class="row">
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="a" class="icheck" checked> a类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="b" class="icheck"> b类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="c" class="icheck"> c类
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>合同年天数</label>
-								<div class="row">
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="365" class="icheck" checked> 365/年
-									</div>
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="360" class="icheck"> 360/年
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">优势说明</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>优势说明</label>
-								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">标的实力</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>融资方</label>
-								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>融资方简介</label>
-								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方</label>
-								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方简介</label>
-								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">资金用途</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>资金用途</label>
-								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">还款说明</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>还款说明</label>
-								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">风控措施</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>风控措施</label>
-								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施"></textarea>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- 模态窗底部 -->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="saveTarget" type="button" class="btn btn-primary btn-submit">保 存</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 标的详情弹窗 -->
-<form id="detTargetForm" name="detTargetForm" method="post">
-<div id="targetDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<!-- 模态窗头部 -->
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-				<h4 class="modal-title">标的详情</h4>
-			</div>
-			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<p class="form-header">标的概况</p>
-				<div class="row">
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>标的编号</dt>
-							<dd id="detsn">
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>标的名称</dt>
-							<dd>
-								<div data-detail-fetch="name"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>标的类型</dt>
-							<dd>
-								<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>投资方向</dt>
-							<dd>
-								<div data-detail-fetch="investment"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>资产规模</dt>
-							<dd>
-								<div data-detail-fetch="raiseScope"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>资产期限</dt>
-							<dd>
-								<div data-detail-fetch="life"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>付息方式</dt>
-							<dd>
-								<div data-detail-fetch="accrualType"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>预计收益</dt>
-							<dd>
-								<div data-detail-fetch="expIncome"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>预计年化收益</dt>
-							<dd>
-								<div data-detail-fetch="expAror"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>起购金额</dt>
-							<dd>
-								<div data-detail-fetch="floorVolume"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>拟成立日</dt>
-							<dd>
-								<div data-detail-fetch="expSetDate"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>募集期</dt>
-							<dd>
-								<div data-detail-fetch="collectDate"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>主体评级</dt>
-							<dd>
-								<div data-detail-fetch="subjectRating"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>评级机构</dt>
-							<dd>
-								<div data-detail-fetch="ratingAgency"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>评级时间</dt>
-							<dd>
-								<div data-detail-fetch="ratingTime"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>内部评级</dt>
-							<dd>
-								<div data-detail-fetch="irb"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>优先级</dt>
-							<dd>
-								<div data-detail-fetch="prior"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>合同年天数</dt>
-							<dd>
-								<div data-detail-fetch="contractDays"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
-							<dt>收益说明</dt>
-							<dd>
-								<div data-detail-fetch="expArorDesc"></div>
-							</dd>
-						</dl>
-					</div>
-				</div>
-				<p class="form-header">优势说明</p>
-				<dl class="dl-horizontal">
-					<dt>优势说明</dt>
-					<dd>
-						<div data-detail-fetch="superiority"></div>
-					</dd>
-				</dl>
-				<p class="form-header">标的实力</p>
-				<dl class="dl-horizontal">
-					<dt>融资方</dt>
-					<dd>
-						<div data-detail-fetch="financer"></div>
-					</dd>
-					<dt>融资方简介</dt>
-					<dd>
-						<div data-detail-fetch="financerDesc"></div>
-					</dd>
-				</dl>
-				<dl class="dl-horizontal">
-					<dt>担保方</dt>
-					<dd>
-						<div data-detail-fetch="warrantor"></div>
-					</dd>
-					<dt>担保简介</dt>
-					<dd>
-						<div data-detail-fetch="warrantorDesc"></div>
-					</dd>
-				</dl>
-				<p class="form-header">资金用途</p>
-				<dl class="dl-horizontal">
-					<dt>资金用途</dt>
-					<dd>
-						<div data-detail-fetch="usages"></div>
-					</dd>
-				</dl>
-				<p class="form-header">还款说明</p>
-				<dl class="dl-horizontal">
-					<dt>还款说明</dt>
-					<dd>
-						<div data-detail-fetch="repayment"></div>
-					</dd>
-				</dl>
-				<p class="form-header">风控措施</p>
-				<dl class="dl-horizontal">
-					<dt>风控措施</dt>
-					<dd>
-						<div data-detail-fetch="risk"></div>
-					</dd>
-				</dl>
-			</div>
-		</div>
-	</div>
-</div>
-	</from>
-<!-- 底层资产管理弹窗 -->
-<div id="assetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<!-- 模态窗头部 -->
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-				<h4 class="modal-title">底层资产管理</h4>
-			</div>
-			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-xs-12">
-						<!-- 主体Grid -->
-						<div id="assetGrid" class="box box-primary">
-							<!-- Grid头部 -->
-							<div class="box-header">
-								<h3 class="box-title"></h3>
-								<div class="box-tools">
-									<button id="assetAdd" class="btn btn-default btn-sm">
-                    <i class="fa fa-plus"></i> 新建底层资产
-                  </button>
-								</div>
-							</div>
-							<!-- Grid内容体 -->
-							<div class="box-body">
-								<!-- 搜索项表单 -->
-								<form id="assetSearchForm" name="searchForm" method="post" class="search-body">
-									<div class="row">
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label>资产名称</label>
-												<input name="email" type="text" class="form-control input-sm" placeholder="搜索资产名称">
-											</div>
-										</div>
-									</div>
-								</form>
-								<!-- 主体数据表格 -->
-								<table id="assetTable" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>编号</th>
-											<th>名称</th>
-											<th>项目经理</th>
-											<th>类型</th>
-											<th>城市</th>
-											<th>创建时间</th>
-											<th>操作</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 新建底层资产弹窗 -->
-<div id="addAssetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<!-- 模态窗头部 -->
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-				<h4 class="modal-title">新建底层资产</h4>
-			</div>
-			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<!-- 新增/编辑事件表单 -->
-				<form id="addAssetForm" name="addTargetForm" method="post">
-					<p class="form-header">项目概况</p>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目名称</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目名称">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目经理</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目经理">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目类型</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>城市</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="城市">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>已默认认购期数</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目经理">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资金方所在地</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="资金方所在地">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资金用途</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="资金用途">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目还款来源</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目还款来源">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>外部信用增级措施</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-							</div>
-						</div>
-					</div>
-					<!-- 金融类项目显示/隐藏层 -->
-					<div id="addAssetIsFinancial">
-						<p class="form-header">金融类项目</p>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>房地产项目所在地</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="房地产项目所在地">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>开发商排名</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="开发商排名">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>完工情况</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="完工情况">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>房地产项目属性</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="addAssetIsProperty">
-						<p class="form-header">地产类项目</p>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>政府层级</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="政府层级">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>融资方</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="融资方">
-								</div>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">担保人信息</p>
-					<div class="form-group">
-						<label>担保人</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio1" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio1" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasSponsor">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人所在地</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人所在地">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人总资产</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人总资产">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人负债</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人负债">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>保证方式</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">抵押信息</p>
-					<div class="form-group">
-						<label>抵押</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasMortgage">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>抵押人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="质押人">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>受益人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="受益人">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label>质押</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasPledge">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>质押人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="质押人">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>质押方式</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<p class="form-header">其他信息</p>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目规模</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目规模">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>融资成本</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="融资成本">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>委托采购主体（SPV）</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="委托采购主体（SPV）">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>SPV通道费</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="SPV通道费">
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- 模态窗底部 -->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button type="button" class="btn btn-primary btn-submit">保 存</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
-<div id="doConfirm" class="popover func-delete-popover">
-  <div class="arrow"></div>
-  <h3 class="popover-title">提示</h3>
-  <div class="popover-content">
-	  <p id="confirmTitle"></p>
-	  <div class="popover-btn clearfix">
-	    <div class="unit">
-	      <button class="btn btn-block btn-primary accept">确 定</button>
-	    </div>
-	    <div class="unit">
-	      <button class="btn btn-block btn-default cancel">取 消</button>
-	    </div>
-	  </div>
-	</div>
-</div>
-
-<!-- 新建底层项目弹窗 -->
-<div id="projectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<!-- 模态窗头部 -->
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-				<h4 class="modal-title">底层项目</h4>
-			</div>
-			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<div class="row " id="targetDetail">
-					<p class="form-header">标的概况</p>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的编号</label>
-							<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" disabled>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的名称</label>
-							<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" disabled>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的类型</label>
-							<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE" disabled>
-            				</select>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>付息方式</label>
-							<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式" disabled>
-						</div>
-					</div>
-				</div>
-				<!-- 新增/编辑事件表单 -->
-				<form id="projectForm" name="projectForm" method="post">
-					<p class="form-header">项目概况</p>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="项目编号" required>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="项目名称" required>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目经理</label>
-								<input name="projectManager" type="text" class="form-control input-sm" placeholder="项目经理">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目类型</label>
-								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE"  data-enum-text="请选择" required>
+								<label>基金类型</label>
+								<select name='etfLof' class="form-control input-sm" data-enum-fetch="CASHTOOLTYPE">
                 				</select>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>城市</label>
-								<input name="projectCity" type="text" class="form-control input-sm" placeholder="城市">
+								<label>投资对象</label>
+								<input name="investee" type="text" class="form-control input-sm" placeholder="投资对象">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>资金方所在地</label>
-								<input name="funderAddr" type="text" class="form-control input-sm" placeholder="资金方所在地">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-					            <label>资金用途</label>
-					            <textarea name="funderAddr" rows="3"
-					                      class="form-control input-sm"
-					                      placeholder="请输入内容" required></textarea>
-				          	</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>投资方向</label>
-								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向">
+								<label>运作模式</label>
+								<input name="operationMode" type="text" class="form-control input-sm" placeholder="运作模式">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>资产规模</label>
+								<label>业绩比较基准</label>
 								<div class="input-group input-group-sm">
-									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模">
-									<span class="input-group-addon">万</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资产期限单位</label>
-								<select name='lifeUnit' class="form-control input-sm">
-									<option value="day">日</option>
-									<option value="month">月</option>
-									<option value="year">年</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>预计收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益">
-									<span class="input-group-addon">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-2">
-							<div class="form-group">
-								<label>预计年化收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expAror" type="text" class="form-control" placeholder="最小收益">
-									<span class="input-group-addon">%</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-2">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<div class="input-group input-group-sm range">
-									<input name="expArorSec" type="text" class="form-control" placeholder="最大收益">
+									<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
 									<span class="input-group-addon">%</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>起购金额</label>
+								<label>是否QDII</label>
+								<select name='isQdii' class="form-control input-sm">
+									<option value="Y">是</option>
+									<option value="N">否</option>
+                				</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>是否isFoF</label>
+								<select name='isFof' class="form-control input-sm">
+									<option value="Y">是</option>
+									<option value="N">否</option>
+                				</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>是否分级基金</label>
+								<select name='isClass' class="form-control input-sm">
+										<option value="Y">是</option>
+										<option value="N">否</option>
+            						</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>是否保本</label>
+								<select name='isGuarFund' class="form-control input-sm">
+										<option value="Y">是</option>
+										<option value="N">否</option>
+            						</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>保本周期</label>
 								<div class="input-group input-group-sm">
-									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额">
-									<span class="input-group-addon">元</span>
+									<input name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
+									<span class="input-group-addon">月</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>拟成立日</label>
+								<label>保本比例</label>
 								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="guarRatio" type="text" class="form-control" placeholder="保本比例">
+									<span class="input-group-addon">%</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>募集起始日</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
-								</div>
+								<label>交易所代码</label>
+								<input name="exchangeCd" type="text" class="form-control input-sm" placeholder="交易所代码">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>募集截至日</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
-								</div>
+								<label>基金管理人编码</label>
+								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>主体评级</label>
-								<input name="subjectRating" type="text" class="form-control input-sm" placeholder="主题评级">
+								<label>基金管理人名称</label>
+								<input name="managementFullName" type="text" class="form-control input-sm" placeholder="基金管理人名称">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>评级机构</label>
-								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构">
+								<label>基金托管人编码</label>
+								<input name="custodian" type="text" class="form-control input-sm" placeholder="基金托管人编码">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>评级时间</label>
-								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="ratingTime" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD HH:mm:ss">
-								</div>
+								<label>基金托管人名称</label>
+								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>收益说明</label>
-								<textarea name="expArorDesc" rows="1" class="form-control input-sm" placeholder="收益说明"></textarea>
+								<label>投资领域</label>
+								<input name="investField" type="text" class="form-control input-sm" placeholder="投资领域">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>优先级</label>
-								<div class="row">
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="a" class="icheck" checked> a类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="b" class="icheck"> b类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="c" class="icheck"> c类
-									</div>
-								</div>
+								<label>投资目标</label>
+								<input name="investTarget" type="text" class="form-control input-sm" placeholder="投资目标">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>合同年天数</label>
-								<div class="row">
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="365" class="icheck" checked> 365/年
-									</div>
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="360" class="icheck"> 360/年
-									</div>
-								</div>
+								<label>基金经理</label>
+								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理">
 							</div>
 						</div>
-					</div>
-					<p class="form-header">优势说明</p>
-					<div class="row">
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<div class="form-group">
-								<label>优势说明</label>
-								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明"></textarea>
+								<label>风险等级</label>
+								<input name="riskLevel" type="text" class="form-control input-sm" placeholder="风险等级">
 							</div>
 						</div>
-					</div>
-					<p class="form-header">标的实力</p>
-					<div class="row">
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<div class="form-group">
-								<label>融资方</label>
-								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>融资方简介</label>
-								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方</label>
-								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方简介</label>
-								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">资金用途</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>资金用途</label>
-								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">还款说明</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>还款说明</label>
-								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">风控措施</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>风控措施</label>
-								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施"></textarea>
+								<label>分红方式</label>
+								<input name="dividendType" type="text" class="form-control input-sm" placeholder="分红方式">
 							</div>
 						</div>
 					</div>
@@ -1300,8 +255,322 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="projectForm" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="saveCashTool" type="button" class="btn btn-primary btn-submit">保 存</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- 现金管理类工具详情弹窗 -->
+<form id="detCashToolForm" name="detCashToolForm" method="post">
+	<div id="cashToolDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<!-- 模态窗头部 -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+					<h4 class="modal-title">现金管理类工具详情</h4>
+				</div>
+				<!-- 模态窗内容体 -->
+				<div class="modal-body">
+					<p class="form-header">现金管理类工具概况</p>
+					<div class="row">
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金代码</dt>
+								<dd>
+									<div data-detail-fetch="ticker"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金名称</dt>
+								<dd>
+									<div data-detail-fetch="secShortName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>类型</dt>
+								<dd>
+									<div data-detail-fetch="etfLof" data-enum-transform="CASHTOOLTYPE"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>投资对象</dt>
+								<dd>
+									<div data-detail-fetch="investee"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>运作模式</dt>
+								<dd>
+									<div data-detail-fetch="operationMode"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>是否QDII</dt>
+								<dd>
+									<div data-detail-fetch="isQdii" data-enum-transform="booleanSelect"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>是否isFof</dt>
+								<dd>
+									<div data-detail-fetch="isFof" data-enum-transform="booleanSelect"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>是否分级基金</dt>
+								<dd>
+									<div data-detail-fetch="isClass" data-enum-transform="booleanSelect"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>是否保本</dt>
+								<dd>
+									<div data-detail-fetch="isGuarFund" data-enum-transform="booleanSelect"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>保本周期（月）</dt>
+								<dd>
+									<div data-detail-fetch="guarPeriod"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>保本比例</dt>
+								<dd>
+									<div data-detail-fetch="guarRatio"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>交易所代码</dt>
+								<dd>
+									<div data-detail-fetch="exchangeCd"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>上市状态</dt>
+								<dd>
+									<div data-detail-fetch="listStatusCd"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>成立日期</dt>
+								<dd>
+									<div data-detail-fetch="establishDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>上市日期</dt>
+								<dd>
+									<div data-detail-fetch="listDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>终止上市日期</dt>
+								<dd>
+									<div data-detail-fetch="delistDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金管理人编码</dt>
+								<dd>
+									<div data-detail-fetch="managementCompany"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金管理人名称</dt>
+								<dd>
+									<div data-detail-fetch="managementFullName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金托管人编码</dt>
+								<dd>
+									<div data-detail-fetch="custodian"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金托管人名称</dt>
+								<dd>
+									<div data-detail-fetch="custodianFullName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>投资领域</dt>
+								<dd>
+									<div data-detail-fetch="investField"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>投资目标</dt>
+								<dd>
+									<div data-detail-fetch="investTarget"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>业绩比较基准</dt>
+								<dd>
+									<div data-detail-fetch="perfBenchmark"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>最新流通份额</dt>
+								<dd>
+									<div data-detail-fetch="circulationShares"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>交易简称</dt>
+								<dd>
+									<div data-detail-fetch="tradeAbbrName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金经理人</dt>
+								<dd>
+									<div data-detail-fetch="managerName"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>万份收益日</dt>
+								<dd>
+									<div data-detail-fetch="dailyProfitDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>万份收益</dt>
+								<dd>
+									<div data-detail-fetch="dailyProfit"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>7日年化收益率</dt>
+								<dd>
+									<div data-detail-fetch="weeklyYield"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>风险等级</dt>
+								<dd>
+									<div data-detail-fetch="riskLevel"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>分红方式</dt>
+								<dd>
+									<div data-detail-fetch="dividendType"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>资产净值</dt>
+								<dd>
+									<div data-detail-fetch="netAsset"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金管理费</dt>
+								<dd>
+									<div data-detail-fetch="charge"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>基金托管费</dt>
+								<dd>
+									<div data-detail-fetch="custody"></div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</from>
+
+
+	<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+	<div id="doConfirm" class="popover func-delete-popover">
+		<div class="arrow"></div>
+		<h3 class="popover-title">提示</h3>
+		<div class="popover-content">
+			<p id="confirmTitle"></p>
+			<div class="popover-btn clearfix">
+				<div class="unit">
+					<button class="btn btn-block btn-primary accept">确 定</button>
+				</div>
+				<div class="unit">
+					<button class="btn btn-block btn-default cancel">取 消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
