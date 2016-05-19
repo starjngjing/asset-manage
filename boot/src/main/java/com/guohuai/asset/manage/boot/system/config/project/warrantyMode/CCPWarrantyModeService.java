@@ -75,6 +75,7 @@ public class CCPWarrantyModeService {
 				if (!map.containsKey(mode.getType())) {
 					map.put(mode.getType(), new ArrayList<CCPWarrantyMode>());
 				}
+				map.get(mode.getType()).add(mode);
 			}
 
 			if (map.containsKey("GUARANTEE")) {
