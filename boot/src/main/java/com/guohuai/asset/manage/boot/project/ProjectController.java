@@ -4,6 +4,7 @@ package com.guohuai.asset.manage.boot.project;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,7 +79,7 @@ public class ProjectController extends BaseController {
 	 * @return CommonResp    返回类型
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public CommonResp save(ProjectForm approvalReq) {
+	public CommonResp save(@Valid ProjectForm approvalReq) {
 
 		String loginId = null; 
 		try {

@@ -998,14 +998,15 @@
 				<div class="row" id="targetDetail">
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
-							<dt>标的编号</dt>
-							<dd id="detsn">
+							<dt>标的编号:</dt>
+							<dd>
+								<div data-detail-fetch="sn"></div>
 							</dd>
 						</dl>
 					</div>
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
-							<dt>标的名称</dt>
+							<dt>标的名称:</dt>
 							<dd>
 								<div data-detail-fetch="name"></div>
 							</dd>
@@ -1013,7 +1014,7 @@
 					</div>
 					<div class="col-sm-3">
 						<dl class="dl-horizontal">
-							<dt>标的类型</dt>
+							<dt>标的类型:</dt>
 							<dd>
 								<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
 							</dd>
@@ -1021,7 +1022,7 @@
 					</div>
 					<div class="col-sm-3">
 						<dl class="dl-horizontal">
-							<dt>付息方式</dt>
+							<dt>付息方式:</dt>
 							<dd>
 								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
 							</dd>
@@ -1029,7 +1030,7 @@
 					</div>
 					<div class="col-sm-3">
 						<dl class="dl-horizontal">
-							<dt>预计收益</dt>
+							<dt>预计收益:</dt>
 							<dd>
 								<div data-detail-fetch="expIncome"></div>
 							</dd>
@@ -1049,7 +1050,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="项目名称" required>
+								<input name="projectName" type="text" class="form-control input-sm" placeholder="项目名称" required>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1096,13 +1097,13 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>外部项目增信措施</label>
-								<input name="trustMeasures" type="text" class="form-control input-sm" placeholder="资金方所在地">
+								<input name="trustMeasures" type="text" class="form-control input-sm" placeholder="外部项目增信措施">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>其他外部项目增信措施</label>
-								<input name="trustMeasuresName" type="text" class="form-control input-sm" placeholder="资金方所在地">
+								<input name="trustMeasuresName" type="text" class="form-control input-sm" placeholder="其他外部项目增信措施">
 							</div>
 						</div>
 					</div>
@@ -1118,7 +1119,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>开发商排名</label>
-								<input name="sn" type="developerRank" class="form-control input-sm" placeholder="项目编号">
+								<input name="sn" type="developerRank" class="form-control input-sm" placeholder="开发商排名">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1131,7 +1132,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>完工情况</label>
-								<input name="sn" type="estateCompletion" class="form-control input-sm" placeholder="项目编号" required>
+								<input name="sn" type="estateCompletion" class="form-control input-sm" placeholder="完工情况" required>
 							</div>
 						</div>
 					</div>
@@ -1168,7 +1169,7 @@
 							<div class="form-group">
 								<label>担保人负债</label>
 								<div class="input-group input-group-sm">
-									<input name="warrantorDebt" type="text" class="form-control input-sm" placeholder="担保人总资产">
+									<input name="warrantorDebt" type="text" class="form-control input-sm" placeholder="担保人负债">
 									<span class="input-group-addon">万</span>
 								</div>
 							</div>
@@ -1203,7 +1204,7 @@
 								<label>抵押物所在地</label>
 								<textarea name="pledgeAddr" rows="3"
 					                      class="form-control input-sm"
-					                      placeholder="担保人所在地"></textarea>
+					                      placeholder="抵押物所在地"></textarea>
 							</div>
 						</div>
 						<div class="col-sm-12">
@@ -1274,14 +1275,15 @@
 						</div>
 						-->
 					</div>
+					<!--
 					<div class="form-group">
 		              <label>是否有质押</label>
 		              <div class="row form-style">
 		                <div class="col-sm-2">
-		                  <input type="radio" name="pledge" value="yes" class="icheck" checked> 是
+		                  <input type="radio" name="pledge11" value="yes" class="icheck" checked> 是
 		                </div>
 		                <div class="col-sm-2">
-		                  <input type="radio" name="pledge" value="no" class="icheck"> 否
+		                  <input type="radio" name="pledge11" value="no" class="icheck"> 否
 		                </div>
 		              </div>
 		            </div>
@@ -1291,17 +1293,16 @@
 								<label>质押人</label>
 								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
 							</div>
-						</div>						
-						<!--
+						</div>	
                         <div class="col-sm-4">
 							<div class="form-group">
 								<label>质押方式</label>
-								<select name='pledgeType' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
+								<select name='pledgeType1111' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
                 				</select>
 							</div>
 						</div>
-						-->
 					</div>
+						-->
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">

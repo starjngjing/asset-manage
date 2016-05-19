@@ -238,8 +238,8 @@ define([
 			                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
 			                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
 			                		  
-//			                		  $$.detailAutoFix($('#projectForm'), data);	// 自动填充详情
-//			                		  $$.formAutoFix($('#projectForm'), data); // 自动填充表单
+			                		  $$.detailAutoFix($('#projectForm'), data);	// 自动填充详情
+			                		  $$.formAutoFix($('#projectForm'), data); // 自动填充表单
 			                		  $('#projectModal').modal('show');
 			                	  });
 							}
@@ -296,7 +296,7 @@ define([
 		$('#projectForm').ajaxSubmit({
 			type:"post",  //提交方式  
             //dataType:"json", //数据类型'xml', 'script', or 'json'  
-			url: config.api.targetAdd,
+			url: config.api.saveProject,
 			//			contentType : 'application/json',
 			success: function(result) {
 				$('#projectForm').clearForm();
