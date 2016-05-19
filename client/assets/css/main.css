@@ -67,6 +67,14 @@ h6,
   display: none;
 }
 
+.thumb-area > img.thumb-left{
+  right: 100%;
+}
+
+.thumb-area > img.thumb-right{
+  left: 100%;
+}
+
 .thumb-area:hover > img,
 .thumb-area > img:hover{
   display: block;

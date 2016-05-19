@@ -18,11 +18,12 @@ define([
         /**
          * 图片url转成缩略图
          */
-        urlToThumb: function (val) {
+        urlToThumb: function (val, position) {
           if (val) {
-            return '<a href="http://www.guohuaigroup.com' + val + '" class="thumb-area" target="_blank">' + 
-                     '<span class="thumb fa fa-picture-o text-light-blue"></span>' + 
-                     '<img src="http://www.guohuaigroup.com' + val + '" />' + 
+            position = position || 'left'
+            return '<a href="http://www.guohuaigroup.com' + val + '" class="thumb-area" target="_blank">' +
+                     '<span class="thumb fa fa-picture-o text-light-blue"></span>' +
+                     '<img src="http://www.guohuaigroup.com' + val + '" class="thumb-' + position + '" />' +
                    '</a>'
           } else {
             return ''
