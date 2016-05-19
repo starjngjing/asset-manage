@@ -63,6 +63,7 @@ define([
      *     -- options.field：用于显示的字段名称 string
      *     -- options.formatter：formatter Function
      *
+     * FIXME 逻辑写得不清晰，仅可用，需要完善
      */
     switcher: function (options) {
       var container = options.container
@@ -77,8 +78,8 @@ define([
       var toList = $('<div class="col-sm-6"><div class="box box-primary"></div></div>')
       var fromHeader = generateHeader(fromTitle)
       var toHeader = generateHeader(toTitle)
-      var fromBody = generateBody(fromArray, toArray)
-      var toBody = generateBody(toArray, fromArray, 1)
+      var fromBody = generateBody(fromList, toList, fromArray, toArray)
+      var toBody = generateBody(toList, fromList, toArray, fromArray, 1)
 
       fromList.find('.box').append(fromHeader).append(fromBody)
       toList.find('.box').append(toHeader).append(toBody)
@@ -88,26 +89,22 @@ define([
         return $('<div class="box-header"><h3 class="box-title">' + title + '</h3></div>')
       }
 
-      function generateBody (fromArray, toArr, sign) {
+      function generateBody (fromList, toList, fromArr, toArr, sign) {
         var body = $('<div class="box-body"></div>')
         var ul = $('<ul class="todo-list"></ul>')
-        fromArray.forEach(function (item, index) {
-          if (!sign) {
-            ul.append(generateCell(fromList, toList, fromArray, toArr, item, index, sign))
-          } else {
-            ul.append(generateCell(toList, fromList, toArr, fromArray, item, index, sign))
-          }
+        fromArr.forEach(function (item, index) {
+          ul.append(generateCell(fromList, toList, fromArr, toArr, field, formatter, item, index, sign))
         })
         body.append(ul)
         return body
       }
 
-      function generateCell (fromList, toList, fromArr, toArr, source, index, sign) {
+      function generateCell (fromList, toList, fromArr, toArr, field, formatter, source, index, sign) {
         var li = $('<li></li>')
         var indexer = $('<span class="handle">' + (index + 1) + '</span>')
-        var innerHTML = $(formatter ? formatter(source[field]) : source[field])
+        var innerHTML = !!formatter ? formatter(source[field]) : source[field]
         var arrow = $('<i class="fa pull-right switcher-arrow ' + (sign ? 'fa-arrow-circle-o-left text-red' : 'fa-arrow-circle-o-right text-green') + '"></i>')
-        li.append(indexer).append(innerHTML).append(arrow)
+        li.html(innerHTML).prepend(indexer).append(arrow)
 
         arrow.on('click', function () {
           var currentIndex = fromArr.indexOf(source)
@@ -118,7 +115,7 @@ define([
           fromList.find('.handle').each(function (index, item) {
             $(item).html(index + 1)
           })
-          //toList.find('ul').append(generateCell(toList, fromList))
+          toList.find('ul').append(generateCell(toList, fromList, toArr, fromArr, field, formatter, source, index, !sign))
         })
 
         return li
@@ -180,7 +177,6 @@ define([
      * @param columns：单元格配置，同bootstrap配置中的culumns 数组
      */
     treetableInit: function (source, table, columns) {
-      console.log(source)
       var tbody = $('<tbody></tbody>')
       source.forEach(function (item) {
         tbody.append(trGenerator(item, columns))
