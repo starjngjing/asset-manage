@@ -102,7 +102,7 @@ public class ProjectController extends BaseController {
 	 * @param approvalReq
 	 * @return CommonResp    返回类型
 	 */
-	@RequestMapping(value = "deleteProject", method = RequestMethod.POST)
+	@RequestMapping(value = "deleteProject")
 	public CommonResp deleteProject(@RequestParam String targetOid, @RequestParam String oid) {
 		log.info("删除投资标的id=" + targetOid + "的底层项目id=" + oid);
 		projectService.deleteByTargetOidAndOid(targetOid, oid);

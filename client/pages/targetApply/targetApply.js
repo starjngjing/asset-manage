@@ -223,6 +223,7 @@ define([
 								})
 							},
 							'click .item-project': function(e, value, row) {
+								var targetInfo = row; // 缓存一下 投资标的信息
 								var projectTableConfig = {
 									ajax: function(origin) {
 										http.post(config.api.targetListQuery, {
@@ -290,9 +291,11 @@ define([
 													container: $('#doConfirm'),
 													trigger: this,
 													accept: function() {
+														console.log('targetInfo===>' + JSON.stringify(targetInfo));
+														console.log('项目row===>' + JSON.stringify(row));
 														http.post(config.api.targetProjectDelete, {
 															data: {
-																targetOid: row.targetOid,
+																targetOid: targetInfo.oid,
 																oid: row.oid
 															},
 															contentType: 'form'
@@ -305,8 +308,7 @@ define([
 															}
 														})
 													}
-												})						
-												
+												})			
 												
 											}
 										}
@@ -315,7 +317,8 @@ define([
 								};
 								// 初始化底层项目表格
 								$('#projectTable').bootstrapTable(projectTableConfig)
-								$('#projectModal').modal('show');
+								$$.searchInit($('#projectSearchForm'), $('#projectTable'))
+								$('#projectDataModal').modal('show');
 
 							}
 						}
@@ -325,7 +328,11 @@ define([
 			$('#targetApplyTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-			
+			// 新建标的按钮点击事件
+            $('#targetAdd').on('click', function() {
+               $('#addTargetModal').modal('show')
+            })
+           // 新建底层资产按钮点击事件
 				
 			$('#assetAdd').on('click', function() {
 				$('#addAssetModal').modal('show')
@@ -362,11 +369,19 @@ define([
 
 			$(document.projectForm.warrantor).each(function (index, item){
 				$(item).on('ifChecked', function(e) { // 是否有担保人
-					console.log('aasd')
 					if($(this).val() === 'yes' )
 						$('#prjWarrantorInfo').show();
 					else
 						$('#prjWarrantorInfo').hide();
+				});
+			})
+			
+			$(document.projectForm.pledge).each(function (index, item){
+				$(item).on('ifChecked', function(e) { // 是否有抵押人
+					if($(this).val() === 'yes' )
+						$('#prjPledgeInfo').show();
+					else
+						$('#prjPledgeInfo').hide();
 				});
 			})
 
