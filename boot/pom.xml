@@ -214,11 +214,15 @@
 			<version>1.0.0</version>
 		</dependency>
 		 -->
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>2.11.0</version>
 		</dependency>
+=======
+
+>>>>>>> 67fdccd2029626dbe7e05d83365b560dfa17eaee
 	</dependencies>
 
 	<build>

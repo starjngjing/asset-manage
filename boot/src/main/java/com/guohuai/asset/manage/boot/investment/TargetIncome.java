@@ -19,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guohuai.asset.manage.component.persist.UUID;
