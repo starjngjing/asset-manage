@@ -26,6 +26,6 @@ public interface TargetIncomeDao
 	 * @return
 	 * @return List<Interest>    返回类型 
 	 */
-	@Query(value = "from Interest p where p.investment.oid = ?1")
+	@Query(value = "from TargetIncome p where p.investment.oid = ?1")
 	public List<TargetIncome> findByTargetOid(String targetOid);
 }
