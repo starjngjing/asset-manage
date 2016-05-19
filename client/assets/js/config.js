@@ -36,6 +36,10 @@ define(function () {
     	saveCurrent: this.host + "/ams/product/save/current",//新加活期产品
     	productDetail: this.host + "/ams/product/detail",//产品详情
     	productInvalid: this.host + "/ams/product/delete",//产品作废
+    	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
+		cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
+		cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
+		cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核
     	system: {
     		config: {
     			ccp: {
@@ -62,6 +66,39 @@ define(function () {
     conventionStates: {
 
     },
+    cashtoolStates: [{
+			id: "waitPretrial",
+			text: "未审核",
+			children: []
+		}, {
+			id: "pretrial",
+			text: "审核中",
+			children: []
+		}, {
+			id: "checkpass",
+			text: "审核通过",
+			children: []
+		}, {
+			id: "reject",
+			text: "驳回",
+			children: []
+		}, {
+			id: "invalid",
+			text: "作废",
+			children: []
+		}],
+		/*
+		 * 是否下拉列表
+		 */
+		booleanSelect: [{
+			id: "Y",
+			text: "是",
+			children: []
+		}, {
+			id: "N",
+			text: "否",
+			children: []
+		}],
     /**
      * 图标所用到的主题颜色
      */

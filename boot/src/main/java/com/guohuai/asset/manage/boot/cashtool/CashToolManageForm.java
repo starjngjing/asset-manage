@@ -1,60 +1,16 @@
-/*   
- * Copyright © 2015 guohuaigroup All Rights Reserved.   
- *   
- * This software is the confidential and proprietary information of   
- * Founder. You shall not disclose such Confidential Information   
- * and shall use it only in accordance with the terms of the agreements   
- * you entered into with Founder.   
- *   
- */
 package com.guohuai.asset.manage.boot.cashtool;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import com.guohuai.asset.manage.component.persist.UUID;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-/**
- * @ClassName: CashTool
- * @Description: 现金管理工具实体
- * @author vania
- * @date 2016年5月16日 上午10:15:56
- *
- */
-@Entity
-@Table(name = "T_GAM_CASHTOOL")
 @Data
-@Builder
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
-@AllArgsConstructor
-public class CashTool extends UUID {
+public class CashToolManageForm implements Serializable {
 
-	private static final long serialVersionUID = -3696995771339594216L;
-	
-	/**
-	 * 现金管理类工具状态
-	 * waitPretrial 未审核
-	 * pretrial 审核中
-	 * checkpass 审核通过
-	 * reject 驳回
-	 * invalid 作废
-	 */
-	public static final String CASHTOOL_STATE_waitPretrial = "waitPretrial";
-	public static final String CASHTOOL_STATE_pretrial = "pretrial";
-	public static final String CASHTOOL_STATE_checkpass = "checkpass";
-	public static final String CASHTOOL_STATE_reject = "reject";
-	public static final String CASHTOOL_STATE_invalid = "invalid";
+	private static final long serialVersionUID = -684099825649628579L;
 
 	/**
 	 * 基金代码
@@ -205,7 +161,7 @@ public class CashTool extends UUID {
 	 * 持有份额
 	 */
 	private BigDecimal holdAmount;
-	
+
 	/**
 	 * 风险等级
 	 */
@@ -260,5 +216,4 @@ public class CashTool extends UUID {
 	 * 修改时间
 	 */
 	private Timestamp updateTime;
-
 }
