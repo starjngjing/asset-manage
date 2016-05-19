@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="plugins/bootstrap-table/bootstrap-table.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="plugins/select2/select2.min.css">
-    <link rel="stylesheet" href="plugins/iCheck/minimal/blue.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/2.1.2/toastr.min.css">
     <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
     <link rel="stylesheet" href="assets/css/skin-blue.min.css">
@@ -128,6 +127,12 @@
                 <span>现金类管理工具审查</span>
               </a>
             </li>
+            <li>
+              <a href="javascript:void(0)" data-gh-route="cashtoolStorage">
+                <i class="fa fa-amazon"></i>
+                <span>现金类管理工具备选库</span>
+              </a>
+            </li>
             <li class="header">产品管理</li>
             <li>
               <a href="javascript:void(0)" data-gh-route="productDesign">
@@ -214,17 +219,17 @@
               <ul class="treeview-menu">
                 <li>
                   <a href="javascript:void(0)" data-gh-route="ccpWarrantor">
-                    <i class="fa fa-circle-o"></i> 担保对象权限配置
+                    <i class="fa fa-circle-o"></i> 担保对象权数配置
                   </a>
                 </li>
                 <li>
                   <a href="javascript:void(0)" data-gh-route="ccpWarrantyMode">
-                    <i class="fa fa-circle-o"></i> 担保方式权限配置
+                    <i class="fa fa-circle-o"></i> 担保方式权数配置
                   </a>
                 </li>
                 <li>
                   <a href="javascript:void(0)" data-gh-route="ccpWarrantyExpire">
-                    <i class="fa fa-circle-o"></i> 担保期限权限配置
+                    <i class="fa fa-circle-o"></i> 担保期限权数配置
                   </a>
                 </li>
               </ul>
@@ -254,10 +259,11 @@
     <script src="http://cdn.bootcss.com/moment.js/2.10.6/locale/zh-cn.js"></script>
     <!-- jQuery-form -->
     <script src="plugins/jQuery-form/jquery.form.js"></script>
-    <!-- Select2 -->
-    <script src="http://cdn.bootcss.com/select2/4.0.2/js/select2.full.min.js"></script>
-    <!-- iCheck -->
-    <script src="plugins/iCheck/icheck.min.js"></script>
+    <!-- icheck 1.0.2 -->
+    <script src="http://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
+    <!-- Select2 4.0.2 -->
+    <script src="http://cdn.bootcss.com/select2/4.0.2/js/select2.min.js"></script>
+    <script src="http://cdn.bootcss.com/select2/4.0.2/js/i18n/zh-CN.js"></script>
     <!-- toastr -->
     <script src="http://cdn.bootcss.com/toastr.js/2.1.2/toastr.min.js"></script>
     <!-- Bootstrap-table -->
@@ -298,6 +304,7 @@
           'targetStorage',
           'cashtoolApply',
           'cashtoolAccess',
+          'cashtoolStorage',
           'productDesign',
           'productAudit',
           'productReview',
@@ -419,6 +426,9 @@
           // fix select2在bootstrap modal中input无法focus的问题
           // https://github.com/select2/select2/issues/1436
           $.fn.modal.Constructor.prototype.enforceFocus = function() {}
+
+          // select2 i18n初始化
+          $.fn.select2.defaults.set('language', 'zh-CN');
 
         })
       })

@@ -1,0 +1,506 @@
+<!-- 页面头部 -->
+<section class="content-header">
+  <h1>
+    现金类管理工具备选库
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 现金类管理工具管理</a></li>
+    <li class="active">现金类管理工具备选库</li>
+  </ol>
+</section>
+
+<!-- 主要内容 -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 主体Grid -->
+      <div id="dataGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">标题</h3>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 搜索项表单 -->
+          <form id="searchForm" name="searchForm" method="post" class="search-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>标的名称</label>
+                  <input name="name" type="text"
+                         class="form-control input-sm"
+                         placeholder="搜索标的名称">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>标的类型</label>
+                  <select name="type" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
+                    <option value="" selected>不限</option>
+                    <option value="ok">已验证</option>
+                    <option value="no">未验证</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>标的规模</label>
+              <div class="row form-style">
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value="" class="icheck" checked> 不限
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value="-1000000" class="icheck"> <100万
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value=":1000000-10000000" class="icheck"> 100万 - 1000万
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value=":1000000-100000000" class="icheck"> 1000万 - 1亿
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value=":100000000-1000000000" class="icheck"> 1亿 - 10亿
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="raiseScope" value=":1000000000-" class="icheck"> >10 亿
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>标的期限</label>
+              <div class="row form-style">
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value="" class="icheck" checked> 不限
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value="-30" class="icheck"> <1个月
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value=":30-90" class="icheck"> 1 - 3个月
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value=":90-180" class="icheck"> 3 - 6个月
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value=":180-360" class="icheck"> 6 - 12个月
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="lifed" value=":360-" class="icheck"> >12个月
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>预期年化收益</label>
+              <div class="row form-style">
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value="" class="icheck" checked> 不限
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value="-0.03" class="icheck"> <3%
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value=":0.03-0.06" class="icheck"> 3% - 6%
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value=":0.06-0.1" class="icheck"> 6% - 10%
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value=":0.1-0.15" class="icheck"> 10% - 15%
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="expAror" value=":0.15" class="icheck"> >15%
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- 主体数据表格 -->
+          <table id="dataTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>名称</th>
+              <th>标的类型</th>
+              <th>收益率</th>
+              <th>标的规模</th>
+              <th>期限</th>
+              <th>状态</th>
+              <th>已购份额</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 成立模态窗 默认大小 -->
+<div id="establishModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">成立</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="establishForm" name="establishForm" method="post">
+        	<p class="form-header">标的概况</p>
+        	<div class="form-group">
+            <label>标的名称</label>
+            <input data-detail-fetch="name" type="text"
+                   class="form-control input-sm"
+                   disabled="disabled">
+          </div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的类型</label>
+		            <input data-detail-fetch="type" data-enum-transform="TARGETTYPE"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的规模</label>
+		            <input data-detail-fetch="raiseScope"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          </div>
+	      	<div class="row">
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>年化收益率:</lable>
+	      				<input data-detail-fetch="expArorSec"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>标的期限:</lable>
+	      				<input data-detail-fetch="lifed"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      	</div>
+	      	<div class="row">
+	      		<div class="col-sm-12">
+	      			<div class="form-group">
+	            <label>风控</label>
+	            <textarea name="risk" rows="3"
+	                      class="form-control input-sm"
+	                      placeholder="请输入内容" required></textarea>
+          		</div>
+	      		</div>
+	      	</div>
+	      	<div class="row">
+      			<div class="col-sm-6">
+          		<div class="form-group">
+			          <div class="form-group">
+				          <label>成立日期</label>
+				          <div class="input-group input-group-sm">
+				            <div class="input-group-addon">
+				              <i class="fa fa-calendar"></i>
+				            </div>
+				            <input name="setDate" type="text"
+				                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+				                   placeholder="成立日期">
+				          </div>
+				        </div>  
+			        </div>          		
+          	</div>
+          	<div class="col-sm-6"></div>
+	      	</div>
+          <div class="row">          	
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益起始日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="">
+			          </div>
+			        </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益截止日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="">
+			          </div>
+			        </div>          		
+          	</div>
+          </div>
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>首付息日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="首付息日">
+			          </div>
+			        </div>
+		        </div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>付息日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa">T+</i>			              
+			            </div>
+			            <input name="accrualDate" type="text"
+			                   type="text" class="form-control input-sm"
+			                   placeholder="付息日" required>
+			            <span class="input-group-addon">工作日以内</span>
+			          </div>
+			        </div>          		
+          	</div>
+          </div>
+	        
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>募集期收益</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="collectIncomeRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="募集期收益" required>
+			            <span class="input-group-addon">%</span>
+			          </div>
+			        </div>
+		        </div>
+          	
+          </div>
+          
+          <input name="oid" type="hidden" data-detail-fetch="oid">
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- 不成立模态窗 默认大小 -->
+<div id="unEstablishModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">成立失败</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="unEstablishForm" name="unEstablishForm" method="post">
+        	<p class="form-header">标的概况</p>
+        	<div class="form-group">
+            <label>标的名称</label>
+            <input data-detail-fetch="name" type="text"
+                   class="form-control input-sm"
+                   disabled="disabled">
+          </div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的类型</label>
+		            <input data-detail-fetch="type" data-enum-transform="TARGETTYPE"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的规模</label>
+		            <input data-detail-fetch="raiseScope"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          </div>
+	      	<div class="row">
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>年化收益率:</lable>
+	      				<input data-detail-fetch="expArorSec"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>标的期限:</lable>
+	      				<input data-detail-fetch="lifed"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      	</div>
+	      	<div class="row">
+	      		<div class="col-sm-12">
+	      			<div class="form-group">
+	            <label>成立失败说明</label>
+	            <textarea name="remark" rows="3"
+	                      class="form-control input-sm"
+	                      placeholder="请输入内容" required></textarea>
+          		</div>
+	      		</div>
+	      	</div>
+	      	
+	        
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>募集期收益</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="collectIncomeRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="募集期收益" required>
+			            <span class="input-group-addon">%</span>
+			          </div>
+			        </div>
+		        </div>
+          	
+          </div>
+          
+          <input name="oid" type="hidden" data-detail-fetch="oid">
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 本息兑付 默认大小 -->
+<div id="interestModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">本息兑付</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="interestForm" name="interestForm" method="post">
+        	<p class="form-header">标的概况</p>
+        	<div class="form-group">
+            <label>标的名称</label>
+            <input data-detail-fetch="name" type="text"
+                   class="form-control input-sm"
+                   disabled="disabled">
+          </div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的类型</label>
+		            <input data-detail-fetch="type" data-enum-transform="TARGETTYPE"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的规模</label>
+		            <input data-detail-fetch="raiseScope"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          </div>
+	      	<div class="row">
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>年化收益率:</lable>
+	      				<input data-detail-fetch="expArorSec"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>标的期限:</lable>
+	      				<input data-detail-fetch="lifed"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      	</div>
+	      	<div class="row">
+	      		<div class="col-sm-12">
+	      			<div class="form-group">
+	            <label>成立失败说明</label>
+	            <textarea name="remark" rows="3"
+	                      class="form-control input-sm"
+	                      placeholder="请输入内容" required></textarea>
+          		</div>
+	      		</div>
+	      	</div>
+	      	
+	        
+	        <div class="row">
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>募集期收益</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="collectIncomeRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="募集期收益" required>
+			            <span class="input-group-addon">%</span>
+			          </div>
+			        </div>
+		        </div>
+          	
+          </div>
+          
+          <input name="oid" type="hidden" data-detail-fetch="oid">
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="interestSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+      </div>
+    </div>
+  </div>
+</div>
