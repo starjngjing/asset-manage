@@ -18,8 +18,8 @@ define([
 				name: '',
 				type: ''
 			}
-			// 用于存储表格checkbox选中的项
-			var checkItems = []
+		// 用于存储表格checkbox选中的项
+		var checkItems = []
     	// 数据表格配置
     	var tableConfig = {
     		ajax: function (origin) {
@@ -187,7 +187,6 @@ define([
 								container: $('#doConfirm'),
 								trigger: this,
 								accept: function() {
-									console.log(row.oid)
 									http.post(config.api.productInvalid, {
 										data: {
 											oid: row.oid
@@ -246,17 +245,6 @@ define([
     	$('#productAdd').on('click', function () {
     		$('#addProductModal').modal('show')
     	})    	
-    	// 编辑表单保存按钮点击事件
-    	//$('#updateProductSubmit').on('click', function () {
-    		//$('#updateProductForm').ajaxSubmit({
-      			//url: config.api.applyUpdateOpenState,
-      			//success: function (addResult) {
-        			//$('#updateModal').modal('hide')
-        			//$('#productDesignTable').bootstrapTable('refresh')
-      			//}
-    		//})
-  		//})
-
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
     		var form = document.searchForm
@@ -309,17 +297,53 @@ define([
   		})
 
 			// 提交审核按钮点击事件
-			$('#productAudit').on('click', function () {
-				$('#productAuditModal').modal('show')
-			})
-
-			// 提交审核弹窗 -> 提交按钮点击事件
-			$('#doProductAudit').on('click', function () {
-				// 获取id数组
-				var idArr = checkItems.map(function (item) {
-					return item.id
+		$('#productAudit').on('click', function () {
+			if(checkItems.length>0) {
+				var productNames = checkItems.map(function (item) {
+					return item.name
 				})
-				// 提交数组
+				var pnames = "";
+				var le = productNames.length
+				for (var i=0;i<le;i++) {
+					if(i>0){
+						pnames+="，"
+					}
+					pnames+=productNames[i]
+				}
+				$("#auditProductNames").html(pnames)
+				$('#productAuditModal').modal('show')
+			} else {
+				alert("请选择产品")
+			}
+		})
+
+		// 提交审核弹窗 -> 提交按钮点击事件
+		$('#doProductAudit').on('click', function () {
+			// 获取id数组
+			var oids = checkItems.map(function (item) {
+				return item.oid
+			})
+			// 提交数组
+			http.post(config.api.productInvalid, {
+				
+			$('#addProductForm').ajaxSubmit({
+      		url: config.api.savePeriodic,
+      		success: function (addResult) {
+        			$('#productAuditModal').modal('hide')
+        			$('#productDesignTable').bootstrapTable('refresh')
+      			}
+      			
+      			
+      			http.post(config.api.productInvalid, {
+										data: {
+											oids: oids
+										},
+										contentType: 'form',
+									}, function(result) {
+										$('#productDesignTable').bootstrapTable('refresh')
+									})
+				
+				
 			})
 
 			// 选择资产池按钮点击事件
