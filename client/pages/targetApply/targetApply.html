@@ -1029,13 +1029,13 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="项目编号">
+								<input name="sn" type="text" class="form-control input-sm" placeholder="项目编号" required>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="项目名称">
+								<input name="name" type="text" class="form-control input-sm" placeholder="项目名称" required>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1047,15 +1047,29 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目类型</label>
-								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE">
+								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE"  data-enum-text="请选择" required>
                 				</select>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>付息方式</label>
-								<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式">
+								<label>城市</label>
+								<input name="projectCity" type="text" class="form-control input-sm" placeholder="城市">
 							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>资金方所在地</label>
+								<input name="funderAddr" type="text" class="form-control input-sm" placeholder="资金方所在地">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+					            <label>资金用途</label>
+					            <textarea name="funderAddr" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="请输入内容" required></textarea>
+				          	</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
