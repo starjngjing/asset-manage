@@ -268,7 +268,26 @@ define([
 			for (var i = 0; i < config.targetStates.name.length; i++) {
 				$("[name='targetStatus']").append('<option value="' + config.targetStates.value[i] + '">' + config.targetStates.name[i] + '</option>')
 			}
-
+//
+			$("#projectForm input[name='projectType']").change(function() { // 项目类型
+				var ptt = $(this).val();
+				if(ptt === 'PROJECTTYPE_01') { // 金融
+					$("#estateDiv").hide();
+					$("#financeDiv").show();
+				} else if(ptt === 'PROJECTTYPE_02') { // 房地产
+					$("#estateDiv").show();
+					$("#financeDiv").hide();
+				} else {
+					$("#estateDiv").hide();
+					$("#financeDiv").hide();
+				}
+			});
+//			$("#projectForm :radio[name='warrantor']").click(function() { // 是否有担保人
+//				if($(this).val() == 'yes' )
+//					$('#prjWarrantorInfo').show();
+//				else
+//					$('#prjWarrantorInfo').hide();
+//			});
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit
