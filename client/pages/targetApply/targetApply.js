@@ -13,6 +13,7 @@ define([
 
 			// js逻辑写在这里
 			// 分页配置
+			var targetInfo ; // 缓存 选中的某一行的 投资标的信息
 			var pageOptions = {
 					number: 1,
 					size: 10,
@@ -223,98 +224,9 @@ define([
 								})
 							},
 							'click .item-project': function(e, value, row) {
-								var targetInfo = row; // 缓存一下 投资标的信息
-								var projectTableConfig = {
-									ajax: function(origin) {
-										http.post(config.api.targetListQuery, {
-											data: {
-												page: pageOptions.number,
-												rows: pageOptions.size,
-												name: pageOptions.targetName,
-												type: pageOptions.targetType,
-												state: pageOptions.state
-											},
-											contentType: 'form'
-										}, function(rlt) {
-											origin.success(rlt)
-										})
-									},
-									pageNumber: pageOptions.number,
-									pageSize: pageOptions.size,
-									pagination: true,
-									sidePagination: 'server',
-									pageList: [10, 20, 30, 50, 100],
-									queryParams: getQueryParams,
-									columns: [
-									  {
-										  //编号
-										 field: 'oid',
-										 width:60,
-									  },
-									  {
-										  //项目名称
-										  field: 'projectName',
-									  },
-									  {
-										  //项目项目经理
-										  field: 'projectManager',
-									  },
-									  {
-										  //项目项目类型
-										  field: 'projectType',
-									  },
-									  {
-										  //城市
-										  field: 'projectCity',
-									  },
-									  {
-										  //创建时间
-										  field: 'createTime',
-									  },{
-										  //操作
-										  align: 'center',
-										  formatter: function(val, row) {
-										  var buttons = [
-							            	    {
-							            	      text: '删除',
-							            	      type: 'button',
-							            	      class: 'item-delete',
-							            	      isRender: true
-							            	    }
-							            	  ];
-						            	  return util.table.formatter.generateButton(buttons);
-										},
-										events: {
-											'click .item-delete': function(e, value, row) { // 删除底层项目
-												$("#confirmTitle").html("确定删除底层项目？")
-												$$.confirm({
-													container: $('#doConfirm'),
-													trigger: this,
-													accept: function() {
-														console.log('targetInfo===>' + JSON.stringify(targetInfo));
-														console.log('项目row===>' + JSON.stringify(row));
-														http.post(config.api.targetProjectDelete, {
-															data: {
-																targetOid: targetInfo.oid,
-																oid: row.oid
-															},
-															contentType: 'form'
-														}, function(result) {
-															if (result.errorCode == 0) {
-																
-																$('#projectTable').bootstrapTable('refresh');
-															} else {
-																alert('删除底层项目失败');
-															}
-														})
-													}
-												})			
-												
-											}
-										}
-									  }
-									]
-								};
+								targetInfo = row; // 变更某一行 投资标的信息
+								console.log(targetInfo)
+								//111
 								// 初始化底层项目表格
 								$('#projectTable').bootstrapTable(projectTableConfig)
 								$$.searchInit($('#projectSearchForm'), $('#projectTable'))
@@ -323,7 +235,102 @@ define([
 							}
 						}
 					}]
-				}
+				};
+					
+			
+			var prjPageOptions = {}
+			var projectTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.targetProjectList, {
+						data: prjPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pageOptions.number,
+				pageSize: pageOptions.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function (val) {
+					var form = document.projectSearchForm
+					prjPageOptions.rows = val.limit
+					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
+					prjPageOptions.targetOid = targetInfo.oid.trim();
+					prjPageOptions.projectName = form.projectName.value.trim();
+					return val
+				},
+				columns: [
+				  {
+					  //编号
+					 field: 'oid',
+					 width:60,
+				  },
+				  {
+					  //项目名称
+					  field: 'projectName',
+				  },
+				  {
+					  //项目项目经理
+					  field: 'projectManager',
+				  },
+				  {
+					  //项目项目类型
+					  field: 'projectType',
+				  },
+				  {
+					  //城市
+					  field: 'projectCity',
+				  },
+				  {
+					  //创建时间
+					  field: 'createTime',
+				  },{
+					  //操作
+					  align: 'center',
+					  formatter: function(val, row) {
+					  var buttons = [
+		            	    {
+		            	      text: '删除',
+		            	      type: 'button',
+		            	      class: 'item-delete',
+		            	      isRender: true
+		            	    }
+		            	  ];
+	            	  return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-delete': function(e, value, row) { // 删除底层项目
+							$("#confirmTitle").html("确定删除底层项目？")
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									console.log('targetInfo===>' + JSON.stringify(targetInfo));
+									console.log('项目row===>' + JSON.stringify(row));
+									http.post(config.api.targetProjectDelete, {
+										data: {
+											targetOid: targetInfo.oid,
+											oid: row.oid
+										},
+										contentType: 'form'
+									}, function(result) {
+										if (result.errorCode == 0) {
+											
+											$('#projectTable').bootstrapTable('refresh');
+										} else {
+											alert('删除底层项目失败');
+										}
+									})
+								}
+							})			
+							
+						}
+					}
+				  }
+				]
+			};
 				// 初始化表格
 			$('#targetApplyTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
