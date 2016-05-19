@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyExpire;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +23,6 @@ public class CCPWarrantyExpireForm {
 	@NotEmpty
 	private String title;
 	@Digits(integer = 4, fraction = 4)
-	private double weight100;
+	private BigDecimal weight100;
 
 }

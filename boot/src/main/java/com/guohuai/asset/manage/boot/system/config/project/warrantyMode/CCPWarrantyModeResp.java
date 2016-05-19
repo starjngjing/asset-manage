@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyMode;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,7 @@ public class CCPWarrantyModeResp {
 	private String oid;
 	private String type;
 	private String title;
-	private double weight;
+	private BigDecimal weight;
 	private boolean showType = false;
 
 }

@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public class CCPWarrantyModeService {
 	public CCPWarrantyMode create(CCPWarrantyModeForm form) {
 
 		CCPWarrantyMode.CCPWarrantyModeBuilder builder = CCPWarrantyMode.builder().oid(StringUtil.uuid());
-		builder.type(form.getType()).title(form.getTitle()).weight(form.getWeight100() / 100);
+		builder.type(form.getType()).title(form.getTitle()).weight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		CCPWarrantyMode warrantyMode = this.ccpWarrantyModeDao.save(builder.build());
 
@@ -37,7 +38,7 @@ public class CCPWarrantyModeService {
 		CCPWarrantyMode warrantyMode = this.get(form.getOid());
 		warrantyMode.setType(form.getType());
 		warrantyMode.setTitle(form.getTitle());
-		warrantyMode.setWeight(form.getWeight100() / 100);
+		warrantyMode.setWeight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		warrantyMode = this.ccpWarrantyModeDao.save(warrantyMode);
 

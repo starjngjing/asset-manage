@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,6 +27,6 @@ public class CCPWarrantor implements Serializable {
 	private String title;
 	private int lowScore;
 	private int highScore;
-	private double weight;
+	private BigDecimal weight;
 
 }

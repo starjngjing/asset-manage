@@ -35,7 +35,7 @@ define([
 				}, {
 					field: 'weight',
 					formatter: function(val, row) {
-						return val * 100 + '%';
+						return parseInt(val * 100) + '%';
 					}
 				}, {
 					align: 'center',
@@ -56,7 +56,7 @@ define([
 					events: {
 						'click .item-update': function(e, value, row) {
 							$('#updateCcpWarrantorModal').modal('show');
-							row.weight100 = row.weight * 100;
+							row.weight100 = parseInt(row.weight * 100);
 							$$.formAutoFix($('#updateCcpWarrantorForm'), row);
 						},
 						'click .item-delete': function(e, value, row) {

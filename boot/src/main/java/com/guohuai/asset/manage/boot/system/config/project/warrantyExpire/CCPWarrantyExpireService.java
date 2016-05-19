@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyExpire;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -15,12 +16,12 @@ public class CCPWarrantyExpireService {
 
 	@Autowired
 	private CCPWarrantyExpireDao ccpWarrantyExpireDao;
-	
+
 	@Transactional
 	public CCPWarrantyExpire create(CCPWarrantyExpireForm form) {
 
 		CCPWarrantyExpire.CCPWarrantyExpireBuilder builder = CCPWarrantyExpire.builder().oid(StringUtil.uuid());
-		builder.title(form.getTitle()).weight(form.getWeight100() / 100);
+		builder.title(form.getTitle()).weight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		CCPWarrantyExpire warrantyExpire = this.ccpWarrantyExpireDao.save(builder.build());
 
@@ -34,7 +35,7 @@ public class CCPWarrantyExpireService {
 		CCPWarrantyExpire warrantyExpire = this.get(form.getOid());
 
 		warrantyExpire.setTitle(form.getTitle());
-		warrantyExpire.setWeight(form.getWeight100() / 100);
+		warrantyExpire.setWeight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		warrantyExpire = this.ccpWarrantyExpireDao.save(warrantyExpire);
 
@@ -66,5 +67,4 @@ public class CCPWarrantyExpireService {
 		return list;
 	}
 
-	
 }

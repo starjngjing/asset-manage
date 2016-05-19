@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantor;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +27,6 @@ public class CCPWarrantorForm {
 	@Digits(integer = 4, fraction = 0)
 	private int highScore;
 	@Digits(integer = 4, fraction = 4)
-	private double weight100;
+	private BigDecimal weight100;
 
 }

@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyMode;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +27,6 @@ public class CCPWarrantyModeForm {
 	@NotBlank
 	private String title;
 	@Digits(integer = 4, fraction = 4)
-	private double weight100;
+	private BigDecimal weight100;
 
 }
