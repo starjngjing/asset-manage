@@ -1,8 +1,6 @@
 
 package com.guohuai.asset.manage.boot.project;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,7 @@ import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.web.BaseController;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -36,6 +35,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  */
 @RestController
 @RequestMapping("/ams/boot/project")
+@Slf4j
 public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectDao projectDao;
@@ -68,32 +68,26 @@ public class ProjectController extends BaseController {
 		return new ResponseEntity<ProjectListResp>(resp, HttpStatus.OK);
 	}
 
+	/**
+	 * 创建底层项目
+	 * @Title: save 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param approvalReq
+	 * @return CommonResp    返回类型
+	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public CommonResp save(ProjectReq approvalReq) {
+	public CommonResp save(ProjectForm approvalReq) {
 
-		String oid = approvalReq.getOid();
-		if (oid != null && !"".equals(oid.trim())) {
-			Project asOld = projectDao.findOne(oid);
-		
-			Project asNew = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
-					.endUseAmount(new BigDecimal(approvalReq.getEndUseAmount())).financialType1(approvalReq.getFinancialType1())
-					.financialType2(approvalReq.getFinancialType2()).isPhasedrelease(approvalReq.getIsPhasedrelease()).isStockCoopOrg(approvalReq.getIsStockCoopOrg()).orgName(approvalReq.getOrgName())
-					.pjSources(approvalReq.getPjSources()).projectType(approvalReq.getPjType()).relatedParty(approvalReq.getRelatedParty()).subsCount(approvalReq.getSubsCount())
-					.tradeCredit(approvalReq.getTradeCredit()).usedAmount(new BigDecimal(approvalReq.getUsedAmount())).updateTime(new Timestamp(System.currentTimeMillis())).build();
-			asNew.setOid(asOld.getOid());
-			asNew.setCreateTime(asOld.getCreateTime());
-			projectService.save(asNew);
-			return CommonResp.builder().errorCode(1).errorMessage("更新成功").build();
-		} else {
-			Project approval = Project.builder().projectName(approvalReq.getProjectName()).projectManager(approvalReq.getProjectManager()).projectCity(approvalReq.getCityName())
-					.endUseAmount(new BigDecimal(approvalReq.getEndUseAmount())).financialType1(approvalReq.getFinancialType1())
-					.financialType2(approvalReq.getFinancialType2()).isPhasedrelease(approvalReq.getIsPhasedrelease()).isStockCoopOrg(approvalReq.getIsStockCoopOrg()).orgName(approvalReq.getOrgName())
-					.pjSources(approvalReq.getPjSources()).projectType(approvalReq.getPjType()).relatedParty(approvalReq.getRelatedParty()).subsCount(approvalReq.getSubsCount())
-					.tradeCredit(approvalReq.getTradeCredit()).usedAmount(new BigDecimal(approvalReq.getUsedAmount())).createTime(new Timestamp(System.currentTimeMillis()))
-					.businesstype(approvalReq.getBusinesstype()).build();
-			projectService.save(approval);
-			return CommonResp.builder().errorCode(1).errorMessage("保存成功！").attached(approval.getOid()).build();
+		String loginId = null; 
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
+		Project prj = projectService.save(approvalReq, loginId, loginId);
+		return CommonResp.builder().errorCode(1).errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
 	}
 
 	/**

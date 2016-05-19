@@ -1,50 +1,33 @@
 package com.guohuai.asset.manage.boot.project;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.guohuai.asset.manage.boot.investment.Investment;
-import com.guohuai.asset.manage.component.persist.UUID;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * @ClassName: Project
- * @Description: 底层项目实体
- * @author vania
- * @date 2016年5月16日 上午10:15:56
- *
- */
-@Entity
-@Table(name = "T_GAM_PROJECT")
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project extends UUID {
+public class ProjectForm implements Cloneable, Serializable {
 
-	private static final long serialVersionUID = -8451087996991540133L;
+	/**
+	 * @Fields serialVersionUID : TODO
+	 */
 
-	// 关联投资标的id
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "targetOid", referencedColumnName = "oid")
-	@JsonBackReference
-	private Investment investment;
-
+	private static final long serialVersionUID = 5787252786984515512L;
+	private String oid;
+	@NotNull(message = "标的id不能为空")
+	private String targetOid;
+	@NotNull(message = "项目名称不能为空")
 	private String projectName;
+	@NotNull(message = "项目类型不能为空")
 	private String projectType;
 	private String projectTypeName;
 	private String projectManager;

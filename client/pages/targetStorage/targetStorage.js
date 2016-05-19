@@ -66,7 +66,9 @@ define([
             {// 收益率
             	field: 'expAror',
             	formatter: function (val) {
-            		return val+"%";
+            		if(val)
+						return val.toFixed(2) + "%";
+            		return val;
             	}
             },
             {
@@ -229,7 +231,9 @@ define([
                 //dataType:"json", //数据类型'xml', 'script', or 'json'  
         		url: config.api.establish,
         		success:function(data) {
+        			$('#establishForm').clearForm();
         			$('#establishModal').modal('hide');
+        			$('#dataTable').bootstrapTable('refresh');
         		}
         	});
         	
@@ -242,7 +246,9 @@ define([
         		//dataType:"json", //数据类型'xml', 'script', or 'json'  
         		url: config.api.unEstablish,
         		success:function(data) {
+        			$('#unEstablishForm').clearForm();
         			$('#unEstablishModal').modal('hide');
+        			$('#dataTable').bootstrapTable('refresh');
         		}
         	});
         	

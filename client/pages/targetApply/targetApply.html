@@ -994,32 +994,46 @@
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
-				<div class="row " id="targetDetail">
-					<p class="form-header">标的概况</p>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的编号</label>
-							<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" disabled>
-						</div>
+				<p class="form-header">标的概况</p>
+				<div class="row" id="targetDetail">
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>标的编号</dt>
+							<dd id="detsn">
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的名称</label>
-							<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" disabled>
-						</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>标的名称</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的类型</label>
-							<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE" disabled>
-            				</select>
-						</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>标的类型</dt>
+							<dd>
+								<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>付息方式</label>
-							<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式" disabled>
-						</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>付息方式</dt>
+							<dd>
+								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>预计收益</dt>
+							<dd>
+								<div data-detail-fetch="expIncome"></div>
+							</dd>
+						</dl>
 					</div>
 				</div>
 				<!-- 新增/编辑事件表单 -->
@@ -1071,116 +1085,273 @@
 					                      placeholder="请输入内容" required></textarea>
 				          	</div>
 						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+					            <label>项目还款来源</label>
+					            <textarea name="payment" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="请输入内容" required></textarea>
+				          	</div>
+						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>投资方向</label>
-								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向">
+								<label>外部项目增信措施</label>
+								<input name="trustMeasures" type="text" class="form-control input-sm" placeholder="资金方所在地">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>资产规模</label>
+								<label>其他外部项目增信措施</label>
+								<input name="trustMeasuresName" type="text" class="form-control input-sm" placeholder="资金方所在地">
+							</div>
+						</div>
+					</div>
+					<div class="row" id="">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>房地产项目所在地</label>
+								<textarea name="projectAddr" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="请输入内容" required></textarea>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>开发商排名</label>
+								<input name="sn" type="developerRank" class="form-control input-sm" placeholder="项目编号">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>房地产项目属性</label>
+								<select name='estateProp' class="form-control input-sm" data-enum-fetch="ESTATEPROPTYPE">
+            					</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>完工情况</label>
+								<input name="sn" type="estateCompletion" class="form-control input-sm" placeholder="项目编号" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+		              <label>是否有担保人</label>
+		              <div class="row form-style">
+		                <div class="col-sm-2">
+		                  <input type="radio" name="warrantor" value="yes" class="icheck" checked> 是
+		                </div>
+		                <div class="col-sm-2">
+		                  <input type="radio" name="warrantor" value="no" class="icheck"> 否
+		                </div>
+		              </div>
+		            </div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>担保人所在地</label>
+								<textarea name="investment" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="担保人所在地"></textarea>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>担保人总资产</label>
 								<div class="input-group input-group-sm">
-									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模">
+									<input name="warrantorCapital" type="text" class="form-control input-sm" placeholder="担保人总资产">
 									<span class="input-group-addon">万</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限">
+								<label>担保人负债</label>
+								<div class="input-group input-group-sm">
+									<input name="warrantorDebt" type="text" class="form-control input-sm" placeholder="担保人总资产">
+									<span class="input-group-addon">万</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+		              <label>是否有抵押</label>
+		              <div class="row form-style">
+		                <div class="col-sm-2">
+		                  <input type="radio" name="pledge" value="yes" class="icheck" checked> 是
+		                </div>
+		                <div class="col-sm-2">
+		                  <input type="radio" name="pledge" value="no" class="icheck"> 否
+		                </div>
+		              </div>
+		            </div>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>抵押人</label>
+								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>资产期限单位</label>
-								<select name='lifeUnit' class="form-control input-sm">
-									<option value="day">日</option>
-									<option value="month">月</option>
-									<option value="year">年</option>
-                </select>
+								<label>出质人</label>
+								<input name="pledgor" type="text" class="form-control input-sm" placeholder="出质人">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>抵押物所在地</label>
+								<textarea name="pledgeAddr" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="担保人所在地"></textarea>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>抵押物形态</label>
+								<textarea name="pledgeType" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="抵押物形态"></textarea>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>预计收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益">
-									<span class="input-group-addon">%</span>
-								</div>
+								<label>数量或面积</label>
+								<input name="pledgeWeight" type="text" class="form-control input-sm" placeholder="数量或面积">
 							</div>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-sm-12">
 							<div class="form-group">
-								<label>预计年化收益</label>
-								<div class="input-group input-group-sm">
-									<input name="expAror" type="text" class="form-control" placeholder="最小收益">
-									<span class="input-group-addon">%</span>
-								</div>
+								<label>抵押物名称坐落</label>
+								<textarea name="pledgeName" rows="3"
+					                      class="form-control input-sm"
+					                      placeholder="担保人所在地"></textarea>
 							</div>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-sm-4">
 							<div class="form-group">
-								<label>&nbsp;</label>
-								<div class="input-group input-group-sm range">
-									<input name="expArorSec" type="text" class="form-control" placeholder="最大收益">
+								<label>抵押物评估机构</label>
+								<input name="pledgeAssessment" type="text" class="form-control input-sm" placeholder="抵押物评估机构">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>评估价值</label>
+								<input name="pledgeValuation" type="text" class="form-control input-sm" placeholder="评估价值">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>抵押顺位</label>
+								<input name="pledgePriority" type="text" class="form-control input-sm" placeholder="抵押顺位">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>抵押率</label>
+								<div class="input-group input-group-sm">
+									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率">
 									<span class="input-group-addon">%</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>起购金额</label>
+								<label>保证金</label>
 								<div class="input-group input-group-sm">
-									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额">
+									<input name="margin" type="text" class="form-control input-sm" placeholder="保证金">
 									<span class="input-group-addon">元</span>
 								</div>
 							</div>
 						</div>
+						<!--
+                        <div class="col-sm-4">
+							<div class="form-group">
+								<label>抵押方式</label>
+								<select name='pledgeType' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
+                				</select>
+							</div>
+						</div>
+						-->
+					</div>
+					<div class="form-group">
+		              <label>是否有质押</label>
+		              <div class="row form-style">
+		                <div class="col-sm-2">
+		                  <input type="radio" name="pledge" value="yes" class="icheck" checked> 是
+		                </div>
+		                <div class="col-sm-2">
+		                  <input type="radio" name="pledge" value="no" class="icheck"> 否
+		                </div>
+		              </div>
+		            </div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>拟成立日</label>
+								<label>质押人</label>
+								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
+							</div>
+						</div>						
+						<!--
+                        <div class="col-sm-4">
+							<div class="form-group">
+								<label>质押方式</label>
+								<select name='pledgeType' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
+                				</select>
+							</div>
+						</div>
+						-->
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>政府层级</label>
+								<input name="govLevel" type="text" class="form-control input-sm" placeholder="政府层级">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>项目规模</label>
 								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="projectScale" type="text" class="form-control input-sm" placeholder="项目规模">
+									<span class="input-group-addon">万</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>募集起始日</label>
+								<label>融资成本</label>
 								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="financeCosts" type="text" class="form-control input-sm" placeholder="融资成本">
+									<span class="input-group-addon">万</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>募集截至日</label>
+								<label>受托采购主体(SPV)</label>
+								<input name="spv" type="text" class="form-control input-sm" placeholder="受托采购主体">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>SPV通道费</label>
 								<div class="input-group input-group-sm">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费">
+									<span class="input-group-addon">万</span>
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>主体评级</label>
-								<input name="subjectRating" type="text" class="form-control input-sm" placeholder="主题评级">
+								<label>项目评级</label>
+								<input name="projectGrade" type="text" class="form-control input-sm" placeholder="项目评级">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>评级机构</label>
-								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构">
+								<input name="gradeAssessment" type="text" class="form-control input-sm" placeholder="评级机构">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1190,117 +1361,18 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="ratingTime" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD HH:mm:ss">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>收益说明</label>
-								<textarea name="expArorDesc" rows="1" class="form-control input-sm" placeholder="收益说明"></textarea>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>优先级</label>
-								<div class="row">
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="a" class="icheck" checked> a类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="b" class="icheck"> b类
-									</div>
-									<div class="col-sm-3">
-										<input name="prior" type="radio" value="c" class="icheck"> c类
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>合同年天数</label>
-								<div class="row">
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="365" class="icheck" checked> 365/年
-									</div>
-									<div class="col-sm-4">
-										<input name="contractDays" type="radio" value="360" class="icheck"> 360/年
-									</div>
+									<input name="gradeTime" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD HH:mm:ss">
 								</div>
 							</div>
 						</div>
 					</div>
-					<p class="form-header">优势说明</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>优势说明</label>
-								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">标的实力</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>融资方</label>
-								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>融资方简介</label>
-								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方</label>
-								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方">
-							</div>
-						</div>
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>担保方简介</label>
-								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">资金用途</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>资金用途</label>
-								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">还款说明</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>还款说明</label>
-								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明"></textarea>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">风控措施</p>
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
-								<label>风控措施</label>
-								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施"></textarea>
-							</div>
-						</div>
-					</div>
+					<input name="targetOid" type="hidden" data-detail-fetch="oid">
 				</form>
 			</div>
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="projectForm" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
 			</div>
 		</div>
 	</div>

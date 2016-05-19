@@ -1,8 +1,10 @@
 package com.guohuai.asset.manage.boot.project;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,15 +16,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.boot.investment.InvestmentDao;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 @Service
+@Transactional
 public class ProjectService {
 
 	@Autowired
 	private ProjectDao approvalDao;
+	@Autowired
+	private InvestmentDao investmentDao;
 
-	@Transactional
 	public Page<Project> list(Specification<Project> spec, int page, int size, String sortDirection, String sortField) {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page, size, new Sort(order));
@@ -30,7 +36,6 @@ public class ProjectService {
 		return pagedata;
 	}
 
-	@Transactional
 	public Project get(String oid) {
 		Project approv = this.approvalDao.findOne(oid);
 		if (null == approv) {
@@ -49,15 +54,28 @@ public class ProjectService {
 	 * @param approv
 	 * @return
 	 * @return Approval 返回类型
-	 */
-	@Transactional
-	public Project save(Project approv) {
+	 */	
+	public Project save(ProjectForm approv, String creator, String operator) {
 		if (null == approv)
 			throw AMPException.getException("底层项目不能为空");
-//		if (StringUtils.isBlank(approv.getTargetOid())) {
-//			throw AMPException.getException("关联标的不能为空");
-//		}
-		return this.approvalDao.save(approv);
+		String targetOid = approv.getTargetOid();
+		if (StringUtils.isBlank(approv.getTargetOid()))
+			throw AMPException.getException("投资标的id不能为空");
+
+		Project prj = new Project();
+		BeanUtils.copyProperties(approv, prj);
+
+		Investment investment = this.investmentDao.findOne(targetOid);
+		if (null == investment)
+			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
+		prj.setInvestment(investment);
+		
+		prj.setCreator(creator);
+		prj.setOperator(operator);
+		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+
+		return this.approvalDao.save(prj);
 	}
 
 	/**

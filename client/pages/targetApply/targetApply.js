@@ -262,6 +262,9 @@ define([
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
+			$('#projectSubmit').on('click', function() {
+				saveProject();
+			})
 			for (var i = 0; i < config.targetStates.name.length; i++) {
 				$("[name='targetStatus']").append('<option value="' + config.targetStates.value[i] + '">' + config.targetStates.name[i] + '</option>')
 			}
@@ -285,6 +288,19 @@ define([
 			success: function(result) {
 				$('#addTargetForm').clearForm();
 				$('#addTargetModal').modal('hide');
+				$('#targetApplyTable').bootstrapTable('refresh');
+			}
+		})
+	}
+	function saveProject(){
+		$('#projectForm').ajaxSubmit({
+			type:"post",  //提交方式  
+            //dataType:"json", //数据类型'xml', 'script', or 'json'  
+			url: config.api.targetAdd,
+			//			contentType : 'application/json',
+			success: function(result) {
+				$('#projectForm').clearForm();
+				$('#projectModal').modal('hide');
 				$('#targetApplyTable').bootstrapTable('refresh');
 			}
 		})
