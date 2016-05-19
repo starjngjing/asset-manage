@@ -110,16 +110,13 @@ define([
               	      text: '不成立',
               	      type: 'button',
               	      class: 'item-unEstablish',
+              	      isRender: true
               	    },
               	    {
               	    	text: '本息兑付',
               	    	type: 'button',
               	    	class: 'item-interest',
-              	    },
-              	  {
-              	      text: '详情',
-              	      type: 'button',
-              	      class: 'item-detail',
+              	    	isRender: true
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
@@ -181,37 +178,6 @@ define([
                 		  $$.formAutoFix($('#interestForm'), data); // 自动填充表单
                 	  });
                 	  $('#interestModal').modal('show');
-                  },
-                  'click .item-detail': function (e, value, row) {
-                    http.post(config.api.applyGetUserInfo, {
-                      data: {
-                        aoid: row.oid
-                      },
-                      contentType: 'form'
-                    }, function (result) {
-                      $('#detailModal')
-                      .find('.detail-property')
-                      .each(function (index, item) {
-                        switch (index) {
-                          case 0:
-                            item.innerText = result.name || '--'
-                            break
-                          case 1:
-                            item.innerText = result.sex || '--'
-                            break
-                          case 2:
-                            item.innerText = result.company || '--'
-                            break
-                          case 3:
-                            item.innerText = result.position || '--'
-                            break
-                          case 4:
-                            item.innerText = result.phone || '--'
-                            break
-                        }
-                      })
-                      $('#detailModal').modal('show')
-                    })
                   }
                 
               }

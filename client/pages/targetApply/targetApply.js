@@ -269,7 +269,7 @@ define([
 				$("[name='targetStatus']").append('<option value="' + config.targetStates.value[i] + '">' + config.targetStates.name[i] + '</option>')
 			}
 //
-			$("#projectForm input[name='projectType']").change(function() { // 项目类型
+			$(projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if(ptt === 'PROJECTTYPE_01') { // 金融
 					$("#estateDiv").hide();
@@ -283,11 +283,16 @@ define([
 				}
 			});
 //			$("#projectForm :radio[name='warrantor']").click(function() { // 是否有担保人
-//				if($(this).val() == 'yes' )
-//					$('#prjWarrantorInfo').show();
-//				else
-//					$('#prjWarrantorInfo').hide();
-//			});
+			$(projectForm.warrantor).each(function (index, item){
+				console.log(item)
+				$(item).on('ifChecked', function() { // 是否有担保人
+					console.log('aasd')
+					if($(this).val() === 'yes' )
+						$('#prjWarrantorInfo').show();
+					else
+						$('#prjWarrantorInfo').hide();
+				});
+			})
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit
