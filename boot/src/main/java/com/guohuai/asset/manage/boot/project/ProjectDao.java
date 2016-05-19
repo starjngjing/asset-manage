@@ -24,4 +24,10 @@ public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpe
 	@Query(value = "from Project p where p.investment.oid = ?1")
 	public List<Project> findByTargetOid(String targetOid);
 	
+	
+	@Query(value = "delete from T_GAM_PROJECT where oid = ?1 and targetOid = ?2", nativeQuery = true)
+	public void deleteByTargetOidAndOid(String targetOid, String oid);
+	
+	@Query(value = "delete from T_GAM_PROJECT where targetOid = ?1", nativeQuery = true)
+	public void deleteByTargetOid(String targetOid);
 }

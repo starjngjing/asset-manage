@@ -19,6 +19,8 @@ define(function () {
     	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
     	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
+    	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
+    	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
     	saveProject: this.host + "/ams/boot/project/save",//保存底层项目
     	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 		targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询

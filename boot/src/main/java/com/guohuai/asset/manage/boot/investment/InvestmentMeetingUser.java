@@ -1,7 +1,6 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck.InvestmentMeetingCheckBuilder;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;

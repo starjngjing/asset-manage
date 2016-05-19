@@ -299,7 +299,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
@@ -399,7 +399,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
@@ -426,8 +426,9 @@
 	      		<div class="col-sm-12">
 	      			<div class="form-group">
 	      				<label>付息周期</label>
-	      				<button class="btn">1/12</button>
-	      				<button class="btn">2/12</button>
+	      				<input name="seq" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="付息周期" required>
 	      			</div>
 	      		</div>
 	      		
@@ -474,7 +475,7 @@
 				            <div class="input-group-addon">
 				              <i class="fa fa-calendar"></i>
 				            </div>
-				            <input name="incomeRate" type="text"
+				            <input name="incomeDate" type="text"
 				                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
 				                   placeholder="收益支付日">
 				          </div>
@@ -497,7 +498,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>

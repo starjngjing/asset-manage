@@ -576,7 +576,7 @@
 	</div>
 </div>
 <!-- 底层资产管理弹窗 -->
-<div id="assetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+<div id="projectDataModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<!-- 模态窗头部 -->
@@ -596,9 +596,9 @@
 							<div class="box-header">
 								<h3 class="box-title"></h3>
 								<div class="box-tools">
-									<button id="assetAdd" class="btn btn-default btn-sm">
-                    <i class="fa fa-plus"></i> 新建底层资产
-                  </button>
+									<button id="projectAdd" class="btn btn-default btn-sm">
+					                    <i class="fa fa-plus"></i> 新建底层资产
+					                  </button>
 								</div>
 							</div>
 							<!-- Grid内容体 -->
@@ -609,13 +609,13 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label>资产名称</label>
-												<input name="email" type="text" class="form-control input-sm" placeholder="搜索资产名称">
+												<input name="projectName" type="text" class="form-control input-sm" placeholder="搜索资产名称">
 											</div>
 										</div>
 									</div>
 								</form>
 								<!-- 主体数据表格 -->
-								<table id="assetTable" class="table table-bordered table-striped">
+								<table id="projectTable" class="table table-bordered table-striped">
 									<thead>
 										<tr>
 											<th>编号</th>
@@ -980,6 +980,8 @@
 	  </div>
 	</div>
 </div>
+
+
 
 <!-- 新建底层项目弹窗 -->
 <div id="projectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
