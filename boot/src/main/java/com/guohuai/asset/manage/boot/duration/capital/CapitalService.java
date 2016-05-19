@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.duration.fund;
+package com.guohuai.asset.manage.boot.duration.capital;
 
 import java.util.List;
 
@@ -7,13 +7,13 @@ import java.util.List;
  * @author star.zhu
  * 2016年5月16日
  */
-public class AccountService {
+public class CapitalService {
 
 	/**
 	 * 获取所有的出入金明细
 	 * @return
 	 */
-	public List<AccountForm> getAllList() {
+	public List<CapitalForm> getAllList() {
 		
 		return null;
 	}

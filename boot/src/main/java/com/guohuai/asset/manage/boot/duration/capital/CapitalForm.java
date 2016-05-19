@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.duration.fund;
+package com.guohuai.asset.manage.boot.duration.capital;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,7 +13,7 @@ import lombok.Data;
  * 2016年5月16日
  */
 @Data
-public class AccountForm {
+public class CapitalForm {
 
 	@Id
 	private String id;

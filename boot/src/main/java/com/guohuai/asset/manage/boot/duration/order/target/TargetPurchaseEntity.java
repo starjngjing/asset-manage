@@ -49,6 +49,8 @@ public class TargetPurchaseEntity implements Serializable {
 	private String auditor; 
 	// 预约人
 	private String reserver; 
+	// 状态（-1：未审核，0：未确认，1：确认）
+	private String state;
 	// 确认人
 	private String confirmer; 
 	// 操作员

@@ -33,6 +33,8 @@ public class FundRedeemEntity implements Serializable {
 	private Date redeemDate; 
 	// 资金到账日
 	private Date backDate; 
+	// 收益截止日
+	private Date endYield;
 	// 赎回金额
 	private BigDecimal return_amount;
 	// 审核额度

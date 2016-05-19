@@ -29,13 +29,17 @@ public class TargetTransEntity implements Serializable {
 	private String assetPoolTargetOid;
 	// 转让份额
 	private BigDecimal tranVolume;
+	// 审核额度
+	private BigDecimal auditVolume;
+	// 确认额度
+	private BigDecimal investVolume;
 	// 转让日期
 	private Date tranDate; 
 	// 转让溢价
 	private BigDecimal tranCash; 
 	// 转让操作员
 	private String creater;
-	// 状态
+	// 状态（-1：未审核，0：未确认，1：确认）
 	private String state;
 	// 申请人
 	private String asker;
