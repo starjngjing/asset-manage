@@ -40,6 +40,20 @@ public class CashToolService {
 	public CashTool save(CashTool cashTool) {
 		return this.cashToolDao.save(cashTool);
 	}
+	
+	/**
+	 * 根据oid查询现金管理工具
+	 * @Title: findByOid 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid
+	 * @return CashTool    返回类型
+	 */
+	public CashTool findByOid(String oid) {
+		return this.cashToolDao.findOne(oid);
+	}
+	
 	/**
 	 * 分页查询现金管理工具
 	 * @Title: getCashToolList 

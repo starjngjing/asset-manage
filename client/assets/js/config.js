@@ -20,6 +20,11 @@ define(function () {
     	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 		targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 		targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
+		targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
+		targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
+		targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
+		targetCheckPass: this.host + '/ams/target/targetCheck/checkpass', //标的预审通过
+		targetCheckReject: this.host + '/ams/target/targetCheck/checkreject', //标的预审驳回
 		productApplyList: this.host + "/ams/product/apply/list",//查询产品申请列表
 		productAuditList: this.host + "/ams/product/audit/list",//查询产品审核列表
 		productCheckList: this.host + "/ams/product/check/list",//查询产品复核列表

@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface FundPurchaseDao extends JpaRepository<FundPurchaseEntity, String>, JpaSpecificationExecutor<FundPurchaseEntity> {
 
+	public FundPurchaseEntity findByOid(String oid);
 }
