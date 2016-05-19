@@ -25,6 +25,6 @@ public class CCPWarrantorForm {
 	@Digits(integer = 4, fraction = 0)
 	private int highScore;
 	@Digits(integer = 4, fraction = 4)
-	private double weight;
+	private double weight100;
 
 }

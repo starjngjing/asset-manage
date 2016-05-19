@@ -20,7 +20,7 @@ public class CCPWarrantorService {
 	public CCPWarrantor create(CCPWarrantorForm form) {
 
 		CCPWarrantor.CCPWarrantorBuilder builder = CCPWarrantor.builder().oid(StringUtil.uuid());
-		builder.title(form.getTitle()).lowScore(form.getLowScore()).highScore(form.getHighScore()).weight(form.getWeight());
+		builder.title(form.getTitle()).lowScore(form.getLowScore()).highScore(form.getHighScore()).weight(form.getWeight100() / 100);
 
 		CCPWarrantor warrantor = this.ccpWarrantorDao.save(builder.build());
 
@@ -36,7 +36,7 @@ public class CCPWarrantorService {
 		warrantor.setTitle(form.getTitle());
 		warrantor.setLowScore(form.getLowScore());
 		warrantor.setHighScore(form.getHighScore());
-		warrantor.setWeight(form.getWeight());
+		warrantor.setWeight(form.getWeight100() / 100);
 
 		warrantor = this.ccpWarrantorDao.save(warrantor);
 
@@ -45,9 +45,9 @@ public class CCPWarrantorService {
 	}
 
 	@Transactional
-	public void delete(CCPWarrantorForm form) {
+	public void delete(String oid) {
 
-		this.ccpWarrantorDao.delete(form.getOid());
+		this.ccpWarrantorDao.delete(oid);
 
 	}
 
