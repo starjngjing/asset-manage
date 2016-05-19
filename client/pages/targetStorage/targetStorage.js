@@ -60,7 +60,7 @@ define([
 //            	width: 60,
               field: 'type',
               formatter: function (val) {
-            	return util.enum.transform('TARGETTYPE', val);            	
+            	return util.enum.transform('TARGETTYPE', val);
               }
             },
             {// 收益率
@@ -87,14 +87,14 @@ define([
             	}
             },
             { // 已购份额
-            	field: 'state',
+            	field: 'holdAmount',
             	formatter: function (val) {
-            		return '已购份额';
+            		return val;
             	}
             },
             {
 //              field: 'operator',
-              width: 200,
+              width: 260,
               align: 'center',
               formatter: function (val) {
             	  var buttons = [
@@ -107,25 +107,78 @@ define([
             	    {
               	      text: '不成立',
               	      type: 'button',
-              	      class: 'item-unestablish'
+              	      class: 'item-unEstablish',
+              	    },
+              	    {
+              	    	text: '本息兑付',
+              	    	type: 'button',
+              	    	class: 'item-interest',
               	    },
               	  {
               	      text: '详情',
               	      type: 'button',
-              	      class: 'item-detail'
+              	      class: 'item-detail',
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
                   'click .item-establish': function (e, value, row) {
-                	http.get('pages/targetStorage/test.json',
-                	  {},
+                	http.post(config.api.targetDetQuery, {
+                        data: {
+                        	oid:row.oid
+                        },
+                        contentType: 'form'
+                      },
                 	  function (obj) {
-                	  $$.detailAutoFix($('#updateForm'), obj);	// 自动填充详情
-                	  $$.formAutoFix($('#updateForm'), obj); // 自动填充表单
+                    	  var data  = obj.investment;
+                    	  if(!data){
+                    		  toastr.error('标的详情数据不存在', '错误信息', {
+                    			    timeOut: 10000
+                    			  });
+                    	  }
+                	  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
+                	  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
                 	});
-                	$('#updateModal').modal('show');
+                	$('#establishModal').modal('show');
+                  },
+                  'click .item-unEstablish': function (e, value, row) {
+                	  http.post(config.api.targetDetQuery, {
+                		  data: {
+                			  oid:row.oid
+                		  },
+                		  contentType: 'form'
+                	  },
+                	  function (obj) {
+                		  var data  = obj.investment;
+                		  if(!data){
+                			  toastr.error('标的详情数据不存在', '错误信息', {
+                				  timeOut: 10000
+                			  });
+                		  }
+                		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
+                		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
+                	  });
+                	  $('#unEstablishModal').modal('show');
+                  },
+                  'click .item-interest': function (e, value, row) {
+                	  http.post(config.api.targetDetQuery, {
+                		  data: {
+                			  oid:row.oid
+                		  },
+                		  contentType: 'form'
+                	  },
+                	  function (obj) {
+                		  var data  = obj.investment;
+                		  if(!data){
+                			  toastr.error('标的详情数据不存在', '错误信息', {
+                				  timeOut: 10000
+                			  });
+                		  }
+                		  $$.detailAutoFix($('#interestForm'), data);	// 自动填充详情
+                		  $$.formAutoFix($('#interestForm'), data); // 自动填充表单
+                	  });
+                	  $('#interestModal').modal('show');
                   },
                   'click .item-detail': function (e, value, row) {
                     http.post(config.api.applyGetUserInfo, {
@@ -168,6 +221,32 @@ define([
         $('#dataTable').bootstrapTable(tableConfig)
         // 搜索表单初始化
         $$.searchInit($('#searchForm'), $('#dataTable'))
+        
+        // 修改按钮点击事件
+        $("#establishSubmit").click(function(){
+        	$("#establishForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+                //dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.establish,
+        		success:function(data) {
+        			$('#establishModal').modal('hide');
+        		}
+        	});
+        	
+        });
+        
+        // 修改按钮点击事件
+        $("#unEstablishSubmit").click(function(){
+        	$("#unEstablishForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.unEstablish,
+        		success:function(data) {
+        			$('#unEstablishModal').modal('hide');
+        		}
+        	});
+        	
+        });
 
         function getQueryParams (val) {
           var form = document.searchForm
