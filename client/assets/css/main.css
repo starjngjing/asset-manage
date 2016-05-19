@@ -232,3 +232,9 @@ table.treetable tr.expanded span.indenter a:before {
 .modal .nav-tabs-custom .tab-content .btn-area .btn{
   margin-left: 5px;
 }
+
+/* todo-list */
+.todo-list .switcher-arrow{
+  font-size: 18px;
+  cursor: pointer;
+}

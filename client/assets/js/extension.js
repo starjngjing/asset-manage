@@ -10,12 +10,12 @@ define([
   return {
     /**
      * confirm方法，使用 $$.confirm 将一段html结构变成confirm功能弹窗
-     * @param options
-     *      -- options.container：弹窗div，jquery对象
-     *      -- options.trigger：点击trigger呼出弹窗，domNode对象
-     *      -- options.position：弹窗出现位置，string，目前仅支持'bottomLeft'
-     *      -- options.accept：点击确定后触发的回调函数
-     *      -- options.cancel：点击取消后触发的回调函数
+     * @param options json object对象
+     *     -- options.container：弹窗div，jquery对象
+     *     -- options.trigger：点击trigger呼出弹窗，domNode对象
+     *     -- options.position：弹窗出现位置，string，目前仅支持'bottomLeft'
+     *     -- options.accept：点击确定后触发的回调函数
+     *     -- options.cancel：点击取消后触发的回调函数
      */
     confirm: function (options) {
 
@@ -50,6 +50,80 @@ define([
         if (cancelCallback) cancelCallback()
         confirm.hide()
       })
+    },
+    /**
+     * switcher方法，使用 $$.switcher 将一段 <div class="row"></div> 结构变成一段含有左右两侧列表，
+     *              列表项可以左右交换的组件
+     * @param options json object对象
+     *     -- options.container：组件容器 jquery对象
+     *     -- options.fromTitle：左侧列表title string
+     *     -- options.toTitle：右侧列表title string
+     *     -- options.fromArray：左侧列表数据源 数组
+     *     -- options.toArray：右侧列表title 数组
+     *     -- options.field：用于显示的字段名称 string
+     *     -- options.formatter：formatter Function
+     *
+     */
+    switcher: function (options) {
+      var container = options.container
+      var fromTitle = options.fromTitle || '左侧列表'
+      var toTitle = options.toTitle || '右侧列表'
+      var fromArray = options.fromArray || []
+      var toArray = options.toArray || []
+      var field = options.field || 'text'
+      var formatter = options.formatter || null
+
+      var fromList = $('<div class="col-sm-6"><div class="box box-primary"></div></div>')
+      var toList = $('<div class="col-sm-6"><div class="box box-primary"></div></div>')
+      var fromHeader = generateHeader(fromTitle)
+      var toHeader = generateHeader(toTitle)
+      var fromBody = generateBody(fromArray, toArray)
+      var toBody = generateBody(toArray, fromArray, 1)
+
+      fromList.find('.box').append(fromHeader).append(fromBody)
+      toList.find('.box').append(toHeader).append(toBody)
+      container.append(fromList).append(toList)
+
+      function generateHeader (title) {
+        return $('<div class="box-header"><h3 class="box-title">' + title + '</h3></div>')
+      }
+
+      function generateBody (fromArray, toArr, sign) {
+        var body = $('<div class="box-body"></div>')
+        var ul = $('<ul class="todo-list"></ul>')
+        fromArray.forEach(function (item, index) {
+          if (!sign) {
+            ul.append(generateCell(fromList, toList, fromArray, toArr, item, index, sign))
+          } else {
+            ul.append(generateCell(toList, fromList, toArr, fromArray, item, index, sign))
+          }
+        })
+        body.append(ul)
+        return body
+      }
+
+      function generateCell (fromList, toList, fromArr, toArr, source, index, sign) {
+        var li = $('<li></li>')
+        var indexer = $('<span class="handle">' + (index + 1) + '</span>')
+        var innerHTML = $(formatter ? formatter(source[field]) : source[field])
+        var arrow = $('<i class="fa pull-right switcher-arrow ' + (sign ? 'fa-arrow-circle-o-left text-red' : 'fa-arrow-circle-o-right text-green') + '"></i>')
+        li.append(indexer).append(innerHTML).append(arrow)
+
+        arrow.on('click', function () {
+          var currentIndex = fromArr.indexOf(source)
+          fromArr.splice(currentIndex, 1)
+          toArr.push(source)
+
+          fromList.find('li:eq(' + currentIndex + ')').remove()
+          fromList.find('.handle').each(function (index, item) {
+            $(item).html(index + 1)
+          })
+          //toList.find('ul').append(generateCell(toList, fromList))
+        })
+
+        return li
+      }
+
     },
     /**
      * 搜索表单初始化，使用 $$.searchInit 将grid中的搜索表单键盘事件绑定表格刷新
