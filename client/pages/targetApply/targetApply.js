@@ -77,17 +77,19 @@ define([
 					}, {
 						field: 'expIncome',
 						formatter: function(val) {
+							if(val)
 							return val.toFixed(2) + "%";
 						}
 					}, {
 						field: 'expAror',
 						formatter: function(val, row) {
-							if (val == row.expArorSec) {
-								return val.toFixed(2) + "%";
-							} else {
-								var maxAro = parseFloat(row.expArorSec);
-								return val.toFixed(2) + '-' + maxAro.toFixed(2) + "%";
-							}
+							if(val)
+								if (val == row.expArorSec) {
+									return val.toFixed(2) + "%";
+								} else {
+									var maxAro = parseFloat(row.expArorSec);
+									return val.toFixed(2) + '-' + maxAro.toFixed(2) + "%";
+								}
 						}
 					}, {
 						field: 'state',
@@ -120,6 +122,40 @@ define([
 					}, {
 						align: 'center',
 						formatter: function(val, row) {
+						var buttons = [
+		            	    {
+		            	      text: '查看详情',
+		            	      type: 'button',
+		            	      class: 'item-detail',
+		            	      isRender: true
+		            	    },
+		            	    {
+		              	      text: '底层项目',
+		              	      type: 'button',
+		              	      class: 'item-project',
+		              	      isRender: row.state == 'waitPretrial' || row.state == 'reject'
+		              	    },
+		              	    {
+		              	    	text: '提交预审',
+		              	    	type: 'button',
+		              	    	class: 'item-check',
+		              	    	isRender: row.state == 'waitPretrial' || row.state == 'reject'
+		              	    },
+		              	    {
+		              	    	text: '编辑',
+		              	    	type: 'button',
+		              	    	class: 'item-edit',
+		              	    	isRender: row.state == 'waitPretrial' || row.state == 'reject'
+		              	    },
+		              	    {
+		              	      text: '作废',
+		              	      type: 'button',
+		              	      class: 'item-invalid',
+		              	      isRender: row.state != 'invalid'
+		              	    }
+		            	  ];
+	            	  return util.table.formatter.generateButton(buttons);
+							/*
 							var baseBtn = '<a href="javascript:void(0)" class="item-detail">查看详情</a>';
 							if (row.state == 'waitPretrial' || row.state == 'reject') {
 								baseBtn += '<a href="javascript:void(0)" class="item-check">提交预审</a>' +
@@ -131,6 +167,7 @@ define([
 							return '<div class="func-area">' +
 								baseBtn +
 								'</div>'
+								*/
 						},
 						events: {
 							'click .item-check': function(e, value, row) {
