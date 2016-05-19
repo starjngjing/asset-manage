@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.project;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
 import com.guohuai.asset.manage.component.web.view.PageResp;
@@ -26,7 +27,9 @@ public class ProjectListResp extends PageResp<ProjectResp> {
 		this();
 		super.setTotal(total);
 		for (Project approval : Approvals) {
-			super.getRows().add(new ProjectResp(approval));
+			ProjectResp pr = new ProjectResp();
+			BeanUtils.copyProperties(approval, pr);
+			super.getRows().add(pr);
 		}
 	}
 

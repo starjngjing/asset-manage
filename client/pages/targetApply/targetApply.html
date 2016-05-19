@@ -994,32 +994,46 @@
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
-				<div class="row " id="targetDetail">
-					<p class="form-header">标的概况</p>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的编号</label>
-							<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" disabled>
-						</div>
+				<p class="form-header">标的概况</p>
+				<div class="row" id="targetDetail">
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>标的编号</dt>
+							<dd id="detsn">
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的名称</label>
-							<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" disabled>
-						</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>标的名称</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>标的类型</label>
-							<select name='type' class="form-control input-sm" data-enum-fetch="TARGETTYPE" disabled>
-            				</select>
-						</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>标的类型</dt>
+							<dd>
+								<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label>付息方式</label>
-							<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式" disabled>
-						</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>付息方式</dt>
+							<dd>
+								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-3">
+						<dl class="dl-horizontal">
+							<dt>预计收益</dt>
+							<dd>
+								<div data-detail-fetch="expIncome"></div>
+							</dd>
+						</dl>
 					</div>
 				</div>
 				<!-- 新增/编辑事件表单 -->
@@ -1110,7 +1124,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>房地产项目属性</label>
-								<select name='estateProp' class="form-control input-sm" data-enum-fetch="ESTATEPROPTYPE" disabled>
+								<select name='estateProp' class="form-control input-sm" data-enum-fetch="ESTATEPROPTYPE">
             					</select>
 							</div>
 						</div>
@@ -1144,13 +1158,19 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>担保人总资产</label>
-								<input name="warrantorCapital" type="text" class="form-control input-sm" placeholder="担保人总资产">
+								<div class="input-group input-group-sm">
+									<input name="warrantorCapital" type="text" class="form-control input-sm" placeholder="担保人总资产">
+									<span class="input-group-addon">万</span>
+								</div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>担保人负债</label>
-								<input name="warrantorDebt" type="text" class="form-control input-sm" placeholder="担保人总资产">
+								<div class="input-group input-group-sm">
+									<input name="warrantorDebt" type="text" class="form-control input-sm" placeholder="担保人总资产">
+									<span class="input-group-addon">万</span>
+								</div>
 							</div>
 						</div>
 					</div>

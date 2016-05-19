@@ -66,7 +66,9 @@ define([
             {// 收益率
             	field: 'expAror',
             	formatter: function (val) {
-            		return val+"%";
+            		if(val)
+						return val.toFixed(2) + "%";
+            		return val;
             	}
             },
             {
