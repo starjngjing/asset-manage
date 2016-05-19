@@ -281,7 +281,7 @@ define([
           case '[object RadioNodeList]':
             $(domElm).each(function (index, item) {
               if (item.value === (source[key] + '')) {
-                item.checked = true
+                $(item).iCheck('check')
               }
             })
             break
@@ -289,7 +289,6 @@ define([
             break
         }
       }
-      this.inputPluginsInit(form)
     },
     /**
      * 详情内容自动填充
