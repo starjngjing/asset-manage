@@ -311,6 +311,8 @@ define([
         	$(item).html(propValue || '--')
         	break
           case '[object HTMLInputElement]':
+          case '[object HTMLTextAreaElement]':
+          case '[object HTMLSelectElement]':
         	$(item).val(propValue || '--')
           	break
           default:
