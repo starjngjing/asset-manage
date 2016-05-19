@@ -48,132 +48,196 @@ define([
     		onLoadSuccess: function () {},
     		columns: [
     			{
-    				checkbox: true
+    				checkbox: true,
+    				align: 'center'
     			},
     			{
-						field: 'code'
-					},
-					{
-						field: 'name'
-					},
+					field: 'code',
+					align: 'center'
+				},
+				{
+					field: 'name',
+					align: 'center'
+				},
      			{
-						field: 'typeName'
-					},
-					{
-						field: 'administrator'
-					},
-					{
-						width: 30,
-						align: 'center',
-						formatter: function (val, row, index) {
-								return index + 1
+					field: 'typeName',
+					align: 'center'
+				},
+				{
+					field: 'administrator',
+					align: 'center'
+				},
+				{
+					align: 'center',
+					field: 'durationPeriod',
+					formatter: function (val, row, index) {
+						var typeOid = row.typeOid;  
+						if(typeOid=="PRODUCTTYPE_01") {
+							return row.durationPeriod+"天";
+						} else {
+							return "不固定";
 						}
-					},
-					{
-						field: 'expAror',
-						formatter: function (val, row, index) {
-							if(row.expArorSec!=null && row.expAror!=row.expArorSec) {
-								return row.expArorSec+"%"+"~"+row.expArorSec+"%";
-							}
-								return row.expAror+"%";
+					}
+				},
+				{
+					field: 'expAror',
+					align: 'center',
+					formatter: function (val, row, index) {
+						if(row.expArorSec!=null && row.expAror!=row.expArorSec) {
+							return row.expArorSec+"%"+"~"+row.expArorSec+"%";
 						}
-					},
-					{
-						field: 'raisedTotalNumber'
-					},
-					{
-						field: 'netUnitShare'
-					},
-					{
-						width: 30,
-						align: 'center',
-						formatter: function (val, row, index) {
-								return index + 1
-						}
-					},
-					{
-						field: 'createTime',
-						formatter: function (val) {
-								return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
-						}
-					},
-					{
-						width: 170,
-						align: 'center',
-						formatter: function () {
-							return '<div class="func-area">' +
-										'<a href="javascript:void(0)" class="item-update">编辑</a>' +
-										'<a href="javascript:void(0)" class="item-delete">作废</a>' +
-										'<a href="javascript:void(0)" class="item-detail">详情</a>' +
-										'<a href="javascript:void(0)" class="item-selectchannel">选择渠道</a>' +
-									'</div>'
+						return row.expAror+"%";
+					}
+				},
+				{
+					field: 'raisedTotalNumber',
+					align: 'center'
+				},
+				{
+					field: 'netUnitShare',
+					align: 'center'
+				},
+				{
+					align: 'center',
+					formatter: function (val, row, index) {
+						return index + 1
+					}
+				},
+				{
+					field: 'investment',
+					align: 'center'
+				},
+				{
+					field: 'createTime',
+					align: 'center',
+					formatter: function (val) {
+						return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
+					}
+				},
+				{
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [
+		           	    	{
+		           	      		text: '详情',
+		           	      		type: 'button',
+		           	      		class: 'item-detail',
+		           	      		isRender: true
+		           	    	},
+		           	    	{
+		           	    		text: '编辑',
+		           	    		type: 'button',
+		           	    		class: 'item-update',
+		           	    		isRender: true
+		           	    	},
+		           	    	{
+		          	      		text: '作废',
+		           	      		type: 'button',
+		           	      		class: 'item-invalid',
+		           	      		isRender: true
+		           	    	},
+		           	    	{
+		           	    		text: '选择渠道',
+		           	    		type: 'button',
+		           	    		class: 'item-channel',
+		           	    		isRender: true
+		           	    	}
+		           	    ];
+		           	  	return util.table.formatter.generateButton(buttons);
+		           	},
+		           	events: {
+						'click .item-detail': function(e, value, row) {
+							http.post(config.api.productDetail, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								if (result.errorCode == 0) {
+									var data = result;
+									$$.detailAutoFix($('#productDetailForm'), data); // 自动填充详情
+									$$.formAutoFix($('#productDetailForm'), data); // 自动填充表单
+									$('#productDetailModal').modal('show');
+								} else {
+									alert(查询失败);
+								}
+							})
 						},
-						events: {
-							'click .item-update': function (e, value, row) {
-								var form = document.updateForm
-								form.oid.value = row.oid
-								form.openstate.value = row.openState
-								form.remark.value = row.remark
-								$('#updateModal').modal('show')
-							},
-
-							'click .item-detail': function (e, value, row) {
-								http.post(
-									ams.product.detail,
-									{
+						'click .item-check': function(e, value, row) {
+							$("#confirmTitle").html("确定提交预审？")
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.targetExamine, {
 										data: {
-												oid: row.oid
-											},
-											contentType: 'form'
-									},
-									function (result) {
-											$('#detailModal').find('.detail-property').each(function (index, item) {
-													switch (index) {
-														case 0:
-																item.innerText = result.name || '--'
-																break
-														case 1:
-																item.innerText = result.sex || '--'
-																break
-														case 2:
-																item.innerText = result.company || '--'
-																break
-														case 3:
-																item.innerText = result.position || '--'
-																break
-														case 4:
-																item.innerText = result.phone || '--'
-																break
-													}
-											})
-											$('#detailModal').modal('show')
-									}
-								)
-							}
+											oid: row.oid
+										},
+										contentType: 'form',
+									}, function(result) {
+										$('#targetApplyTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						},
+						'click .item-invalid': function(e, value, row) {
+							$("#confirmTitle").html("确定作废产品名称为:")
+							$("#confirmTitle1").html(row.fullName+"的产品吗？")
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									console.log(row.oid)
+									http.post(config.api.productInvalid, {
+										data: {
+											oid: row.oid
+										},
+										contentType: 'form',
+									}, function(result) {
+										$('#productDesignTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						},
+						'click .item-channel': function(e, value, row) {
+							http.post(
+								config.api.channels, {
+		                		  data: {
+		                			  oid:row.oid
+		                		  },
+		                		  contentType: 'form'
+		                		},
+		                		function (obj) {
+		                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
+		                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
+		                		  $('#projectModal').modal('show');
+		                		}
+		                	);
 						}
 					}
-				],
-				// 单选按钮选中一项时
-				onCheck: function (row) {
-					if (checkItems.indexOf(row) < 0){
-						checkItems.push(row)
-					}
 				},
-				// 单选按钮取消一项时
-				onUncheck: function (row) {
-					checkItems.splice(checkItems.indexOf(row), 1)
-				},
-				// 全选按钮选中时
-				onCheckAll: function (rows) {
-					checkItems = rows.map(function (item) {
-						return item
-					})
-				},
-				// 全选按钮取消时
-				onUncheckAll: function () {
-					checkItems = []
+			],
+			// 单选按钮选中一项时
+			onCheck: function (row) {
+				if (checkItems.indexOf(row) < 0){
+					checkItems.push(row)
 				}
+			},
+			// 单选按钮取消一项时
+			onUncheck: function (row) {
+				checkItems.splice(checkItems.indexOf(row), 1)
+			},
+			// 全选按钮选中时
+			onCheckAll: function (rows) {
+				checkItems = rows.map(function (item) {
+					return item
+				})
+			},
+			// 全选按钮取消时
+			onUncheckAll: function () {
+				checkItems = []
 			}
+		}
     	// 数据表格初始化
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
