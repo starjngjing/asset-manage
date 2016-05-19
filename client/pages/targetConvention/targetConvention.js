@@ -16,24 +16,27 @@ define([
 
       // 参会人select2初始化
       var addForm = document.addTargetConventionForm
+
       $(addForm.participant).select2({
+        multiple: "multiple",
         ajax: {
+          //type: 'post',
           url: 'https://api.github.com/search/repositories',
           dataType: 'json',
-          delay: 250,
+          delay: 250,  // 输入->查询 停顿毫秒数
           data: function (params) {
+            console.log(params)
             return {
-              q: params.term,
-              page: params.page
+              q: params.term  // 输入字符串
             }
           },
-          processResults: function (data, params) {
-            params.page = params.page || 1
+          processResults: function (data) {
             return {
-              results: data.items,
-              pagination: {
-                more: (params.page * 30) < data.total_count
-              }
+              results: data.rows.map(function (item) {
+                var showObj = {}
+                showObj.id = item.id
+                showObj.text = item.name
+              })
             }
           },
           cache: true

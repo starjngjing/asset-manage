@@ -235,7 +235,6 @@ define([
         checkboxClass: 'icheckbox_minimal-blue',
         radioClass: 'iradio_minimal-blue'
       })
-      parent.find('.select2').select2()
       parent.find('.datepicker').datetimepicker()
     },
     /**
