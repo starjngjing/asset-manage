@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.system.config.project.warrantor;
+package com.guohuai.asset.manage.boot.system.config.project.warrantyExpire;
 
 import java.math.BigDecimal;
 
@@ -15,17 +15,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CCPWarrantorForm {
+public class CCPWarrantyExpireForm {
 
 	private String oid;
 	@NotNull
 	@NotBlank
 	@NotEmpty
 	private String title;
-	@Digits(integer = 4, fraction = 0)
-	private int lowScore;
-	@Digits(integer = 4, fraction = 0)
-	private int highScore;
 	@Digits(integer = 4, fraction = 4)
 	private BigDecimal weight100;
 

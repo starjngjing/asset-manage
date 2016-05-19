@@ -1,6 +1,7 @@
-package com.guohuai.asset.manage.boot.system.config.project.warrantyExpire;
+package com.guohuai.asset.manage.boot.system.config.project.warrantyMode;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,6 +26,6 @@ public class CCPWarrantyMode implements Serializable {
 	private String oid;
 	private String type;
 	private String title;
-	private double weight;
+	private BigDecimal weight;
 
 }

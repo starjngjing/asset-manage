@@ -163,20 +163,20 @@ define([
 								}
 							})
 						},
-						'click .item-check': function(e, value, row) {
-							$("#confirmTitle").html("确定提交预审？")
-							$$.confirm({
-								container: $('#doConfirm'),
-								trigger: this,
-								accept: function() {
-									http.post(config.api.targetExamine, {
-										data: {
-											oid: row.oid
-										},
-										contentType: 'form',
-									}, function(result) {
-										$('#targetApplyTable').bootstrapTable('refresh')
-									})
+						'click .item-update': function(e, value, row) {
+							http.post(config.api.productDetail, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								if (result.errorCode == 0) {
+									var data = result;
+									$$.detailAutoFix($('#updateProductForm'), data); // 自动填充详情
+									$$.formAutoFix($('#updateProductForm'), data); // 自动填充表单
+									$('#updateProductModal').modal('show');
+								} else {
+									alert(查询失败);
 								}
 							})
 						},
@@ -247,15 +247,15 @@ define([
     		$('#addProductModal').modal('show')
     	})    	
     	// 编辑表单保存按钮点击事件
-    	$('#updateSubmit').on('click', function () {
-    		$('#updateForm').ajaxSubmit({
-      			url: config.api.applyUpdateOpenState,
-      			success: function (addResult) {
-        			$('#updateModal').modal('hide')
-        			$('#productDesignTable').bootstrapTable('refresh')
-      			}
-    		})
-  		})
+    	//$('#updateProductSubmit').on('click', function () {
+    		//$('#updateProductForm').ajaxSubmit({
+      			//url: config.api.applyUpdateOpenState,
+      			//success: function (addResult) {
+        			//$('#updateModal').modal('hide')
+        			//$('#productDesignTable').bootstrapTable('refresh')
+      			//}
+    		//})
+  		//})
 
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
@@ -282,6 +282,26 @@ define([
       			url: config.api.saveCurrent,
       			success: function (addResult) {
         			$('#addProductModal').modal('hide')
+        			$('#productDesignTable').bootstrapTable('refresh')
+      			}
+    			})
+    		}
+  		})
+    	$('#updateProductSubmit').on('click', function () {
+    		var typeOid = $("#typeOid").val();  
+    		if(typeOid=="PRODUCTTYPE_01") {
+    			$('#updateProductForm').ajaxSubmit({
+      			url: config.api.updatePeriodic,
+      			success: function (addResult) {
+        			$('#updateProductModal').modal('hide')
+        			$('#productDesignTable').bootstrapTable('refresh')
+      			}
+    		})
+    		} else {
+    			$('#updateProductForm').ajaxSubmit({
+      			url: config.api.updateCurrent,
+      			success: function (addResult) {
+        			$('#updateProductModal').modal('hide')
         			$('#productDesignTable').bootstrapTable('refresh')
       			}
     			})

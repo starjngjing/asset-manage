@@ -354,7 +354,6 @@
 </div>
 
 <!-- 标的详情弹窗 -->
-<form id="detTargetForm" name="detTargetForm" method="post">
 <div id="targetDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -367,6 +366,7 @@
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
+				<form id="detTargetForm" name="detTargetForm" method="post">
 				<p class="form-header">标的概况</p>
 				<div class="row">
 					<div class="col-sm-6">
@@ -570,13 +570,13 @@
 						<div data-detail-fetch="risk"></div>
 					</dd>
 				</dl>
+				</form>
 			</div>
 		</div>
 	</div>
 </div>
-	</from>
 <!-- 底层资产管理弹窗 -->
-<div id="assetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+<div id="projectDataModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<!-- 模态窗头部 -->
@@ -596,26 +596,26 @@
 							<div class="box-header">
 								<h3 class="box-title"></h3>
 								<div class="box-tools">
-									<button id="assetAdd" class="btn btn-default btn-sm">
-                    <i class="fa fa-plus"></i> 新建底层资产
-                  </button>
+									<button id="projectAdd" class="btn btn-default btn-sm">
+					                    <i class="fa fa-plus"></i> 新建底层资产
+					                  </button>
 								</div>
 							</div>
 							<!-- Grid内容体 -->
 							<div class="box-body">
 								<!-- 搜索项表单 -->
-								<form id="assetSearchForm" name="searchForm" method="post" class="search-body">
+								<form id="projectSearchForm" name="projectSearchForm" method="post" class="search-body">
 									<div class="row">
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label>资产名称</label>
-												<input name="email" type="text" class="form-control input-sm" placeholder="搜索资产名称">
+												<input name="projectName" type="text" class="form-control input-sm" placeholder="搜索资产名称">
 											</div>
 										</div>
 									</div>
 								</form>
 								<!-- 主体数据表格 -->
-								<table id="assetTable" class="table table-bordered table-striped">
+								<table id="projectTable" class="table table-bordered table-striped">
 									<thead>
 										<tr>
 											<th>编号</th>
@@ -981,6 +981,8 @@
 	</div>
 </div>
 
+
+
 <!-- 新建底层项目弹窗 -->
 <div id="projectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
@@ -1139,16 +1141,16 @@
 						</div>
 					</div>
 					<div class="form-group">
-		              <label>是否有担保人</label>
-		              <div class="row form-style">
-		                <div class="col-sm-2">
-		                  <input type="radio" name="warrantor" value="yes" class="icheck" checked> 是
-		                </div>
-		                <div class="col-sm-2">
-		                  <input type="radio" name="warrantor" value="no" class="icheck"> 否
-		                </div>
-		              </div>
-		            </div>
+						 <label>是否有担保人</label>
+						 <div class="row form-style">
+							 <div class="col-sm-2">
+								 <input type="radio" name="warrantor" value="yes" class="icheck" checked> 是
+							 </div>
+							 <div class="col-sm-2">
+								 <input type="radio" name="warrantor" value="no" class="icheck"> 否
+							</div>
+						 </div>
+					</div>
 					<div class="row" id="prjWarrantorInfo">
 						<div class="col-sm-12">
 							<div class="form-group">
@@ -1178,17 +1180,17 @@
 						</div>
 					</div>
 					<div class="form-group">
-		              <label>是否有抵押</label>
-		              <div class="row form-style">
-		                <div class="col-sm-2">
-		                  <input type="radio" name="pledge" value="yes" class="icheck" checked> 是
-		                </div>
-		                <div class="col-sm-2">
-		                  <input type="radio" name="pledge" value="no" class="icheck"> 否
-		                </div>
-		              </div>
-		            </div>
-					<div class="row">
+						<label>是否有抵押</label>
+						<div class="row form-style">
+							<div class="col-sm-2">
+								<input type="radio" name="pledge" value="yes" class="icheck" checked> 是
+							</div>
+							<div class="col-sm-2">
+								<input type="radio" name="pledge" value="no" class="icheck"> 否
+							</div>
+						</div>
+					</div>
+					<div class="row" id="prjPledgeInfo">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押人</label>

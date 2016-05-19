@@ -42,10 +42,7 @@ public class ProductResp extends BaseResp {
 		this.investAdditional = p.getInvestAdditional();//单笔投资追加份额
 		this.netMaxRredeemDay = p.getNetMaxRredeemDay();//单日净赎回上限
 		this.minRredeem = p.getMinRredeem();
-		if (null != p.getAccrualCycle()) {
-			this.accrualCycleOid = p.getAccrualCycle().getOid();
-			this.accrualCycleName = p.getAccrualCycle().getName();
-		}
+		this.accrualCycleOid = p.getAccrualCycleOid();
 		this.purchaseConfirmDate = p.getPurchaseConfirmDate();//申购确认日:()个
 		this.purchaseConfirmDateType = p.getPurchaseConfirmDateType();//申购确认日类型:自然日或交易日
 		this.redeemConfirmDate = p.getRedeemConfirmDate();//赎回确认日:()个

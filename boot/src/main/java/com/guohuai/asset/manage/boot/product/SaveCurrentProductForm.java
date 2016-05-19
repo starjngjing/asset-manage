@@ -64,9 +64,9 @@ public class SaveCurrentProductForm implements Serializable {
 	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")
 	@NotBlank(message = "预期年化收益不可为空")
 	private String expAror;//预期年化收益率
-	@Digits(integer = 4, fraction = 2, message = "预期年化收益参数错误")
+	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")
 	private String expArorSec;//预期年化收益率区间
-	@Digits(integer = 12, fraction = 2, message = "单位份额净值参数错误")
+	@Digits(integer = 12, fraction = 4, message = "单位份额净值参数错误")
 	@NotBlank(message = "单位份额净值不可为空")
 	private String netUnitShare;//单位份额净值
 	@Digits(integer = 12, fraction = 0, message = "单笔投资最低份额参数错误")

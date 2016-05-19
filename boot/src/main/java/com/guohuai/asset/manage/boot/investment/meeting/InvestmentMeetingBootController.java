@@ -1,5 +1,9 @@
 package com.guohuai.asset.manage.boot.investment.meeting;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeeting;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingService;
+import com.guohuai.asset.manage.boot.investment.InvestmentService;
+import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
@@ -34,10 +44,12 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
  */
 @RestController
 @RequestMapping(value = "/ams/target/targetMeeting", produces = "application/json;charset=UTF-8")
-public class InvestmentMeetingBootController {
+public class InvestmentMeetingBootController extends BaseController {
 
 	@Autowired
 	private InvestmentMeetingService investmentMeetingService;
+	@Autowired
+	private InvestmentService investmentService;
 
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<InvestmentMeetingListResp> list(HttpServletRequest request,
@@ -56,5 +68,36 @@ public class InvestmentMeetingBootController {
 		Page<InvestmentMeeting> entitys = investmentMeetingService.getMeetingList(spec, pageable);
 		InvestmentMeetingListResp resps = new InvestmentMeetingListResp(entitys);
 		return new ResponseEntity<InvestmentMeetingListResp>(resps, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "targetList", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentListResp> findInvestmentList(HttpServletRequest request,
+			@And({ @Spec(params = "name", path = "name", spec = Like.class) }) Specification<Investment> spec,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
+			@RequestParam(required = false, defaultValue = "updateTime") String sortField,
+			@RequestParam(required = false, defaultValue = "desc") String sort) {
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Specification<Investment> typeSpec = new Specification<Investment>() {
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_waitMeeting);
+			}
+		};
+		spec = Specifications.where(spec).and(typeSpec);
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		Page<Investment> entitys = investmentService.getInvestmentList(spec, pageable);
+		InvestmentListResp resps = new InvestmentListResp(entitys);
+		return new ResponseEntity<InvestmentListResp>(resps, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "addMeeting", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> addMeeting(AddInvestmentMeetingForm form){
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.addMeeting(form, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK); 
 	}
 }

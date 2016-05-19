@@ -236,7 +236,7 @@ define([
         		//dataType:"json", //数据类型'xml', 'script', or 'json'  
         		url: config.api.targetIncomeSave,
         		success:function(data) {
-        			$('#targetIncomeSubmit').clearForm();
+        			$('#targetIncomeForm').clearForm();
         			$('#targetIncomeModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}

@@ -77,10 +77,8 @@
             <tr>
               <th>编号</th>
               <th>主题</th>
-              <th>与会人</th>
               <th>召开时间</th>
               <th>状态</th>
-              <th>更新时间</th>
               <th>操作</th>
             </tr>
             </thead>
@@ -108,7 +106,7 @@
         <form id="addTargetConventionForm" name="addTargetConventionForm" method="post">
           <div class="form-group">
             <label>会议编号</label>
-            <input name="title" type="text"
+            <input name="sn" type="text"
                    class="form-control input-sm"
                    placeholder="会议编号">
           </div>
@@ -131,10 +129,10 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input name="newsDate" type="text"
+              <input name="conferenceTime" type="text"
                      class="form-control datepicker"
-                     placeholder="从"
-                     data-date-format="YYYY-MM-DD">
+                     placeholder="会议时间"
+                     data-date-format="YYYY-MM-DD HH:mm:ss">
             </div>
           </div>
           <div class="form-group">
@@ -149,7 +147,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="interestSubmit" type="button" class="btn btn-primary btn-submit">修 改</button>
+        <button id="addMeeting" type="button" class="btn btn-primary btn-submit">保存</button>
       </div>
     </div>
   </div>

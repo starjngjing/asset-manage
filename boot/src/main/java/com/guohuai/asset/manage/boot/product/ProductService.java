@@ -135,11 +135,9 @@ public class ProductService {
 			Dict type = this.dictService.get(form.getTypeOid());
 			pb.type(type);
 			// 收益结转周期
-			Dict accrualCycle = this.dictService.get(form.getAccrualCycleOid());
-			pb.accrualCycle(accrualCycle);
+			pb.accrualCycleOid(form.getAccrualCycleOid());
 			// 付利方式
-			Dict payMode = this.dictService.get(form.getPayModeOid());
-			pb.payMode(payMode);
+			pb.payModeOid(form.getPayModeOid());
 		}
 		{
 			pb.payModeDate(form.getPayModeDate());
@@ -203,7 +201,7 @@ public class ProductService {
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
-		{
+		if (null != form.getFiles() && form.getFiles().size() > 0) {
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
@@ -274,7 +272,7 @@ public class ProductService {
 		
 		//未提交审核的可修改
 		if(!Product.AUDIT_STATE_Nocommit.equals(product.getAuditState())) {
-			throw AMPException.getException(30008);
+			throw AMPException.getException(90008);
 		}
 		// 判断是否可以修改 名称类型不变
 		{
@@ -312,19 +310,18 @@ public class ProductService {
 			product.setDurationPeriod(form.getDurationPeriod());
 		}
 		
-		{
-			//募集开始时间  募集期:()个自然日  起息日:募集满额后()个自然日  存续期:()个自然日
-			if(form.getRaiseStatrtDate()!=null) {
-				Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
-				product.setRaiseStartDate(new Timestamp(raiseStatrtDate.getTime()));
-				product.setRaiseEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()).getTime()));//募集结束时间
-				product.setSetupDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()).getTime()));//产品成立时间（存续期开始时间）
-				product.setDurationPeriodEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()+form.getDurationPeriod()).getTime()));//存续期结束时间
-				//到期最晚还本付息日 指存续期结束后的还本付息最迟发生在存续期后的第X个自然日的23:59:59为止
-				Date repayDate = DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()+form.getDurationPeriod()+form.getAccrualDate());
-				String repayDateStr = DateUtil.format(repayDate, DateUtil.datePattern);
-				product.setAccrualLastDate(new Timestamp(DateUtil.parseDate(repayDateStr+" 23:59:59", DateUtil.datetimePattern).getTime()));//到期还款时间
-			}
+		if(Product.DATE_TYPE_FirstRackTime.equals(form.getRaiseStartDateType())) {
+			product.setRaiseStartDate(null);
+		} else {
+			Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
+			product.setRaiseStartDate(new Timestamp(raiseStatrtDate.getTime()));
+			product.setRaiseEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()).getTime()));//募集结束时间
+			product.setSetupDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()).getTime()));//产品成立时间（存续期开始时间）
+			product.setDurationPeriodEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()+form.getDurationPeriod()).getTime()));//存续期结束时间
+			//到期最晚还本付息日 指存续期结束后的还本付息最迟发生在存续期后的第X个自然日的23:59:59为止
+			Date repayDate = DateUtil.addDay(raiseStatrtDate, form.getRaisePeriod()+form.getInterestsFirstDate()+form.getDurationPeriod()+form.getAccrualDate());
+			String repayDateStr = DateUtil.format(repayDate, DateUtil.datePattern);
+			product.setAccrualLastDate(new Timestamp(DateUtil.parseDate(repayDateStr+" 23:59:59", DateUtil.datetimePattern).getTime()));//到期还款时间
 		}
 		{
 			product.setRaisedTotalNumber(form.getRaisedTotalNumber());
@@ -340,15 +337,19 @@ public class ProductService {
 			product.setInstruction(form.getInstruction());
 			product.setRiskLevel(form.getRiskLevel());
 		}
-		String fkey = null;
+		String fkey = StringUtil.EMPTY;
 		{
-			if (StringUtil.isEmpty(product.getFileKeys())) {
-				fkey = StringUtil.uuid();
-				product.setFileKeys(fkey);
-			} else {
-				fkey = product.getFileKeys();
+			if (null != form.getFiles() && form.getFiles().size() > 0) {
+				if (StringUtil.isEmpty(product.getFileKeys())) {
+					fkey = StringUtil.uuid();
+					product.setFileKeys(fkey);
+				} else {
+					fkey = product.getFileKeys();
+				}
 			}
+			
 		}
+		product.setFileKeys(fkey);
 		{
 			// 其它：修改时间、操作人
 			product.setOperator(operator);
@@ -357,10 +358,11 @@ public class ProductService {
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
-		{
+		if (null != form.getFiles() && form.getFiles().size() > 0) {
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
+		
 		return response;
 	}
 	
@@ -383,7 +385,7 @@ public class ProductService {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		//未提交审核的可修改
 		if(!Product.AUDIT_STATE_Nocommit.equals(product.getAuditState())) {
-			throw AMPException.getException(30008);
+			throw AMPException.getException(90008);
 		}
 		// 判断是否可以修改 名称类型不变
 		{
@@ -399,11 +401,9 @@ public class ProductService {
 		
 		{
 			//收益结转周期
-			Dict accrualCycle = this.dictService.get(form.getAccrualCycleOid());
-			product.setAccrualCycle(accrualCycle);
+			product.setAccrualCycleOid(form.getAccrualCycleOid());
 			// 付利方式
-			Dict payMode = this.dictService.get(form.getPayModeOid());
-			product.setPayMode(payMode);
+			product.setPayModeOid(form.getPayModeOid());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
@@ -433,8 +433,10 @@ public class ProductService {
 			product.setRedeemTimingTaskDateType(form.getRedeemTimingTaskDateType());
 			product.setRedeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()));
 			
+			if(Product.DATE_TYPE_FirstRackTime.equals(form.getSetupDateType())) {
+				form.setSetupDate(null);
+			} else {
 			//产品成立时间（存续期开始时间）
-			if(form.getSetupDate()!=null) {
 				Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
 				product.setSetupDate(new Timestamp(setupDate.getTime()));
 			}
@@ -468,22 +470,29 @@ public class ProductService {
 			}
 		}
 		
+		product.setFileKeys(fkey);
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
-		{
+		if (null != form.getFiles() && form.getFiles().size() > 0) {
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
+		
 		return response;
 	}
 	
+	/**
+	 * 产品详情
+	 * @param oid
+	 * @return
+	 */
 	@Transactional
-	public ProductResp read(String oid) {
+	public ProductDetailResp read(String oid) {
 		Product product = this.getProductById(oid);
-		ProductResp pr = new ProductResp(product);
+		ProductDetailResp pr = new ProductDetailResp(product);
 
-		if (null != product.getFileKeys()) {
+		if (!StringUtil.isEmpty(product.getFileKeys())) {
 			List<File> files = this.fileService.list(product.getFileKeys(), File.STATE_Valid);
 			if (files.size() > 0) {
 				pr.setFiles(new ArrayList<FileResp>());

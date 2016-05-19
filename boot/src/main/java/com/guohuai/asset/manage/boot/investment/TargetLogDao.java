@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 
 /**
  * 
- * <p>Title: TargetIncomeDao.java</p>    
- * <p>本息兑付Dao</p>   
+ * <p>Title: TargetLogDao.java</p>    
+ * <p>标的操作日志Dao</p>   
  * @author vania      
  * @version 1.0    
  * @created 2016年5月18日 下午3:31:40
  */
-public interface TargetIncomeDao
-		extends JpaRepository<TargetIncome, String>, JpaSpecificationExecutor<TargetIncome> {
+public interface TargetLogDao
+		extends JpaRepository<TargetLog, String>, JpaSpecificationExecutor<TargetLog> {
 	/**
 	 * 根据投资标的id查询本兮兑付记录
 	 * @Title: findByTargetOid 
@@ -23,9 +23,8 @@ public interface TargetIncomeDao
 	 * @version 1.0
 	 * @see: 
 	 * @param targetOid
-	 * @return
-	 * @return List<Interest>    返回类型 
+	 * @return List<TargetIncome>    返回类型 
 	 */
-	@Query(value = "from TargetIncome p where p.investment.oid = ?1")
+	@Query(value = "from TargetLog p where p.investment.oid = ?1")
 	public List<TargetIncome> findByTargetOid(String targetOid);
 }

@@ -1,5 +1,5 @@
 /**
- * 担保期限权限配置
+ * 担保对象权限配置
  */
 define([
 	'http',
@@ -8,11 +8,12 @@ define([
 	'extension'
 ], function(http, config, util, $$) {
 	return {
-		name: 'ccpWarrantyExpire',
+		name: 'ccpWarranty',
 		init: function() {
+
 			var tableConfig = {
 				ajax: function(origin) {
-					http.post(config.api.system.config.ccp.warrantyExpire.search, {
+					http.post(config.api.system.config.ccp.warrantor.search, {
 						data: {},
 						contentType: 'form'
 					}, function(rlt) {
@@ -23,6 +24,11 @@ define([
 					field: 'oid',
 					formatter: function(val, row, index) {
 						return index + 1
+					}
+				}, {
+					field: 'score',
+					formatter: function(val, row) {
+						return row.lowScore + ' - ' + row.highScore;
 					}
 				}, {
 					field: 'title'
@@ -49,23 +55,23 @@ define([
 					},
 					events: {
 						'click .item-update': function(e, value, row) {
-							$('#updateCcpWarrantyExpireModal').modal('show');
+							$('#updateCcpWarrantorModal').modal('show');
 							row.weight100 = parseInt(row.weight * 100);
-							$$.formAutoFix($('#updateCcpWarrantyExpireForm'), row);
+							$$.formAutoFix($('#updateCcpWarrantorForm'), row);
 						},
 						'click .item-delete': function(e, value, row) {
-							$("#confirmTitle").html("确定删除担保期限权数配置？");
+							$("#confirmTitle").html("确定删除担保对象权数配置？");
 							$$.confirm({
-								container: $('#deleteCcpWarrantyExpireModal'),
+								container: $('#deleteCcpWarrantorModal'),
 								trigger: this,
 								accept: function() {
-									http.post(config.api.system.config.ccp.warrantyExpire.delete, {
+									http.post(config.api.system.config.ccp.warrantor.delete, {
 										data: {
 											oid: row.oid
 										},
 										contentType: 'form'
 									}, function(result) {
-										$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+										$('#ccpWarrantorTable').bootstrapTable('refresh');
 									})
 								}
 							})
@@ -75,33 +81,34 @@ define([
 				}]
 			};
 
-			$('#ccpWarrantyExpireTable').bootstrapTable(tableConfig);
+			$('#ccpWarrantorTable').bootstrapTable(tableConfig);
 
-			$('#ccpWarrantyExpireAdd').on('click', function() {
-				$('#addCcpWarrantyExpireModal').modal('show');
+			$('#ccpWarrantorAdd').on('click', function() {
+				$('#addCcpWarrantorModal').modal('show');
 			});
 
-			$('#saveCcpWarrantyExpire').on('click', function() {
-				$('#addCcpWarrantyExpireForm').ajaxSubmit({
-					url: config.api.system.config.ccp.warrantyExpire.create,
+			$('#saveCcpWarrantor').on('click', function() {
+				$('#addCcpWarrantorForm').ajaxSubmit({
+					url: config.api.system.config.ccp.warrantor.create,
 					success: function(result) {
-						$('#addCcpWarrantyExpireForm').clearForm();
-						$('#addCcpWarrantyExpireModal').modal('hide');
-						$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+						$('#addCcpWarrantorForm').clearForm();
+						$('#addCcpWarrantorModal').modal('hide');
+						$('#ccpWarrantorTable').bootstrapTable('refresh');
 					}
 				})
 			});
 
-			$('#updateCcpWarrantyExpire').on('click', function() {
-				$('#updateCcpWarrantyExpireForm').ajaxSubmit({
-					url: config.api.system.config.ccp.warrantyExpire.update,
+			$('#updateCcpWarrantor').on('click', function() {
+				$('#updateCcpWarrantorForm').ajaxSubmit({
+					url: config.api.system.config.ccp.warrantor.update,
 					success: function(result) {
-						$('#updateCcpWarrantyExpireForm').clearForm();
-						$('#updateCcpWarrantyExpireModal').modal('hide');
-						$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+						$('#updateCcpWarrantorForm').clearForm();
+						$('#updateCcpWarrantorModal').modal('hide');
+						$('#ccpWarrantorTable').bootstrapTable('refresh');
 					}
 				})
 			});
+
 		}
 	}
 })

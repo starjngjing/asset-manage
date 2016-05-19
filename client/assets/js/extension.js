@@ -239,7 +239,9 @@ define([
         checkboxClass: 'icheckbox_minimal-blue',
         radioClass: 'iradio_minimal-blue'
       })
-      parent.find('.datepicker').datetimepicker()
+      parent.find('.datepicker').datetimepicker({
+        showClear: true
+      })
     },
     /**
      * 枚举值填充表单元素 区域内初始化
@@ -281,7 +283,7 @@ define([
           case '[object RadioNodeList]':
             $(domElm).each(function (index, item) {
               if (item.value === (source[key] + '')) {
-                item.checked = true
+                $(item).iCheck('check')
               }
             })
             break
@@ -289,7 +291,6 @@ define([
             break
         }
       }
-      this.inputPluginsInit(form)
     },
     /**
      * 详情内容自动填充

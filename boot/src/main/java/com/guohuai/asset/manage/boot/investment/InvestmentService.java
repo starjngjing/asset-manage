@@ -1,6 +1,5 @@
 package com.guohuai.asset.manage.boot.investment;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 
 import javax.transaction.Transactional;

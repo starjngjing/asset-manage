@@ -90,7 +90,23 @@ public class ProjectController extends BaseController {
 		approvalReq.setCreator(loginId);
 		approvalReq.setOperator(loginId);
 		Project prj = projectService.save(approvalReq);
-		return CommonResp.builder().errorCode(1).errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
+		return CommonResp.builder().errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
+	}
+	
+	/**
+	 * 删除底层项目
+	 * @Title: deleteProject 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param approvalReq
+	 * @return CommonResp    返回类型
+	 */
+	@RequestMapping(value = "deleteProject")
+	public CommonResp deleteProject(@RequestParam String targetOid, @RequestParam String oid) {
+		log.info("删除投资标的id=" + targetOid + "的底层项目id=" + oid);
+		projectService.deleteByTargetOidAndOid(targetOid, oid);
+		return CommonResp.builder().errorMessage("删除底层项目成功！").attached(oid).build();
 	}
 
 	/**

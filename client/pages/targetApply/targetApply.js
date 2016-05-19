@@ -10,8 +10,10 @@ define([
 	return {
 		name: 'targetApply',
 		init: function() {
+
 			// js逻辑写在这里
 			// 分页配置
+			var targetInfo ; // 缓存 选中的某一行的 投资标的信息
 			var pageOptions = {
 					number: 1,
 					size: 10,
@@ -222,39 +224,123 @@ define([
 								})
 							},
 							'click .item-project': function(e, value, row) {
-								http.post(config.api.targetDetQuery, {
-			                		  data: {
-			                			  oid:row.oid
-			                		  },
-			                		  contentType: 'form'
-			                	  },
-			                	  function (obj) {
-			                		  var data  = obj.investment;
-			                		  if(!data){
-			                			  toastr.error('标的详情数据不存在', '错误信息', {
-			                				  timeOut: 10000
-			                			  });
-			                		  }
-			                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
-			                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
-			                		  
-			                		  $$.detailAutoFix($('#projectForm'), data);	// 自动填充详情
-			                		  $$.formAutoFix($('#projectForm'), data); // 自动填充表单
-			                		  $('#projectModal').modal('show');
-			                	  });
+								targetInfo = row; // 变更某一行 投资标的信息
+								console.log(targetInfo)
+								//111
+								// 初始化底层项目表格
+								$('#projectTable').bootstrapTable(projectTableConfig)
+								$$.searchInit($('#projectSearchForm'), $('#projectTable'))
+								$('#projectDataModal').modal('show');
+
 							}
 						}
 					}]
-				}
+				};
+					
+			
+			var prjPageOptions = {}
+			var projectTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.targetProjectList, {
+						data: prjPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pageOptions.number,
+				pageSize: pageOptions.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function (val) {
+					var form = document.projectSearchForm
+					prjPageOptions.rows = val.limit
+					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
+					prjPageOptions.targetOid = targetInfo.oid.trim();
+					prjPageOptions.projectName = form.projectName.value.trim();
+					return val
+				},
+				columns: [
+				  {
+					  //编号
+					 field: 'oid',
+					 width:60,
+				  },
+				  {
+					  //项目名称
+					  field: 'projectName',
+				  },
+				  {
+					  //项目项目经理
+					  field: 'projectManager',
+				  },
+				  {
+					  //项目项目类型
+					  field: 'projectType',
+				  },
+				  {
+					  //城市
+					  field: 'projectCity',
+				  },
+				  {
+					  //创建时间
+					  field: 'createTime',
+				  },{
+					  //操作
+					  align: 'center',
+					  formatter: function(val, row) {
+					  var buttons = [
+		            	    {
+		            	      text: '删除',
+		            	      type: 'button',
+		            	      class: 'item-delete',
+		            	      isRender: true
+		            	    }
+		            	  ];
+	            	  return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-delete': function(e, value, row) { // 删除底层项目
+							$("#confirmTitle").html("确定删除底层项目？")
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									console.log('targetInfo===>' + JSON.stringify(targetInfo));
+									console.log('项目row===>' + JSON.stringify(row));
+									http.post(config.api.targetProjectDelete, {
+										data: {
+											targetOid: targetInfo.oid,
+											oid: row.oid
+										},
+										contentType: 'form'
+									}, function(result) {
+										if (result.errorCode == 0) {
+											
+											$('#projectTable').bootstrapTable('refresh');
+										} else {
+											alert('删除底层项目失败');
+										}
+									})
+								}
+							})			
+							
+						}
+					}
+				  }
+				]
+			};
 				// 初始化表格
 			$('#targetApplyTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-				// 新建标的按钮点击事件
-			$('#targetAdd').on('click', function() {
-					$('#addTargetModal').modal('show')
-				})
-				// 新建底层资产按钮点击事件
+			// 新建标的按钮点击事件
+            $('#targetAdd').on('click', function() {
+               $('#addTargetModal').modal('show')
+            })
+           // 新建底层资产按钮点击事件
+				
 			$('#assetAdd').on('click', function() {
 				$('#addAssetModal').modal('show')
 			})
@@ -262,14 +348,19 @@ define([
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
-			$('#projectSubmit').on('click', function() {
+			
+			// 新建底层项目按钮点击事件
+			$('#projectAdd').on('click', function() {
+				$('#projectModal').modal('show');
+			})
+			$('#projectSubmit').on('click', function() { 
 				saveProject();
 			})
 			for (var i = 0; i < config.targetStates.name.length; i++) {
 				$("[name='targetStatus']").append('<option value="' + config.targetStates.value[i] + '">' + config.targetStates.name[i] + '</option>')
 			}
-//
-			$(projectForm.projectType).change(function() { // 项目类型
+
+			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if(ptt === 'PROJECTTYPE_01') { // 金融
 					$("#estateDiv").hide();
@@ -282,17 +373,25 @@ define([
 					$("#financeDiv").hide();
 				}
 			});
-//			$("#projectForm :radio[name='warrantor']").click(function() { // 是否有担保人
-			$(projectForm.warrantor).each(function (index, item){
-				console.log(item)
-				$(item).on('ifChecked', function() { // 是否有担保人
-					console.log('aasd')
+
+			$(document.projectForm.warrantor).each(function (index, item){
+				$(item).on('ifChecked', function(e) { // 是否有担保人
 					if($(this).val() === 'yes' )
 						$('#prjWarrantorInfo').show();
 					else
 						$('#prjWarrantorInfo').hide();
 				});
 			})
+			
+			$(document.projectForm.pledge).each(function (index, item){
+				$(item).on('ifChecked', function(e) { // 是否有抵押人
+					if($(this).val() === 'yes' )
+						$('#prjPledgeInfo').show();
+					else
+						$('#prjPledgeInfo').hide();
+				});
+			})
+
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit

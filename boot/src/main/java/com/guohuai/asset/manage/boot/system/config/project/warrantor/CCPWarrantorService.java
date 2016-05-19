@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -20,7 +21,7 @@ public class CCPWarrantorService {
 	public CCPWarrantor create(CCPWarrantorForm form) {
 
 		CCPWarrantor.CCPWarrantorBuilder builder = CCPWarrantor.builder().oid(StringUtil.uuid());
-		builder.title(form.getTitle()).lowScore(form.getLowScore()).highScore(form.getHighScore()).weight(form.getWeight100() / 100);
+		builder.title(form.getTitle()).lowScore(form.getLowScore()).highScore(form.getHighScore()).weight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		CCPWarrantor warrantor = this.ccpWarrantorDao.save(builder.build());
 
@@ -36,7 +37,7 @@ public class CCPWarrantorService {
 		warrantor.setTitle(form.getTitle());
 		warrantor.setLowScore(form.getLowScore());
 		warrantor.setHighScore(form.getHighScore());
-		warrantor.setWeight(form.getWeight100() / 100);
+		warrantor.setWeight(form.getWeight100().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
 
 		warrantor = this.ccpWarrantorDao.save(warrantor);
 

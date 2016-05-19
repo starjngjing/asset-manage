@@ -75,20 +75,14 @@ public class Product implements Serializable {
 	public static final String PRODUCT_STATUS_endWaitCalc = "endWaitCalc";
 	public static final String PRODUCT_STATUS_abortionEnd = "abortionEnd";
 	public static final String PRODUCT_STATUS_end = "end";
-	
-	
-	
-	
 
-	public static final String RETURN_CYCLE_Month = "MONTH";//按月
-	public static final String RETURN_CYCLE_Day = "DAY";//按日
+	public static final String UNIT_Day = "DAY";//按日
+	public static final String UNIT_Week = "WEEK";
+	public static final String UNIT_Month = "MONTH";
+	public static final String UNIT_Year = "YEAR";
 	
 	public static final String DATE_TYPE_Natrue = "NATRUE";//自然日
 	public static final String DATE_TYPE_Trade = "TRADE";//交易日
-	
-	public static final String RISK_LEVEL_Low = "LOW";//低
-	public static final String RISK_LEVEL_Mid = "MID";//
-	public static final String RISK_LEVEL_High = "HIGH";//低
 	
 	public static final String AUDIT_STATE_Nocommit = "NOCOMMIT";//未提交审核
 	public static final String AUDIT_STATE_Auditing = "AUDITING";//待审核(已经提交:审核中)
@@ -106,9 +100,7 @@ public class Product implements Serializable {
 	public static final String DATE_TYPE_ManualInput  = "MANUALINPUT";//固定时间(手动录入时间)
 	public static final String DATE_TYPE_FirstRackTime  = "FIRSTRACKTIME";//;与首次上架时间同时
 	
-	public static final String UNIT_Month = "MONTH";
-	public static final String UNIT_Year = "YEAR";
-	public static final String UNIT_Day = "DAY";
+	
 	
 	@Id
 	private String oid;//产品序号
@@ -124,12 +116,8 @@ public class Product implements Serializable {
 	private String incomeCalcBasis;//收益计算基础
 	private BigDecimal manageRate;//托管费率
 	private BigDecimal fixedManageRate;//固定管理费率
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "accrualCycleOid", referencedColumnName = "oid")
-	private Dict accrualCycle;//收益结转周期
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "payModeOid", referencedColumnName = "oid")
-	private Dict payMode;//付利方式
+	private String accrualCycleOid;//收益结转周期
+	private String payModeOid;//付利方式
 	private int payModeDate;//付利具体几号
 	private String raiseStartDateType;//募集开始时间类型
 	private Timestamp raiseStartDate;//募集开始时间

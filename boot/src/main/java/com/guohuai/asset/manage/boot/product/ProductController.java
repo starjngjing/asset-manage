@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
@@ -44,7 +46,10 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/save/periodic", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BaseResp> savePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && form.getRaiseStatrtDate()==null) {
+			throw AMPException.getException(90009);
+		}
 		BaseResp repponse = this.productService.savePeriodic(form, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -58,14 +63,17 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> saveCurrent(@Valid SaveCurrentProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
+		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && form.getSetupDate()==null) {
+			throw AMPException.getException(90010);
+		}
 		BaseResp repponse = this.productService.saveCurrent(form, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
 	public ResponseEntity<ProductResp> delete(@RequestParam(required = true) String oid) {
-		String operator = super.getLoginAdmin();
+		String operator = null;//super.getLoginAdmin();
 		Product product = this.productService.delete(oid, operator);
 		return new ResponseEntity<ProductResp>(new ProductResp(product), HttpStatus.OK);
 	}
@@ -78,7 +86,11 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/update/periodic", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BaseResp> updatePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
-		String operator = super.getLoginAdmin();
+		String operator = null;//super.getLoginAdmin();
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && form.getRaiseStatrtDate()==null) {
+			throw AMPException.getException(90009);
+		}
+			
 		BaseResp repponse = this.productService.updatePeriodic(form, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -92,6 +104,9 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> updateCurrent(@Valid SaveCurrentProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
+		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && form.getSetupDate()==null) {
+			throw AMPException.getException(90010);
+		}
 		BaseResp repponse = this.productService.updateCurrent(form, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -103,9 +118,9 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/detail", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public ResponseEntity<ProductResp> detail(@RequestParam(required = true) String oid) {
-		ProductResp pr = this.productService.read(oid);
-		return new ResponseEntity<ProductResp>(pr, HttpStatus.OK);
+	public ResponseEntity<ProductDetailResp> detail(@RequestParam(required = true) String oid) {
+		ProductDetailResp pr = this.productService.read(oid);
+		return new ResponseEntity<ProductDetailResp>(pr, HttpStatus.OK);
 	}
 	
 	/**
