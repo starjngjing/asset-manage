@@ -54,7 +54,6 @@ public class TargetService {
 		Investment entity = investmentService.getInvestmentDet(oid);
 		if (null != entity) {
 			form.setTargetOid(entity.getSn());
-			form
 		}
 		
 		return form;
