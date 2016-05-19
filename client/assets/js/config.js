@@ -2,7 +2,7 @@
  * 配置项，提供全局使用各项配置
  * amd模块，使用requirejs载入
  */
- 
+
 define(function () {
 //  this.host = 'http://www.guohuaigroup.com'
   this.host = ''
@@ -43,7 +43,11 @@ define(function () {
     	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 		cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 		cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
-		cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核
+		cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核			
+		meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10',
+		meetingTarget: this.host + '/ams/target/targetMeeting/targetList',
+		meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting',
+		meetingList: this.host + '/ams/target/targetMeeting/list',
     	system: {
     		config: {
     			ccp: {
@@ -80,9 +84,8 @@ define(function () {
      * conventionStates 过会状态
      */
     conventionStates: {
-
-    },
-    cashtoolStates: [{
+		},
+		cashtoolStates: [{
 			id: "waitPretrial",
 			text: "未审核",
 			children: []
@@ -115,9 +118,14 @@ define(function () {
 			text: "否",
 			children: []
 		}],
-    /**
-     * 图标所用到的主题颜色
-     */
-    colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
-  }
+		meetingStates: [{
+			id: "notopen",
+			text: "未举行",
+			children: []
+		}],
+		/**
+		 * 图标所用到的主题颜色
+		 */
+		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
+	}
 })

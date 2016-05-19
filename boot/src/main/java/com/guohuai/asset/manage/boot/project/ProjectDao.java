@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpecificationExecutor<Project> {
@@ -25,9 +26,11 @@ public interface ProjectDao extends JpaRepository<Project, Serializable>, JpaSpe
 	public List<Project> findByTargetOid(String targetOid);
 	
 	
-	@Query(value = "delete from T_GAM_PROJECT where oid = ?1 and targetOid = ?2", nativeQuery = true)
+	@Modifying
+	@Query(value = "DELETE FROM T_GAM_PROJECT WHERE oid = ?2 and targetOid = ?1", nativeQuery = true)
 	public void deleteByTargetOidAndOid(String targetOid, String oid);
 	
-	@Query(value = "delete from T_GAM_PROJECT where targetOid = ?1", nativeQuery = true)
+	@Modifying
+	@Query(value = "DELETE FROM T_GAM_PROJECT WHERE targetOid = ?1", nativeQuery = true)
 	public void deleteByTargetOid(String targetOid);
 }

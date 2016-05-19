@@ -61,10 +61,10 @@ public class SavePeriodicProductForm implements Serializable {
 	@Range(min = 1, max = 240, message = "存续期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "存续期参数错误")
 	private int durationPeriod;//存续期:()个自然日
-	@Digits(integer = 4, fraction = 2, message = "预期年化收益参数错误")
+	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")
 	@NotBlank(message = "预期年化收益不可为空")
 	private String expAror;//预期年化收益率
-	@Digits(integer = 4, fraction = 2, message = "预期年化收益参数错误")
+	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")
 	private String expArorSec;//预期年化收益率区间
 	@Digits(integer = 12, fraction = 0, message = "募集总份额参数错误")
 	@Min(value = 1, message = "募集总份额参数错误")

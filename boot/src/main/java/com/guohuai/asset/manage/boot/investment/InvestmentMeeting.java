@@ -31,9 +31,12 @@ import lombok.NoArgsConstructor;
 public class InvestmentMeeting extends UUID implements Serializable {
 
 	private static final long serialVersionUID = -248787174503909861L;
+	
+	public static final String MEETING_STATE_NOTOPEN = "notopen"; //未举行
+	
 	private String sn;
 	private String title;
-	private String tate;
+	private String state;
 	private Timestamp conferenceTime;
 	private String creator;
 	private String operator;
