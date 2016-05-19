@@ -155,7 +155,13 @@ public class InvestmentPoolController extends BaseController {
 		log.debug("投资标的成立接口!!!");
 		Investment ist = new Investment();
 		BeanUtils.copyProperties(form, ist);
-//		this.investmentService.establish(ist);
+		String loginId = null; 
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			
+		}
+		this.investmentService.establish(ist, loginId);
 		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
 	}
 

@@ -81,6 +81,7 @@ public class InvestmentService {
 		if(null == old)
 			throw AMPException.getException("未知的投资标的ID");
 		BeanUtils.copyProperties(entity, old);
+		old.setState(Investment.INVESTMENT_STATUS_establish); // 重置为成立
 		this.investmentDao.save(old);
 		return entity;
 	}
