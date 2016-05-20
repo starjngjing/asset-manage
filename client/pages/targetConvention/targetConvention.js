@@ -11,7 +11,7 @@ define([
 		name: 'targetConvention',
 		init: function() {
 			// js逻辑写在这里
-			$('#targetConventionReportModal').modal('show')
+
 			// 分页配置
 			var pageOptions = {
 					number: 1,
@@ -139,6 +139,57 @@ define([
 				},
 				minimumInputLength: 1
 			})
+
+			// 会议报告表格配置
+			var targetConventionReportTableConfig = {
+				data: [{
+					name: '十一届三中全会'
+				}],
+				detailView: true,
+				onExpandRow: function (index, row, $detail) {
+					var table = $('<table><thead><tr>' +
+												'<th>角色名称</th>' +
+												'<th>投票意见</th>' +
+												'<th>投票人</th>' +
+												'<th>时间</th>' +
+											'</tr></thead></table>')
+					var tableConfig = {
+						data: [{
+							role: '投资人',
+							comment: '同意',
+							name: '张三',
+							date: '2015-01-01'
+						}],
+						columns: [
+							{
+								field: 'role',
+								align: 'center'
+							},
+							{
+								field: 'comment',
+								align: 'center'
+							},
+							{
+								field: 'name',
+								align: 'center'
+							},
+							{
+								field: 'date',
+								align: 'center'
+							}
+						]
+					}
+					$detail.append(table)
+					$(table).bootstrapTable(tableConfig)
+				},
+				columns: [
+					{
+						field: 'name'
+					}
+				]
+			}
+
+			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
 			
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
