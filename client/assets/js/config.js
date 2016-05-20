@@ -80,6 +80,11 @@ define(function () {
     					delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
     					search: this.host + "/ams/system/ccp/warrantyExpire/search"
     				}
+    			},
+    			ccr: {
+    				indicate: {
+    					search: this.host + "/ams/system/ccr/indicate/search"
+    				}
     			}
     		}
     	}
