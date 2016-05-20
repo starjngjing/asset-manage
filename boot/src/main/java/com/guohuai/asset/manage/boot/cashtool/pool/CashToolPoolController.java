@@ -43,7 +43,6 @@ import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
-import com.guohuai.asset.manage.boot.investment.pool.TargetIncomeForm;
 import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
@@ -74,6 +73,8 @@ public class CashToolPoolController extends BaseController {
 	CashToolDao cashToolDao;
 	@Autowired
 	CashToolService cashToolService;
+	@Autowired
+	CashtoolRevenueService cashToolRevenueService;
 
 	
 
@@ -229,18 +230,18 @@ public class CashToolPoolController extends BaseController {
 	 * @param interest
 	 * @return CommonResp 返回类型
 	 */
-	@RequestMapping("targetIncomeSave")
+	@RequestMapping("cashToolRevenueSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public CommonResp interestSave(@Valid TargetIncomeForm interestForm) {
+	public CommonResp cashToolRevenueSave(@Valid CashToolRevenueForm cashToolRevenueForm) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
 		} catch (Exception e) {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
-		interestForm.setOperator(loginId);
-//		TargetIncome interest = targetIncomeService.save(interestForm);
-		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached("").build();
+		cashToolRevenueForm.setOperator(loginId);
+		CashToolRevenue cashToolRevenue = cashToolRevenueService.save(cashToolRevenueForm);
+		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(cashToolRevenue.getOid()).build();
 	}
 
 	/**

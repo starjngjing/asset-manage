@@ -184,15 +184,15 @@ define([
         // 搜索表单初始化
         $$.searchInit($('#searchForm'), $('#dataTable'))
         
-        // 修改按钮点击事件
-        $("#establishSubmit").click(function(){
-        	$("#establishForm").ajaxSubmit({
+        // 收益采集 按钮点击事件
+        $("#interestSubmit").click(function(){
+        	$("#interestForm").ajaxSubmit({
         		type:"post",  //提交方式  
                 //dataType:"json", //数据类型'xml', 'script', or 'json'  
-        		url: config.api.establish,
+        		url: config.api.cashToolRevenueSave,
         		success:function(data) {
-        			$('#establishForm').clearForm();
-        			$('#establishModal').modal('hide');
+        			$('#interestForm').clearForm();
+        			$('#interestModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});

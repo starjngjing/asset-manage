@@ -22,6 +22,7 @@ define(function () {
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
     	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
     	removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
+    	cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
     	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
     	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
     	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目

@@ -7,8 +7,9 @@
  * you entered into with Founder.   
  *   
  */
-package com.guohuai.asset.manage.boot.cashtool;
+package com.guohuai.asset.manage.boot.cashtool.pool;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -18,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guohuai.asset.manage.component.persist.UUID;
@@ -35,38 +37,41 @@ import lombok.NoArgsConstructor;
  * @date 2016年5月16日 上午10:15:56
  *
  */
-@Entity
-@Table(name = "T_GAM_CASHTOOL_REVENUE")
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CashToolRevenue extends UUID {
+public class CashToolRevenueForm implements Cloneable, Serializable {
 
-	private static final long serialVersionUID = -3696995771339594216L;
+	/**
+	 * @Fields serialVersionUID : TODO
+	 */
+
+	private static final long serialVersionUID = -2361258913434461386L;
 
 	/**
 	 * 关联现金管理工具
 	 */
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "cashtoolOid", referencedColumnName = "oid")
-	@JsonBackReference
-	private CashTool cashTool;
-	
+	@NotNull(message = "关联现金管理工具id不能为空")
+	private String cashtoolOid;
+
 	/**
 	 * 交易日期
 	 */
+	@NotNull(message = "交易日期不能为空")
 	private Timestamp dailyProfitDate;
 
 	/**
 	 * 万份收益
 	 */
+	@NotNull(message = "万份收益不能为空")
 	private BigDecimal dailyProfit;
 
 	/**
 	 * 7日年化收益率
 	 */
+	@NotNull(message = "7日年化收益率不能为空")
 	private BigDecimal weeklyYield;
 
 	/**
