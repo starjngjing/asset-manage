@@ -95,7 +95,7 @@ define([
               	    {
               	    	text: '收益采集',
               	    	type: 'button',
-              	    	class: 'item-interest',
+              	    	class: 'item-cashToolRevenue',
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
@@ -123,7 +123,7 @@ define([
 						})
                 	  
                   },
-                  'click .item-interest': function (e, value, row) { // 收益采集
+                  'click .item-cashToolRevenue': function (e, value, row) { // 收益采集-显示弹窗
                 	  http.post(config.api.cashtoolDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -131,16 +131,17 @@ define([
                 		  contentType: 'form'
                 	  },
                 	  function (obj) {
-                		  var data  = obj.data;
+                		  var data = obj.data;
                 		  if(!data){
                 			  toastr.error('现金管理工具详情数据不存在', '错误信息', {
                 				  timeOut: 10000
                 			  });
                 		  }
                 		  $$.detailAutoFix($('#cashToolDetail'), data);	// 自动填充详情
-                		  $$.formAutoFix($('#interestForm'), data); // 自动填充表单
+                		  $$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
+                		  console.log("data======>" + JSON.stringify(data));
                 	  });
-                	  $('#interestModal').modal('show');
+                	  $('#cashToolRevenueModal').modal('show');
                   },
                   'click .item-detail': function (e, value, row) { // 详情
                     http.post(config.api.applyGetUserInfo, {
@@ -149,27 +150,7 @@ define([
                       },
                       contentType: 'form'
                     }, function (result) {
-                      $('#detailModal')
-                      .find('.detail-property')
-                      .each(function (index, item) {
-                        switch (index) {
-                          case 0:
-                            item.innerText = result.name || '--'
-                            break
-                          case 1:
-                            item.innerText = result.sex || '--'
-                            break
-                          case 2:
-                            item.innerText = result.company || '--'
-                            break
-                          case 3:
-                            item.innerText = result.position || '--'
-                            break
-                          case 4:
-                            item.innerText = result.phone || '--'
-                            break
-                        }
-                      })
+                      
                       $('#detailModal').modal('show')
                     })
                   }
@@ -185,14 +166,14 @@ define([
         $$.searchInit($('#searchForm'), $('#dataTable'))
         
         // 收益采集 按钮点击事件
-        $("#interestSubmit").click(function(){
-        	$("#interestForm").ajaxSubmit({
+        $("#cashToolRevenueSubmit").click(function(){
+        	$("#cashToolRevenueForm").ajaxSubmit({
         		type:"post",  //提交方式  
                 //dataType:"json", //数据类型'xml', 'script', or 'json'  
         		url: config.api.cashToolRevenueSave,
         		success:function(data) {
-        			$('#interestForm').clearForm();
-        			$('#interestModal').modal('hide');
+        			$('#cashToolRevenueForm').clearForm();
+        			$('#cashToolRevenueModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});
