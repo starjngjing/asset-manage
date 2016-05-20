@@ -14,6 +14,8 @@ define(function () {
      * 
      */
     api: {
+			yup: this.host + '/yup',                                       // 文件上传服务
+
       dictList: this.host + '/ams/dict/list',                // 枚举值获取接口
     	establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
     	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
@@ -23,17 +25,17 @@ define(function () {
     	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
     	saveProject: this.host + "/ams/boot/project/save",//保存底层项目
     	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
-		targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
-		targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
-		targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
-		targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
-		targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
-		targetCheckPass: this.host + '/ams/target/targetCheck/checkpass', //标的预审通过
-		targetCheckReject: this.host + '/ams/target/targetCheck/checkreject', //标的预审驳回
-		productApplyList: this.host + "/ams/product/apply/list",//查询产品申请列表
-		productAuditList: this.host + "/ams/product/audit/list",//查询产品审核列表
-		productCheckList: this.host + "/ams/product/check/list",//查询产品复核列表
-		productApproveList: this.host + "/ams/product/approve/list",//查询产品批准列表
+			targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
+			targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
+			targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
+			targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
+			targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
+			targetCheckPass: this.host + '/ams/target/targetCheck/checkpass', //标的预审通过
+			targetCheckReject: this.host + '/ams/target/targetCheck/checkreject', //标的预审驳回
+			productApplyList: this.host + "/ams/product/apply/list",//查询产品申请列表
+			productAuditList: this.host + "/ams/product/audit/list",//查询产品审核列表
+			productCheckList: this.host + "/ams/product/check/list",//查询产品复核列表
+			productApproveList: this.host + "/ams/product/approve/list",//查询产品批准列表
     	savePeriodic: this.host + "/ams/product/save/periodic",//新加定期产品
     	saveCurrent: this.host + "/ams/product/save/current",//新加活期产品
     	updatePeriodic: this.host + "/ams/product/update/periodic",//更新定期产品
@@ -50,13 +52,13 @@ define(function () {
     	productAdmitReject: this.host + "/ams/product/admit/reject",//产品准入不通过
     	productAdmitApprove: this.host + "/ams/product/admit/approve",//产品准入通过
     	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
-		cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
-		cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
-		cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核			
-		meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10',
-		meetingTarget: this.host + '/ams/target/targetMeeting/targetList',
-		meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting',
-		meetingList: this.host + '/ams/target/targetMeeting/list',
+			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
+			cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
+			cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核
+			meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10',
+			meetingTarget: this.host + '/ams/target/targetMeeting/targetList',
+			meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting',
+			meetingList: this.host + '/ams/target/targetMeeting/list',
     	system: {
     		config: {
     			ccp: {
