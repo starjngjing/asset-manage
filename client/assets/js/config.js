@@ -13,7 +13,7 @@ define(function () {
      * 
      */
     api: {
-			yup: this.host + '/yup',                                       // 文件上传服务
+			yup:  'http://www.guohuaigroup.com/yup',                                       // 文件上传服务
 
       dictList: this.host + '/ams/dict/list',                // 枚举值获取接口
     	establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
