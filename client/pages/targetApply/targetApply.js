@@ -234,8 +234,11 @@ define([
 				},
 				columns: [{
 					//编号
-					field: 'oid',
+					// field: 'oid',
 					width: 60,
+					formatter: function(val, row, index) {
+						return index + 1
+					}
 				}, {
 					//项目名称
 					field: 'projectName',

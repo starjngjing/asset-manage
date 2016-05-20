@@ -23,28 +23,28 @@ public class CCPWarrantorController extends BaseController {
 	@Autowired
 	private CCPWarrantorService ccpWarrantorService;
 
-	@RequestMapping(value = "/create", method = { RequestMethod.POST })
+	@RequestMapping(value = "/create", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<CCPWarrantor> create(@Valid CCPWarrantorForm form) {
 		super.checkLogin();
 		CCPWarrantor warrantor = this.ccpWarrantorService.create(form);
 		return new ResponseEntity<CCPWarrantor>(warrantor, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<CCPWarrantor> update(@Valid CCPWarrantorForm form) {
 		super.checkLogin();
 		CCPWarrantor warrantor = this.ccpWarrantorService.update(form);
 		return new ResponseEntity<CCPWarrantor>(warrantor, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<BaseResp> delete(@RequestParam String oid) {
 		super.checkLogin();
 		this.ccpWarrantorService.delete(oid);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	@RequestMapping(value = "/search", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<List<CCPWarrantor>> search() {
 		super.checkLogin();
 		List<CCPWarrantor> list = this.ccpWarrantorService.search();
