@@ -20,7 +20,7 @@ define([
         // 数据表格配置
         var tableConfig = {
           ajax: function (origin) {
-            http.post(config.api.listinvestment, {
+            http.post(config.api.listCashTool, {
               data: pageOptions,
               contentType: 'form'
             }, function (rlt) {
@@ -33,28 +33,19 @@ define([
           sidePagination: 'server',
           pageList: [10, 20, 30, 50, 100],
           queryParams: getQueryParams,
-          onLoadSuccess: function () {
-          //  http.post(config.api.listinvestment, {
-           //   contentType: 'form'
-           // }, function (result) {
-//              $('#clubData').html('会员机构：' + result.clubData + '家')
-//              $('#platAssetData').html('平台资产：' + result.platAssetData + '项')
-//              $('#assetSizeData').html('资产规模：' + result.assetSizeData + '亿')
-//              $('#updateTime').html('变更时间：' + util.table.formatter.timestampToDate(result.updateTime, 'YYYY-MM-DD'))
-//              document.clubDataForm.data.value = result.clubData
-//              document.platAssetDataForm.data.value = result.platAssetData
-//              document.assetSizeDataForm.data.value = result.assetSizeData
-//              $('#clubDataForm').validator()
-//              $('#platAssetDataForm').validator()
-//              $('#assetSizeDataForm').validator()
-            //})
-          },
+          onLoadSuccess: function () {},
           columns: [
-            {// 名称
-            	field: 'name',
+            {// 代码
+            	field: 'ticker',
 //              width: 60,
               align: 'center'
               
+            },
+            {// 基金名称
+            	field: 'secShortName',
+//              width: 60,
+            	align: 'center'
+            		
             },
             {// 类型
 //            	width: 60,
@@ -63,24 +54,13 @@ define([
             	return util.enum.transform('TARGETTYPE', val);
               }
             },
-            {// 收益率
-            	field: 'expAror',
+            {// 7日年化收益率
+            	field: 'weeklyYield',
             	formatter: function (val) {
             		if(val)
 						return val.toFixed(2) + "%";
             		return val;
             	}
-            },
-            {
-            	// 标的规模
-            	field: 'raiseScope',
-            	formatter: function (val) {
-            		return val;
-            	}
-            },
-            { // 标的限期（日）
-              field: 'lifed',
-              
             },
             { // 状态
             	field: 'state',
@@ -88,7 +68,7 @@ define([
             		return val;
             	}
             },
-            { // 已购份额
+            { // 持有份额
             	field: 'holdAmount',
             	formatter: function (val) {
             		return val;
@@ -101,25 +81,15 @@ define([
               formatter: function (val) {
             	  var buttons = [
             	    {
-            	      text: '成立',
+            	      text: '移除出库',
             	      type: 'button',
             	      class: 'item-establish',
             	      isRender: true
             	    },
-            	    {
-              	      text: '不成立',
-              	      type: 'button',
-              	      class: 'item-unEstablish',
-              	    },
               	    {
-              	    	text: '本息兑付',
+              	    	text: '收益采集',
               	    	type: 'button',
               	    	class: 'item-interest',
-              	    },
-              	  {
-              	      text: '详情',
-              	      type: 'button',
-              	      class: 'item-detail',
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
@@ -135,7 +105,7 @@ define([
                 	  function (obj) {
                     	  var data  = obj.investment;
                     	  if(!data){
-                    		  toastr.error('标的详情数据不存在', '错误信息', {
+                    		  toastr.error('现金管理工具详情数据不存在', '错误信息', {
                     			    timeOut: 10000
                     			  });
                     	  }
@@ -256,7 +226,7 @@ define([
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.name = form.name.value;
+          pageOptions.secShortName = form.secShortName.value;
           pageOptions.type = form.type.value;
           pageOptions.raiseScope = form.raiseScope.value;
           pageOptions.lifed = form.lifed.value;

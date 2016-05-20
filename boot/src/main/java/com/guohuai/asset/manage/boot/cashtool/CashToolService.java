@@ -94,5 +94,17 @@ public class CashToolService {
 			throw new RuntimeException();
 		}
 	}
+	
+	/**
+	 * 移除出库
+	 * @Title: remove 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param oid void    返回类型
+	 */
+	public void remove(String oid, String operator){
+		this.cashToolDao.delete(oid);
+	}
 
 }
