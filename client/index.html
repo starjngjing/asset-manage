@@ -80,10 +80,15 @@
             <li>
               <a href="javascript:void(0)" data-gh-route="channel">
                 <i class="fa fa-adn"></i>
-                <span>渠道管理</span>
+                <span>全部渠道</span>
               </a>
             </li>
-
+            <li>
+              <a href="javascript:void(0)" data-gh-route="channelapply">
+                <i class="fa fa-adn"></i>
+                <span>渠道审批</span>
+              </a>
+            </li>
             <li class="header">投资标的管理</li>
             <li>
               <a href="javascript:void(0)" data-gh-route="targetApply">
@@ -286,6 +291,7 @@
         // 为满足断点调试需求，前期将资源全部require进来，$.getScript无法满足断点调试
         var navSource = [
           'channel',
+          'channelapply',
           'targetApply',
           'targetAccess',
           'targetConvention',
