@@ -267,6 +267,78 @@ define([
 			//
 			//			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
 
+<<<<<<< HEAD
+=======
+			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
+
+			// 过会纪要表格配置
+			var targetConventionSummaryTableConfig = {
+
+			}
+
+			// 上传纪要弹窗按钮点击事件
+			$('#targetConventionSummaryUpload').on('click', function () {
+				$('#uploadTargetConventionSummaryModal').modal('show')
+			})
+			// 上传纪要附件表格数据源
+			var uploadTargetConventionSummaryFiles = []
+			// 初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#uploader'),
+				success: function (file) {
+					uploadTargetConventionSummaryFiles.push(file)
+					$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
+				}
+			})
+			// 上传纪要附件表格配置
+			var uploadTargetConventionSummaryTableConfig = {
+				columns: [
+					{
+						field: 'name',
+					},
+					{
+						width: 100,
+						align: 'center',
+						formatter: function () {
+							var buttons = [
+								{
+									text: '下载',
+									type: 'button',
+									class: 'item-download'
+								},
+								{
+									text: '删除',
+									type: 'button',
+									class: 'item-delete'
+								}
+							]
+							return util.table.formatter.generateButton(buttons)
+						},
+						events: {
+							'click .item-download': function (e, value, row) {
+								location.href = config.host + row.url
+							},
+							'click .item-delete': function (e, value, row) {
+								var index = uploadTargetConventionSummaryFiles.indexOf(row)
+								uploadTargetConventionSummaryFiles.splice(index, 1)
+								$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
+							}
+						}
+					}
+				]
+			}
+			// 上传纪要附件表格初始化
+			$('#uploadTargetConventionSummaryTable').bootstrapTable(uploadTargetConventionSummaryTableConfig)
+			// 上传纪要“上传”按钮点击事件
+			$('#doUploadTargetConventionSummary').on('click', function () {
+				var form = document.uploadTargetConventionSummaryForm
+				form.files.value = JSON.stringify(uploadTargetConventionSummaryFiles)
+				form.ajaxSubmit({
+
+				})
+			})
+			
+>>>>>>> c52ff9a19242baf2bdf265c77f80bbb0ecd8dfbe
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit

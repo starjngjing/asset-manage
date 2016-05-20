@@ -164,6 +164,25 @@ h6,
   background-color: #fff;
 }
 
+.yupForm{
+  position: relative;
+}
+
+.yupForm input[type=file]{
+  width: 80px;
+  height: 34px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.yupForm input[type=file].sm{
+  width: 70px;
+  height: 30px;
+}
+
 .input-group.range:after{
   width: 10px;
   height: 0;

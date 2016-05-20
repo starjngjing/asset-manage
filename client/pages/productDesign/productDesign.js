@@ -318,6 +318,7 @@ define([
 		})
 
 		// 提交审核弹窗 -> 提交按钮点击事件
+<<<<<<< HEAD
 //		$('#doProductAudit').on('click', function () {
 //			// 获取id数组
 //			var oids = checkItems.map(function (item) {
@@ -350,6 +351,34 @@ define([
 //			$('#productAssetPool').on('click', function () {
 //				$('#assetPoolModal').modal('show')
 //			})
+=======
+		$('#doProductAudit').on('click', function () {
+			// 获取id数组
+			var oids = checkItems.map(function (item) {
+				return item.oid
+			})
+			// 提交数组
+			http.post(
+				config.api.productAuditApply, 
+				{
+					data: {
+						oids: oids
+					},
+					contentType: 'form',
+				}, 
+				function(result) {
+					$('productAuditModal').modal('hide')
+					$('#productDesignTable').bootstrapTable('refresh')
+				}
+			)
+				
+		})
+
+		// 选择资产池按钮点击事件
+		$('#productAssetPool').on('click', function () {
+			$('#assetPoolModal').modal('show')
+		})
+>>>>>>> c52ff9a19242baf2bdf265c77f80bbb0ecd8dfbe
     	     
     }
   }

@@ -7,9 +7,10 @@
  * you entered into with Founder.   
  *   
  */
-package com.guohuai.asset.manage.boot.cashtool;
+package com.guohuai.asset.manage.boot.cashtool.pool;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -57,7 +59,7 @@ public class CashToolRevenue extends UUID {
 	/**
 	 * 交易日期
 	 */
-	private Timestamp dailyProfitDate;
+	private Date dailyProfitDate;
 
 	/**
 	 * 万份收益

@@ -11,10 +11,6 @@
 
 <!-- 主要内容 -->
 <section class="content">
-  <select id="fff" name="target" class="form-control input-sm"
-          data-placeholder="相关标的"
-          style="width: 100%;">
-  </select>
   <div class="row">
     <div class="col-xs-12">
       <!-- 主体Grid -->
@@ -89,7 +85,7 @@
   </div>
 </section>
 
-<!-- 新建会议弹窗 addTargetConventionModal -->
+<!-- 新建会议弹窗 -->
 <div id="addTargetConventionModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -200,4 +196,110 @@
   </div>
   </form>
 </div>
+
+<!-- 过会纪要弹窗 -->
+<div id="targetConventionSummaryModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">过会纪要</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <!-- 主体Grid -->
+            <div class="box box-primary">
+              <!-- Grid头部 -->
+              <div class="box-header">
+                <h3 class="box-title"></h3>
+                <div class="box-tools">
+                  <button id="targetConventionSummaryUpload" class="btn btn-default btn-sm">
+                    <i class="fa fa-upload"></i> 上传纪要
+                  </button>
+                </div>
+              </div>
+              <!-- Grid内容体 -->
+              <div class="box-body">
+                <!-- 主体数据表格 -->
+                <table id="targetConventionSummaryTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>上传人员</th>
+                    <th>会议主题</th>
+                    <th>与会人</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 上传纪要弹窗 -->
+<div id="uploadTargetConventionSummaryModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">上传纪要</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="uploadTargetConventionSummaryForm" name="uploadTargetConventionSummaryForm" method="post">
+          <div class="form-group">
+            <label>上传人员</label>
+            <input name="sn" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="form-group">
+            <label>会议主题</label>
+            <input name="title" type="text"
+                   class="form-control input-sm"
+                   placeholder="会议主题">
+          </div>
+          <div class="form-group">
+            <label>参会人</label>
+            <select name="participant" class="form-control input-sm"
+                    data-placeholder="参会人"
+                    style="width: 100%;">
+            </select>
+          </div>
+          <input name="files" type="hidden"/>
+        </form>
+        <div class="form-group" id="uploader"></div>
+        <table id="uploadTargetConventionSummaryTable" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>附件名称</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doUploadTargetConventionSummary" type="button" class="btn btn-primary btn-submit">上 传</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
