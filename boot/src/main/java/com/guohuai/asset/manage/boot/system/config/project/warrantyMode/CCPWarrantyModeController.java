@@ -23,28 +23,28 @@ public class CCPWarrantyModeController extends BaseController {
 	@Autowired
 	private CCPWarrantyModeService ccpWarrantyModeService;
 
-	@RequestMapping(value = "/create", method = { RequestMethod.POST })
+	@RequestMapping(value = "/create", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<CCPWarrantyMode> create(@Valid CCPWarrantyModeForm form) {
 		super.checkLogin();
 		CCPWarrantyMode warrantyMode = this.ccpWarrantyModeService.create(form);
 		return new ResponseEntity<CCPWarrantyMode>(warrantyMode, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<CCPWarrantyMode> update(@Valid CCPWarrantyModeForm form) {
 		super.checkLogin();
 		CCPWarrantyMode warrantyMode = this.ccpWarrantyModeService.update(form);
 		return new ResponseEntity<CCPWarrantyMode>(warrantyMode, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<BaseResp> delete(@RequestParam String oid) {
 		super.checkLogin();
 		this.ccpWarrantyModeService.delete(oid);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	@RequestMapping(value = "/search", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<List<CCPWarrantyModeResp>> search() {
 		super.checkLogin();
 		List<CCPWarrantyModeResp> list = this.ccpWarrantyModeService.search();

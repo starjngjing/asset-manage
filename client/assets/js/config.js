@@ -83,8 +83,12 @@ define(function () {
     				}
     			},
     			ccr: {
+    				cate: {
+    					options: this.host + "/ams/system/ccr/cate/options"
+    				},
     				indicate: {
-    					search: this.host + "/ams/system/ccr/indicate/search"
+    					search: this.host + "/ams/system/ccr/indicate/search",
+    					save: this.host + "/ams/system/ccr/indicate/save"
     				}
     			}
     		}
