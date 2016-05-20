@@ -136,9 +136,16 @@ define([
 
 				});
 			});
-			
-			$('#saveButton').on('click', function(){
-				
+
+			$('#saveButton').on('click', function() {
+				$('#addForm').ajaxSubmit({
+					url: config.api.system.config.ccr.indicate.save,
+					success: function(result) {
+						$('#addForm').resetForm();
+						$('#addForm').modal('hide');
+						$('#dataTable').bootstrapTable('refresh');
+					}
+				})
 			});
 
 		}
