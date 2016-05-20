@@ -318,38 +318,38 @@ define([
 		})
 
 		// 提交审核弹窗 -> 提交按钮点击事件
-		$('#doProductAudit').on('click', function () {
-			// 获取id数组
-			var oids = checkItems.map(function (item) {
-				return item.oid
-			})
-			// 提交数组
-			http.post(config.api.productInvalid, {
-				
-			$('#addProductForm').ajaxSubmit({
-      		url: config.api.savePeriodic,
-      		success: function (addResult) {
-        			$('#productAuditModal').modal('hide')
-        			$('#productDesignTable').bootstrapTable('refresh')
-      			}
-      			
-      			
-      			http.post(config.api.productInvalid, {
-										data: {
-											oids: oids
-										},
-										contentType: 'form',
-									}, function(result) {
-										$('#productDesignTable').bootstrapTable('refresh')
-									})
-				
-				
-			})
-
-			// 选择资产池按钮点击事件
-			$('#productAssetPool').on('click', function () {
-				$('#assetPoolModal').modal('show')
-			})
+//		$('#doProductAudit').on('click', function () {
+//			// 获取id数组
+//			var oids = checkItems.map(function (item) {
+//				return item.oid
+//			})
+//			// 提交数组
+//			http.post(config.api.productInvalid, {
+//				
+//			$('#addProductForm').ajaxSubmit({
+//    		url: config.api.savePeriodic,
+//    		success: function (addResult) {
+//      			$('#productAuditModal').modal('hide')
+//      			$('#productDesignTable').bootstrapTable('refresh')
+//    			}
+//    			
+//    			
+//    			http.post(config.api.productInvalid, {
+//										data: {
+//											oids: oids
+//										},
+//										contentType: 'form',
+//									}, function(result) {
+//										$('#productDesignTable').bootstrapTable('refresh')
+//									})
+//				
+//				
+//			})
+//
+//			// 选择资产池按钮点击事件
+//			$('#productAssetPool').on('click', function () {
+//				$('#assetPoolModal').modal('show')
+//			})
     	     
     }
   }

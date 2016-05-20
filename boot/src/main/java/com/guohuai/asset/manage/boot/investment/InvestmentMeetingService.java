@@ -1,7 +1,5 @@
 package com.guohuai.asset.manage.boot.investment;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.guohuai.asset.manage.boot.investment.meeting.AddInvestmentMeetingForm;
-import com.guohuai.asset.manage.boot.investment.meeting.InvestmentMeetingListResp;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
 @Service
@@ -75,7 +72,6 @@ public class InvestmentMeetingService {
 		entity.setOperator(operator);
 		return this.investmentMeetingDao.save(entity);
 	}
-	
 
 	@Transactional
 	public InvestmentMeeting addMeeting(AddInvestmentMeetingForm form, String operator) {
@@ -96,7 +92,7 @@ public class InvestmentMeetingService {
 	private void addParticipant(String parStr, InvestmentMeeting meeting) throws Exception {
 		String[] arr = parStr.split(",");
 		for (String oid : arr) {
-			InvestmentMeetingUser entity = InvestmentMeetingUser.builder().InvestmentMeeting(meeting)
+			InvestmentMeetingUser entity = InvestmentMeetingUser.builder().investmentMeeting(meeting)
 					.participantOid(oid).build();
 			investmentMeetingUserDao.save(entity);
 		}
@@ -106,7 +102,7 @@ public class InvestmentMeetingService {
 		String[] arr = targetStr.split(",");
 		for (String oid : arr) {
 			Investment temp = investmentService.getInvestmentDet(oid);
-			InvestmentMeetingAsset entity = InvestmentMeetingAsset.builder().investment(temp).InvestmentMeeting(meeting)
+			InvestmentMeetingAsset entity = InvestmentMeetingAsset.builder().investment(temp).investmentMeeting(meeting)
 					.build();
 			entity.setInvestment(temp);
 			entity.setInvestmentMeeting(meeting);

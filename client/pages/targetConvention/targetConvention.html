@@ -155,6 +155,8 @@
 
 <!-- 会议报告弹窗 -->
 <div id="targetConventionReportModal" class="modal fade" tabindex="-1" role="dialog">
+	<form id="targetConventionReportModalForm" name="targetConventionReportModalForm" method="post">
+		<input id="reoid" name="oid" type="hidden" data-detail-fetch="oid" value="" />
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <!-- 模态窗头部 -->
@@ -169,19 +171,21 @@
         <p class="form-header">会议详情</p>
         <dl class="dl-horizontal">
           <dt>会议主题</dt>
-          <dd>xxxx</dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>与会人员</dt>
-          <dd>xxxx</dd>
+          <dd>
+          	<div data-detail-fetch="title"></div>
+          </dd>
         </dl>
         <dl class="dl-horizontal">
           <dt>会议状态</dt>
-          <dd>xxxx</dd>
+          <dd>
+          	<div data-detail-fetch="state" data-enum-transform="meetingStates"></div>
+          </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>更新时间</dt>
-          <dd>xxxx</dd>
+          <dt>会议时间</dt>
+          <dd>
+          	<div data-detail-fetch="conferenceTime"></div>
+          </dd>
         </dl>
         <p class="form-header">报告内容</p>
         <table id="targetConventionReportTable" class="table table-bordered table-striped">
@@ -194,5 +198,6 @@
       </div>
     </div>
   </div>
+  </form>
 </div>
 
