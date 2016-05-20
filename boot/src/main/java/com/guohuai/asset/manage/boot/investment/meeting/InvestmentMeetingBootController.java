@@ -126,8 +126,6 @@ public class InvestmentMeetingBootController extends BaseController {
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<List<InvestmentVoteDetResp>> meetingTargetList(String meetingOid,
 			String targetOid) {
-		System.out.println(meetingOid);
-		System.out.println(targetOid);
 		List<InvestmentVoteDetResp> resp = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meetingOid,
 				targetOid);
 		return new ResponseEntity<List<InvestmentVoteDetResp>>(resp, HttpStatus.OK);

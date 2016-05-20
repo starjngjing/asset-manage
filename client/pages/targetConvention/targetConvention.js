@@ -55,10 +55,18 @@ define([
 								type: 'button',
 								class: 'item-detail',
 								isRender: true
+							}, {
+								text: '纪要管理',
+								type: 'button',
+								class: 'item-summary',
+								isRender: true
 							}];
 							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
+							'click .item-summary': function(e, value, row) {
+								$('#targetConventionSummaryModal').modal('show');
+							},
 							'click .item-detail': function(e, value, row) {
 								http.post(config.api.meetingDetail, {
 									data: {
@@ -104,8 +112,11 @@ define([
 													field: 'role',
 													align: 'center'
 												}, {
-													field: 'comment',
-													align: 'center'
+													field: 'state',
+													align: 'center',
+													formatter: function(val) {
+														return util.enum.transform('voteStates', val);
+													}
 												}, {
 													field: 'name',
 													align: 'center'
@@ -121,7 +132,6 @@ define([
 											field: 'name'
 										}]
 									}
-
 									$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
 									$('#targetConventionReportModal').modal('show');
 								})
@@ -206,128 +216,67 @@ define([
 				minimumInputLength: 1
 			})
 
-			//			// 会议报告表格配置
-			//			var targetConventionReportTableConfig = {
-			//				//				data: [{
-			//				//					name: '十一届三中全会'
-			//				//					
-			//				//				}],
-			//				ajax: function(origin) {
-			//					http.post(config.api.meetingTargetList, {
-			//						data: {
-			//							oid: $('#reoid').val()
-			//						},
-			//						contentType: 'form'
-			//					}, function(rlt) {
-			//						origin.success(rlt)
-			//					})
-			//				},
-			//				detailView: true,
-			//				onExpandRow: function(index, row, $detail) {
-			//					var table = $('<table><thead><tr>' +
-			//						'<th>角色名称</th>' +
-			//						'<th>投票意见</th>' +
-			//						'<th>投票人</th>' +
-			//						'<th>时间</th>' +
-			//						'</tr></thead></table>')
-			//					var tableConfig = {
-			//						data: [{
-			//							role: '投资人',
-			//							comment: '同意',
-			//							name: '张三',
-			//							date: '2015-01-01'
-			//						}],
-			//						columns: [{
-			//							field: 'role',
-			//							align: 'center'
-			//						}, {
-			//							field: 'comment',
-			//							align: 'center'
-			//						}, {
-			//							field: 'name',
-			//							align: 'center'
-			//						}, {
-			//							field: 'date',
-			//							align: 'center'
-			//						}]
-			//					}
-			//					$detail.append(table)
-			//					$(table).bootstrapTable(tableConfig)
-			//				},
-			//				columns: [{
-			//					field: 'name'
-			//				}]
-			//			}
-			//
-			//			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
-
 			// 过会纪要表格配置
 			var targetConventionSummaryTableConfig = {
 
 			}
 
 			// 上传纪要弹窗按钮点击事件
-			$('#targetConventionSummaryUpload').on('click', function () {
-				$('#uploadTargetConventionSummaryModal').modal('show')
-			})
-			// 上传纪要附件表格数据源
+			$('#targetConventionSummaryUpload').on('click', function() {
+					$('#uploadTargetConventionSummaryModal').modal('show')
+				})
+				// 上传纪要附件表格数据源
 			var uploadTargetConventionSummaryFiles = []
-			// 初始化上传附件插件，在success里将上传成功附件插入到表格中
+				// 初始化上传附件插件，在success里将上传成功附件插入到表格中
 			$$.uploader({
-				container: $('#uploader'),
-				success: function (file) {
-					uploadTargetConventionSummaryFiles.push(file)
-					$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
-				}
-			})
-			// 上传纪要附件表格配置
+					container: $('#uploader'),
+					success: function(file) {
+						uploadTargetConventionSummaryFiles.push(file)
+						$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
+					}
+				})
+				// 上传纪要附件表格配置
 			var uploadTargetConventionSummaryTableConfig = {
-				columns: [
-					{
+					columns: [{
 						field: 'name',
-					},
-					{
+					}, {
 						width: 100,
 						align: 'center',
-						formatter: function () {
-							var buttons = [
-								{
-									text: '下载',
-									type: 'button',
-									class: 'item-download'
-								},
-								{
-									text: '删除',
-									type: 'button',
-									class: 'item-delete'
-								}
-							]
+						formatter: function() {
+							var buttons = [{
+								text: '下载',
+								type: 'button',
+								class: 'item-download'
+							}, {
+								text: '删除',
+								type: 'button',
+								class: 'item-delete'
+							}]
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
-							'click .item-download': function (e, value, row) {
+							'click .item-download': function(e, value, row) {
 								location.href = config.host + row.url
 							},
-							'click .item-delete': function (e, value, row) {
+							'click .item-delete': function(e, value, row) {
 								var index = uploadTargetConventionSummaryFiles.indexOf(row)
 								uploadTargetConventionSummaryFiles.splice(index, 1)
 								$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
 							}
 						}
-					}
-				]
-			}
-			// 上传纪要附件表格初始化
+					}]
+				}
+				// 上传纪要附件表格初始化
 			$('#uploadTargetConventionSummaryTable').bootstrapTable(uploadTargetConventionSummaryTableConfig)
-			// 上传纪要“上传”按钮点击事件
-			$('#doUploadTargetConventionSummary').on('click', function () {
+				// 上传纪要“上传”按钮点击事件
+			$('#doUploadTargetConventionSummary').on('click', function() {
 				var form = document.uploadTargetConventionSummaryForm
 				form.files.value = JSON.stringify(uploadTargetConventionSummaryFiles)
 				form.ajaxSubmit({
 
 				})
 			})
-			
+
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit

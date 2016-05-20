@@ -26,6 +26,9 @@ public class InvestmentMeetingVoteService {
 	private InvestmentMeetingService investmentMeetingService;
 
 	@Autowired
+	private InvestmentService investmentService;
+
+	@Autowired
 	private AdminSdk adminSdk;
 
 	@Autowired
@@ -73,16 +76,18 @@ public class InvestmentMeetingVoteService {
 	public List<InvestmentVoteDetResp> getVoteDetByMeetingAndInvestment(String meetingOid, String investmentOid) {
 		List<InvestmentVoteDetResp> resps = new ArrayList<InvestmentVoteDetResp>();
 		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(meetingOid);
+		Investment investment = investmentService.getInvestmentDet(investmentOid);
 		List<InvestmentMeetingUser> userList = investmentMeetingUserService.getMeetingUserByMeeting(meeting);
 		for (InvestmentMeetingUser user : userList) {
-			InvestmentMeetingVote vote = investmentMeetingVoteDao.findByInvestmentMeetingAndInvestmentAndInvestmentMeetingUser(meeting.getOid(),investmentOid,user.getOid());
-			AdminObj userInfo = adminSdk.getAdmin(user.getOid());
+			List<InvestmentMeetingVote> votes = investmentMeetingVoteDao
+					.findByInvestmentMeetingAndInvestmentAndInvestmentMeetingUser(meeting, investment, user);
+			AdminObj userInfo = adminSdk.getAdmin(user.getParticipantOid());
 			InvestmentVoteDetResp resp = new InvestmentVoteDetResp();
-			if(vote != null){
-				resp.setState(vote.getState());
-				resp.setTime(vote.getVoteTime());
-			}else{
-				resp.setState(InvestmentMeetingVote.VOTE_STATUS_notapprove);
+			if (votes != null && votes.size() > 0) {
+				resp.setState(votes.get(0).getState());
+				resp.setTime(votes.get(0).getVoteTime());
+			} else {
+				resp.setState(InvestmentMeetingVote.VOTE_STATUS_notvote);
 			}
 			resp.setName(userInfo.getName());
 			resps.add(resp);

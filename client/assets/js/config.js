@@ -177,6 +177,23 @@ define(function () {
 			text: "未举行",
 			children: []
 		}],
+		voteStates: [{
+			id: "notvote",
+			text: "未投票",
+			children: []
+		},{
+			id: "approve",
+			text: "赞成",
+			children: []
+		},{
+			id: "notapprove",
+			text: "反对",
+			children: []
+		},{
+			id: "notpass",
+			text: "一票否决",
+			children: []
+		}],
 		/**
 		 * 图标所用到的主题颜色
 		 */
