@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
-import com.guohuai.asset.manage.boot.investment.InvestmentMeetingAsset.InvestmentMeetingAssetBuilder;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;

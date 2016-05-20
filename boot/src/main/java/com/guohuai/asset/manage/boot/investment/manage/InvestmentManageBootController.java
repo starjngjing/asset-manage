@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
@@ -104,7 +105,7 @@ public class InvestmentManageBootController extends BaseController {
 		Investment investment = investmentService.createInvestment(form);
 		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
 		investment = investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_create, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.create, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -146,7 +147,7 @@ public class InvestmentManageBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_check, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -163,7 +164,7 @@ public class InvestmentManageBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_invalid, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.invalid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

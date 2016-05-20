@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.enums.TargetEventType;
+import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
@@ -23,6 +25,9 @@ public class InvestmentService {
 
 	@Autowired
 	private InvestmentDao investmentDao;
+	
+	@Autowired
+	InvestmentLogService investmentLogService;
 
 	/**
 	 * 获得投资标的列表
@@ -115,6 +120,7 @@ public class InvestmentService {
 		old.setState(Investment.INVESTMENT_STATUS_establish); // 重置为成立
 
 		this.investmentDao.save(old);
+		investmentLogService.saveInvestmentLog(old, TargetEventType.establish, operator); // 保存标的操作日志
 		return entity;
 	}
 }

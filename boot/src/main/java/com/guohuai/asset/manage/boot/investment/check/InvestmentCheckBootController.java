@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
@@ -89,7 +90,7 @@ public class InvestmentCheckBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_waitMeeting);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_checkpass, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkpass, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -105,7 +106,7 @@ public class InvestmentCheckBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_reject);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_checkreject, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkreject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
