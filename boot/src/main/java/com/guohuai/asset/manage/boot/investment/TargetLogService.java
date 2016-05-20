@@ -40,13 +40,31 @@ public class TargetLogService {
 	public TargetLog saveLog(String targetOid, String operator, String eventType) {
 		if (StringUtils.isBlank(targetOid))
 			throw AMPException.getException("投资标的id不能为空");
-		if (StringUtils.isBlank(eventType))
-			throw AMPException.getException("事件类型不能为空");
-
 		Investment investment = this.investmentDao.findOne(targetOid);
 		if (null == investment)
 			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
 
+		return this.saveLog(investment, operator, eventType);
+	}
+	
+	/**
+	 * 添加标的操作日志
+	 * @Title: saveLog 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param targetOid
+	 * @param operator
+	 * @param eventType
+	 * @return TargetLog    返回类型
+	 */
+	public TargetLog saveLog(Investment investment, String operator, String eventType) {
+		if (StringUtils.isBlank(eventType))
+			throw AMPException.getException("事件类型不能为空");
+		
+		if (null == investment)
+			throw AMPException.getException("投资标的不能为空");
+		
 		TargetLog log = TargetLog.builder().investment(investment).eventTime(new Timestamp(System.currentTimeMillis()))
 				.operator(operator).eventType(eventType)
 				.build();

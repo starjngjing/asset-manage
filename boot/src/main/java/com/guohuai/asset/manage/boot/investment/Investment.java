@@ -154,9 +154,13 @@ public class Investment extends UUID implements Serializable {
 	 */
 	private Date collectEndDate;
 	/**
-	 * 目前优势
+	 * 募集期收益
 	 */
-	private String collectIncomeRate;
+	private BigDecimal collectIncomeRate;
+	/**
+	 * 标的优势
+	 */
+	private String superiority;
 	/**
 	 * 融资方
 	 */

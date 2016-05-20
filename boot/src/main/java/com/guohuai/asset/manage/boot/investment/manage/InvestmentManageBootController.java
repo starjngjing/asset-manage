@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
@@ -100,14 +101,38 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid InvestmentManageForm form) {
-		// String operator = super.getLoginAdmin();
-		String operator = "admin";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.createInvestment(form);
 		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
 		investment = investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_create, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.create, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
+
+	/**
+	 * 编辑投资标的
+	 * 
+	 * @param investment
+	 * @return
+	 */
+	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid InvestmentManageForm form) {
+		String operator = super.getLoginAdmin();
+		Investment investment = investmentService.getInvestmentDet(form.getOid());
+		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
+						&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+			throw new RuntimeException();
+		}
+		Investment temp = investmentService.createInvestment(form);
+		temp.setState(investment.getState());
+		temp.setCreateTime(investment.getCreateTime());
+		temp.setCreator(investment.getCreator());
+		System.out.println(form.getRaiseScope());
+		investment = investmentService.updateInvestment(temp, operator);
+		investmentLogService.saveInvestmentLog(temp, InvestmentLog.INVESTMENT_LOG_TYPE_create, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+	
 
 	/**
 	 * 提交预审
@@ -122,7 +147,7 @@ public class InvestmentManageBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_check, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -139,7 +164,7 @@ public class InvestmentManageBootController extends BaseController {
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, InvestmentLog.INVESTMENT_LOG_TYPE_invalid, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.invalid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

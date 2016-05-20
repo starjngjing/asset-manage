@@ -1,6 +1,8 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,11 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.boot.investment.TargetIncome;
-import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
+import com.guohuai.asset.manage.boot.investment.TargetIncome;
+import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -100,6 +101,19 @@ public class InvestmentPoolController extends BaseController {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(order));
 		
+		// 拼接条件
+		spec = Specifications.where(spec).and(new Specification<Investment>() {
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicate = new ArrayList<>();
+				
+//				predicate.add(cb.notEqual(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid));
+				predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+				Predicate[] pre = new Predicate[predicate.size()];
+				return query.where(predicate.toArray(pre)).getRestriction();
+			}
+		});
+		
 		String raiseScope = request.getParameter("raiseScope");
 		if (StringUtils.isNotBlank(raiseScope)) {
 			spec = Specifications.where(spec).and(new Specification<Investment>() {
@@ -153,15 +167,14 @@ public class InvestmentPoolController extends BaseController {
 	@ApiOperation(value = "标的成立")
 	public CommonResp establish(@Valid EstablishForm form) {
 		log.debug("投资标的成立接口!!!");
-		Investment ist = new Investment();
-		BeanUtils.copyProperties(form, ist);
 		String loginId = null; 
 		try {
 			loginId = super.getLoginAdmin();
 		} catch (Exception e) {
 			
 		}
-		this.investmentService.establish(ist, loginId);
+		form.setOperator(loginId);
+		this.investmentService.establish(form);
 		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
 	}
 
@@ -175,7 +188,16 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("unEstablish")
 	@ApiOperation(value = "标的不成立")
-	public CommonResp unEstablish() {
+	public CommonResp unEstablish(@Valid UnEstablishForm form) {
+		log.debug("投资标的成立接口!!!");
+		String loginId = null; 
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			
+		}
+		form.setOperator(loginId);
+		this.investmentService.unEstablish(form);
 		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
 	}
 

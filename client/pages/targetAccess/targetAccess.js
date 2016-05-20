@@ -51,8 +51,8 @@ define([
 						field: 'raiseScope',
 						formatter: function(val) {
 							if (val)
-								var temp = val / 10000;
-							return temp.toFixed(0) + "万";
+								var temp = (val / 10000).toFixed(0) + '万';
+							return temp;
 						}
 					}, {
 						field: 'life',

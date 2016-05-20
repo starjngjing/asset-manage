@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 
- * <p>Title: EstablishForm.java</p>    
- * <p>标的成立表单 </p>   
+ * <p>Title: UnEstablishForm.java</p>    
+ * <p>标的不成立表单 </p>   
  * @author vania      
  * @version 1.0    
  * @created 2016年5月18日 下午7:37:44
@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstablishForm implements Serializable {
+public class UnEstablishForm implements Serializable {
 
 	/**
 	 * @Fields serialVersionUID : 

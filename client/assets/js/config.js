@@ -87,10 +87,49 @@ define(function () {
     /**
      * targetStates 标的状态
      */
-    targetStates: {
-		name: ['待预审', '预审中', '待过会', '过会中', '募集中', '成立', '成立失败', '驳回', '逾期', '作废'], //标的状态
-		value: ['waitPretrial', 'pretrial', 'waitMeeting', 'metting', 'collecting', 'establish', 'unEstablish', 'reject', 'overdue', 'invalid'] //标的状态
-    },
+    targetStates: 
+    	[{
+			id: "waitPretrial",
+			text: "未审核",
+			children: []
+		},{
+			id: "pretrial",
+			text: "预审中",
+			children: []
+		},{
+			id: "waitMeeting",
+			text: "未过会",
+			children: []
+		},{
+			id: "metting",
+			text: "过会中",
+			children: []
+		},{
+			id: "collecting",
+			text: "募集中",
+			children: []
+		},{
+			id: "establish",
+			text: "成立",
+			children: []
+		},{
+			id: "unEstablish",
+			text: "成立失败",
+			children: []
+		},{
+			id: "reject",
+			text: "驳回",
+			children: []
+		},{
+			id: "overdue",
+			text: "逾期",
+			children: []
+		},{
+			id: "invalid",
+			text: "作废",
+			children: []
+		}
+    ],
     /**
      * conventionStates 过会状态
      */

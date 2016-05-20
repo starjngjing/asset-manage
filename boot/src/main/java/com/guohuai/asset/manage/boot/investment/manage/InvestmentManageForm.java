@@ -11,6 +11,8 @@ import lombok.Data;
 public class InvestmentManageForm implements Serializable {
 
 	private static final long serialVersionUID = -8744625712102166340L;
+	
+	private String oid;
 	/**
 	 * 标的编号
 	 */
@@ -118,9 +120,13 @@ public class InvestmentManageForm implements Serializable {
 	 */
 	private Date collectEndDate;
 	/**
-	 * 目前优势
+	 * 募集收益
 	 */
 	private String collectIncomeRate;
+	/**
+	 * 标的优势
+	 */
+	private String superiority;
 	/**
 	 * 融资方
 	 */
