@@ -137,9 +137,9 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
+                		  data.cashtoolOid = data.oid; // 手动为 cashtoolOid 赋值
                 		  $$.detailAutoFix($('#cashToolDetail'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
-                		  console.log("data======>" + JSON.stringify(data));
                 	  });
                 	  $('#cashToolRevenueModal').modal('show');
                   },
