@@ -69,7 +69,6 @@ public class InvestmentManageBootController extends BaseController {
 			@RequestParam(required = false, defaultValue = "10") int rows,
 			@RequestParam(required = false, defaultValue = "updateTime") String sortField,
 			@RequestParam(required = false, defaultValue = "desc") String sort) {
-
 		Direction sortDirection = Direction.DESC;
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
@@ -120,7 +119,7 @@ public class InvestmentManageBootController extends BaseController {
 		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(form.getOid());
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
-						&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
 			throw new RuntimeException();
 		}
 		Investment temp = investmentService.createInvestment(form);
@@ -129,10 +128,8 @@ public class InvestmentManageBootController extends BaseController {
 		temp.setCreator(investment.getCreator());
 		System.out.println(form.getRaiseScope());
 		investment = investmentService.updateInvestment(temp, operator);
-		investmentLogService.saveInvestmentLog(temp, TargetEventType.create, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
-	
 
 	/**
 	 * 提交预审
@@ -142,9 +139,12 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
-		// String operator = super.getLoginAdmin();
-		String operator = "admin";
+		 String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
+		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
+				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+			throw new RuntimeException();
+		}
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
 		investmentService.saveInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);

@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;
@@ -43,6 +45,6 @@ public class InvestmentMeetingAsset extends UUID implements Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "conferenceOid", referencedColumnName = "oid")
-	private InvestmentMeeting InvestmentMeeting;
+	private InvestmentMeeting investmentMeeting;
 
 }

@@ -52,7 +52,7 @@ public class CashToolRevenue extends UUID {
 	 * 关联现金管理工具
 	 */
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "cashToolOid", referencedColumnName = "oid")
+	@JoinColumn(name = "cashtoolOid", referencedColumnName = "oid")
 	@JsonBackReference
 	private CashTool cashTool;
 	

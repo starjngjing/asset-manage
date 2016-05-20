@@ -410,7 +410,7 @@
 
 
 <!-- 收益采集 默认大小 -->
-<div id="interestModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="cashToolRevenueModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <!-- 模态窗头部 -->
@@ -450,7 +450,7 @@
 					</div>      		
       	</div>
         <!-- 编辑表单 -->
-        <form id="interestForm" name="interestForm" method="post">
+        <form id="cashToolRevenueForm" name="cashToolRevenueForm" method="post">
 <!--        	<p class="form-header">现金管理工具概况</p>-->
         	
 	      	<div class="row">
@@ -470,7 +470,7 @@
 	            <label>万份收益</label>
 	            <input name="dailyProfit" type="text" 
 	                      class="form-control input-sm"
-	                      placeholder="万份收益" required></textarea>
+	                      placeholder="万份收益" required>
           		</div>
 	      		</div>
 	      		
@@ -478,7 +478,7 @@
 	          	<div class="form-group">
 			          <label>7日年化收益率</label>
 			          <div class="input-group input-group-sm">			            
-			            <input name="weeklyYield" type="text"
+			            <input name="weeklyYield" type="text" 
 			                   class="form-control input-sm"
 			                   placeholder="7日年化收益率" required>
 			            <span class="input-group-addon">%</span>
@@ -487,13 +487,13 @@
 		        </div>
 	      	</div>
           
-          <input name="cashtoolOid" type="hidden" data-detail-fetch="oid">
+          <input name="cashtoolOid" type="hidden">
         </form>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="interestSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="cashToolRevenueSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
