@@ -55,7 +55,7 @@ public class CashToolRevenueForm implements Cloneable, Serializable {
 	 * 关联现金管理工具
 	 */
 	@NotNull(message = "关联现金管理工具id不能为空")
-	private String cashtoolOid;
+	private String cashToolOid;
 
 	/**
 	 * 交易日期

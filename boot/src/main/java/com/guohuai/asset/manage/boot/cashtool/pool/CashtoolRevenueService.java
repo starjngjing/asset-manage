@@ -45,7 +45,7 @@ public class CashtoolRevenueService {
 	 * @return CashToolRevenue    返回类型
 	 */
 	public CashToolRevenue save(CashToolRevenueForm cashToolRevenueForm) {
-		String cashtoolOid = cashToolRevenueForm.getCashtoolOid();
+		String cashtoolOid = cashToolRevenueForm.getCashToolOid();
 		if (StringUtils.isBlank(cashtoolOid))
 			throw AMPException.getException("现金管理工具id不能为空");
 		
