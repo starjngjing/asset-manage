@@ -25,6 +25,7 @@ define(function () {
     	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 		targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 		targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
+		targetEdit: this.host + '/ams/target/targetManage/edit', //编辑标的
 		targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
 		targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
 		targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
@@ -85,10 +86,49 @@ define(function () {
     /**
      * targetStates 标的状态
      */
-    targetStates: {
-		name: ['待预审', '预审中', '待过会', '过会中', '募集中', '成立', '成立失败', '驳回', '逾期', '作废'], //标的状态
-		value: ['waitPretrial', 'pretrial', 'waitMeeting', 'metting', 'collecting', 'establish', 'unEstablish', 'reject', 'overdue', 'invalid'] //标的状态
-    },
+    targetStates: 
+    	[{
+			id: "waitPretrial",
+			text: "未审核",
+			children: []
+		},{
+			id: "pretrial",
+			text: "预审中",
+			children: []
+		},{
+			id: "waitMeeting",
+			text: "未过会",
+			children: []
+		},{
+			id: "metting",
+			text: "过会中",
+			children: []
+		},{
+			id: "collecting",
+			text: "募集中",
+			children: []
+		},{
+			id: "establish",
+			text: "成立",
+			children: []
+		},{
+			id: "unEstablish",
+			text: "成立失败",
+			children: []
+		},{
+			id: "reject",
+			text: "驳回",
+			children: []
+		},{
+			id: "overdue",
+			text: "逾期",
+			children: []
+		},{
+			id: "invalid",
+			text: "作废",
+			children: []
+		}
+    ],
     /**
      * conventionStates 过会状态
      */
