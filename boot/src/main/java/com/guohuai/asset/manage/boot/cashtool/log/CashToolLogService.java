@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
-import com.guohuai.asset.manage.boot.enums.TargetEventType;
+import com.guohuai.asset.manage.boot.enums.CashToolEventType;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
@@ -22,28 +22,28 @@ public class CashToolLogService {
 
 
 	/**
-	 * 添加标的操作日志
-	 * @Title: saveInvestmentLog 
+	 * 添加现金管理工具操作日志
+	 * @Title: saveCashToolLog 
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
-	 * @param targetOid
+	 * @see: 
+	 * @param cashtoolOid
 	 * @param operator
 	 * @param eventType
 	 * @return TargetLog    返回类型
 	 */
-	public CashToolLog saveCashToolLog(String targetOid, TargetEventType eventType, String operator) {
-		if (StringUtils.isBlank(targetOid))
+	public CashToolLog saveCashToolLog(String cashtoolOid, CashToolEventType eventType, String operator) {
+		if (StringUtils.isBlank(cashtoolOid))
 			throw AMPException.getException("投资标的id不能为空");
-		CashTool cashTool = this.cashToolDao.findOne(targetOid);
+		CashTool cashTool = this.cashToolDao.findOne(cashtoolOid);
 		if (null == cashTool)
-			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
+			throw AMPException.getException("找不到id为[" + cashtoolOid + "]的投资标的");
 
 		return this.saveCashToolLog(cashTool, eventType, operator);
 	}
 	
 	/**
-	 * 添加标的操作日志
+	 * 添加现金管理工具操作日志
 	 * @Title: saveCashToolLog 
 	 * @author vania
 	 * @version 1.0
@@ -53,7 +53,7 @@ public class CashToolLogService {
 	 * @param operator
 	 * @return CashToolLog    返回类型
 	 */
-	public CashToolLog saveCashToolLog(CashTool cashTool, TargetEventType eventType, String operator) {
+	public CashToolLog saveCashToolLog(CashTool cashTool, CashToolEventType eventType, String operator) {
 		if(null == eventType)
 			throw AMPException.getException("操作类型不能为空!");
 		CashToolLog entity = CashToolLog.builder().cashTool(cashTool).eventTime(DateUtil.getSqlCurrentDate())

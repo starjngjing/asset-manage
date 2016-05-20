@@ -42,8 +42,6 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
-import com.guohuai.asset.manage.boot.investment.Investment;
-import com.guohuai.asset.manage.boot.investment.TargetIncome;
 import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
 import com.guohuai.asset.manage.boot.investment.pool.TargetIncomeForm;
 import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
@@ -182,17 +180,17 @@ public class CashToolPoolController extends BaseController {
 	
 	
 	/**
-	 * 移除出库
+	 * 现金管理工具移除出库
 	 * 
-	 * @Title: remove
+	 * @Title: removeCashTool
 	 * @author vania
 	 * @version 1.0 @see:
 	 * @return CommonResp 返回类型
 	 */
 	@RequestMapping("removeCashTool")
-	@ApiOperation(value = "标的成立")
+	@ApiOperation(value = "现金管理工具移除出库")
 	public CommonResp removeCashTool(String oid) {
-		log.debug("投资标的成立接口!!!");
+		log.debug("现金管理工具移除出库接口!!!");
 		String loginId = null; 
 		try {
 			loginId = super.getLoginAdmin();

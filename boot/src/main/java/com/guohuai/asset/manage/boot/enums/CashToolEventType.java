@@ -73,6 +73,10 @@ public enum CashToolEventType {
 	 * 完成
 	 */
 	finish("13", "完成"),
+	/**
+	 * 移除
+	 */
+	delete("14", "移除"),
 	;
 	private String code;
 	private String desc;
