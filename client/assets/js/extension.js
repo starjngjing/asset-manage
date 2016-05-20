@@ -274,7 +274,7 @@ define([
       }
     },
     /**
-     * iCheck select2 datetimepicker 区域内初始化
+     * iCheck datetimepicker 区域内初始化
      * @param parent：要进行初始化的区域 jquery对象
      */
     inputPluginsInit: function (parent) {
