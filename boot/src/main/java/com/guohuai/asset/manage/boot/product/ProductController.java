@@ -1,6 +1,8 @@
 package com.guohuai.asset.manage.boot.product;
 
 import java.text.ParseException;
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -387,6 +390,105 @@ public class ProductController extends BaseController {
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
 		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
 		return new ResponseEntity<PageResp<ProductResp>>(rep, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品提交审核
+	 * @param oids 产品oids
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 */
+	@RequestMapping(value = "/aduit/apply", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> aduitApply(@RequestParam String oids) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		List<String> oidlist = JSON.parseArray(oids, String.class);
+		BaseResp repponse = this.productService.aduitApply(oidlist, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品审核通过
+	 * @param oids 产品oids
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 */
+	@RequestMapping(value = "/aduit/approve", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> aduitApprove(@RequestParam(required = true) String oid) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.aduitApprove(oid, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品审核不通过
+	 * @param oid 产品oid
+	 * @param auditComment 审核不通过备注
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/aduit/reject", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> aduitReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.aduitReject(oid, auditComment, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * 产品复核通过
+	 * @param oids 产品oid
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 */
+	@RequestMapping(value = "/review/approve", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> reviewApprove(@RequestParam(required = true) String oid) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.reviewApprove(oid, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品复核不通过
+	 * @param oid 产品oid
+	 * @param auditComment 审核不通过备注
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/review/reject", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> reviewReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.reviewReject(oid, auditComment, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品准入通过
+	 * @param oids 产品oid
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 */
+	@RequestMapping(value = "/admit/approve", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> admitApprove(@RequestParam(required = true) String oid) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.admitApprove(oid, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品准入不通过
+	 * @param oid 产品oid
+	 * @param auditComment 审核不通过备注
+	 * @return {@link ResponseEntity<BaseResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/admit/reject", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<BaseResp> admitReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
+		String operator = null;//super.getLoginAdmin();
+		BaseResp repponse = this.productService.admitReject(oid, auditComment, operator);
+		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
 	
 }

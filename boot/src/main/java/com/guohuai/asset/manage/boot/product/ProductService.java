@@ -33,6 +33,8 @@ public class ProductService {
 	@Autowired
 	private ProductDao productDao;
 	@Autowired
+	private ProductLogDao productLogDao;
+	@Autowired
 	private DictService dictService;
 	@Autowired
 	private FileService fileService;
@@ -337,17 +339,14 @@ public class ProductService {
 			product.setInstruction(form.getInstruction());
 			product.setRiskLevel(form.getRiskLevel());
 		}
-		String fkey = StringUtil.EMPTY;
+		String fkey = null;
 		{
-			if (null != form.getFiles() && form.getFiles().size() > 0) {
-				if (StringUtil.isEmpty(product.getFileKeys())) {
-					fkey = StringUtil.uuid();
-					product.setFileKeys(fkey);
-				} else {
-					fkey = product.getFileKeys();
-				}
+			if (StringUtil.isEmpty(product.getFileKeys())) {
+				fkey = StringUtil.uuid();
+				product.setFileKeys(fkey);
+			} else {
+				fkey = product.getFileKeys();
 			}
-			
 		}
 		product.setFileKeys(fkey);
 		{
@@ -358,7 +357,7 @@ public class ProductService {
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
-		if (null != form.getFiles() && form.getFiles().size() > 0) {
+		{
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
@@ -474,7 +473,7 @@ public class ProductService {
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
-		if (null != form.getFiles() && form.getFiles().size() > 0) {
+		{
 			// 文件
 			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
 		}
@@ -526,5 +525,180 @@ public class ProductService {
 		return pagesRep;
 	}
 	
+	
+	@Transactional
+	public BaseResp aduitApply(List<String> oids, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		List<Product> ps = productDao.findByOidIn(oids);
+		if (ps == null || ps.size()==0) {
+			throw AMPException.getException(90000);
+		}
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		for(Product product : ps) {
+			if (product == null || Product.YES.equals(product.getIsDeleted())) {
+				throw AMPException.getException(90000);
+			}
+			if (product.getAssetPool() == null) {
+				throw AMPException.getException(90011);
+			}
+			product.setStatus(Product.STATE_Auditing);
+			product.setAuditState(Product.AUDIT_STATE_Auditing);
+			product.setOperator(operator);
+			product.setUpdateTime(now);
+			
+			ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+			{
+				plb.product(product).auditType(ProductLog.AUDIT_TYPE_Auditing).auditState(ProductLog.AUDIT_STATE_Commited).auditor(operator).auditTime(now);
+			}
+			
+			this.productDao.saveAndFlush(product);
+			this.productLogDao.save(plb.build());
+			
+		}
+		
+		return response;
+	}
+	
+	@Transactional
+	public BaseResp aduitApprove(String oid, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Auditpass);
+		product.setAuditState(Product.AUDIT_STATE_Reviewing);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Auditing).auditState(ProductLog.AUDIT_STATE_Approval).auditor(operator).auditTime(now);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
+	
+	@Transactional
+	public BaseResp aduitReject(String oid, String auditComment, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Auditfail);
+		product.setAuditState(Product.AUDIT_STATE_Nocommit);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Auditing).auditState(ProductLog.AUDIT_STATE_Reject).auditor(operator).auditTime(now).auditComment(auditComment);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
+	
+	
+	@Transactional
+	public BaseResp reviewApprove(String oid, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Reviewpass);
+		product.setAuditState(Product.AUDIT_STATE_Approvaling);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Reviewing).auditState(ProductLog.AUDIT_STATE_Approval).auditor(operator).auditTime(now);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
+	
+	@Transactional
+	public BaseResp reviewReject(String oid, String auditComment, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Reviewfail);
+		product.setAuditState(Product.AUDIT_STATE_Auditing);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Reviewing).auditState(ProductLog.AUDIT_STATE_Reject).auditor(operator).auditTime(now).auditComment(auditComment);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
+	
+	
+	@Transactional
+	public BaseResp admitApprove(String oid, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Admitpass);
+		product.setAuditState(Product.AUDIT_STATE_Approval);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Approval).auditor(operator).auditTime(now);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
+	
+	@Transactional
+	public BaseResp admitReject(String oid, String auditComment, String operator) throws ParseException {
+		BaseResp response = new BaseResp();
+		
+		Product product = this.getProductById(oid);
+		
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		product.setStatus(Product.STATE_Admitfail);
+		product.setAuditState(Product.AUDIT_STATE_Reviewing);
+		product.setOperator(operator);
+		product.setUpdateTime(now);
+		
+		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+		{
+			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Reject).auditor(operator).auditTime(now).auditComment(auditComment);
+		}
+		
+		this.productDao.saveAndFlush(product);
+		this.productLogDao.save(plb.build());
+		
+		return response;
+	}
 	
 }

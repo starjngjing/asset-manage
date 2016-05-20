@@ -44,37 +44,31 @@ public class Product implements Serializable {
 	 * 	状态status：
 	 */
 	public static final String STATE_Create = "CREATE";//新建
-	public static final String STATE_Update = "UPDATE";//提交修改
+	public static final String STATE_Update = "UPDATE";//修改
+	public static final String STATE_Auditing = "AUDITING";//审核中
+	public static final String STATE_Auditfail = "AUDITFAIL";//审核不通过
+	public static final String STATE_Auditpass = "AUDITPASS";//审核通过(复核中)
+	public static final String STATE_Reviewfail = "REVIEWFAIL";//复核不通过
+	public static final String STATE_Reviewpass = "REVIEWPASS";//复核通过(准入中)
+	public static final String STATE_Admitfail = "ADMITFAIL";//准入不通过
+	public static final String STATE_Admitpass = "ADMITPASS";//准入通过(待上架)
 	public static final String STATE_Notstartraise = "NOTSTARTRAISE";//未开始募集
-	public static final String STATE_Raising = "RAISING";//募集中
+	public static final String STATE_Raising = "RAISING";//募集中(募集期)
+	public static final String STATE_Noestablishing = "NOESTALISHING";//成立未开始
+	public static final String STATE_Establishing = "ESTALISHING";//已成立
 	public static final String STATE_Raiseend = "RAISEEND";//募集结束
 	public static final String STATE_Risefail = "RISEFAIL";//募集失败
 	public static final String STATE_Subsist = "SUBSIST";//存续期
 	public static final String STATE_Subsistend = "SUBSISTEND";//存续期结束(还本付息期)
 	public static final String STATE_Liquidation = "LIQUIDATION";//已清算
-	/**
-	 * 	状态status：
-	 *  waitPutOn:未排期
-	 *  putOnShelf:已排期
-	 *  collecting:募集期
-	 *  putOffShelf:下架
-	 *  collectingUnreached:募集未满
-	 *  running:运行期
-	 *  abortionWaitCalc:流标结算中
-	 *  endWaitCacl:到期结算中
-	 *  abortionEnd:流标终止
-	 *  end:到期完成
-	 */
-	public static final String PRODUCT_STATUS_waitPutOn = "waitPutOn";
-	public static final String PRODUCT_STATUS_putOnShelf = "putOnShelf";
-	public static final String PRODUCT_STATUS_collecting = "collecting";
-	public static final String PRODUCT_STATUS_putOffShelf = "putOffShelf";
-	public static final String PRODUCT_STATUS_collectingUnreached = "collectingUnreached";
-	public static final String PRODUCT_STATUS_running = "running";
-	public static final String PRODUCT_STATUS_abortionWaitCalc = "abortionWaitCalc";
-	public static final String PRODUCT_STATUS_endWaitCalc = "endWaitCalc";
-	public static final String PRODUCT_STATUS_abortionEnd = "abortionEnd";
-	public static final String PRODUCT_STATUS_end = "end";
+	public static final String PRODUCT_STATUS_waitPutOn = "waitPutOn";//未排期
+	public static final String PRODUCT_STATUS_putOnShelf = "putOnShelf";//已排期
+	public static final String PRODUCT_STATUS_collectingUnreached = "collectingUnreached";//募集未满
+	public static final String PRODUCT_STATUS_running = "running";//运行期
+	public static final String PRODUCT_STATUS_abortionWaitCalc = "abortionWaitCalc";//流标结算中
+	public static final String PRODUCT_STATUS_endWaitCalc = "endWaitCalc";//到期结算中
+	public static final String PRODUCT_STATUS_abortionEnd = "abortionEnd";//流标终止
+	public static final String PRODUCT_STATUS_end = "end";//到期完成
 
 	public static final String UNIT_Day = "DAY";//按日
 	public static final String UNIT_Week = "WEEK";
@@ -99,8 +93,6 @@ public class Product implements Serializable {
 	
 	public static final String DATE_TYPE_ManualInput  = "MANUALINPUT";//固定时间(手动录入时间)
 	public static final String DATE_TYPE_FirstRackTime  = "FIRSTRACKTIME";//;与首次上架时间同时
-	
-	
 	
 	@Id
 	private String oid;//产品序号
