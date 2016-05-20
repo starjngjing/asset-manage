@@ -54,8 +54,10 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(value = "orderlist", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<ProjectListResp> orderlist(HttpServletRequest request,
-			@And({ @Spec(path = "projectName", spec = Like.class), @Spec(path = "projectManager", spec = Equal.class),
-					@Spec(path = "pjType", params = "pjType", spec = Equal.class) }) Specification<Project> spec,
+			@And({ @Spec(params = "projectName", path = "projectName", spec = Like.class),
+			 @Spec(params = "projectManager", path = "projectManager", spec = Like.class),
+			 @Spec(params = "targetOid", path = "targetOid", spec = Equal.class),
+					@Spec(path = "projectType", params = "projectType", spec = Equal.class) }) Specification<Project> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int size, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
 		if (page < 1) {

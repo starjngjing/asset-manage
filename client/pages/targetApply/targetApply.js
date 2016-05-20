@@ -223,9 +223,14 @@ define([
 									}
 								})
 							},
-							'click .item-project': function(e, value, row) {
+							'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 								targetInfo = row; // 变更某一行 投资标的信息
-								console.log(targetInfo)
+								
+								$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+								$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
+								
+								// 给项目表单的 标的id属性赋值
+								$("#targetOid")[0].value = targetInfo.oid;
 								//111
 								// 初始化底层项目表格
 								$('#projectTable').bootstrapTable(projectTableConfig)
@@ -307,8 +312,8 @@ define([
 								container: $('#doConfirm'),
 								trigger: this,
 								accept: function() {
-									console.log('targetInfo===>' + JSON.stringify(targetInfo));
-									console.log('项目row===>' + JSON.stringify(row));
+//									console.log('targetInfo===>' + JSON.stringify(targetInfo));
+//									console.log('项目row===>' + JSON.stringify(row));
 									http.post(config.api.targetProjectDelete, {
 										data: {
 											targetOid: targetInfo.oid,
@@ -424,7 +429,8 @@ define([
 			success: function(result) {
 				$('#projectForm').clearForm();
 				$('#projectModal').modal('hide');
-				$('#targetApplyTable').bootstrapTable('refresh');
+				$('#projectTable').bootstrapTable('refresh'); // 项目表单重新加载
+				$('#targetApplyTable').bootstrapTable('refresh'); // 标的标的重新加载
 			}
 		})
 	}

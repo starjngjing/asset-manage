@@ -40,6 +40,15 @@ define(function () {
     	updateCurrent: this.host + "/ams/product/update/current",//更新活期产品
     	productDetail: this.host + "/ams/product/detail",//产品详情
     	productInvalid: this.host + "/ams/product/delete",//产品作废
+    	productAuditApply: this.host + "/ams/product/aduit/apply",//产品审核申请
+    	productAuditReject: this.host + "/ams/product/aduit/reject",//产品审核不通过
+    	productAuditApprove: this.host + "/ams/product/aduit/approve",//产品审核通过
+    	productReviewApply: this.host + "/ams/product/review/apply",//产品复核申请
+    	productReviewReject: this.host + "/ams/product/review/reject",//产品复核不通过
+    	productReviewApprove: this.host + "/ams/product/review/approve",//产品复核通过
+    	productAdmitApply: this.host + "/ams/product/admit/apply",//产品准入申请
+    	productAdmitReject: this.host + "/ams/product/admit/reject",//产品准入不通过
+    	productAdmitApprove: this.host + "/ams/product/admit/approve",//产品准入通过
     	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 		cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 		cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
