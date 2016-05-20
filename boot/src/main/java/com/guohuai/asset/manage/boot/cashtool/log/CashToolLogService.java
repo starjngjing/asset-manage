@@ -34,10 +34,10 @@ public class CashToolLogService {
 	 */
 	public CashToolLog saveCashToolLog(String cashtoolOid, CashToolEventType eventType, String operator) {
 		if (StringUtils.isBlank(cashtoolOid))
-			throw AMPException.getException("投资标的id不能为空");
+			throw AMPException.getException("现金管理工具id不能为空");
 		CashTool cashTool = this.cashToolDao.findOne(cashtoolOid);
 		if (null == cashTool)
-			throw AMPException.getException("找不到id为[" + cashtoolOid + "]的投资标的");
+			throw AMPException.getException("找不到id为[" + cashtoolOid + "]的现金管理工具");
 
 		return this.saveCashToolLog(cashTool, eventType, operator);
 	}

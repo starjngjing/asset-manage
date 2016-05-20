@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.cashtool.log.CashToolLogService;
 import com.guohuai.asset.manage.boot.enums.CashToolEventType;
+import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 /**
@@ -107,8 +108,12 @@ public class CashToolService {
 	 *            void 返回类型
 	 */
 	public void remove(String oid, String operator) {
-		this.cashToolDao.delete(oid);
+		CashTool ct = this.cashToolDao.findOne(oid);
+		ct.setState(CashTool.CASHTOOL_STATE_delete);
+		ct.setOperator(operator);
+		ct.setUpdateTime(DateUtil.getSqlCurrentDate());
 		cashToolLogService.saveCashToolLog(oid, CashToolEventType.delete, operator);
+		this.cashToolDao.save(ct);
 	}
 
 }

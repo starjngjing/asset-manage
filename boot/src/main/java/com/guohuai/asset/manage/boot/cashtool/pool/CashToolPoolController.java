@@ -95,7 +95,8 @@ public class CashToolPoolController extends BaseController {
 	@RequestMapping(value = "listCashTool", method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "现金工具成立管理列表")
 	public @ResponseBody ResponseEntity<CashToolListResp> listCashTool(HttpServletRequest request,
-			@And({	@Spec(params = "secShortName", path = "secShortName", spec = Like.class), 
+			@And({	@Spec(params = "secShortName", path = "secShortName", spec = Like.class),
+					@Spec(params = "ticker", path = "ticker", spec = Like.class), 
 					@Spec(params = "etfLof", path = "etfLof", spec = Equal.class) }) 
 					Specification<CashTool> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
@@ -115,9 +116,7 @@ public class CashToolPoolController extends BaseController {
 			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
 
-				// predicate.add(cb.notEqual(root.get("state").as(String.class),
-				// Investment.INVESTMENT_STATUS_invalid));
-				predicate.add(cb.equal(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_checkpass));
+				predicate.add(cb.notEqual(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete));
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();
 			}
@@ -191,13 +190,9 @@ public class CashToolPoolController extends BaseController {
 	@ApiOperation(value = "现金管理工具移除出库")
 	public CommonResp removeCashTool(String oid) {
 		log.debug("现金管理工具移除出库接口!!!");
-		String loginId = null; 
-		try {
-			loginId = super.getLoginAdmin();
-		} catch (Exception e) {
-			
-		}
-		this.cashToolService.remove(oid,loginId);
+		String loginId = super.getLoginAdmin();
+		log.debug("获取操作员id:" + loginId);
+		this.cashToolService.remove(oid, loginId);
 		return CommonResp.builder().errorMessage("移除出库成功！").attached("").build();
 	}
 
