@@ -18,6 +18,8 @@ define(function () {
     	establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
     	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
+    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
+    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
     	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
     	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
     	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
