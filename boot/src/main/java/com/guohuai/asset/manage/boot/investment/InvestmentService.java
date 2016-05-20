@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,9 +86,11 @@ public class InvestmentService {
 	 */
 	public Investment createInvestment(InvestmentManageForm form) {
 		Investment entity = new Investment();
-		entity.setOid(StringUtil.uuid());
+		if (StringUtils.isEmpty(form.getOid())) {
+			entity.setOid(StringUtil.uuid());
+		}
 		try {
-			BeanUtils.copyProperties(entity, form);
+			BeanUtils.copyProperties(form, entity);
 			// 资产规模 万转元
 			if (form.getRaiseScope() != null) {
 				BigDecimal yuan = form.getRaiseScope().multiply(new BigDecimal(10000));
