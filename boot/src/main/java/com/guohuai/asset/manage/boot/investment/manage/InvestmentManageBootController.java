@@ -128,10 +128,6 @@ public class InvestmentManageBootController extends BaseController {
 		temp.setCreator(investment.getCreator());
 		System.out.println(form.getRaiseScope());
 		investment = investmentService.updateInvestment(temp, operator);
-<<<<<<< HEAD
-=======
-		investmentLogService.saveInvestmentLog(temp, TargetEventType.create, operator);
->>>>>>> c52ff9a19242baf2bdf265c77f80bbb0ecd8dfbe
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

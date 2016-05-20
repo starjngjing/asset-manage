@@ -89,17 +89,11 @@ define([
 												'<th>时间</th>' +
 												'</tr></thead></table>')
 											var tableConfig = {
-												//												data: [{
-												//													role: '投资人',
-												//													comment: '同意',
-												//													name: '张三',
-												//													date: '2015-01-01'
-												//												}],
 												ajax: function(origin) {
 													http.post(config.api.meetingTargetVoteDet, {
 														data: {
 															meetingOid: data.oid,
-															targetOid: data.oid
+															targetOid: row.oid
 														},
 														contentType: 'form'
 													}, function(rlt) {
@@ -267,10 +261,6 @@ define([
 			//
 			//			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
 
-<<<<<<< HEAD
-=======
-			$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
-
 			// 过会纪要表格配置
 			var targetConventionSummaryTableConfig = {
 
@@ -338,7 +328,6 @@ define([
 				})
 			})
 			
->>>>>>> c52ff9a19242baf2bdf265c77f80bbb0ecd8dfbe
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit

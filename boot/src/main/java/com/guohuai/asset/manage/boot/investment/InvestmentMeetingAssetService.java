@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.investment.meeting.InvestmentMeetingAssetResp;
-
 @Service
 @Transactional
 public class InvestmentMeetingAssetService {
@@ -64,18 +62,16 @@ public class InvestmentMeetingAssetService {
 	 * @param meeting
 	 * @return
 	 */
-	public List<InvestmentMeetingAssetResp> getInvestmentByMeeting(String meetingOid) {
+	public List<Investment> getInvestmentByMeeting(String meetingOid) {
 		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(meetingOid);
 		List<InvestmentMeetingAsset> lists = investmentMeetingAssetDao.findByInvestmentMeeting(meeting);
-		List<InvestmentMeetingAssetResp> resps = new ArrayList<InvestmentMeetingAssetResp>();
+		List<Investment> investments = new ArrayList<Investment>();
 		for (InvestmentMeetingAsset temp : lists) {
 			Investment entity = new Investment();
-			InvestmentMeetingAssetResp resp = new InvestmentMeetingAssetResp();
-			resp.setAssetOid(temp.getInvestment().getOid());
-			resp.setAssetName(temp.getInvestment().getName());
-			resps.add(resp);
+			BeanUtils.copyProperties(temp.getInvestment(), entity);
+			investments.add(entity);
 		}
-		return resps;
+		return investments;
 	}
 
 }

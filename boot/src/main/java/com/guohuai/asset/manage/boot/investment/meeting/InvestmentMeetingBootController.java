@@ -118,9 +118,9 @@ public class InvestmentMeetingBootController extends BaseController {
 	}
 
 	@RequestMapping(value = "meetingTarget", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<InvestmentMeetingAssetResp>> meetingTargetList(String oid) {
-		List<InvestmentMeetingAssetResp> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
-		return new ResponseEntity<List<InvestmentMeetingAssetResp>>(list, HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<Investment>> meetingTargetList(String oid) {
+		List<Investment> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
+		return new ResponseEntity<List<Investment>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
