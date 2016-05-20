@@ -11,6 +11,7 @@ package com.guohuai.asset.manage.boot.cashtool.pool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
@@ -60,7 +61,7 @@ public class CashToolRevenueForm implements Cloneable, Serializable {
 	 * 交易日期
 	 */
 	@NotNull(message = "交易日期不能为空")
-	private Timestamp dailyProfitDate;
+	private Date dailyProfitDate;
 
 	/**
 	 * 万份收益
