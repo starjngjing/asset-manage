@@ -27,4 +27,11 @@ public class RiskIndicateController extends BaseController {
 		return new ResponseEntity<List<RiskIndicateResp>>(list, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/save", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<RiskIndicateResp> save(RiskIndicateForm form) {
+		super.checkLogin();
+		RiskIndicate i = this.riskIndicateService.save(form);
+		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
+	}
+
 }
