@@ -49,16 +49,22 @@ define([
             },
             {// 类型
 //            	width: 60,
-              field: 'type',
+              field: 'etfLof',
               formatter: function (val) {
-            	return util.enum.transform('TARGETTYPE', val);
+            	return util.enum.transform('CASHTOOLTYPE', val);
               }
+            },
+            {// 最新流通份额
+            	field: 'circulationShares',
+            	formatter: function (val) {
+            		return val;
+            	}
             },
             {// 7日年化收益率
             	field: 'weeklyYield',
             	formatter: function (val) {
             		if(val)
-						return val.toFixed(2) + "%";
+            			return val.toFixed(2) + "%";
             		return val;
             	}
             },
@@ -83,103 +89,68 @@ define([
             	    {
             	      text: '移除出库',
             	      type: 'button',
-            	      class: 'item-establish',
+            	      class: 'item-remove',
             	      isRender: true
             	    },
               	    {
               	    	text: '收益采集',
               	    	type: 'button',
-              	    	class: 'item-interest',
+              	    	class: 'item-cashToolRevenue',
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
-                  'click .item-establish': function (e, value, row) {
-                	http.post(config.api.targetDetQuery, {
-                        data: {
-                        	oid:row.oid
-                        },
-                        contentType: 'form'
-                      },
-                	  function (obj) {
-                    	  var data  = obj.investment;
-                    	  if(!data){
-                    		  toastr.error('现金管理工具详情数据不存在', '错误信息', {
-                    			    timeOut: 10000
-                    			  });
-                    	  }
-                	  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
-                	  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
-                	});
-                	$('#establishModal').modal('show');
+                  'click .item-remove': function (e, value, row) { // 移除出库
+                	  $("#confirmTitle").html("确定移除现金管理工具？")
+						$$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								http.post(config.api.removeCashTool, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									if (result.errorCode == 0) {
+										$('#dataTable').bootstrapTable('refresh');
+									} else {
+										alert('移除现金管理工具失败');
+									}
+								})
+							}
+						})
+                	  
                   },
-                  'click .item-unEstablish': function (e, value, row) {
-                	  http.post(config.api.targetDetQuery, {
+                  'click .item-cashToolRevenue': function (e, value, row) { // 收益采集-显示弹窗
+                	  http.post(config.api.cashtoolDetQuery, {
                 		  data: {
                 			  oid:row.oid
                 		  },
                 		  contentType: 'form'
                 	  },
                 	  function (obj) {
-                		  var data  = obj.investment;
+                		  var data = obj.data;
                 		  if(!data){
-                			  toastr.error('标的详情数据不存在', '错误信息', {
+                			  toastr.error('现金管理工具详情数据不存在', '错误信息', {
                 				  timeOut: 10000
                 			  });
                 		  }
-                		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
-                		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
+                		  data.cashtoolOid = data.oid; // 手动为 cashtoolOid 赋值
+                		  $$.detailAutoFix($('#cashToolDetail'), data);	// 自动填充详情
+                		  $$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
                 	  });
-                	  $('#unEstablishModal').modal('show');
+                	  $('#cashToolRevenueModal').modal('show');
                   },
-                  'click .item-interest': function (e, value, row) {
-                	  http.post(config.api.targetDetQuery, {
-                		  data: {
-                			  oid:row.oid
-                		  },
-                		  contentType: 'form'
-                	  },
-                	  function (obj) {
-                		  var data  = obj.investment;
-                		  if(!data){
-                			  toastr.error('标的详情数据不存在', '错误信息', {
-                				  timeOut: 10000
-                			  });
-                		  }
-                		  $$.detailAutoFix($('#interestForm'), data);	// 自动填充详情
-                		  $$.formAutoFix($('#interestForm'), data); // 自动填充表单
-                	  });
-                	  $('#interestModal').modal('show');
-                  },
-                  'click .item-detail': function (e, value, row) {
+                  'click .item-detail': function (e, value, row) { // 详情
                     http.post(config.api.applyGetUserInfo, {
                       data: {
                         aoid: row.oid
                       },
                       contentType: 'form'
                     }, function (result) {
-                      $('#detailModal')
-                      .find('.detail-property')
-                      .each(function (index, item) {
-                        switch (index) {
-                          case 0:
-                            item.innerText = result.name || '--'
-                            break
-                          case 1:
-                            item.innerText = result.sex || '--'
-                            break
-                          case 2:
-                            item.innerText = result.company || '--'
-                            break
-                          case 3:
-                            item.innerText = result.position || '--'
-                            break
-                          case 4:
-                            item.innerText = result.phone || '--'
-                            break
-                        }
-                      })
+                      
                       $('#detailModal').modal('show')
                     })
                   }
@@ -194,15 +165,15 @@ define([
         // 搜索表单初始化
         $$.searchInit($('#searchForm'), $('#dataTable'))
         
-        // 修改按钮点击事件
-        $("#establishSubmit").click(function(){
-        	$("#establishForm").ajaxSubmit({
+        // 收益采集 按钮点击事件
+        $("#cashToolRevenueSubmit").click(function(){
+        	$("#cashToolRevenueForm").ajaxSubmit({
         		type:"post",  //提交方式  
                 //dataType:"json", //数据类型'xml', 'script', or 'json'  
-        		url: config.api.establish,
+        		url: config.api.cashToolRevenueSave,
         		success:function(data) {
-        			$('#establishForm').clearForm();
-        			$('#establishModal').modal('hide');
+        			$('#cashToolRevenueForm').clearForm();
+        			$('#cashToolRevenueModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});
@@ -226,11 +197,11 @@ define([
 
         function getQueryParams (val) {
           var form = document.searchForm
+          pageOptions.ticker = form.ticker.value;
           pageOptions.secShortName = form.secShortName.value;
-          pageOptions.type = form.type.value;
-          pageOptions.raiseScope = form.raiseScope.value;
-          pageOptions.lifed = form.lifed.value;
-          pageOptions.expAror = form.expAror.value;
+          pageOptions.etfLof = form.etfLof.value;
+          pageOptions.circulationShares = form.circulationShares.value;
+          pageOptions.weeklyYield = form.weeklyYield.value;
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val

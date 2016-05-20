@@ -2,7 +2,6 @@
  * 配置项，提供全局使用各项配置
  * amd模块，使用requirejs载入
  */
-
 define(function () {
 //  this.host = 'http://www.guohuaigroup.com'
   this.host = ''
@@ -21,7 +20,8 @@ define(function () {
     	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
     	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
-    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
+    	removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
+    	cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
     	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
     	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
     	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
@@ -34,56 +34,62 @@ define(function () {
 			targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
 			targetCheckPass: this.host + '/ams/target/targetCheck/checkpass', //标的预审通过
 			targetCheckReject: this.host + '/ams/target/targetCheck/checkreject', //标的预审驳回
-			productApplyList: this.host + "/ams/product/apply/list",//查询产品申请列表
-			productAuditList: this.host + "/ams/product/audit/list",//查询产品审核列表
-			productCheckList: this.host + "/ams/product/check/list",//查询产品复核列表
-			productApproveList: this.host + "/ams/product/approve/list",//查询产品批准列表
-    	savePeriodic: this.host + "/ams/product/save/periodic",//新加定期产品
-    	saveCurrent: this.host + "/ams/product/save/current",//新加活期产品
-    	updatePeriodic: this.host + "/ams/product/update/periodic",//更新定期产品
-    	updateCurrent: this.host + "/ams/product/update/current",//更新活期产品
-    	productDetail: this.host + "/ams/product/detail",//产品详情
-    	productInvalid: this.host + "/ams/product/delete",//产品作废
-    	productAuditApply: this.host + "/ams/product/aduit/apply",//产品审核申请
-    	productAuditReject: this.host + "/ams/product/aduit/reject",//产品审核不通过
-    	productAuditApprove: this.host + "/ams/product/aduit/approve",//产品审核通过
-    	productReviewReject: this.host + "/ams/product/review/reject",//产品复核不通过
-    	productReviewApprove: this.host + "/ams/product/review/approve",//产品复核通过
-    	productAdmitReject: this.host + "/ams/product/admit/reject",//产品准入不通过
-    	productAdmitApprove: this.host + "/ams/product/admit/approve",//产品准入通过
-    	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
+			productApplyList: this.host + "/ams/product/apply/list", //查询产品申请列表
+			productAuditList: this.host + "/ams/product/audit/list", //查询产品审核列表
+			productCheckList: this.host + "/ams/product/check/list", //查询产品复核列表
+			productApproveList: this.host + "/ams/product/approve/list", //查询产品批准列表
+			savePeriodic: this.host + "/ams/product/save/periodic", //新加定期产品
+			saveCurrent: this.host + "/ams/product/save/current", //新加活期产品
+			updatePeriodic: this.host + "/ams/product/update/periodic", //更新定期产品
+			updateCurrent: this.host + "/ams/product/update/current", //更新活期产品
+			productDetail: this.host + "/ams/product/detail", //产品详情
+			productInvalid: this.host + "/ams/product/delete", //产品作废
+			productAuditApply: this.host + "/ams/product/aduit/apply", //产品审核申请
+			productAuditReject: this.host + "/ams/product/aduit/reject", //产品审核不通过
+			productAuditApprove: this.host + "/ams/product/aduit/approve", //产品审核通过
+			productReviewApply: this.host + "/ams/product/review/apply", //产品复核申请
+			productReviewReject: this.host + "/ams/product/review/reject", //产品复核不通过
+			productReviewApprove: this.host + "/ams/product/review/approve", //产品复核通过
+			productAdmitApply: this.host + "/ams/product/admit/apply", //产品准入申请
+			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
+			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
+			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 			cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
-			cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核
-			meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10',
-			meetingTarget: this.host + '/ams/target/targetMeeting/targetList',
-			meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting',
-			meetingList: this.host + '/ams/target/targetMeeting/list',
-    	system: {
-    		config: {
-    			ccp: {
-    				warrantor: {
-    					create: this.host + "/ams/system/ccp/warrantor/create",
-    					update: this.host + "/ams/system/ccp/warrantor/update",
-    					delete: this.host + "/ams/system/ccp/warrantor/delete",
-    					search: this.host + "/ams/system/ccp/warrantor/search"
-    				},
-    				warrantyMode: {
-    					create: this.host + "/ams/system/ccp/warrantyMode/create",
-    					update: this.host + "/ams/system/ccp/warrantyMode/update",
-    					delete: this.host + "/ams/system/ccp/warrantyMode/delete",
-    					search: this.host + "/ams/system/ccp/warrantyMode/search"
-    				},
-    				warrantyExpire: {
-    					create: this.host + "/ams/system/ccp/warrantyExpire/create",
-    					update: this.host + "/ams/system/ccp/warrantyExpire/update",
-    					delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
-    					search: this.host + "/ams/system/ccp/warrantyExpire/search"
-    				}
-    			}
-    		}
-    	}
-    },
+			cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核			
+			meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10', //参会人池
+			meetingTarget: this.host + '/ams/target/targetMeeting/targetList', //未过会标的池
+			meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting', //新建过会
+			meetingList: this.host + '/ams/target/targetMeeting/list', //过会列表
+			meetingDetail: this.host + '/ams/target/targetMeeting/detail', //过会详情
+			meetingTargetList: this.host + '/ams/target/targetMeeting/meetingTarget', //过会中标的列表
+			meetingTargetVoteDet: this.host + '/ams/target/targetMeeting/meetingTargetVoteDet', //过会中标的投票情况
+			system: {
+				config: {
+					ccp: {
+						warrantor: {
+							create: this.host + "/ams/system/ccp/warrantor/create",
+							update: this.host + "/ams/system/ccp/warrantor/update",
+							delete: this.host + "/ams/system/ccp/warrantor/delete",
+							search: this.host + "/ams/system/ccp/warrantor/search"
+						},
+						warrantyMode: {
+							create: this.host + "/ams/system/ccp/warrantyMode/create",
+							update: this.host + "/ams/system/ccp/warrantyMode/update",
+							delete: this.host + "/ams/system/ccp/warrantyMode/delete",
+							search: this.host + "/ams/system/ccp/warrantyMode/search"
+						},
+						warrantyExpire: {
+							create: this.host + "/ams/system/ccp/warrantyExpire/create",
+							update: this.host + "/ams/system/ccp/warrantyExpire/update",
+							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
+							search: this.host + "/ams/system/ccp/warrantyExpire/search"
+						}
+					}
+				}
+			}
+		},
+		
     /**
      * targetStates 标的状态
      */
@@ -92,49 +98,47 @@ define(function () {
 			id: "waitPretrial",
 			text: "未审核",
 			children: []
-		},{
+		}, {
 			id: "pretrial",
 			text: "预审中",
 			children: []
-		},{
+		}, {
 			id: "waitMeeting",
 			text: "未过会",
 			children: []
-		},{
+		}, {
 			id: "metting",
 			text: "过会中",
 			children: []
-		},{
+		}, {
 			id: "collecting",
 			text: "募集中",
 			children: []
-		},{
+		}, {
 			id: "establish",
 			text: "成立",
 			children: []
-		},{
+		}, {
 			id: "unEstablish",
 			text: "成立失败",
 			children: []
-		},{
+		}, {
 			id: "reject",
 			text: "驳回",
 			children: []
-		},{
+		}, {
 			id: "overdue",
 			text: "逾期",
 			children: []
-		},{
+		}, {
 			id: "invalid",
 			text: "作废",
 			children: []
-		}
-    ],
-    /**
-     * conventionStates 过会状态
-     */
-    conventionStates: {
-		},
+		}],
+		/**
+		 * conventionStates 过会状态
+		 */
+		conventionStates: {},
 		cashtoolStates: [{
 			id: "waitPretrial",
 			text: "未审核",

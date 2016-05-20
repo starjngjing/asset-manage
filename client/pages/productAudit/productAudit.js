@@ -268,7 +268,6 @@ define([
 					$('#productDesignTable').bootstrapTable('refresh')
 				}
 			)
-				
 		})
     	     
     }

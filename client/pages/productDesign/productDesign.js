@@ -227,6 +227,7 @@ define([
 		                		  contentType: 'form'
 		                		},
 		                		function (obj) {
+
 		                		  $('#projectModal').modal('show');
 		                		}
 		                	);
@@ -314,6 +315,7 @@ define([
     		}
   		})
 
+
 		// 提交审核按钮点击事件
 		$('#productAudit').on('click', function () {
 			if(checkItems.length>0) {
@@ -334,6 +336,9 @@ define([
 		})
 
 		// 提交审核弹窗 -> 提交按钮点击事件
+
+
+
 		$('#doProductAudit').on('click', function () {
 			// 获取id数组
 			var oids = checkItems.map(function (item) {

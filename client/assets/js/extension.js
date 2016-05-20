@@ -127,6 +127,49 @@ define([
 
     },
     /**
+     * uploader方法，使用 $$.uploader 将一段 <div class="form-group"></div> 结构变成一个上传附件按钮，
+     *              每次选择附件后立即上传附件到 /yup接口，并返回附件信息
+     * @param options json object对象
+     *     -- options.container：组件容器 jquery对象
+     *     -- options.fromTitle：左侧列表title string
+     *     -- options.toTitle：右侧列表title string
+     *     -- options.fromArray：左侧列表数据源 数组
+     *     -- options.toArray：右侧列表title 数组
+     *     -- options.field：用于显示的字段名称 string
+     *     -- options.formatter：formatter Function
+     *
+     */
+    uploader: function (options) {
+      var container = options.container
+      var size = options.size || ''
+      var success = options.success || null
+
+      var form = $('<form method="post" class="yupForm" enctype="multipart/form-data"></form>')
+      var btn = $('<button class="btn btn-default ' + (size ? 'btn-' + size : '') + '">上传附件</button>')
+      var input = $('<input name="yupUpload" class="' + size + '" type="file"/>')
+
+      form.append(btn).append(input).appendTo(container)
+
+      form.delegate('input:file', 'change', function () {
+        var fileSize = parseInt(this.files[0].size / 1000)
+        form.ajaxSubmit({
+          url: config.api.yup,
+          success: function (data) {
+            if (!!success) {
+              var remoteFile = data[0]
+              success({
+                name: remoteFile.realname,
+                url: '/' + remoteFile.url,
+                size: fileSize
+              })
+              form.find('input:file').remove()
+              form.append('<input name="yupUpload" class="' + size + '" type="file"/>')
+            }
+          }
+        })
+      })
+    },
+    /**
      * 搜索表单初始化，使用 $$.searchInit 将grid中的搜索表单键盘事件绑定表格刷新
      * @param form：搜索表单 jquery对象
      * @param table：搜索表单对应的表格 jquery对象
@@ -231,7 +274,7 @@ define([
       }
     },
     /**
-     * iCheck select2 datetimepicker 区域内初始化
+     * iCheck datetimepicker 区域内初始化
      * @param parent：要进行初始化的区域 jquery对象
      */
     inputPluginsInit: function (parent) {

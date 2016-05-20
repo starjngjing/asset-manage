@@ -37,7 +37,7 @@ public class InvestmentMeetingUser extends UUID implements Serializable {
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "conferenceOid", referencedColumnName = "oid")
-	private InvestmentMeeting InvestmentMeeting;
+	private InvestmentMeeting investmentMeeting;
 	/**
 	 * 参会人员
 	 */

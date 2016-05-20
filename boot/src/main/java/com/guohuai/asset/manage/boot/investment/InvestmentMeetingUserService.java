@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.investment;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,16 @@ public class InvestmentMeetingUserService {
 	 */
 	public InvestmentMeetingUser saveOrUpdateInvestment(InvestmentMeetingUser entity, String operator) {
 		return this.investmentMeetingUserDao.save(entity);
+	}
+
+	/**
+	 * 根据会议查询参会人列表
+	 * 
+	 * @param meeting
+	 * @return
+	 */
+	public List<InvestmentMeetingUser> getMeetingUserByMeeting(InvestmentMeeting meeting) {
+		return investmentMeetingUserDao.findByInvestmentMeeting(meeting);
 	}
 
 }

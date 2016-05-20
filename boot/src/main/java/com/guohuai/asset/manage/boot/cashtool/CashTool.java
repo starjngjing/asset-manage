@@ -49,12 +49,14 @@ public class CashTool extends UUID {
 	 * checkpass 审核通过
 	 * reject 驳回
 	 * invalid 作废
+	 * delete删除
 	 */
 	public static final String CASHTOOL_STATE_waitPretrial = "waitPretrial";
 	public static final String CASHTOOL_STATE_pretrial = "pretrial";
 	public static final String CASHTOOL_STATE_checkpass = "checkpass";
 	public static final String CASHTOOL_STATE_reject = "reject";
 	public static final String CASHTOOL_STATE_invalid = "invalid";
+	public static final String CASHTOOL_STATE_delete = "delete";
 
 	/**
 	 * 基金代码

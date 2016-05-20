@@ -44,6 +44,12 @@ public class InvestmentMeetingVote extends UUID implements Serializable {
 	public static final String VOTE_STATUS_notpass = "notpass";
 
 	/**
+	 * 会议
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "conferenceOid", referencedColumnName = "oid")
+	private InvestmentMeeting investmentMeeting;
+	/**
 	 * 投资标的
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)

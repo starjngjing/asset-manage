@@ -62,9 +62,9 @@ public enum CashToolEventType {
 	unEstablish("10", "不成立"),
 	
 	/**
-	 * 本息兑付
+	 * 收益采集
 	 */
-	income("11", "本息兑付"),
+	revenue("11", "收益采集"),
 	/**
 	 * 逾期
 	 */

@@ -80,10 +80,15 @@
             <li>
               <a href="javascript:void(0)" data-gh-route="channel">
                 <i class="fa fa-adn"></i>
-                <span>渠道管理</span>
+                <span>全部渠道</span>
               </a>
             </li>
-
+            <li>
+              <a href="javascript:void(0)" data-gh-route="channelapply">
+                <i class="fa fa-adn"></i>
+                <span>渠道审批</span>
+              </a>
+            </li>
             <li class="header">投资标的管理</li>
             <li>
               <a href="javascript:void(0)" data-gh-route="targetApply">
@@ -217,6 +222,12 @@
                 <span>资产准入评分模型</span>
               </a>
             </li>
+            <li>
+              <a href="javascript:void(0)" data-gh-route="riskIndicate">
+                <i class="fa fa-connectdevelop"></i>
+                <span>风险关键指标维护</span>
+              </a>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -280,6 +291,7 @@
         // 为满足断点调试需求，前期将资源全部require进来，$.getScript无法满足断点调试
         var navSource = [
           'channel',
+          'channelapply',
           'targetApply',
           'targetAccess',
           'targetConvention',
@@ -294,7 +306,8 @@
           'productAccess',
           'AssetPool',
           'AssetPoolDuration',
-          'ccpWarranty'
+          'ccpWarranty',
+          'riskIndicate'
         ]
         var navRequire = (function () {
           var arr = ['config', 'extension', 'http', 'util']
@@ -356,7 +369,7 @@
                     .on('blur', function () {
                       $(document).off('keydown.formInput')
                     })
-                  // icheck select2 datetimepicker全局初始化
+                  // icheck datetimepicker全局初始化
                   $$.inputPluginsInit($(document))
                 })
               location.hash = params.value ? route + '?' + params.value : route
