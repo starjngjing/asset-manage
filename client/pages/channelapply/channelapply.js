@@ -1,12 +1,12 @@
 /**
- * 全部渠道
+ * 渠道审批
  */
 define([
   'util',
   'extension'
 ], function (util, $$) {
   return {
-    name: 'channel',
+    name: 'channelapply',
     init: function () {
       // js逻辑写在这里
 
