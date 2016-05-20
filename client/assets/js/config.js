@@ -85,7 +85,16 @@ define(function () {
 							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
 							search: this.host + "/ams/system/ccp/warrantyExpire/search"
 						}
-					}
+					},
+					ccr: {
+	    				cate: {
+	    					options: this.host + "/ams/system/ccr/cate/options"
+	    				},
+	    				indicate: {
+	    					search: this.host + "/ams/system/ccr/indicate/search",
+	    					save: this.host + "/ams/system/ccr/indicate/save"
+	    				}
+	    			}
 				}
 			}
 		},

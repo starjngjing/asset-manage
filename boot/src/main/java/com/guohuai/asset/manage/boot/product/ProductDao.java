@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.product;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -12,5 +13,6 @@ public interface ProductDao extends JpaRepository<Product, String>, JpaSpecifica
 	 */
 	public Product findByCode(String code);
 	
+	public List<Product> findByOidIn(List<String> oids);
 	
 }

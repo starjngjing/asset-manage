@@ -69,6 +69,28 @@ define([
 				},
 				{
 					align: 'center',
+					field: 'status',
+					formatter: function (val) {
+						switch (val) {
+							case 'CREATE': return '新建'
+							case 'UPDATE': return '修改'
+							case 'AUDITING': return '审核中'
+							case 'AUDITFAIL': return '审核不通过'
+							case 'AUDITFAIL': return '审核通过'
+							case 'REVIEWFAIL': return '复核不通过'
+							case 'REVIEWPASS': return '复核通过'
+							case 'ADMITFAIL': return '准入不通过'
+							case 'ADMITPASS': return '准入通过'
+							case 'NOTSTARTRAISE': return '未开始募集'
+							case 'RAISING': return '募集中(募集期)'
+							case 'NOESTALISHING': return '成立未开始'
+							case 'ESTALISHING': return '已成立'
+							default : return '-'
+						}
+					}
+				},
+				{
+					align: 'center',
 					field: 'durationPeriod',
 					formatter: function (val, row, index) {
 						var typeOid = row.typeOid;  
@@ -155,8 +177,7 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
-									$$.detailAutoFix($('#productDetailForm'), data); // 自动填充详情
-									$$.formAutoFix($('#productDetailForm'), data); // 自动填充表单
+									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
 								} else {
 									alert(查询失败);
@@ -172,7 +193,6 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
-									$$.detailAutoFix($('#updateProductForm'), data); // 自动填充详情
 									$$.formAutoFix($('#updateProductForm'), data); // 自动填充表单
 									$('#updateProductModal').modal('show');
 								} else {
@@ -207,8 +227,7 @@ define([
 		                		  contentType: 'form'
 		                		},
 		                		function (obj) {
-		                		  $$.detailAutoFix($('#targetDetail'), data);	// 自动填充详情
-		                		  $$.formAutoFix($('#targetDetail'), data); // 自动填充表单
+
 		                		  $('#projectModal').modal('show');
 		                		}
 		                	);
@@ -296,7 +315,8 @@ define([
     		}
   		})
 
-			// 提交审核按钮点击事件
+
+		// 提交审核按钮点击事件
 		$('#productAudit').on('click', function () {
 			if(checkItems.length>0) {
 				var productNames = checkItems.map(function (item) {
@@ -309,49 +329,17 @@ define([
 						pnames+="，"
 					}
 					pnames+=productNames[i]
+
 				}
 				$("#auditProductNames").html(pnames)
 				$('#productAuditModal').modal('show')
-			} else {
-				alert("请选择产品")
 			}
 		})
 
 		// 提交审核弹窗 -> 提交按钮点击事件
-<<<<<<< HEAD
-//		$('#doProductAudit').on('click', function () {
-//			// 获取id数组
-//			var oids = checkItems.map(function (item) {
-//				return item.oid
-//			})
-//			// 提交数组
-//			http.post(config.api.productInvalid, {
-//				
-//			$('#addProductForm').ajaxSubmit({
-//    		url: config.api.savePeriodic,
-//    		success: function (addResult) {
-//      			$('#productAuditModal').modal('hide')
-//      			$('#productDesignTable').bootstrapTable('refresh')
-//    			}
-//    			
-//    			
-//    			http.post(config.api.productInvalid, {
-//										data: {
-//											oids: oids
-//										},
-//										contentType: 'form',
-//									}, function(result) {
-//										$('#productDesignTable').bootstrapTable('refresh')
-//									})
-//				
-//				
-//			})
-//
-//			// 选择资产池按钮点击事件
-//			$('#productAssetPool').on('click', function () {
-//				$('#assetPoolModal').modal('show')
-//			})
-=======
+
+
+
 		$('#doProductAudit').on('click', function () {
 			// 获取id数组
 			var oids = checkItems.map(function (item) {
@@ -362,12 +350,12 @@ define([
 				config.api.productAuditApply, 
 				{
 					data: {
-						oids: oids
+						oids: JSON.stringify(oids)
 					},
 					contentType: 'form',
 				}, 
 				function(result) {
-					$('productAuditModal').modal('hide')
+					$('#productAuditModal').modal('hide')
 					$('#productDesignTable').bootstrapTable('refresh')
 				}
 			)
@@ -378,8 +366,8 @@ define([
 		$('#productAssetPool').on('click', function () {
 			$('#assetPoolModal').modal('show')
 		})
->>>>>>> c52ff9a19242baf2bdf265c77f80bbb0ecd8dfbe
     	     
     }
   }
+	
 })

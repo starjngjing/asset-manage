@@ -118,6 +118,13 @@ define([
               	    	class: 'item-targetIncome',
 //              	    	isRender: row.state == 'establish',
               	    	isRender: true,
+              	    },
+              	    {
+              	    	text: '财务数据',
+              	    	type: 'button',
+              	    	class: 'item-financialData',
+              	    	//isRender: row.state == 'establish',
+              	    	isRender: true,
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
@@ -186,6 +193,9 @@ define([
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
                 	  $('#targetIncomeModal').modal('show');
+                  },
+                  'click .item-financialData': function(e, value, row) {
+                	  
                   }
                 
               }
