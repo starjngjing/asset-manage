@@ -18,7 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.investment.InvestmentDao;
+import com.guohuai.asset.manage.boot.cashtool.log.CashToolLogService;
+import com.guohuai.asset.manage.boot.enums.CashToolEventType;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 /**
@@ -39,9 +40,9 @@ public class CashToolService {
 
 	@Autowired
 	private CashToolDao cashToolDao;
-
+	
 	@Autowired
-	private InvestmentDao investmentDao;
+	private CashToolLogService cashToolLogService;
 
 	public CashTool save(CashTool cashTool) {
 		return this.cashToolDao.save(cashTool);
@@ -93,6 +94,21 @@ public class CashToolService {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
+	}
+	
+	/**
+	 * 移除出库
+	 * 
+	 * @Title: remove
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param oid
+	 *            void 返回类型
+	 */
+	public void remove(String oid, String operator) {
+		this.cashToolDao.delete(oid);
+		cashToolLogService.saveCashToolLog(oid, CashToolEventType.delete, operator);
 	}
 
 }

@@ -42,8 +42,6 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
-import com.guohuai.asset.manage.boot.investment.Investment;
-import com.guohuai.asset.manage.boot.investment.TargetIncome;
 import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
 import com.guohuai.asset.manage.boot.investment.pool.TargetIncomeForm;
 import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
@@ -97,8 +95,8 @@ public class CashToolPoolController extends BaseController {
 	@RequestMapping(value = "listCashTool", method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "现金工具成立管理列表")
 	public @ResponseBody ResponseEntity<CashToolListResp> listCashTool(HttpServletRequest request,
-			@And({	@Spec(params = "name", path = "name", spec = Like.class), 
-					@Spec(params = "type", path = "type", spec = Equal.class) }) 
+			@And({	@Spec(params = "secShortName", path = "secShortName", spec = Like.class), 
+					@Spec(params = "etfLof", path = "etfLof", spec = Equal.class) }) 
 					Specification<CashTool> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
@@ -116,43 +114,35 @@ public class CashToolPoolController extends BaseController {
 			@Override
 			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
-				
-//						predicate.add(cb.notEqual(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid));
+
+				// predicate.add(cb.notEqual(root.get("state").as(String.class),
+				// Investment.INVESTMENT_STATUS_invalid));
 				predicate.add(cb.equal(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_checkpass));
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();
 			}
 		});
+
+		// 最新流通份额
+		String circulationShares = request.getParameter("circulationShares");
+		if (StringUtils.isNotBlank(circulationShares)) {
+			spec = Specifications.where(spec).and(new Specification<CashTool>() {
+				@Override
+				public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					Section<CashTool> section = new Section<CashTool>(circulationShares);
+					return section.build(root, cb, "circulationShares");
+				}
+			});
+		}
 		
-		String raiseScope = request.getParameter("raiseScope");
-		if (StringUtils.isNotBlank(raiseScope)) {
+		// 7日年化收益率
+		String weeklyYield = request.getParameter("weeklyYield");
+		if (StringUtils.isNotBlank(weeklyYield)) {
 			spec = Specifications.where(spec).and(new Specification<CashTool>() {
 				@Override
 				public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<CashTool> section = new Section<CashTool>(raiseScope);
-					return section.build(root, cb, "raiseScope");
-				}
-			});
-		}
-
-		String lifed = request.getParameter("lifed");
-		if (StringUtils.isNotBlank(lifed)) {
-			spec = Specifications.where(spec).and(new Specification<CashTool>() {
-				@Override
-				public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<CashTool> section = new Section<CashTool>(lifed);
-					return section.build(root, cb, "lifed");
-				}
-			});
-		}
-
-		String expAror = request.getParameter("expAror");
-		if (StringUtils.isNotBlank(expAror)) {
-			spec = Specifications.where(spec).and(new Specification<CashTool>() {
-				@Override
-				public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<CashTool> section = new Section<CashTool>(expAror);
-					return section.build(root, cb, "expAror");
+					Section<CashTool> section = new Section<CashTool>(weeklyYield);
+					return section.build(root, cb, "weeklyYield");
 				}
 			});
 		}
@@ -186,6 +176,29 @@ public class CashToolPoolController extends BaseController {
 		form.setOperator(loginId);
 //		this.cashToolService.establish(form);
 		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
+	}
+	
+	
+	/**
+	 * 现金管理工具移除出库
+	 * 
+	 * @Title: removeCashTool
+	 * @author vania
+	 * @version 1.0 @see:
+	 * @return CommonResp 返回类型
+	 */
+	@RequestMapping("removeCashTool")
+	@ApiOperation(value = "现金管理工具移除出库")
+	public CommonResp removeCashTool(String oid) {
+		log.debug("现金管理工具移除出库接口!!!");
+		String loginId = null; 
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			
+		}
+		this.cashToolService.remove(oid,loginId);
+		return CommonResp.builder().errorMessage("移除出库成功！").attached("").build();
 	}
 
 	/**

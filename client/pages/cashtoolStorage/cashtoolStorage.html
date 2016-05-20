@@ -17,7 +17,7 @@
       <div id="dataGrid" class="box box-primary">
         <!-- Grid头部 -->
         <div class="box-header">
-          <h3 class="box-title">标题</h3>
+          <h3 class="box-title">现金管理工具列表</h3>
         </div>
         <!-- Grid内容体 -->
         <div class="box-body">
@@ -26,86 +26,61 @@
             <div class="row">
               <div class="col-sm-3">
                 <div class="form-group">
-                  <label>标的名称</label>
-                  <input name="name" type="text"
+                  <label>基金名称</label>
+                  <input name="secShortName" type="text"
                          class="form-control input-sm"
-                         placeholder="搜索标的名称">
+                         placeholder="搜索基金名称">
                 </div>
               </div>
               <div class="col-sm-3">
                 <div class="form-group">
-                  <label>标的类型</label>
-                  <select name="type" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
+                  <label>基金类型</label>
+                  <select name="etfLof" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
                     <option value="" selected>不限</option>
-                    <option value="ok">已验证</option>
-                    <option value="no">未验证</option>
                   </select>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label>标的规模</label>
+              <label>最新流通份额</label>
               <div class="row form-style">
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value="" class="icheck" checked> 不限
+                  <input type="radio" name="circulationShares" value="" class="icheck" checked> 不限
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value="-1000000" class="icheck"> <100万
+                  <input type="radio" name="circulationShares" value="-1000000" class="icheck"> <100万
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value=":1000000-10000000" class="icheck"> 100万 - 1000万
+                  <input type="radio" name="circulationShares" value=":1000000-10000000" class="icheck"> 100万 - 1000万
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value=":1000000-100000000" class="icheck"> 1000万 - 1亿
+                  <input type="radio" name="circulationShares" value=":1000000-100000000" class="icheck"> 1000万 - 1亿
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value=":100000000-1000000000" class="icheck"> 1亿 - 10亿
+                  <input type="radio" name="circulationShares" value=":100000000-1000000000" class="icheck"> 1亿 - 10亿
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="raiseScope" value=":1000000000-" class="icheck"> >10 亿
+                  <input type="radio" name="circulationShares" value=":1000000000-" class="icheck"> >10 亿
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label>标的期限</label>
+              <label>7日年化收益率</label>
               <div class="row form-style">
                 <div class="col-sm-2">
-                  <input type="radio" name="lifed" value="" class="icheck" checked> 不限
+                  <input type="radio" name="weeklyYield" value="" class="icheck" checked> 不限
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="lifed" value="-30" class="icheck"> <1个月
+                  <input type="radio" name="weeklyYield" value="-0.03" class="icheck"> <3%
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="lifed" value=":30-90" class="icheck"> 1 - 3个月
+                  <input type="radio" name="weeklyYield" value=":0.03-0.06" class="icheck"> 3% - 6%
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="lifed" value=":90-180" class="icheck"> 3 - 6个月
+                  <input type="radio" name="weeklyYield" value=":0.06-0.1" class="icheck"> 6% - 10%
                 </div>
                 <div class="col-sm-2">
-                  <input type="radio" name="lifed" value=":180-360" class="icheck"> 6 - 12个月
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="lifed" value=":360-" class="icheck"> >12个月
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>预期年化收益</label>
-              <div class="row form-style">
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value="" class="icheck" checked> 不限
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value="-0.03" class="icheck"> <3%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value=":0.03-0.06" class="icheck"> 3% - 6%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value=":0.06-0.1" class="icheck"> 6% - 10%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value=":0.1-0.15" class="icheck"> 10% - 15%
+                  <input type="radio" name="weeklyYield" value=":0.1-0.15" class="icheck"> 10% - 15%
                 </div>
                 <div class="col-sm-2">
                   <input type="radio" name="expAror" value=":0.15" class="icheck"> >15%
@@ -117,13 +92,11 @@
           <table id="dataTable" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th>名称</th>
-              <th>标的类型</th>
-              <th>收益率</th>
-              <th>标的规模</th>
-              <th>期限</th>
+              <th>基金名称</th>
+              <th>基金类型</th>
+              <th>7日年化收益率</th>
               <th>状态</th>
-              <th>已购份额</th>
+              <th>持有份额</th>
               <th>操作</th>
             </tr>
             </thead>

@@ -324,32 +324,26 @@ define([
 				return item.oid
 			})
 			// 提交数组
-			http.post(config.api.productInvalid, {
+			http.post(
+				config.api.productAuditApply, 
+				{
+					data: {
+						oids: oids
+					},
+					contentType: 'form',
+				}, 
+				function(result) {
+					$('productAuditModal').modal('hide')
+					$('#productDesignTable').bootstrapTable('refresh')
+				}
+			)
 				
-			$('#addProductForm').ajaxSubmit({
-      		url: config.api.savePeriodic,
-      		success: function (addResult) {
-        			$('#productAuditModal').modal('hide')
-        			$('#productDesignTable').bootstrapTable('refresh')
-      			}
-      			
-      			
-      			http.post(config.api.productInvalid, {
-										data: {
-											oids: oids
-										},
-										contentType: 'form',
-									}, function(result) {
-										$('#productDesignTable').bootstrapTable('refresh')
-									})
-				
-				
-			})
+		})
 
-			// 选择资产池按钮点击事件
-			$('#productAssetPool').on('click', function () {
-				$('#assetPoolModal').modal('show')
-			})
+		// 选择资产池按钮点击事件
+		$('#productAssetPool').on('click', function () {
+			$('#assetPoolModal').modal('show')
+		})
     	     
     }
   }

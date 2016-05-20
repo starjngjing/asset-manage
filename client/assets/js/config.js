@@ -20,6 +20,8 @@ define(function () {
     	establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
     	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
     	listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
+    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
+    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
     	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
     	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
     	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
@@ -45,10 +47,8 @@ define(function () {
     	productAuditApply: this.host + "/ams/product/aduit/apply",//产品审核申请
     	productAuditReject: this.host + "/ams/product/aduit/reject",//产品审核不通过
     	productAuditApprove: this.host + "/ams/product/aduit/approve",//产品审核通过
-    	productReviewApply: this.host + "/ams/product/review/apply",//产品复核申请
     	productReviewReject: this.host + "/ams/product/review/reject",//产品复核不通过
     	productReviewApprove: this.host + "/ams/product/review/approve",//产品复核通过
-    	productAdmitApply: this.host + "/ams/product/admit/apply",//产品准入申请
     	productAdmitReject: this.host + "/ams/product/admit/reject",//产品准入不通过
     	productAdmitApprove: this.host + "/ams/product/admit/approve",//产品准入通过
     	cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
