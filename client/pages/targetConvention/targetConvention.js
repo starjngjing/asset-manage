@@ -76,11 +76,88 @@ define([
 								text: '完成过会',
 								type: 'button',
 								class: 'item-finish',
-								isRender: row.state == "waitenter"
+								isRender: row.state != "notopen" && row.state != "finish"
 							}];
 							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
+							'click .item-finish': function(e, value, row) {
+								$('#finishOid').val(row.oid)
+								currentOpTarget = null
+									// 会议确认表格配置
+								var finishTargetConventionTableConfig = {
+										// 在初始化数据的时候，将检查项数组和驳回理由字符串添加到每个对象里
+										ajax: function(origin) {
+											http.post(config.api.meetingTargetList, {
+												data: {
+													oid: row.oid
+												},
+												contentType: 'form'
+											}, function(rlt) {
+												origin.success(rlt)
+											})
+										},
+										detailView: true,
+										onExpandRow: function(index, row, $detail) {
+
+										},
+										columns: [{
+											field: 'name'
+										}, {
+											field: 'status',
+											formatter: function(val) {
+												switch (val) {
+													case 'yes':
+														return '<span class="text-green">通过</span>';
+													case 'no':
+														return '<span class="text-red">驳回</span>';
+													default:
+														return '<span>-</span>';
+												}
+											}
+										}, {
+											width: 120,
+											align: 'center',
+											formatter: function() {
+												var buttons = [{
+													text: '通过',
+													type: 'button',
+													class: 'item-pass'
+												}, {
+													text: '驳回',
+													type: 'button',
+													class: 'item-reject'
+												}]
+												return util.table.formatter.generateButton(buttons)
+											},
+											events: {
+												'click .item-pass': function(e, value, row) {
+													currentOpTarget = row
+														// 复制此标的下检查项的值
+													var injectData = row.checkConditions.map(function(text) {
+															return {
+																text: text
+															}
+														})
+														// 加一条空值，用于新增
+													injectData.push({
+														text: ''
+													})
+													$('#checkConditionsTable').bootstrapTable('load', injectData)
+													$('#checkConditionsModal').modal('show')
+												},
+												'click .item-reject': function(e, value, row) {
+													currentOpTarget = row
+													document.rejectForm.rejectComment.value = currentOpTarget.rejectComment
+													$('#rejectCommentModal').modal('show')
+												}
+											}
+										}]
+									}
+									// 会议确认表格初始化
+								$('#finishTargetConventionTable').bootstrapTable(finishTargetConventionTableConfig)
+								$('#finishTargetConventionModal').modal('show')
+							},
 							'click .item-open': function(e, value, row) {
 								$("#confirmTitle").html("确定启动过会？")
 								$$.confirm({
@@ -279,6 +356,7 @@ define([
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
 					url: config.api.meetingAdd,
 					success: function(result) {
+						$('#targetConventionTable').bootstrapTable('refresh')
 						$('#addTargetConventionModal').modal('hide')
 					}
 				})
@@ -408,67 +486,6 @@ define([
 
 			// 临时存储当前操作标的对象
 			var currentOpTarget = null
-				// 会议确认表格配置
-			var finishTargetConventionTableConfig = {
-					// 在初始化数据的时候，将检查项数组和驳回理由字符串添加到每个对象里
-					data: [{
-						name: '十一届三中全会',
-						status: 'yes',
-						checkConditions: [], // 检查项
-						rejectComment: '' // 驳回理由
-					}],
-					detailView: true,
-					onExpandRow: function(index, row, $detail) {
-
-					},
-					columns: [{
-						field: 'name'
-					}, {
-						field: 'status',
-						formatter: function(val) {
-							return val === 'yes' ? '<span class="text-green">通过</span>' : '<span class="text-red">驳回</span>'
-						}
-					}, {
-						width: 120,
-						align: 'center',
-						formatter: function() {
-							var buttons = [{
-								text: '通过',
-								type: 'button',
-								class: 'item-pass'
-							}, {
-								text: '驳回',
-								type: 'button',
-								class: 'item-reject'
-							}]
-							return util.table.formatter.generateButton(buttons)
-						},
-						events: {
-							'click .item-pass': function(e, value, row) {
-								currentOpTarget = row
-									// 复制此标的下检查项的值
-								var injectData = row.checkConditions.map(function(text) {
-										return {
-											text: text
-										}
-									})
-									// 加一条空值，用于新增
-								injectData.push({
-									text: ''
-								})
-								$('#checkConditionsTable').bootstrapTable('load', injectData)
-								$('#checkConditionsModal').modal('show')
-							},
-							'click .item-reject': function(e, value, row) {
-								currentOpTarget = row
-								document.rejectForm.rejectComment.value = currentOpTarget.rejectComment
-								$('#rejectCommentModal').modal('show')
-							}
-						}
-					}]
-				}
-				// 会议确认表格初始化
-			$('#finishTargetConventionTable').bootstrapTable(finishTargetConventionTableConfig)
 
 			// 检查项表格配置
 			var checkConditionsTableConfig = {
@@ -529,6 +546,7 @@ define([
 					return item.text
 				})
 				currentOpTarget.status = 'yes'
+				$('#finishTargetConventionTable').bootstrapTable('load', $('#finishTargetConventionTable').bootstrapTable('getData'))
 				$('#checkConditionsModal').modal('hide')
 			})
 
@@ -536,6 +554,7 @@ define([
 			$('#doAddRejectComment').on('click', function() {
 				currentOpTarget.rejectComment = document.rejectForm.rejectComment.value.trim()
 				currentOpTarget.status = 'no'
+				$('#finishTargetConventionTable').bootstrapTable('load', $('#finishTargetConventionTable').bootstrapTable('getData'))
 				$('#rejectCommentModal').modal('hide')
 			})
 
@@ -545,7 +564,12 @@ define([
 				var form = document.finishTargetConventionForm
 				form.targets.value = JSON.stringify(tableData)
 				$(form).ajaxSubmit({
-
+					url: config.api.meetingFinish,
+					success: function(result) {
+						$(form).clearForm();
+						$('#targetConventionTable').bootstrapTable('refresh')
+						$('#finishTargetConventionModal').modal('hide')
+					}
 				})
 			})
 

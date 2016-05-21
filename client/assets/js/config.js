@@ -67,6 +67,7 @@ define(function() {
 			meetingOpen: this.host + '/ams/target/targetMeeting/open', //获得会议纪要详情
 			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
+			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
 			channelQuery: this.host + '/ams/channel/query',              //渠道-列表查询
 		    addChannel: this.host + '/ams/channel/add', 				 //渠道-新增
 		    channelinfo: this.host + '/ams/channel/channelinfo',		 //渠道-获取详情
@@ -76,6 +77,7 @@ define(function() {
 		    remarksQuery: this.host + '/ams/channel/remarksquery',	     //渠道-意见列表
 		    chanApproveQuery: this.host + '/ams/channelapprove/query',   //渠道-渠道审批查询
 		    delApply: this.host + '/ams/channelapprove/dealapply',       //渠道-处理申请开启和停用
+		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
 			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
@@ -160,6 +162,10 @@ define(function() {
 		}, {
 			id: "invalid",
 			text: "作废",
+			children: []
+		}, {
+			id: "meetingPass",
+			text: "待准入",
 			children: []
 		}],
 		/**

@@ -61,6 +61,7 @@ public class InvestmentService {
 	 */
 	public Investment saveInvestment(Investment entity, String operator) {
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
 		return this.investmentDao.save(entity);
 	}

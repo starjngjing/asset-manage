@@ -59,5 +59,15 @@ public class InvestmentMeetingUserService {
 	public List<InvestmentMeetingUser> getMeetingUserByMeeting(InvestmentMeeting meeting) {
 		return investmentMeetingUserDao.findByInvestmentMeeting(meeting);
 	}
+	
+	/**
+	 * 根据会议查询参会人列表
+	 * 
+	 * @param meeting
+	 * @return
+	 */
+	public List<InvestmentMeetingUser> getMeetingUserByUser(String participantOid) {
+		return investmentMeetingUserDao.findByParticipantOid(participantOid);
+	}
 
 }

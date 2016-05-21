@@ -121,9 +121,9 @@ public class InvestmentMeetingBootController extends BaseController {
 	}
 
 	@RequestMapping(value = "meetingTarget", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<Investment>> meetingTargetList(String oid) {
-		List<Investment> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
-		return new ResponseEntity<List<Investment>>(list, HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<MeetingInvestmentDetResp>> meetingTargetList(String oid) {
+		List<MeetingInvestmentDetResp> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
+		return new ResponseEntity<List<MeetingInvestmentDetResp>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
@@ -145,9 +145,9 @@ public class InvestmentMeetingBootController extends BaseController {
 		investmentMeetingService.summaryUp(meetingOid, files, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "summaryDetele", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> summaryDelete(String oid){
+	public @ResponseBody ResponseEntity<BaseResp> summaryDelete(String oid) {
 		String operator = super.getLoginAdmin();
 		investmentMeetingService.deleteSummary(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
@@ -165,4 +165,11 @@ public class InvestmentMeetingBootController extends BaseController {
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "finish", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> finish(MeetingFinishForm form) {
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.finishMeeting(form, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+	
 }

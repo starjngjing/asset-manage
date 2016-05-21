@@ -5,7 +5,7 @@ import java.util.List;
 import com.guohuai.asset.manage.component.web.view.PageResp;
 
 
-public class SummaryListResp extends  PageResp<SummaryDetResp> {
+public class SummaryListResp extends PageResp<SummaryDetResp> {
 
 	public SummaryListResp() {
 		super();

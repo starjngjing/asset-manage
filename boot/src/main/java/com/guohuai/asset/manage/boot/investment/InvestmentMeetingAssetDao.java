@@ -9,4 +9,6 @@ public interface InvestmentMeetingAssetDao
 		extends JpaRepository<InvestmentMeetingAsset, String>, JpaSpecificationExecutor<InvestmentMeetingAsset> {
 
 	public List<InvestmentMeetingAsset> findByInvestmentMeeting(InvestmentMeeting investmentMeeting);
+
+	public List<InvestmentMeetingAsset> findByInvestmentMeetingIn(InvestmentMeeting[] investmentMeeting);
 }

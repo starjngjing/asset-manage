@@ -16,6 +16,8 @@ import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileService;
 import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.boot.investment.meeting.AddInvestmentMeetingForm;
+import com.guohuai.asset.manage.boot.investment.meeting.MeetingFinishForm;
+import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.SummaryDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.SummaryFileDet;
 import com.guohuai.asset.manage.component.util.DateUtil;
@@ -40,6 +42,9 @@ public class InvestmentMeetingService {
 	@Autowired
 	private FileService fileService;
 
+	@Autowired
+	private InvestmentMeetingCheckService investmentMeetingCheckService;
+
 	/**
 	 * 获得投资标的过会列表
 	 * 
@@ -62,7 +67,7 @@ public class InvestmentMeetingService {
 	}
 
 	/**
-	 * 新建投资标的
+	 * 新建标的会议
 	 * 
 	 * @param entity
 	 * @param operator
@@ -70,6 +75,7 @@ public class InvestmentMeetingService {
 	 */
 	public InvestmentMeeting saveMeeting(InvestmentMeeting entity, String operator) {
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
 		return this.investmentMeetingDao.save(entity);
 	}
@@ -87,13 +93,20 @@ public class InvestmentMeetingService {
 		return this.investmentMeetingDao.save(entity);
 	}
 
+	/**
+	 * 创建国会信息
+	 * 
+	 * @param form
+	 * @param operator
+	 * @return
+	 */
 	@Transactional
 	public InvestmentMeeting addMeeting(AddInvestmentMeetingForm form, String operator) {
 		try {
 			InvestmentMeeting entity = InvestmentMeeting.builder().conferenceTime(form.getConferenceTime())
 					.creator(operator).createTime(DateUtil.getSqlCurrentDate()).sn(form.getSn())
 					.state(InvestmentMeeting.MEETING_STATE_NOTOPEN).title(form.getTitle()).build();
-			InvestmentMeeting meeting = investmentMeetingDao.save(entity);
+			InvestmentMeeting meeting = this.saveMeeting(entity, operator);
 			this.addTargetStr(form.getTarget(), meeting, operator);
 			this.addParticipant(form.getParticipant(), meeting);
 			return meeting;
@@ -227,5 +240,43 @@ public class InvestmentMeetingService {
 		meeting.setState(InvestmentMeeting.MEETING_STATE_STOP);
 		this.updateMeeting(meeting, operator);
 		return meeting;
+	}
+
+	/**
+	 * 过会完成
+	 * 
+	 * @param form
+	 * @param operator
+	 */
+	public void finishMeeting(MeetingFinishForm form, String operator) {
+		InvestmentMeeting meeting = this.getMeetingDet(form.getOid());
+		if (InvestmentMeeting.MEETING_STATE_NOTOPEN.equals(meeting.getState())
+				|| InvestmentMeeting.MEETING_STATE_FINISH.equals(meeting.getState())) {
+			// 当会议状态为完成或者未启动
+			throw new RuntimeException();
+		}
+		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
+		for (MeetingInvestmentDetResp req : list) {
+			Investment investment = investmentService.getInvestment(req.getOid());
+			if ("yes".equals(req.getStatus())) {
+				investment.setState(Investment.INVESTMENT_STATUS_meetingpass);
+				String[] checkList = req.getCheckConditions();
+				// 添加检查项
+				for (String checkName : checkList) {
+					InvestmentMeetingCheck check = InvestmentMeetingCheck.builder().investment(investment)
+							.InvestmentMeeting(meeting).title(checkName)
+							.state(InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck).build();
+					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check, operator);
+				}
+			} else if ("no".equals(req.getStatus())) {
+				investment.setState(Investment.INVESTMENT_STATUS_reject);
+				investment.setRejectDesc(req.getRejectComment());
+			} else {
+				continue;
+			}
+			investmentService.updateInvestment(investment, operator);
+		}
+		meeting.setState(InvestmentMeeting.MEETING_STATE_FINISH);
+		this.updateMeeting(meeting, operator);
 	}
 }

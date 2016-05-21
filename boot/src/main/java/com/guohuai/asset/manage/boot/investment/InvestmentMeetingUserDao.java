@@ -15,4 +15,12 @@ public interface InvestmentMeetingUserDao
 	 * @return
 	 */
 	public List<InvestmentMeetingUser> findByInvestmentMeeting(InvestmentMeeting investmentMeeting);
+	
+	/**
+	 * 根据会议查询参会人列表
+	 * 
+	 * @param investmentMeeting
+	 * @return
+	 */
+	public List<InvestmentMeetingUser> findByParticipantOid(String participantOid);
 }
