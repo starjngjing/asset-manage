@@ -8,7 +8,7 @@ define([
 'util'
 ], function (http, config, $$, util) {
   return {
-    name: 'targetStorage',
+    name: 'targetHistory',
     init: function () {
       // js逻辑写在这里
 

@@ -8,13 +8,13 @@ define([
 'util'
 ], function (http, config, $$, util) {
   return {
-    name: 'targetStorage',
+    name: 'targetNotHold',
     init: function () {
       // js逻辑写在这里
 
         // 分页配置
         var pageOptions = {
-        		op:"noHaveList",
+        		op:"noHoldList",
         		page: 1,
           rows: 10
         }
