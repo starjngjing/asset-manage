@@ -17,7 +17,7 @@
 			<div id="dataGrid" class="box box-primary">
 				<!-- Grid头部 -->
 				<div class="box-header">
-					<h3 class="box-title">标题</h3>
+					<h3 class="box-title">风险指标列表</h3>
 					<div class="box-tools">
 						<button id="eventAdd" class="btn btn-default btn-sm">
 							<i class="fa fa-plus"></i> 新建
@@ -120,6 +120,112 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
 				<button id="saveButton" type="button" class="btn btn-primary btn-submit">保 存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">新建风险指标</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<!-- 新增/编辑事件表单 -->
+				<form id="updateForm" name="updateForm" method="post">
+					<input type="hidden" name="indicateOid" />
+					<div class="form-group">
+						<label>指标类型</label>
+						<select name="cateType" class="form-control input-sm">
+							<option value="WARNING" selected>风险预警指标</option>
+							<option value="SCORE">风险评分指标</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>指标分类</label>
+						<select name="cateOid" class="form-control input-sm">
+						</select>
+					</div>
+					<div id="updateFormCateTitle" class="form-group" style="display: none;">
+						<label>指标分类名称</label>
+						<input name="cateTitle" type="text" class="form-control input-sm" placeholder="指标分类名称">
+					</div>
+					<div class="form-group">
+						<label>指标项名称</label>
+						<input name="indicateTitle" type="text" class="form-control input-sm" placeholder="指标项名称">
+					</div>
+					<div class="form-group">
+						<label>指标项数据格式</label>
+						<select name="indicateDataType" class="form-control input-sm">
+							<option value="NUMBER" selected>数值</option>
+							<option value="NUMRANGE">数值区间</option>
+							<option value="TEXT">文本</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>指标项单位</label>
+						<input name="indicateDataUnit" type="text" class="form-control input-sm" placeholder="指标项单位">
+					</div>
+				</form>
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="updateButton" type="button" class="btn btn-primary btn-submit">保 存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="enableModal" class="popover func-delete-popover">
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<p id="enableConfirmTitle"></p>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="disableModal" class="popover func-delete-popover">
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<p id="disableConfirmTitle"></p>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="deleteModal" class="popover func-delete-popover">
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<p id="deleteConfirmTitle"></p>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
 			</div>
 		</div>
 	</div>

@@ -72,6 +72,165 @@ define([
 							return '删除';
 						return val;
 					}
+				}, {
+					align: 'center',
+					formatter: function(val, row, index) {
+
+						var updateButton = {
+							text: '修改',
+							type: 'button',
+							class: 'item-update',
+							isRender: true
+						};
+
+						var enableButton = {
+							text: '启用',
+							type: 'button',
+							class: 'item-enable',
+							isRender: true
+						};
+
+						var disableButton = {
+							text: '禁用',
+							type: 'button',
+							class: 'item-disable',
+							isRender: true
+						};
+
+						var deleteButton = {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+							isRender: true
+						};
+
+						var buttons = [];
+
+						buttons.push(updateButton);
+
+						if (row.indicateState == 'ENABLE') {
+							buttons.push(disableButton);
+						};
+						if (row.indicateState == 'DISABLE') {
+							buttons.push(enableButton)
+						};
+
+						buttons.push(deleteButton);
+
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-update': function(e, value, row) {
+
+							http.post(config.api.system.config.ccr.cate.options, {
+								data: {},
+								contentType: 'form'
+							}, function(val) {
+								$.each(val, function(key, value) {
+									value.push({
+										oid: '',
+										type: key,
+										title: '其他'
+									});
+								});
+								$('#updateForm').resetForm();
+								$('#updateModal').modal('show');
+								var form = document.updateForm;
+								var cateType = form.cateType;
+								$(cateType).off().on('change', function() {
+									if (!val[cateType.value]) {
+										val[cateType.value] = [{
+											oid: '',
+											title: '其他',
+											type: cateType.value
+										}];
+									}
+
+									$(form.cateOid).empty();
+									$.each(val[cateType.value], function(i, v) {
+										$(form.cateOid).append('<option value="' + v.oid + '">' + v.title + '</option>')
+									});
+
+									$(form.cateOid).change();
+								});
+
+								$(form.cateOid).off().on('change', function() {
+
+									if (form.cateOid.value == '' && $('#updateFormCateTitle').css('display') == 'none') {
+										$('#updateFormCateTitle').animate({
+											height: 'toggle',
+											opacity: 'toggle'
+										}, "slow");
+									}
+
+									if (form.cateOid.value != '' && $('#updateFormCateTitle').css('display') == 'block') {
+										$('#updateFormCateTitle').animate({
+											height: 'toggle',
+											opacity: 'toggle'
+										}, "slow");
+									}
+
+								});
+
+								$(cateType).val(row.cateType).change();
+
+								$$.formAutoFix($('#updateForm'), row);
+
+							});
+
+						},
+						'click .item-enable': function(e, value, row) {
+							$("#enableConfirmTitle").html("确定启用风险指标配置？");
+							$$.confirm({
+								container: $('#enableModal'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.system.config.ccr.indicate.enable, {
+										data: {
+											oid: row.indicateOid
+										},
+										contentType: 'form'
+									}, function(result) {
+										$('#dataTable').bootstrapTable('refresh');
+									})
+								}
+							})
+						},
+						'click .item-disable': function(e, value, row) {
+							$("#disableConfirmTitle").html("确定禁用风险指标配置？");
+							$$.confirm({
+								container: $('#disableModal'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.system.config.ccr.indicate.disable, {
+										data: {
+											oid: row.indicateOid
+										},
+										contentType: 'form'
+									}, function(result) {
+										$('#dataTable').bootstrapTable('refresh');
+									})
+								}
+							})
+						},
+						'click .item-delete': function(e, value, row) {
+							$("#deleteConfirmTitle").html("确定删除风险指标配置？");
+							$$.confirm({
+								container: $('#deleteModal'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.system.config.ccr.indicate.delete, {
+										data: {
+											oid: row.indicateOid
+										},
+										contentType: 'form'
+									}, function(result) {
+										$('#dataTable').bootstrapTable('refresh');
+									})
+								}
+							})
+						}
+					}
 				}]
 
 			});
@@ -112,8 +271,6 @@ define([
 						$(form.cateOid).change();
 					});
 
-					$(cateType).change();
-
 					$(form.cateOid).off().on('change', function() {
 
 						if (form.cateOid.value == '' && $('#addFormCateTitle').css('display') == 'none') {
@@ -132,7 +289,7 @@ define([
 
 					});
 
-					$(form.cateOid).change();
+					$(cateType).change();
 
 				});
 			});
@@ -142,11 +299,23 @@ define([
 					url: config.api.system.config.ccr.indicate.save,
 					success: function(result) {
 						$('#addForm').resetForm();
-						$('#addForm').modal('hide');
+						$('#addModal').modal('hide');
 						$('#dataTable').bootstrapTable('refresh');
 					}
 				})
 			});
+
+			$('#updateButton').on('click', function() {
+				$('#updateForm').ajaxSubmit({
+					url: config.api.system.config.ccr.indicate.save,
+					success: function(result) {
+						$('#updateForm').resetForm();
+						$('#updateModal').modal('hide');
+						$('#dataTable').bootstrapTable('refresh');
+					}
+				})
+			});
+
 
 		}
 	}

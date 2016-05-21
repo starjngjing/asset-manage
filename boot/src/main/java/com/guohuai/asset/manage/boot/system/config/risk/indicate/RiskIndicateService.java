@@ -28,7 +28,7 @@ public class RiskIndicateService {
 		if (StringUtil.isEmpty(form.getCateOid())) {
 			cate = this.riskCateService.save(form.getCateType(), form.getCateTitle());
 		} else {
-			this.riskCateService.get(form.getCateOid());
+			cate = this.riskCateService.get(form.getCateOid());
 		}
 
 		RiskIndicate indicate;
