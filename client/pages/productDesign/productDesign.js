@@ -366,8 +366,6 @@ define([
 		$('#productAssetPool').on('click', function () {
 			$('#assetPoolModal').modal('show')
 		})
-
-			util.form.validator.init($('#addProductForm'))
     	     
     }
   }
