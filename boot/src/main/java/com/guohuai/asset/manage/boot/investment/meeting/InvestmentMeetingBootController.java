@@ -145,6 +145,13 @@ public class InvestmentMeetingBootController extends BaseController {
 		investmentMeetingService.summaryUp(meetingOid, files, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "summaryDetele", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> summaryDelete(String oid){
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.deleteSummary(oid, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "open", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> open(String oid) {

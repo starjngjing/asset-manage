@@ -66,9 +66,10 @@ define(function() {
 			meetingSummaryDet: this.host + '/ams/target/targetMeeting/summaryDet', //获得会议纪要详情
 			meetingOpen: this.host + '/ams/target/targetMeeting/open', //获得会议纪要详情
 			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
+			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
 			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
-				download: this.host + '/ams/pkg/dl' //下载附件包 参数key
+				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
 			},
 			system: {
 				config: {
