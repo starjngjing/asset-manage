@@ -204,4 +204,16 @@ public class ChannelService {
 		return pageResp;
 	}
 	
+	/**
+	 * 获取一个渠道信息
+	 * @return
+	 */
+	public ChannelInfoRep getOneChannel(){
+		List<Channel> list = this.daoChannel.findAll();
+		ChannelInfoRep rep = new ChannelInfoRep();
+		if(list!=null && list.size()>0){			
+			rep = this.getChannelInfo(list.get(0).getOid());
+		}
+		return rep;
+	}
 }

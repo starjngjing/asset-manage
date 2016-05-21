@@ -68,6 +68,7 @@ define(function() {
 			channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
 			addChannel: this.host + '/ams/channel/add', //渠道-新增
 			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
+			oneChannel: this.host + '/ams/channel/onechannel',  //渠道-随机获取一条渠道信息
 			editChannel: this.host + '/ams/channel/edit', //渠道-修改
 			delChannel: this.host + '/ams/channel/delete', //渠道-删除
 			setapply: this.host + '/ams/channel/setapply', //渠道-申请开启停用
@@ -242,7 +243,7 @@ define(function() {
 	    joinTypes:[
 	    	{
 				id: "ftp",
-				text: "ftp文件",			
+				text: "FTP文件",			
 			},
 			{
 				id: "api",
