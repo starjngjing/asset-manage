@@ -398,7 +398,9 @@
                       $(document).off('keydown.formInput')
                     })
                   // icheck datetimepicker全局初始化
-                  $$.inputPluginsInit($(document))
+                  $$.inputPluginsInit($('#mainContent'))
+                  // 枚举值自动填充
+                  $$.enumSourceInit($('#mainContent'))
                 })
               location.hash = params.value ? route + '?' + params.value : route
               currentHash = route
