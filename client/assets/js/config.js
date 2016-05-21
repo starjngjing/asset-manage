@@ -238,6 +238,65 @@ define(function() {
 			text: "一票否决",
 			children: []
 		}],
+		//接入类型
+	    joinTypes:[
+	    	{
+				id: "ftp",
+				text: "ftp文件",			
+			},
+			{
+				id: "api",
+				text: "API接口",
+			}
+	    ],
+	    //渠道状态
+	    channelStatus:[
+	    	{
+				id: "on",
+				text: "已启用",			
+			},
+	        {
+				id: "off",
+				text: "已停用",			
+			}    
+	    ],
+	    //删除状态
+	    delStatus:[
+	    	{
+				id: "yes",
+				text: "已删除",			
+			},
+	        {
+				id: "no",
+				text: "正常",			
+			}
+	   ],
+	   //请求类型
+	   requestTypes:[
+	   		{
+				id: "on",
+				text: "开启",			
+			},
+	        {
+				id: "off",
+				text: "停用",			
+			}
+	   ],
+	   //审批结果
+	   approveStatus:[
+	   		{
+				id: "pass",
+				text: "通过",			
+			},
+	        {
+				id: "refused",
+				text: "驳回",			
+			},
+	        {
+				id: "toApprove",
+				text: "待审批",			
+			}   
+	   ],
 		/**
 		 * 图标所用到的主题颜色
 		 */
