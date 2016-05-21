@@ -103,6 +103,17 @@ public class ChannelController extends BaseController {
 	}
 	
 	/**
+	 * 获取一个渠道信息
+	 * @return
+	 */
+	@RequestMapping(value = "onechannel", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<ChannelInfoRep> getOneChannel() {		
+		ChannelInfoRep rep = this.serviceChannel.getOneChannel();
+		return new ResponseEntity<ChannelInfoRep>(rep, HttpStatus.OK);		
+	}
+	
+	/**
 	 * 渠道申请处理
 	 * @param oid
 	 * @param requestType 申请类型 on/off
