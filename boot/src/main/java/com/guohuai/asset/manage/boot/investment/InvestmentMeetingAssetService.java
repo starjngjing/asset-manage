@@ -94,6 +94,9 @@ public class InvestmentMeetingAssetService {
 		for (InvestmentMeetingAsset temp : lists) {
 			MeetingInvestmentDetResp entity = new MeetingInvestmentDetResp();
 			BeanUtils.copyProperties(temp.getInvestment(), entity);
+			entity.setMeetingOid(temp.getInvestmentMeeting().getOid());
+			entity.setMeetingTitle(temp.getInvestmentMeeting().getTitle());
+			entity.setMeetingTime(temp.getInvestmentMeeting().getConferenceTime());
 			investments.add(entity);
 		}
 		return investments;
@@ -121,6 +124,8 @@ public class InvestmentMeetingAssetService {
 			MeetingInvestmentDetResp resp = new MeetingInvestmentDetResp();
 			BeanUtils.copyProperties(temp.getInvestment(), resp);
 			resp.setMeetingOid(temp.getInvestmentMeeting().getOid());
+			resp.setMeetingTitle(temp.getInvestmentMeeting().getTitle());
+			resp.setMeetingTime(temp.getInvestmentMeeting().getConferenceTime());
 			res.add(resp);
 		}
 		return res;

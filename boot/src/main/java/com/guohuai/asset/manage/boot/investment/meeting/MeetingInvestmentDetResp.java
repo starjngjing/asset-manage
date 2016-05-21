@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.meeting;
 
+import java.sql.Timestamp;
+
 import com.guohuai.asset.manage.boot.investment.Investment;
 
 import lombok.Data;
@@ -23,4 +25,6 @@ public class MeetingInvestmentDetResp extends Investment {
 	private String rejectComment = ""; // 驳回理由
 	private String status = "yes"; //标的决议 通过/驳回
 	private String meetingOid; //会议oid
+	private String meetingTitle;
+	private Timestamp meetingTime;
 }
