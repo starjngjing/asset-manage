@@ -94,7 +94,10 @@ define(function() {
 						},
 						indicate: {
 							search: this.host + "/ams/system/ccr/indicate/search",
-							save: this.host + "/ams/system/ccr/indicate/save"
+							save: this.host + "/ams/system/ccr/indicate/save",
+							enable: this.host + "/ams/system/ccr/indicate/enable",
+							disable: this.host + "/ams/system/ccr/indicate/disable",
+							delete: this.host + "/ams/system/ccr/indicate/delete"
 						}
 					}
 				}
