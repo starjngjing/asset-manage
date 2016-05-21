@@ -274,15 +274,6 @@ function (http, config, util, $$) {
 		},
 		bindEvent:function(){
 			var _this = this;
-			//待审核搜索按钮
-			$("#WaitSearchBtn").on("click",function(){
-				$('#waitTable').bootstrapTable('refresh');
-			});
-			
-			//已审核搜索按钮
-			$("#okSearchBtn").on("click",function(){
-				$('#okTable').bootstrapTable('refresh');
-			});
 			
 			//审批操作按钮
 			$("#approveBut").on('click',function(){
