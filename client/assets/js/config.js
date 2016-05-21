@@ -49,6 +49,11 @@ define(function() {
 			productReviewApprove: this.host + "/ams/product/review/approve", //产品复核通过
 			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
 			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
+			productChooseChannelList: this.host + "/ams/product/channel/choose/list", //产品选择渠道列表
+			saveProductChannel: this.host + "/ams/product/channel/save/list", //保存产品已经选择渠道列表
+			productChannelList: this.host + "/ams/product/channel/list", //该渠道的产品列表
+			productChannelIpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
+			productChannelOffshelf: this.host + "/ams/product/channel/donwshelf", //下架产品
 			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 			cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
