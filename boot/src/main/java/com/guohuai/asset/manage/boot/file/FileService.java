@@ -154,6 +154,16 @@ public class FileService extends Packer<File> {
 		this.fileDao.save(file);
 	}
 
+	@Transactional
+	public void batchDelete(String fkey, String operator) {
+		List<File> list = this.list(fkey);
+		if (null != list && list.size() > 0) {
+			for (File f : list) {
+				this.delete(f, operator);
+			}
+		}
+	}
+
 	private String getSizeh(long size) {
 		if (size < 1024L) {
 			// 不到1K的, 按字节
