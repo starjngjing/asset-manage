@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "T_MONEY_FILE")
+@Table(name = "T_GAM_FILE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
