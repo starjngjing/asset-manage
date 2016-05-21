@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.file.FileService;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeeting;
@@ -60,9 +61,11 @@ public class InvestmentMeetingBootController extends BaseController {
 	private InvestmentMeetingAssetService investmentMeetingAssetService;
 	@Autowired
 	private InvestmentMeetingVoteService investmentMeetingVoteService;
+	@Autowired
+	private FileService fileSerevice;
 
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentMeetingListResp> list(HttpServletRequest request,
+	public @ResponseBody ResponseEntity<MeetingListResp> list(HttpServletRequest request,
 			@And({ @Spec(params = "sn", path = "sn", spec = Equal.class),
 					@Spec(params = "title", path = "title", spec = Like.class),
 					@Spec(params = "state", path = "state", spec = Equal.class) }) Specification<InvestmentMeeting> spec,
@@ -76,14 +79,14 @@ public class InvestmentMeetingBootController extends BaseController {
 		}
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		Page<InvestmentMeeting> entitys = investmentMeetingService.getMeetingList(spec, pageable);
-		InvestmentMeetingListResp resps = new InvestmentMeetingListResp(entitys);
-		return new ResponseEntity<InvestmentMeetingListResp>(resps, HttpStatus.OK);
+		MeetingListResp resps = new MeetingListResp(entitys);
+		return new ResponseEntity<MeetingListResp>(resps, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "detail", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentMeetingDetResp> detail(String oid) {
+	public @ResponseBody ResponseEntity<MeetingDetResp> detail(String oid) {
 		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(oid);
-		return new ResponseEntity<InvestmentMeetingDetResp>(new InvestmentMeetingDetResp(meeting), HttpStatus.OK);
+		return new ResponseEntity<MeetingDetResp>(new MeetingDetResp(meeting), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "targetList", method = { RequestMethod.POST, RequestMethod.GET })
@@ -124,11 +127,34 @@ public class InvestmentMeetingBootController extends BaseController {
 	}
 
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<InvestmentVoteDetResp>> meetingTargetList(String meetingOid,
-			String targetOid) {
-		List<InvestmentVoteDetResp> resp = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meetingOid,
-				targetOid);
-		return new ResponseEntity<List<InvestmentVoteDetResp>>(resp, HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<VoteDetResp>> meetingTargetList(String meetingOid, String targetOid) {
+		List<VoteDetResp> resp = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meetingOid, targetOid);
+		return new ResponseEntity<List<VoteDetResp>>(resp, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "summaryDet", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<SummaryListResp> summaryList(String oid) {
+		List<SummaryDetResp> resp = investmentMeetingService.getSummary(oid);
+		return new ResponseEntity<SummaryListResp>(new SummaryListResp(resp), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "summaryUp", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> summaryUp(String files, String meetingOid) {
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.summaryUp(meetingOid, files, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "open", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> open(String oid) {
+		investmentMeetingService.openMeeting(oid, super.getLoginAdmin());
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "stop", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> stop(String oid) {
+		investmentMeetingService.stopMeeting(oid, super.getLoginAdmin());
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 }

@@ -31,9 +31,16 @@ import lombok.NoArgsConstructor;
 public class InvestmentMeeting extends UUID implements Serializable {
 
 	private static final long serialVersionUID = -248787174503909861L;
-	
-	public static final String MEETING_STATE_NOTOPEN = "notopen"; //未举行
-	
+
+	/**
+	 * 过会状态
+	 */
+	public static final String MEETING_STATE_NOTOPEN = "notopen"; // 未举行
+	public static final String MEETING_STATE_OPENING = "opening"; // 举行中
+	public static final String MEETING_STATE_STOP = "stop"; // 暂停
+	public static final String MEETING_STATE_WAITENTER = "waitenter"; //待确认
+	public static final String MEETING_STATE_FINISH = "finish"; // 完成
+
 	private String sn;
 	private String title;
 	private String state;
@@ -42,4 +49,5 @@ public class InvestmentMeeting extends UUID implements Serializable {
 	private String operator;
 	private Timestamp createTime;
 	private Timestamp updateTime;
+	public String fkey;
 }

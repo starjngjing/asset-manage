@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-public class InvestmentMeetingDetResp extends BaseResp {
+public class MeetingDetResp extends BaseResp {
 
-	public InvestmentMeetingDetResp(InvestmentMeeting meeting) {
+	public MeetingDetResp(InvestmentMeeting meeting) {
 		this.data = meeting;
 	}
 	private InvestmentMeeting data;

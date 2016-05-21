@@ -11,7 +11,7 @@ import lombok.Data;
  *
  */
 @Data
-public class InvestmentVoteDetResp {
+public class VoteDetResp {
 
 	/**
 	 * 角色

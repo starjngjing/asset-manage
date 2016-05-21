@@ -1,5 +1,8 @@
 package com.guohuai.asset.manage.boot.investment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,8 +10,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
+import com.guohuai.asset.manage.boot.file.File;
+import com.guohuai.asset.manage.boot.file.FileService;
+import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.boot.investment.meeting.AddInvestmentMeetingForm;
+import com.guohuai.asset.manage.boot.investment.meeting.SummaryDetResp;
+import com.guohuai.asset.manage.boot.investment.meeting.SummaryFileDet;
 import com.guohuai.asset.manage.component.util.DateUtil;
+import com.guohuai.asset.manage.component.util.StringUtil;
 
 @Service
 @Transactional
@@ -25,6 +35,9 @@ public class InvestmentMeetingService {
 
 	@Autowired
 	private InvestmentService investmentService;
+
+	@Autowired
+	private FileService fileService;
 
 	/**
 	 * 获得投资标的过会列表
@@ -110,5 +123,87 @@ public class InvestmentMeetingService {
 			temp.setState(Investment.INVESTMENT_STATUS_metting);
 			investmentService.updateInvestment(temp, operator);
 		}
+	}
+
+	/**
+	 * 获得过会纪要列表
+	 * 
+	 * @param oid
+	 */
+	public List<SummaryDetResp> getSummary(String oid) {
+		List<SummaryDetResp> resps = new ArrayList<SummaryDetResp>();
+		InvestmentMeeting meeting = this.getMeetingDet(oid);
+		if (null == meeting.getFkey()) {
+			return resps;
+		}
+		List<File> files = fileService.list(meeting.getFkey());
+		SummaryDetResp resp = new SummaryDetResp();
+		resp.setMeetingSn(meeting.getSn());
+		resp.setMeetingTitle(meeting.getTitle());
+		resp.setFkey(files.get(0).getFkey());
+		resp.setUpdate(files.get(0).getUpdateTime());
+		resp.setOperator(files.get(0).getOperator());
+		resps.add(resp);
+		return resps;
+	}
+
+	/**
+	 * 上传过会纪要
+	 */
+	public void summaryUp(String oid,String filesStr, String operator) {
+		InvestmentMeeting meeting = this.getMeetingDet(oid);
+		if(null == meeting){
+			throw new RuntimeException();
+		}
+		String fkey = StringUtil.uuid();
+		List<SummaryFileDet> lists = JSONArray.parseArray(filesStr, SummaryFileDet.class);
+		List<SaveFileForm> forms = new ArrayList<SaveFileForm>();
+		for (SummaryFileDet file : lists) {
+			SaveFileForm form = new SaveFileForm();
+			form.setName(file.getName());
+			form.setFurl(file.getUrl());
+			form.setOid(StringUtil.uuid());
+			form.setSize(file.getSize());
+			forms.add(form);
+		}
+		fileService.save(forms, fkey, "", operator);
+		meeting.setFkey(fkey);
+		this.updateMeeting(meeting, operator);
+	}
+
+	/**
+	 * 启动过会
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
+	public InvestmentMeeting openMeeting(String oid, String operator) {
+		InvestmentMeeting meeting = this.getMeetingDet(oid);
+		if (!InvestmentMeeting.MEETING_STATE_NOTOPEN.equals(meeting.getState())
+				&& !InvestmentMeeting.MEETING_STATE_STOP.equals(meeting.getState())) {
+			throw new RuntimeException();
+		}
+		meeting.setState(InvestmentMeeting.MEETING_STATE_OPENING);
+		this.updateMeeting(meeting, operator);
+		return meeting;
+	}
+	
+	/**
+	 * 
+	 * 暂停过会
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
+	public InvestmentMeeting stopMeeting(String oid, String operator) {
+		InvestmentMeeting meeting = this.getMeetingDet(oid);
+		if (!InvestmentMeeting.MEETING_STATE_OPENING.equals(meeting.getState())) {
+			throw new RuntimeException();
+		}
+		meeting.setState(InvestmentMeeting.MEETING_STATE_STOP);
+		this.updateMeeting(meeting, operator);
+		return meeting;
 	}
 }

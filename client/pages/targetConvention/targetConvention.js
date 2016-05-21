@@ -17,7 +17,7 @@ define([
 					number: 1,
 					size: 10
 				}
-				// 数据表格配置
+				// 会议列表数据表格配置
 			var tableConfig = {
 					ajax: function(origin) {
 						http.post(config.api.meetingList, {
@@ -48,6 +48,8 @@ define([
 							return util.enum.transform('meetingStates', val);
 						}
 					}, {
+						field: 'updateTime'
+					}, {
 						align: 'center',
 						formatter: function(val, row) {
 							var buttons = [{
@@ -60,12 +62,114 @@ define([
 								type: 'button',
 								class: 'item-summary',
 								isRender: true
+							}, {
+								text: '启动过会',
+								type: 'button',
+								class: 'item-open',
+								isRender: row.state == "notopen" || row.state == "stop"
+							}, {
+								text: '暂停过会',
+								type: 'button',
+								class: 'item-stop',
+								isRender: row.state == "opening"
+							}, {
+								text: '完成过会',
+								type: 'button',
+								class: 'item-finish',
+								isRender: row.state == "waitenter"
 							}];
 							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
+							'click .item-open': function(e, value, row) {
+								$("#confirmTitle").html("确定启动过会？")
+								$$.confirm({
+									container: $('#doConfirm'),
+									trigger: this,
+									accept: function() {
+										http.post(config.api.meetingOpen, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form',
+										}, function(result) {
+											$('#targetConventionTable').bootstrapTable('refresh')
+										})
+									}
+								})
+							},
+							'click .item-stop': function(e, value, row) {
+								$("#confirmTitle").html("确定暂停过会？")
+								$$.confirm({
+									container: $('#doConfirm'),
+									trigger: this,
+									accept: function() {
+										http.post(config.api.meetingStop, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form',
+										}, function(result) {
+											$('#targetConventionTable').bootstrapTable('refresh')
+										})
+									}
+								})
+							},
 							'click .item-summary': function(e, value, row) {
-								$('#targetConventionSummaryModal').modal('show');
+								// 过会纪要表格配置
+								var targetConventionSummaryTableConfig = {
+									ajax: function(origin) {
+										http.post(config.api.meetingSummaryDet, {
+											data: {
+												oid: row.oid,
+											},
+											contentType: 'form'
+										}, function(rlt) {
+											origin.success(rlt)
+										})
+									},
+									columns: [{
+										field: 'operator'
+									}, {
+										field: 'sn'
+									}, {
+										field: 'title'
+									}, {
+										field: 'update'
+									}, {
+										align: 'center',
+										formatter: function(val, row) {
+											var buttons = [{
+												text: '下载',
+												type: 'button',
+												class: 'item-summarydown',
+												isRender: true
+											}, {
+												text: '删除',
+												type: 'button',
+												class: 'item-summarydel',
+												isRender: true
+											}];
+											return util.table.formatter.generateButton(buttons);
+										},
+										events: {
+
+										}
+									}]
+								}
+
+								// 初始化过会纪要表格
+								$('#targetConventionSummaryTable').bootstrapTable(targetConventionSummaryTableConfig)
+								http.post(config.api.meetingDetail, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									var data = result.data;
+									$$.detailAutoFix($('#uploadTargetConventionSummaryForm'), data); // 自动填充详情
+									$('#targetConventionSummaryModal').modal('show');
+								})
 							},
 							'click .item-detail': function(e, value, row) {
 								http.post(config.api.meetingDetail, {
@@ -216,13 +320,10 @@ define([
 				minimumInputLength: 1
 			})
 
-			// 过会纪要表格配置
-			var targetConventionSummaryTableConfig = {
-
-			}
-
 			// 上传纪要弹窗按钮点击事件
 			$('#targetConventionSummaryUpload').on('click', function() {
+					$('#smeetingOid').val()
+
 					$('#uploadTargetConventionSummaryModal').modal('show')
 				})
 				// 上传纪要附件表格数据源
@@ -272,7 +373,11 @@ define([
 			$('#doUploadTargetConventionSummary').on('click', function() {
 				var form = document.uploadTargetConventionSummaryForm
 				form.files.value = JSON.stringify(uploadTargetConventionSummaryFiles)
-				form.ajaxSubmit({
+				$('#uploadTargetConventionSummaryForm').ajaxSubmit({
+					url: config.api.meetingSummaryUp,
+					success: function(result) {
+							
+					}
 
 				})
 			})

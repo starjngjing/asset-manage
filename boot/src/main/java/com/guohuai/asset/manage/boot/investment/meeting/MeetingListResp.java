@@ -9,21 +9,21 @@ import com.guohuai.asset.manage.component.web.view.PageResp;
 
 //import com.guohuai.asset.hill.component.web.view.PageResp;
 
-public class InvestmentMeetingListResp extends PageResp<InvestmentMeeting> {
+public class MeetingListResp extends PageResp<InvestmentMeeting> {
 
-	public InvestmentMeetingListResp() {
+	public MeetingListResp() {
 		super();
 	}
 
-	public InvestmentMeetingListResp(Page<InvestmentMeeting> Approvals) {
+	public MeetingListResp(Page<InvestmentMeeting> Approvals) {
 		this(Approvals.getContent(), Approvals.getTotalElements());
 	}
 
-	public InvestmentMeetingListResp(List<InvestmentMeeting> approvals) {
+	public MeetingListResp(List<InvestmentMeeting> approvals) {
 		this(approvals, approvals.size());
 	}
 
-	public InvestmentMeetingListResp(List<InvestmentMeeting> Approvals, long total) {
+	public MeetingListResp(List<InvestmentMeeting> Approvals, long total) {
 		this();
 		super.setTotal(total);
 		super.setRows(Approvals);
