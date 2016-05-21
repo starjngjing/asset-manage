@@ -3,6 +3,7 @@ package com.guohuai.asset.manage.boot.investment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -138,10 +139,9 @@ public class InvestmentMeetingService {
 		}
 		List<File> files = fileService.list(meeting.getFkey());
 		SummaryDetResp resp = new SummaryDetResp();
-		resp.setMeetingSn(meeting.getSn());
-		resp.setMeetingTitle(meeting.getTitle());
+		resp.setMeetingOid(meeting.getOid());
 		resp.setFkey(files.get(0).getFkey());
-		resp.setUpdate(files.get(0).getUpdateTime());
+		resp.setUpdateTime(files.get(0).getUpdateTime());
 		resp.setOperator(files.get(0).getOperator());
 		resps.add(resp);
 		return resps;
@@ -155,7 +155,11 @@ public class InvestmentMeetingService {
 		if(null == meeting){
 			throw new RuntimeException();
 		}
-		String fkey = StringUtil.uuid();
+		String fkey = meeting.getFkey();
+		if(StringUtils.isEmpty(meeting.getFkey())){
+			//之前未上传纪要
+			fkey = StringUtil.uuid();
+		}
 		List<SummaryFileDet> lists = JSONArray.parseArray(filesStr, SummaryFileDet.class);
 		List<SaveFileForm> forms = new ArrayList<SaveFileForm>();
 		for (SummaryFileDet file : lists) {

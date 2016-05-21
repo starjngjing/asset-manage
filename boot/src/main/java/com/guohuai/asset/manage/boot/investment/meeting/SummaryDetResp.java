@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class SummaryDetResp {
 
-	private String meetingTitle;
-	private String meetingSn;
+	private String meetingOid;
 	private String fkey;
 	private String operator;
-	private Timestamp update;
+	private Timestamp updateTime;
 }

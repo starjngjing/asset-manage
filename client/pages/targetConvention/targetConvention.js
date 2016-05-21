@@ -116,49 +116,55 @@ define([
 								})
 							},
 							'click .item-summary': function(e, value, row) {
-								// 过会纪要表格配置
+								$('#targetConventionSummaryTable').bootstrapTable('destroy')
+									// 过会纪要表格配置
 								var targetConventionSummaryTableConfig = {
-									ajax: function(origin) {
-										http.post(config.api.meetingSummaryDet, {
-											data: {
-												oid: row.oid,
-											},
-											contentType: 'form'
-										}, function(rlt) {
-											origin.success(rlt)
-										})
-									},
-									columns: [{
-										field: 'operator'
-									}, {
-										field: 'sn'
-									}, {
-										field: 'title'
-									}, {
-										field: 'update'
-									}, {
-										align: 'center',
-										formatter: function(val, row) {
-											var buttons = [{
-												text: '下载',
-												type: 'button',
-												class: 'item-summarydown',
-												isRender: true
-											}, {
-												text: '删除',
-												type: 'button',
-												class: 'item-summarydel',
-												isRender: true
-											}];
-											return util.table.formatter.generateButton(buttons);
+										ajax: function(origin) {
+											http.post(config.api.meetingSummaryDet, {
+												data: {
+													oid: row.oid,
+												},
+												contentType: 'form'
+											}, function(rlt) {
+												origin.success(rlt)
+											})
 										},
-										events: {
+										pageNumber: 1,
+										pageSize: 100000,
+										pagination: false,
+										sidePagination: 'server',
+										columns: [{
+											field: 'operator'
+										}, {
+											field: 'updateTime'
+										}, {
+											align: 'center',
+											formatter: function(val, row) {
+												var buttons = [{
+													text: '下载',
+													type: 'button',
+													class: 'item-download',
+													isRender: true
+												}, {
+													text: '删除',
+													type: 'button',
+													class: 'item-delete',
+													isRender: true
+												}];
+												return util.table.formatter.generateButton(buttons);
+											},
+											events: {
+												'click .item-download': function(e, value, row) {
+													
+												},
+												'click .item-delete': function(e, value, row) {
 
-										}
-									}]
-								}
-								// 初始化过会纪要表格
-								$('#targetConventionSummaryTable').bootstrapTable(targetConventionSummaryTableConfig);
+												}
+											}
+										}]
+									}
+									// 初始化过会纪要表格
+								$('#targetConventionSummaryTable').bootstrapTable(targetConventionSummaryTableConfig)
 								http.post(config.api.meetingDetail, {
 									data: {
 										oid: row.oid
@@ -181,60 +187,61 @@ define([
 									$$.detailAutoFix($('#targetConventionReportModalForm'), data); // 自动填充详情
 									// 会议报告表格配置
 									var targetConventionReportTableConfig = {
-										ajax: function(origin) {
-											http.post(config.api.meetingTargetList, {
-												data: {
-													oid: data.oid
-												},
-												contentType: 'form'
-											}, function(rlt) {
-												origin.success(rlt)
-											})
-										},
-										detailView: true,
-										onExpandRow: function(index, row, $detail) {
-											var table = $('<table><thead><tr>' +
-												'<th>角色名称</th>' +
-												'<th>投票意见</th>' +
-												'<th>投票人</th>' +
-												'<th>时间</th>' +
-												'</tr></thead></table>')
-											var tableConfig = {
-												ajax: function(origin) {
-													http.post(config.api.meetingTargetVoteDet, {
-														data: {
-															meetingOid: data.oid,
-															targetOid: row.oid
-														},
-														contentType: 'form'
-													}, function(rlt) {
-														origin.success(rlt)
-													})
-												},
-												columns: [{
-													field: 'role',
-													align: 'center'
-												}, {
-													field: 'state',
-													align: 'center',
-													formatter: function(val) {
-														return util.enum.transform('voteStates', val);
-													}
-												}, {
-													field: 'name',
-													align: 'center'
-												}, {
-													field: 'date',
-													align: 'center'
-												}]
-											}
-											$detail.append(table)
-											$(table).bootstrapTable(tableConfig)
-										},
-										columns: [{
-											field: 'name'
-										}]
-									}
+											ajax: function(origin) {
+												http.post(config.api.meetingTargetList, {
+													data: {
+														oid: data.oid
+													},
+													contentType: 'form'
+												}, function(rlt) {
+													origin.success(rlt)
+												})
+											},
+											detailView: true,
+											onExpandRow: function(index, row, $detail) {
+												var table = $('<table><thead><tr>' +
+													'<th>角色名称</th>' +
+													'<th>投票意见</th>' +
+													'<th>投票人</th>' +
+													'<th>时间</th>' +
+													'</tr></thead></table>')
+												var tableConfig = {
+													ajax: function(origin) {
+														http.post(config.api.meetingTargetVoteDet, {
+															data: {
+																meetingOid: data.oid,
+																targetOid: row.oid
+															},
+															contentType: 'form'
+														}, function(rlt) {
+															origin.success(rlt)
+														})
+													},
+													columns: [{
+														field: 'role',
+														align: 'center'
+													}, {
+														field: 'state',
+														align: 'center',
+														formatter: function(val) {
+															return util.enum.transform('voteStates', val);
+														}
+													}, {
+														field: 'name',
+														align: 'center'
+													}, {
+														field: 'date',
+														align: 'center'
+													}]
+												}
+												$detail.append(table)
+												$(table).bootstrapTable(tableConfig)
+											},
+											columns: [{
+												field: 'name'
+											}]
+										}
+										//初始化过会报告
 									$('#targetConventionReportTable').bootstrapTable(targetConventionReportTableConfig)
 									$('#targetConventionReportModal').modal('show');
 								})
@@ -321,8 +328,6 @@ define([
 
 			// 上传纪要弹窗按钮点击事件
 			$('#targetConventionSummaryUpload').on('click', function() {
-					$('#smeetingOid').val()
-
 					$('#uploadTargetConventionSummaryModal').modal('show')
 				})
 				// 上传纪要附件表格数据源
@@ -356,7 +361,7 @@ define([
 						},
 						events: {
 							'click .item-download': function(e, value, row) {
-								location.href = config.host + row.url
+								location.href = config.api.yup + row.url
 							},
 							'click .item-delete': function(e, value, row) {
 								var index = uploadTargetConventionSummaryFiles.indexOf(row)
@@ -375,7 +380,8 @@ define([
 				$('#uploadTargetConventionSummaryForm').ajaxSubmit({
 					url: config.api.meetingSummaryUp,
 					success: function(result) {
-							
+						$('#targetConventionSummaryTable').bootstrapTable('refresh')
+						$('#uploadTargetConventionSummaryModal').modal('hide')
 					}
 
 				})
@@ -383,135 +389,124 @@ define([
 
 			// 临时存储当前操作标的对象
 			var currentOpTarget = null
-			// 会议确认表格配置
+				// 会议确认表格配置
 			var finishTargetConventionTableConfig = {
-				// 在初始化数据的时候，将检查项数组和驳回理由字符串添加到每个对象里
-				data: [{
-					name: '十一届三中全会',
-					status: 'yes',
-					checkConditions: [],			// 检查项
-					rejectComment: ''					// 驳回理由
-				}],
-				detailView: true,
-				onExpandRow: function (index, row, $detail) {
+					// 在初始化数据的时候，将检查项数组和驳回理由字符串添加到每个对象里
+					data: [{
+						name: '十一届三中全会',
+						status: 'yes',
+						checkConditions: [], // 检查项
+						rejectComment: '' // 驳回理由
+					}],
+					detailView: true,
+					onExpandRow: function(index, row, $detail) {
 
-				},
-				columns: [
-					{
-						field: 'name'
 					},
-					{
+					columns: [{
+						field: 'name'
+					}, {
 						field: 'status',
-						formatter: function (val) {
+						formatter: function(val) {
 							return val === 'yes' ? '<span class="text-green">通过</span>' : '<span class="text-red">驳回</span>'
 						}
-					},
-					{
+					}, {
 						width: 120,
 						align: 'center',
-						formatter: function () {
-							var buttons = [
-								{
-									text: '通过',
-									type: 'button',
-									class: 'item-pass'
-								},
-								{
-									text: '驳回',
-									type: 'button',
-									class: 'item-reject'
-								}
-							]
+						formatter: function() {
+							var buttons = [{
+								text: '通过',
+								type: 'button',
+								class: 'item-pass'
+							}, {
+								text: '驳回',
+								type: 'button',
+								class: 'item-reject'
+							}]
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
-							'click .item-pass': function (e, value, row) {
+							'click .item-pass': function(e, value, row) {
 								currentOpTarget = row
-								// 复制此标的下检查项的值
-								var injectData = row.checkConditions.map(function (text) {
-									return {
-										text: text
-									}
+									// 复制此标的下检查项的值
+								var injectData = row.checkConditions.map(function(text) {
+										return {
+											text: text
+										}
+									})
+									// 加一条空值，用于新增
+								injectData.push({
+									text: ''
 								})
-								// 加一条空值，用于新增
-								injectData.push({ text: '' })
 								$('#checkConditionsTable').bootstrapTable('load', injectData)
 								$('#checkConditionsModal').modal('show')
 							},
-							'click .item-reject': function (e, value, row) {
+							'click .item-reject': function(e, value, row) {
 								currentOpTarget = row
 								document.rejectForm.rejectComment.value = currentOpTarget.rejectComment
 								$('#rejectCommentModal').modal('show')
 							}
 						}
-					}
-				]
-			}
-			// 会议确认表格初始化
+					}]
+				}
+				// 会议确认表格初始化
 			$('#finishTargetConventionTable').bootstrapTable(finishTargetConventionTableConfig)
 
 			// 检查项表格配置
 			var checkConditionsTableConfig = {
-				columns: [
-					{
-						field: 'text',
-						formatter: function (val) {
-							if (!val) {
-								return '<input type="text">'
-							} else {
-								return val
-							}
-						}
-					},
-					{
-						width: 80,
-						align: 'center',
-						formatter: function (val, row) {
-							var buttons = [
-								{
-									text: '保存',
-									type: 'button',
-									class: 'item-save',
-									isRender: !row.text				// 空值时显示保存按钮
-								},
-								{
-									text: '删除',
-									type: 'button',
-									class: 'item-delete',
-									isRender: row.text
-								}
-							]
-							return util.table.formatter.generateButton(buttons)
-						},
-						events: {
-							'click .item-save': function (e, val, row) {
-								var inputValue = $(e.target.parentNode.parentNode.parentNode).find('input').val().trim()
-								if (inputValue) {
-									var currentTable = $('#checkConditionsTable')
-									var currentData = currentTable.bootstrapTable('getData')
-									currentData.splice(currentData.length - 1, 0, {
-										text: inputValue
-									})
-									currentTable.bootstrapTable('load', currentData)
-								}
-							},
-							'click .item-delete': function (e, val, row, index) {
-								var currentTable = $('#checkConditionsTable')
-								var currentData = currentTable.bootstrapTable('getData')
-								currentData.splice(index, 1)
-								currentTable.bootstrapTable('load', currentData)
-							}
+				columns: [{
+					field: 'text',
+					formatter: function(val) {
+						if (!val) {
+							return '<input type="text">'
+						} else {
+							return val
 						}
 					}
-				]
+				}, {
+					width: 80,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '保存',
+							type: 'button',
+							class: 'item-save',
+							isRender: !row.text // 空值时显示保存按钮
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+							isRender: row.text
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-save': function(e, val, row) {
+							var inputValue = $(e.target.parentNode.parentNode.parentNode).find('input').val().trim()
+							if (inputValue) {
+								var currentTable = $('#checkConditionsTable')
+								var currentData = currentTable.bootstrapTable('getData')
+								currentData.splice(currentData.length - 1, 0, {
+									text: inputValue
+								})
+								currentTable.bootstrapTable('load', currentData)
+							}
+						},
+						'click .item-delete': function(e, val, row, index) {
+							var currentTable = $('#checkConditionsTable')
+							var currentData = currentTable.bootstrapTable('getData')
+							currentData.splice(index, 1)
+							currentTable.bootstrapTable('load', currentData)
+						}
+					}
+				}]
 			}
 			$('#checkConditionsTable').bootstrapTable(checkConditionsTableConfig)
 
 			// 检查项提交按钮点击事件
-			$('#doAddCheckConditions').on('click', function () {
+			$('#doAddCheckConditions').on('click', function() {
 				var conditionsData = $('#checkConditionsTable').bootstrapTable('getData')
 				conditionsData.splice(conditionsData.length - 1, 1)
-				currentOpTarget.checkConditions = conditionsData.map(function (item) {
+				currentOpTarget.checkConditions = conditionsData.map(function(item) {
 					return item.text
 				})
 				currentOpTarget.status = 'yes'
@@ -519,14 +514,14 @@ define([
 			})
 
 			// 驳回理由按钮点击事件
-			$('#doAddRejectComment').on('click', function () {
+			$('#doAddRejectComment').on('click', function() {
 				currentOpTarget.rejectComment = document.rejectForm.rejectComment.value.trim()
 				currentOpTarget.status = 'no'
 				$('#rejectCommentModal').modal('hide')
 			})
 
 			// 会议确认“确认”按钮点击事件
-			$('#doFinishTargetConvention').on('click', function () {
+			$('#doFinishTargetConvention').on('click', function() {
 				var tableData = $('#finishTargetConventionTable').bootstrapTable('getData')
 				var form = document.finishTargetConventionForm
 				form.targets.value = JSON.stringify(tableData)
@@ -541,6 +536,7 @@ define([
 				pageOptions.number = parseInt(val.offset / val.limit) + 1
 				return val
 			}
+
 		}
 	}
 })
