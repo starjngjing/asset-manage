@@ -150,15 +150,17 @@ public class InvestmentMeetingService {
 	/**
 	 * 上传过会纪要
 	 */
-	public void summaryUp(String oid,String filesStr, String operator) {
+	public void summaryUp(String oid, String filesStr, String operator) {
 		InvestmentMeeting meeting = this.getMeetingDet(oid);
-		if(null == meeting){
+		if (null == meeting) {
 			throw new RuntimeException();
 		}
 		String fkey = meeting.getFkey();
-		if(StringUtils.isEmpty(meeting.getFkey())){
-			//之前未上传纪要
+		if (StringUtils.isEmpty(meeting.getFkey())) {
+			// 之前未上传纪要,创建一个uuid
 			fkey = StringUtil.uuid();
+			meeting.setFkey(fkey);
+			this.updateMeeting(meeting, operator);
 		}
 		List<SummaryFileDet> lists = JSONArray.parseArray(filesStr, SummaryFileDet.class);
 		List<SaveFileForm> forms = new ArrayList<SaveFileForm>();
@@ -170,9 +172,7 @@ public class InvestmentMeetingService {
 			form.setSize(file.getSize());
 			forms.add(form);
 		}
-		fileService.save(forms, fkey, "", operator);
-		meeting.setFkey(fkey);
-		this.updateMeeting(meeting, operator);
+		fileService.merge(forms, fkey, "", operator);
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class InvestmentMeetingService {
 		this.updateMeeting(meeting, operator);
 		return meeting;
 	}
-	
+
 	/**
 	 * 
 	 * 暂停过会
