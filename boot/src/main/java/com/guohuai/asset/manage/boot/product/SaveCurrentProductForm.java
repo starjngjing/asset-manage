@@ -57,7 +57,7 @@ public class SaveCurrentProductForm implements Serializable {
 	private String setupDate;//成立时间
 	@Range(min = 1, max = 240, message = "起息日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "起息日参数错误")
-	private int interestsFirstDate;//起息日:募集满额后()个自然日
+	private int interestsDate;//起息日:募集满额后()个自然日
 	@Range(min = 1, max = 240, message = "锁定期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "锁定期参数错误")
 	private int lockPeriod;//锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
@@ -82,6 +82,9 @@ public class SaveCurrentProductForm implements Serializable {
 	@Min(value = 1, message = "单日净赎回上限参数错误")
 //	@NotBlank(message = "单日净赎回上限不可为空")
 	private int netMaxRredeemDay;//单日净赎回上限
+	@Digits(integer = 12, fraction = 0, message = "单笔净赎回下限参数错误")
+	@Min(value = 1, message = "单笔净赎回下限参数错误")
+	private int minRredeem;//单笔净赎回下限
 	@Range(min = 1, max = 240, message = "申购确认日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "申购确认日参数错误")
 	private int purchaseConfirmDate;//申购确认日:()个

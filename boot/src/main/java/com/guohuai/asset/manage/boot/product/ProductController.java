@@ -50,7 +50,7 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> savePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && form.getRaiseStatrtDate()==null) {
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStatrtDate())) {
 			throw AMPException.getException(90009);
 		}
 		BaseResp repponse = this.productService.savePeriodic(form, operator);
@@ -66,7 +66,7 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> saveCurrent(@Valid SaveCurrentProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && form.getSetupDate()==null) {
+		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && StringUtil.isEmpty(form.getSetupDate())) {
 			throw AMPException.getException(90010);
 		}
 		BaseResp repponse = this.productService.saveCurrent(form, operator);
@@ -76,7 +76,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/delete", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
 	public ResponseEntity<ProductResp> delete(@RequestParam(required = true) String oid) {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		Product product = this.productService.delete(oid, operator);
 		return new ResponseEntity<ProductResp>(new ProductResp(product), HttpStatus.OK);
 	}
@@ -89,8 +89,8 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/update/periodic", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BaseResp> updatePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && form.getRaiseStatrtDate()==null) {
+		String operator = super.getLoginAdmin();
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStatrtDate())) {
 			throw AMPException.getException(90009);
 		}
 			
@@ -107,7 +107,7 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> updateCurrent(@Valid SaveCurrentProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && form.getSetupDate()==null) {
+		if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType()) && StringUtil.isEmpty(form.getSetupDate())) {
 			throw AMPException.getException(90010);
 		}
 		BaseResp repponse = this.productService.updateCurrent(form, operator);
@@ -180,7 +180,7 @@ public class ProductController extends BaseController {
 			typeSpec = new Specification<Product>() {
 				@Override
 				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.equal(root.get("typeOid").as(String.class), type);
+					return cb.equal(root.get("type").get("oid").as(String.class), type);
 				}
 			};
 			spec = Specifications.where(spec).and(typeSpec);
@@ -246,7 +246,7 @@ public class ProductController extends BaseController {
 			typeSpec = new Specification<Product>() {
 				@Override
 				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.equal(root.get("typeOid").as(String.class), type);
+					return cb.equal(root.get("type").get("oid").as(String.class), type);
 				}
 			};
 			spec = Specifications.where(spec).and(typeSpec);
@@ -313,7 +313,7 @@ public class ProductController extends BaseController {
 			typeSpec = new Specification<Product>() {
 				@Override
 				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.equal(root.get("typeOid").as(String.class), type);
+					return cb.equal(root.get("type").get("oid").as(String.class), type);
 				}
 			};
 			spec = Specifications.where(spec).and(typeSpec);
@@ -379,7 +379,7 @@ public class ProductController extends BaseController {
 			typeSpec = new Specification<Product>() {
 				@Override
 				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.equal(root.get("typeOid").as(String.class), type);
+					return cb.equal(root.get("type").get("oid").as(String.class), type);
 				}
 			};
 			spec = Specifications.where(spec).and(typeSpec);
@@ -400,7 +400,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/aduit/apply", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> aduitApply(@RequestParam String oids) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		List<String> oidlist = JSON.parseArray(oids, String.class);
 		BaseResp repponse = this.productService.aduitApply(oidlist, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
@@ -414,7 +414,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/aduit/approve", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> aduitApprove(@RequestParam(required = true) String oid) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.aduitApprove(oid, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -429,7 +429,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/aduit/reject", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> aduitReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.aduitReject(oid, auditComment, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -443,7 +443,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/review/approve", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> reviewApprove(@RequestParam(required = true) String oid) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.reviewApprove(oid, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -458,7 +458,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/review/reject", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> reviewReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.reviewReject(oid, auditComment, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -471,7 +471,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/admit/approve", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> admitApprove(@RequestParam(required = true) String oid) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.admitApprove(oid, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
@@ -486,7 +486,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "/admit/reject", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<BaseResp> admitReject(@RequestParam(required = true) String oid,@RequestParam(required = true) String auditComment) throws ParseException {
-		String operator = null;//super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		BaseResp repponse = this.productService.admitReject(oid, auditComment, operator);
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}

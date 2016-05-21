@@ -47,9 +47,6 @@
                 <div class="form-group">
                   <label>产品类型</label>
                   <select name="type" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE" data-enum-text="全部">
-                    <option value="" selected>不限</option>
-                    <option value="ok">已验证</option>
-                    <option value="no">未验证</option>
                   </select>
                 </div>
               </div>
@@ -244,8 +241,8 @@
                 <div class="form-group">
                   <label>募集开始时间</label>
                   <select name="raiseStartDateType" class="form-control input-sm" id="raiseStartDateTypeSelect">
-                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
-                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
+                    <option selected="selected" value="MANUALINPUT">固定时间</option>
+                    <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
                   
                 </div>
@@ -323,8 +320,8 @@
                 <div class="form-group">
                   <label>成立时间</label>
                   <select name="setupDateType" class="form-control input-sm" id="setupDateTypeSelect">
-                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
-                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
+                    <option selected="selected" value="MANUALINPUT">固定时间</option>
+                    <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
                 </div>
               </div>
@@ -361,9 +358,10 @@
                 <div class="form-group">
                   <label>&nbsp;</label>
                   <div class="input-group input-group-sm">
+                  	<span class="input-group-addon">第</span>
                     <input name="payModeDate" type="number"
                            class="form-control">
-                    <span class="input-group-addon">号</span>
+                    <span class="input-group-addon">天</span>
                   </div>
                 </div>
               </div>
@@ -373,7 +371,7 @@
                 <div class="form-group">
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">一旦申购，将冻结此金额</span>
+                    <span class="input-group-addon">一旦申购将冻结此金额</span>
                     <input name="lockPeriod" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
@@ -384,7 +382,7 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <input name="interestsFirstDate" type="number"
+                    <input name="interestsDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
                   </div>
@@ -746,10 +744,9 @@
                 <div class="form-group">
                   <label>募集开始时间</label>
                   <select name="raiseStartDateType" class="form-control input-sm" id="raiseStartDateTypeSelect">
-                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
-                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
+                    <option selected="selected" value="MANUALINPUT">固定时间</option>
+                    <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
-                  
                 </div>
               </div>
               <div class="col-sm-2">
@@ -825,8 +822,8 @@
                 <div class="form-group">
                   <label>成立时间</label>
                   <select name="setupDateType" class="form-control input-sm" id="setupDateTypeSelect">
-                    <option selected="selected" value="FIRSTRACKTIME">固定时间</option>
-                    <option value="MANUALINPUT">与首次渠道上架时间相同</option>
+                    <option selected="selected" value="MANUALINPUT">固定时间</option>
+                    <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
                 </div>
               </div>
@@ -863,9 +860,10 @@
                 <div class="form-group">
                   <label>&nbsp;</label>
                   <div class="input-group input-group-sm">
+                    <span class="input-group-addon">第</span>
                     <input name="payModeDate" type="number"
                            class="form-control">
-                    <span class="input-group-addon">号</span>
+                    <span class="input-group-addon">天</span>
                   </div>
                 </div>
               </div>
@@ -875,7 +873,7 @@
                 <div class="form-group">
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
-                    <span class="input-group-addon">一旦申购，将冻结此金额</span>
+                    <span class="input-group-addon">一旦申购将冻结此金额</span>
                     <input name="lockPeriod" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
@@ -886,7 +884,7 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <input name="interestsFirstDate" type="number"
+                    <input name="interestsDate" type="number"
                            class="form-control">
                     <span class="input-group-addon">个自然日</span>
                   </div>
@@ -1314,7 +1312,7 @@
 							<dl class="dl-horizontal">
 								<dt>起息日:</dt>
 								<dd>
-									<div data-detail-fetch="interestsFirstDateStr"></div>
+									<div data-detail-fetch="interestsDateStr"></div>
 								</dd>
 							</dl>
 						</div>
@@ -1346,7 +1344,7 @@
 							<dl class="dl-horizontal">
 								<dt>赎回确认日:</dt>
 								<dd>
-									<div data-detail-fetch="redeemConfirmDate"></div>
+									<div data-detail-fetch="redeemConfirmDateStr"></div>
 								</dd>
 							</dl>
 						</div>
@@ -1429,7 +1427,7 @@
 		  				<dl class="dl-horizontal">
 		  					<dt>风险等级:</dt>
 		  					<dd>
-		  						<div data-detail-fetch="riskLevel"></div>
+		  						<div data-detail-fetch="riskLevelStr"></div>
 		  					</dd>
 		  				</dl>
 		  			</div>
