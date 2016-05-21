@@ -155,7 +155,24 @@ define([
 											},
 											events: {
 												'click .item-download': function(e, value, row) {
-													
+													var key = {};
+													key.fkey = row.fkey;
+													var json = {
+														fkeys: []
+													};
+													json.fkeys.push(key);
+													http.post(config.api.files.pkg, {
+														data: JSON.stringify(json)
+													}, function(result) {
+														alert(result.key);
+														http.post(config.api.files.download, {
+															data: {
+																key : result.key
+															}
+														}, function(result) {
+															
+														})
+													})
 												},
 												'click .item-delete': function(e, value, row) {
 
@@ -262,7 +279,7 @@ define([
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
 					url: config.api.meetingAdd,
 					success: function(result) {
-
+						$('#addTargetConventionModal').modal('hide')
 					}
 				})
 			})
@@ -380,6 +397,8 @@ define([
 				$('#uploadTargetConventionSummaryForm').ajaxSubmit({
 					url: config.api.meetingSummaryUp,
 					success: function(result) {
+						uploadTargetConventionSummaryFiles = []
+						$('#uploadTargetConventionSummaryTable').bootstrapTable('load', uploadTargetConventionSummaryFiles)
 						$('#targetConventionSummaryTable').bootstrapTable('refresh')
 						$('#uploadTargetConventionSummaryModal').modal('hide')
 					}
