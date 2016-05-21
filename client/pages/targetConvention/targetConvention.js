@@ -164,18 +164,18 @@ define([
 													http.post(config.api.files.pkg, {
 														data: JSON.stringify(json)
 													}, function(result) {
-														alert(result.key);
-														http.post(config.api.files.download, {
-															data: {
-																key : result.key
-															}
-														}, function(result) {
-															
-														})
+														location.href = config.api.files.download + result.key
 													})
 												},
 												'click .item-delete': function(e, value, row) {
-
+													http.post(config.api.meetingSummaryDelete, {
+														data: {
+															oid: row.meetingOid
+														},
+														contentType: 'form'
+													}, function(result) {
+														$('#targetConventionSummaryTable').bootstrapTable('refresh')
+													})
 												}
 											}
 										}]

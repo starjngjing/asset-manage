@@ -176,6 +176,24 @@ public class InvestmentMeetingService {
 	}
 
 	/**
+	 * 删除过会纪要
+	 * 
+	 * @param oid
+	 * @param operator
+	 */
+	public void deleteSummary(String oid, String operator) {
+		InvestmentMeeting meeting = this.getMeetingDet(oid);
+		if (null == meeting) {
+			throw new RuntimeException();
+		}
+		if (null != meeting.getFkey()) {
+			fileService.batchDelete(meeting.getFkey(), operator);
+			meeting.setFkey(null);
+			this.updateMeeting(meeting, operator);
+		}
+	}
+
+	/**
 	 * 启动过会
 	 * 
 	 * @param oid
