@@ -157,9 +157,8 @@ define([
 										}
 									}]
 								}
-
 								// 初始化过会纪要表格
-								$('#targetConventionSummaryTable').bootstrapTable(targetConventionSummaryTableConfig)
+								$('#targetConventionSummaryTable').bootstrapTable(targetConventionSummaryTableConfig);
 								http.post(config.api.meetingDetail, {
 									data: {
 										oid: row.oid
