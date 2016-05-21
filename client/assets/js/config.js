@@ -67,60 +67,61 @@ define(function() {
 			meetingOpen: this.host + '/ams/target/targetMeeting/open', //获得会议纪要详情
 			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
-			channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
-			addChannel: this.host + '/ams/channel/add', //渠道-新增
-			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
-			editChannel: this.host + '/ams/channel/edit', //渠道-修改
-			delChannel: this.host + '/ams/channel/delete', //渠道-删除
-			setapply: this.host + '/ams/channel/setapply', //渠道-申请开启停用
-			remarksQuery: this.host + '/ams/channel/remarksquery', //渠道-意见列表
-			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
-			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
-			pkg: this.host + '/ams/file/pkg', //获得下载key
-			download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
-		},
-		system: {
-			config: {
-				ccp: {
-					warrantor: {
-						create: this.host + "/ams/system/ccp/warrantor/create",
-						update: this.host + "/ams/system/ccp/warrantor/update",
-						delete: this.host + "/ams/system/ccp/warrantor/delete",
-						search: this.host + "/ams/system/ccp/warrantor/search"
+			channelQuery: this.host + '/ams/channel/query',              //渠道-列表查询
+		    addChannel: this.host + '/ams/channel/add', 				 //渠道-新增
+		    channelinfo: this.host + '/ams/channel/channelinfo',		 //渠道-获取详情
+		    editChannel: this.host + '/ams/channel/edit',			     //渠道-修改
+		    delChannel: this.host + '/ams/channel/delete',               //渠道-删除
+		    setapply: this.host + '/ams/channel/setapply',			     //渠道-申请开启停用
+		    remarksQuery: this.host + '/ams/channel/remarksquery',	     //渠道-意见列表
+		    chanApproveQuery: this.host + '/ams/channelapprove/query',   //渠道-渠道审批查询
+		    delApply: this.host + '/ams/channelapprove/dealapply',       //渠道-处理申请开启和停用
+			files:{
+				pkg: this.host + '/ams/file/pkg', //获得下载key
+				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
+			},
+			system: {
+				config: {
+					ccp: {
+						warrantor: {
+							create: this.host + "/ams/system/ccp/warrantor/create",
+							update: this.host + "/ams/system/ccp/warrantor/update",
+							delete: this.host + "/ams/system/ccp/warrantor/delete",
+							search: this.host + "/ams/system/ccp/warrantor/search"
+						},
+						warrantyMode: {
+							create: this.host + "/ams/system/ccp/warrantyMode/create",
+							update: this.host + "/ams/system/ccp/warrantyMode/update",
+							delete: this.host + "/ams/system/ccp/warrantyMode/delete",
+							search: this.host + "/ams/system/ccp/warrantyMode/search"
+						},
+						warrantyExpire: {
+							create: this.host + "/ams/system/ccp/warrantyExpire/create",
+							update: this.host + "/ams/system/ccp/warrantyExpire/update",
+							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
+							search: this.host + "/ams/system/ccp/warrantyExpire/search"
+						}
 					},
-					warrantyMode: {
-						create: this.host + "/ams/system/ccp/warrantyMode/create",
-						update: this.host + "/ams/system/ccp/warrantyMode/update",
-						delete: this.host + "/ams/system/ccp/warrantyMode/delete",
-						search: this.host + "/ams/system/ccp/warrantyMode/search"
-					},
-					warrantyExpire: {
-						create: this.host + "/ams/system/ccp/warrantyExpire/create",
-						update: this.host + "/ams/system/ccp/warrantyExpire/update",
-						delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
-						search: this.host + "/ams/system/ccp/warrantyExpire/search"
-					}
-				},
-				ccr: {
-					cate: {
-						options: this.host + "/ams/system/ccr/cate/options"
-					},
-					indicate: {
-						search: this.host + "/ams/system/ccr/indicate/search",
-						save: this.host + "/ams/system/ccr/indicate/save",
-						enable: this.host + "/ams/system/ccr/indicate/enable",
-						disable: this.host + "/ams/system/ccr/indicate/disable",
-						delete: this.host + "/ams/system/ccr/indicate/delete"
+					ccr: {
+						cate: {
+							options: this.host + "/ams/system/ccr/cate/options"
+						},
+						indicate: {
+							search: this.host + "/ams/system/ccr/indicate/search",
+							save: this.host + "/ams/system/ccr/indicate/save",
+							enable: this.host + "/ams/system/ccr/indicate/enable",
+							disable: this.host + "/ams/system/ccr/indicate/disable",
+							delete: this.host + "/ams/system/ccr/indicate/delete"
+						}
 					}
 				}
 			}
-		}
-	},
+		},
 
-	/**
-	 * targetStates 标的状态
-	 */
-	targetStates: [{
+		/**
+		 * targetStates 标的状态
+		 */
+		targetStates: [{
 			id: "waitPretrial",
 			text: "未审核",
 			children: []
@@ -165,7 +166,7 @@ define(function() {
 		 * conventionStates 过会状态
 		 */
 		conventionStates: [
-
+			
 		],
 		cashtoolStates: [{
 			id: "waitPretrial",
@@ -201,26 +202,26 @@ define(function() {
 			children: []
 		}],
 		meetingStates: [{
-			id: "notopen",
-			text: "未启动",
-			children: []
-		}, {
-			id: "opening",
-			text: "启动中",
-			children: []
-		}, {
-			id: "stop",
-			text: "暂停",
-			children: []
-		}, {
-			id: "waitenter",
-			text: "待确认",
-			children: []
-		}, {
-			id: "finish",
-			text: "完成",
-			children: []
-		}],
+				id: "notopen",
+				text: "未启动",
+				children: []
+			},{
+				id: "opening",
+				text: "启动中",
+				children: []
+			},{
+				id: "stop",
+				text: "暂停",
+				children: []
+			},{
+				id: "waitenter",
+				text: "待确认",
+				children: []
+			},{
+				id: "finish",
+				text: "完成",
+				children: []
+			}],
 		voteStates: [{
 			id: "notvote",
 			text: "未投票",
@@ -242,5 +243,5 @@ define(function() {
 		 * 图标所用到的主题颜色
 		 */
 		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
-}
+	}
 })
