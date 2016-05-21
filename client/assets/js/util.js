@@ -125,6 +125,24 @@ define([
         })
         return rlt
       }
+    },
+    /**
+     * 表单操作实用工具
+     */
+    form: {
+      /**
+       * 表单验证工具
+       */
+      validator: {
+        init : function (form) {
+          form.validator({
+            validFloat: this.validFloat
+          })
+        },
+        validFloat: function ($el) {
+          console.log('abc')
+        }
+      }
     }
   }
 })
