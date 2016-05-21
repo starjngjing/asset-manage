@@ -406,13 +406,17 @@
                     })
                   // icheck datetimepicker全局初始化
                   $$.inputPluginsInit($('#mainContent'))
-                  // 枚举值自动填充
-                  $$.enumSourceInit($('#mainContent'))
+                  // 枚举值自动填充，非首次加载
+                  if (config.enumSourceState) {
+                    $$.enumSourceInit($('#mainContent'))
+                  }
                 })
               location.hash = params.value ? route + '?' + params.value : route
               currentHash = route
               params.value = ''
               document.body.scrollTop = 0
+              // for mobile
+              $('body').removeClass('sidebar-open')
             })
             .each(function (index, item) {
               if (!hash) {
