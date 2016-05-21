@@ -18,7 +18,7 @@ define([
 					ticker: '',
 					secShortName: '',
 					etfLof: '',
-					state :''
+					state: ''
 				}
 				// 数据表格配置
 			var tableConfig = {
@@ -66,32 +66,29 @@ define([
 					}, {
 						align: 'center',
 						formatter: function(val, row) {
-						var buttons = [
-		            	    {
-		            	      text: '查看详情',
-		            	      type: 'button',
-		            	      class: 'item-detail',
-		            	      isRender: true
-		            	    },
-		              	    {
-		              	    	text: '提交审核',
-		              	    	type: 'button',
-		              	    	class: 'item-check',
-		              	    	isRender: row.state == 'waitPretrial' || row.state == 'reject'
-		              	    },
-		            	  ];
-	            	  return util.table.formatter.generateButton(buttons);
+							var buttons = [{
+								text: '查看详情',
+								type: 'button',
+								class: 'item-detail',
+								isRender: true
+							}, {
+								text: '提交审核',
+								type: 'button',
+								class: 'item-check',
+								isRender: row.state == 'waitPretrial' || row.state == 'reject'
+							}, ];
+							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
 							'click .item-check': function(e, value, row) {
-								http.post(config.api.cashToolExamine, {
-											data: {
-												oid: row.oid
-											},
-											contentType: 'form',
-										}, function(result) {
-											$('#cashToolApplyTable').bootstrapTable('refresh')
-										})
+								$("#confirmTitle").html("确定提交预审？")
+								$$.confirm({
+									container: $('#doConfirm'),
+									trigger: this,
+									accept: function() {
+										
+									}
+								})
 							},
 							'click .item-detail': function(e, value, row) {
 								http.post(config.api.cashtoolDetQuery, {

@@ -15,7 +15,10 @@ define([
 			// 分页配置
 			var pageOptions = {
 					number: 1,
-					size: 10
+					size: 10,
+					sn: '',
+					title: '',
+					state: '',
 				}
 				// 会议列表数据表格配置
 			var tableConfig = {
@@ -23,7 +26,10 @@ define([
 						http.post(config.api.meetingList, {
 							data: {
 								page: pageOptions.number,
-								rows: pageOptions.size
+								rows: pageOptions.size,
+								sn: pageOptions.sn,
+								title: pageOptions.title,
+								state: pageOptions.state
 							},
 							contentType: 'form'
 						}, function(rlt) {
@@ -381,6 +387,8 @@ define([
 				}
 				// 初始化表格
 			$('#targetConventionTable').bootstrapTable(tableConfig)
+				// 搜索表单初始化
+			$$.searchInit($('#searchForm'), $('#targetConventionTable'))
 				// 新建会议按钮点击事件
 			$('#targetConventionAdd').on('click', function() {
 				$('#addTargetConventionModal').modal('show')
@@ -610,9 +618,12 @@ define([
 			})
 
 			function getQueryParams(val) {
-				var form = document.targetSearchForm
+				var form = document.searchForm
 				pageOptions.size = val.limit
 				pageOptions.number = parseInt(val.offset / val.limit) + 1
+				pageOptions.sn = form.sn.value.trim();
+				pageOptions.title = form.title.value.trim();
+				pageOptions.state = form.state.value.trim();
 				return val
 			}
 

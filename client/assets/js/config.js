@@ -229,10 +229,6 @@ define(function() {
 			text: "暂停",
 			children: []
 		}, {
-			id: "waitenter",
-			text: "待确认",
-			children: []
-		}, {
 			id: "finish",
 			text: "完成",
 			children: []
