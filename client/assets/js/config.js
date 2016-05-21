@@ -3,8 +3,8 @@
  * amd模块，使用requirejs载入
  */
 define(function() {
-	//  this.host = 'http://api.guohuaigroup.com'
-	this.host = ''
+	  this.host = 'http://api.guohuaigroup.com'
+	//this.host = ''
 	return {
 		host: this.host,
 		/**

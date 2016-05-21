@@ -136,11 +136,32 @@ define([
       validator: {
         init : function (form) {
           form.validator({
-            validFloat: this.validFloat
+            custom: {
+              validfloat: this.validfloat
+            },
+            errors: {
+              validfloat: '数据格式不正确'
+            }
           })
         },
-        validFloat: function ($el) {
-          console.log('abc')
+        /**
+         * 浮点数校验，例如 data-validfloat="10.2"，10.2 表示小数点前面10位后面2位，默认前后各10位
+         * @param $el 验证表单元素 jquery对象
+         * @returns 验证结果 {boolean}
+         */
+        validfloat: function ($el) {
+          var value = $el.val().trim()
+          var range = $el.attr('data-validfloat') || '10.10'
+          var rangeArr = range.split('.')
+          var intPart = rangeArr[0]
+          var decPart = rangeArr[1]
+          var regStr = '^[+-]?\\d{0,' + intPart + '}(\\.\\d{0,' + decPart + '})?$'
+          var floatReg = new RegExp(regStr)
+          if (!floatReg.test(value)) {
+            return false
+          } else {
+            return true
+          }
         }
       }
     }

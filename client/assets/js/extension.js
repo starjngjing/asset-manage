@@ -151,7 +151,7 @@ define([
       form.append(btn).append(input).appendTo(container)
 
       form.delegate('input:file', 'change', function () {
-        var fileSize = parseInt(this.files[0].size / 1000)
+        var fileSize = this.files[0].size
         form.ajaxSubmit({
           url: config.api.yup,
           success: function (data) {
