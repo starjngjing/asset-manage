@@ -34,4 +34,25 @@ public class RiskIndicateController extends BaseController {
 		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/enable", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<RiskIndicateResp> enable(@RequestParam String oid) {
+		super.checkLogin();
+		RiskIndicate i = this.riskIndicateService.enable(oid);
+		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/disable", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<RiskIndicateResp> disable(@RequestParam String oid) {
+		super.checkLogin();
+		RiskIndicate i = this.riskIndicateService.disable(oid);
+		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<RiskIndicateResp> delete(@RequestParam String oid) {
+		super.checkLogin();
+		RiskIndicate i = this.riskIndicateService.delete(oid);
+		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
+	}
+
 }
