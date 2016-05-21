@@ -2,31 +2,29 @@
  * 配置项，提供全局使用各项配置
  * amd模块，使用requirejs载入
  */
-define(function () {
-//  this.host = 'http://www.guohuaigroup.com'
-  this.host = ''
-  
-  return {
-    host: this.host,
-    /**
-     * api 接口提供与服务器异步交互地址
-     * 
-     */
-    api: {
-			yup:  'http://www.guohuaigroup.com/yup',                                       // 文件上传服务
-
-      dictList: this.host + '/ams/dict/list',                // 枚举值获取接口
-    	establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
-    	unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
-    	listinvestmentPoolList: this.host + "/ams/boot/investmentPool/poolList", // 投资标的库列表(未持有投资标的列表,已持有投资标的列表,历史投资标的列表)
-    	listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
-    	removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
-    	cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
-    	targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
-    	targetProjectList:this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
-    	targetProjectDelete:this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
-    	saveProject: this.host + "/ams/boot/project/save",//保存底层项目
-    	targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
+define(function() {
+	//  this.host = 'http://api.guohuaigroup.com'
+	this.host = ''
+	return {
+		host: this.host,
+		/**
+		 * api 接口提供与服务器异步交互地址
+		 * 
+		 */
+		api: {
+			yup: 'http://api.guohuaigroup.com/yup', // 文件上传服务
+			dictList: this.host + '/ams/dict/list', // 枚举值获取接口
+			establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
+			unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
+			listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
+			listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
+			removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
+			cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
+			targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
+			targetProjectList: this.host + "/ams/boot/project/getByTargetId", // 查询投资标的下的底层项目
+			targetProjectDelete: this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
+			saveProject: this.host + "/ams/boot/project/save", //保存底层项目
+			targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 			targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 			targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
 			targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
@@ -64,6 +62,24 @@ define(function () {
 			meetingDetail: this.host + '/ams/target/targetMeeting/detail', //过会详情
 			meetingTargetList: this.host + '/ams/target/targetMeeting/meetingTarget', //过会中标的列表
 			meetingTargetVoteDet: this.host + '/ams/target/targetMeeting/meetingTargetVoteDet', //过会中标的投票情况
+			meetingSummaryUp: this.host + '/ams/target/targetMeeting/summaryUp', //上传会议纪要
+			meetingSummaryDet: this.host + '/ams/target/targetMeeting/summaryDet', //获得会议纪要详情
+			meetingOpen: this.host + '/ams/target/targetMeeting/open', //获得会议纪要详情
+			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
+			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
+			channelQuery: this.host + '/ams/channel/query',              //渠道-列表查询
+		    addChannel: this.host + '/ams/channel/add', 				 //渠道-新增
+		    channelinfo: this.host + '/ams/channel/channelinfo',		 //渠道-获取详情
+		    editChannel: this.host + '/ams/channel/edit',			     //渠道-修改
+		    delChannel: this.host + '/ams/channel/delete',               //渠道-删除
+		    setapply: this.host + '/ams/channel/setapply',			     //渠道-申请开启停用
+		    remarksQuery: this.host + '/ams/channel/remarksquery',	     //渠道-意见列表
+		    chanApproveQuery: this.host + '/ams/channelapprove/query',   //渠道-渠道审批查询
+		    delApply: this.host + '/ams/channelapprove/dealapply',       //渠道-处理申请开启和停用
+			files:{
+				pkg: this.host + '/ams/file/pkg', //获得下载key
+				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
+			},
 			system: {
 				config: {
 					ccp: {
@@ -87,23 +103,25 @@ define(function () {
 						}
 					},
 					ccr: {
-	    				cate: {
-	    					options: this.host + "/ams/system/ccr/cate/options"
-	    				},
-	    				indicate: {
-	    					search: this.host + "/ams/system/ccr/indicate/search",
-	    					save: this.host + "/ams/system/ccr/indicate/save"
-	    				}
-	    			}
+						cate: {
+							options: this.host + "/ams/system/ccr/cate/options"
+						},
+						indicate: {
+							search: this.host + "/ams/system/ccr/indicate/search",
+							save: this.host + "/ams/system/ccr/indicate/save",
+							enable: this.host + "/ams/system/ccr/indicate/enable",
+							disable: this.host + "/ams/system/ccr/indicate/disable",
+							delete: this.host + "/ams/system/ccr/indicate/delete"
+						}
+					}
 				}
 			}
 		},
-		
-    /**
-     * targetStates 标的状态
-     */
-    targetStates: 
-    	[{
+
+		/**
+		 * targetStates 标的状态
+		 */
+		targetStates: [{
 			id: "waitPretrial",
 			text: "未审核",
 			children: []
@@ -147,7 +165,9 @@ define(function () {
 		/**
 		 * conventionStates 过会状态
 		 */
-		conventionStates: {},
+		conventionStates: [
+			
+		],
 		cashtoolStates: [{
 			id: "waitPretrial",
 			text: "未审核",
@@ -182,23 +202,39 @@ define(function () {
 			children: []
 		}],
 		meetingStates: [{
-			id: "notopen",
-			text: "未举行",
-			children: []
-		}],
+				id: "notopen",
+				text: "未启动",
+				children: []
+			},{
+				id: "opening",
+				text: "启动中",
+				children: []
+			},{
+				id: "stop",
+				text: "暂停",
+				children: []
+			},{
+				id: "waitenter",
+				text: "待确认",
+				children: []
+			},{
+				id: "finish",
+				text: "完成",
+				children: []
+			}],
 		voteStates: [{
 			id: "notvote",
 			text: "未投票",
 			children: []
-		},{
+		}, {
 			id: "approve",
 			text: "赞成",
 			children: []
-		},{
+		}, {
 			id: "notapprove",
 			text: "反对",
 			children: []
-		},{
+		}, {
 			id: "notpass",
 			text: "一票否决",
 			children: []

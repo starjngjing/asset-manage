@@ -233,6 +233,10 @@ table.treetable tr.expanded span.indenter a:before {
   content: '\f0d7';
 }
 
+.table > tbody > tr > td{
+  line-height: 22px;
+}
+
 /* modal */
 .modal .nav-tabs-custom{
   -webkit-box-shadow: none;

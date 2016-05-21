@@ -125,6 +125,82 @@ define([
         })
         return rlt
       }
+    },
+    /**
+     * 表单操作实用工具
+     */
+    form: {
+      /**
+       * 表单验证工具
+       */
+      validator: {
+        init : function (form) {
+          form.validator({
+            custom: {
+              validfloat: this.validfloat
+            },
+            errors: {
+              validfloat: '数据格式不正确'
+            }
+          })
+        },
+        /**
+         * 浮点数校验，例如 data-validfloat="10.2"，10.2 表示小数点前面10位后面2位，默认前后各10位
+         * @param $el 验证表单元素 jquery对象
+         * @returns 验证结果 {boolean}
+         */
+        validfloat: function ($el) {
+          var value = $el.val().trim()
+          var range = $el.attr('data-validfloat') || '10.10'
+          var rangeArr = range.split('.')
+          var intPart = rangeArr[0]
+          var decPart = rangeArr[1]
+          var regStr = '^[+-]?\\d{0,' + intPart + '}(\\.\\d{0,' + decPart + '})?$'
+          var floatReg = new RegExp(regStr)
+          if (!floatReg.test(value)) {
+            return false
+          } else {
+            return true
+          }
+        }
+      }
+    },
+    /**
+     * 将对象转换成带参数的形式 &a=1&b=2
+     */
+    buildQueryUrl: function(url, param){
+    	var x = url;
+		var ba = true;
+		if (x.indexOf('?') != -1) {
+			if (x.indexOf('?') == url.length - 1) {
+				ba = false;
+			} else {
+				ba = true;
+			}
+		} else {
+			x = x + '?';
+			ba = false;
+		}
+		var builder = '';
+		for (var i in param) {
+			var p = '&' + i + '=';
+			if (param[i]) {
+				var v = param[i];
+				if (Object.prototype.toString.call(v) === '[object Array]') {
+					for (var j = 0; j < v.length; j++) {
+						builder = builder + p + encodeURIComponent(v[j]);
+					}
+				} else if (typeof(v) == "object" && Object.prototype.toString.call(v).toLowerCase() == "[object object]" && !v.length) {
+					builder = builder + p + encodeURIComponent(JSON.stringify(v));
+				} else {
+					builder = builder + p + encodeURIComponent(v);
+				}
+			}
+		}
+		if (!ba) {
+			builder = builder.substring(1);
+		}
+		return x + builder;
     }
   }
 })

@@ -7,11 +7,11 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.hsqldb.lib.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.component.exception.AMPException;
+import com.guohuai.asset.manage.component.util.StringUtil;
 
 @Service
 public class RiskCateService {
@@ -25,6 +25,7 @@ public class RiskCateService {
 		RiskCate c;
 		if (StringUtil.isEmpty(oid)) {
 			c = new RiskCate();
+			c.setOid(StringUtil.uuid());
 		} else {
 			c = this.get(oid);
 		}

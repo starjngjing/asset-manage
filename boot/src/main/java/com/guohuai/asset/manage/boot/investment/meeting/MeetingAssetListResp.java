@@ -15,21 +15,21 @@ import lombok.EqualsAndHashCode;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
-public class InvestmentMeetingAssetListResp extends PageResp<InvestmentMeetingAsset> {
+public class MeetingAssetListResp extends PageResp<InvestmentMeetingAsset> {
 
-	public InvestmentMeetingAssetListResp() {
+	public MeetingAssetListResp() {
 		super();
 	}
 
-	public InvestmentMeetingAssetListResp(Page<InvestmentMeetingAsset> Approvals) {
+	public MeetingAssetListResp(Page<InvestmentMeetingAsset> Approvals) {
 		this(Approvals.getContent(), Approvals.getTotalElements());
 	}
 
-	public InvestmentMeetingAssetListResp(List<InvestmentMeetingAsset> approvals) {
+	public MeetingAssetListResp(List<InvestmentMeetingAsset> approvals) {
 		this(approvals, approvals.size());
 	}
 
-	public InvestmentMeetingAssetListResp(List<InvestmentMeetingAsset> Approvals, long total) {
+	public MeetingAssetListResp(List<InvestmentMeetingAsset> Approvals, long total) {
 		this();
 		super.setTotal(total);
 		super.setRows(Approvals);
