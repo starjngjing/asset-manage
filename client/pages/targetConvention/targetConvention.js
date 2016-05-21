@@ -381,6 +381,160 @@ define([
 				})
 			})
 
+			// 临时存储当前操作标的对象
+			var currentOpTarget = null
+			// 会议确认表格配置
+			var finishTargetConventionTableConfig = {
+				// 在初始化数据的时候，将检查项数组和驳回理由字符串添加到每个对象里
+				data: [{
+					name: '十一届三中全会',
+					status: 'yes',
+					checkConditions: [],			// 检查项
+					rejectComment: ''					// 驳回理由
+				}],
+				detailView: true,
+				onExpandRow: function (index, row, $detail) {
+
+				},
+				columns: [
+					{
+						field: 'name'
+					},
+					{
+						field: 'status',
+						formatter: function (val) {
+							return val === 'yes' ? '<span class="text-green">通过</span>' : '<span class="text-red">驳回</span>'
+						}
+					},
+					{
+						width: 120,
+						align: 'center',
+						formatter: function () {
+							var buttons = [
+								{
+									text: '通过',
+									type: 'button',
+									class: 'item-pass'
+								},
+								{
+									text: '驳回',
+									type: 'button',
+									class: 'item-reject'
+								}
+							]
+							return util.table.formatter.generateButton(buttons)
+						},
+						events: {
+							'click .item-pass': function (e, value, row) {
+								currentOpTarget = row
+								// 复制此标的下检查项的值
+								var injectData = row.checkConditions.map(function (text) {
+									return {
+										text: text
+									}
+								})
+								// 加一条空值，用于新增
+								injectData.push({ text: '' })
+								$('#checkConditionsTable').bootstrapTable('load', injectData)
+								$('#checkConditionsModal').modal('show')
+							},
+							'click .item-reject': function (e, value, row) {
+								currentOpTarget = row
+								document.rejectForm.rejectComment.value = currentOpTarget.rejectComment
+								$('#rejectCommentModal').modal('show')
+							}
+						}
+					}
+				]
+			}
+			// 会议确认表格初始化
+			$('#finishTargetConventionTable').bootstrapTable(finishTargetConventionTableConfig)
+
+			// 检查项表格配置
+			var checkConditionsTableConfig = {
+				columns: [
+					{
+						field: 'text',
+						formatter: function (val) {
+							if (!val) {
+								return '<input type="text">'
+							} else {
+								return val
+							}
+						}
+					},
+					{
+						width: 80,
+						align: 'center',
+						formatter: function (val, row) {
+							var buttons = [
+								{
+									text: '保存',
+									type: 'button',
+									class: 'item-save',
+									isRender: !row.text				// 空值时显示保存按钮
+								},
+								{
+									text: '删除',
+									type: 'button',
+									class: 'item-delete',
+									isRender: row.text
+								}
+							]
+							return util.table.formatter.generateButton(buttons)
+						},
+						events: {
+							'click .item-save': function (e, val, row) {
+								var inputValue = $(e.target.parentNode.parentNode.parentNode).find('input').val().trim()
+								if (inputValue) {
+									var currentTable = $('#checkConditionsTable')
+									var currentData = currentTable.bootstrapTable('getData')
+									currentData.splice(currentData.length - 1, 0, {
+										text: inputValue
+									})
+									currentTable.bootstrapTable('load', currentData)
+								}
+							},
+							'click .item-delete': function (e, val, row, index) {
+								var currentTable = $('#checkConditionsTable')
+								var currentData = currentTable.bootstrapTable('getData')
+								currentData.splice(index, 1)
+								currentTable.bootstrapTable('load', currentData)
+							}
+						}
+					}
+				]
+			}
+			$('#checkConditionsTable').bootstrapTable(checkConditionsTableConfig)
+
+			// 检查项提交按钮点击事件
+			$('#doAddCheckConditions').on('click', function () {
+				var conditionsData = $('#checkConditionsTable').bootstrapTable('getData')
+				conditionsData.splice(conditionsData.length - 1, 1)
+				currentOpTarget.checkConditions = conditionsData.map(function (item) {
+					return item.text
+				})
+				currentOpTarget.status = 'yes'
+				$('#checkConditionsModal').modal('hide')
+			})
+
+			// 驳回理由按钮点击事件
+			$('#doAddRejectComment').on('click', function () {
+				currentOpTarget.rejectComment = document.rejectForm.rejectComment.value.trim()
+				currentOpTarget.status = 'no'
+				$('#rejectCommentModal').modal('hide')
+			})
+
+			// 会议确认“确认”按钮点击事件
+			$('#doFinishTargetConvention').on('click', function () {
+				var tableData = $('#finishTargetConventionTable').bootstrapTable('getData')
+				var form = document.finishTargetConventionForm
+				form.targets.value = JSON.stringify(tableData)
+				$(form).ajaxSubmit({
+
+				})
+			})
+
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit
