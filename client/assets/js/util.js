@@ -137,10 +137,12 @@ define([
         init : function (form) {
           form.validator({
             custom: {
-              validfloat: this.validfloat
+              validfloat: this.validfloat,
+              validint: this.validint
             },
             errors: {
-              validfloat: '数据格式不正确'
+              validfloat: '数据格式不正确',
+              validint: '数据格式不正确'
             }
           })
         },
@@ -161,6 +163,29 @@ define([
             return false
           } else {
             return true
+          }
+        },
+        /**
+         * 整数校验，例如 data-validint="1-1000"，1-1000 表示许可范围从1到1000
+         * @param $el 验证表单元素 jquery对象
+         * @returns 验证结果 {boolean}
+         */
+        validint: function ($el) {
+          var value = $el.val().trim()
+          var range = $el.attr('data-validint') || '0-1000000000'
+          var rangeArr = range.split('-')
+          var start = Number(rangeArr[0])
+          var end = Number(rangeArr[1])
+          var regStr = '^[+-]?\\d*$'
+          var intReg = new RegExp(regStr)
+          if (!intReg.test(value)) {
+            return false
+          } else {
+            if (parseInt(value) > end || parseInt(value) < start) {
+              return false
+            } else {
+              return true
+            }
           }
         }
       }
