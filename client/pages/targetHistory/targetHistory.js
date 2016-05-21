@@ -8,13 +8,13 @@ define([
 'util'
 ], function (http, config, $$, util) {
   return {
-    name: 'targetStorage',
+    name: 'targetHistory',
     init: function () {
       // js逻辑写在这里
 
         // 分页配置
         var pageOptions = {
-        		op:"storageList",
+        		op:"historyList",
         		page: 1,
           rows: 10
         }
@@ -35,7 +35,7 @@ define([
           pageList: [10, 20, 30, 50, 100],
           queryParams: getQueryParams,
           onLoadSuccess: function () {
-          //  http.post(config.api.investmentStorageList, {
+          //  http.post(config.api.listinvestmentPoolList, {
            //   contentType: 'form'
            // }, function (result) {
 //              $('#clubData').html('会员机构：' + result.clubData + '家')

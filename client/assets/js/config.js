@@ -5,7 +5,6 @@
 define(function() {
 	//  this.host = 'http://www.guohuaigroup.com'
 	this.host = ''
-
 	return {
 		host: this.host,
 		/**
