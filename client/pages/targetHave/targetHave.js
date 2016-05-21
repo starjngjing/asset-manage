@@ -14,13 +14,14 @@ define([
 
         // 分页配置
         var pageOptions = {
+        		op:"haveList",
         		page: 1,
           rows: 10
         }
         // 数据表格配置
         var tableConfig = {
           ajax: function (origin) {
-            http.post(config.api.listinvestment, {
+            http.post(config.api.listinvestmentPoolList, {
               data: pageOptions,
               contentType: 'form'
             }, function (rlt) {
@@ -34,7 +35,7 @@ define([
           pageList: [10, 20, 30, 50, 100],
           queryParams: getQueryParams,
           onLoadSuccess: function () {
-          //  http.post(config.api.listinvestment, {
+          //  http.post(config.api.listinvestmentPoolList, {
            //   contentType: 'form'
            // }, function (result) {
 //              $('#clubData').html('会员机构：' + result.clubData + '家')
