@@ -164,6 +164,43 @@ define([
           }
         }
       }
+    },
+    /**
+     * 将对象转换成带参数的形式 &a=1&b=2
+     */
+    buildQueryUrl: function(url, param){
+    	var x = url;
+		var ba = true;
+		if (x.indexOf('?') != -1) {
+			if (x.indexOf('?') == url.length - 1) {
+				ba = false;
+			} else {
+				ba = true;
+			}
+		} else {
+			x = x + '?';
+			ba = false;
+		}
+		var builder = '';
+		for (var i in param) {
+			var p = '&' + i + '=';
+			if (param[i]) {
+				var v = param[i];
+				if (Object.prototype.toString.call(v) === '[object Array]') {
+					for (var j = 0; j < v.length; j++) {
+						builder = builder + p + encodeURIComponent(v[j]);
+					}
+				} else if (typeof(v) == "object" && Object.prototype.toString.call(v).toLowerCase() == "[object object]" && !v.length) {
+					builder = builder + p + encodeURIComponent(JSON.stringify(v));
+				} else {
+					builder = builder + p + encodeURIComponent(v);
+				}
+			}
+		}
+		if (!ba) {
+			builder = builder.substring(1);
+		}
+		return x + builder;
     }
   }
 })
