@@ -34,6 +34,7 @@ import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.TargetIncome;
 import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -70,9 +71,9 @@ public class InvestmentPoolController extends BaseController {
 	TargetIncomeService targetIncomeService;
 
 	/**
-	 * 标的成立管理列表
+	 * 投资标的库管理列表
 	 * 
-	 * @Title: listinvestment
+	 * @Title: investmentPoolList
 	 * @author vania
 	 * @version 1.0
 	 * @see:
@@ -84,14 +85,18 @@ public class InvestmentPoolController extends BaseController {
 	 * @param sortField
 	 * @return ResponseEntity<InvestmentListResp> 返回类型
 	 */
-	@RequestMapping(value = "listinvestment", method = { RequestMethod.POST, RequestMethod.GET })
-	@ApiOperation(value = "标的成立管理列表")
-	public @ResponseBody ResponseEntity<InvestmentListResp> listinvestment(HttpServletRequest request,
-			@And({	@Spec(params = "name", path = "name", spec = Like.class), 
-					@Spec(params = "type", path = "type", spec = Equal.class) }) 
-					Specification<Investment> spec,
+	@RequestMapping(value = { "poolList"}, method = { RequestMethod.POST, RequestMethod.GET })
+	@ApiOperation(value = "标的库列表")
+	public @ResponseBody ResponseEntity<InvestmentListResp> investmentPoolList(HttpServletRequest request,
+			@RequestParam() String op,
+			@And({	
+				@Spec(params = "name", path = "name", spec = Like.class), 
+				@Spec(params = "type", path = "type", spec = Equal.class) 
+			}) Specification<Investment> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
+		log.info("标的库查询op=" + op);
+
 		if (page < 1) {
 			page = 1;
 		}
@@ -101,58 +106,54 @@ public class InvestmentPoolController extends BaseController {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(order));
 		
-		// 拼接条件
+		// 根据不同的操作拼接条件
 		spec = Specifications.where(spec).and(new Specification<Investment>() {
 			@Override
 			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
-				
-//				predicate.add(cb.notEqual(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid));
-				predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+				if (op.equals("storageList")) { // 标的库列表
+					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+				} else if (op.equals("haveList")) { // 已持有列表
+					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+				} else if (op.equals("notHaveList")) { // 未持有列表
+					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+				} else if (op.equals("historyList")) { // 历史列表
+					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid)); // 作废
+				} else{
+					throw AMPException.getException("未知的操作类型[" + op + "]"); 
+				}
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();
 			}
 		});
 		
 		String raiseScope = request.getParameter("raiseScope");
-		if (StringUtils.isNotBlank(raiseScope)) {
-			spec = Specifications.where(spec).and(new Specification<Investment>() {
-				@Override
-				public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<Investment> section = new Section<Investment>(raiseScope);
-					return section.build(root, cb, "raiseScope");
-				}
-			});
-		}
+		spec = this.buildSpec(spec, "raiseScope", raiseScope);		
 
 		String lifed = request.getParameter("lifed");
-		if (StringUtils.isNotBlank(lifed)) {
-			spec = Specifications.where(spec).and(new Specification<Investment>() {
-				@Override
-				public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<Investment> section = new Section<Investment>(lifed);
-					return section.build(root, cb, "lifed");
-				}
-			});
-		}
+		spec = this.buildSpec(spec, "lifed", lifed);		
 
 		String expAror = request.getParameter("expAror");
-		if (StringUtils.isNotBlank(expAror)) {
-			spec = Specifications.where(spec).and(new Specification<Investment>() {
-				@Override
-				public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Section<Investment> section = new Section<Investment>(expAror);
-					return section.build(root, cb, "expAror");
-				}
-			});
-		}
-
+		spec = this.buildSpec(spec, "expAror", expAror);
+		
 		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);
 
 		InvestmentListResp resp = new InvestmentListResp(pageData);
 		return new ResponseEntity<InvestmentListResp>(resp, HttpStatus.OK);
 	}
 
+	private Specification<Investment> buildSpec(Specification<Investment> spec, String attr, String value) {
+		if (StringUtils.isNotBlank(value)) {
+			spec = Specifications.where(spec).and(new Specification<Investment>() {
+				@Override
+				public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					Section<Investment> section = new Section<Investment>(value);
+					return section.build(root, cb, attr);
+				}
+			});
+		}
+		return spec;
+	}
 	
 	
 	/**
