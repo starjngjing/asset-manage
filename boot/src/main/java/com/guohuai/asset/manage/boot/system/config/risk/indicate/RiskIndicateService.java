@@ -1,7 +1,9 @@
 package com.guohuai.asset.manage.boot.system.config.risk.indicate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -97,6 +99,39 @@ public class RiskIndicateService {
 		}
 
 		return result;
+	}
+
+	@Transactional
+	public List<RiskIndicateOption> options(String type) {
+
+		List<RiskIndicate> list = this.riskIndicateDao.search(type, new String[] { RiskIndicate.STATE_Enable });
+
+		List<RiskIndicateOption> options = new ArrayList<RiskIndicateOption>();
+		Map<String, RiskIndicateOption> map = new HashMap<String, RiskIndicateOption>();
+
+		if (null != list && list.size() > 0) {
+			for (RiskIndicate i : list) {
+				if (!map.containsKey(i.getCate().getOid())) {
+					RiskIndicateOption rio = new RiskIndicateOption();
+					rio.setOid(i.getCate().getOid());
+					rio.setTitle(i.getCate().getTitle());
+					options.add(rio);
+					map.put(i.getCate().getOid(), rio);
+				}
+
+				RiskIndicateOption.Option roo = new RiskIndicateOption.Option();
+				roo.setOid(i.getOid());
+				roo.setTitle(i.getTitle());
+				roo.setDataType(i.getDataType());
+				roo.setDataUnit(i.getDataUnit());
+
+				RiskIndicateOption rio = map.get(i.getCate().getOid());
+				rio.getOptions().add(roo);
+
+			}
+		}
+
+		return options;
 	}
 
 }

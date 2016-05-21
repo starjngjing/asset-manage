@@ -106,14 +106,22 @@ define([
 					align: 'center',
 					formatter: function (val, row, index) {
 						if(row.expArorSec!=null && row.expAror!=row.expArorSec) {
-							return row.expArorSec+"%"+"~"+row.expArorSec+"%";
+							return row.expAror+"%"+"~"+row.expArorSec+"%";
 						}
 						return row.expAror+"%";
 					}
 				},
 				{
+					align: 'center',
 					field: 'raisedTotalNumber',
-					align: 'center'
+					formatter: function (val, row, index) {
+						var typeOid = row.typeOid;  
+						if(typeOid=="PRODUCTTYPE_01") {
+							return row.raisedTotalNumber;
+						} else {
+							return "不限";
+						}
+					}
 				},
 				{
 					field: 'netUnitShare',
@@ -337,9 +345,6 @@ define([
 		})
 
 		// 提交审核弹窗 -> 提交按钮点击事件
-
-
-
 		$('#doProductAudit').on('click', function () {
 			// 获取id数组
 			var oids = checkItems.map(function (item) {
@@ -355,8 +360,11 @@ define([
 					contentType: 'form',
 				}, 
 				function(result) {
+					checkItems = []
 					$('#productAuditModal').modal('hide')
-					$('#productDesignTable').bootstrapTable('refresh')
+					if (result.errorCode == 0) {
+						$('#productDesignTable').bootstrapTable('refresh')
+					}
 				}
 			)
 				
