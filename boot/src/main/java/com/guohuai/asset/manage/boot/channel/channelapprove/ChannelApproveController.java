@@ -62,8 +62,8 @@ public class ChannelApproveController extends BaseController {
 	@RequestMapping(value = "dealapply", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BaseResp> delApply(@Valid ChannelApproveOpeReq req) {
-		//String operator = super.getLoginAdmin();
-		BaseResp rep = this.serviceChannelApprove.dealApply(req, "admin");		
+		String operator = super.getLoginAdmin();
+		BaseResp rep = this.serviceChannelApprove.dealApply(req, operator);		
 		return new ResponseEntity<BaseResp>(rep, HttpStatus.OK);
 	}
 	

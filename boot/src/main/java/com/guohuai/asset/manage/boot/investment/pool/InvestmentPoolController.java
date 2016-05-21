@@ -113,9 +113,9 @@ public class InvestmentPoolController extends BaseController {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 标的库列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
-				} else if (op.equals("haveList")) { // 已持有列表
+				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
-				} else if (op.equals("notHaveList")) { // 未持有列表
+				} else if (op.equals("noHoldList")) { // 未持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 				} else if (op.equals("historyList")) { // 历史列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid)); // 作废
