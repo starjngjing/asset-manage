@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-xs-12">
       <!-- Grid -->
-      <div class="box box-primary">
+      <div class="nav-tabs-custom">
       	<!-- Nav tabs -->
 			  <ul class="nav nav-tabs" role="tablist">
 			    <li role="presentation" class="active"><a href="#tabcon1" aria-controls="待审核列表" role="tab" data-toggle="tab">待审核列表</a></li>
@@ -21,13 +21,13 @@
 			  
 			  <div class="tab-content">
 			    <div role="tabpanel" class="tab-pane active" id="tabcon1">
-			    	<form id="waitSearchForm" name="waitSearchForm" method="post" class="box-header">
+			    	<form id="waitSearchForm" name="waitSearchForm" method="post">
 	            <div class="row">
 	              <div class="col-sm-3">
 	                <div class="form-group">
 	                  <label>渠道名称：</label>
 	                  <input name="channelName" type="text"
-	                         class="form-control"
+	                         class="form-control input-sm"
 	                         placeholder="搜索渠道名称">
 	                </div>
 	              </div>
@@ -35,14 +35,14 @@
 	                <div class="form-group">
 	                  <label>申请人：</label>
 	                  <input name="requester" type="text"
-	                         class="form-control"
+	                         class="form-control input-sm"
 	                         placeholder="搜索申请人">
 	                </div>
 	              </div>	              	
 	              <div class="col-sm-3">
 	                <div class="form-group">
 	                  <label>申请类型</label>
-	                  <select name="requestType" class="form-control">
+	                  <select name="requestType" class="form-control input-sm">
 	                  	<option value="" selected>全部</option>
 	                    <option value="on">启用</option>
 	                    <option value="off">停用</option>
@@ -54,7 +54,7 @@
 	              	  <div class="col-sm-3">
 			                <div class="form-group">
 			                  <label>申请时间:</label>
-			                  <div class="input-group">
+			                  <div class="input-group input-group-sm">
 			                    <div class="input-group-addon">
 			                      <i class="fa fa-calendar"></i>
 			                    </div>
@@ -68,7 +68,7 @@
 			              <div class="col-sm-3">
 			                <div class="form-group">
 			                  <label>&nbsp;</label>
-			                  <div class="input-group daterange">
+			                  <div class="input-group input-group-sm range">
 			                    <div class="input-group-addon">
 			                      <i class="fa fa-calendar"></i>
 			                    </div>
@@ -78,41 +78,35 @@
 			                           data-date-format="YYYY-MM-DD HH:mm:ss">
 			                  </div>
 			                </div>
-			              </div>	              
-			              <div class="col-sm-3">
-			              	<div class="form-group">
-			              	<label>&nbsp;</label><br />
-				              	<a id="WaitSearchBtn" class="btn btn-default btn-sm">搜索</a>			            
-					            </div>
 			              </div>
 	              </div>
 	          </form>
 			    	<!-- 数据表格 -->
-	          <table id="waitTable" class="table table-bordered table-striped">
-	            <thead>
-	              <tr>
-	                <th>序号</th>
-	                <th>渠道名称</th>	 
-	                <th>渠道审批编号</th>	
-	                <th>申请类型</th>
-	                <th>申请人</th>
-	                <th>申请时间</th>
-	                <th>操作</th>
-	              </tr>
-	            </thead>
-	          </table>
+						<table id="waitTable" class="table table-bordered table-striped">
+							<thead>
+							<tr>
+								<th>序号</th>
+								<th>渠道名称</th>
+								<th>渠道审批编号</th>
+								<th>申请类型</th>
+								<th>申请人</th>
+								<th>申请时间</th>
+								<th>操作</th>
+							</tr>
+							</thead>
+						</table>
 			    </div>
 			    
 			    
 			    <!--已审核列表-->
 			    <div role="tabpanel" class="tab-pane" id="tabcon2">
-			    	<form id="okSearchForm" name="okSearchForm" method="post" class="box-header">
+			    	<form id="okSearchForm" name="okSearchForm" method="post">
 	            <div class="row">
 	              <div class="col-sm-3">
 	                <div class="form-group">
 	                  <label>渠道名称：</label>
 	                  <input name="channelName" type="text"
-	                         class="form-control"
+	                         class="form-control input-sm"
 	                         placeholder="搜索渠道名称">
 	                </div>
 	              </div>
@@ -120,14 +114,14 @@
 	                <div class="form-group">
 	                  <label>申请人：</label>
 	                  <input name="requester" type="text"
-	                         class="form-control"
+	                         class="form-control input-sm"
 	                         placeholder="搜索申请人">
 	                </div>
 	              </div>	             	 
 	              <div class="col-sm-3">
 	                <div class="form-group">
 	                  <label>申请类型</label>
-	                  <select name="requestType" class="form-control">
+	                  <select name="requestType" class="form-control input-sm">
 	                    <option value="" selected>启用</option>
 	                    <option value="ok">停用</option>
 	                  </select>
@@ -138,7 +132,7 @@
 		           	  <div class="col-sm-3">
 		                <div class="form-group">
 		                  <label>申请时间:</label>
-		                  <div class="input-group">
+		                  <div class="input-group input-group-sm">
 		                    <div class="input-group-addon">
 		                      <i class="fa fa-calendar"></i>
 		                    </div>
@@ -152,7 +146,7 @@
 		              <div class="col-sm-3">
 		                <div class="form-group">
 		                  <label>&nbsp;</label>
-		                  <div class="input-group daterange">
+		                  <div class="input-group input-group-sm range">
 		                    <div class="input-group-addon">
 		                      <i class="fa fa-calendar"></i>
 		                    </div>
@@ -162,13 +156,7 @@
 		                           data-date-format="YYYY-MM-DD HH:mm:ss">
 		                  </div>
 		                </div>
-		              </div>	              
-		              <div class="col-sm-3">
-		              	<div class="form-group">
-		              	<label>&nbsp;</label><br />
-			              	<a id="okSearchBtn" class="btn btn-default btn-sm">搜索</a>					            
-				            </div>
-		              </div>	
+		              </div>
 		            </div>
 	          </form>
 			    	<!-- 数据表格 -->
@@ -212,7 +200,7 @@
           <form id="approveForm" name="approveForm" method="post">
 	          <div class="form-group">
 	            <label>确定要<span id="content"></span>申请？</label>
-	            <textarea name="remark" class="form-control"placeholder="请输入审核意见" rows="3" required></textarea>	            
+	            <textarea name="remark" class="form-control input-sm" placeholder="请输入审核意见" rows="3" required></textarea>
 	          </div>
 	          <input name="apprOid" type="hidden">
 	          <input name="apprResult" type="hidden">
@@ -289,6 +277,15 @@
 								<dt>接入方式</dt>
 								<dd>
 									<div data-detail-fetch="joinType" data-enum-transform="joinTypes"></div>
+								</dd>
+							</dl>
+						</div>
+						
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>渠道费率(%)</dt>
+								<dd>
+									<div data-detail-fetch="channelFee"></div>
 								</dd>
 							</dl>
 						</div>

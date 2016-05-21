@@ -20,5 +20,5 @@ public class RiskOptionsService {
 	public RiskOptionsResp save(RiskOptionsForm form) {
 		return null;
 	}
-	
+
 }

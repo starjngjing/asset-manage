@@ -1,0 +1,473 @@
+<!-- 页面头部 -->
+<section class="content-header">
+  <h1>渠道管理</h1>
+  <ol class="breadcrumb">
+    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 销售平台</a></li>
+    <li class="active">渠道管理</li>
+  </ol>
+</section>
+
+<!-- 主要内容 -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- Grid -->
+      <div id="dataGrid" class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header with-border">
+          <!-- 统计数据 -->
+          	<form id="detailForm" name="detailForm" method="post">
+          		<div class="row">
+          			<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道标识：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelId"></div>
+								  	</dd>
+								  </dl>
+								</div>
+          			
+          			<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道名称：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelName"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道费率(%)：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelFee"></div>
+								  	</dd>
+								  </dl>
+								</div>
+          			
+          			<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>接入方式：</dt>
+									  <dd>
+										    <div data-detail-fetch="joinType" data-enum-transform="joinTypes"></div>
+								  	</dd>
+								  </dl>
+								</div>															
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道机构：</dt>
+									  <dd>
+										    <div data-detail-fetch="partner"></div>
+								  	</dd>
+								  </dl>
+								</div>								
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道联系人：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelContactName"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道联系人邮箱：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelEmail"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道联系人电话：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelPhone"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>渠道状态：</dt>
+									  <dd>
+										    <div data-detail-fetch="channelStatus" data-enum-transform="channelStatus"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>审核状态：</dt>
+									  <dd>
+										    <div data-detail-fetch="approvelStatus" data-enum-transform="approveStatus"></div>
+								  	</dd>
+								  </dl>
+								</div>
+								
+								<div class="col-sm-3">
+		          			<dl class="dl-horizontal">
+									  <dt>删除状态：</dt>
+									  <dd>
+										    <div data-detail-fetch="deleteStatus" data-enum-transform="delStatus"></div>
+								  	</dd>
+								  </dl>
+								</div>         
+		          </div>
+		          <div class="row">
+		            	<div class="col-sm-3">
+		              	<a id="checkChanBut" class="btn btn-default btn-sm">切换渠道</a>&nbsp;&nbsp;
+				            <a id="editChanBut" class="btn btn-default btn-sm" style="display: none;">编辑渠道</a>
+	                </div>
+		          </div>
+	          </form>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <ul class="nav nav-tabs" role="tablist">
+				    <li role="presentation" class="active"><a href="#tabcon1" aria-controls="本渠道产品列表" role="tab" data-toggle="tab">本渠道产品列表</a></li>
+				    <li role="presentation"><a href="#tabcon2" aria-controls="本渠道订单明细" role="tab" data-toggle="tab">本渠道订单明细</a></li>
+				    <li role="presentation"><a href="#tabcon3" aria-controls="本渠道投资者列表" role="tab" data-toggle="tab">本渠道投资者列表</a></li>
+				  </ul>
+				  
+				  <div class="tab-content">
+				    <div role="tabpanel" class="tab-pane active" id="tabcon1">
+				    	<div class="box-header">
+		            <div class="row">
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>产品名称：</label>
+		                  <input name="email" type="text"
+		                         class="form-control"
+		                         placeholder="搜索产品名称">
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>产品编号：</label>
+		                  <input name="email" type="text"
+		                         class="form-control"
+		                         placeholder="搜索产品编号">
+		                </div>
+		              </div>		              
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>产品状态</label>
+		                  <select name="validState" class="form-control">
+		                    <option value="" selected>存续期</option>
+		                    <option value="ok">已清算</option>
+		                  </select>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>上下架状态</label>
+		                  <select name="validState" class="form-control">
+		                    <option value="" selected>上架</option>
+		                    <option value="ok">下架</option>
+		                  </select>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>上下架时间:</label>
+		                  <div class="input-group">
+		                    <div class="input-group-addon">
+		                      <i class="fa fa-calendar"></i>
+		                    </div>
+		                    <input name="applyTimeBegin" type="text"
+		                           class="form-control datepicker"
+		                           placeholder="">
+		                  </div>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		              	<div class="form-group">
+		              	<label>&nbsp;</label><br />
+			              	<button id="" class="btn btn-default btn-sm">搜索</button>&nbsp;&nbsp;
+					            <button id="" class="btn btn-default btn-sm">导出Excel</button>
+				            </div>
+		              </div>
+		            </div>
+		          </div>
+				    	<!-- 数据表格 -->
+		          <table id="dataTable1" class="table table-bordered table-striped">
+		            <thead>
+		              <tr>
+		                <th>序号</th>
+		                <th>产品名称</th>
+		                <th>产品编号</th>
+		                <th>接入方式</th>
+		                <th>上下架状态</th>
+		                <th>核准时间</th>
+		                <th>产品状态</th>
+		                <th>操作</th>
+		              </tr>
+		            </thead>
+		          </table>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="tabcon2">
+				    	<div class="box-header">
+		            <div class="row">
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>流水号：</label>
+		                  <input name="email" type="text"
+		                         class="form-control"
+		                         placeholder="搜索流水号">
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>订单类型</label>
+		                  <select name="validState" class="form-control">
+		                    <option value="" selected>投资</option>
+		                    <option value="">赎回</option>
+		                    <option value="">还款</option>
+		                  </select>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>发起时间:</label>
+		                  <div class="input-group">
+		                    <div class="input-group-addon">
+		                      <i class="fa fa-calendar"></i>
+		                    </div>
+		                    <input name="applyTimeBegin" type="text"
+		                           class="form-control datepicker"
+		                           placeholder="">
+		                  </div>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		              	<div class="form-group">
+		              	<label>&nbsp;</label><br />
+			              	<button id="" class="btn btn-default btn-sm">搜索</button>&nbsp;&nbsp;
+					            <button id="" class="btn btn-default btn-sm">导出Excel</button>
+				            </div>
+		              </div>
+		            </div>
+		          </div>
+				    	<!-- 数据表格 -->
+		          <table id="dataTable2" class="table table-bordered table-striped">
+		            <thead>
+		              <tr>
+		                <th>序号</th>
+		                <th>流水号</th>
+		                <th>订单类型</th>
+		                <th>发起时间</th>
+		                <th>发起人ID</th>
+		                <th>订单状态</th>
+		                <th>关联产品编号</th>
+		                <th>操作</th>
+		              </tr>
+		            </thead>
+		          </table>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="tabcon3">
+				    	<div class="box-header">
+		            <div class="row">
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>流水号：</label>
+		                  <input name="email" type="text"
+		                         class="form-control"
+		                         placeholder="搜索流水号">
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>总投资金额大于：</label>
+		                  <input name="email" type="text"
+		                         class="form-control"
+		                         placeholder="搜索总投资金额大于">
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		                <div class="form-group">
+		                  <label>首次投资时间:</label>
+		                  <div class="input-group">
+		                    <div class="input-group-addon">
+		                      <i class="fa fa-calendar"></i>
+		                    </div>
+		                    <input name="applyTimeBegin" type="text"
+		                           class="form-control datepicker"
+		                           placeholder="">
+		                  </div>
+		                </div>
+		              </div>
+		              <div class="col-sm-3">
+		              	<div class="form-group">
+		              	<label>&nbsp;</label><br />
+			              	<button id="" class="btn btn-default btn-sm">搜索</button>&nbsp;&nbsp;
+					            <button id="" class="btn btn-default btn-sm">导出Excel</button>
+				            </div>
+		              </div>
+		            </div>
+		          </div>
+				    	<!-- 数据表格 -->
+		          <table id="dataTable3" class="table table-bordered table-striped">
+		            <thead>
+		              <tr>
+		                <th>序号</th>
+		                <th>投资者ID</th>
+		                <th>用户名</th>
+		                <th>接入方式</th>
+		                <th>首次投资时间</th>
+		                <th>最后投资时间</th>
+		                <th>累计金额(元)</th>
+		                <th>投资产品个数</th>
+		                <th>操作</th>
+		              </tr>
+		            </thead>
+		          </table>
+				    </div>
+				  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 编辑模态窗 默认大小窗体 -->
+<div id="channelModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 新增/编辑事件表单 -->
+        <form id="channelForm" name="channelForm" method="post">
+
+          <div class="form-group">
+            <label>渠道名称</label>
+            <input name="channelName" type="text" id="editChanelName"
+                   class="form-control"
+                   placeholder="请输入渠道名称" required>
+          </div>
+          <div class="form-group">
+            <label>接入方式</label>
+            <div>
+            	<label class="radio-inline">
+							  <input type="radio" name="joinType" value="ftp"> FTP文件
+							</label>
+							<label class="radio-inline">
+							  <input type="radio" name="joinType" value="api"> API接口
+							</label>						
+            </div>
+          </div>
+          <div class="form-group">
+            <label>渠道费率(%)</label>
+            <input name="channelFee" type="text"
+                   class="form-control"
+                   placeholder="请输入渠道费率" required>
+          </div>
+          <div class="form-group">
+            <label>渠道机构</label>
+            <input name="partner" type="text"
+                   class="form-control"
+                   placeholder="请输入所属渠道机构" required>
+          </div>
+          <div class="form-group">
+            <label>渠道联系人</label>
+            <input name="channelContactName" type="text"
+                   class="form-control"
+                   placeholder="请输入渠道联系人" required>
+          </div>
+          <div class="form-group">
+            <label>渠道联系人邮箱</label>
+            <input name="channelEmail" type="text"
+                   class="form-control"
+                   placeholder="请输入渠道联系人邮箱" required>
+          </div>
+          <div class="form-group">
+            <label>渠道联系人电话</label>
+            <input name="channelPhone" type="text"
+                   class="form-control"
+                   placeholder="请输入渠道联系人电话" required>
+          </div>          
+          <input name="oid" type="hidden">
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="channelSubmit" type="button" class="btn btn-primary btn-submit channelSubmit">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 渠道列表 -->
+<div id="channelsModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">切换渠道</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-10">
+            <div class="form-group">
+		            <label>渠道名称</label>
+		            <input id="searchChannelName" name="title" type="text"
+		                   class="form-control"
+		                   placeholder="请输入渠道名称" required>
+		          </div>
+          </div>
+          <div class="col-sm-2">
+          	<div class="form-group">
+          	<label>&nbsp;</label><br />
+              	<button id="channelSearchBtn" class="btn btn-default btn-sm">搜索</button>
+	            </div>
+          </div>
+        </div>
+	      <table id="channelTable" class="table table-bordered table-striped">
+	        <thead>
+	          <tr>
+	            <th>序号</th>
+	            <th>渠道标识</th>
+	            <th>渠道名称</th>
+	            <th>操作</th>
+	          </tr>
+	        </thead>
+	      </table>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="eventModal3" class="popover func-delete-popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">渠道状态申请</h3>
+  <div class="popover-content">
+  <p> <span id="confirm_txt"></span> ？</p>
+  <div class="popover-btn clearfix">
+    <div class="unit">
+      <button class="btn btn-block btn-primary accept" data-dismiss="modal">确 定</button>
+    </div>
+    <div class="unit">
+      <button class="btn btn-block btn-default cancel" data-dismiss="modal">取 消</button>
+    </div>
+  </div>
+</div>

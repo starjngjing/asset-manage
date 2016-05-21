@@ -203,8 +203,8 @@ function (http, config, util, $$) {
                   contentType: 'form',
                 }, function (result) {
                 	$('#editChanelName').attr('readonly',true);                  
-                  $$.formAutoFix($('#channelForm'), result); // 自动填充详情      
-                  $('#channelForm').validator('validate')
+                  $$.formAutoFix($('#channelForm'), result); // 自动填充详情
+                  //$('#channelForm').validator('validate')
                 })
 								$('#channelModal').modal('show')
 								.find('.modal-title').html("修改渠道"); 
@@ -255,10 +255,6 @@ function (http, config, util, $$) {
 		},
 		bindEvent:function(){
 			var _this = this;
-			//按条件搜索
-			$("#searchBtn").on("click",function(){
-				$('#channelTable').bootstrapTable('refresh');
-			});
 			
 			//将新增修改渠道页面显示出来
 			$("#addChannel").on("click",function(){
@@ -266,7 +262,7 @@ function (http, config, util, $$) {
 				 $('#channelForm').clearForm()
         .find('input[type=hidden]').val('')
         _this.channelInfo.oid='';
-				$(document.channelForm).validator('validate')
+				//$(document.channelForm).validator('validate')
 				$('#channelModal').modal('show')
 				.find('.modal-title').html("新建渠道");
 			});

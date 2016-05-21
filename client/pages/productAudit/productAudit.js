@@ -102,14 +102,22 @@ define([
 					align: 'center',
 					formatter: function (val, row, index) {
 						if(row.expArorSec!=null && row.expAror!=row.expArorSec) {
-							return row.expArorSec+"%"+"~"+row.expArorSec+"%";
+							return row.expAror+"%"+"~"+row.expArorSec+"%";
 						}
 						return row.expAror+"%";
 					}
 				},
 				{
+					align: 'center',
 					field: 'raisedTotalNumber',
-					align: 'center'
+					formatter: function (val, row, index) {
+						var typeOid = row.typeOid;  
+						if(typeOid=="PRODUCTTYPE_01") {
+							return row.raisedTotalNumber;
+						} else {
+							return "不限";
+						}
+					}
 				},
 				{
 					field: 'netUnitShare',
@@ -126,7 +134,11 @@ define([
 					align: 'center'
 				},
 				{
-					field: 'createTime',
+					field: 'applicant',
+					align: 'center'
+				},
+				{
+					field: 'applyTime',
 					align: 'center',
 					formatter: function (val) {
 						return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
@@ -167,7 +179,7 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
-									$$.detailAutoFix($('#productDetailForm'), data); // 自动填充详情
+									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
 								} else {
 									alert(查询失败);
@@ -175,40 +187,46 @@ define([
 							})
 						},
 						'click .item-approve': function(e, value, row) {
-//							$("#confirmTitle").html("确定作废产品名称为:")
-//							$("#confirmTitle1").html(row.fullName+"的产品吗？")
-//							$$.confirm({
-//								container: $('#doConfirm'),
-//								trigger: this,
-//								accept: function() {
-//									http.post(config.api.productInvalid, {
-//										data: {
-//											oid: row.oid
-//										},
-//										contentType: 'form',
-//									}, function(result) {
-//										$('#productDesignTable').bootstrapTable('refresh')
-//									})
-//								}
-//							})
+							$("#oid").val(row.oid)
+							$("#auditComment").val("")
+							$$.confirm({
+								container: $('#doAuditConfirm'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.productAuditApprove, {
+										data: {
+											oid: row.oid
+										},
+										contentType: 'form',
+									}, function(result) {
+										$('#productAuditTable').bootstrapTable('refresh')
+									})
+								}
+							})
 						},
 						'click .item-reject': function(e, value, row) {
-//							$("#confirmTitle").html("确定作废产品名称为:")
-//							$("#confirmTitle1").html(row.fullName+"的产品吗？")
-//							$$.confirm({
-//								container: $('#doConfirm'),
-//								trigger: this,
-//								accept: function() {
-//									http.post(config.api.productInvalid, {
-//										data: {
-//											oid: row.oid
-//										},
-//										contentType: 'form',
-//									}, function(result) {
-//										$('#productDesignTable').bootstrapTable('refresh')
-//									})
-//								}
-//							})
+							$("#oid").val(row.oid)
+							$("#auditComment").val("")
+							$$.confirm({
+								container: $('#doAuditConfirm'),
+								trigger: this,
+								accept: function() {
+									var auditComment = $("#auditComment").val()
+									if(null==auditComment || ""==auditComment) {
+										
+									} else {
+										http.post(config.api.productAuditReject, {
+											data: {
+												oid: row.oid,
+												auditComment: auditComment
+											},
+											contentType: 'form',
+										}, function(result) {
+											$('#productAuditTable').bootstrapTable('refresh')
+										})
+									}
+								}
+							})
 						}
 					}
 				},
@@ -218,6 +236,7 @@ define([
     	$('#productAuditTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productAuditTable'))
+    	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
     		var form = document.searchForm
@@ -227,48 +246,6 @@ define([
     		pageOptions.type = form.type.value.trim()
     		return val
   		}
-    	
-
-		// 提交审核按钮点击事件
-		$('#productAudit').on('click', function () {
-			if(checkItems.length>0) {
-				var productNames = checkItems.map(function (item) {
-					return item.name
-				})
-				var pnames = "";
-				var le = productNames.length
-				for (var i=0;i<le;i++) {
-					if(i>0){
-						pnames+="，"
-					}
-					pnames+=productNames[i]
-				}
-				$("#auditProductNames").html(pnames)
-				$('#productAuditModal').modal('show')
-			}
-		})
-
-		// 提交审核弹窗 -> 提交按钮点击事件
-		$('#doProductAudit').on('click', function () {
-			// 获取id数组
-			var oids = checkItems.map(function (item) {
-				return item.oid
-			})
-			// 提交数组
-			http.post(
-				config.api.productAuditApply, 
-				{
-					data: {
-						oids: JSON.stringify(oids)
-					},
-					contentType: 'form',
-				}, 
-				function(result) {
-					$('#productAuditModal').modal('hide')
-					$('#productDesignTable').bootstrapTable('refresh')
-				}
-			)
-		})
     	     
     }
   }

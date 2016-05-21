@@ -307,6 +307,7 @@ define([
             $(item).append(options)
         }
       })
+      config.enumSourceState = 'loaded'
     },
     /**
      * 表单自动填充

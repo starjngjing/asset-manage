@@ -55,4 +55,11 @@ public class RiskIndicateController extends BaseController {
 		return new ResponseEntity<RiskIndicateResp>(new RiskIndicateResp(i), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/options", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<List<RiskIndicateOption>> options(@RequestParam String type) {
+		super.checkLogin();
+		List<RiskIndicateOption> list = this.riskIndicateService.options(type);
+		return new ResponseEntity<List<RiskIndicateOption>>(list, HttpStatus.OK);
+	}
+
 }

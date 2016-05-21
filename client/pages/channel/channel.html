@@ -30,26 +30,20 @@
 	                <div class="form-group">
 	                  <label>渠道名称：</label>
 	                  <input name="channelName" type="text"
-	                         class="form-control"
+	                         class="form-control input-sm"
 	                         placeholder="搜索渠道名称">
 	                </div>
 	              </div>          
 								<div class="col-sm-3">
 	                <div class="form-group">
 	                  <label>渠道状态:</label>
-	                  <select name="channelStatus" class="form-control">
+	                  <select name="channelStatus" class="form-control input-sm">
 	                  	 <option value="" selected>全部</option>
 	                    <option value="on">已启用</option>
 	                    <option value="off">已停用</option>
 	                  </select>
 	                </div>
 	              </div>
-	              <div class="col-sm-3">
-	              	<div class="form-group">
-	                  <label>&nbsp;</label><br />	                  
-		              	<a id="searchBtn" class="btn btn-default btn-sm">搜索</a>				           
-	                </div>
-	              </div>	                         
 	            </div>
 	          </form>
         </div>
@@ -96,48 +90,48 @@
           <div class="form-group">
             <label>渠道名称</label>
             <input name="channelName" type="text" id="editChanelName"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入渠道名称" required>
           </div>         
           <div class="form-group">
             <label>渠道机构</label>
             <input name="partner" type="text"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入所属渠道机构" required>
           </div>
           <div class="form-group">
             <label>渠道费率(%)</label>
             <input name="channelFee" type="text"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入渠道费率(%)" required>            
           </div>
           <div class="form-group">
             <label>接入方式</label>
-            <div>
-            	<label class="radio-inline">
-							  <input type="radio" name="joinType" value="ftp" checked="true"> FTP文件
-							</label>
-							<label class="radio-inline">
-							  <input type="radio" name="joinType" value="api"> API接口
-							</label>						
+            <div class="row form-style">
+              <div class="col-sm-3">
+                <input type="radio" name="joinType" value="ftp" class="icheck" checked> FTP文件
+              </div>
+              <div class="col-sm-3">
+                <input type="radio" name="joinType" value="api" class="icheck"> API接口
+              </div>
             </div>
           </div>
           <div class="form-group">
             <label>渠道联系人</label>
             <input name="channelContactName" type="text"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入渠道联系人" required>
           </div>
           <div class="form-group">
             <label>渠道联系人邮箱</label>
             <input name="channelEmail" type="text"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入渠道联系人邮箱" required>
           </div>
           <div class="form-group">
             <label>渠道联系人电话</label>
             <input name="channelPhone" type="text"
-                   class="form-control"
+                   class="form-control input-sm"
                    placeholder="请输入渠道联系人电话" required>
           </div>          
           <input name="oid" type="hidden">
@@ -146,7 +140,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="channelSubmit" type="button" class="btn btn-primary btn-submit channelSubmit">确定</button>
+        <button id="channelSubmit" type="button" class="btn btn-primary btn-submit channelSubmit">确 定</button>
       </div>
     </div>
   </div>
@@ -236,7 +230,7 @@
 						
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>渠道费率</dt>
+								<dt>渠道费率(%)</dt>
 								<dd>
 									<div data-detail-fetch="channelFee"></div>
 								</dd>

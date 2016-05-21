@@ -10,5 +10,11 @@ public interface RiskIndicateDao extends JpaRepository<RiskIndicate, String>, Jp
 
 	@Query("from RiskIndicate i where i.cate.type like ?1 and (i.title like ?2 or i.cate.title like ?2) and i.state in ?3 order by i.cate.type asc, i.cate.title asc, i.title asc")
 	public List<RiskIndicate> search(String type, String keyword, String[] state);
+	
+	@Query("from RiskIndicate i where i.cate.type = ?1 and i.state in ?2 order by i.cate.title asc, i.title asc")
+	public List<RiskIndicate> search(String type, String[] state);
+	
+	@Query("from RiskIndicate i where i.state in ?1 order by i.cate.type asc, i.cate.title asc, i.title asc")
+	public List<RiskIndicate> search(String[] state);
 
 }

@@ -59,8 +59,8 @@ public class ProductService {
 			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
-			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				pb.manageRate(new BigDecimal(form.getFixedManageRate()));
+			if (!StringUtil.isEmpty(form.getManageRate())) {
+				pb.manageRate(new BigDecimal(form.getManageRate()));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
 				pb.fixedManageRate(new BigDecimal(form.getFixedManageRate()));
@@ -72,7 +72,7 @@ public class ProductService {
 		}
 		{
 			//募集开始时间  募集期:()个自然日  起息日:募集满额后()个自然日  存续期:()个自然日
-			if(form.getRaiseStatrtDate()!=null) {
+			if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType())) {
 				Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
 				pb.raiseStartDate(new Timestamp(raiseStartDate.getTime()));
 				pb.raiseEndDate(new Timestamp(DateUtil.addDay(raiseStartDate, form.getRaisePeriod()).getTime()));//募集结束时间
@@ -148,8 +148,8 @@ public class ProductService {
 			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
-			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				pb.manageRate(new BigDecimal(form.getFixedManageRate()));
+			if (!StringUtil.isEmpty(form.getManageRate())) {
+				pb.manageRate(new BigDecimal(form.getManageRate()));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
 				pb.fixedManageRate(new BigDecimal(form.getFixedManageRate()));
@@ -159,13 +159,14 @@ public class ProductService {
 			//产品成立时间类型;起息日;锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
 			//申购确认日:()个;申购确认日类型:自然日或交易日
 			//赎回确认日:()个;赎回确认日类型:自然日或交易日
-			pb.setupDateType(form.getSetupDateType()).interestsFirstDate(form.getInterestsFirstDate()).lockPeriod(form.getLockPeriod())
+			pb.setupDateType(form.getSetupDateType()).interestsFirstDate(form.getInterestsDate()).lockPeriod(form.getLockPeriod())
 			.purchaseConfirmDate(form.getPurchaseConfirmDate()).purchaseConfirmDateType(form.getPurchaseConfirmDateType()).
 			redeemConfirmDate(form.getRedeemConfirmDate()).redeemConfirmDateType(form.getRedeemConfirmDateType())
 			.redeemTimingTaskDateType(form.getRedeemTimingTaskDateType()).redeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()))
 			.redeemTimingTaskDate(1);//redeemTimingTaskDate 默认每日
 			//产品成立时间（存续期开始时间）
-			if(form.getSetupDate()!=null) {
+			
+			if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType())) {
 				Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
 				pb.setupDate(new Timestamp(setupDate.getTime()));
 			}
@@ -180,7 +181,7 @@ public class ProductService {
 			}
 		}
 		{
-			pb.investMin(form.getInvestMin()).investMax(form.getInvestMax()).purchaseLimit(form.getPurchaseLimit()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).netMaxRredeemDay(form.getNetMaxRredeemDay());
+			pb.investMin(form.getInvestMin()).investMax(form.getInvestMax()).purchaseLimit(form.getPurchaseLimit()).investAdditional(form.getInvestAdditional()).netUnitShare(new BigDecimal(form.getNetUnitShare())).netMaxRredeemDay(form.getNetMaxRredeemDay()).minRredeem(form.getMinRredeem());
 		}
 		{
 			pb.isOpenPurchase(Product.NO).isOpenRemeed(Product.NO);
@@ -288,8 +289,8 @@ public class ProductService {
 			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
-			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				product.setManageRate(new BigDecimal(form.getFixedManageRate()));
+			if (!StringUtil.isEmpty(form.getManageRate())) {
+				product.setManageRate(new BigDecimal(form.getManageRate()));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
 				product.setFixedManageRate(new BigDecimal(form.getFixedManageRate()));
@@ -405,8 +406,8 @@ public class ProductService {
 			product.setPayModeOid(form.getPayModeOid());
 		}
 		{
-			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				product.setManageRate(new BigDecimal(form.getFixedManageRate()));
+			if (!StringUtil.isEmpty(form.getManageRate())) {
+				product.setManageRate(new BigDecimal(form.getManageRate()));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
 				product.setFixedManageRate(new BigDecimal(form.getFixedManageRate()));
@@ -423,7 +424,7 @@ public class ProductService {
 		}
 		{
 			product.setSetupDateType(form.getSetupDateType());
-			product.setInterestsFirstDate(form.getInterestsFirstDate());
+			product.setInterestsFirstDate(form.getInterestsDate());
 			product.setLockPeriod(form.getLockPeriod());
 			product.setPurchaseConfirmDate(form.getPurchaseConfirmDate());
 			product.setPurchaseConfirmDateType(form.getPurchaseConfirmDateType());
@@ -446,6 +447,7 @@ public class ProductService {
 			product.setPurchaseLimit(form.getPurchaseLimit());
 			product.setInvestAdditional(form.getInvestAdditional());
 			product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
+			product.setMinRredeem(form.getMinRredeem());
 			product.setNetMaxRredeemDay(form.getNetMaxRredeemDay());
 		}
 		{
@@ -543,6 +545,9 @@ public class ProductService {
 			if (product.getAssetPool() == null) {
 				throw AMPException.getException(90011);
 			}
+			if(!Product.AUDIT_STATE_Nocommit.equals(product.getAuditState())) {
+				throw AMPException.getException(90012);
+			}
 			product.setStatus(Product.STATE_Auditing);
 			product.setAuditState(Product.AUDIT_STATE_Auditing);
 			product.setOperator(operator);
@@ -567,6 +572,10 @@ public class ProductService {
 		
 		Product product = this.getProductById(oid);
 		
+		if(!Product.AUDIT_STATE_Auditing.equals(product.getAuditState())) {
+			throw AMPException.getException(90013);
+		}
+		
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Auditpass);
 		product.setAuditState(Product.AUDIT_STATE_Reviewing);
@@ -589,7 +598,9 @@ public class ProductService {
 		BaseResp response = new BaseResp();
 		
 		Product product = this.getProductById(oid);
-		
+		if(!Product.AUDIT_STATE_Auditing.equals(product.getAuditState())) {
+			throw AMPException.getException(90013);
+		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Auditfail);
 		product.setAuditState(Product.AUDIT_STATE_Nocommit);
@@ -613,7 +624,9 @@ public class ProductService {
 		BaseResp response = new BaseResp();
 		
 		Product product = this.getProductById(oid);
-		
+		if(!Product.AUDIT_STATE_Reviewing.equals(product.getAuditState())) {
+			throw AMPException.getException(90014);
+		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Reviewpass);
 		product.setAuditState(Product.AUDIT_STATE_Approvaling);
@@ -636,7 +649,9 @@ public class ProductService {
 		BaseResp response = new BaseResp();
 		
 		Product product = this.getProductById(oid);
-		
+		if(!Product.AUDIT_STATE_Reviewing.equals(product.getAuditState())) {
+			throw AMPException.getException(90014);
+		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Reviewfail);
 		product.setAuditState(Product.AUDIT_STATE_Auditing);
@@ -660,7 +675,9 @@ public class ProductService {
 		BaseResp response = new BaseResp();
 		
 		Product product = this.getProductById(oid);
-		
+		if(!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
+			throw AMPException.getException(90015);
+		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Admitpass);
 		product.setAuditState(Product.AUDIT_STATE_Approval);
@@ -683,7 +700,9 @@ public class ProductService {
 		BaseResp response = new BaseResp();
 		
 		Product product = this.getProductById(oid);
-		
+		if(!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
+			throw AMPException.getException(90015);
+		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setStatus(Product.STATE_Admitfail);
 		product.setAuditState(Product.AUDIT_STATE_Reviewing);

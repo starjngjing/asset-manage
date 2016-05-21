@@ -45,10 +45,8 @@ define(function() {
 			productAuditApply: this.host + "/ams/product/aduit/apply", //产品审核申请
 			productAuditReject: this.host + "/ams/product/aduit/reject", //产品审核不通过
 			productAuditApprove: this.host + "/ams/product/aduit/approve", //产品审核通过
-			productReviewApply: this.host + "/ams/product/review/apply", //产品复核申请
 			productReviewReject: this.host + "/ams/product/review/reject", //产品复核不通过
 			productReviewApprove: this.host + "/ams/product/review/approve", //产品复核通过
-			productAdmitApply: this.host + "/ams/product/admit/apply", //产品准入申请
 			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
 			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
 			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
@@ -77,6 +75,16 @@ define(function() {
 		    remarksQuery: this.host + '/ams/channel/remarksquery',	     //渠道-意见列表
 		    chanApproveQuery: this.host + '/ams/channelapprove/query',   //渠道-渠道审批查询
 		    delApply: this.host + '/ams/channelapprove/dealapply',       //渠道-处理申请开启和停用
+		    channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
+			addChannel: this.host + '/ams/channel/add', //渠道-新增
+			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
+			oneChannel: this.host + '/ams/channel/onechannel',  //渠道-随机获取一条渠道信息
+			editChannel: this.host + '/ams/channel/edit', //渠道-修改
+			delChannel: this.host + '/ams/channel/delete', //渠道-删除
+			setapply: this.host + '/ams/channel/setapply', //渠道-申请开启停用
+			remarksQuery: this.host + '/ams/channel/remarksquery', //渠道-意见列表
+			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
+			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
 		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
 			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
@@ -113,7 +121,8 @@ define(function() {
 							save: this.host + "/ams/system/ccr/indicate/save",
 							enable: this.host + "/ams/system/ccr/indicate/enable",
 							disable: this.host + "/ams/system/ccr/indicate/disable",
-							delete: this.host + "/ams/system/ccr/indicate/delete"
+							delete: this.host + "/ams/system/ccr/indicate/delete",
+							options: this.host + "/ams/system/ccr/indicate/options"
 						}
 					}
 				}
@@ -172,7 +181,7 @@ define(function() {
 		 * conventionStates 过会状态
 		 */
 		conventionStates: [
-			
+
 		],
 		cashtoolStates: [{
 			id: "waitPretrial",
@@ -208,26 +217,26 @@ define(function() {
 			children: []
 		}],
 		meetingStates: [{
-				id: "notopen",
-				text: "未启动",
-				children: []
-			},{
-				id: "opening",
-				text: "启动中",
-				children: []
-			},{
-				id: "stop",
-				text: "暂停",
-				children: []
-			},{
-				id: "waitenter",
-				text: "待确认",
-				children: []
-			},{
-				id: "finish",
-				text: "完成",
-				children: []
-			}],
+			id: "notopen",
+			text: "未启动",
+			children: []
+		}, {
+			id: "opening",
+			text: "启动中",
+			children: []
+		}, {
+			id: "stop",
+			text: "暂停",
+			children: []
+		}, {
+			id: "waitenter",
+			text: "待确认",
+			children: []
+		}, {
+			id: "finish",
+			text: "完成",
+			children: []
+		}],
 		voteStates: [{
 			id: "notvote",
 			text: "未投票",
@@ -245,6 +254,65 @@ define(function() {
 			text: "一票否决",
 			children: []
 		}],
+		//接入类型
+	    joinTypes:[
+	    	{
+				id: "ftp",
+				text: "FTP文件",			
+			},
+			{
+				id: "api",
+				text: "API接口",
+			}
+	    ],
+	    //渠道状态
+	    channelStatus:[
+	    	{
+				id: "on",
+				text: "已启用",			
+			},
+	        {
+				id: "off",
+				text: "已停用",			
+			}    
+	    ],
+	    //删除状态
+	    delStatus:[
+	    	{
+				id: "yes",
+				text: "已删除",			
+			},
+	        {
+				id: "no",
+				text: "正常",			
+			}
+	   ],
+	   //请求类型
+	   requestTypes:[
+	   		{
+				id: "on",
+				text: "开启",			
+			},
+	        {
+				id: "off",
+				text: "停用",			
+			}
+	   ],
+	   //审批结果
+	   approveStatus:[
+	   		{
+				id: "pass",
+				text: "通过",			
+			},
+	        {
+				id: "refused",
+				text: "驳回",			
+			},
+	        {
+				id: "toApprove",
+				text: "待审批",			
+			}   
+	   ],
 		/**
 		 * 图标所用到的主题颜色
 		 */
