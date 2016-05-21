@@ -303,3 +303,105 @@
 		</div>
 	</div>
 </div>
+
+<!-- 会议确认弹窗 -->
+<div id="finishTargetConventionModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">会议确认</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<table id="finishTargetConventionTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>标的名称</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+				<form id="finishTargetConventionForm" name="finishTargetConventionForm" method="post">
+					<div class="form-group">
+						<h6>备注</h6>
+            <textarea name="financerDesc" rows="3"
+											class="form-control input-sm"
+											placeholder="备注"></textarea>
+					</div>
+					<input name="targets" type="hidden"/>
+				</form>
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="doFinishTargetConvention" type="button" class="btn btn-primary btn-submit">确 认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 会议确认通过 添加检查项 弹窗 -->
+<div id="checkConditionsModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">确认通过 - 添加检查项</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<table id="checkConditionsTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>检查项名称</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
+				<button id="doAddCheckConditions" type="button" class="btn btn-primary btn-sm">提 交</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 会议确认驳回 驳回理由 弹窗 -->
+<div id="rejectCommentModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">驳回 - 填写理由</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<form id="rejectForm" name="rejectForm">
+					<div class="form-group">
+						<h6>驳回理由</h6>
+            <textarea name="rejectComment" rows="3"
+											class="form-control input-sm"
+											placeholder="请填写驳回理由"></textarea>
+					</div>
+				</form>
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
+				<button id="doAddRejectComment" type="button" class="btn btn-primary btn-sm">提 交</button>
+			</div>
+		</div>
+	</div>
+</div>
