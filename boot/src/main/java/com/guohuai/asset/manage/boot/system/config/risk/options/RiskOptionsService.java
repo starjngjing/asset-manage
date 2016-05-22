@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateService;
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 @Service
@@ -53,11 +54,52 @@ public class RiskOptionsService {
 	}
 
 	@Transactional
-	public List<RiskOptionsView> showview(String keyword) {
+	public void batchDelete(String indicateOid) {
+		RiskIndicate indicate = this.riskIndicateService.get(indicateOid);
+		this.riskOptionsDao.deleteByIndicate(indicate);
+	}
+
+	@Transactional
+	public RiskOptionsForm preUpdate(String indicateOid) {
+		RiskIndicate indicate = this.riskIndicateService.get(indicateOid);
+		List<RiskOptions> list = this.riskOptionsDao.search(indicate);
+
+		if (null == list || list.size() == 0) {
+			throw new AMPException(String.format("No data found for indicate '%s'", indicateOid));
+		}
+
+		RiskOptionsForm form = new RiskOptionsForm();
+		form.setOptions(new ArrayList<RiskOptionsForm.Option>());
+
+		for (RiskOptions o : list) {
+			if (o.getDft().equals("YES")) {
+				form.setCateOid(o.getIndicate().getCate().getOid());
+				form.setCateTitle(o.getIndicate().getCate().getTitle());
+				form.setIndicateOid(o.getIndicate().getOid());
+				form.setIndicateTitle(o.getIndicate().getTitle());
+				form.setIndicateDataType(o.getIndicate().getDataType());
+				form.setDftScore(o.getScore());
+			}
+			if (o.getDft().equals("NO")) {
+				RiskOptionsForm.Option option = new RiskOptionsForm.Option();
+				option.setScore(o.getScore());
+				option.setParam0(o.getParam0());
+				option.setParam1(o.getParam1());
+				option.setParam2(o.getParam2());
+				option.setParam3(o.getParam3());
+				form.getOptions().add(option);
+			}
+		}
+
+		return form;
+	}
+
+	@Transactional
+	public List<RiskOptionsView> showview(String type, String keyword) {
 
 		List<RiskOptionsView> view = new ArrayList<RiskOptionsView>();
 
-		List<RiskOptions> options = this.riskOptionsDao.search(String.format("%%%s%%", keyword));
+		List<RiskOptions> options = this.riskOptionsDao.search(type, String.format("%%%s%%", keyword));
 
 		if (null != options && options.size() > 0) {
 			Map<String, Map<String, List<RiskOptionsView>>> cmap = new HashMap<String, Map<String, List<RiskOptionsView>>>();

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 @RestController
 @RequestMapping(value = "/ams/system/ccr/options", produces = "application/json;charset=utf-8")
@@ -28,10 +29,24 @@ public class RiskOptionsController extends BaseController {
 		return new ResponseEntity<List<RiskOptionsResp>>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/showview", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<List<RiskOptionsView>> showview(@RequestParam String keyword) {
+	@RequestMapping(value = "/batchDelete", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<BaseResp> batchDelete(@RequestParam String indicateOid) {
 		super.checkLogin();
-		List<RiskOptionsView> list = this.riskOptionsService.showview(keyword);
+		this.riskOptionsService.batchDelete(indicateOid);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/preUpdate", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<RiskOptionsForm> preUpdate(@RequestParam String indicateOid) {
+		super.checkLogin();
+		RiskOptionsForm form = this.riskOptionsService.preUpdate(indicateOid);
+		return new ResponseEntity<RiskOptionsForm>(form, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/showview", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<List<RiskOptionsView>> showview(@RequestParam String type, @RequestParam String keyword) {
+		super.checkLogin();
+		List<RiskOptionsView> list = this.riskOptionsService.showview(type, keyword);
 		return new ResponseEntity<List<RiskOptionsView>>(list, HttpStatus.OK);
 	}
 

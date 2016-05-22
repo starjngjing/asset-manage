@@ -131,8 +131,10 @@ define(function() {
 							options: this.host + "/ams/system/ccr/indicate/options"
 						},
 						options: {
-							save: this.host +"/ams/system/ccr/options/save",
-							showview: this.host +"/ams/system/ccr/options/showview"
+							save: this.host + "/ams/system/ccr/options/save",
+							showview: this.host + "/ams/system/ccr/options/showview",
+							batchDelete: this.host + "/ams/system/ccr/options/batchDelete",
+							preUpdate: this.host + "/ams/system/ccr/options/preUpdate"
 						}
 					}
 				}

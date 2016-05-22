@@ -80,47 +80,159 @@ define([
 				}
 			};
 
-			$('#eventAdd').on('click', function() {
+			var queryParams = {
+				type: 'SCORE',
+				keyword: ''
+			};
 
-				http.post(config.api.system.config.ccr.indicate.options, {
-					data: {
-						type: 'SCORE'
+			$('#dataTable').bootstrapTable({
+				ajax: function(origin) {
+					http.post(config.api.system.config.ccr.options.showview, {
+						data: queryParams,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt);
+					})
+				},
+				queryParams: function(val) {
+					var form = document.searchForm;
+					queryParams.keyword = form.keyword.value.trim();
+				},
+				columns: [{
+					field: 'cateTitle',
+					formatter: function(val, row, index) {
+						return row.showCate ? '<b>' + val + '</b>' : '';
+					}
+				}, {
+					field: 'indicateTitle',
+					formatter: function(val, row, index) {
+						return row.showIndicate ? val : '';
+					}
+				}, {
+					field: 'optionsTitle',
+					formatter: function(val, row, index) {
+						return row.showOptions ? '<i>' + val + '</i>' : '';
+					}
+				}, {
+					field: 'optionsScore',
+					formatter: function(val, row, index) {
+						return row.showOptions ? '<i>' + val + '</i>' : '';
+					}
+				}, {
+					align: 'center',
+					formatter: function(val, row, index) {
+						var updateButton = {
+							text: '编辑',
+							type: 'button',
+							class: 'item-update',
+							isRender: true
+						};
+
+						var deleteButton = {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+							isRender: true
+						};
+
+						return row.showIndicate ? util.table.formatter.generateButton([updateButton, deleteButton]) : '';
+
 					},
-					contentType: 'form'
-				}, function(val) {
+					events: {
+						'click .item-update': function(e, value, row) {
+							http.post(config.api.system.config.ccr.options.preUpdate, {
+								data: {
+									indicateOid: row.indicateOid
+								},
+								contentType: 'form'
+							}, function(val) {
 
-					var cascade = {};
-					var options = {};
-					var form = document.addForm;
+								var form = document.updateForm;
 
-					$('#addForm').resetForm();
-					$('#addFormOptions').empty();
-					$('#addModal').modal('show');
+								$('#updateForm').resetForm();
+								$('#updateFormOptions').empty();
+								$('#updateModal').modal('show');
 
-					$(form.cateOid).empty();
-					$.each(val, function(i, value) {
-						cascade[value.oid] = value.options;
-						$(form.cateOid).append('<option value="' + value.oid + '">' + value.title + '</option>')
-					});
+								$$.formAutoFix($('#updateForm'), val);
 
-					$(form.indicateOid).off().on('change', function() {
+								if (val.options && val.options.length > 0) {
+									var type = val.indicateDataType;
+									if (createOptions[type]) {
+										$.each(val.options, function(i, item) {
+											var option = createOptions[type]();
+											if (option) {
+												$('#updateFormOptions').append(option);
+											}
+											$$.formAutoFix(option, item);
+										});
+									}
+								}
+
+							});
+						},
+						'click .item-delete': function(e, value, row) {
+							$("#deleteConfirmTitle").html("确定删除评分模型？");
+							$$.confirm({
+								container: $('#deleteModal'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.system.config.ccr.options.batchDelete, {
+										data: {
+											indicateOid: row.indicateOid
+										},
+										contentType: 'form'
+									}, function(result) {
+										$('#dataTable').bootstrapTable('refresh');
+									})
+								}
+							})
+						}
+					}
+				}]
+			});
+
+			$$.searchInit($('#searchForm'), $('#dataTable'));
+
+			$('#eventAdd').on('click', function() {
+				http.post(config.api.system.config.ccr.indicate.options, {
+						data: {
+							type: 'SCORE'
+						},
+						contentType: 'form'
+					},
+					function(val) {
+						var cascade = {};
+						var options = {};
+						var form = document.addForm;
+
+						$('#addForm').resetForm();
 						$('#addFormOptions').empty();
-						var option = options[form.indicateOid.value];
-						$(form.indicateDataType).val(option.dataType);
-					});
+						$('#addModal').modal('show');
 
-					$(form.cateOid).off().on('change', function() {
-						$(form.indicateOid).empty();
-						$.each(cascade[form.cateOid.value], function(i, value) {
-							options[value.oid] = value;
-							$(form.indicateOid).append('<option value="' + value.oid + '">' + value.title + '</option>')
+						$(form.cateOid).empty();
+						$.each(val, function(i, value) {
+							cascade[value.oid] = value.options;
+							$(form.cateOid).append('<option value="' + value.oid + '">' + value.title + '</option>')
 						});
-						$(form.indicateOid).change();
+
+						$(form.indicateOid).off().on('change', function() {
+							$('#addFormOptions').empty();
+							var option = options[form.indicateOid.value];
+							$(form.indicateDataType).val(option.dataType);
+						});
+
+						$(form.cateOid).off().on('change', function() {
+							$(form.indicateOid).empty();
+							$.each(cascade[form.cateOid.value], function(i, value) {
+								options[value.oid] = value;
+								$(form.indicateOid).append('<option value="' + value.oid + '">' + value.title + '</option>')
+							});
+							$(form.indicateOid).change();
+						});
+
+						$(form.cateOid).change();
+
 					});
-
-					$(form.cateOid).change();
-
-				});
 			});
 
 			$('#saveButton').on('click', function() {
@@ -154,12 +266,51 @@ define([
 
 			});
 
+			$('#updateButton').on('click', function() {
+				var json = {
+					options: []
+				};
+				$.each($('#updateForm').serializeArray(), function(i, v) {
+					json[v.name] = v.value;
+				});
+
+
+				var x = $('#updateFormOptions').children();
+				$.each(x, function(i, v) {
+					var ov = {};
+					$.each($(v).serializeArray(), function(i, v) {
+						ov[v.name] = v.value;
+					});
+					json.options.push(ov);
+				});
+
+
+				http.post(config.api.system.config.ccr.options.save, {
+					data: JSON.stringify(json)
+				}, function(result) {
+					$('#updateForm').resetForm();
+					$('#updateFormOptions').empty();
+					$('#updateModal').modal('hide');
+					$('#dataTable').bootstrapTable('refresh');
+				});
+			});
+
 			$('#addFormAddOption').on('click', function() {
 				var type = document.addForm.indicateDataType.value;
 				if (createOptions[type]) {
 					var option = createOptions[type]();
 					if (option) {
 						$('#addFormOptions').append(option);
+					}
+				}
+			});
+
+			$('#updateFormAddOption').on('click', function() {
+				var type = document.updateForm.indicateDataType.value;
+				if (createOptions[type]) {
+					var option = createOptions[type]();
+					if (option) {
+						$('#updateFormOptions').append(option);
 					}
 				}
 			});
