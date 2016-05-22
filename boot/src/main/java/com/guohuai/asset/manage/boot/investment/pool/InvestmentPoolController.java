@@ -66,7 +66,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 @Slf4j
 public class InvestmentPoolController extends BaseController {
 	@Autowired
-	InvestmentService investmentService;
+	InvestmentPoolService investmentPoolService;
 	@Autowired
 	TargetIncomeService targetIncomeService;
 
@@ -136,7 +136,7 @@ public class InvestmentPoolController extends BaseController {
 		String expAror = request.getParameter("expAror");
 		spec = this.buildSpec(spec, "expAror", expAror);
 		
-		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);
+		Page<Investment> pageData = investmentPoolService.getInvestmentList(spec, pageable);
 
 		InvestmentListResp resp = new InvestmentListResp(pageData);
 		return new ResponseEntity<InvestmentListResp>(resp, HttpStatus.OK);
@@ -175,7 +175,7 @@ public class InvestmentPoolController extends BaseController {
 			
 		}
 		form.setOperator(loginId);
-		this.investmentService.establish(form);
+		this.investmentPoolService.establish(form);
 		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
 	}
 
@@ -198,7 +198,7 @@ public class InvestmentPoolController extends BaseController {
 			
 		}
 		form.setOperator(loginId);
-		this.investmentService.unEstablish(form);
+		this.investmentPoolService.unEstablish(form);
 		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
 	}
 
@@ -240,7 +240,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
-	public CommonResp overdue(Integer days, Double rate, BigDecimal overdueFine) {
+	public CommonResp overdue(@Valid OverdueForm form) {
 
 		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
 	}

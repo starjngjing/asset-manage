@@ -85,9 +85,9 @@ define([
             },
             { // 状态
             	field: 'state',
-            	formatter: function (val) {
-            		return val;
-            	}
+				formatter: function(val) {
+					return util.enum.transform('targetStates', val);
+				}
             },
             { // 已购份额
             	field: 'holdAmount',
