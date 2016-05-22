@@ -26,9 +26,14 @@ import com.guohuai.asset.manage.component.util.StringUtil;
 public class InvestmentPoolService {
 	@Autowired
 	InvestmentService investmentService;
+	@Autowired
+	TargetOverdueService targetOverdueService;
 
 	@Autowired
 	private InvestmentDao investmentDao;
+	
+	@Autowired
+	private TargetOverdueDao targetOverdueDao;
 	
 	@Autowired
 	InvestmentLogService investmentLogService;
@@ -160,15 +165,21 @@ public class InvestmentPoolService {
 	 * @param form
 	 * @return Investment 返回类型
 	 */
-	public Investment overdue(OverdueForm form) {
+	public Investment overdue(TargetOverdueForm form) {
 		String oid = form.getOid();
+		
 		Investment it = investmentService.getInvestment(oid);
-		BeanUtils.copyProperties(form, it);
 
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
 		it.setState(Investment.INVESTMENT_STATUS_overdue); // 重置为逾期
+		
+		TargetOverdue to = new TargetOverdue();
+		BeanUtils.copyProperties(form, to);
+		to.setInvestment(it);
+		to.setCreateTime(DateUtil.getSqlCurrentDate());
 
-		this.investmentDao.save(it);
+		this.investmentDao.save(it); // 修改标的库
+		targetOverdueDao.save(to); // 添加逾期对象
 		investmentLogService.saveInvestmentLog(it, TargetEventType.overdue, form.getOperator()); // 保存标的操作日志
 		return it;
 	}

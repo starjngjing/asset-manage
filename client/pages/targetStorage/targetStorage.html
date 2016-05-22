@@ -135,6 +135,25 @@
 </section>
 
 
+
+<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+<div id="doConfirm" class="popover func-delete-popover">
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<p id="confirmTitle"></p>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!-- 成立模态窗 默认大小 -->
 <div id="establishModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -638,12 +657,24 @@
 			          </div>
 			        </div>
 		        </div>
-	        
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>逾期日期</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="overdueDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="逾期日期">
+			          </div>
+			        </div>
+		        </div>
 	        	<div class="col-sm-6">
 	          	<div class="form-group">
 			          <label>逾期天数</label>
 			          <div class="input-group input-group-sm">			            
-			            <input name="days" type="text"
+			            <input name="overdueDays" type="text"
 			                   class="form-control input-sm"
 			                   placeholder="逾期天数" >
 			            <span class="input-group-addon">天</span>
@@ -655,13 +686,14 @@
 	          	<div class="form-group">
 			          <label>逾期利率</label>
 			          <div class="input-group input-group-sm">			            
-			            <input name="rate" type="text"
+			            <input name="overdueRate" type="text"
 			                   class="form-control input-sm"
 			                   placeholder="逾期利率" >
 			            <span class="input-group-addon">%</span>
 			          </div>
 			        </div>
 		        </div>
+		        <!--
           	<div class="col-sm-6">
 	          	<div class="form-group">
 			          <label>逾期滞纳金</label>
@@ -672,7 +704,7 @@
 			          </div>
 			        </div>
 		        </div>
-	        
+	        -->
           </div>
           
           <input name="oid" type="hidden" data-detail-fetch="oid">

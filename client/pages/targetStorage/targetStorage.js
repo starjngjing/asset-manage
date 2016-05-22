@@ -210,6 +210,30 @@ define([
                 	  $('#targetIncomeModal').modal('show');
                   },
                   'click .item-overdue': function(e, value, row) { // 逾期
+                	  /**
+                	   不需要弹窗
+                	   
+                	  $("#confirmTitle").html("确定投资标的逾期？");
+						$$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								http.post(config.api.overdue, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									if (result.errorCode == 0) {
+										$('#dataTable').bootstrapTable('refresh');
+									} else {
+										alert('逾期投资标的失败');
+									}
+								})
+							}
+						});
+						*/
+                	  /*  需要弹窗的 */
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -227,6 +251,7 @@ define([
 //                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
                 	  });                	  
 					$('#overdueModal').modal('show');
+					
                   },
                   'click .item-remove': function (e, value, row) { // 移除出库
                 	  $("#confirmTitle").html("确定移除投资标的？")
@@ -295,7 +320,7 @@ define([
         	
         });
         
-        // 逾期 按钮点击事件
+        // 逾期 按钮点击事件     暂时没用到
         $("#overdueSubmit").click(function(){
         	$("#overdueForm").ajaxSubmit({
         		type:"post",  //提交方式  
