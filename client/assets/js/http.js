@@ -51,7 +51,7 @@ function baseAjax (type, url, options, success, failure) {
     },
     dataType: options.dataType || 'json',
     data: options.data || '',
-    async: options.async || true
+    async: options.async === undefined ? true : options.async
   }).then(function (res) {
     if (!res.errorCode) {
       if (success) {
