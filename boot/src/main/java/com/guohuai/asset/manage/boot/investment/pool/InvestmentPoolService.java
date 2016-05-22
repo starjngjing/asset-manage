@@ -150,4 +150,26 @@ public class InvestmentPoolService {
 		return it;
 	}
 
+	/**
+	 * 标的逾期
+	 * 
+	 * @Title: overdue
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param form
+	 * @return Investment 返回类型
+	 */
+	public Investment overdue(OverdueForm form) {
+		String oid = form.getOid();
+		Investment it = investmentService.getInvestment(oid);
+		BeanUtils.copyProperties(form, it);
+
+		it.setUpdateTime(DateUtil.getSqlCurrentDate());
+		it.setState(Investment.INVESTMENT_STATUS_overdue); // 重置为逾期
+
+		this.investmentDao.save(it);
+		investmentLogService.saveInvestmentLog(it, TargetEventType.overdue, form.getOperator()); // 保存标的操作日志
+		return it;
+	}
 }

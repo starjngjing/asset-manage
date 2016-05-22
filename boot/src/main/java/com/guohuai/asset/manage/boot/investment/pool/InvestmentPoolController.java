@@ -1,6 +1,5 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
-import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.TargetIncome;
 import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.component.exception.AMPException;
@@ -241,7 +239,14 @@ public class InvestmentPoolController extends BaseController {
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
 	public CommonResp overdue(@Valid OverdueForm form) {
-
+		String loginId = null;
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			log.error("获取操作员失败, 原因: " + e.getMessage());
+		}
+		form.setOperator(loginId);
+		this.investmentPoolService.overdue(form);
 		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
 	}
 

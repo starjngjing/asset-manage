@@ -102,7 +102,7 @@ define([
               formatter: function (val) {
             	  var buttons = [
             	    {
-            	      text: '成立',
+            	      text: '估值',
             	      type: 'button',
             	      class: 'item-establish',
             	      isRender: true

@@ -98,9 +98,9 @@ define([
             },
             {
 //              field: 'operator',
-              width: 260,
+              width: 310,
               align: 'center',
-              formatter: function (val) {
+              formatter: function (val, row) {
             	  var buttons = [
             	    {
             	      text: '成立',
@@ -118,15 +118,15 @@ define([
               	    	text: '本息兑付',
               	    	type: 'button',
               	    	class: 'item-targetIncome',
-//              	    	isRender: row.state == 'establish',
-              	    	isRender: true,
+              	    	isRender: row.state == 'establish',
+//              	    	isRender: true,
               	    },
               	    {
               	    	text: '逾期',
               	    	type: 'button',
-              	    	class: 'item-targetIncome',
-//              	    	isRender: row.state == 'establish',
-              	    	isRender: true,
+              	    	class: 'item-overdue',
+              	    	isRender: row.state == 'establish',
+//              	    	isRender: true,
               	    },
               	    {
               	    	text: '财务数据',
@@ -139,7 +139,7 @@ define([
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
-                  'click .item-establish': function (e, value, row) {
+                  'click .item-establish': function (e, value, row) { // 标的成立
                 	  // 初始化   付息日 
                       for ( var i = 1; i <= 30; i++) {
 	                      	var option = $("<option>").val(i).text(i);
@@ -165,7 +165,7 @@ define([
                 	});
                 	$('#establishModal').modal('show');
                   },
-                  'click .item-unEstablish': function (e, value, row) {
+                  'click .item-unEstablish': function (e, value, row) { // 标的不成立
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -184,7 +184,7 @@ define([
                 	  });
                 	  $('#unEstablishModal').modal('show');
                   },
-                  'click .item-targetIncome': function (e, value, row) {
+                  'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -203,7 +203,10 @@ define([
                 	  });
                 	  $('#targetIncomeModal').modal('show');
                   },
-                  'click .item-financialData': function(e, value, row) {
+                  'click .item-overdue': function(e, value, row) { // 逾期
+                	  
+                  },
+                  'click .item-financialData': function(e, value, row) {// 财务数据
                 	  
                   }
                 
