@@ -119,13 +119,14 @@ public class RiskIndicateService {
 					map.put(i.getCate().getOid(), rio);
 				}
 
+				RiskIndicateOption rio = map.get(i.getCate().getOid());
+
 				RiskIndicateOption.Option roo = new RiskIndicateOption.Option();
 				roo.setOid(i.getOid());
 				roo.setTitle(i.getTitle());
 				roo.setDataType(i.getDataType());
 				roo.setDataUnit(i.getDataUnit());
 
-				RiskIndicateOption rio = map.get(i.getCate().getOid());
 				rio.getOptions().add(roo);
 
 			}
