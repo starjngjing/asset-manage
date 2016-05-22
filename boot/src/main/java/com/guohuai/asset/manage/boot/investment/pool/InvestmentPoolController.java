@@ -118,9 +118,7 @@ public class InvestmentPoolController extends BaseController {
 					
 					Expression<BigDecimal> exp = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.gt(exp, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
-					predicate.add(p); 
-					
-					predicate.add(cb.gt(root.get("holdAmount").as(BigDecimal.class), new BigDecimal(0))); // 持有金额大于0
+					predicate.add(p);					
 				} else if (op.equals("noHoldList")) { // 未持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					
