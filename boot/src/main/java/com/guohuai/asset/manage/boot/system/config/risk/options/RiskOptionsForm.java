@@ -8,14 +8,13 @@ import lombok.Data;
 public class RiskOptionsForm {
 
 	private String indicateOid;
+	private int dftScore;
 	private List<Option> options;
 
 	@Data
 	public static class Option {
 
-		private String title;
-		private String score;
-		private String dft;
+		private int score;
 		private String param0;
 		private String param1;
 		private String param2;

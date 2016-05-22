@@ -31,18 +31,8 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>渠道名称</label>
-									<input name="email" type="text" class="form-control input-sm" placeholder="搜索渠道名称">
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label>渠道状态</label>
-									<select name="validState" class="form-control input-sm">
-										<option value="" selected>不限</option>
-										<option value="ok">已验证</option>
-										<option value="no">未验证</option>
-									</select>
+									<label>关键字</label>
+									<input name="keyword" type="text" class="form-control input-sm" placeholder="搜索指标分类或指标项名称">
 								</div>
 							</div>
 						</div>
@@ -51,12 +41,10 @@
 					<table id="dataTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>标识</th>
-								<th>名称</th>
-								<th>机构名称</th>
-								<th>接入方式</th>
-								<th>费率</th>
-								<th>状态</th>
+								<th>指标分类</th>
+								<th>指标项名称</th>
+								<th>指标项值</th>
+								<th>得分</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -66,3 +54,54 @@
 		</div>
 	</div>
 </section>
+
+<div id="addModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">新建信用等级评分配置</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<!-- 新增/编辑事件表单 -->
+				<form id="addForm" name="addForm" method="post">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>指标分类</label>
+								<select name="cateOid" class="form-control input-sm">
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>指标项</label>
+								<select name="indicateOid" class="form-control input-sm"></select>
+								<input type="hidden" name="indicateDataType" />
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>默认得分</label>
+								<input name="dftScore" type="text" class="form-control input-sm" placeholder="默认得分">
+							</div>
+						</div>
+					</div>
+				</form>
+				<h6><b>指标项</b></h6>
+				<div id="addFormOptions"></div>
+				<div id="addFormAddOption" class="btn btn-default">添加指标项</div>
+
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="saveButton" type="button" class="btn btn-primary btn-submit">保 存</button>
+			</div>
+		</div>
+	</div>
+</div>

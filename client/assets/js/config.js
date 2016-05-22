@@ -129,6 +129,10 @@ define(function() {
 							disable: this.host + "/ams/system/ccr/indicate/disable",
 							delete: this.host + "/ams/system/ccr/indicate/delete",
 							options: this.host + "/ams/system/ccr/indicate/options"
+						},
+						options: {
+							save: this.host +"/ams/system/ccr/options/save",
+							showview: this.host +"/ams/system/ccr/options/showview"
 						}
 					}
 				}
