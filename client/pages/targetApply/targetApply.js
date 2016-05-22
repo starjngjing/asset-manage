@@ -264,7 +264,7 @@ define([
 								type: 'button',
 								class: 'item-projectDetail',
 								isRender: true
-						    }
+						    },
 						    {
 						    	text: '删除',
 						    	type: 'button',
