@@ -916,332 +916,6 @@
 	</div>
 </div>
 
-<!-- 新建底层资产弹窗 -->
-<div id="addAssetModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<!-- 模态窗头部 -->
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-				<h4 class="modal-title">新建底层资产</h4>
-			</div>
-			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<!-- 新增/编辑事件表单 -->
-				<form id="addAssetForm" name="addTargetForm" method="post">
-					<p class="form-header">项目概况</p>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目名称</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目名称">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目经理</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目经理">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目类型</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>城市</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="城市">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>已默认认购期数</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目经理">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资金方所在地</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="资金方所在地">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>资金用途</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="资金用途">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目还款来源</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目还款来源">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>外部信用增级措施</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<select class="form-control input-sm">
-                  <option selected="selected">请选择</option>
-                  <option>B</option>
-                </select>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>&nbsp;</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-							</div>
-						</div>
-					</div>
-					<!-- 金融类项目显示/隐藏层 -->
-					<div id="addAssetIsFinancial">
-						<p class="form-header">金融类项目</p>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>房地产项目所在地</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="房地产项目所在地">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>开发商排名</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="开发商排名">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>完工情况</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="完工情况">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>房地产项目属性</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="说明">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div id="addAssetIsProperty">
-						<p class="form-header">地产类项目</p>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>政府层级</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="政府层级">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>融资方</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="融资方">
-								</div>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">担保人信息</p>
-					<div class="form-group">
-						<label>担保人</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio1" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio1" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasSponsor">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人所在地</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人所在地">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人总资产</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人总资产">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>担保人负债</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="担保人负债">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>保证方式</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<p class="form-header">抵押信息</p>
-					<div class="form-group">
-						<label>抵押</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasMortgage">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>抵押人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="质押人">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>受益人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="受益人">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label>质押</label>
-						<div class="row form-style">
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck" checked> 是
-							</div>
-							<div class="col-sm-2">
-								<input name="radio2" type="radio" value="a" class="icheck"> 否
-							</div>
-						</div>
-					</div>
-					<div id="addAssetHasPledge">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>质押人</label>
-									<input name="title" type="text" class="form-control input-sm" placeholder="质押人">
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>质押方式</label>
-									<select class="form-control input-sm">
-                    <option selected="selected">请选择</option>
-                    <option>B</option>
-                  </select>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<p class="form-header">其他信息</p>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>项目规模</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="项目规模">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>融资成本</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="融资成本">
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>委托采购主体（SPV）</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="委托采购主体（SPV）">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>SPV通道费</label>
-								<input name="title" type="text" class="form-control input-sm" placeholder="SPV通道费">
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- 模态窗底部 -->
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button type="button" class="btn btn-primary btn-submit">保 存</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- 操作confirm窗 使用 $$.confirm 初始化 -->
 <div id="doConfirm" class="popover func-delete-popover">
@@ -1641,6 +1315,412 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
 				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- 底层项目详情  弹窗 -->
+<div id="projectDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">底层项目</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<p class="form-header">标的概况</p>
+				<div class="row" id="targetDetail_2">
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>标的编号:</dt>
+							<dd>
+								<div data-detail-fetch="sn"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>标的名称:</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-4">
+						<dl class="dl-horizontal">
+							<dt>标的类型:</dt>
+							<dd>
+								<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-4">
+						<dl class="dl-horizontal">
+							<dt>付息方式:</dt>
+							<dd>
+								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-4">
+						<dl class="dl-horizontal">
+							<dt>预计收益:</dt>
+							<dd>
+								<div data-detail-fetch="expIncome"></div>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<!-- 新增/编辑事件表单 -->
+				<p class="form-header">项目概况</p>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目编号:</dt>
+						<dd>
+							<div data-detail-fetch="sn"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目编号:</dt>
+						<dd>
+							<div data-detail-fetch="projectName"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目经理:</dt>
+						<dd>
+							<div data-detail-fetch="projectManager"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目类型:</dt>
+						<dd>
+							<div data-detail-fetch="projectType"  data-enum-fetch="PROJECTTYPE"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>城市:</dt>
+						<dd>
+							<div data-detail-fetch="projectCity" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>资金方所在地:</dt>
+						<dd>
+							<div data-detail-fetch="funderAddr" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>资金方所在地:</dt>
+						<dd>
+							<div data-detail-fetch="funderAddr" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>项目还款来源:</dt>
+						<dd>
+							<div data-detail-fetch="payment" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>外部项目增信措施:</dt>
+						<dd>
+							<div data-detail-fetch="trustMeasures" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>其他外部项目增信措施:</dt>
+						<dd>
+							<div data-detail-fetch="trustMeasuresName" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>其他外部项目增信措施:</dt>
+						<dd>
+							<div data-detail-fetch="projectAddr" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>开发商排名:</dt>
+						<dd>
+							<div data-detail-fetch="developerRank" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>房地产项目属性:</dt>
+						<dd>
+							<div data-detail-fetch="estateProp" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>完工情况:</dt>
+						<dd>
+							<div data-detail-fetch="estateCompletion" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="form-group">
+					<dl class="dl-horizontal">
+						<dt>是否有担保人:</dt>
+						<dd>
+							<div data-detail-fetch="warrantor" ></div>
+						</dd>
+					</dl>						
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>担保人所在地:</dt>
+						<dd>
+							<div data-detail-fetch="investment" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>担保人总资产:</dt>
+						<dd>
+							<div data-detail-fetch="warrantorCapital" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>担保人负债:</dt>
+						<dd>
+							<div data-detail-fetch="warrantorDebt" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>是否有抵押:</dt>
+						<dd>
+							<div data-detail-fetch="pledge" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>抵押人:</dt>
+						<dd>
+							<div data-detail-fetch="mortgager" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>出质人:</dt>
+						<dd>
+							<div data-detail-fetch="pledgor" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>抵押物所在地:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeAddr" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>抵押物形态:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeType" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>数量或面积:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeWeight" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-12">
+					<dl class="dl-horizontal">
+						<dt>抵押物名称坐落:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeName" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>抵押物评估机构:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeAssessment" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>评估价值:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeValuation" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>抵押顺位:</dt>
+						<dd>
+							<div data-detail-fetch="pledgePriority" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>抵押率:</dt>
+						<dd>
+							<div data-detail-fetch="pledgeRatio" ></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>保证金:</dt>
+						<dd>
+							<div data-detail-fetch="margin" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<!--
+                <div class="col-sm-4">
+					<div class="form-group">
+						<label>抵押方式</label>
+						<select name='pledgeType' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
+        				</select>
+					</div>
+				</div>
+				-->
+				<!--
+				<div class="form-group">
+	              <label>是否有质押</label>
+	              <div class="row form-style">
+	                <div class="col-sm-2">
+	                  <input type="radio" name="pledge11" value="yes" class="icheck" checked> 是
+	                </div>
+	                <div class="col-sm-2">
+	                  <input type="radio" name="pledge11" value="no" class="icheck"> 否
+	                </div>
+	              </div>
+	            </div>
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>质押人</label>
+							<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
+						</div>
+					</div>	
+                    <div class="col-sm-4">
+						<div class="form-group">
+							<label>质押方式</label>
+							<select name='pledgeType1111' class="form-control input-sm" data-enum-fetch="PLEDGETYPE"  data-enum-text="请选择" required>
+            				</select>
+						</div>
+					</div>
+				</div>
+					-->
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>政府层级:</dt>
+						<dd>
+							<div data-detail-fetch="govLevel" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目规模:</dt>
+						<dd>
+							<div data-detail-fetch="projectScale" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>融资成本:</dt>
+						<dd>
+							<div data-detail-fetch="financeCosts" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>受托采购主体(SPV):</dt>
+						<dd>
+							<div data-detail-fetch="spv" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>SPV通道费:</dt>
+						<dd>
+							<div data-detail-fetch="spvTariff" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>项目评级:</dt>
+						<dd>
+							<div data-detail-fetch="projectGrade" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>评级机构:</dt>
+						<dd>
+							<div data-detail-fetch="gradeAssessment" ></div>%
+						</dd>
+					</dl>
+				</div>
+				<div class="col-sm-4">
+					<dl class="dl-horizontal">
+						<dt>评级时间:</dt>
+						<dd>
+							<div data-detail-fetch="gradeTime" ></div>%
+						</dd>
+					</dl>
+				</div>
 			</div>
 		</div>
 	</div>
