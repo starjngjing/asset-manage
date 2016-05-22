@@ -111,7 +111,7 @@ public class InvestmentPoolController extends BaseController {
 			@Override
 			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
-				if (op.equals("storageList")) { // 标的库列表
+				if (op.equals("storageList")) { // 投资标的备选库
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
