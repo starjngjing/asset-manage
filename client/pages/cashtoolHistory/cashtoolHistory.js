@@ -8,7 +8,7 @@ define([
 'util'
 ], function (http, config, $$, util) {
   return {
-    name: 'cashtoolStorage',
+    name: 'cashtoolHistory',
     init: function () {
       // js逻辑写在这里
 
