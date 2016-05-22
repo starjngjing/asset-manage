@@ -50,7 +50,8 @@ function baseAjax (type, url, options, success, failure) {
       withCredentials: true
     },
     dataType: options.dataType || 'json',
-    data: options.data || ''
+    data: options.data || '',
+    async: options.async || true
   }).then(function (res) {
     if (!res.errorCode) {
       if (success) {
