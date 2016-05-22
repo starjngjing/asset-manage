@@ -125,8 +125,8 @@ define([
               	    	text: '逾期',
               	    	type: 'button',
               	    	class: 'item-overdue',
-              	    	isRender: row.state == 'establish',
-//              	    	isRender: true,
+//              	    	isRender: row.state == 'establish',
+              	    	isRender: true,
               	    },
               	    {
               	      text: '移除出库',
@@ -210,7 +210,23 @@ define([
                 	  $('#targetIncomeModal').modal('show');
                   },
                   'click .item-overdue': function(e, value, row) { // 逾期
-                	  
+                	  http.post(config.api.targetDetQuery, {
+                		  data: {
+                			  oid:row.oid
+                		  },
+                		  contentType: 'form'
+                	  },
+                	  function (obj) {
+                		  var data  = obj.investment;
+                		  if(!data){
+                			  toastr.error('标的详情数据不存在', '错误信息', {
+                				  timeOut: 10000
+                			  });
+                		  }
+                		  $$.detailAutoFix($('#overdueForm'), data);	// 自动填充详情
+//                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
+                	  });                	  
+					$('#overdueModal').modal('show');
                   },
                   'click .item-remove': function (e, value, row) { // 移除出库
                 	  $("#confirmTitle").html("确定移除投资标的？")
@@ -218,7 +234,7 @@ define([
 							container: $('#doConfirm'),
 							trigger: this,
 							accept: function() {
-								http.post(config.api.removeCashTool, {
+								http.post(config.api.targetInvalid, {
 									data: {
 										oid: row.oid
 									},
@@ -273,6 +289,21 @@ define([
         		success:function(data) {
         			$('#unEstablishForm').clearForm();
         			$('#unEstablishModal').modal('hide');
+        			$('#dataTable').bootstrapTable('refresh');
+        		}
+        	});
+        	
+        });
+        
+        // 逾期 按钮点击事件
+        $("#overdueSubmit").click(function(){
+        	$("#overdueForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.overdue,
+        		success:function(data) {
+        			$('#overdueForm').clearForm();
+        			$('#overdueModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});

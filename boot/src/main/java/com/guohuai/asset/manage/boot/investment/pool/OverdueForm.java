@@ -43,7 +43,7 @@ public class OverdueForm implements Serializable {
 	@NotNull(message = "逾期天数不能为空")
 	private Integer days;
 //	@NotNull(message = "逾期利率不能为空")
-	private Double rate;
+	private BigDecimal rate;
 //	@NotNull(message = "滞纳金不能为空")
 	private BigDecimal overdueFine;
 
