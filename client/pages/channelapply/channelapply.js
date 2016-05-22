@@ -76,7 +76,10 @@ function (http, config, util, $$) {
 		      },
 		      {
             field: 'channelName'
-         },          
+          },   
+          {
+            field: 'channelApprovelCode'
+          },
           {
             field: 'requestType',
             formatter: function (val, row, index) {
@@ -162,7 +165,10 @@ function (http, config, util, $$) {
 		      },
 		      {
             field: 'channelName'
-          },         
+          }, 
+          {
+            field: 'channelApprovelCode'
+          },
           {
             field: 'requestType',
             formatter: function (val, row, index) {

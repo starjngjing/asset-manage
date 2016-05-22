@@ -24,7 +24,6 @@ import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
-import com.guohuai.asset.manage.boot.investment.log.InvestmentLog;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
@@ -139,10 +138,11 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
-		 String operator = super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
 				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+			//标的状态不是待预审或驳回不能提交预审
 			throw new RuntimeException();
 		}
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
@@ -159,8 +159,7 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
-		// String operator = super.getLoginAdmin();
-		String operator = "admin";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		investmentService.saveInvestment(investment, operator);

@@ -85,9 +85,9 @@ define([
             },
             { // 状态
             	field: 'state',
-            	formatter: function (val) {
-            		return val;
-            	}
+				formatter: function(val) {
+					return util.enum.transform('targetStates', val);
+				}
             },
             { // 已购份额
             	field: 'holdAmount',
@@ -102,7 +102,7 @@ define([
               formatter: function (val) {
             	  var buttons = [
             	    {
-            	      text: '成立',
+            	      text: '估值',
             	      type: 'button',
             	      class: 'item-establish',
             	      isRender: true

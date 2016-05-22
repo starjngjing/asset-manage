@@ -61,6 +61,7 @@ public class InvestmentService {
 	 */
 	public Investment saveInvestment(Investment entity, String operator) {
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
 		return this.investmentDao.save(entity);
 	}
@@ -101,48 +102,6 @@ public class InvestmentService {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
-	}
-
-	/**
-	 * 标的成立
-	 * 
-	 * @Title: establish
-	 * @author vania
-	 * @version 1.0
-	 * @see:
-	 * @param form
-	 * @return Investment 返回类型
-	 */
-	public Investment establish(EstablishForm form) {
-		String oid = form.getOid();
-		Investment it = getInvestment(oid);
-		BeanUtils.copyProperties(form, it);
-		it.setState(Investment.INVESTMENT_STATUS_establish); // 重置为成立
-
-		this.investmentDao.save(it);
-		investmentLogService.saveInvestmentLog(it, TargetEventType.establish, form.getOperator()); // 保存标的操作日志
-		return it;
-	}
-	
-	/**
-	 * 标的不成立
-	 * 
-	 * @Title: unEstablish
-	 * @author vania
-	 * @version 1.0
-	 * @see:
-	 * @param form
-	 * @return Investment 返回类型
-	 */
-	public Investment unEstablish(UnEstablishForm form) {
-		String oid = form.getOid();
-		Investment it = getInvestment(oid);
-		BeanUtils.copyProperties(form, it);
-		it.setState(Investment.INVESTMENT_STATUS_unEstablish); // 重置为成立
-
-		this.investmentDao.save(it);
-		investmentLogService.saveInvestmentLog(it, TargetEventType.unEstablish, form.getOperator()); // 保存标的操作日志
-		return it;
 	}
 
 	public Investment getInvestment(String oid) {

@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.boot.file.FileService;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeeting;
@@ -61,9 +60,18 @@ public class InvestmentMeetingBootController extends BaseController {
 	private InvestmentMeetingAssetService investmentMeetingAssetService;
 	@Autowired
 	private InvestmentMeetingVoteService investmentMeetingVoteService;
-	@Autowired
-	private FileService fileSerevice;
 
+	/**
+	 * 过会会议列表
+	 * 
+	 * @param request
+	 * @param spec
+	 * @param page
+	 * @param rows
+	 * @param sortField
+	 * @param sort
+	 * @return
+	 */
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<MeetingListResp> list(HttpServletRequest request,
 			@And({ @Spec(params = "sn", path = "sn", spec = Equal.class),
@@ -83,12 +91,29 @@ public class InvestmentMeetingBootController extends BaseController {
 		return new ResponseEntity<MeetingListResp>(resps, HttpStatus.OK);
 	}
 
+	/**
+	 * 过会会议详情
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "detail", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<MeetingDetResp> detail(String oid) {
 		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(oid);
 		return new ResponseEntity<MeetingDetResp>(new MeetingDetResp(meeting), HttpStatus.OK);
 	}
 
+	/**
+	 * 待过会标的列表
+	 * 
+	 * @param request
+	 * @param spec
+	 * @param page
+	 * @param rows
+	 * @param sortField
+	 * @param sort
+	 * @return
+	 */
 	@RequestMapping(value = "targetList", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<InvestmentListResp> findInvestmentList(HttpServletRequest request,
 			@And({ @Spec(params = "name", path = "name", spec = Like.class) }) Specification<Investment> spec,
@@ -113,6 +138,12 @@ public class InvestmentMeetingBootController extends BaseController {
 		return new ResponseEntity<InvestmentListResp>(resps, HttpStatus.OK);
 	}
 
+	/**
+	 * 创建会议
+	 * 
+	 * @param form
+	 * @return
+	 */
 	@RequestMapping(value = "addMeeting", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> addMeeting(AddInvestmentMeetingForm form) {
 		String operator = super.getLoginAdmin();
@@ -120,18 +151,37 @@ public class InvestmentMeetingBootController extends BaseController {
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
+	/**
+	 * 会议的标的列表
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "meetingTarget", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<Investment>> meetingTargetList(String oid) {
-		List<Investment> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
-		return new ResponseEntity<List<Investment>>(list, HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<MeetingInvestmentDetResp>> meetingTargetList(String oid) {
+		List<MeetingInvestmentDetResp> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
+		return new ResponseEntity<List<MeetingInvestmentDetResp>>(list, HttpStatus.OK);
 	}
 
+	/**
+	 * 会议的标的表决详情列表
+	 * 
+	 * @param meetingOid
+	 * @param targetOid
+	 * @return
+	 */
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<List<VoteDetResp>> meetingTargetList(String meetingOid, String targetOid) {
 		List<VoteDetResp> resp = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meetingOid, targetOid);
 		return new ResponseEntity<List<VoteDetResp>>(resp, HttpStatus.OK);
 	}
 
+	/**
+	 * 会议纪要详情
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "summaryDet", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<SummaryListResp> summaryList(String oid) {
 		System.out.println(oid);
@@ -139,29 +189,67 @@ public class InvestmentMeetingBootController extends BaseController {
 		return new ResponseEntity<SummaryListResp>(new SummaryListResp(resp), HttpStatus.OK);
 	}
 
+	/**
+	 * 上传会议纪要
+	 * 
+	 * @param files
+	 * @param meetingOid
+	 * @return
+	 */
 	@RequestMapping(value = "summaryUp", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> summaryUp(String files, String meetingOid) {
 		String operator = super.getLoginAdmin();
 		investmentMeetingService.summaryUp(meetingOid, files, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
-	
+
+	/**
+	 * 删除会议纪要
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "summaryDetele", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> summaryDelete(String oid){
+	public @ResponseBody ResponseEntity<BaseResp> summaryDelete(String oid) {
 		String operator = super.getLoginAdmin();
 		investmentMeetingService.deleteSummary(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
+	/**
+	 * 启动过会
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "open", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> open(String oid) {
 		investmentMeetingService.openMeeting(oid, super.getLoginAdmin());
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
+	/**
+	 * 暂停过会
+	 * 
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "stop", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> stop(String oid) {
 		investmentMeetingService.stopMeeting(oid, super.getLoginAdmin());
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	/**
+	 * 会议确认
+	 * 
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "finish", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> finish(MeetingFinishForm form) {
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.finishMeeting(form, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

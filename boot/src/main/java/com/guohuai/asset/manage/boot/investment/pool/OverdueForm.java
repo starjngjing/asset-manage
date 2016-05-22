@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 
- * <p>Title: UnEstablishForm.java</p>    
- * <p>标的不成立表单 </p>   
+ * <p>Title: EstablishForm.java</p>    
+ * <p>标的成立表单 </p>   
  * @author vania      
  * @version 1.0    
  * @created 2016年5月18日 下午7:37:44
@@ -29,24 +29,27 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnEstablishForm implements Serializable {
+public class OverdueForm implements Serializable {
 
+	
 	/**
-	 * @Fields serialVersionUID : 
+	 * @Fields serialVersionUID : TODO
 	 */
+	
+	private static final long serialVersionUID = -5951077006998356229L;
 
-	private static final long serialVersionUID = 2246250729662434487L;
 	@NotNull(message = "投资标的id不能为空")
 	private String oid;
-	/**
-	 * 募集期收益
-	 */
-	@NotNull(message = "投资标的募集期收益不能为空")
-	private BigDecimal collectIncomeRate;
+	@NotNull(message = "逾期天数不能为空")
+	private Integer days;
+//	@NotNull(message = "逾期利率不能为空")
+	private BigDecimal rate;
+//	@NotNull(message = "滞纳金不能为空")
+	private BigDecimal overdueFine;
 
 	// @NotNull(message = "投资标的收益截止日期不能为空")
 	// private Timestamp arorFirstDate;
-	
+
 	/**
 	 * 操作员
 	 */

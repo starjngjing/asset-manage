@@ -258,15 +258,28 @@ define([
 					//操作
 					align: 'center',
 					formatter: function(val, row) {
-						var buttons = [{
-							text: '删除',
-							type: 'button',
-							class: 'item-delete',
-							isRender: true
-						}];
+						var buttons = [						               
+						    {
+								text: '详情',
+								type: 'button',
+								class: 'item-projectDetail',
+								isRender: true
+						    },
+						    {
+						    	text: '删除',
+						    	type: 'button',
+						    	class: 'item-delete',
+						    	isRender: true
+						    }
+						];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
+						'click .item-projectDetail': function(e, value, row) { // 底层项目详情
+							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
+							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
+							$('#projectDetailModal').modal('show');
+						},
 						'click .item-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
 							$$.confirm({

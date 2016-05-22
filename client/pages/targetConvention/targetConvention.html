@@ -32,33 +32,20 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>会议编号</label>
-									<input name="email" type="text" class="form-control input-sm" placeholder="搜索会议编号">
+									<input name="sn" type="text" class="form-control input-sm" placeholder="搜索会议编号">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>会议主题</label>
-									<input name="email" type="text" class="form-control input-sm" placeholder="搜索会议主题">
+									<input name="title" type="text" class="form-control input-sm" placeholder="搜索会议主题">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>标的类型</label>
-									<select name="validState" class="form-control input-sm">
-                    <option value="" selected>不限</option>
-                    <option value="ok">已验证</option>
-                    <option value="no">未验证</option>
-                  </select>
-								</div>
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label>状态</label>
-									<select name="infoState" class="form-control input-sm">
-                    <option value="" selected>不限</option>
-                    <option value="isWrite">已填写</option>
-                    <option value="noWrite">未填写</option>
-                  </select>
+									<label>会议状态</label>
+									<select name="state" class="form-control input-sm" data-enum-fetch="meetingStates" data-enum-text="全部">
+                  					</select>
 								</div>
 							</div>
 						</div>
@@ -317,21 +304,20 @@
 			<div class="modal-body">
 				<table id="finishTargetConventionTable" class="table table-bordered table-striped">
 					<thead>
-					<tr>
-						<th>标的名称</th>
-						<th>状态</th>
-						<th>操作</th>
-					</tr>
+						<tr>
+							<th>标的名称</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
 					</thead>
 				</table>
 				<form id="finishTargetConventionForm" name="finishTargetConventionForm" method="post">
+					<input type="hidden" id="finishOid" name="oid" value="" />
 					<div class="form-group">
 						<h6>备注</h6>
-            <textarea name="financerDesc" rows="3"
-											class="form-control input-sm"
-											placeholder="备注"></textarea>
+						<textarea name="meetingRemark" rows="3" class="form-control input-sm" placeholder="备注"></textarea>
 					</div>
-					<input name="targets" type="hidden"/>
+					<input name="targets" type="hidden" />
 				</form>
 			</div>
 			<!-- 模态窗底部 -->
@@ -358,10 +344,10 @@
 			<div class="modal-body">
 				<table id="checkConditionsTable" class="table table-bordered table-striped">
 					<thead>
-					<tr>
-						<th>检查项名称</th>
-						<th>操作</th>
-					</tr>
+						<tr>
+							<th>检查项名称</th>
+							<th>操作</th>
+						</tr>
 					</thead>
 				</table>
 			</div>
@@ -389,9 +375,7 @@
 				<form id="rejectForm" name="rejectForm">
 					<div class="form-group">
 						<h6>驳回理由</h6>
-            <textarea name="rejectComment" rows="3"
-											class="form-control input-sm"
-											placeholder="请填写驳回理由"></textarea>
+						<textarea name="rejectComment" rows="3" class="form-control input-sm" placeholder="请填写驳回理由"></textarea>
 					</div>
 				</form>
 			</div>

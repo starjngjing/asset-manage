@@ -42,8 +42,10 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
+import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
 import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -94,12 +96,14 @@ public class CashToolPoolController extends BaseController {
 	 * @return ResponseEntity<CashToolListResp> 返回类型
 	 */
 	@RequestMapping(value = "listCashTool", method = { RequestMethod.POST, RequestMethod.GET })
-	@ApiOperation(value = "现金工具成立管理列表")
+	@ApiOperation(value = "现金工具管理列表")
 	public @ResponseBody ResponseEntity<CashToolListResp> listCashTool(HttpServletRequest request,
-			@And({	@Spec(params = "secShortName", path = "secShortName", spec = Like.class),
-					@Spec(params = "ticker", path = "ticker", spec = Like.class), 
-					@Spec(params = "etfLof", path = "etfLof", spec = Equal.class) }) 
-					Specification<CashTool> spec,
+			@RequestParam() String op,
+			@And({	
+				@Spec(params = "secShortName", path = "secShortName", spec = Like.class),
+				@Spec(params = "ticker", path = "ticker", spec = Like.class), 
+				@Spec(params = "etfLof", path = "etfLof", spec = Equal.class) 
+			}) Specification<CashTool> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
 		if (page < 1) {
@@ -115,11 +119,17 @@ public class CashToolPoolController extends BaseController {
 		spec = Specifications.where(spec).and(new Specification<CashTool>() {
 			@Override
 			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicate = new ArrayList<>();
-
-				predicate.add(cb.notEqual(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete));
+				List<Predicate> predicate = new ArrayList<>();				
+				if (op.equals("storageList")) { // 现金管理工具库列表
+					predicate.add(cb.notEqual(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete));
+				} else if (op.equals("historyList")) { // 历史列表
+					predicate.add(cb.equal(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete)); // 作废
+				} else{
+					throw AMPException.getException("未知的操作类型[" + op + "]"); 
+				}
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();
+				
 			}
 		});
 

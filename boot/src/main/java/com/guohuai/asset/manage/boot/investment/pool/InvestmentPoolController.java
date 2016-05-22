@@ -1,6 +1,5 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
-import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.TargetIncome;
 import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.component.exception.AMPException;
@@ -66,7 +64,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 @Slf4j
 public class InvestmentPoolController extends BaseController {
 	@Autowired
-	InvestmentService investmentService;
+	InvestmentPoolService investmentPoolService;
 	@Autowired
 	TargetIncomeService targetIncomeService;
 
@@ -113,9 +111,9 @@ public class InvestmentPoolController extends BaseController {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 标的库列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
-				} else if (op.equals("haveList")) { // 已持有列表
+				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
-				} else if (op.equals("notHaveList")) { // 未持有列表
+				} else if (op.equals("noHoldList")) { // 未持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 				} else if (op.equals("historyList")) { // 历史列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid)); // 作废
@@ -136,7 +134,7 @@ public class InvestmentPoolController extends BaseController {
 		String expAror = request.getParameter("expAror");
 		spec = this.buildSpec(spec, "expAror", expAror);
 		
-		Page<Investment> pageData = investmentService.getInvestmentList(spec, pageable);
+		Page<Investment> pageData = investmentPoolService.getInvestmentList(spec, pageable);
 
 		InvestmentListResp resp = new InvestmentListResp(pageData);
 		return new ResponseEntity<InvestmentListResp>(resp, HttpStatus.OK);
@@ -175,7 +173,7 @@ public class InvestmentPoolController extends BaseController {
 			
 		}
 		form.setOperator(loginId);
-		this.investmentService.establish(form);
+		this.investmentPoolService.establish(form);
 		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
 	}
 
@@ -198,7 +196,7 @@ public class InvestmentPoolController extends BaseController {
 			
 		}
 		form.setOperator(loginId);
-		this.investmentService.unEstablish(form);
+		this.investmentPoolService.unEstablish(form);
 		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
 	}
 
@@ -240,8 +238,15 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
-	public CommonResp overdue(Integer days, Double rate, BigDecimal overdueFine) {
-
+	public CommonResp overdue(@Valid OverdueForm form) {
+		String loginId = null;
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			log.error("获取操作员失败, 原因: " + e.getMessage());
+		}
+		form.setOperator(loginId);
+		this.investmentPoolService.overdue(form);
 		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
 	}
 

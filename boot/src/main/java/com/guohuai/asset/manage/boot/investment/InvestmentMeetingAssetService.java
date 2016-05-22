@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
+
 @Service
 @Transactional
 public class InvestmentMeetingAssetService {
@@ -21,6 +23,9 @@ public class InvestmentMeetingAssetService {
 
 	@Autowired
 	private InvestmentMeetingService investmentMeetingService;
+
+	@Autowired
+	private InvestmentMeetingUserService investmentMeetingUserService;
 
 	/**
 	 * 获得过会投资标的列表
@@ -57,21 +62,73 @@ public class InvestmentMeetingAssetService {
 	}
 
 	/**
+	 * 根据会议获得标的
+	 * 
+	 * @param meeting
+	 * @return
+	 */
+	public List<InvestmentMeetingAsset> getMeetingAssetListByMeeting(InvestmentMeeting meeting) {
+		return investmentMeetingAssetDao.findByInvestmentMeeting(meeting);
+	}
+
+	/**
+	 * 根据批量会议获得标的
+	 * 
+	 * @param meeting
+	 * @return
+	 */
+	public List<InvestmentMeetingAsset> getMeetingAssetListByBathcMeeting(InvestmentMeeting[] meeting) {
+		return investmentMeetingAssetDao.findByInvestmentMeetingIn(meeting);
+	}
+
+	/**
 	 * 根据会议获得标的列表
 	 * 
 	 * @param meeting
 	 * @return
 	 */
-	public List<Investment> getInvestmentByMeeting(String meetingOid) {
+	public List<MeetingInvestmentDetResp> getInvestmentByMeeting(String meetingOid) {
 		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(meetingOid);
-		List<InvestmentMeetingAsset> lists = investmentMeetingAssetDao.findByInvestmentMeeting(meeting);
-		List<Investment> investments = new ArrayList<Investment>();
+		List<InvestmentMeetingAsset> lists = this.getMeetingAssetListByMeeting(meeting);
+		List<MeetingInvestmentDetResp> investments = new ArrayList<MeetingInvestmentDetResp>();
 		for (InvestmentMeetingAsset temp : lists) {
-			Investment entity = new Investment();
+			MeetingInvestmentDetResp entity = new MeetingInvestmentDetResp();
 			BeanUtils.copyProperties(temp.getInvestment(), entity);
+			entity.setMeetingOid(temp.getInvestmentMeeting().getOid());
+			entity.setMeetingTitle(temp.getInvestmentMeeting().getTitle());
+			entity.setMeetingTime(temp.getInvestmentMeeting().getConferenceTime());
 			investments.add(entity);
 		}
 		return investments;
+	}
+
+	/**
+	 * 根据与会人查询标的列表
+	 * 
+	 * @param participantOid
+	 * @param pageabl
+	 * @return
+	 */
+	public List<MeetingInvestmentDetResp> getInvestmentByParticipant(String participantOid) {
+		List<InvestmentMeetingUser> participantList = investmentMeetingUserService.getMeetingUserByUser(participantOid);
+		List<InvestmentMeeting> openMeetingList = new ArrayList<InvestmentMeeting>();
+		for (InvestmentMeetingUser temp : participantList) {
+			if (InvestmentMeeting.MEETING_STATE_OPENING.equals(temp.getInvestmentMeeting().getState())) {
+				openMeetingList.add(temp.getInvestmentMeeting());
+			}
+		}
+		InvestmentMeeting[] opMeetingArr = (InvestmentMeeting[]) openMeetingList.toArray(new InvestmentMeeting[0]);
+		List<InvestmentMeetingAsset> assetList = this.getMeetingAssetListByBathcMeeting(opMeetingArr);
+		List<MeetingInvestmentDetResp> res = new ArrayList<MeetingInvestmentDetResp>();
+		for (InvestmentMeetingAsset temp : assetList) {
+			MeetingInvestmentDetResp resp = new MeetingInvestmentDetResp();
+			BeanUtils.copyProperties(temp.getInvestment(), resp);
+			resp.setMeetingOid(temp.getInvestmentMeeting().getOid());
+			resp.setMeetingTitle(temp.getInvestmentMeeting().getTitle());
+			resp.setMeetingTime(temp.getInvestmentMeeting().getConferenceTime());
+			res.add(resp);
+		}
+		return res;
 	}
 
 }

@@ -85,9 +85,10 @@ define([
             },
             { // 状态
             	field: 'state',
-            	formatter: function (val) {
-            		return val;
-            	}
+				formatter: function(val) {
+					return util.enum.transform('targetStates', val);
+				}
+            
             },
             { // 已购份额
             	field: 'holdAmount',
@@ -97,9 +98,9 @@ define([
             },
             {
 //              field: 'operator',
-              width: 260,
+              width: 310,
               align: 'center',
-              formatter: function (val) {
+              formatter: function (val, row) {
             	  var buttons = [
             	    {
             	      text: '成立',
@@ -117,8 +118,21 @@ define([
               	    	text: '本息兑付',
               	    	type: 'button',
               	    	class: 'item-targetIncome',
+              	    	isRender: row.state == 'establish',
+//              	    	isRender: true,
+              	    },
+              	    {
+              	    	text: '逾期',
+              	    	type: 'button',
+              	    	class: 'item-overdue',
 //              	    	isRender: row.state == 'establish',
               	    	isRender: true,
+              	    },
+              	    {
+              	      text: '移除出库',
+              	      type: 'button',
+              	      class: 'item-remove',
+              	      isRender: true,
               	    },
               	    {
               	    	text: '财务数据',
@@ -131,7 +145,7 @@ define([
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
-                  'click .item-establish': function (e, value, row) {
+                  'click .item-establish': function (e, value, row) { // 标的成立
                 	  // 初始化   付息日 
                       for ( var i = 1; i <= 30; i++) {
 	                      	var option = $("<option>").val(i).text(i);
@@ -157,7 +171,7 @@ define([
                 	});
                 	$('#establishModal').modal('show');
                   },
-                  'click .item-unEstablish': function (e, value, row) {
+                  'click .item-unEstablish': function (e, value, row) { // 标的不成立
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -176,7 +190,7 @@ define([
                 	  });
                 	  $('#unEstablishModal').modal('show');
                   },
-                  'click .item-targetIncome': function (e, value, row) {
+                  'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -195,7 +209,48 @@ define([
                 	  });
                 	  $('#targetIncomeModal').modal('show');
                   },
-                  'click .item-financialData': function(e, value, row) {
+                  'click .item-overdue': function(e, value, row) { // 逾期
+                	  http.post(config.api.targetDetQuery, {
+                		  data: {
+                			  oid:row.oid
+                		  },
+                		  contentType: 'form'
+                	  },
+                	  function (obj) {
+                		  var data  = obj.investment;
+                		  if(!data){
+                			  toastr.error('标的详情数据不存在', '错误信息', {
+                				  timeOut: 10000
+                			  });
+                		  }
+                		  $$.detailAutoFix($('#overdueForm'), data);	// 自动填充详情
+//                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
+                	  });                	  
+					$('#overdueModal').modal('show');
+                  },
+                  'click .item-remove': function (e, value, row) { // 移除出库
+                	  $("#confirmTitle").html("确定移除投资标的？")
+						$$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								http.post(config.api.targetInvalid, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									if (result.errorCode == 0) {
+										$('#dataTable').bootstrapTable('refresh');
+									} else {
+										alert('移除投资标的失败');
+									}
+								})
+							}
+						})
+                	  
+                  },
+                  'click .item-financialData': function(e, value, row) {// 财务数据
                 	  
                   }
                 
@@ -234,6 +289,21 @@ define([
         		success:function(data) {
         			$('#unEstablishForm').clearForm();
         			$('#unEstablishModal').modal('hide');
+        			$('#dataTable').bootstrapTable('refresh');
+        		}
+        	});
+        	
+        });
+        
+        // 逾期 按钮点击事件
+        $("#overdueSubmit").click(function(){
+        	$("#overdueForm").ajaxSubmit({
+        		type:"post",  //提交方式  
+        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
+        		url: config.api.overdue,
+        		success:function(data) {
+        			$('#overdueForm').clearForm();
+        			$('#overdueModal').modal('hide');
         			$('#dataTable').bootstrapTable('refresh');
         		}
         	});

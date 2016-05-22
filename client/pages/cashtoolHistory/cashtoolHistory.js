@@ -8,12 +8,13 @@ define([
 'util'
 ], function (http, config, $$, util) {
   return {
-    name: 'cashtoolStorage',
+    name: 'cashtoolHistory',
     init: function () {
       // js逻辑写在这里
 
         // 分页配置
         var pageOptions = {
+        		op:'historyList',
         		page: 1,
           rows: 10
         }
@@ -70,9 +71,9 @@ define([
             },
             { // 状态
             	field: 'state',
-            	formatter: function (val) {
-            		return val;
-            	}
+				formatter: function(val) {
+					return util.enum.transform('cashtoolStates', val);
+				}
             },
             { // 持有份额
             	field: 'holdAmount',

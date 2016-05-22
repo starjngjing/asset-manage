@@ -19,7 +19,8 @@ define(function() {
 			dictList: this.host + '/ams/dict/list', // 枚举值获取接口
 			establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
 			unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
-			listinvestment: this.host + "/ams/boot/investmentPool/listinvestment", // 投资标的库列表
+			overdue: this.host + "/ams" + "/boot/investmentPool/overdue", // 标的逾期
+			listinvestmentPoolList: this.host + "/ams/boot/investmentPool/poolList", // 投资标的库列表(未持有投资标的列表,已持有投资标的列表,历史投资标的列表)
 			listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
 			removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
 			cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
@@ -52,6 +53,11 @@ define(function() {
 			productReviewApprove: this.host + "/ams/product/review/approve", //产品复核通过
 			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
 			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
+			productChooseChannelList: this.host + "/ams/product/channel/choose/list", //产品选择渠道列表
+			saveProductChannel: this.host + "/ams/product/channel/save/list", //保存产品已经选择渠道列表
+			productChannelList: this.host + "/ams/product/channel/list", //该渠道的产品列表
+			productChannelIpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
+			productChannelOffshelf: this.host + "/ams/product/channel/donwshelf", //下架产品
 			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 			cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
@@ -68,7 +74,17 @@ define(function() {
 			meetingOpen: this.host + '/ams/target/targetMeeting/open', //获得会议纪要详情
 			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
-			channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
+			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
+			channelQuery: this.host + '/ams/channel/query',              //渠道-列表查询
+		    addChannel: this.host + '/ams/channel/add', 				 //渠道-新增
+		    channelinfo: this.host + '/ams/channel/channelinfo',		 //渠道-获取详情
+		    editChannel: this.host + '/ams/channel/edit',			     //渠道-修改
+		    delChannel: this.host + '/ams/channel/delete',               //渠道-删除
+		    setapply: this.host + '/ams/channel/setapply',			     //渠道-申请开启停用
+		    remarksQuery: this.host + '/ams/channel/remarksquery',	     //渠道-意见列表
+		    chanApproveQuery: this.host + '/ams/channelapprove/query',   //渠道-渠道审批查询
+		    delApply: this.host + '/ams/channelapprove/dealapply',       //渠道-处理申请开启和停用
+		    channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
 			addChannel: this.host + '/ams/channel/add', //渠道-新增
 			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
 			oneChannel: this.host + '/ams/channel/onechannel',  //渠道-随机获取一条渠道信息
@@ -78,7 +94,8 @@ define(function() {
 			remarksQuery: this.host + '/ams/channel/remarksquery', //渠道-意见列表
 			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
 			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
-			files: {
+		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
+			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
 			},
@@ -115,6 +132,12 @@ define(function() {
 							disable: this.host + "/ams/system/ccr/indicate/disable",
 							delete: this.host + "/ams/system/ccr/indicate/delete",
 							options: this.host + "/ams/system/ccr/indicate/options"
+						},
+						options: {
+							save: this.host + "/ams/system/ccr/options/save",
+							showview: this.host + "/ams/system/ccr/options/showview",
+							batchDelete: this.host + "/ams/system/ccr/options/batchDelete",
+							preUpdate: this.host + "/ams/system/ccr/options/preUpdate"
 						}
 					}
 				}
@@ -167,6 +190,10 @@ define(function() {
 			id: "invalid",
 			text: "作废",
 			children: []
+		}, {
+			id: "meetingPass",
+			text: "待准入",
+			children: []
 		}],
 		/**
 		 * conventionStates 过会状态
@@ -218,10 +245,6 @@ define(function() {
 		}, {
 			id: "stop",
 			text: "暂停",
-			children: []
-		}, {
-			id: "waitenter",
-			text: "待确认",
 			children: []
 		}, {
 			id: "finish",

@@ -122,8 +122,8 @@ public class ChannelController extends BaseController {
 	@RequestMapping(value = "setapply", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<BaseResp> setApply(@RequestParam String oid, @RequestParam String requestType) {
-		//String operator = super.getLoginAdmin();
-		BaseResp rep = this.serviceChannel.setApply(oid, requestType, "dev");
+		String operator = super.getLoginAdmin();
+		BaseResp rep = this.serviceChannel.setApply(oid, requestType, operator);
 		return new ResponseEntity<BaseResp>(rep, HttpStatus.OK);
 	}
 	

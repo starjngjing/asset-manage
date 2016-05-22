@@ -101,10 +101,11 @@ public class InvestmentCheckBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid,String suggest) {
 		String operator = "admin";
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_reject);
+		investment.setRejectDesc(suggest);
 		investmentService.saveInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkreject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);

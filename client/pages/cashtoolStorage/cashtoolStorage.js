@@ -14,6 +14,7 @@ define([
 
         // 分页配置
         var pageOptions = {
+        		op:'storageList',
         		page: 1,
           rows: 10
         }
@@ -70,9 +71,9 @@ define([
             },
             { // 状态
             	field: 'state',
-            	formatter: function (val) {
-            		return val;
-            	}
+				formatter: function(val) {
+					return util.enum.transform('cashtoolStates', val);
+				}
             },
             { // 持有份额
             	field: 'holdAmount',

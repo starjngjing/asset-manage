@@ -31,14 +31,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 
 public class Investment extends UUID implements Serializable {
 
 	private static final long serialVersionUID = 7108314017534718240L;
 	/**
 	 * 投资标的状态status waitPretrial 等待预审 pretrial 预审中 waitMeeting 待过会 metting 过会中
-	 * collecting 募集期 （运营期） reject 驳回 invalid 作废 
+	 * collecting 募集期 （运营期） reject 驳回 invalid 作废
 	 */
 	public static final String INVESTMENT_STATUS_waitPretrial = "waitPretrial";
 	public static final String INVESTMENT_STATUS_pretrial = "pretrial";
@@ -46,10 +46,12 @@ public class Investment extends UUID implements Serializable {
 	public static final String INVESTMENT_STATUS_metting = "metting";
 	public static final String INVESTMENT_STATUS_collecting = "collecting";
 	public static final String INVESTMENT_STATUS_establish = "establish"; // 成立
-	public static final String INVESTMENT_STATUS_unEstablish = "unEstablish"; //成立失败
-	public static final String INVESTMENT_STATUS_reject = "reject"; //  reject 驳回 
+	public static final String INVESTMENT_STATUS_unEstablish = "unEstablish"; // 成立失败
+	public static final String INVESTMENT_STATUS_reject = "reject"; // reject 驳回
 	public static final String INVESTMENT_STATUS_overdue = "overdue"; // overdue逾期
-	public static final String INVESTMENT_STATUS_invalid = "invalid"; //invalid 作废 
+	public static final String INVESTMENT_STATUS_invalid = "invalid"; // invalid
+																		// 作废
+	public static final String INVESTMENT_STATUS_meetingpass = "meetingPass"; // 待准入
 
 	/**
 	 * 标的编号
@@ -107,12 +109,12 @@ public class Investment extends UUID implements Serializable {
 	 * 起购金额
 	 */
 	private BigDecimal floorVolume;
-	
+
 	/**
 	 * 持有份额
 	 */
 	private BigDecimal holdAmount;
-	
+
 	/**
 	 * 收益说明
 	 */
@@ -225,5 +227,9 @@ public class Investment extends UUID implements Serializable {
 	 * 更新时间
 	 */
 	private Timestamp updateTime;
+	/**
+	 * 驳回备注
+	 */
+	private String rejectDesc;
 
 }

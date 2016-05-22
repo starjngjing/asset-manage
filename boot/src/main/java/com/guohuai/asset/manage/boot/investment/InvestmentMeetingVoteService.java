@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,9 @@ public class InvestmentMeetingVoteService {
 
 	@Autowired
 	private InvestmentMeetingUserService investmentMeetingUserService;
+
+	@Autowired
+	private InvestmentMeetingAssetService investmentMeetingAssetService;
 
 	/**
 	 * 获得投资标的过会表决列表
@@ -94,4 +98,5 @@ public class InvestmentMeetingVoteService {
 		}
 		return resps;
 	}
+
 }
