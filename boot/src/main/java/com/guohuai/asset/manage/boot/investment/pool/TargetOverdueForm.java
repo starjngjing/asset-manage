@@ -11,6 +11,8 @@ package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
@@ -29,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OverdueForm implements Serializable {
+public class TargetOverdueForm implements Serializable {
 
 	
 	/**
@@ -40,10 +42,12 @@ public class OverdueForm implements Serializable {
 
 	@NotNull(message = "投资标的id不能为空")
 	private String oid;
+	@NotNull(message = "逾期日期不能为空")
+	private Date overdueDate;
 	@NotNull(message = "逾期天数不能为空")
-	private Integer days;
-//	@NotNull(message = "逾期利率不能为空")
-	private BigDecimal rate;
+	private Integer overdueDays;
+	@NotNull(message = "逾期利率不能为空")
+	private BigDecimal overdueRate;
 //	@NotNull(message = "滞纳金不能为空")
 	private BigDecimal overdueFine;
 
@@ -54,4 +58,5 @@ public class OverdueForm implements Serializable {
 	 * 操作员
 	 */
 	private String operator;
+	private Timestamp createTime;
 }

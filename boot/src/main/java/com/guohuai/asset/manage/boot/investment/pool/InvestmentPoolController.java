@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
@@ -116,7 +117,8 @@ public class InvestmentPoolController extends BaseController {
 				} else if (op.equals("noHoldList")) { // 未持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 				} else if (op.equals("historyList")) { // 历史列表
-					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_invalid)); // 作废
+					Expression<String> exp = root.get("state");					
+					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_unEstablish, Investment.INVESTMENT_STATUS_overdue, Investment.INVESTMENT_STATUS_invalid }));
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
 				}
@@ -238,7 +240,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
-	public CommonResp overdue(@Valid OverdueForm form) {
+	public CommonResp overdue(@Valid TargetOverdueForm form) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();

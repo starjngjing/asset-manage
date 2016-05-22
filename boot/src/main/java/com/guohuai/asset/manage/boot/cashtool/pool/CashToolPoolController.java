@@ -9,12 +9,12 @@
  */
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +42,6 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
-import com.guohuai.asset.manage.boot.investment.Investment;
-import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
-import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
@@ -123,7 +120,8 @@ public class CashToolPoolController extends BaseController {
 				if (op.equals("storageList")) { // 现金管理工具库列表
 					predicate.add(cb.notEqual(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete));
 				} else if (op.equals("historyList")) { // 历史列表
-					predicate.add(cb.equal(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete)); // 作废
+					Expression<String> exp = root.get("state");					
+					predicate.add(exp.in(new Object[] { CashTool.CASHTOOL_STATE_delete, CashTool.CASHTOOL_STATE_invalid }));
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
 				}
@@ -164,31 +162,6 @@ public class CashToolPoolController extends BaseController {
 	}
 
 	
-	
-	/**
-	 * 标的成立
-	 * 
-	 * @Title: establish
-	 * @author vania
-	 * @version 1.0 @see:
-	 * @return CommonResp 返回类型
-	 */
-	@RequestMapping("establish")
-	@ApiOperation(value = "标的成立")
-	public CommonResp establish(@Valid EstablishForm form) {
-		log.debug("投资标的成立接口!!!");
-		String loginId = null; 
-		try {
-			loginId = super.getLoginAdmin();
-		} catch (Exception e) {
-			
-		}
-		form.setOperator(loginId);
-//		this.cashToolService.establish(form);
-		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
-	}
-	
-	
 	/**
 	 * 现金管理工具移除出库
 	 * 
@@ -207,28 +180,6 @@ public class CashToolPoolController extends BaseController {
 		return CommonResp.builder().errorMessage("移除出库成功！").attached("").build();
 	}
 
-	/**
-	 * 标的不成立
-	 * 
-	 * @Title: unEstablish
-	 * @author vania
-	 * @version 1.0
-	 * @see: @return CommonResp 返回类型 @throws
-	 */
-	@RequestMapping("unEstablish")
-	@ApiOperation(value = "标的不成立")
-	public CommonResp unEstablish(@Valid UnEstablishForm form) {
-		log.debug("投资标的成立接口!!!");
-		String loginId = null; 
-		try {
-			loginId = super.getLoginAdmin();
-		} catch (Exception e) {
-			
-		}
-		form.setOperator(loginId);
-//		this.cashToolService.unEstablish(form);
-		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
-	}
 
 	/**
 	 * 投资标的本息兑付
@@ -252,24 +203,5 @@ public class CashToolPoolController extends BaseController {
 		cashToolRevenueForm.setOperator(loginId);
 		CashToolRevenue cashToolRevenue = cashToolRevenueService.save(cashToolRevenueForm);
 		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(cashToolRevenue.getOid()).build();
-	}
-
-	/**
-	 * 标的逾期
-	 * 
-	 * @Title: overdue
-	 * @author vania
-	 * @version 1.0
-	 * @see: TODO
-	 * @param days
-	 * @param rate
-	 * @param overdueFine
-	 * @return CommonResp 返回类型
-	 */
-	@RequestMapping("overdue")
-	@ApiOperation(value = "标的逾期")
-	public CommonResp overdue(Integer days, Double rate, BigDecimal overdueFine) {
-
-		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
 	}
 }
