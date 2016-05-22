@@ -14,6 +14,7 @@ define([
 
         // 分页配置
         var pageOptions = {
+        		op:'storageList',
         		page: 1,
           rows: 10
         }
