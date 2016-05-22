@@ -129,6 +129,12 @@ define([
 //              	    	isRender: true,
               	    },
               	    {
+              	      text: '移除出库',
+              	      type: 'button',
+              	      class: 'item-remove',
+              	      isRender: true,
+              	    },
+              	    {
               	    	text: '财务数据',
               	    	type: 'button',
               	    	class: 'item-financialData',
@@ -204,6 +210,28 @@ define([
                 	  $('#targetIncomeModal').modal('show');
                   },
                   'click .item-overdue': function(e, value, row) { // 逾期
+                	  
+                  },
+                  'click .item-remove': function (e, value, row) { // 移除出库
+                	  $("#confirmTitle").html("确定移除投资标的？")
+						$$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								http.post(config.api.removeCashTool, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									if (result.errorCode == 0) {
+										$('#dataTable').bootstrapTable('refresh');
+									} else {
+										alert('移除投资标的失败');
+									}
+								})
+							}
+						})
                 	  
                   },
                   'click .item-financialData': function(e, value, row) {// 财务数据
