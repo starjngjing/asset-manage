@@ -14,7 +14,7 @@ define([
 
         // 分页配置
         var pageOptions = {
-        		ope:'historyList',
+        		op:'historyList',
         		page: 1,
           rows: 10
         }
