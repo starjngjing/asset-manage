@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,10 +115,20 @@ public class InvestmentPoolController extends BaseController {
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+					
+					Expression<BigDecimal> exp = root.get("holdAmount").as(BigDecimal.class);
+					Predicate p = cb.gt(exp, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
+					predicate.add(p); 
+					
+					predicate.add(cb.gt(root.get("holdAmount").as(BigDecimal.class), new BigDecimal(0))); // 持有金额大于0
 				} else if (op.equals("noHoldList")) { // 未持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+					
+					Expression<BigDecimal> exp = root.get("holdAmount").as(BigDecimal.class);
+					Predicate p = cb.or(cb.isNull(exp), cb.le(exp, new BigDecimal(0))); //持有金额为空或者大于0: holdAmount is null or holdAmount < 0
+					predicate.add(p); 
 				} else if (op.equals("historyList")) { // 历史列表
-					Expression<String> exp = root.get("state");					
+					Expression<String> exp = root.get("state").as(String.class);					
 					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_unEstablish, Investment.INVESTMENT_STATUS_overdue, Investment.INVESTMENT_STATUS_invalid }));
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
