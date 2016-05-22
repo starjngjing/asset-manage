@@ -122,6 +122,13 @@ define([
               	    	isRender: true,
               	    },
               	    {
+              	    	text: '逾期',
+              	    	type: 'button',
+              	    	class: 'item-targetIncome',
+//              	    	isRender: row.state == 'establish',
+              	    	isRender: true,
+              	    },
+              	    {
               	    	text: '财务数据',
               	    	type: 'button',
               	    	class: 'item-financialData',

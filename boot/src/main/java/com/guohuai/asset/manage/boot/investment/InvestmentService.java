@@ -104,4 +104,12 @@ public class InvestmentService {
 		}
 	}
 
+	public Investment getInvestment(String oid) {
+		if (null == oid)
+			throw AMPException.getException("投资标的ID不能为空");
+		Investment old = this.investmentDao.findOne(oid);
+		if (null == old)
+			throw AMPException.getException("未知的投资标的ID");
+		return old;
+	}
 }

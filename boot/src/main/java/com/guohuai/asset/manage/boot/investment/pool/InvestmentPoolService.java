@@ -15,15 +15,17 @@ import org.springframework.stereotype.Service;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDao;
+import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
-import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 @Service
 @Transactional
 public class InvestmentPoolService {
+	@Autowired
+	InvestmentService investmentService;
 
 	@Autowired
 	private InvestmentDao investmentDao;
@@ -116,7 +118,7 @@ public class InvestmentPoolService {
 	 */
 	public Investment establish(EstablishForm form) {
 		String oid = form.getOid();
-		Investment it = getInvestment(oid);
+		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
 		it.setState(Investment.INVESTMENT_STATUS_establish); // 重置为成立
@@ -138,7 +140,7 @@ public class InvestmentPoolService {
 	 */
 	public Investment unEstablish(UnEstablishForm form) {
 		String oid = form.getOid();
-		Investment it = getInvestment(oid);
+		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
 		it.setState(Investment.INVESTMENT_STATUS_unEstablish); // 重置为成立
@@ -148,12 +150,4 @@ public class InvestmentPoolService {
 		return it;
 	}
 
-	public Investment getInvestment(String oid) {
-		if (null == oid)
-			throw AMPException.getException("投资标的ID不能为空");
-		Investment old = this.investmentDao.findOne(oid);
-		if (null == old)
-			throw AMPException.getException("未知的投资标的ID");
-		return old;
-	}
 }
