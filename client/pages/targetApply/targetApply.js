@@ -209,7 +209,9 @@ define([
 				}]
 			};
 
-			var prjPageOptions = {}
+			var prjPageOptions = {
+					targetOid:targetInfo.oid,
+			}
 			var projectTableConfig = {
 				ajax: function(origin) {
 					http.post(config.api.targetProjectList, {
