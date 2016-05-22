@@ -95,6 +95,57 @@ public class RiskOptionsService {
 	}
 
 	@Transactional
+	public List<RiskOptionsCollect> preCollect(String type) {
+
+		List<RiskOptionsCollect> view = new ArrayList<RiskOptionsCollect>();
+
+		List<RiskOptions> options = this.riskOptionsDao.search(type);
+
+		if (null != options && options.size() > 0) {
+
+			Map<String, Integer> dr = new HashMap<String, Integer>();
+
+			for (RiskOptions o : options) {
+				if (!dr.containsKey(o.getIndicate().getCate().getOid())) {
+					dr.put(o.getIndicate().getCate().getOid(), view.size());
+
+					RiskOptionsCollect noc = new RiskOptionsCollect();
+					noc.setCateOid(o.getIndicate().getCate().getOid());
+					noc.setCateTitle(o.getIndicate().getCate().getTitle());
+					view.add(noc);
+				}
+
+				RiskOptionsCollect collect = view.get(dr.get(o.getIndicate().getCate().getOid()));
+
+				if (!dr.containsKey(o.getIndicate().getOid())) {
+					dr.put(o.getIndicate().getOid(), collect.getIndicates().size());
+					RiskOptionsCollect.Indicate i = new RiskOptionsCollect.Indicate();
+					i.setIndicateOid(o.getIndicate().getOid());
+					i.setIndicateTitle(o.getIndicate().getTitle());
+					i.setIndicateType(o.getIndicate().getDataType());
+					collect.getIndicates().add(i);
+				}
+
+				RiskOptionsCollect.Indicate indicate = collect.getIndicates().get(dr.get(o.getIndicate().getOid()));
+
+				if (indicate.getIndicateType().equals(RiskIndicate.DATA_TYPE_Text)) {
+					RiskOptionsCollect.Indicate.Options option = new RiskOptionsCollect.Indicate.Options();
+					option.setOid(o.getOid());
+					option.setParam0(o.getParam0());
+					option.setParam1(o.getParam1());
+					option.setParam2(o.getParam2());
+					option.setParam3(o.getParam3());
+					indicate.getOptions().add(option);
+				}
+
+			}
+
+		}
+
+		return view;
+	}
+
+	@Transactional
 	public List<RiskOptionsView> showview(String type, String keyword) {
 
 		List<RiskOptionsView> view = new ArrayList<RiskOptionsView>();

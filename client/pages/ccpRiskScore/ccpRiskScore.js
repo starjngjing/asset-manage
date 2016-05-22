@@ -314,6 +314,11 @@ define([
 					}
 				}
 			});
+			
+			// 下面的代码要移动到标的模块
+			$('#eventCollect').on('click', function(){
+				$('#collectModal').modal('show');
+			});
 		}
 	}
 })

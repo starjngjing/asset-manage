@@ -43,6 +43,13 @@ public class RiskOptionsController extends BaseController {
 		return new ResponseEntity<RiskOptionsForm>(form, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/preCollect", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<List<RiskOptionsCollect>> preCollect(@RequestParam String type) {
+		super.checkLogin();
+		List<RiskOptionsCollect> list = this.riskOptionsService.preCollect(type);
+		return new ResponseEntity<List<RiskOptionsCollect>>(list, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/showview", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResponseEntity<List<RiskOptionsView>> showview(@RequestParam String type, @RequestParam String keyword) {
 		super.checkLogin();
