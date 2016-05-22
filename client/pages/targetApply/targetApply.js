@@ -277,7 +277,7 @@ define([
 					events: {
 						'click .item-projectDetail': function(e, value, row) { // 底层项目详情
 							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
-							$$.detailAutoFix($('#projectDetailModal'), row); // 自动填充详情
+							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
 							$('#projectDetailModal').modal('show');
 						},
 						'click .item-delete': function(e, value, row) { // 删除底层项目
