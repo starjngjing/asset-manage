@@ -97,6 +97,7 @@ define([
             },
             {
 //              field: 'operator',
+            	visible:false, // 不显示
               width: 260,
               align: 'center',
               formatter: function (val) {
