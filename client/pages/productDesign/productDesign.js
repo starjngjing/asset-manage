@@ -146,6 +146,7 @@ define([
 					}
 				},
 				{
+					width: 256,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [
@@ -410,31 +411,37 @@ define([
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
 
 			// 产品类型下拉菜单关联区域显隐
+			// input disabled 设置为 disabled的时候将不做验证
 			$('#addProductTypeSelect').on('change', function () {
 				switch (this.value) {
 					case 'PRODUCTTYPE_01':
-						$('#addProductType01Area').show()
-						$('#addProductType02Area').hide()
+						$('#addProductType01Area').show().find('input').attr('disabled', false)
+						$('#addProductType02Area').hide().find('input').attr('disabled', 'disabled')
 						break
 					case 'PRODUCTTYPE_02':
-						$('#addProductType02Area').show()
-						$('#addProductType01Area').hide()
+						$('#addProductType02Area').show().find('input').attr('disabled', false)
+						$('#addProductType01Area').hide().find('input').attr('disabled', 'disabled')
 						break
 				}
+				// 重置验证逻辑
+				$('#addProductForm').validator('destroy')
+				util.form.validator.init($('#addProductForm'))
 			})
 			$('#updateProductTypeSelect').on('change', function () {
 				switch (this.value) {
 					case 'PRODUCTTYPE_01':
-						$('#updateProductType01Area').show()
-						$('#updateProductType02Area').hide()
+						$('#updateProductType01Area').show().find('input').attr('disabled', false)
+						$('#updateProductType02Area').hide().find('input').attr('disabled', 'disabled')
 						break
 					case 'PRODUCTTYPE_02':
-						$('#updateProductType02Area').show()
-						$('#updateProductType01Area').hide()
+						$('#updateProductType02Area').show().find('input').attr('disabled', false)
+						$('#updateProductType01Area').hide().find('input').attr('disabled', 'disabled')
 						break
 				}
+				// 重置验证逻辑
+				$('#updateProductForm').validator('destroy')
+				util.form.validator.init($('#updateProductForm'))
 			})
-			
 
 			// 募集开始时间&成立时间select联动
 			$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
@@ -457,6 +464,8 @@ define([
 				ul.prev('button').html(this.innerText + ' <span class="fa fa-caret-down"></span>')
 				ul.next('input').val($(this).attr('value'))
 			})
+
+			util.form.validator.init($('#addProductForm'))
 
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
@@ -624,7 +633,7 @@ define([
 				var le = productNames.length
 				for (var i=0;i<le;i++) {
 					if(i>0){
-						pnames+="，"
+						pnames+="<br/>"
 					}
 					pnames+=productNames[i]
 
