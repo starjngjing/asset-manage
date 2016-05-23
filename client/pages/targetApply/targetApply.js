@@ -267,25 +267,25 @@ define([
 						    {
 								text: '详情',
 								type: 'button',
-								class: 'item-projectDetail',
+								class: 'item-project-detail',
 								isRender: true
 						    },
 						    {
 						    	text: '删除',
 						    	type: 'button',
-						    	class: 'item-delete',
+						    	class: 'item-project-delete',
 						    	isRender: true
 						    }
 						];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
-						'click .item-projectDetail': function(e, value, row) { // 底层项目详情
+						'click .item-project-detail': function(e, value, row) { // 底层项目详情
 							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
 							$('#projectDetailModal').modal('show');
 						},
-						'click .item-delete': function(e, value, row) { // 删除底层项目
+						'click .item-project-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
 							$$.confirm({
 								container: $('#doConfirm'),
@@ -338,6 +338,7 @@ define([
 
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
+				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
 			$('#projectSubmit').on('click', function() {

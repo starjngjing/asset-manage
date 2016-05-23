@@ -1011,7 +1011,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目名称</label>
-								<input name="projectName" type="text" class="form-control input-sm" placeholder="项目名称" required>
+								<input name="projectName" type="text" class="form-control input-sm" placeholder="项目名称" maxlength="64" required data-error="项目名称不能为空">
+            					<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1322,7 +1323,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit projectForm">保 存</button>
 			</div>
 		</div>
 	</div>
