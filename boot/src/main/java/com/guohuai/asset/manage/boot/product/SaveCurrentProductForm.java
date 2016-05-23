@@ -106,7 +106,7 @@ public class SaveCurrentProductForm implements Serializable {
 	private String instruction;//产品说明
 	@Enumerations(values = { "R1", "R2", "R3", "R4", "R5" }, message = "风险等级参数错误")
 	private String riskLevel;//风险等级
-	@Valid
-	private List<SaveFileForm> files;//附加文件
+//	private List<SaveFileForm> files;//附加文件
+	private String files;//附加文件
 	
 }
