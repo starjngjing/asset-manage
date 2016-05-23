@@ -191,8 +191,8 @@ define([
       },
       /**
        * 将表单序列化成json对象
-       * @param form
-       * @returns
+       * @param form 表单
+       * @returns 列化之后的json对象
        */
       serializeJson: function(form){
         var serializeObj = {}
