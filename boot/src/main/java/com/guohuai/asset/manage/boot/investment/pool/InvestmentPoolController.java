@@ -110,7 +110,8 @@ public class InvestmentPoolController extends BaseController {
 			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 投资标的备选库
-					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+					Expression<String> exp = root.get("state").as(String.class);					
+					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_establish }));
 				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					

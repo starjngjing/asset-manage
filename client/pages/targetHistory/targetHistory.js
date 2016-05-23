@@ -51,6 +51,11 @@ define([
             //})
           },
           columns: [
+			{// 编号
+				field: 'sn',
+			//  width: 60,
+			  
+			},
             {// 名称
             	field: 'name',
 //              width: 60,

@@ -11,7 +11,7 @@ define([
     name: 'targetStorage',
     init: function () {
       // js逻辑写在这里
-    	var targetInfo = row;
+    	var targetInfo;
         // 分页配置
         var pageOptions = {
         		op:"storageList",
@@ -36,11 +36,16 @@ define([
           queryParams: getQueryParams,
           onLoadSuccess: function () {},
           columns: [
+            {// 编号
+            	field: 'sn',
+//              width: 60,
+              
+            },
             {// 名称
             	field: 'name',
 //              width: 60,
-              align: 'center'
-              
+            	align: 'center'
+            		
             },
             {// 类型
 //            	width: 60,
@@ -91,13 +96,13 @@ define([
             	      text: '成立',
             	      type: 'button',
             	      class: 'item-establish',
-            	      isRender: true
+            	      isRender: row.state == 'collecting',
             	    },
             	    {
               	      text: '不成立',
               	      type: 'button',
               	      class: 'item-unEstablish',
-              	      isRender: true
+              	      isRender: row.state == 'collecting',
               	    },
               	    {
               	    	text: '本息兑付',
@@ -110,8 +115,7 @@ define([
               	    	text: '逾期',
               	    	type: 'button',
               	    	class: 'item-overdue',
-//              	    	isRender: row.state == 'establish',
-              	    	isRender: true,
+              	    	isRender: row.state == 'establish',
               	    },
               	    {
               	      text: '移除出库',
@@ -180,7 +184,7 @@ define([
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
                 	  targetInfo = row;
                   	// 初始化数据表格
-                        $('#incomeTable').bootstrapTable(incomeTableConfig);
+                       $('#incomeTable').bootstrapTable(incomeTableConfig);
                 	  
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
@@ -314,16 +318,16 @@ define([
    					return index + 1
    				} 
                },
-               {// 交易日
-               	field: 'dailyProfitDate',
+               {// 兑付期数
+               	field: 'seq',
                		
                },
-               {// 万份收益
-               	field: 'dailyProfit',
+               {// 实际支付收益
+               	field: 'incomeRate',
                		
                },
-               {// 7日年化收益
-               	field: 'weeklyYield',
+               {// 收益支付日
+               	field: 'incomeDate',
                		
                },
                {// 录入时间
