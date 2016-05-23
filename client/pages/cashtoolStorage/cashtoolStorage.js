@@ -181,28 +181,11 @@ define([
         	
         });
         
-        // 修改按钮点击事件
-        $("#unEstablishSubmit").click(function(){
-        	$("#unEstablishForm").ajaxSubmit({
-        		type:"post",  //提交方式  
-        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
-        		url: config.api.unEstablish,
-        		success:function(data) {
-        			$('#unEstablishForm').clearForm();
-        			$('#unEstablishModal').modal('hide');
-        			$('#dataTable').bootstrapTable('refresh');
-        		}
-        	});
-        	
-        });
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.ticker = form.ticker.value;
-          pageOptions.secShortName = form.secShortName.value;
-          pageOptions.etfLof = form.etfLof.value;
-          pageOptions.circulationShares = form.circulationShares.value;
-          pageOptions.weeklyYield = form.weeklyYield.value;
+          $.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+          
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val
