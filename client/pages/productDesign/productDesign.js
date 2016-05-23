@@ -199,7 +199,6 @@ define([
 									}
 									
 									var productDetailFiles = []
-									console.log(data.files)
 									if(data.files!=null && data.files.length>0) {
 										for(var i=0;i<data.files.length;i++){
 											productDetailFiles.push(data.files[i])
@@ -230,7 +229,7 @@ define([
 												},
 												events: {
 													'click .item-download': function(e, value, row) {
-														location.href = config.api.yup + row.url
+														location.href = 'http://api.guohuaigroup.com' + row.furl
 													}
 												}
 											}
@@ -507,7 +506,7 @@ define([
 					},
 					events: {
 						'click .item-download': function(e, value, row) {
-							location.href = config.api.yup + row.url
+							location.href = 'http://api.guohuaigroup.com' + row.url
 						},
 						'click .item-delete': function(e, value, row) {
 							var index = addProductUploadFiles.indexOf(row)
@@ -579,7 +578,7 @@ define([
 					},
 					events: {
 						'click .item-download': function(e, value, row) {
-							location.href = config.api.yup + row.url
+							location.href = 'http://api.guohuaigroup.com' + row.url
 						},
 						'click .item-delete': function(e, value, row) {
 							var index = updateProductUploadFiles.indexOf(row)
