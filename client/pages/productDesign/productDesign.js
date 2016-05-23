@@ -369,9 +369,55 @@ define([
     		pageOptions.type = form.type.value.trim()
     		return val
   		}
-    	
+
+			// 新建产品上传附件表格数据源
+			var addProductUploadFiles = []
+			// 新建产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#addProductUploader'),
+				success: function(file) {
+					file.furl = file.url
+					addProductUploadFiles.push(file)
+					$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+				}
+			})
+			// 新建产品附件表格配置
+			var addProductUploadTableConfig = {
+				columns: [{
+					field: 'name',
+				}, {
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = config.api.yup + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = addProductUploadFiles.indexOf(row)
+							addProductUploadFiles.splice(index, 1)
+							$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+						}
+					}
+				}]
+			}
+			// 新建产品附件表格初始化
+			$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
+			// 新建产品“保存”按钮点击事件
     	$('#saveProductSubmit').on('click', function () {
-    		var typeOid = $("#typeSelect  option:selected").val();  
+    		var typeOid = $("#typeSelect  option:selected").val();
+				document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.savePeriodic,
@@ -390,8 +436,55 @@ define([
     			})
     		}
   		})
+
+			// 编辑产品上传附件表格数据源
+			var updateProductUploadFiles = []
+			// 编辑产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#updateProductUploader'),
+				success: function(file) {
+					file.furl = file.url
+					updateProductUploadFiles.push(file)
+					$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+				}
+			})
+			// 编辑产品附件表格配置
+			var updateProductUploadTableConfig = {
+				columns: [{
+					field: 'name',
+				}, {
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = config.api.yup + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = updateProductUploadFiles.indexOf(row)
+							updateProductUploadFiles.splice(index, 1)
+							$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+						}
+					}
+				}]
+			}
+			// 编辑产品附件表格初始化
+			$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
+			// 编辑产品“保存”按钮点击事件
     	$('#updateProductSubmit').on('click', function () {
-    		var typeOid = $("#typeOid").val();  
+    		var typeOid = $("#typeOid").val();
+				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#updateProductForm').ajaxSubmit({
       			url: config.api.updatePeriodic,
