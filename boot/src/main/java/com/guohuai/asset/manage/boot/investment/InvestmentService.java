@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -124,5 +125,19 @@ public class InvestmentService {
 		}
 		investment.setState(state);
 		this.updateInvestment(investment, operator);
+	}
+
+	/**
+	 * 根据名称模糊查询投资标的
+	 * 
+	 * @Title: getInvestmentByName
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param name
+	 * @return List<Object> 返回类型
+	 */
+	public List<Object> getInvestmentByName(String name) {
+		return this.investmentDao.getInvestmentByName(name);
 	}
 }

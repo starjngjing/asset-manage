@@ -12,6 +12,7 @@ define([
     init: function () {
       // js逻辑写在这里
 
+    	var cashtool; // 缓存 选中的某一行的 现金工具信息
         // 分页配置
         var pageOptions = {
         		op:'storageList',
@@ -125,6 +126,10 @@ define([
                 	  
                   },
                   'click .item-cashToolRevenue': function (e, value, row) { // 收益采集-显示弹窗
+                	  cashtool = row;
+                	// 初始化数据表格
+                      $('#revenueTable').bootstrapTable(revenueTableConfig)
+                	  
                 	  http.post(config.api.cashtoolDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -160,6 +165,65 @@ define([
             }
           ]
         }
+        
+     // 分页配置
+        var revenuePageOptions = {
+          page: 1,
+          rows: 10
+        }
+        // 数据表格配置
+        var revenueTableConfig = {
+          ajax: function (origin) {
+            http.post(config.api.listCashToolRevenue, {
+              data: revenuePageOptions,
+              contentType: 'form'
+            }, function (rlt) {
+              origin.success(rlt)
+            })
+          },
+          pageNumber: revenuePageOptions.page,
+          pageSize: revenuePageOptions.rows,
+          pagination: true,
+          sidePagination: 'server',
+          pageList: [10, 20, 30, 50, 100],
+          queryParams: function (val) {	              
+              revenuePageOptions.cashtoolOid = cashtool.oid;
+              revenuePageOptions.rows = val.limit
+              revenuePageOptions.page = parseInt(val.offset / val.limit) + 1
+              return val
+            },
+          onLoadSuccess: function () {},
+          columns: [
+            {
+	        	//编号
+				// field: 'oid',
+				width: 60,
+				formatter: function(val, row, index) {
+					return index + 1
+				} 
+            },
+            {// 交易日
+            	field: 'dailyProfitDate',
+            		
+            },
+            {// 万份收益
+            	field: 'dailyProfit',
+            		
+            },
+            {// 7日年化收益
+            	field: 'weeklyYield',
+            		
+            },
+            {// 录入时间
+            	field: 'createTime',
+            	visible:false,
+            },
+            {// 操作员
+            	field: 'operator',
+            	visible:false,            	
+            },
+           ],
+        }
 
         // 初始化数据表格
         $('#dataTable').bootstrapTable(tableConfig)
@@ -181,28 +245,11 @@ define([
         	
         });
         
-        // 修改按钮点击事件
-        $("#unEstablishSubmit").click(function(){
-        	$("#unEstablishForm").ajaxSubmit({
-        		type:"post",  //提交方式  
-        		//dataType:"json", //数据类型'xml', 'script', or 'json'  
-        		url: config.api.unEstablish,
-        		success:function(data) {
-        			$('#unEstablishForm').clearForm();
-        			$('#unEstablishModal').modal('hide');
-        			$('#dataTable').bootstrapTable('refresh');
-        		}
-        	});
-        	
-        });
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.ticker = form.ticker.value;
-          pageOptions.secShortName = form.secShortName.value;
-          pageOptions.etfLof = form.etfLof.value;
-          pageOptions.circulationShares = form.circulationShares.value;
-          pageOptions.weeklyYield = form.weeklyYield.value;
+          $.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+          
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val
