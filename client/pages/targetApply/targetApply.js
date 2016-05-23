@@ -210,7 +210,6 @@ define([
 			};
 
 			var prjPageOptions = {
-					targetOid:targetInfo.oid,
 			}
 			var projectTableConfig = {
 				ajax: function(origin) {
