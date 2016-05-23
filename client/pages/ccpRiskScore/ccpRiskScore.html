@@ -187,53 +187,12 @@
 				</button>
 				<h4 class="modal-title">信用指标采集</h4>
 			</div>
+			<form id="collectForm" name="collectForm">
+				<input name="relative" type="hidden" />
+			</form>
 			<!-- 模态窗内容体 -->
-			<div class="modal-body">
-				<h6><b>经营者素质</b></h6>
-				<div class="row">
-					<div class="col-sm-12 col-xs-6">
-						<div class="form-group">
-							<div class="input-group input-group-sm">
-								<div class="input-group-addon">信用记录</div>
-								<input name="score" type="text" class="form-control">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12 col-xs-6">
-						<div class="form-group">
-							<div class="input-group input-group-sm">
-								<div class="input-group-addon">经营年限</div>
-								<input name="score" type="text" class="form-control">
-							</div>
-						</div>
-					</div>
-				</div>
-				<h6><b>偿债能力</b></h6>
-				<div class="row">
-					<div class="col-sm-12 col-xs-6">
-						<div class="form-group">
-							<div class="input-group input-group-sm">
-								<div class="input-group-addon">最近财年资产负债率</div>
-								<input name="score" type="text" class="form-control">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12 col-xs-6">
-						<div class="form-group">
-							<div class="input-group input-group-sm">
-								<div class="input-group-addon">最近财年流动比率</div>
-								<select name="cateType" class="form-control input-sm">
-									<option value="WARNING" selected>风险预警指标</option>
-									<option value="SCORE">风险评分指标</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div id="collectModalContent" class="modal-body">
+				
 			</div>
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">

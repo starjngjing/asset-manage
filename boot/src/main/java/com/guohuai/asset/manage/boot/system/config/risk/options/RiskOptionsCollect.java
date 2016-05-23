@@ -17,15 +17,13 @@ public class RiskOptionsCollect {
 		private String indicateOid;
 		private String indicateTitle;
 		private String indicateType;
+		private String indicateUnit;
 		private List<Options> options = new ArrayList<Options>();
 
 		@Data
 		public static class Options {
 			private String oid;
-			private String param0;
-			private String param1;
-			private String param2;
-			private String param3;
+			private String title;
 		}
 	}
 

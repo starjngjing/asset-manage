@@ -123,6 +123,7 @@ public class RiskOptionsService {
 					i.setIndicateOid(o.getIndicate().getOid());
 					i.setIndicateTitle(o.getIndicate().getTitle());
 					i.setIndicateType(o.getIndicate().getDataType());
+					i.setIndicateUnit(o.getIndicate().getDataUnit());
 					collect.getIndicates().add(i);
 				}
 
@@ -131,10 +132,7 @@ public class RiskOptionsService {
 				if (indicate.getIndicateType().equals(RiskIndicate.DATA_TYPE_Text)) {
 					RiskOptionsCollect.Indicate.Options option = new RiskOptionsCollect.Indicate.Options();
 					option.setOid(o.getOid());
-					option.setParam0(o.getParam0());
-					option.setParam1(o.getParam1());
-					option.setParam2(o.getParam2());
-					option.setParam3(o.getParam3());
+					option.setTitle(o.showTitle());
 					indicate.getOptions().add(option);
 				}
 
