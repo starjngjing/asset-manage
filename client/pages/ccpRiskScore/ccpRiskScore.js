@@ -314,11 +314,105 @@ define([
 					}
 				}
 			});
-			
+
 			// 下面的代码要移动到标的模块
-			$('#eventCollect').on('click', function(){
-				$('#collectModal').modal('show');
+			$('#eventCollect').on('click', function() {
+				http.post(config.api.system.config.ccr.options.preCollect, {
+						data: {
+							type: 'SCORE'
+						},
+						contentType: 'form'
+					},
+					function(val) {
+
+						// TODO 这里要调下, 标的模块要设置标的的oid
+						$(document.collectForm.relative).val('xxxxxxxxxxxxxxxx');
+
+						$('#collectModalContent').empty();
+
+						if (val && val.length > 0) {
+
+							var content = $('#collectModalContent');
+
+							$.each(val, function(i, collect) {
+								$('<h6><b>' + collect.cateTitle + '</b></h6>').appendTo(content);
+
+								$.each(collect.indicates, function(j, indicate) {
+									var form = $('<form></form>');
+									form.appendTo(content);
+
+									var indicateOid = $('<input type="hidden" name="indicateOid" value="' + indicate.indicateOid + '" />');
+									indicateOid.appendTo(form);
+
+									var row = $('<div class="row"></div>');
+									row.appendTo(form);
+									var col = $('<div class="col-sm-12 col-xs-6"></div>');
+									col.appendTo(row);
+									var formGroup = $('<div class="form-group"></div>');
+									formGroup.appendTo(col);
+									var inputGroup = $('<div class="input-group input-group-sm"></div>');
+									inputGroup.appendTo(formGroup);
+
+									var inputTitle = $('<div class="input-group-addon">' + indicate.indicateTitle + '</div>');
+									inputTitle.appendTo(inputGroup);
+
+									if (indicate.indicateType == 'NUMBER') {
+										var inputOcx = $('<input name="collectData" type="text" class="form-control">');
+										inputOcx.appendTo(inputGroup);
+									}
+
+									if (indicate.indicateType == 'NUMRANGE') {
+										var inputOcx = $('<input name="collectData" type="text" class="form-control">');
+										inputOcx.appendTo(inputGroup);
+									}
+
+									if (indicate.indicateType == 'TEXT') {
+										var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
+										inputOcx.appendTo(inputGroup);
+										$.each(indicate.options, function(k, option) {
+											var inputOption = $('<option value="' + option.oid + '" selected>' + option.title + '</option>');
+											inputOption.appendTo(inputOcx);
+										});
+									}
+
+									if (indicate.indicateUnit && indicate.indicateUnit != '') {
+										var inputSuffix = $('<span class="input-group-addon">' + indicate.indicateUnit + '</span>');
+										inputSuffix.appendTo(inputGroup);
+									}
+
+								});
+
+							});
+						}
+
+						$('#collectModal').modal('show');
+
+					});
 			});
+
+			$('#collectButton').on('click', function() {
+
+				var data = {
+					relative: document.collectForm.relative.value,
+					datas: []
+				}
+
+				$('#collectModalContent').find('form').each(function(x, form) {
+					var config = {};
+					$.each($(form).serializeArray(), function(i, v) {
+						config[v.name] = v.value;
+					});
+					data.datas.push(config);
+				});
+
+				console.log(data);
+
+				$('#collectForm').resetForm();
+				$('#collectModalContent').empty();
+
+				$('#collectModal').modal('hide');
+			});
+
 		}
 	}
 })
