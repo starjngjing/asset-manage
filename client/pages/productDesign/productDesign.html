@@ -125,7 +125,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>产品类型</label>
-                <select id="typeSelect" name="typeOid" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE">
+                <select id="addProductTypeSelect" name="typeOid" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE">
                 </select>
               </div>
             </div>
@@ -140,7 +140,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>资产池配置</label>
-                <select name="assetPoolOid" class="form-control input-sm" id="currencyTypeSelect">
+                <select name="assetPoolOid" class="form-control input-sm">
                   
                 </select>
               </div>
@@ -185,7 +185,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>币种</label>
-                <select name="currency" class="form-control input-sm" id="currencyTypeSelect">
+                <select name="currency" class="form-control input-sm">
                   <option selected="selected" value="CNY">人民币</option>
                   <option value="USD">美元</option>
                   <option value="EUR">欧元</option>
@@ -234,13 +234,13 @@
             </div>
           </div>
           <!-- 封闭式产品显示/隐藏层 -->
-          <div>
+          <div id="addProductType01Area">
             <p class="form-header">封闭式产品信息</p>
             <div class="row">
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>募集开始时间</label>
-                  <select name="raiseStartDateType" class="form-control input-sm" id="raiseStartDateTypeSelect">
+                  <select name="raiseStartDateType" class="form-control input-sm">
                     <option selected="selected" value="MANUALINPUT">固定时间</option>
                     <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
@@ -250,10 +250,10 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <input id="raiseStatrtDateInput" name="raiseStatrtDate" type="text"
-                           class="form-control datepicker"
-                           placeholder="请填写时间"
-                           data-date-format="YYYY-MM-DD HH:mm:ss">
+                  <input name="raiseStatrtDate" type="text"
+                         class="form-control input-sm datepicker"
+                         placeholder="请填写时间"
+                         data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
               </div>
               <div class="col-sm-4">
@@ -313,13 +313,13 @@
             </div>
           </div>
           <!-- 开放式产品显示/隐藏层 -->
-          <div>
+          <div id="addProductType02Area">
             <p class="form-header">开放式产品信息</p>
             <div class="row">
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>成立时间</label>
-                  <select name="setupDateType" class="form-control input-sm" id="setupDateTypeSelect">
+                  <select name="setupDateType" class="form-control input-sm">
                     <option selected="selected" value="MANUALINPUT">固定时间</option>
                     <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
@@ -329,7 +329,7 @@
                 <div class="form-group">
                   <label>&nbsp;</label>               
                   <input name="setupDate" type="text"
-                           class="form-control datepicker"
+                           class="form-control input-sm datepicker"
                            placeholder="请填写时间"
                            data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
@@ -570,7 +570,17 @@
                 
             </select>
           </div>
+          <input name="files" type="hidden"/>
         </form>
+        <div class="form-group" id="addProductUploader"></div>
+        <table id="addProductUploadTable" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>附件名称</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+        </table>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
@@ -629,7 +639,7 @@
               <div class="form-group">
                 <label>产品类型</label>
                 <input id="typeOid" name="typeOid" type="hidden">
-                <input name="typeName" type="text" class="form-control input-sm" disabled="disabled">
+                <input id="updateProductTypeSelect" name="typeName" type="text" class="form-control input-sm" disabled="disabled">
               </div>
             </div>
             <div class="col-sm-4">
@@ -643,7 +653,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>资产池配置</label>
-                <select name="assetPoolOid" class="form-control input-sm" id="currencyTypeSelect">
+                <select name="assetPoolOid" class="form-control input-sm">
                   
                 </select>
               </div>
@@ -688,7 +698,7 @@
             <div class="col-sm-4">
               <div class="form-group">
                 <label>币种</label>
-                <select name="currency" class="form-control input-sm" id="currencyTypeSelect">
+                <select name="currency" class="form-control input-sm">
                   <option selected="selected" value="CNY">人民币</option>
                   <option value="USD">美元</option>
                   <option value="EUR">欧元</option>
@@ -737,13 +747,13 @@
             </div>
           </div>
           <!-- 封闭式产品显示/隐藏层 -->
-          <div>
+          <div id="updateProductType01Area">
             <p class="form-header">封闭式产品信息</p>
             <div class="row">
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>募集开始时间</label>
-                  <select name="raiseStartDateType" class="form-control input-sm" id="raiseStartDateTypeSelect">
+                  <select name="raiseStartDateType" class="form-control input-sm">
                     <option selected="selected" value="MANUALINPUT">固定时间</option>
                     <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
@@ -752,8 +762,8 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <input id="raiseStatrtDateInput" name="raiseStatrtDate" type="text"
-                           class="form-control datepicker"
+                  <input   name="raiseStatrtDate" type="text"
+                           class="form-control input-sm datepicker"
                            placeholder="请填写时间"
                            data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
@@ -815,13 +825,13 @@
             </div>
           </div>
           <!-- 开放式产品显示/隐藏层 -->
-          <div>
+          <div id="updateProductType02Area">
             <p class="form-header">开放式产品信息</p>
             <div class="row">
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>成立时间</label>
-                  <select name="setupDateType" class="form-control input-sm" id="setupDateTypeSelect">
+                  <select name="setupDateType" class="form-control input-sm">
                     <option selected="selected" value="MANUALINPUT">固定时间</option>
                     <option value="FIRSTRACKTIME">与首次渠道上架时间相同</option>
                   </select>
@@ -831,7 +841,7 @@
                 <div class="form-group">
                   <label>&nbsp;</label>               
                   <input name="setupDate" type="text"
-                           class="form-control datepicker"
+                           class="form-control input-sm datepicker"
                            placeholder="请填写时间"
                            data-date-format="YYYY-MM-DD HH:mm:ss">
                 </div>
@@ -1073,6 +1083,15 @@
             </select>
           </div>
         </form>
+        <div class="form-group" id="updateProductUploader"></div>
+        <table id="updateProductUploadTable" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>附件名称</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+        </table>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
@@ -1497,6 +1516,49 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
         <button id="doChooseAssetPool" type="button" class="btn btn-primary">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 选择渠道弹窗 -->
+<div id="channelModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class=" modal-title">渠道列表</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <!-- 选择资产池Grid -->
+            <div id="chooseChannelGrid" class="box box-primary">
+              <div class="box-body">
+                <!-- 选择资产池数据表格 -->
+                <table id="productChooseChannelTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th></th>
+                    <th>渠道标识</th>
+                    <th>渠道名称</th>
+                    <th>渠道状态</th>
+                    <th>渠道费率</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doChooseChannel" type="button" class="btn btn-primary">确 定</button>
       </div>
     </div>
   </div>

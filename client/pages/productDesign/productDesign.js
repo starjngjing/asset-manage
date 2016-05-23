@@ -20,6 +20,9 @@ define([
 			}
 		// 用于存储表格checkbox选中的项
 		var checkItems = []
+		// 用于存储选择的渠道checkbox选中的项
+		var checkChannels = []
+		var selectProductOid = ""
     	// 数据表格配置
     	var tableConfig = {
     		ajax: function (origin) {
@@ -129,9 +132,7 @@ define([
 				},
 				{
 					align: 'center',
-					formatter: function (val, row, index) {
-						return index + 1
-					}
+					field: 'channelNum'
 				},
 				{
 					field: 'investment',
@@ -227,19 +228,106 @@ define([
 							})
 						},
 						'click .item-channel': function(e, value, row) {
-							http.post(
-								config.api.channels, {
-		                		  data: {
-		                			  oid:row.oid
-		                		  },
-		                		  contentType: 'form'
-		                		},
-		                		function (obj) {
-
-		                		  $('#projectModal').modal('show');
-		                		}
-		                	);
+							selectProductOid = row.oid
+							// 数据表格配置
+							var channelsTableConfig = {
+								ajax: function (origin) {
+									http.post(
+    									config.api.productChooseChannelList, 
+    									{
+ 		   									data: {
+    											productOid:row.oid
+    										},
+    										contentType: 'form'
+    									},
+    									function (rlt) {
+    										origin.success(rlt)
+    									}
+    								)
+    							},
+    							pagination: false,
+    		            		sidePagination: 'server',
+    		            		pageList: [10, 20, 30, 50, 100],
+    		            		onLoadSuccess: function () {},
+    		
+            					columns: [
+    			            		{
+    				            		checkbox: true,
+    				            		field: 'selectStatus',
+    				            		align: 'center',
+    				            		formatter: function (val, row, index) {
+					            			var selectStatus = row.selectStatus
+					            			if(true==selectStatus) {
+					            				if (checkChannels.indexOf(row) < 0){
+			            							checkChannels.push(row)
+					            				}
+					            			}
+					            			return selectStatus
+					            		}
+    			            		},
+    			            		{
+					            		field: 'channelId',
+					            		align: 'center'
+				            		},
+				            		{
+					            		field: 'channelName',
+					            		align: 'center'
+				            		},
+				            		{
+					            		align: 'center',
+            							field: 'channelStatus',
+					            		formatter: function (val, row, index) {
+					            			var channelStatus = row.channelStatus
+					            			if("on"==channelStatus) {
+					            				return "已启用"
+					            			} else if("off"==channelStatus) {
+					            				return "已停用"
+					            			}
+					            		}
+				            		},
+				            		{
+					            		field: 'channelFee',
+					            		align: 'center',
+					            		formatter: function (val, row, index) {
+					            			var channelFee = row.channelFee
+					            			if(channelFee!=null && channelFee!="") {
+					            				return channelFee+"%"
+					            			}
+							           		return "";
+					            		}
+				            		}
+			            		],
+    		
+    		
+			            		// 单选按钮选中一项时
+			            		onCheck: function (row) {
+			            			if (checkChannels.indexOf(row) < 0){
+			            				checkChannels.push(row)
+			            			}
+			            		},
+			            		// 单选按钮取消一项时
+			            		onUncheck: function (row) {
+			            			checkChannels.splice(checkChannels.indexOf(row), 1)
+			            		},
+			            		// 全选按钮选中时
+			            		onCheckAll: function (rows) {
+			            			checkChannels = rows.map(function (item) {
+				            			return item
+				            		})
+			            		},
+			            		// 全选按钮取消时
+			            		onUncheckAll: function () {
+				            		checkChannels = []
+			            		}
+		            		}
+				            		
+				            		
+    	            		// 数据表格初始化
+    	            		$('#productChooseChannelTable').bootstrapTable(channelsTableConfig)
+		                	$('#channelModal').modal('show');
 						}
+							
+							
 					}
 				},
 			],
@@ -268,6 +356,48 @@ define([
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
+
+			// 产品类型下拉菜单关联区域显隐
+			$('#addProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#addProductType01Area').show()
+						$('#addProductType02Area').hide()
+						break
+					case 'PRODUCTTYPE_02':
+						$('#addProductType02Area').show()
+						$('#addProductType01Area').hide()
+						break
+				}
+			})
+			$('#updateProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#updateProductType01Area').show()
+						$('#updateProductType02Area').hide()
+						break
+					case 'PRODUCTTYPE_02':
+						$('#updateProductType02Area').show()
+						$('#updateProductType01Area').hide()
+						break
+				}
+			})
+
+			// 募集开始时间&成立时间select联动
+			$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
+				var col = $(this).parent().parent()
+				switch (this.value) {
+					case 'MANUALINPUT':
+						col.removeClass('col-sm-2').addClass('col-sm-4')
+						col.next('.col-sm-2').hide()
+						break
+					case 'FIRSTRACKTIME':
+						col.removeClass('col-sm-4').addClass('col-sm-2')
+						col.next('.col-sm-2').show()
+						break
+				}
+			}).change()
+
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
     		$('#addProductModal').modal('show')
@@ -281,9 +411,55 @@ define([
     		pageOptions.type = form.type.value.trim()
     		return val
   		}
-    	
+
+			// 新建产品上传附件表格数据源
+			var addProductUploadFiles = []
+			// 新建产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#addProductUploader'),
+				success: function(file) {
+					file.furl = file.url
+					addProductUploadFiles.push(file)
+					$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+				}
+			})
+			// 新建产品附件表格配置
+			var addProductUploadTableConfig = {
+				columns: [{
+					field: 'name',
+				}, {
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = config.api.yup + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = addProductUploadFiles.indexOf(row)
+							addProductUploadFiles.splice(index, 1)
+							$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+						}
+					}
+				}]
+			}
+			// 新建产品附件表格初始化
+			$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
+			// 新建产品“保存”按钮点击事件
     	$('#saveProductSubmit').on('click', function () {
-    		var typeOid = $("#typeSelect  option:selected").val();  
+    		var typeOid = $("#typeSelect  option:selected").val();
+				document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.savePeriodic,
@@ -302,8 +478,55 @@ define([
     			})
     		}
   		})
+
+			// 编辑产品上传附件表格数据源
+			var updateProductUploadFiles = []
+			// 编辑产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#updateProductUploader'),
+				success: function(file) {
+					file.furl = file.url
+					updateProductUploadFiles.push(file)
+					$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+				}
+			})
+			// 编辑产品附件表格配置
+			var updateProductUploadTableConfig = {
+				columns: [{
+					field: 'name',
+				}, {
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = config.api.yup + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = updateProductUploadFiles.indexOf(row)
+							updateProductUploadFiles.splice(index, 1)
+							$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+						}
+					}
+				}]
+			}
+			// 编辑产品附件表格初始化
+			$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
+			// 编辑产品“保存”按钮点击事件
     	$('#updateProductSubmit').on('click', function () {
-    		var typeOid = $("#typeOid").val();  
+    		var typeOid = $("#typeOid").val();
+				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#updateProductForm').ajaxSubmit({
       			url: config.api.updatePeriodic,
@@ -375,6 +598,33 @@ define([
 			$('#assetPoolModal').modal('show')
 		})
     	     
+    	// 选择渠道点击确定按钮事件
+		$('#doChooseChannel').on('click', function () {
+			// 获取id数组
+			var channelOids = checkChannels.map(function (item) {
+				return item.oid
+			})
+			// 提交数组
+			http.post(
+				config.api.saveProductChannel, 
+				{
+					data: {
+						productOid: selectProductOid, 
+						channelOid: JSON.stringify(channelOids)
+					},
+					contentType: 'form',
+				}, 
+				function(result) {
+					checkChannels = []
+					$('#channelModal').modal('hide')
+					if (result.errorCode == 0) {
+						$('#productDesignTable').bootstrapTable('refresh')
+					}
+				}
+			)
+				
+		})
+		
     }
   }
 	
