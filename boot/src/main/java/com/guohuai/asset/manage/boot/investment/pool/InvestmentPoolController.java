@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
-import com.guohuai.asset.manage.boot.investment.TargetIncome;
-import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
