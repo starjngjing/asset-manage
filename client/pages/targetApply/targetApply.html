@@ -1147,7 +1147,9 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押人</label>
-								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
+								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人"
+									 maxlength="32" required data-error="抵押人不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1195,15 +1197,18 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押顺位</label>
-								<input name="pledgePriority" type="text" class="form-control input-sm" placeholder="抵押顺位">
+								<input name="pledgePriority" type="text" class="form-control input-sm" placeholder="抵押顺位"
+									required data-error="抵押顺位不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押率</label>
 								<div class="input-group input-group-sm">
-									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率">
-									<span class="input-group-addon">%</span>
+									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率" required data-validfloat="3.2" data-error="抵押率不能为空且必须为三位整数两位小数">
+									<span class="input-group-addon">%</span>									
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1211,8 +1216,10 @@
 							<div class="form-group">
 								<label>保证金</label>
 								<div class="input-group input-group-sm">
-									<input name="margin" type="text" class="form-control input-sm" placeholder="保证金">
-									<span class="input-group-addon">元</span>
+									<input name="margin" type="text" class="form-control input-sm" placeholder="保证金"
+										data-validfloat="10.5" data-error="保证金必须为十位整数5位小数">
+									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1265,8 +1272,9 @@
 							<div class="form-group">
 								<label>项目规模</label>
 								<div class="input-group input-group-sm">
-									<input name="projectScale" type="text" class="form-control input-sm" placeholder="项目规模">
+									<input name="projectScale" type="text" class="form-control input-sm" placeholder="项目规模" data-validfloat="10.5" data-error="项目规模必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1274,8 +1282,9 @@
 							<div class="form-group">
 								<label>融资成本</label>
 								<div class="input-group input-group-sm">
-									<input name="financeCosts" type="text" class="form-control input-sm" placeholder="融资成本">
+									<input name="financeCosts" type="text" class="form-control input-sm" placeholder="融资成本" data-validfloat="10.5" data-error="融资成本必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1289,8 +1298,9 @@
 							<div class="form-group">
 								<label>SPV通道费</label>
 								<div class="input-group input-group-sm">
-									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费">
+									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费" data-validfloat="10.5" data-error="SPV通道费必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>

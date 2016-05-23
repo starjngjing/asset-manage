@@ -253,6 +253,9 @@ define([
 				}, {
 					//项目项目类型
 					field: 'projectType',
+					formatter: function(val) {
+						return util.enum.transform('PROJECTTYPE', val);
+					}
 				}, {
 					//城市
 					field: 'projectCity',
