@@ -132,7 +132,11 @@ define(function() {
 							enable: this.host + "/ams/system/ccr/indicate/enable",
 							disable: this.host + "/ams/system/ccr/indicate/disable",
 							delete: this.host + "/ams/system/ccr/indicate/delete",
-							options: this.host + "/ams/system/ccr/indicate/options"
+							options: this.host + "/ams/system/ccr/indicate/options",
+							collect: {
+								save: this.host + "/ams/system/ccr/indicate/collect/save",
+								preUpdate: this.host + "/ams/system/ccr/indicate/collect/preUpdate"
+							}
 						},
 						options: {
 							save: this.host + "/ams/system/ccr/options/save",
@@ -145,7 +149,10 @@ define(function() {
 				}
 			},
 			role: {
-				list: this.host + '/operate/admin/ctrl/role/list'					// 权限列表
+				list: this.host + '/operate/admin/ctrl/role/list'					// 角色列表
+			},
+			auth: {
+				list: this.host + '/operate/admin/ctrl/auth/list'					// 权限列表
 			}
 		},
 

@@ -9,6 +9,8 @@
  */
 package com.guohuai.asset.manage.boot.cashtool;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
@@ -62,6 +64,25 @@ public class CashToolService {
 	public CashTool findByOid(String oid) {
 		return this.cashToolDao.findOne(oid);
 	}
+	
+	public List<CashTool> getCashToolList(Specification<CashTool> spec) {
+		return cashToolDao.findAll(spec);
+	}
+	
+	/**
+	 * 根据名称模糊查询现金管理工具
+	 * @Title: getCashToolListByName 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param name
+	 * @return List<Object>    返回类型
+	 */
+	public List<Object> getCashToolListByName(String name) {
+		return cashToolDao.getCashToolByName(name);
+	}
+	
+	
 
 	/**
 	 * 分页查询现金管理工具

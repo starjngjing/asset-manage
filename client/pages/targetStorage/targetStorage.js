@@ -34,22 +34,7 @@ define([
           sidePagination: 'server',
           pageList: [10, 20, 30, 50, 100],
           queryParams: getQueryParams,
-          onLoadSuccess: function () {
-          //  http.post(config.api.investmentStorageList, {
-           //   contentType: 'form'
-           // }, function (result) {
-//              $('#clubData').html('会员机构：' + result.clubData + '家')
-//              $('#platAssetData').html('平台资产：' + result.platAssetData + '项')
-//              $('#assetSizeData').html('资产规模：' + result.assetSizeData + '亿')
-//              $('#updateTime').html('变更时间：' + util.table.formatter.timestampToDate(result.updateTime, 'YYYY-MM-DD'))
-//              document.clubDataForm.data.value = result.clubData
-//              document.platAssetDataForm.data.value = result.platAssetData
-//              document.assetSizeDataForm.data.value = result.assetSizeData
-//              $('#clubDataForm').validator()
-//              $('#platAssetDataForm').validator()
-//              $('#assetSizeDataForm').validator()
-            //})
-          },
+          onLoadSuccess: function () {},
           columns: [
             {// 名称
             	field: 'name',
@@ -169,6 +154,7 @@ define([
                 	  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
                 	  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
                 	});
+                	util.form.validator.init($("#establishForm")); // 初始化表单验证
                 	$('#establishModal').modal('show');
                   },
                   'click .item-unEstablish': function (e, value, row) { // 标的不成立
@@ -188,6 +174,7 @@ define([
                 		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
                 	  });
+                	  util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
                 	  $('#unEstablishModal').modal('show');
                   },
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
@@ -207,6 +194,7 @@ define([
                 		  $$.detailAutoFix($('#targetIncomeForm'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
+                	  util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
                 	  $('#targetIncomeModal').modal('show');
                   },
                   'click .item-overdue': function(e, value, row) { // 逾期
@@ -249,7 +237,8 @@ define([
                 		  }
                 		  $$.detailAutoFix($('#overdueForm'), data);	// 自动填充详情
 //                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
-                	  });                	  
+                	  });
+                	  util.form.validator.init($("#overdueForm")); // 初始化表单验证
 					$('#overdueModal').modal('show');
 					
                   },
@@ -352,15 +341,14 @@ define([
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.name = form.name.value;
-          pageOptions.type = form.type.value;
-          pageOptions.raiseScope = form.raiseScope.value;
-          pageOptions.lifed = form.lifed.value;
-          pageOptions.expAror = form.expAror.value;
+          $.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+          
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
+          
           return val
         }
+        
       
     }
   }

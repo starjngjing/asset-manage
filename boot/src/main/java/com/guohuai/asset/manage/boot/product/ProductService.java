@@ -17,11 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.boot.dict.Dict;
 import com.guohuai.asset.manage.boot.dict.DictService;
 import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.boot.file.FileService;
+import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.boot.product.productChannel.ProductChannel;
 import com.guohuai.asset.manage.boot.product.productChannel.ProductChannelService;
 import com.guohuai.asset.manage.component.exception.AMPException;
@@ -29,6 +31,10 @@ import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 import com.guohuai.asset.manage.component.web.view.PageResp;
+import com.guohuai.operate.api.AdminAmpSdk;
+import com.guohuai.operate.api.AdminSdk;
+import com.guohuai.operate.api.objs.admin.AdminObj;
+import com.guohuai.operate.api.objs.admin.amp.AdminAmpObj;
 
 @Service
 @Transactional
@@ -45,6 +51,8 @@ public class ProductService {
 	private FileService fileService;
 	@Autowired
 	private ProductChannelService productChannelService;
+	@Autowired
+	private AdminSdk adminSdk;
 
 	@Transactional
 	public BaseResp savePeriodic(SavePeriodicProductForm form, String operator) throws ParseException {
@@ -110,21 +118,23 @@ public class ProductService {
 			// 其他字段 初始化默认值s
 			pb.operator(operator).publisher(operator).updateTime(now).createTime(now);
 		}
+		List<SaveFileForm> fileForms = null;
 		String fkey = StringUtil.uuid();
 		{
-			if (null != form.getFiles() && form.getFiles().size() > 0) {
-				pb.fileKeys(fkey);
-			} else {
+			if (StringUtil.isEmpty(form.getFiles())) {
 				pb.fileKeys(StringUtil.EMPTY);
+			} else {
+				pb.fileKeys(fkey);
+				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
 			}
 		}
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
-		if (null != form.getFiles() && form.getFiles().size() > 0) {
-			// 文件
-			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
-		}
+			
+		// 文件
+		this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+		
 		return response;
 	}
 	
@@ -200,21 +210,24 @@ public class ProductService {
 			// 其他字段 初始化默认值s
 			pb.operator(operator).publisher(operator).updateTime(now).createTime(now);
 		}
+		
+		List<SaveFileForm> fileForms = null;
 		String fkey = StringUtil.uuid();
 		{
-			if (null != form.getFiles() && form.getFiles().size() > 0) {
-				pb.fileKeys(fkey);
-			} else {
+			if (StringUtil.isEmpty(form.getFiles())) {
 				pb.fileKeys(StringUtil.EMPTY);
+			} else {
+				pb.fileKeys(fkey);
+				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
 			}
 		}
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
-		if (null != form.getFiles() && form.getFiles().size() > 0) {
-			// 文件
-			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
-		}
+			
+		// 文件
+		this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+		
 		
 		return response;
 	}
@@ -356,6 +369,15 @@ public class ProductService {
 				fkey = product.getFileKeys();
 			}
 		}
+		
+		List<SaveFileForm> fileForms = null;
+		{
+			if (!StringUtil.isEmpty(form.getFiles())) {
+				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
+			}
+		}
+		
+		
 		product.setFileKeys(fkey);
 		{
 			// 其它：修改时间、操作人
@@ -367,7 +389,7 @@ public class ProductService {
 
 		{
 			// 文件
-			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
+			this.fileService.save(fileForms, fkey, File.CATE_User, operator);
 		}
 		
 		return response;
@@ -478,13 +500,20 @@ public class ProductService {
 			}
 		}
 		
+		List<SaveFileForm> fileForms = null;
+		{
+			if (!StringUtil.isEmpty(form.getFiles())) {
+				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
+			}
+		}
+		
 		product.setFileKeys(fkey);
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
 		{
 			// 文件
-			this.fileService.save(form.getFiles(), fkey, File.CATE_User, operator);
+			this.fileService.save(fileForms, fkey, File.CATE_User, operator);
 		}
 		
 		return response;
@@ -500,12 +529,23 @@ public class ProductService {
 		Product product = this.getProductById(oid);
 		ProductDetailResp pr = new ProductDetailResp(product);
 
+		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
+		
 		if (!StringUtil.isEmpty(product.getFileKeys())) {
 			List<File> files = this.fileService.list(product.getFileKeys(), File.STATE_Valid);
 			if (files.size() > 0) {
 				pr.setFiles(new ArrayList<FileResp>());
+				
+				FileResp fr = null;
 				for (File file : files) {
-					pr.getFiles().add(new FileResp(file));
+					fr = new FileResp(file);
+					if(adminObjMap.get(file.getOperator())==null) {
+						adminObjMap.put(file.getOperator(),adminSdk.getAdmin(file.getOperator()));
+					}
+					if(adminObjMap.get(file.getOperator())!=null) {
+						fr.setOperator(adminObjMap.get(file.getOperator()).getName());
+					}
+					pr.getFiles().add(fr);
 				}
 			}
 		}

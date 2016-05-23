@@ -257,11 +257,8 @@ define([
 
         function getQueryParams (val) {
           var form = document.searchForm
-          pageOptions.name = form.name.value;
-          pageOptions.type = form.type.value;
-          pageOptions.raiseScope = form.raiseScope.value;
-          pageOptions.lifed = form.lifed.value;
-          pageOptions.expAror = form.expAror.value;
+          $.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+                    
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
           return val

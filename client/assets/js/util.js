@@ -188,44 +188,66 @@ define([
             }
           }
         }
+      },
+      /**
+       * 将表单序列化成json对象
+       * @param form 表单
+       * @returns 列化之后的json对象
+       */
+      serializeJson: function(form){
+        var serializeObj = {}
+        var array = $(form).serializeArray()
+        var str = $(form).serialize()
+        $(array).each(function () {
+          if (serializeObj[this.name]) {
+            if ($.isArray(serializeObj[this.name])) {
+              serializeObj[this.name].push(this.value)
+            } else {
+              serializeObj[this.name] = [serializeObj[this.name], this.value]
+            }
+          }else{
+            serializeObj[this.name] = this.value
+          }
+        })
+        return serializeObj
       }
     },
     /**
      * 将对象转换成带参数的形式 &a=1&b=2
      */
-    buildQueryUrl: function(url, param){
-    	var x = url;
-		var ba = true;
-		if (x.indexOf('?') != -1) {
-			if (x.indexOf('?') == url.length - 1) {
-				ba = false;
-			} else {
-				ba = true;
-			}
-		} else {
-			x = x + '?';
-			ba = false;
-		}
-		var builder = '';
-		for (var i in param) {
-			var p = '&' + i + '=';
-			if (param[i]) {
-				var v = param[i];
-				if (Object.prototype.toString.call(v) === '[object Array]') {
-					for (var j = 0; j < v.length; j++) {
-						builder = builder + p + encodeURIComponent(v[j]);
-					}
-				} else if (typeof(v) == "object" && Object.prototype.toString.call(v).toLowerCase() == "[object object]" && !v.length) {
-					builder = builder + p + encodeURIComponent(JSON.stringify(v));
-				} else {
-					builder = builder + p + encodeURIComponent(v);
-				}
-			}
-		}
-		if (!ba) {
-			builder = builder.substring(1);
-		}
-		return x + builder;
+    buildQueryUrl: function (url, param) {
+    	var x = url
+		  var ba = true
+      if (x.indexOf('?') != -1) {
+        if (x.indexOf('?') == url.length - 1) {
+          ba = false
+        } else {
+          ba = true
+        }
+      } else {
+        x = x + '?'
+        ba = false
+      }
+      var builder = ''
+      for (var i in param) {
+        var p = '&' + i + '='
+        if (param[i]) {
+          var v = param[i]
+          if (Object.prototype.toString.call(v) === '[object Array]') {
+            for (var j = 0; j < v.length; j++) {
+              builder = builder + p + encodeURIComponent(v[j])
+            }
+          } else if (typeof(v) == "object" && Object.prototype.toString.call(v).toLowerCase() == "[object object]" && !v.length) {
+            builder = builder + p + encodeURIComponent(JSON.stringify(v))
+          } else {
+            builder = builder + p + encodeURIComponent(v)
+          }
+        }
+      }
+      if (!ba) {
+        builder = builder.substring(1)
+      }
+		  return x + builder
     }
   }
 })

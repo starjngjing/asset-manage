@@ -218,7 +218,8 @@
 	            <label>风控</label>
 	            <textarea name="risk" rows="3"
 	                      class="form-control input-sm"
-	                      placeholder="请输入内容" required></textarea>
+	                      placeholder="请输入内容" required data-error="风控不能为空"></textarea>
+            	<div class="help-block with-errors text-red"></div>
           		</div>
 	      		</div>
 	      	</div>
@@ -304,8 +305,11 @@
 			          <div class="input-group input-group-sm">			            
 			            <input name="collectIncomeRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="募集期收益" required>
+			                   placeholder="募集期收益" required 
+			                   data-validfloat="2.4" 
+                   			 data-error="募集期收益必须为前两位后四位小数">
 			            <span class="input-group-addon">%</span>
+			            <div class="help-block with-errors text-red"></div>
 			          </div>
 			        </div>
 		        </div>
@@ -318,7 +322,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit establishSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -407,7 +411,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit unEstablishSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -506,7 +510,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit targetIncomeSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -688,8 +692,12 @@
 			          <div class="input-group input-group-sm">			            
 			            <input name="overdueRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="逾期利率" >
+			                   placeholder="逾期利率"
+			                   data-validfloat="2.4"
+                   			 data-error="逾期利率必须为前两位后四位小数"
+			                   >
 			            <span class="input-group-addon">%</span>
+			            <div class="help-block with-errors text-red"></div>
 			          </div>
 			        </div>
 		        </div>
@@ -713,7 +721,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="overdueSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="overdueSubmit" type="button" class="btn btn-primary btn-submit overdueSubmit">保 存</button>
       </div>
     </div>
   </div>

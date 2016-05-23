@@ -154,6 +154,17 @@ public class InvestmentPoolController extends BaseController {
 		return new ResponseEntity<InvestmentListResp>(resp, HttpStatus.OK);
 	}
 
+	/**
+	 * 构建范围查询条件
+	 * @Title: buildSpec 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param spec
+	 * @param attr
+	 * @param value
+	 * @return Specification<Investment>    返回类型
+	 */
 	private Specification<Investment> buildSpec(Specification<Investment> spec, String attr, String value) {
 		if (StringUtils.isNotBlank(value)) {
 			spec = Specifications.where(spec).and(new Specification<Investment>() {
@@ -165,8 +176,7 @@ public class InvestmentPoolController extends BaseController {
 			});
 		}
 		return spec;
-	}
-	
+	}	
 	
 	/**
 	 * 标的成立

@@ -192,6 +192,7 @@ define([
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
+							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
 
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 							$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
@@ -201,6 +202,7 @@ define([
 							//111
 							// 初始化底层项目表格
 							$('#projectTable').bootstrapTable(projectTableConfig)
+							$('#projectTable').bootstrapTable('refresh'); // 项目表单重新加载
 							$$.searchInit($('#projectSearchForm'), $('#projectTable'))
 							$('#projectDataModal').modal('show');
 
@@ -227,10 +229,12 @@ define([
 				pageList: [10, 20, 30, 50, 100],
 				queryParams: function(val) {
 					var form = document.projectSearchForm
+					$.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+					
 					prjPageOptions.rows = val.limit
 					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
-					prjPageOptions.targetOid = targetInfo.oid.trim();
-					prjPageOptions.projectName = form.projectName.value.trim();
+					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id				
+					
 					return val
 				},
 				columns: [{
@@ -249,6 +253,9 @@ define([
 				}, {
 					//项目项目类型
 					field: 'projectType',
+					formatter: function(val) {
+						return util.enum.transform('PROJECTTYPE', val);
+					}
 				}, {
 					//城市
 					field: 'projectCity',
@@ -263,25 +270,25 @@ define([
 						    {
 								text: '详情',
 								type: 'button',
-								class: 'item-projectDetail',
+								class: 'item-project-detail',
 								isRender: true
 						    },
 						    {
 						    	text: '删除',
 						    	type: 'button',
-						    	class: 'item-delete',
+						    	class: 'item-project-delete',
 						    	isRender: true
 						    }
 						];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
-						'click .item-projectDetail': function(e, value, row) { // 底层项目详情
+						'click .item-project-detail': function(e, value, row) { // 底层项目详情
 							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
 							$('#projectDetailModal').modal('show');
 						},
-						'click .item-delete': function(e, value, row) { // 删除底层项目
+						'click .item-project-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
 							$$.confirm({
 								container: $('#doConfirm'),
@@ -334,6 +341,8 @@ define([
 
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
+				$('#projectForm').clearForm(); // 先清理表单
+				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
 			$('#projectSubmit').on('click', function() {
@@ -342,32 +351,40 @@ define([
 			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if (ptt === 'PROJECTTYPE_01') { // 金融
-					$("#estateDiv").hide();
-					$("#financeDiv").show();
+					$("#estateDiv").hide().find('input').attr('disabled', 'disabled');
+					$("#financeDiv").show().find('input').attr('disabled', false);
 				} else if (ptt === 'PROJECTTYPE_02') { // 房地产
-					$("#estateDiv").show();
-					$("#financeDiv").hide();
+					$("#estateDiv").show().find('input').attr('disabled', false);
+					$("#financeDiv").hide().find('input').attr('disabled', 'disabled');
 				} else {
-					$("#estateDiv").hide();
-					$("#financeDiv").hide();
+					$("#estateDiv").hide().find('input').attr('disabled', 'disabled');
+					$("#financeDiv").hide().find('input').attr('disabled', 'disabled');
 				}
+				$('#projectForm').validator('destroy'); // 先销毁验证规则
+				util.form.validator.init($('#projectForm')); // 然后添加验证规则
 			});
 
 			$(document.projectForm.warrantor).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有担保人
 					if ($(this).val() === 'yes')
-						$('#prjWarrantorInfo').show();
+						$('#prjWarrantorInfo').show().find('input').attr('disabled', false);
 					else
-						$('#prjWarrantorInfo').hide();
+						$('#prjWarrantorInfo').hide().find('input').attr('disabled', 'disabled');
+					
+					$('#projectForm').validator('destroy'); // 先销毁验证规则
+					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
 			})
 
 			$(document.projectForm.pledge).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有抵押人
 					if ($(this).val() === 'yes')
-						$('#prjPledgeInfo').show();
+						$('#prjPledgeInfo').show().find('input').attr('disabled', false);
 					else
-						$('#prjPledgeInfo').hide();
+						$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
+					
+					$('#projectForm').validator('destroy'); // 先销毁验证规则
+					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
 			})
 

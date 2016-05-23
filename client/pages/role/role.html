@@ -58,8 +58,8 @@
   </div>
 </section>
 
-<!-- 新增/编辑模态窗 默认大小窗体 -->
-<div id="channelModal" class="modal fade" tabindex="-1" role="dialog">
+<!-- 新建角色弹窗 -->
+<div id="addRoleModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <!-- 模态窗头部 -->
@@ -67,61 +67,18 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title"></h4>
+        <h4 class="modal-title">新建角色</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
-        <!-- 新增/编辑事件表单 -->
-        <form id="channelForm" name="channelForm" method="post">
-
+        <form id="addRoleForm" name="addRoleForm" method="post">
           <div class="form-group">
-            <label>渠道名称</label>
-            <input name="channelName" type="text" id="editChanelName"
+            <label>角色名称</label>
+            <input name="name" type="text" id="editChanelName"
                    class="form-control input-sm"
-                   placeholder="请输入渠道名称" required>
-          </div>         
-          <div class="form-group">
-            <label>渠道机构</label>
-            <input name="partner" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入所属渠道机构" required>
+                   placeholder="请输入角色名称" required>
           </div>
-          <div class="form-group">
-            <label>渠道费率(%)</label>
-            <input name="channelFee" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入渠道费率(%)" required>            
-          </div>
-          <div class="form-group">
-            <label>接入方式</label>
-            <div class="row form-style">
-              <div class="col-sm-3">
-                <input type="radio" name="joinType" value="ftp" class="icheck" checked> FTP文件
-              </div>
-              <div class="col-sm-3">
-                <input type="radio" name="joinType" value="api" class="icheck"> API接口
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>渠道联系人</label>
-            <input name="channelContactName" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入渠道联系人" required>
-          </div>
-          <div class="form-group">
-            <label>渠道联系人邮箱</label>
-            <input name="channelEmail" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入渠道联系人邮箱" required>
-          </div>
-          <div class="form-group">
-            <label>渠道联系人电话</label>
-            <input name="channelPhone" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入渠道联系人电话" required>
-          </div>          
-          <input name="oid" type="hidden">
+          <input name="systemOid" type="hidden">
         </form>
       </div>
       <!-- 模态窗底部 -->
@@ -138,148 +95,14 @@
   <div class="arrow"></div>
   <h3 class="popover-title"></h3>
   <div class="popover-content">
-  <p></p>
-  <div class="popover-btn clearfix">
-    <div class="unit">
-      <button class="btn btn-block btn-primary accept" data-dismiss="modal">确 定</button>
+    <p></p>
+    <div class="popover-btn clearfix">
+      <div class="unit">
+        <button class="btn btn-block btn-primary accept" data-dismiss="modal">确 定</button>
+      </div>
+      <div class="unit">
+        <button class="btn btn-block btn-default cancel" data-dismiss="modal">取 消</button>
+      </div>
     </div>
-    <div class="unit">
-      <button class="btn btn-block btn-default cancel" data-dismiss="modal">取 消</button>
-    </div>
-  </div>
 	</div>
-</div>
-
-<!-- 审核意见模态窗 默认大小窗体 -->
-<div id="remarksModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <!-- 模态窗头部 -->
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">审核意见</h4>
-      </div>
-      <!-- 模态窗内容体 -->
-      <div class="modal-body">       
-          <div id="remarks"></div>
-      </div>
-      <!-- 模态窗底部 -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 详情模态窗 默认大小 -->
-<div id="detailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <!-- 模态窗头部 -->
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">详情</h4>
-      </div>
-      <!-- 模态窗内容体 -->
-      <div class="modal-body">
-      	<form id="detailForm" name="detailForm" method="post">					
-					<div class="row">
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道标识</dt>
-								<dd>
-									<div data-detail-fetch="channelId"></div>
-								</dd>
-							</dl>
-						</div>
-
-				    <div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道名称</dt>
-								<dd>
-									<div data-detail-fetch="channelName"></div>
-								</dd>
-							</dl>
-						</div>
-				
-      			<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>接入方式</dt>
-								<dd>
-									<div data-detail-fetch="joinType" data-enum-transform="joinTypes"></div>
-								</dd>
-							</dl>
-						</div>
-						
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道费率(%)</dt>
-								<dd>
-									<div data-detail-fetch="channelFee"></div>
-								</dd>
-							</dl>
-						</div>
-      	
-      			<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道机构</dt>
-								<dd>
-									<div data-detail-fetch="partner"></div>
-								</dd>
-							</dl>
-						</div>
-      	
-      			<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道联系人</dt>
-								<dd>
-									<div data-detail-fetch="channelContactName"></div>
-								</dd>
-							</dl>
-						</div>
-      	
-      			<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道联系人邮件</dt>
-								<dd>
-									<div data-detail-fetch="channelEmail"></div>
-								</dd>
-							</dl>
-						</div>
-						
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道联系人电话</dt>
-								<dd>
-									<div data-detail-fetch="channelPhone"></div>
-								</dd>
-							</dl>
-						</div>												
-						
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>渠道状态</dt>
-								<dd>
-									<div data-detail-fetch="channelStatus" data-enum-transform="channelStatus"></div>
-								</dd>
-							</dl>
-						</div>
-						
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>审核状态</dt>
-								<dd>
-									<div data-detail-fetch="approvelStatus" data-enum-transform="approveStatus"></div>
-								</dd>
-							</dl>
-						</div>						
-												
-        </div>
-      </form>
-    </div>
-  </div>
 </div>

@@ -863,7 +863,7 @@
 				<button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-				<h4 class="modal-title">底层资产管理</h4>
+				<h4 class="modal-title">底层项目管理</h4>
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
@@ -876,7 +876,7 @@
 								<h3 class="box-title"></h3>
 								<div class="box-tools">
 									<button id="projectAdd" class="btn btn-default btn-sm">
-					                    <i class="fa fa-plus"></i> 新建底层资产
+					                    <i class="fa fa-plus"></i> 新建底层项目
 					                  </button>
 								</div>
 							</div>
@@ -887,8 +887,14 @@
 									<div class="row">
 										<div class="col-sm-3">
 											<div class="form-group">
-												<label>资产名称</label>
-												<input name="projectName" type="text" class="form-control input-sm" placeholder="搜索资产名称">
+												<label>项目名称</label>
+												<input name="projectName" type="text" class="form-control input-sm" placeholder="搜索项目名称">
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>项目经理</label>
+												<input name="projectManager" type="text" class="form-control input-sm" placeholder="搜索项目经理">
 											</div>
 										</div>
 									</div>
@@ -1005,7 +1011,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目名称</label>
-								<input name="projectName" type="text" class="form-control input-sm" placeholder="项目名称" required>
+								<input name="projectName" type="text" class="form-control input-sm" placeholder="项目名称" maxlength="64" required data-error="项目名称不能为空">
+            					<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1017,8 +1024,9 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目类型</label>
-								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE" data-enum-text="请选择" required>
+								<select name='projectType' class="form-control input-sm" data-enum-fetch="PROJECTTYPE" data-enum-text="请选择" required data-error="项目类型不能为空">
                 				</select>
+                				<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1139,7 +1147,9 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押人</label>
-								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人">
+								<input name="mortgager" type="text" class="form-control input-sm" placeholder="抵押人"
+									 maxlength="32" required data-error="抵押人不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1187,15 +1197,18 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押顺位</label>
-								<input name="pledgePriority" type="text" class="form-control input-sm" placeholder="抵押顺位">
+								<input name="pledgePriority" type="text" class="form-control input-sm" placeholder="抵押顺位"
+									required data-error="抵押顺位不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押率</label>
 								<div class="input-group input-group-sm">
-									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率">
-									<span class="input-group-addon">%</span>
+									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率" required data-validfloat="3.2" data-error="抵押率不能为空且必须为三位整数两位小数">
+									<span class="input-group-addon">%</span>									
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1203,8 +1216,10 @@
 							<div class="form-group">
 								<label>保证金</label>
 								<div class="input-group input-group-sm">
-									<input name="margin" type="text" class="form-control input-sm" placeholder="保证金">
-									<span class="input-group-addon">元</span>
+									<input name="margin" type="text" class="form-control input-sm" placeholder="保证金"
+										data-validfloat="10.5" data-error="保证金必须为十位整数5位小数">
+									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1257,8 +1272,9 @@
 							<div class="form-group">
 								<label>项目规模</label>
 								<div class="input-group input-group-sm">
-									<input name="projectScale" type="text" class="form-control input-sm" placeholder="项目规模">
+									<input name="projectScale" type="text" class="form-control input-sm" placeholder="项目规模" data-validfloat="10.5" data-error="项目规模必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1266,8 +1282,9 @@
 							<div class="form-group">
 								<label>融资成本</label>
 								<div class="input-group input-group-sm">
-									<input name="financeCosts" type="text" class="form-control input-sm" placeholder="融资成本">
+									<input name="financeCosts" type="text" class="form-control input-sm" placeholder="融资成本" data-validfloat="10.5" data-error="融资成本必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1281,8 +1298,9 @@
 							<div class="form-group">
 								<label>SPV通道费</label>
 								<div class="input-group input-group-sm">
-									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费">
+									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费" data-validfloat="10.5" data-error="SPV通道费必须为十位整数5位小数">
 									<span class="input-group-addon">万</span>
+									<div class="help-block with-errors text-red"></div>
 								</div>
 							</div>
 						</div>
@@ -1316,7 +1334,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="projectSubmit" type="button" class="btn btn-primary btn-submit projectSubmit">保 存</button>
 			</div>
 		</div>
 	</div>

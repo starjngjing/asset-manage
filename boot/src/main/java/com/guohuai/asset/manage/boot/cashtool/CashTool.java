@@ -263,4 +263,8 @@ public class CashTool extends UUID {
 	 */
 	private Timestamp updateTime;
 
+	public CashTool(String oid, String secShortName) {
+		this.oid = oid;
+		this.secShortName = secShortName;
+	}
 }

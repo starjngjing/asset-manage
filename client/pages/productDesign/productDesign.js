@@ -146,6 +146,7 @@ define([
 					}
 				},
 				{
+					width: 256,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [
@@ -186,6 +187,58 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
+									
+									switch (data.typeOid) {
+										case 'PRODUCTTYPE_01':
+											$('#detailProductType01Area').show()
+											$('#detailProductType02Area').hide()
+											break
+										case 'PRODUCTTYPE_02':
+											$('#detailProductType02Area').show()
+											$('#detailProductType01Area').hide()
+											break
+									}
+									
+									var productDetailFiles = []
+									if(data.files!=null && data.files.length>0) {
+										for(var i=0;i<data.files.length;i++){
+											productDetailFiles.push(data.files[i])
+										}
+									}
+									var productDetailFileTableConfig = {
+										data:productDetailFiles,
+										columns: [
+											{
+												field: 'name',
+											},
+											{
+												field: 'operator',
+											},
+											{
+												field: 'createTime',
+											},
+											{
+												width: 100,
+												align: 'center',
+												formatter: function() {
+													var buttons = [{
+														text: '下载',
+														type: 'button',
+														class: 'item-download'
+													}]
+													return util.table.formatter.generateButton(buttons)
+												},
+												events: {
+													'click .item-download': function(e, value, row) {
+														location.href = 'http://api.guohuaigroup.com' + row.furl
+													}
+												}
+											}
+										]
+									}
+			
+									$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
+									
 									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
 								} else {
@@ -356,6 +409,64 @@ define([
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
+
+			// 产品类型下拉菜单关联区域显隐
+			// input disabled 设置为 disabled的时候将不做验证
+			$('#addProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#addProductType01Area').show().find('input').attr('disabled', false)
+						$('#addProductType02Area').hide().find('input').attr('disabled', 'disabled')
+						break
+					case 'PRODUCTTYPE_02':
+						$('#addProductType02Area').show().find('input').attr('disabled', false)
+						$('#addProductType01Area').hide().find('input').attr('disabled', 'disabled')
+						break
+				}
+				// 重置验证逻辑
+				$('#addProductForm').validator('destroy')
+				util.form.validator.init($('#addProductForm'))
+			})
+			$('#updateProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#updateProductType01Area').show().find('input').attr('disabled', false)
+						$('#updateProductType02Area').hide().find('input').attr('disabled', 'disabled')
+						break
+					case 'PRODUCTTYPE_02':
+						$('#updateProductType02Area').show().find('input').attr('disabled', false)
+						$('#updateProductType01Area').hide().find('input').attr('disabled', 'disabled')
+						break
+				}
+				// 重置验证逻辑
+				$('#updateProductForm').validator('destroy')
+				util.form.validator.init($('#updateProductForm'))
+			})
+
+			// 募集开始时间&成立时间select联动
+			$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
+				var col = $(this).parent().parent()
+				switch (this.value) {
+					case 'FIRSTRACKTIME':
+						col.removeClass('col-sm-2').addClass('col-sm-4')
+						col.next('.col-sm-2').hide()
+						break
+					case 'MANUALINPUT':
+						col.removeClass('col-sm-4').addClass('col-sm-2')
+						col.next('.col-sm-2').show()
+						break
+				}
+			}).change()
+
+			// 确认日input后缀按钮联动
+			$('.select-button').find('li a').on('click', function () {
+				var ul = $(this).parent().parent()
+				ul.prev('button').html(this.innerText + ' <span class="fa fa-caret-down"></span>')
+				ul.next('input').val($(this).attr('value'))
+			})
+
+			util.form.validator.init($('#addProductForm'))
+
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
     		$('#addProductModal').modal('show')
@@ -369,9 +480,62 @@ define([
     		pageOptions.type = form.type.value.trim()
     		return val
   		}
-    	
+
+		// 新建产品上传附件表格数据源
+		var addProductUploadFiles = []
+		// 新建产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+		$$.uploader({
+			container: $('#addProductUploader'),
+			success: function(file) {
+				file.furl = file.url
+				addProductUploadFiles.push(file)
+				$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+			}
+		})
+		// 新建产品附件表格配置
+		var addProductUploadTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = addProductUploadFiles.indexOf(row)
+							addProductUploadFiles.splice(index, 1)
+							$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+						}
+					}
+				}
+			]
+		}
+		// 新建产品附件表格初始化
+		$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
+			
+		// 新建产品“保存”按钮点击事件
     	$('#saveProductSubmit').on('click', function () {
-    		var typeOid = $("#typeSelect  option:selected").val();  
+    		var typeOid = $("#addProductTypeSelect  option:selected").val();
+			document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
+			if(document.addProductForm.expArorSec.value=="") {
+				document.addProductForm.expArorSec.value = document.addProductForm.expAror.value
+			}
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.savePeriodic,
@@ -390,8 +554,55 @@ define([
     			})
     		}
   		})
+
+			// 编辑产品上传附件表格数据源
+			var updateProductUploadFiles = []
+			// 编辑产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+			$$.uploader({
+				container: $('#updateProductUploader'),
+				success: function(file) {
+					file.furl = file.url
+					updateProductUploadFiles.push(file)
+					$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+				}
+			})
+			// 编辑产品附件表格配置
+			var updateProductUploadTableConfig = {
+				columns: [{
+					field: 'name',
+				}, {
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = updateProductUploadFiles.indexOf(row)
+							updateProductUploadFiles.splice(index, 1)
+							$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+						}
+					}
+				}]
+			}
+			// 编辑产品附件表格初始化
+			$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
+			// 编辑产品“保存”按钮点击事件
     	$('#updateProductSubmit').on('click', function () {
-    		var typeOid = $("#typeOid").val();  
+    		var typeOid = $("#typeOid").val();
+				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#updateProductForm').ajaxSubmit({
       			url: config.api.updatePeriodic,
@@ -422,7 +633,7 @@ define([
 				var le = productNames.length
 				for (var i=0;i<le;i++) {
 					if(i>0){
-						pnames+="，"
+						pnames+="<br/>"
 					}
 					pnames+=productNames[i]
 

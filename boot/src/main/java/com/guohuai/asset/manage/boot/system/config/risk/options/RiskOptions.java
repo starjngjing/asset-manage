@@ -66,8 +66,8 @@ public class RiskOptions implements Serializable {
 		Object[] param = new Object[4];
 		param[0] = this.param0;
 		param[1] = StringUtil.isEmpty(this.param1) ? "∞" : this.param1;
-		param[2] = this.param2;
-		param[3] = StringUtil.isEmpty(this.param3) ? "∞" : this.param3;
+		param[2] = StringUtil.isEmpty(this.param2) ? "∞" : this.param2;
+		param[3] = this.param3;
 		return String.format("%s %s, %s %s", param);
 	}
 

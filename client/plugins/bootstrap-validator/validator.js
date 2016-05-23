@@ -1,6 +1,7 @@
 /* 有做修改 */
 /* 1. submit button class 使用固定格式 */
 /* 2. submit button disable 从使用class换到使用attr */
+/* 3. remote 请求添加 id 参数，通过 data-fetch-id attribute 传入 */
 
 /*!
  * Validator v0.10.2 for Bootstrap 3, by @1000hz
@@ -163,6 +164,7 @@
       this.defer($el, function () {
         var data = {}
         data[$el.attr('name')] = getValue($el)
+        data['id'] = $el.attr('data-fetch-id')
         $.get($el.data('remote'), data)
           .fail(function (jqXHR, textStatus, error) { errors.push(getErrorMessage('remote') || error) })
           .always(function () { deferred.resolve(errors)})
