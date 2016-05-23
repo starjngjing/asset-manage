@@ -260,6 +260,7 @@ define([
           pageOptions.name = form.name.value;
           pageOptions.type = form.type.value;
           pageOptions.raiseScope = form.raiseScope.value;
+          pageOptions.holdAmount = form.holdAmount.value;
           pageOptions.lifed = form.lifed.value;
           pageOptions.expAror = form.expAror.value;
           pageOptions.rows = val.limit
