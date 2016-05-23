@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
-import com.guohuai.asset.manage.boot.investment.TargetIncome;
-import com.guohuai.asset.manage.boot.investment.TargetIncomeService;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
@@ -112,7 +110,8 @@ public class InvestmentPoolController extends BaseController {
 			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 投资标的备选库
-					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+					Expression<String> exp = root.get("state").as(String.class);					
+					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_establish }));
 				} else if (op.equals("holdList")) { // 已持有列表
 					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					

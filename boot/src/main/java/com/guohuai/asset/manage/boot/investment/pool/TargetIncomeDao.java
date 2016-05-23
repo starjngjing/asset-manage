@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.investment;
+package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.investment;
+package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.sql.Timestamp;
 
@@ -7,9 +7,14 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.investment.pool.TargetIncomeForm;
+import com.guohuai.asset.manage.boot.cashtool.pool.CashToolRevenue;
+import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.boot.investment.InvestmentDao;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 /**
@@ -54,5 +59,23 @@ public class TargetIncomeService {
 		interest.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		interest.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		return targetIncomeDao.save(interest);
+	}
+	
+
+	
+	/**
+	 * 分页查询本息兑付
+	 * 
+	 * @Title: getTargetIncomeList
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param spec
+	 * @param pageable
+	 * @return
+	 * @return Page<TargetIncome> 返回类型
+	 */
+	public Page<TargetIncome> getTargetIncomeList(Specification<TargetIncome> spec, Pageable pageable) {
+		return targetIncomeDao.findAll(spec, pageable);
 	}
 }

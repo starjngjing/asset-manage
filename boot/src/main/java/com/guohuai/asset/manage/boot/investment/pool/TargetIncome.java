@@ -7,7 +7,7 @@
  * you entered into with Founder.   
  *   
  */
-package com.guohuai.asset.manage.boot.investment;
+package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.persist.UUID;
 
 import lombok.AllArgsConstructor;

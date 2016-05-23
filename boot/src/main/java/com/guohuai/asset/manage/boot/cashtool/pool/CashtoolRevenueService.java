@@ -7,6 +7,9 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
@@ -63,5 +66,22 @@ public class CashtoolRevenueService {
 		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, cashToolRevenueForm.getOperator()); // 现金管理工具收益采集
 		
 		return cashtoolRevenueDao.save(cashToolRevenue);
+	}
+	
+	
+	/**
+	 * 分页查询现金收益
+	 * 
+	 * @Title: CashToolRevenue
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param spec
+	 * @param pageable
+	 * @return
+	 * @return Page<CashToolRevenue> 返回类型
+	 */
+	public Page<CashToolRevenue> getCashToolRevenueList(Specification<CashToolRevenue> spec, Pageable pageable) {
+		return cashtoolRevenueDao.findAll(spec, pageable);
 	}
 }

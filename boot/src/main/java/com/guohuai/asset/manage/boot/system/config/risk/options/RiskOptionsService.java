@@ -133,6 +133,7 @@ public class RiskOptionsService {
 				RiskOptionsCollect.Indicate.Options option = new RiskOptionsCollect.Indicate.Options();
 				option.setOid(o.getOid());
 				option.setTitle(o.showTitle());
+				option.setDft(o.getDft());
 				indicate.getOptions().add(option);
 				// }
 

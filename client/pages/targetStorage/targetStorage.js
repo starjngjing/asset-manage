@@ -11,7 +11,7 @@ define([
     name: 'targetStorage',
     init: function () {
       // js逻辑写在这里
-
+    	var targetInfo;
         // 分页配置
         var pageOptions = {
         		op:"storageList",
@@ -36,11 +36,16 @@ define([
           queryParams: getQueryParams,
           onLoadSuccess: function () {},
           columns: [
+            {// 编号
+            	field: 'sn',
+//              width: 60,
+              
+            },
             {// 名称
             	field: 'name',
 //              width: 60,
-              align: 'center'
-              
+            	align: 'center'
+            		
             },
             {// 类型
 //            	width: 60,
@@ -91,13 +96,13 @@ define([
             	      text: '成立',
             	      type: 'button',
             	      class: 'item-establish',
-            	      isRender: true
+            	      isRender: row.state == 'collecting',
             	    },
             	    {
               	      text: '不成立',
               	      type: 'button',
               	      class: 'item-unEstablish',
-              	      isRender: true
+              	      isRender: row.state == 'collecting',
               	    },
               	    {
               	    	text: '本息兑付',
@@ -110,8 +115,7 @@ define([
               	    	text: '逾期',
               	    	type: 'button',
               	    	class: 'item-overdue',
-//              	    	isRender: row.state == 'establish',
-              	    	isRender: true,
+              	    	isRender: row.state == 'establish',
               	    },
               	    {
               	      text: '移除出库',
@@ -178,6 +182,10 @@ define([
                 	  $('#unEstablishModal').modal('show');
                   },
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
+                	  targetInfo = row;
+                  	// 初始化数据表格
+                       $('#incomeTable').bootstrapTable(incomeTableConfig);
+                	  
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
                 			  oid:row.oid
@@ -272,6 +280,66 @@ define([
             }
           ]
         }
+        
+
+        // 分页配置
+           var incomePageOptions = {
+             page: 1,
+             rows: 10
+           }
+           // 数据表格配置
+           var incomeTableConfig = {
+             ajax: function (origin) {
+               http.post(config.api.investmentTargetIncomeList, {
+                 data: incomePageOptions,
+                 contentType: 'form'
+               }, function (rlt) {
+                 origin.success(rlt)
+               })
+             },
+             pageNumber: incomePageOptions.page,
+             pageSize: incomePageOptions.rows,
+             pagination: true,
+             sidePagination: 'server',
+             pageList: [10, 20, 30, 50, 100],
+             queryParams: function (val) {	              
+                 incomePageOptions.targetOid = targetInfo.oid;
+                 incomePageOptions.rows = val.limit
+                 incomePageOptions.page = parseInt(val.offset / val.limit) + 1
+                 return val
+               },
+             onLoadSuccess: function () {},
+             columns: [
+               {
+   	        	//编号
+   				// field: 'oid',
+   				width: 60,
+   				formatter: function(val, row, index) {
+   					return index + 1
+   				} 
+               },
+               {// 兑付期数
+               	field: 'seq',
+               		
+               },
+               {// 实际支付收益
+               	field: 'incomeRate',
+               		
+               },
+               {// 收益支付日
+               	field: 'incomeDate',
+               		
+               },
+               {// 录入时间
+               	field: 'createTime',
+               	visible:false,
+               },
+               {// 操作员
+               	field: 'operator',
+               	visible:false,            	
+               },
+              ],
+           }
 
         // 初始化数据表格
         $('#dataTable').bootstrapTable(tableConfig)
