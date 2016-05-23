@@ -617,6 +617,31 @@ define([
 				})
 			})
 
+			// 过会投票 -> 赞成按钮点击事件
+			$('#doVoteAccept').on('click', function () {
+				$(document.voteForm).ajaxSubmit({
+					url: '',
+					success: function () {
+						$('#voteModal').modal('hide')
+					}
+				})
+			})
+			// 过会投票 -> 不赞成按钮点击事件
+			$('#doVoteReject').on('click', function () {
+
+			})
+			// 初始化过会进程tab上传附件插件
+			$$.uploader({
+				container: $('#voteUploader'),
+				success: function(file) {
+					$('#voteFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
+					$('#voteFile').find('span').html(file.name)
+					document.voteForm.file.value = file.url
+				}
+			})
+
+			$('#voteModal').modal('show')
+
 			function getQueryParams(val) {
 				var form = document.searchForm
 				pageOptions.size = val.limit

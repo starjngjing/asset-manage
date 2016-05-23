@@ -387,3 +387,85 @@
 		</div>
 	</div>
 </div>
+
+<!-- 过会投票弹窗 -->
+<div id="voteModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">过会投票</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<!-- tabs -->
+				<div class="nav-tabs-custom">
+					<!-- tab页签定义，注意对应 href 对应的 id -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active">
+							<a href="#progresstab" role="tab" data-toggle="tab">过会进程</a>
+						</li>
+						<li role="presentation">
+							<a href="#summarytab" role="tab" data-toggle="tab">过会纪要</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<!--过会进程panel -->
+						<div class="tab-pane active" role="tabpanel" id="progresstab">
+							<table id="voteProgressTable" class="table table-bordered table-striped">
+								<thead>
+								<tr>
+									<th>人员</th>
+									<th>角色</th>
+									<th>表决状态</th>
+									<th>决议时间</th>
+								</tr>
+								</thead>
+							</table>
+							<form id="voteForm" name="voteForm" method="post">
+								<div class="form-group">
+									<h6>表决意见</h6>
+									<textarea name="meetingRemark" rows="3" class="form-control input-sm" placeholder="表决意见"></textarea>
+								</div>
+								<div id="voteFile" class="form-group" style="display: none;">
+									<div class="row">
+										<div class="col-sm-4">
+											<h6>
+												表决附件
+												<a href="#"><span class="pull-right"></span></a>
+											</h6>
+										</div>
+									</div>
+								</div>
+								<input name="file" type="hidden"/>
+							</form>
+							<div class="form-group" id="voteUploader"></div>
+							<div class="btn-area">
+								<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+								<button id="doVoteReject" type="button" class="btn btn-warning btn-submit">不赞成</button>
+								<button id="doVoteAccept" type="button" class="btn btn-primary btn-submit">赞 成</button>
+							</div>
+						</div>
+						<!-- 过会纪要panel -->
+						<div class="tab-pane" role="tabpanel" id="summarytab">
+							<table id="voteSummaryTable" class="table table-bordered table-striped">
+								<thead>
+								<tr>
+									<th>上传人</th>
+									<th>会议主题</th>
+									<th>与会人</th>
+									<th>上传时间</th>
+									<th>操作</th>
+								</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
