@@ -356,6 +356,48 @@ define([
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
+
+			// 产品类型下拉菜单关联区域显隐
+			$('#addProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#addProductType01Area').show()
+						$('#addProductType02Area').hide()
+						break
+					case 'PRODUCTTYPE_02':
+						$('#addProductType02Area').show()
+						$('#addProductType01Area').hide()
+						break
+				}
+			})
+			$('#updateProductTypeSelect').on('change', function () {
+				switch (this.value) {
+					case 'PRODUCTTYPE_01':
+						$('#updateProductType01Area').show()
+						$('#updateProductType02Area').hide()
+						break
+					case 'PRODUCTTYPE_02':
+						$('#updateProductType02Area').show()
+						$('#updateProductType01Area').hide()
+						break
+				}
+			})
+
+			// 募集开始时间&成立时间select联动
+			$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
+				var col = $(this).parent().parent()
+				switch (this.value) {
+					case 'MANUALINPUT':
+						col.removeClass('col-sm-2').addClass('col-sm-4')
+						col.next('.col-sm-2').hide()
+						break
+					case 'FIRSTRACKTIME':
+						col.removeClass('col-sm-4').addClass('col-sm-2')
+						col.next('.col-sm-2').show()
+						break
+				}
+			}).change()
+
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
     		$('#addProductModal').modal('show')
