@@ -692,8 +692,12 @@
 			          <div class="input-group input-group-sm">			            
 			            <input name="overdueRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="逾期利率" >
+			                   placeholder="逾期利率"
+			                   data-validfloat="2.4"
+                   			 data-error="逾期利率必须为前两位后四位小数"
+			                   >
 			            <span class="input-group-addon">%</span>
+			            <div class="help-block with-errors text-red"></div>
 			          </div>
 			        </div>
 		        </div>
