@@ -154,6 +154,7 @@ define([
                 	  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
                 	  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
                 	});
+                	util.form.validator.init($("#establishForm")); // 初始化表单验证
                 	$('#establishModal').modal('show');
                   },
                   'click .item-unEstablish': function (e, value, row) { // 标的不成立
@@ -173,6 +174,7 @@ define([
                 		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
                 	  });
+                	  util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
                 	  $('#unEstablishModal').modal('show');
                   },
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
@@ -192,6 +194,7 @@ define([
                 		  $$.detailAutoFix($('#targetIncomeForm'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
+                	  util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
                 	  $('#targetIncomeModal').modal('show');
                   },
                   'click .item-overdue': function(e, value, row) { // 逾期
@@ -234,7 +237,8 @@ define([
                 		  }
                 		  $$.detailAutoFix($('#overdueForm'), data);	// 自动填充详情
 //                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
-                	  });                	  
+                	  });
+                	  util.form.validator.init($("#overdueForm")); // 初始化表单验证
 					$('#overdueModal').modal('show');
 					
                   },
