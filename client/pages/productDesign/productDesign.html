@@ -567,8 +567,6 @@
               <option value="R4">R4(进取型)</option>
               <option value="R5">R5(激进型)</option>
             </select>
-                
-            </select>
           </div>
           <input name="files" type="hidden"/>
         </form>
@@ -1079,8 +1077,6 @@
               <option value="R4">R4(进取型)</option>
               <option value="R5">R5(激进型)</option>
             </select>
-                
-            </select>
           </div>
         </form>
         <div class="form-group" id="updateProductUploader"></div>
@@ -1241,7 +1237,7 @@
 						</dl>
 					</div>
 					<!-- 封闭式产品显示/隐藏层 -->
-          <div>
+          <div id="detailProductType01Area">
 						<p class="form-header">封闭式产品信息</p>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
@@ -1293,7 +1289,7 @@
 						</div>
           </div>
           <!-- 开放式产品显示/隐藏层 -->
-          <div>
+          <div id="detailProductType02Area">
             <p class="form-header">开放式产品信息</p>
             <div class="col-sm-6">
 							<dl class="dl-horizontal">
@@ -1450,6 +1446,23 @@
 		  					</dd>
 		  				</dl>
 		  			</div>
+		  			<div class="col-sm-12">
+			  			<dl class="dl-horizontal">
+				  			<dt>附件:</dt>
+					  		<dd>
+						  		<table id="productDetailFileTable" class="table table-bordered table-striped">
+		  				    	<thead>
+		  						   	<tr>
+            					  <th>附件名称</th>
+            				    <th>上传人</th>
+            				    <th>上传时间</th>
+            				    <th>操作</th>
+          		    		</tr>
+          		    	</thead>
+		  				    </table>
+							  </dd>
+  						</dl>
+	  				</div>
 		  		</div>
 		    </div>
 		  </div>
