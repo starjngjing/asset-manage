@@ -189,6 +189,29 @@ define([
           }
         }
       }
+    ,
+    /**
+     * 将表单序列化成json对象
+     * @param form
+     * @returns
+     */
+    serializeJson: function(form){  
+        var serializeObj={};  
+        var array=$(form).serializeArray();  
+        var str=$(form).serialize();  
+        $(array).each(function(){  
+            if(serializeObj[this.name]){  
+                if($.isArray(serializeObj[this.name])){  
+                    serializeObj[this.name].push(this.value);  
+                }else{  
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                }  
+            }else{  
+                serializeObj[this.name]=this.value;   
+            }  
+        });  
+        return serializeObj;  
+    }
     },
     /**
      * 将对象转换成带参数的形式 &a=1&b=2
