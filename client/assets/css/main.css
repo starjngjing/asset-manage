@@ -164,6 +164,10 @@ h6,
   background-color: #fff;
 }
 
+form .dropdown-menu{
+  font-size: 12px;
+}
+
 .yupForm{
   position: relative;
 }

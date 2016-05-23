@@ -398,6 +398,13 @@ define([
 				}
 			}).change()
 
+			// 确认日input后缀按钮联动
+			$('.select-button').find('li a').on('click', function () {
+				var ul = $(this).parent().parent()
+				ul.prev('button').html(this.innerText + ' <span class="fa fa-caret-down"></span>')
+				ul.next('input').val($(this).attr('value'))
+			})
+
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
     		$('#addProductModal').modal('show')
