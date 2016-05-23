@@ -258,7 +258,7 @@ public class InvestmentMeetingService {
 		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
 		for (MeetingInvestmentDetResp req : list) {
 			Investment investment = investmentService.getInvestment(req.getOid());
-			if ("yes".equals(req.getStatus())) {
+			if ("yes".equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_meetingpass);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项
@@ -268,7 +268,7 @@ public class InvestmentMeetingService {
 							.state(InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck).build();
 					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check, operator);
 				}
-			} else if ("no".equals(req.getStatus())) {
+			} else if ("no".equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_reject);
 				investment.setRejectDesc(req.getRejectComment());
 			} else {

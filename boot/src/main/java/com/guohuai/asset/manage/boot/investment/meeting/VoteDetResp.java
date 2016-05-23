@@ -20,7 +20,7 @@ public class VoteDetResp {
 	/**
 	 * 投票状态
 	 */
-	private String state;
+	private String voteStatus;
 	/**
 	 * 投票人
 	 */
@@ -29,4 +29,8 @@ public class VoteDetResp {
 	 * 投票时间
 	 */
 	private Timestamp time;
+	/*
+	 * 附件
+	 */
+	private String file;
 }

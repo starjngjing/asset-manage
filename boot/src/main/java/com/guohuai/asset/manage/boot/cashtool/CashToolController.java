@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.util.DateUtil;
+import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import io.swagger.annotations.Api;
@@ -53,7 +54,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 @RestController
 @RequestMapping(value = "/ams/boot/cashTool")
 @Api("现金管理工具操作相关接口")
-public class CashToolController {
+public class CashToolController extends BaseController{
 
 	@Autowired
 	CashToolService cashToolService;
@@ -101,8 +102,7 @@ public class CashToolController {
 
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
-		// String operator = super.getLoginAdmin();
-		String operator = "admin";
+		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		entity.setState(Investment.INVESTMENT_STATUS_pretrial);
 		entity.setOperator(operator);
@@ -110,5 +110,11 @@ public class CashToolController {
 		cashToolService.save(entity);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> edit(CashToolFrom form){
+		
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	} 
 
 }

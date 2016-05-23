@@ -95,6 +95,7 @@ define(function() {
 			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
 			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
 		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
+		    voteTarget: this.host + '/ams/target/targetVote/vote',   //过会标的表决
 			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
@@ -254,7 +255,7 @@ define(function() {
 		}],
 		voteStates: [{
 			id: "notvote",
-			text: "未投票",
+			text: "未表决",
 			children: []
 		}, {
 			id: "approve",
@@ -262,7 +263,7 @@ define(function() {
 			children: []
 		}, {
 			id: "notapprove",
-			text: "反对",
+			text: "不赞成",
 			children: []
 		}, {
 			id: "notpass",

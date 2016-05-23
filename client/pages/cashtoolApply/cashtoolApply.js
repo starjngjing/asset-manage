@@ -72,6 +72,11 @@ define([
 								class: 'item-detail',
 								isRender: true
 							}, {
+								text: '编辑',
+								type: 'button',
+								class: 'item-edit',
+								isRender: row.state == 'waitPretrial' || row.state == 'reject'
+							}, {
 								text: '提交审核',
 								type: 'button',
 								class: 'item-check',
@@ -86,7 +91,7 @@ define([
 									container: $('#doConfirm'),
 									trigger: this,
 									accept: function() {
-										
+
 									}
 								})
 							},

@@ -88,6 +88,7 @@ define([
 						},
 						events: {
 							'click .item-finish': function(e, value, row) {
+								$('#finishTargetConventionTable').bootstrapTable('destroy')
 								$('#finishOid').val(row.oid)
 								currentOpTarget = null
 									// 会议确认表格配置
@@ -105,44 +106,61 @@ define([
 										},
 										detailView: true,
 										onExpandRow: function(index, row, $detail) {
-												var table = $('<table><thead><tr>' +
-													'<th>角色名称</th>' +
-													'<th>投票意见</th>' +
-													'<th>投票人</th>' +
-													'<th>时间</th>' +
-													'</tr></thead></table>')
-												var tableConfig = {
-													ajax: function(origin) {
-														http.post(config.api.meetingTargetVoteDet, {
-															data: {
-																meetingOid: row.meetingOid,
-																targetOid: row.oid
-															},
-															contentType: 'form'
-														}, function(rlt) {
-															origin.success(rlt)
-														})
+											var table = $('<table><thead><tr>' +
+												'<th>角色名称</th>' +
+												'<th>表决意见</th>' +
+												'<th>表决人</th>' +
+												'<th>表决时间</th>' +
+												'<th>附件</th>' +
+												'</tr></thead></table>')
+											var tableConfig = {
+												ajax: function(origin) {
+													http.post(config.api.meetingTargetVoteDet, {
+														data: {
+															meetingOid: row.meetingOid,
+															targetOid: row.oid
+														},
+														contentType: 'form'
+													}, function(rlt) {
+														origin.success(rlt)
+													})
+												},
+												columns: [{
+													field: 'role',
+													align: 'center'
+												}, {
+													field: 'voteStatus',
+													align: 'center',
+													formatter: function(val) {
+														return util.enum.transform('voteStates', val);
+													}
+												}, {
+													field: 'name',
+													align: 'center'
+												}, {
+													field: 'time',
+													align: 'center'
+												}, {
+													align: 'center',
+													formatter: function(val, row) {
+														var buttons = [{
+															text: '下载',
+															type: 'button',
+															class: 'item-download',
+															isRender: row.file != null
+														}];
+														return util.table.formatter.generateButton(buttons);
 													},
-													columns: [{
-														field: 'role',
-														align: 'center'
-													}, {
-														field: 'state',
-														align: 'center',
-														formatter: function(val) {
-															return util.enum.transform('voteStates', val);
+													events: {
+														'click .item-download': function(e, value, row) {
+															location.href = 'http://api.guohuaigroup.com' + row.file
 														}
-													}, {
-														field: 'name',
-														align: 'center'
-													}, {
-														field: 'date',
-														align: 'center'
-													}]
-												}
-												$detail.append(table)
-												$(table).bootstrapTable(tableConfig)
-											},
+													}
+												}]
+											}
+											$detail.append(table)
+											$(table).bootstrapTable(tableConfig)
+										},
 										columns: [{
 											field: 'name'
 										}, {
@@ -313,6 +331,7 @@ define([
 								})
 							},
 							'click .item-detail': function(e, value, row) {
+								$('#targetConventionReportTable').bootstrapTable('destroy')
 								http.post(config.api.meetingDetail, {
 									data: {
 										oid: row.oid
@@ -337,9 +356,10 @@ define([
 											onExpandRow: function(index, row, $detail) {
 												var table = $('<table><thead><tr>' +
 													'<th>角色名称</th>' +
-													'<th>投票意见</th>' +
-													'<th>投票人</th>' +
-													'<th>时间</th>' +
+													'<th>表决意见</th>' +
+													'<th>表决人</th>' +
+													'<th>表决时间</th>' +
+													'<th>附件</th>' +
 													'</tr></thead></table>')
 												var tableConfig = {
 													ajax: function(origin) {
@@ -357,7 +377,7 @@ define([
 														field: 'role',
 														align: 'center'
 													}, {
-														field: 'state',
+														field: 'voteStatus',
 														align: 'center',
 														formatter: function(val) {
 															return util.enum.transform('voteStates', val);
@@ -366,8 +386,24 @@ define([
 														field: 'name',
 														align: 'center'
 													}, {
-														field: 'date',
+														field: 'time',
 														align: 'center'
+													}, {
+														align: 'center',
+														formatter: function(val, row) {
+															var buttons = [{
+																text: '下载',
+																type: 'button',
+																class: 'item-download',
+																isRender: row.file != null
+															}];
+															return util.table.formatter.generateButton(buttons);
+														},
+														events: {
+															'click .item-download': function(e, value, row) {
+																location.href = 'http://api.guohuaigroup.com' + row.file
+															}
+														}
 													}]
 												}
 												$detail.append(table)
@@ -500,7 +536,7 @@ define([
 						},
 						events: {
 							'click .item-download': function(e, value, row) {
-								location.href = config.api.yup + row.url
+								location.href = 'http://api.guohuaigroup.com' + row.url
 							},
 							'click .item-delete': function(e, value, row) {
 								var index = uploadTargetConventionSummaryFiles.indexOf(row)
