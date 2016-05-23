@@ -35,7 +35,7 @@ public class InvestmentMeetingVote extends UUID implements Serializable {
 	private static final long serialVersionUID = -5306960536423543505L;
 
 	/**
-	 * 投票状态 notvote 为投票 approve 赞成 notapprove 不赞成 notpass 一票否决
+	 * 投票状态 notvote 未投票 approve 赞成 notapprove 不赞成 notpass 一票否决
 	 * 
 	 */
 	public static final String VOTE_STATUS_notvote = "notvote";

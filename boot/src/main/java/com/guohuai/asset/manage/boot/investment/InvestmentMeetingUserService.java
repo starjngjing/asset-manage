@@ -39,6 +39,10 @@ public class InvestmentMeetingUserService {
 		return investmentMeetingUserDao.findOne(oid);
 	}
 
+	public InvestmentMeetingUser getMeetingUserDetByUserAndMeeting(String participantOid, InvestmentMeeting meeting) {
+		return investmentMeetingUserDao.findByParticipantOidAndInvestmentMeeting(participantOid, meeting);
+	}
+
 	/**
 	 * 新建投资标的过会人员
 	 * 
@@ -59,7 +63,7 @@ public class InvestmentMeetingUserService {
 	public List<InvestmentMeetingUser> getMeetingUserByMeeting(InvestmentMeeting meeting) {
 		return investmentMeetingUserDao.findByInvestmentMeeting(meeting);
 	}
-	
+
 	/**
 	 * 根据会议查询参会人列表
 	 * 

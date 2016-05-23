@@ -72,21 +72,68 @@ define([
 								class: 'item-detail',
 								isRender: true
 							}, {
+								text: '编辑',
+								type: 'button',
+								class: 'item-edit',
+								isRender: row.state == 'waitPretrial' || row.state == 'reject'
+							}, {
 								text: '提交审核',
 								type: 'button',
 								class: 'item-check',
 								isRender: row.state == 'waitPretrial' || row.state == 'reject'
-							}, ];
+							}, {
+								text: '作废',
+								type: 'button',
+								class: 'item-invalid',
+								isRender: row.state != 'invalid'
+							}];
 							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
+							'click .item-invalid': function(e, value, row) {
+								$("#confirmTitle").html("确定作废标的？")
+								$$.confirm({
+									container: $('#doConfirm'),
+									trigger: this,
+									accept: function() {
+										http.post(config.api.cashToolInvalid, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form',
+										}, function(result) {
+											$('#cashToolApplyTable').bootstrapTable('refresh')
+										})
+									}
+								})
+							},
+							'click .item-edit': function(e, value, row) {
+								http.post(config.api.cashtoolDetQuery, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									var data = result.data;
+									//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
+									$$.formAutoFix($('#editCashToolForm'), data); // 自动填充表单
+									$('#editCashToolModal').modal('show');
+								})
+							},
 							'click .item-check': function(e, value, row) {
 								$("#confirmTitle").html("确定提交预审？")
 								$$.confirm({
 									container: $('#doConfirm'),
 									trigger: this,
 									accept: function() {
-										
+										http.post(config.api.cashToolExamine, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form',
+										}, function(result) {
+											$('#cashToolApplyTable').bootstrapTable('refresh')
+										})
 									}
 								})
 							},
@@ -120,11 +167,15 @@ define([
 				})
 				// 新建底层资产按钮点击事件
 			$('#assetAdd').on('click', function() {
-				$('#addAssetModal').modal('show')
-			})
-
+					$('#addAssetModal').modal('show')
+				})
+				//新建现金管理工具按钮
 			$('#saveCashTool').on('click', function() {
-				saveCashTool();
+					saveCashTool();
+				})
+				//编辑现金管理工具按钮
+			$('#editCashTool').on('click', function() {
+				editCashTool();
 			})
 
 			function getQueryParams(val) {
@@ -151,5 +202,17 @@ define([
 			}
 		})
 	}
+
+	function editCashTool() {
+		$('#editCashToolForm').ajaxSubmit({
+			url: config.api.cashToolEdit,
+			success: function(result) {
+				$('#editCashToolForm').clearForm();
+				$('#editCashToolModal').modal('hide');
+				$('#cashToolApplyTable').bootstrapTable('refresh');
+			}
+		})
+	}
+	
 
 })

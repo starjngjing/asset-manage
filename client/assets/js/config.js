@@ -63,7 +63,12 @@ define(function() {
 			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询
 			cashtoolAdd: this.host + "/ams/boot/cashTool/add", //新建现金管理类工具
-			cashToolExamine: this.host + '/ams/target/cashTool/examine', //现金管理类工具提交审核			
+			cashToolExamine: this.host + '/ams/boot/cashTool/examine', //现金管理类工具提交审核
+			cashToolInvalid: this.host + '/ams/boot/cashTool/invalid', //现金管理类工具作废
+			cashToolAccessList: this.host + '/ams/boot/cashTool/accessList', //现金管理类工具审核列表
+			cashToolCheckpass: this.host + '/ams/boot/cashTool/checkpass', //现金管理类工具审核通过
+			cashToolCheckreject: this.host + '/ams/boot/cashTool/checkreject', //现金管理类工具审核驳回
+			cashToolEdit: this.host + '/ams/boot/cashTool/edit', //现金管理类工具编辑		
 			meetingUser: this.host + '/operate/admin/search?system=GAH&rows=10', //参会人池
 			meetingTarget: this.host + '/ams/target/targetMeeting/targetList', //未过会标的池
 			meetingAdd: this.host + '/ams/target/targetMeeting/addMeeting', //新建过会
@@ -97,6 +102,7 @@ define(function() {
 			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
 			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
 		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
+		    voteTarget: this.host + '/ams/target/targetVote/vote',   //过会标的表决
 			files:{
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
@@ -220,8 +226,8 @@ define(function() {
 			text: "审核中",
 			children: []
 		}, {
-			id: "checkpass",
-			text: "审核通过",
+			id: "collecting",
+			text: "募集期",
 			children: []
 		}, {
 			id: "reject",
@@ -263,7 +269,7 @@ define(function() {
 		}],
 		voteStates: [{
 			id: "notvote",
-			text: "未投票",
+			text: "未表决",
 			children: []
 		}, {
 			id: "approve",
@@ -271,7 +277,7 @@ define(function() {
 			children: []
 		}, {
 			id: "notapprove",
-			text: "反对",
+			text: "不赞成",
 			children: []
 		}, {
 			id: "notpass",

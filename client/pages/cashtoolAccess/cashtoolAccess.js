@@ -15,10 +15,10 @@ define([
 					number: 1,
 					size: 10
 				}
-				// 数据表格配置
+					// 数据表格配置
 			var tableConfig = {
 					ajax: function(origin) {
-						http.post(config.api.targetCheckListQuery, {
+						http.post(config.api.cashToolAccessList, {
 							data: {
 								page: pageOptions.number,
 								rows: pageOptions.size
@@ -35,83 +35,24 @@ define([
 					pageList: [10, 20, 30, 50, 100],
 					queryParams: getQueryParams,
 					columns: [{
-						field: 'sn'
+						field: 'ticker'
 					}, {
-						field: 'name'
+						field: 'secShortName'
 					}, {
-						field: 'accrualType'
-					}, {
-						field: 'expSetDate'
-					}, {
-						field: 'type',
+						field: 'etfLof',
 						formatter: function(val) {
-							return util.enum.transform('TARGETTYPE', val);
+							return util.enum.transform('CASHTOOLTYPE', val);
 						}
 					}, {
-						field: 'raiseScope',
-						formatter: function(val) {
-							if (val)
-								var temp = val / 10000;
-							return temp.toFixed(0) + "万";
-						}
+						field: 'dividendType'
 					}, {
-						field: 'life',
-						formatter: function(val, row) {
-							switch (row.lifeUnit) {
-								case "day":
-									return val + '天';
-								case "month":
-									return val + '月';
-								case "year":
-									return val + '年';
-								default:
-									val;
-							}
-						}
+						field: 'perfBenchmark'
 					}, {
-						field: 'expIncome',
-						formatter: function(val) {
-							if (val)
-								return val.toFixed(2) + "%";
-						}
-					}, {
-						field: 'expAror',
-						formatter: function(val, row) {
-							if (val)
-								if (val == row.expArorSec) {
-									return val.toFixed(2) + "%";
-								} else {
-									var maxAro = parseFloat(row.expArorSec);
-									return val.toFixed(2) + '-' + maxAro.toFixed(2) + "%";
-								}
-						}
+						field: 'riskLevel'
 					}, {
 						field: 'state',
 						formatter: function(val) {
-							switch (val) {
-								case 'waitPretrial':
-									return '待预审'
-								case 'pretrial':
-									return '预审中'
-								case 'waitMeeting':
-									return '待过会'
-								case 'metting':
-									return '过会中'
-								case 'collecting':
-									return '募集中'
-								case 'establish':
-									return '成立'
-								case 'unEstablish':
-									return '成立失败'
-								case 'reject':
-									return '驳回'
-								case 'overdue':
-									return '逾期'
-								case 'invalid':
-									return '作废'
-								default:
-									return '作废'
-							}
+							return util.enum.transform('cashtoolStates', val);
 						}
 					}, {
 						align: 'center',
@@ -122,12 +63,7 @@ define([
 								class: 'item-detail',
 								isRender: true
 							}, {
-								text: '底层项目',
-								type: 'button',
-								class: 'item-project',
-								isRender: true
-							}, {
-								text: '预审',
+								text: '审核',
 								type: 'button',
 								class: 'item-check',
 								isRender: true
@@ -139,38 +75,17 @@ define([
 								$("#coid").val(row.oid)
 								$('#accessModal').modal('show');
 							},
-							'click .item-invalid': function(e, value, row) {
-								$("#confirmTitle").html("确定作废标的？")
-								$$.confirm({
-									container: $('#doConfirm'),
-									trigger: this,
-									accept: function() {
-										http.post(config.api.targetInvalid, {
-											data: {
-												oid: row.oid
-											},
-											contentType: 'form',
-										}, function(result) {
-											$('#targetApplyTable').bootstrapTable('refresh')
-										})
-									}
-								})
-							},
 							'click .item-detail': function(e, value, row) {
-								http.post(config.api.targetDetQuery, {
+								http.post(config.api.cashtoolDetQuery, {
 									data: {
 										oid: row.oid
 									},
 									contentType: 'form'
 								}, function(result) {
-									if (result.errorCode == 0) {
-										var data = result.investment;
-										$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
-										$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
-										$('#targetDetailModal').modal('show');
-									} else {
-										alert(查询失败);
-									}
+									var data = result.data;
+										$$.detailAutoFix($('#detCashToolForm'), data); // 自动填充详情
+										$$.formAutoFix($('#detCashToolForm'), data); // 自动填充表单
+										$('#cashToolDetailModal').modal('show');
 								})
 							}
 						}
@@ -192,7 +107,7 @@ define([
 					container: $('#doConfirm'),
 					trigger: this,
 					accept: function() {
-						check(config.api.targetCheckPass);
+						check(config.api.cashToolCheckpass);
 					}
 				})
 			})
@@ -202,7 +117,7 @@ define([
 					container: $('#doConfirm'),
 					trigger: this,
 					accept: function() {
-						check(config.api.targetCheckReject);
+						check(config.api.cashToolCheckreject);
 					}
 				})
 			})

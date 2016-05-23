@@ -125,8 +125,8 @@ public class InvestmentManageBootController extends BaseController {
 		temp.setState(investment.getState());
 		temp.setCreateTime(investment.getCreateTime());
 		temp.setCreator(investment.getCreator());
-		System.out.println(form.getRaiseScope());
 		investment = investmentService.updateInvestment(temp, operator);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.edit, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

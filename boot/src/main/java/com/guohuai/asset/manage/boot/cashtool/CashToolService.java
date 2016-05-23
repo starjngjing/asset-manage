@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public class CashToolService {
 
 	@Autowired
 	private CashToolDao cashToolDao;
-	
+
 	@Autowired
 	private CashToolLogService cashToolLogService;
 
@@ -64,25 +65,24 @@ public class CashToolService {
 	public CashTool findByOid(String oid) {
 		return this.cashToolDao.findOne(oid);
 	}
-	
+
 	public List<CashTool> getCashToolList(Specification<CashTool> spec) {
 		return cashToolDao.findAll(spec);
 	}
-	
+
 	/**
 	 * 根据名称模糊查询现金管理工具
-	 * @Title: getCashToolListByName 
+	 * 
+	 * @Title: getCashToolListByName
 	 * @author vania
 	 * @version 1.0
 	 * @see: TODO
 	 * @param name
-	 * @return List<Object>    返回类型
+	 * @return List<Object> 返回类型
 	 */
 	public List<Object> getCashToolListByName(String name) {
 		return cashToolDao.getCashToolByName(name);
 	}
-	
-	
 
 	/**
 	 * 分页查询现金管理工具
@@ -108,7 +108,9 @@ public class CashToolService {
 	 */
 	public CashTool createInvestment(CashToolManageForm form) {
 		CashTool entity = new CashTool();
-		entity.setOid(StringUtil.uuid());
+		if (StringUtils.isEmpty(form.getOid())) {
+			entity.setOid(StringUtil.uuid());
+		}
 		try {
 			BeanUtils.copyProperties(form, entity);
 			return entity;
@@ -117,7 +119,7 @@ public class CashToolService {
 			throw new RuntimeException();
 		}
 	}
-	
+
 	/**
 	 * 移除出库
 	 * 
@@ -135,6 +137,24 @@ public class CashToolService {
 		ct.setUpdateTime(DateUtil.getSqlCurrentDate());
 		cashToolLogService.saveCashToolLog(oid, CashToolEventType.delete, operator);
 		this.cashToolDao.save(ct);
+	}
+
+	/**
+	 * 现金管理工具审核
+	 * 
+	 * @param oid
+	 * @param state
+	 * @param operator
+	 */
+	public void check(String oid, String state, String operator) {
+		CashTool cashTool = this.findByOid(oid);
+		if(null == cashTool || !CashTool.CASHTOOL_STATE_pretrial.equals(cashTool.getState())){
+			throw new RuntimeException();
+		}
+		cashTool.setState(state);
+		cashTool.setUpdateTime(DateUtil.getSqlCurrentDate());
+		cashTool.setOperator(operator);
+		this.save(cashTool);
 	}
 
 }

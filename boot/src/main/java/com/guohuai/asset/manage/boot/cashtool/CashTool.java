@@ -53,7 +53,7 @@ public class CashTool extends UUID {
 	 */
 	public static final String CASHTOOL_STATE_waitPretrial = "waitPretrial";
 	public static final String CASHTOOL_STATE_pretrial = "pretrial";
-	public static final String CASHTOOL_STATE_checkpass = "checkpass";
+	public static final String CASHTOOL_STATE_collecting = "collecting";
 	public static final String CASHTOOL_STATE_reject = "reject";
 	public static final String CASHTOOL_STATE_invalid = "invalid";
 	public static final String CASHTOOL_STATE_delete = "delete";

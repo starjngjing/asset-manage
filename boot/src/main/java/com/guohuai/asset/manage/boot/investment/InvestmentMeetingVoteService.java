@@ -5,14 +5,18 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.file.FileService;
+import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.VoteDetResp;
+import com.guohuai.asset.manage.boot.investment.vote.MeetingVoteForm;
+import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.operate.api.AdminSdk;
 import com.guohuai.operate.api.objs.admin.AdminObj;
 
@@ -37,6 +41,9 @@ public class InvestmentMeetingVoteService {
 
 	@Autowired
 	private InvestmentMeetingAssetService investmentMeetingAssetService;
+
+	@Autowired
+	private FileService fileService;
 
 	/**
 	 * 获得投资标的过会表决列表
@@ -67,8 +74,39 @@ public class InvestmentMeetingVoteService {
 	 * @param operator
 	 * @return
 	 */
-	public InvestmentMeetingVote saveOrUpdateInvestment(InvestmentMeetingVote entity, String operator) {
+	public InvestmentMeetingVote saveOrUpdateMeetingVote(InvestmentMeetingVote entity) {
 		return this.investmentMeetingVoteDao.save(entity);
+	}
+
+	/**
+	 * 根据与会人查询标的列表
+	 * 
+	 * @param participantOid
+	 * @param pageabl
+	 * @return
+	 */
+	public List<MeetingInvestmentDetResp> getInvestmentByParticipant(String participantOid) {
+		List<InvestmentMeetingUser> participantList = investmentMeetingUserService.getMeetingUserByUser(participantOid);
+		List<MeetingInvestmentDetResp> res = new ArrayList<MeetingInvestmentDetResp>();
+		for (InvestmentMeetingUser userTemp : participantList) {
+			if (InvestmentMeeting.MEETING_STATE_OPENING.equals(userTemp.getInvestmentMeeting().getState())) {
+				// 过会中的会议
+				List<MeetingInvestmentDetResp> temp = investmentMeetingAssetService
+						.getInvestmentByMeeting(userTemp.getInvestmentMeeting().getOid());
+				for (MeetingInvestmentDetResp resp : temp) {
+					InvestmentMeetingVote voteTemp = investmentMeetingVoteDao
+							.findByInvestmentMeetingAndInvestmentAndInvestmentMeetingUser(
+									userTemp.getInvestmentMeeting(), resp, userTemp);
+					if (voteTemp != null) {
+						resp.setVoteStatus(voteTemp.getState());
+					} else {
+						resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
+					}
+					res.add(resp);
+				}
+			}
+		}
+		return res;
 	}
 
 	/**
@@ -83,20 +121,73 @@ public class InvestmentMeetingVoteService {
 		Investment investment = investmentService.getInvestmentDet(investmentOid);
 		List<InvestmentMeetingUser> userList = investmentMeetingUserService.getMeetingUserByMeeting(meeting);
 		for (InvestmentMeetingUser user : userList) {
-			List<InvestmentMeetingVote> votes = investmentMeetingVoteDao
+			InvestmentMeetingVote vote = investmentMeetingVoteDao
 					.findByInvestmentMeetingAndInvestmentAndInvestmentMeetingUser(meeting, investment, user);
 			AdminObj userInfo = adminSdk.getAdmin(user.getParticipantOid());
 			VoteDetResp resp = new VoteDetResp();
-			if (votes != null && votes.size() > 0) {
-				resp.setState(votes.get(0).getState());
-				resp.setTime(votes.get(0).getVoteTime());
+			if (vote != null) {
+				resp.setVoteStatus(vote.getState());
+				resp.setTime(vote.getVoteTime());
+				resp.setFile(vote.getFile());
 			} else {
-				resp.setState(InvestmentMeetingVote.VOTE_STATUS_notvote);
+				resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
 			}
 			resp.setName(userInfo.getName());
 			resps.add(resp);
 		}
 		return resps;
+	}
+
+	/**
+	 * 标的过会表决
+	 * 
+	 * @param form
+	 * @param operator
+	 */
+	public void doMeetingVote(MeetingVoteForm form, String operator) {
+		InvestmentMeeting meeting = investmentMeetingService.getMeetingDet(form.getMeetingOid());
+		if (null == meeting) {
+			throw new RuntimeException();
+		}
+		Investment asset = investmentService.getInvestment(form.getTargetOid());
+		if (null == asset) {
+			throw new RuntimeException();
+		}
+		InvestmentMeetingUser user = investmentMeetingUserService.getMeetingUserDetByUserAndMeeting(operator, meeting);
+		if (null == user) {
+			throw new RuntimeException();
+		}
+		String voteStatus = null;
+		switch (form.getVoteState()) {
+		case "yes":
+			voteStatus = InvestmentMeetingVote.VOTE_STATUS_approve;
+			break;
+		case "no":
+			voteStatus = InvestmentMeetingVote.VOTE_STATUS_notapprove;
+			break;
+		default:
+			throw new RuntimeException();
+		}
+		InvestmentMeetingVote hisVote = investmentMeetingVoteDao
+				.findByInvestmentMeetingAndInvestmentAndInvestmentMeetingUser(meeting, asset, user);
+		InvestmentMeetingVote temp = null;
+		if (null != hisVote) {
+			temp = hisVote;
+		} else {
+			temp = new InvestmentMeetingVote();
+			temp.setInvestment(asset);
+			temp.setInvestmentMeeting(meeting);
+			temp.setInvestmentMeetingUser(user);
+		}
+		if (!StringUtils.isEmpty(form.getSuggest())) {
+			temp.setSuggest(form.getSuggest());
+		}
+		if (!StringUtils.isEmpty(form.getFile())) {
+			temp.setFile(form.getFile());
+		}
+		temp.setVoteTime(DateUtil.getSqlCurrentDate());
+		temp.setState(voteStatus);
+		this.saveOrUpdateMeetingVote(temp);
 	}
 
 }

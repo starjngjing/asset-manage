@@ -12,6 +12,7 @@ public class CashToolManageForm implements Serializable {
 
 	private static final long serialVersionUID = -684099825649628579L;
 
+	private String oid;
 	/**
 	 * 基金代码
 	 */

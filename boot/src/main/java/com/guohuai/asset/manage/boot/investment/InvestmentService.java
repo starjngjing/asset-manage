@@ -25,7 +25,7 @@ public class InvestmentService {
 
 	@Autowired
 	private InvestmentDao investmentDao;
-	
+
 	@Autowired
 	InvestmentLogService investmentLogService;
 
@@ -110,17 +110,34 @@ public class InvestmentService {
 			throw AMPException.getException("未知的投资标的ID");
 		return old;
 	}
-	
+
+	/**
+	 * 标的预审
+	 * 
+	 * @param oid
+	 * @param state
+	 * @param operator
+	 */
+	public void precheck(String oid, String state, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		if (investment == null || Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
+			throw new RuntimeException();
+		}
+		investment.setState(state);
+		this.updateInvestment(investment, operator);
+	}
+
 	/**
 	 * 根据名称模糊查询投资标的
-	 * @Title: getInvestmentByName 
+	 * 
+	 * @Title: getInvestmentByName
 	 * @author vania
 	 * @version 1.0
-	 * @see: 
+	 * @see:
 	 * @param name
-	 * @return List<Object>    返回类型
+	 * @return List<Object> 返回类型
 	 */
-	public List<Object> getInvestmentByName(String name){
+	public List<Object> getInvestmentByName(String name) {
 		return this.investmentDao.getInvestmentByName(name);
 	}
 }
