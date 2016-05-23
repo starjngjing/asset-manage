@@ -129,12 +129,12 @@ public class RiskOptionsService {
 
 				RiskOptionsCollect.Indicate indicate = collect.getIndicates().get(dr.get(o.getIndicate().getOid()));
 
-				if (indicate.getIndicateType().equals(RiskIndicate.DATA_TYPE_Text)) {
-					RiskOptionsCollect.Indicate.Options option = new RiskOptionsCollect.Indicate.Options();
-					option.setOid(o.getOid());
-					option.setTitle(o.showTitle());
-					indicate.getOptions().add(option);
-				}
+				// if (indicate.getIndicateType().equals(RiskIndicate.DATA_TYPE_Text)) {
+				RiskOptionsCollect.Indicate.Options option = new RiskOptionsCollect.Indicate.Options();
+				option.setOid(o.getOid());
+				option.setTitle(o.showTitle());
+				indicate.getOptions().add(option);
+				// }
 
 			}
 
@@ -196,6 +196,11 @@ public class RiskOptionsService {
 		}
 
 		return view;
+	}
+
+	@Transactional
+	public List<RiskOptions> search(String type) {
+		return this.riskOptionsDao.search(type);
 	}
 
 }

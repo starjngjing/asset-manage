@@ -327,6 +327,8 @@ define([
 
 						// TODO 这里要调下, 标的模块要设置标的的oid
 						$(document.collectForm.relative).val('xxxxxxxxxxxxxxxx');
+						// TODO 这里要设置数据采集类型
+						$(document.collectForm.type).val("SCORE");
 
 						$('#collectModalContent').empty();
 
@@ -394,17 +396,19 @@ define([
 
 				var data = {
 					relative: document.collectForm.relative.value,
+					type: document.collectForm.type.value,
 					datas: []
 				}
 
 				$('#collectModalContent').find('form').each(function(x, form) {
 					var config = {};
 					$.each($(form).serializeArray(), function(i, v) {
-						config[v.name] = v.value;
+						config[v.name] = v.value.trim();
 					});
 					data.datas.push(config);
 				});
 
+				// TODO 这个 data 对象是采集页面录入的数据, 可以根据具体业务场景使用
 				console.log(data);
 
 				$('#collectForm').resetForm();
