@@ -133,7 +133,8 @@ define(function() {
 							delete: this.host + "/ams/system/ccr/indicate/delete",
 							options: this.host + "/ams/system/ccr/indicate/options",
 							collect: {
-								save: this.host + "/ams/system/ccr/indicate/collect/save"
+								save: this.host + "/ams/system/ccr/indicate/collect/save",
+								preUpdate: this.host + "/ams/system/ccr/indicate/collect/preUpdate"
 							}
 						},
 						options: {
