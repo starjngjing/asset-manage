@@ -144,7 +144,7 @@ define(function() {
 				}
 			},
 			role: {
-				list: '/operate/admin/ctrl/role/list'					// 权限列表
+				list: this.host + '/operate/admin/ctrl/role/list'					// 权限列表
 			}
 		},
 
