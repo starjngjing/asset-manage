@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
@@ -65,13 +63,14 @@ public class TargetIncomeController extends BaseController {
 	 * @param size
 	 * @param sortDirection
 	 * @param sortField
-	 * @return ResponseEntity<InvestmentListResp> 返回类型
+	 * @return ResponseEntity<TargetIncomeListResp> 返回类型
 	 */
 	@RequestMapping(value = { "investmentTargetIncomeList"}, method = { RequestMethod.POST, RequestMethod.GET })
 	@ApiOperation(value = "投资标的本息兑付列表")
 	public @ResponseBody ResponseEntity<TargetIncomeListResp> investmentTargetIncomeList(HttpServletRequest request,
 			@And({	
-				@Spec(params = "targetOid", path = "investment.oid", spec = Equal.class) 
+				@Spec(params = "targetOid", path = "investment.oid", spec = Equal.class),
+				@Spec(params = "seq", path = "seq", spec = Equal.class) 
 			}) Specification<TargetIncome> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
 			@RequestParam(defaultValue = "updateTime") String sortField) {
