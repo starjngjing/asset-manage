@@ -232,4 +232,8 @@ public class Investment extends UUID implements Serializable {
 	 */
 	private String rejectDesc;
 
+	public Investment(String oid, String name) {
+		this.oid = oid;
+		this.name = name;
+	}
 }

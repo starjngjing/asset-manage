@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -12,11 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
-import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
-import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -111,5 +109,18 @@ public class InvestmentService {
 		if (null == old)
 			throw AMPException.getException("未知的投资标的ID");
 		return old;
+	}
+	
+	/**
+	 * 根据名称模糊查询投资标的
+	 * @Title: getInvestmentByName 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param name
+	 * @return List<Object>    返回类型
+	 */
+	public List<Object> getInvestmentByName(String name){
+		return this.investmentDao.getInvestmentByName(name);
 	}
 }
