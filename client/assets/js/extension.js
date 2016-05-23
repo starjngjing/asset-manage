@@ -305,8 +305,10 @@ define([
               options += '<option value="' + item.id + '">' + item.text + '</option>'
             })
             $(item).append(options)
-            // 如果事先绑定了change事件，触发一下
-            $(item).change()
+            if ($(item).attr('change-immediately')) {
+              // 如果事先声明了change-immediately，触发一下change事件
+              $(item).change()
+            }
         }
       })
       config.enumSourceState = 'loaded'
