@@ -11,11 +11,12 @@ function (http, config, util, $$) {
 	return {
 	  name: 'role',
 	  init: function (){
-			var confirm = $('#confirmModal');
+			var confirm = $('#confirmModal')
 			// 分页配置
 			var pageOptions = {
 				number: 1,
 				size: 10,
+				offset: 0,
 				name: ''
 			}
 			// 权限表格配置
@@ -63,6 +64,8 @@ function (http, config, util, $$) {
 						field: 'createTime'
 					},
 					{
+						width: 150,
+						align: 'center',
 						formatter: function (val, row, index) {
 							var buttons = [
 								{
@@ -81,7 +84,7 @@ function (http, config, util, $$) {
 									class: 'item-delete'
 								}
 							]
-							return util.table.formatter.generateButton(buttons);
+							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
 
@@ -90,9 +93,9 @@ function (http, config, util, $$) {
 				]
 			}
 			// 初始化权限表格
-			$('#roleTable').bootstrapTable(tableConfig);
+			$('#roleTable').bootstrapTable(tableConfig)
 			// 初始化权限表格搜索表单
-			$$.searchInit($('#searchForm'), $('#roleTable'));
+			$$.searchInit($('#searchForm'), $('#roleTable'))
 
 			function getQueryParams (val) {
 				// 参数 val 是bootstrap-table默认的与服务器交互的数据，包含分页、排序数据
@@ -100,6 +103,7 @@ function (http, config, util, $$) {
 				// 分页数据赋值
 				pageOptions.size = val.limit
 				pageOptions.number = parseInt(val.offset / val.limit) + 1
+				pageOptions.offset = val.offset
 				pageOptions.name = form.name.value.trim()
 				return val
 			}
