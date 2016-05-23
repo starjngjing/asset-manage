@@ -192,6 +192,7 @@ define([
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
+							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
 
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 							$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
@@ -201,6 +202,7 @@ define([
 							//111
 							// 初始化底层项目表格
 							$('#projectTable').bootstrapTable(projectTableConfig)
+							$('#projectTable').bootstrapTable('refresh'); // 项目表单重新加载
 							$$.searchInit($('#projectSearchForm'), $('#projectTable'))
 							$('#projectDataModal').modal('show');
 
@@ -227,10 +229,12 @@ define([
 				pageList: [10, 20, 30, 50, 100],
 				queryParams: function(val) {
 					var form = document.projectSearchForm
+					$.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+					
 					prjPageOptions.rows = val.limit
 					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
-					prjPageOptions.targetOid = targetInfo.oid.trim();
-					prjPageOptions.projectName = form.projectName.value.trim();
+					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id				
+					
 					return val
 				},
 				columns: [{
