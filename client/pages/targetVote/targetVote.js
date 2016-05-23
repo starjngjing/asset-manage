@@ -61,6 +61,19 @@ define([
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
+						'click .item-detail': function(e, value, row) {
+								http.post(config.api.targetDetQuery, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								}, function(result) {
+									var data = result.investment;
+									$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
+									$('#targetDetailModal').modal('show');
+								})
+							},
 						'click .item-vote': function(e, value, row) {
 							$('#meetingOid').val(row.meetingOid);
 							$('#targetOid').val(row.oid);

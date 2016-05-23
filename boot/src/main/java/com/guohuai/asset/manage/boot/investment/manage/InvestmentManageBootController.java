@@ -85,7 +85,7 @@ public class InvestmentManageBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "detail", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentDetResp> detail(String oid) {
+	public @ResponseBody ResponseEntity<InvestmentDetResp> detail(@RequestParam(required = true) String oid) {
 		Investment entity = investmentService.getInvestmentDet(oid);
 		InvestmentDetResp resp = new InvestmentDetResp(entity);
 		return new ResponseEntity<InvestmentDetResp>(resp, HttpStatus.OK);
@@ -99,7 +99,7 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid InvestmentManageForm form) {
-		String operator = super.getLoginAdmin();
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		Investment investment = investmentService.createInvestment(form);
 		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
 		investment = investmentService.saveInvestment(investment, operator);
@@ -115,7 +115,7 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid InvestmentManageForm form) {
-		String operator = super.getLoginAdmin();
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		Investment investment = investmentService.getInvestmentDet(form.getOid());
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
 				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
@@ -137,8 +137,8 @@ public class InvestmentManageBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
-		String operator = super.getLoginAdmin();
+	public @ResponseBody ResponseEntity<BaseResp> examine(@RequestParam(required = true) String oid) {
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		Investment investment = investmentService.getInvestmentDet(oid);
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
 				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
@@ -158,8 +158,8 @@ public class InvestmentManageBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
-		String operator = super.getLoginAdmin();
+	public @ResponseBody ResponseEntity<BaseResp> invalid(@RequestParam(required = true) String oid) {
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		investmentService.saveInvestment(investment, operator);

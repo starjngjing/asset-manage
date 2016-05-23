@@ -178,17 +178,8 @@ define([
 							})
 						},
 						'click .item-detail': function(e, value, row) {
-							http.post(config.api.targetDetQuery, {
-								data: {
-									oid: row.oid
-								},
-								contentType: 'form'
-							}, function(result) {
-								var data = result.investment;
-								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
-								$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
-								$('#targetDetailModal').modal('show');
-							})
+							$$.detailAutoFix($('#detTargetForm'), row); // 自动填充详情
+							$('#targetDetailModal').modal('show');
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息

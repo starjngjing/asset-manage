@@ -32,6 +32,7 @@ define(function() {
 			targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 			targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 			targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
+			targetEdit: this.host + '/ams/target/targetManage/edit', //新建标的
 			targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
 			targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
 			targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询

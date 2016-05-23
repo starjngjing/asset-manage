@@ -88,30 +88,7 @@ define([
 					}, {
 						field: 'state',
 						formatter: function(val) {
-							switch (val) {
-								case 'waitPretrial':
-									return '待预审'
-								case 'pretrial':
-									return '预审中'
-								case 'waitMeeting':
-									return '待过会'
-								case 'metting':
-									return '过会中'
-								case 'collecting':
-									return '募集中'
-								case 'establish':
-									return '成立'
-								case 'unEstablish':
-									return '成立失败'
-								case 'reject':
-									return '驳回'
-								case 'overdue':
-									return '逾期'
-								case 'invalid':
-									return '作废'
-								default:
-									return '作废'
-							}
+							return util.enum.transform('targetStates', val);
 						}
 					}, {
 						align: 'center',
@@ -139,22 +116,17 @@ define([
 								$("#coid").val(row.oid)
 								$('#accessModal').modal('show');
 							},
-							'click .item-invalid': function(e, value, row) {
-								$("#confirmTitle").html("确定作废标的？")
-								$$.confirm({
-									container: $('#doConfirm'),
-									trigger: this,
-									accept: function() {
-										http.post(config.api.targetInvalid, {
-											data: {
-												oid: row.oid
-											},
-											contentType: 'form',
-										}, function(result) {
-											$('#targetApplyTable').bootstrapTable('refresh')
-										})
-									}
-								})
+							'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
+								targetInfo = row; // 变更某一行 投资标的信息
+								//								$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+								//								$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
+								//								// 给项目表单的 标的id属性赋值
+								//								$("#targetOid")[0].value = targetInfo.oid;
+								// 初始化底层项目表格
+								$('#projectTable').bootstrapTable(projectTableConfig)
+								$('#projectTable').bootstrapTable('refresh'); // 项目表单重新加载
+								$$.searchInit($('#projectSearchForm'), $('#projectTable'))
+								$('#projectDataModal').modal('show');
 							},
 							'click .item-detail': function(e, value, row) {
 								http.post(config.api.targetDetQuery, {
@@ -163,14 +135,10 @@ define([
 									},
 									contentType: 'form'
 								}, function(result) {
-									if (result.errorCode == 0) {
-										var data = result.investment;
-										$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
-										$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
-										$('#targetDetailModal').modal('show');
-									} else {
-										alert(查询失败);
-									}
+									var data = result.investment;
+									$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
+									$('#targetDetailModal').modal('show');
 								})
 							}
 						}
@@ -178,6 +146,78 @@ define([
 				}
 				// 初始化表格
 			$('#targetAccessTable').bootstrapTable(tableConfig)
+
+			var prjPageOptions = {}
+			var projectTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.targetProjectList, {
+						data: prjPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pageOptions.number,
+				pageSize: pageOptions.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					var form = document.projectSearchForm
+					$.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+
+					prjPageOptions.rows = val.limit
+					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
+					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id				
+
+					return val
+				},
+				columns: [{
+					//编号
+					// field: 'oid',
+					width: 60,
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, {
+					//项目名称
+					field: 'projectName',
+				}, {
+					//项目项目经理
+					field: 'projectManager',
+				}, {
+					//项目项目类型
+					field: 'projectType',
+					formatter: function(val) {
+						return util.enum.transform('PROJECTTYPE', val);
+					}
+				}, {
+					//城市
+					field: 'projectCity',
+				}, {
+					//创建时间
+					field: 'createTime',
+				}, {
+					//操作
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '详情',
+							type: 'button',
+							class: 'item-project-detail',
+							isRender: true
+						}];
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-project-detail': function(e, value, row) { // 底层项目详情
+							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
+							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
+							$('#projectDetailModal').modal('show');
+						}
+					}
+				}]
+			};
 
 			function getQueryParams(val) {
 				var form = document.targetSearchForm

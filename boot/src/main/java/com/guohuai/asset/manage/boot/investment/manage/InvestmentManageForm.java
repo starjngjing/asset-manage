@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 @Data
@@ -16,10 +18,12 @@ public class InvestmentManageForm implements Serializable {
 	/**
 	 * 标的编号
 	 */
+	@NotNull(message = "标的编号不能为空")
 	private String sn;
 	/**
-	 * 表单名称
+	 * 标的名称
 	 */
+	@NotNull(message = "标的名称不能为空")
 	private String name;
 	/**
 	 * 付息方式
@@ -36,6 +40,7 @@ public class InvestmentManageForm implements Serializable {
 	/**
 	 * 标的类型
 	 */
+	@NotNull(message = "标的类型不能为空")
 	private String type;
 	/**
 	 * 投资方向
@@ -64,6 +69,7 @@ public class InvestmentManageForm implements Serializable {
 	/**
 	 * 合同年天数
 	 */
+	@NotNull(message = "合同年天数不能为空")
 	private Integer contractDays;
 	/**
 	 * 起购金额

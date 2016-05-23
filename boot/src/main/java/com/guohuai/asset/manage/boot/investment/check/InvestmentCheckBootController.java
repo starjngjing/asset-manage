@@ -84,7 +84,7 @@ public class InvestmentCheckBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkPass(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> checkPass(@RequestParam(required = true) String oid) {
 		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator);
 		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkpass, operator);
@@ -98,7 +98,7 @@ public class InvestmentCheckBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid, String suggest) {
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(@RequestParam(required = true) String oid) {
 		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_reject, operator);
 		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkreject, operator);

@@ -120,7 +120,7 @@ public class InvestmentService {
 	 */
 	public void precheck(String oid, String state, String operator) {
 		Investment investment = this.getInvestmentDet(oid);
-		if (investment == null || Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
+		if (investment == null || !Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
 			throw new RuntimeException();
 		}
 		investment.setState(state);
