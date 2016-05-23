@@ -55,7 +55,7 @@ public class ProjectController extends BaseController {
 	@RequestMapping(value = "projectlist", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<ProjectListResp> projectlist(HttpServletRequest request,
 			@And({ 
-				@Spec(params = "targetOid", path = "targetOid", spec = Equal.class),
+				@Spec(params = "targetOid", path = "investment.oid", spec = Equal.class),
 				@Spec(params = "projectName", path = "projectName", spec = Like.class),
 				@Spec(params = "projectManager", path = "projectManager", spec = Like.class),
 				@Spec(path = "projectType", params = "projectType", spec = Equal.class) 
