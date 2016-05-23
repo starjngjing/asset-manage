@@ -12,11 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
-import com.guohuai.asset.manage.boot.investment.pool.EstablishForm;
-import com.guohuai.asset.manage.boot.investment.pool.UnEstablishForm;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -27,7 +24,7 @@ public class InvestmentService {
 
 	@Autowired
 	private InvestmentDao investmentDao;
-	
+
 	@Autowired
 	InvestmentLogService investmentLogService;
 
@@ -111,5 +108,21 @@ public class InvestmentService {
 		if (null == old)
 			throw AMPException.getException("未知的投资标的ID");
 		return old;
+	}
+
+	/**
+	 * 标的预审
+	 * 
+	 * @param oid
+	 * @param state
+	 * @param operator
+	 */
+	public void precheck(String oid, String state, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		if (investment == null || Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
+			throw new RuntimeException();
+		}
+		investment.setState(state);
+		this.updateInvestment(investment, operator);
 	}
 }

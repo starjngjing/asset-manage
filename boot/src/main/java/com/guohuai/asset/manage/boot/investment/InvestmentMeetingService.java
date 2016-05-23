@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONArray;
+import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileService;
 import com.guohuai.asset.manage.boot.file.SaveFileForm;
+import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.meeting.AddInvestmentMeetingForm;
 import com.guohuai.asset.manage.boot.investment.meeting.MeetingFinishForm;
 import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
@@ -44,6 +46,9 @@ public class InvestmentMeetingService {
 
 	@Autowired
 	private InvestmentMeetingCheckService investmentMeetingCheckService;
+
+	@Autowired
+	private InvestmentLogService investmentLogService;
 
 	/**
 	 * 获得投资标的过会列表
@@ -257,9 +262,10 @@ public class InvestmentMeetingService {
 		}
 		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
 		for (MeetingInvestmentDetResp req : list) {
+			TargetEventType logType = null;
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if ("yes".equals(req.getVoteStatus())) {
-				investment.setState(Investment.INVESTMENT_STATUS_meetingpass);
+				investment.setState(Investment.INVESTMENT_STATUS_collecting);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项
 				for (String checkName : checkList) {
@@ -268,13 +274,16 @@ public class InvestmentMeetingService {
 							.state(InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck).build();
 					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check, operator);
 				}
+				logType = TargetEventType.collecting;
 			} else if ("no".equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_reject);
 				investment.setRejectDesc(req.getRejectComment());
+				logType = TargetEventType.checkreject;
 			} else {
 				continue;
 			}
 			investmentService.updateInvestment(investment, operator);
+			investmentLogService.saveInvestmentLog(investment, logType, operator);
 		}
 		meeting.setState(InvestmentMeeting.MEETING_STATE_FINISH);
 		this.updateMeeting(meeting, operator);

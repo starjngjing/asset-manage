@@ -26,7 +26,6 @@ import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
-import com.guohuai.asset.manage.boot.investment.log.InvestmentLog;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
@@ -86,11 +85,9 @@ public class InvestmentCheckBootController extends BaseController {
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> checkPass(String oid) {
-		String operator = "admin";
-		Investment investment = investmentService.getInvestmentDet(oid);
-		investment.setState(Investment.INVESTMENT_STATUS_waitMeeting);
-		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkpass, operator);
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator);
+		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkpass, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -101,13 +98,10 @@ public class InvestmentCheckBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid,String suggest) {
-		String operator = "admin";
-		Investment investment = investmentService.getInvestmentDet(oid);
-		investment.setState(Investment.INVESTMENT_STATUS_reject);
-		investment.setRejectDesc(suggest);
-		investmentService.saveInvestment(investment, operator);
-		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkreject, operator);
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid, String suggest) {
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_reject, operator);
+		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkreject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

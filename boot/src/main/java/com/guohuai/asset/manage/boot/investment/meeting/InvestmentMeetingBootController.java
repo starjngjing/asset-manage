@@ -184,7 +184,6 @@ public class InvestmentMeetingBootController extends BaseController {
 	 */
 	@RequestMapping(value = "summaryDet", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<SummaryListResp> summaryList(String oid) {
-		System.out.println(oid);
 		List<SummaryDetResp> resp = investmentMeetingService.getSummary(oid);
 		return new ResponseEntity<SummaryListResp>(new SummaryListResp(resp), HttpStatus.OK);
 	}
