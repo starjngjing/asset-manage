@@ -6,7 +6,10 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,8 @@ import com.guohuai.asset.manage.boot.dict.DictService;
 import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.boot.file.FileService;
+import com.guohuai.asset.manage.boot.product.productChannel.ProductChannel;
+import com.guohuai.asset.manage.boot.product.productChannel.ProductChannelService;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -38,6 +43,8 @@ public class ProductService {
 	private DictService dictService;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private ProductChannelService productChannelService;
 
 	@Transactional
 	public BaseResp savePeriodic(SavePeriodicProductForm form, String operator) throws ParseException {
@@ -517,8 +524,27 @@ public class ProductService {
 		PageResp<ProductResp> pagesRep = new PageResp<ProductResp>();
 		if (cas != null && cas.getContent() != null && cas.getTotalElements() > 0) {
 			List<ProductResp> rows = new ArrayList<ProductResp>();
+			List<String> productOids =  new ArrayList<String>();
+			for (Product p : cas) {
+				productOids.add(p.getOid());
+			}
+			Map<String,Integer> channelNum = new HashMap<String,Integer>();
+			List<ProductChannel> pcs = productChannelService.queryProductChannels(productOids);
+			if(pcs!=null && pcs.size()>0) {
+				for(ProductChannel pc : pcs) {
+					if(channelNum.get(pc.getProduct().getOid())==null) {
+						channelNum.put(pc.getProduct().getOid(),0);
+					}
+					channelNum.put(pc.getProduct().getOid(),channelNum.get(pc.getProduct().getOid())+1);
+				}
+			}
+			
 			for (Product p : cas) {
 				ProductResp queryRep = new ProductResp(p);
+				if(channelNum.get(p.getOid())!=null) {
+					queryRep.setChannelNum(channelNum.get(p.getOid()));
+				}
+				
 				rows.add(queryRep);
 			}
 			pagesRep.setRows(rows);

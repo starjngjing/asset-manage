@@ -56,7 +56,7 @@ define(function() {
 			productChooseChannelList: this.host + "/ams/product/channel/choose/list", //产品选择渠道列表
 			saveProductChannel: this.host + "/ams/product/channel/save/list", //保存产品已经选择渠道列表
 			productChannelList: this.host + "/ams/product/channel/list", //该渠道的产品列表
-			productChannelIpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
+			productChannelUpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
 			productChannelOffshelf: this.host + "/ams/product/channel/donwshelf", //下架产品
 			cashtoolListQuery: this.host + "/ams/boot/cashTool/list", //现金管理类工具列表查询
 			cashtoolDetQuery: this.host + "/ams/boot/cashTool/detail", //现金管理类工具详情查询

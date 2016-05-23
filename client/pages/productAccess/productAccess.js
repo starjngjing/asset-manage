@@ -125,9 +125,7 @@ define([
 				},
 				{
 					align: 'center',
-					formatter: function (val, row, index) {
-						return index + 1
-					}
+					field: 'channelNum'
 				},
 				{
 					field: 'investment',
@@ -177,6 +175,12 @@ define([
 		           	      		isRender: true
 		           	    	},
 		           	    	{
+		           	    		text: '选择渠道',
+		           	    		type: 'button',
+		           	    		class: 'item-channel',
+		           	    		isRender: true
+		           	    	},
+		           	    	{
 		           	    		text: '批准',
 		           	    		type: 'button',
 		           	    		class: 'item-approve',
@@ -207,6 +211,20 @@ define([
 									alert(查询失败);
 								}
 							})
+						},
+						'click .item-channel': function(e, value, row) {
+							http.post(
+								config.api.channels, {
+		                		  data: {
+		                			  oid:row.oid
+		                		  },
+		                		  contentType: 'form'
+		                		},
+		                		function (obj) {
+
+		                		  $('#projectModal').modal('show');
+		                		}
+		                	);
 						},
 						'click .item-approve': function(e, value, row) {
 							$("#oid").val(row.oid)

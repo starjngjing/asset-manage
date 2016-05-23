@@ -108,6 +108,7 @@ public class ProductResp extends BaseResp {
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String isOpenPurchase;//开放申购期
 	private String isOpenRemeed;//开放赎回期
+	private int channelNum;//取到数
 	private List<FileResp> files;
 
 }

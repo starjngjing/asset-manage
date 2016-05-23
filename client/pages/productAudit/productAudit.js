@@ -125,9 +125,7 @@ define([
 				},
 				{
 					align: 'center',
-					formatter: function (val, row, index) {
-						return index + 1
-					}
+					field: 'channelNum'
 				},
 				{
 					field: 'investment',
