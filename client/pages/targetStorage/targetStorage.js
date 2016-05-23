@@ -90,7 +90,7 @@ define([
 				}
             
             },
-            { // 已购份额
+            { // 已持有份额
             	field: 'holdAmount',
             	formatter: function (val) {
             		return val;
