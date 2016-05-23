@@ -21,6 +21,7 @@ define(function() {
 			unEstablish: this.host + "/ams" + "/boot/investmentPool/unEstablish", // 标的不成立
 			overdue: this.host + "/ams" + "/boot/investmentPool/overdue", // 标的逾期
 			listinvestmentPoolList: this.host + "/ams/boot/investmentPool/poolList", // 投资标的库列表(未持有投资标的列表,已持有投资标的列表,历史投资标的列表)
+			listInvestmentIncome: this.host + "/ams/boot/investmentPool/listInvestmentIncome", // 投资标的本兮兑付列表
 			listCashTool: this.host + "/ams/boot/cashToolPool/listCashTool", // 现金管理工具库列表
 			listCashToolRevenue: this.host + "/ams/boot/cashToolRevenue/listCashToolRevenue", // 现金管理工具收益列表
 			removeCashTool: this.host + "/ams/boot/cashToolPool/removeCashTool", // 现金管理工具移除出库
