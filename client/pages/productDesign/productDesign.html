@@ -1236,61 +1236,65 @@
 							</dd>
 						</dl>
 					</div>
-					<!-- 封闭式产品显示/隐藏层 -->
-          <div id="detailProductType01Area">
-						<p class="form-header">封闭式产品信息</p>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>募集开始时间:</dt>
-								<dd>
-									<div data-detail-fetch="raiseStartDateStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>募集期:</dt>
-								<dd>
-									<div data-detail-fetch="raisePeriodStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>起息日:</dt>
-								<dd>
-									<div data-detail-fetch="interestsFirstDateStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-									<dt>存续期:</dt>
-								<dd>
-									<div data-detail-fetch="durationPeriodStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>募集总份额:</dt>
-									<dd>
-									<div data-detail-fetch="raisedTotalNumberStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>到期最晚还本付息日:</dt>
-								<dd>
-									<div data-detail-fetch="accrualDateStr"></div>
-								</dd>
-							</dl>
-						</div>
+        </div>
+        <!-- 封闭式产品显示/隐藏层 -->
+        <div id="detailProductType01Area">
+          <p class="form-header">封闭式产品信息</p>
+          <div class="row">
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>募集开始时间:</dt>
+                <dd>
+                  <div data-detail-fetch="raiseStartDateStr"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>募集期:</dt>
+                <dd>
+                  <div data-detail-fetch="raisePeriodStr"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>起息日:</dt>
+                <dd>
+                  <div data-detail-fetch="interestsFirstDateStr"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>存续期:</dt>
+                <dd>
+                  <div data-detail-fetch="durationPeriodStr"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>募集总份额:</dt>
+                <dd>
+                  <div data-detail-fetch="raisedTotalNumberStr"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>到期最晚还本付息日:</dt>
+                <dd>
+                  <div data-detail-fetch="accrualDateStr"></div>
+                </dd>
+              </dl>
+            </div>
           </div>
-          <!-- 开放式产品显示/隐藏层 -->
-          <div id="detailProductType02Area">
-            <p class="form-header">开放式产品信息</p>
+        </div>
+        <!-- 开放式产品显示/隐藏层 -->
+        <div id="detailProductType02Area">
+          <p class="form-header">开放式产品信息</p>
+          <div class="row">
             <div class="col-sm-6">
 							<dl class="dl-horizontal">
 								<dt>成立时间:</dt>
@@ -1371,7 +1375,9 @@
 								</dd>
 							</dl>
 						</div>
-					</div>
+          </div>
+        </div>
+        <div class="row">
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>单笔投资最低份额:</dt>
@@ -1412,59 +1418,59 @@
 							</dd>
 						</dl>
 					</div>
-					<div>
-            <p class="form-header">其他信息</p>
-            <div class="col-sm-6">
-			  			<dl class="dl-horizontal">
-				  			<dt>产品说明:</dt>
-					  		<dd>
-						  		<div data-detail-fetch="instruction"></div>
-							  </dd>
-  						</dl>
-	  				</div>
-		  			<div class="col-sm-6">
-		  				<dl class="dl-horizontal">
-		  					<dt>投资标的:</dt>
-		  					<dd>
-		  						<div data-detail-fetch="investComment"></div>
-		  					</dd>
-		  				</dl>
-		  			</div>
-		  			<div class="col-sm-6">
-		  				<dl class="dl-horizontal">
-		  					<dt>投资标的:</dt>
-		  					<dd>
-		  						<div data-detail-fetch="investComment"></div>
-		  					</dd>
-		  				</dl>
-		  			</div>
-		  			<div class="col-sm-6">
-		  				<dl class="dl-horizontal">
-		  					<dt>风险等级:</dt>
-		  					<dd>
-		  						<div data-detail-fetch="riskLevelStr"></div>
-		  					</dd>
-		  				</dl>
-		  			</div>
-		  			<div class="col-sm-12">
-			  			<dl class="dl-horizontal">
-				  			<dt>附件:</dt>
-					  		<dd>
-						  		<table id="productDetailFileTable" class="table table-bordered table-striped">
-		  				    	<thead>
-		  						   	<tr>
-            					  <th>附件名称</th>
-            				    <th>上传人</th>
-            				    <th>上传时间</th>
-            				    <th>操作</th>
-          		    		</tr>
-          		    	</thead>
-		  				    </table>
-							  </dd>
-  						</dl>
-	  				</div>
-		  		</div>
 		    </div>
+        <p class="form-header">其他信息</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>产品说明:</dt>
+              <dd>
+                <div data-detail-fetch="instruction"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>投资标的:</dt>
+              <dd>
+                <div data-detail-fetch="investComment"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>投资标的:</dt>
+              <dd>
+                <div data-detail-fetch="investComment"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>风险等级:</dt>
+              <dd>
+                <div data-detail-fetch="riskLevelStr"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-10">
+            <dl class="dl-horizontal">
+              <dt>附件:</dt>
+              <dd>
+                <table id="productDetailFileTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>附件名称</th>
+                    <th>上传人</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table>
+              </dd>
+            </dl>
+          </div>
+        </div>
 		  </div>
 		</div>
 	</div>
