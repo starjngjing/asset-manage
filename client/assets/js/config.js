@@ -144,7 +144,10 @@ define(function() {
 				}
 			},
 			role: {
-				list: this.host + '/operate/admin/ctrl/role/list'					// 权限列表
+				list: this.host + '/operate/admin/ctrl/role/list'					// 角色列表
+			},
+			auth: {
+				list: this.host + '/operate/admin/ctrl/auth/list'					// 权限列表
 			}
 		},
 
