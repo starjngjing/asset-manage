@@ -32,6 +32,7 @@ public class RiskIndicateCollect implements Serializable {
 	@JoinColumn(name = "indicateOid", referencedColumnName = "oid")
 	private RiskIndicate indicate;
 	private String relative;
+	private String collectOption;
 	private String collectData;
 	private int collectScore;
 

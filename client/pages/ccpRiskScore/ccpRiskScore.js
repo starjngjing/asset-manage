@@ -92,7 +92,7 @@ define([
 						contentType: 'form'
 					}, function(rlt) {
 						origin.success(rlt);
-					})
+					});
 				},
 				queryParams: function(val) {
 					var form = document.searchForm;
@@ -317,6 +317,10 @@ define([
 
 			// 下面的代码要移动到标的模块
 			$('#eventCollect').on('click', function() {
+				// TODO 这里要调下, 标的模块要设置标的的oid
+				var relative = "xxxxxxxxxxxxxxxx";
+				// TODO 这里要设置数据采集类型
+				var type = "SCORE";
 				http.post(config.api.system.config.ccr.options.preCollect, {
 						data: {
 							type: 'SCORE'
@@ -325,69 +329,107 @@ define([
 					},
 					function(val) {
 
-						// TODO 这里要调下, 标的模块要设置标的的oid
-						$(document.collectForm.relative).val('xxxxxxxxxxxxxxxx');
-						// TODO 这里要设置数据采集类型
-						$(document.collectForm.type).val("SCORE");
+						http.post(config.api.system.config.ccr.indicate.collect.preUpdate, {
+								data: {
+									relative: relative
+								},
+								contentType: 'form'
+							},
+							function(predata) {
 
-						$('#collectModalContent').empty();
+								var initdata = {
 
-						if (val && val.length > 0) {
+								};
 
-							var content = $('#collectModalContent');
+								if (predata && predata.length > 0) {
+									$.each(predata, function(i, item) {
+										initdata[item.indicateOid] = item;
+									});
+								};
 
-							$.each(val, function(i, collect) {
-								$('<h6><b>' + collect.cateTitle + '</b></h6>').appendTo(content);
 
-								$.each(collect.indicates, function(j, indicate) {
-									var form = $('<form></form>');
-									form.appendTo(content);
+								$(document.collectForm.relative).val(relative);
 
-									var indicateOid = $('<input type="hidden" name="indicateOid" value="' + indicate.indicateOid + '" />');
-									indicateOid.appendTo(form);
+								$(document.collectForm.type).val(type);
 
-									var row = $('<div class="row"></div>');
-									row.appendTo(form);
-									var col = $('<div class="col-sm-12 col-xs-6"></div>');
-									col.appendTo(row);
-									var formGroup = $('<div class="form-group"></div>');
-									formGroup.appendTo(col);
-									var inputGroup = $('<div class="input-group input-group-sm"></div>');
-									inputGroup.appendTo(formGroup);
+								$('#collectModalContent').empty();
 
-									var inputTitle = $('<div class="input-group-addon">' + indicate.indicateTitle + '</div>');
-									inputTitle.appendTo(inputGroup);
+								if (val && val.length > 0) {
 
-									if (indicate.indicateType == 'NUMBER') {
-										var inputOcx = $('<input name="collectData" type="text" class="form-control">');
-										inputOcx.appendTo(inputGroup);
-									}
+									var content = $('#collectModalContent');
 
-									if (indicate.indicateType == 'NUMRANGE') {
-										var inputOcx = $('<input name="collectData" type="text" class="form-control">');
-										inputOcx.appendTo(inputGroup);
-									}
+									$.each(val, function(i, collect) {
+										$('<h6><b>' + collect.cateTitle + '</b></h6>').appendTo(content);
 
-									if (indicate.indicateType == 'TEXT') {
-										var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
-										inputOcx.appendTo(inputGroup);
-										$.each(indicate.options, function(k, option) {
-											var inputOption = $('<option value="' + option.oid + '" selected>' + option.title + '</option>');
-											inputOption.appendTo(inputOcx);
+										$.each(collect.indicates, function(j, indicate) {
+											var form = $('<form></form>');
+											form.appendTo(content);
+
+											var indicateOid = $('<input type="hidden" name="indicateOid" value="' + indicate.indicateOid + '" />');
+											indicateOid.appendTo(form);
+
+											var row = $('<div class="row"></div>');
+											row.appendTo(form);
+											var col = $('<div class="col-sm-12 col-xs-6"></div>');
+											col.appendTo(row);
+											var formGroup = $('<div class="form-group"></div>');
+											formGroup.appendTo(col);
+											var inputGroup = $('<div class="input-group input-group-sm"></div>');
+											inputGroup.appendTo(formGroup);
+
+											var inputTitle = $('<div class="input-group-addon">' + indicate.indicateTitle + '</div>');
+											inputTitle.appendTo(inputGroup);
+
+											if (indicate.indicateType == 'NUMBER') {
+												var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
+												inputOcx.appendTo(inputGroup);
+												$.each(indicate.options, function(k, option) {
+													var check = false;
+													if (initdata[indicate.indicateOid] && initdata[indicate.indicateOid].collectOption == option.oid) {
+														check = true;
+													}
+													if (!initdata[indicate.indicateOid] && option.dft == 'YES') {
+														check = true;
+													}
+													var inputOption = $('<option value="' + option.oid + '" ' + (check ? 'selected' : '') + '>' + option.title + '</option>');
+													inputOption.appendTo(inputOcx);
+												});
+											}
+
+											if (indicate.indicateType == 'NUMRANGE') {
+												var inputOcx = $('<input name="collectData" type="text" value="' + (initdata[indicate.indicateOid] ? initdata[indicate.indicateOid].collectData : '') + '" class="form-control">');
+												inputOcx.appendTo(inputGroup);
+											}
+
+											if (indicate.indicateType == 'TEXT') {
+												var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
+												inputOcx.appendTo(inputGroup);
+												$.each(indicate.options, function(k, option) {
+													var check = false;
+													if (initdata[indicate.indicateOid] && initdata[indicate.indicateOid].collectOption == option.oid) {
+														check = true;
+													}
+													if (!initdata[indicate.indicateOid] && option.dft == 'YES') {
+														check = true;
+													}
+													var inputOption = $('<option value="' + option.oid + '" ' + (check ? 'selected' : '') + '>' + option.title + '</option>');
+													inputOption.appendTo(inputOcx);
+												});
+											}
+
+											if (indicate.indicateUnit && indicate.indicateUnit != '') {
+												var inputSuffix = $('<span class="input-group-addon">' + indicate.indicateUnit + '</span>');
+												inputSuffix.appendTo(inputGroup);
+											}
+
 										});
-									}
 
-									if (indicate.indicateUnit && indicate.indicateUnit != '') {
-										var inputSuffix = $('<span class="input-group-addon">' + indicate.indicateUnit + '</span>');
-										inputSuffix.appendTo(inputGroup);
-									}
+									});
+								}
 
-								});
+								$('#collectModal').modal('show');
 
 							});
-						}
-
-						$('#collectModal').modal('show');
 
 					});
 			});
@@ -411,10 +453,15 @@ define([
 				// TODO 这个 data 对象是采集页面录入的数据, 可以根据具体业务场景使用
 				console.log(data);
 
-				$('#collectForm').resetForm();
-				$('#collectModalContent').empty();
+				http.post(config.api.system.config.ccr.indicate.collect.save, {
+					data: JSON.stringify(data)
+				}, function(rlt) {
+					$('#collectForm').resetForm();
+					$('#collectModalContent').empty();
 
-				$('#collectModal').modal('hide');
+					$('#collectModal').modal('hide');
+				});
+
 			});
 
 		}

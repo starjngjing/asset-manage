@@ -24,6 +24,7 @@ public class RiskOptionsCollect {
 		public static class Options {
 			private String oid;
 			private String title;
+			private String dft;
 		}
 	}
 

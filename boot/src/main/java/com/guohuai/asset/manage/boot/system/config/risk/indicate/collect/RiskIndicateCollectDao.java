@@ -8,4 +8,6 @@ public interface RiskIndicateCollectDao extends JpaRepository<RiskIndicateCollec
 
 	public List<RiskIndicateCollect> findByRelative(String relative);
 
+	public void deleteByRelative(String relative);
+
 }
