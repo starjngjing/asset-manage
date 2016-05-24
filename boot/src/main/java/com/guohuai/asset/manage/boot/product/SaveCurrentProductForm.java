@@ -105,5 +105,6 @@ public class SaveCurrentProductForm implements Serializable {
 	private String riskLevel;//风险等级
 //	private List<SaveFileForm> files;//附加文件
 	private String files;//附加文件
+	private String assetPoolOid;//资产池
 	
 }

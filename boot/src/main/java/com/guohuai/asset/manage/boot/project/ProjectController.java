@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
+import com.guohuai.asset.manage.component.web.view.PageResp;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -43,17 +44,8 @@ public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectService projectService;
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "get", method = RequestMethod.POST)
-	public CommonResp get(String oid) {
-		CommonResp cr = new CommonResp();
-		cr.setErrorCode(1);
-		cr.getRows().add((Project) projectDao.findOne(oid));
-		return cr;
-	}
-
 	@RequestMapping(value = "projectlist", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<ProjectListResp> projectlist(HttpServletRequest request,
+	public @ResponseBody ResponseEntity<PageResp<Project>> projectlist(HttpServletRequest request,
 			@And({ 
 				@Spec(params = "targetOid", path = "investment.oid", spec = Equal.class),
 				@Spec(params = "projectName", path = "projectName", spec = Like.class),
@@ -69,8 +61,12 @@ public class ProjectController extends BaseController {
 			size = 50;
 		}
 		Page<Project> pagedata = projectService.list(spec, page - 1, size, sortDirection, sortField);
-		ProjectListResp resp = new ProjectListResp(pagedata);
-		return new ResponseEntity<ProjectListResp>(resp, HttpStatus.OK);
+		PageResp<Project> pageResp = new PageResp<>(pagedata);
+		return new ResponseEntity<PageResp<Project>>(pageResp, HttpStatus.OK);
+		
+//		ProjectListResp resp = new ProjectListResp(pagedata);
+//		
+//		return new ResponseEntity<ProjectListResp>(resp, HttpStatus.OK);
 	}
 
 	/**
@@ -83,7 +79,7 @@ public class ProjectController extends BaseController {
 	 * @return CommonResp    返回类型
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public CommonResp save(@Valid ProjectForm projectForm) {
+	public BaseResp save(@Valid ProjectForm projectForm) {
 
 		String loginId = null; 
 		try {
@@ -94,7 +90,7 @@ public class ProjectController extends BaseController {
 		projectForm.setCreator(loginId);
 		projectForm.setOperator(loginId);
 		Project prj = projectService.save(projectForm);
-		return CommonResp.builder().errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
+		return new BaseResp();
 	}
 	
 	/**
@@ -104,13 +100,13 @@ public class ProjectController extends BaseController {
 	 * @version 1.0
 	 * @see: 
 	 * @param approvalReq
-	 * @return CommonResp    返回类型
+	 * @return BaseResp    返回类型
 	 */
 	@RequestMapping(value = "deleteProject")
-	public CommonResp deleteProject(@RequestParam String targetOid, @RequestParam String oid) {
+	public BaseResp deleteProject(@RequestParam String targetOid, @RequestParam String oid) {
 		log.info("删除投资标的id=" + targetOid + "的底层项目id=" + oid);
 		projectService.deleteByTargetOidAndOid(targetOid, oid);
-		return CommonResp.builder().errorMessage("删除底层项目成功！").attached(oid).build();
+		return new BaseResp();
 	}
 
 	/**
@@ -125,9 +121,30 @@ public class ProjectController extends BaseController {
 	 */
 	@ApiOperation(value = "根据标的id查询底层项目")
 	@RequestMapping(value = "getByTargetId")
-	public CommonResp getByTargetId(@RequestParam(required = true) String targetOid) {
+	public PageResp<Project> getByTargetId(@RequestParam(required = true) String targetOid) {
 		List<Project> list = this.projectService.findByTargetId(targetOid);
-		return CommonResp.builder().errorMessage("保存成功！").rows(list).total(null == list ? 0 : list.size()).build();
+		PageResp<Project > pageResp = new PageResp<>(null == list ? 0 : list.size(), list);
+		return pageResp;
+//		return new ResponseEntity<PageResp<Project>>(pageResp, HttpStatus.OK);
+//		return PageResp.builder().rows(list).total(null == list ? 0 : list.size()).build();
+	}
+	
+	/**
+	 * 根据项目id查询底层项目
+	 * @Title: getByOid 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid
+	 * @return
+	 * @return CommonResp    返回类型 
+	 */
+	@ApiOperation(value = "根据项目id查询底层项目")
+	@RequestMapping(value = "getByOid")
+	public ProjectResp getByOid(@RequestParam(required = true) String oid) {
+		Project prj = this.projectService.findByOid(oid);
+		ProjectResp resp = new ProjectResp(prj);
+		return resp;
 	}
 
 }

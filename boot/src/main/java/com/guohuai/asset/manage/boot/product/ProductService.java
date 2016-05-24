@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.boot.dict.Dict;
 import com.guohuai.asset.manage.boot.dict.DictService;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolDao;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.boot.file.FileService;
@@ -56,6 +58,8 @@ public class ProductService {
 	private ProductChannelService productChannelService;
 	@Autowired
 	private AdminSdk adminSdk;
+	@Autowired
+	private AssetPoolDao assetPoolDao;
 
 	@Transactional
 	public BaseResp savePeriodic(SavePeriodicProductForm form, String operator) throws ParseException {
@@ -72,6 +76,10 @@ public class ProductService {
 			// 产品类型 
 			Dict assetType = this.dictService.get(form.getTypeOid());
 			pb.type(assetType);
+		}
+		if(!StringUtil.isEmpty(form.getAssetPoolOid())) {
+			AssetPoolEntity assetPool = assetPoolDao.findOne(form.getAssetPoolOid());
+			pb.assetPool(assetPool);
 		}
 		{
 			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
@@ -202,6 +210,10 @@ public class ProductService {
 			if(!StringUtil.isEmpty(form.getPayModeDate())) {
 				pb.payModeDate(Integer.valueOf(form.getPayModeDate()));
 			}
+		}
+		if(!StringUtil.isEmpty(form.getAssetPoolOid())) {
+			AssetPoolEntity assetPool = assetPoolDao.findOne(form.getAssetPoolOid());
+			pb.assetPool(assetPool);
 		}
 		{
 			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
@@ -375,6 +387,10 @@ public class ProductService {
 			throw AMPException.getException(90008);
 		}
 		// 判断是否可以修改 名称类型不变
+		if(!StringUtil.isEmpty(form.getAssetPoolOid())) {
+			AssetPoolEntity assetPool = assetPoolDao.findOne(form.getAssetPoolOid());
+			product.setAssetPool(assetPool);
+		}
 		{
 			product.setCode(form.getCode());
 			product.setName(form.getName());
@@ -523,6 +539,10 @@ public class ProductService {
 			throw AMPException.getException(90008);
 		}
 		// 判断是否可以修改 名称类型不变
+		if(!StringUtil.isEmpty(form.getAssetPoolOid())) {
+			AssetPoolEntity assetPool = assetPoolDao.findOne(form.getAssetPoolOid());
+			product.setAssetPool(assetPool);
+		}
 		{
 			product.setCode(form.getCode());
 			product.setName(form.getName());
