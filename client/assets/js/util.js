@@ -213,6 +213,24 @@ define([
       }
     },
     /**
+     * 导航栏操作实用工具
+     */
+    nav: {
+      /**
+       * 导航栏手动触发页面跳转
+       * @param pageName 页面名称
+       * @param querystring 参数
+       */
+      dispatch: function (pageName, querystring) {
+        $('#sidebarMenu').find('a').each(function (index, item) {
+          if ($(item).attr('data-gh-route') === pageName) {
+            $(item).click()
+            location.hash = '#' + pageName + '?' + querystring
+          }
+        })
+      }
+    },
+    /**
      * 将对象转换成带参数的形式 &a=1&b=2
      */
     buildQueryUrl: function (url, param) {
