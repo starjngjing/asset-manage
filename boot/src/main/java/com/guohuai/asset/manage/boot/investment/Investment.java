@@ -56,9 +56,9 @@ public class Investment extends UUID implements Serializable {
 	 */
 	public static final String INVESTMENT_LIFESTATUS_PREPARE = "PREPARE"; // 准备期
 	public static final String INVESTMENT_LIFESTATUS_STAND_UP = "STAND_UP"; // 已成立
-	public static final String INVESTMENT_LIFESTATUS_STAND_FAIL = "STAND_FAIL"; // 未成立
-	public static final String INVESTMENT_LIFESTATUS_CLOSE = "CLOSE"; // 正常结束
-	public static final String INVESTMENT_LIFESTATUS_OVER_TIME = "OVER_TIME"; // 逾期
+	public static final String INVESTMENT_LIFESTATUS_STAND_FAIL = "STAND_FAIL"; // 成立失败
+	public static final String INVESTMENT_LIFESTATUS_CLOSE = "CLOSE"; // 已结束
+	public static final String INVESTMENT_LIFESTATUS_OVER_TIME = "OVER_TIME"; // 已逾期
 
 	
 	
