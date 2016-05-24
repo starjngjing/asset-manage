@@ -90,11 +90,12 @@ define([
       container.append(fromList).append(toList)
 
       function generateHeader (title) {
-        return $('<div class="box-header"><h3 class="box-title">' + title + '</h3></div>')
+        return $('<div class="box-header"><h6 style="margin: 0;">' + title + '</h6></div>')
       }
 
       function generateBody (fromList, toList, fromArr, toArr, sign) {
-        var body = $('<div class="box-body"></div>')
+        var bodyHeight = (fromArr.length + toArr.length) * 39 + 18
+        var body = $('<div class="box-body" style="height: ' + bodyHeight + 'px"></div>')
         var ul = $('<ul class="todo-list"></ul>')
         fromArr.forEach(function (item, index) {
           ul.append(generateCell(fromList, toList, fromArr, toArr, field, formatter, item, index, sign))
