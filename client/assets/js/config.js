@@ -12,9 +12,9 @@ define(function() {
 		 * 
 		 */
 		api: {
-			login: 'http://api.guohuaigroup.com/operate/admin/login',			// 登录服务
-			logout: 'http://api.guohuaigroup.com/operate/admin/logout',		// 登出服务
-			userInfo: 'http://api.guohuaigroup.com/operate/admin/info',   // 登录用户信息服务
+			login: this.host + '/operate/admin/login',			// 登录服务
+			logout: this.host + '/operate/admin/logout',		// 登出服务
+			userInfo: this.host + '/operate/admin/info',   // 登录用户信息服务
 			yup: 'http://api.guohuaigroup.com/yup', // 文件上传服务
 			dictList: this.host + '/ams/dict/list', // 枚举值获取接口
 			establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
