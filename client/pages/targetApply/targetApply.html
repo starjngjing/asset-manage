@@ -940,7 +940,7 @@
 	</div>
 </div>
 
-<!-- 新建底层项目弹窗 -->
+<!-- 保存底层项目弹窗 -->
 <div id="projectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -1328,7 +1328,8 @@
 							</div>
 						</div>
 					</div>
-					<input name="targetOid" id='targetOid' type="hidden" data-detail-fetch="oid">
+					<input name="targetOid" id='targetOid' type="hidden"><!-- 投资标的id(新增/修改底层项目用到) -->
+					<input name="oid" id='oid' type="hidden"><!-- 底层项目id(修改底层项目用到) -->
 				</form>
 			</div>
 			<!-- 模态窗底部 -->

@@ -186,7 +186,6 @@ define([
 							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
 
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
-							$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
 
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
@@ -265,6 +264,12 @@ define([
 								isRender: true
 						    },
 						    {
+								text: '修改',
+								type: 'button',
+								class: 'item-project-update',
+								isRender: true
+						    },
+						    {
 						    	text: '删除',
 						    	type: 'button',
 						    	class: 'item-project-delete',
@@ -278,6 +283,13 @@ define([
 							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
 							$('#projectDetailModal').modal('show');
+						},
+						'click .item-project-update': function(e, value, row) { // 底层项目修改
+							$('#projectForm').clearForm(); // 先清理表单
+							util.form.validator.init($("#projectForm")); // 初始化表单验证
+							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
+							$('#projectModal').modal('show');
 						},
 						'click .item-project-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
@@ -310,21 +322,20 @@ define([
 			};
 			// 初始化表格
 			$('#targetApplyTable').bootstrapTable(tableConfig)
-				// 搜索表单初始化
+			
+			// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-				// 新建标的按钮点击事件
+			
+			// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
-					$('#addTargetModal').modal('show')
-				})
-				// 新建底层资产按钮点击事件
-
-			$('#assetAdd').on('click', function() {
-				$('#addAssetModal').modal('show')
+				$('#addTargetModal').modal('show')
 			})
+			
 			//新建标的按钮点击事件
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
+			
 			//修改标的按钮点击事件
 			$('#editTarget').on('click', function() {
 				editTarget();
@@ -332,13 +343,23 @@ define([
 
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
+				if(!targetInfo) {
+					alert('请选择投资标的');
+					return false;
+				}
+				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+				
 				$('#projectForm').clearForm(); // 先清理表单
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
+			
+			// 保存底层项目按钮点击事件
 			$('#projectSubmit').on('click', function() {
 				saveProject();
 			})
+			
+			// 新增/修改底层项目-项目类型下拉列表选项改变事件
 			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if (ptt === 'PROJECTTYPE_01') { // 金融
@@ -355,6 +376,7 @@ define([
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
 			});
 
+			// 新增/修改底层项目-是否有担保人单选按钮改变事件
 			$(document.projectForm.warrantor).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有担保人
 					if ($(this).val() === 'yes')
@@ -367,6 +389,7 @@ define([
 				});
 			})
 
+			// 新增/修改底层项目-是否有抵押人单选按钮改变事件
 			$(document.projectForm.pledge).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有抵押人
 					if ($(this).val() === 'yes')

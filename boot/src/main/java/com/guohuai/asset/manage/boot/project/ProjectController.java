@@ -79,11 +79,11 @@ public class ProjectController extends BaseController {
 	 * @author vania
 	 * @version 1.0
 	 * @see: 
-	 * @param approvalReq
+	 * @param projectForm
 	 * @return CommonResp    返回类型
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public CommonResp save(@Valid ProjectForm approvalReq) {
+	public CommonResp save(@Valid ProjectForm projectForm) {
 
 		String loginId = null; 
 		try {
@@ -91,9 +91,9 @@ public class ProjectController extends BaseController {
 		} catch (Exception e) {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
-		approvalReq.setCreator(loginId);
-		approvalReq.setOperator(loginId);
-		Project prj = projectService.save(approvalReq);
+		projectForm.setCreator(loginId);
+		projectForm.setOperator(loginId);
+		Project prj = projectService.save(projectForm);
 		return CommonResp.builder().errorMessage("保存底层项目成功！").attached(prj.getOid()).build();
 	}
 	
