@@ -14,5 +14,5 @@ public interface InvestmentMeetingCheckDao
 	 * @param investment
 	 * @return
 	 */
-	public List<InvestmentMeetingCheck> findByInvestment(Investment investment);
+	public List<InvestmentMeetingCheck> findByInvestmentAndState(Investment investment, String state);
 }

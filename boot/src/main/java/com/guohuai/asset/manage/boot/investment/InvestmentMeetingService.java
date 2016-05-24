@@ -51,7 +51,7 @@ public class InvestmentMeetingService {
 
 	@Autowired
 	private InvestmentLogService investmentLogService;
-	
+
 	@Autowired
 	private AdminSdk adminSdk;
 
@@ -196,7 +196,7 @@ public class InvestmentMeetingService {
 			form.setSize(file.getSize());
 			forms.add(form);
 		}
-		fileService.merge(forms, fkey, "", operator);
+		fileService.merge(forms, fkey, File.CATE_User, operator);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class InvestmentMeetingService {
 					InvestmentMeetingCheck check = InvestmentMeetingCheck.builder().investment(investment)
 							.InvestmentMeeting(meeting).title(checkName)
 							.state(InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck).build();
-					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check, operator);
+					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check);
 				}
 				logType = TargetEventType.collecting;
 			} else if (InvestmentMeetingVote.VOTE_STATUS_notapprove.equals(req.getVoteStatus())) {

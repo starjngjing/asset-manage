@@ -18,17 +18,17 @@ import lombok.NoArgsConstructor;
 public class InvestmentCheckDetResp {
 
 	public InvestmentCheckDetResp(InvestmentMeetingCheck entity) {
-		this.oid = entity.getOid();
-		this.title = entity.getTitle();
+		this.id = entity.getOid();
+		this.text = entity.getTitle();
 		this.state = entity.getState();
-		this.checkDesc = entity.getCheckDesc();
-		this.checkFile = entity.getCheckFile();
+		this.remark = entity.getCheckDesc();
+		this.file = entity.getCheckFile();
 	}
 
-	private String oid;
-	private String title;
+	private String id;
+	private String text;
 	private String state;
-	private String checkDesc;
-	private String checkFile;
+	private String remark;
+	private String file;
 
 }

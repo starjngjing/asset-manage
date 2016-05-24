@@ -1,0 +1,19 @@
+package com.guohuai.asset.manage.boot.investment.manage;
+
+import lombok.Data;
+/**
+ * 确认检查项form
+ * 
+ * @author lirong
+ *
+ */
+@Data
+public class InvestmentCheckListConfirmForm {
+
+	private String id;
+	private String text;
+	private String state;
+	private String remark;
+	private String file;
+	private Boolean checked;
+}

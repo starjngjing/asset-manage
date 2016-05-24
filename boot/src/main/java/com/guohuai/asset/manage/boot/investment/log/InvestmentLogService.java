@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.log;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDao;
+import com.guohuai.asset.manage.boot.investment.manage.InvestmentCheckListConfirmForm;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
@@ -20,17 +23,17 @@ public class InvestmentLogService {
 	@Autowired
 	private InvestmentDao investmentDao;
 
-
 	/**
 	 * 添加标的操作日志
-	 * @Title: saveInvestmentLog 
+	 * 
+	 * @Title: saveInvestmentLog
 	 * @author vania
 	 * @version 1.0
 	 * @see: TODO
 	 * @param targetOid
 	 * @param operator
 	 * @param eventType
-	 * @return TargetLog    返回类型
+	 * @return TargetLog 返回类型
 	 */
 	public InvestmentLog saveInvestmentLog(String targetOid, TargetEventType eventType, String operator) {
 		if (StringUtils.isBlank(targetOid))
@@ -41,29 +44,28 @@ public class InvestmentLogService {
 
 		return this.saveInvestmentLog(investment, eventType, operator);
 	}
-	
+
 	/**
 	 * 添加标的操作日志
-	 * @Title: saveInvestmentLog 
+	 * 
+	 * @Title: saveInvestmentLog
 	 * @author vania
 	 * @version 1.0
-	 * @see: 
+	 * @see:
 	 * @param investment
 	 * @param eventType
 	 * @param operator
-	 * @return InvestmentLog    返回类型
+	 * @return InvestmentLog 返回类型
 	 */
 	public InvestmentLog saveInvestmentLog(Investment investment, TargetEventType eventType, String operator) {
-		if(null == eventType)
+		if (null == eventType)
 			throw AMPException.getException("操作类型不能为空!");
 		InvestmentLog entity = InvestmentLog.builder().investment(investment).eventTime(DateUtil.getSqlCurrentDate())
 				.eventType(eventType.name()) // 用name吧 直观一点
-//				.eventType(eventType.ordinal() + "")
-//				.eventType(eventType.getCode())
-				.operator(operator)
-				.build();
+				// .eventType(eventType.ordinal() + "")
+				// .eventType(eventType.getCode())
+				.operator(operator).build();
 		return investmentLogDao.save(entity);
 	}
-	
-	
+
 }

@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
-import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
@@ -183,6 +183,16 @@ public class InvestmentManageBootController extends BaseController {
 	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkList(@RequestParam(required = true) String oid) {
 		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid);
 		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "confirmCheckList", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> confirmCheckList(
+			@RequestParam(required = true) String checkConditions) {
+		String operatpr = super.getLoginAdmin();
+		List<InvestmentCheckListConfirmForm> form = JSONArray.parseArray(checkConditions,
+				InvestmentCheckListConfirmForm.class);
+		investmentMeetingCheckService.confirmCheckList(form,operatpr);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 }
