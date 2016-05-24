@@ -285,9 +285,12 @@ define([
 							$('#projectDetailModal').modal('show');
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
-							$('#projectForm').clearForm(); // 先清理表单
+							$('#projectForm').resetForm(); // 先清理表单
 							util.form.validator.init($("#projectForm")); // 初始化表单验证
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+							
+							// 给项目表单的 标的id属性赋值
+							$("#targetOid")[0].value = targetInfo.oid;
 							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
 							$('#projectModal').modal('show');
 						},
@@ -349,7 +352,10 @@ define([
 				}
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 				
-				$('#projectForm').clearForm(); // 先清理表单
+				$('#projectForm').resetForm(); // 先清理表单
+				
+				// 给项目表单的 标的id属性赋值
+				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
