@@ -12,11 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.file.File;
 import com.guohuai.asset.manage.boot.file.FileService;
+import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.VoteDetResp;
 import com.guohuai.asset.manage.boot.investment.vote.MeetingVoteForm;
 import com.guohuai.asset.manage.component.util.DateUtil;
+import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.operate.api.AdminSdk;
 import com.guohuai.operate.api.objs.admin.AdminObj;
 
@@ -128,7 +131,10 @@ public class InvestmentMeetingVoteService {
 			if (vote != null) {
 				resp.setVoteStatus(vote.getState());
 				resp.setTime(vote.getVoteTime());
-				resp.setFile(vote.getFile());
+				if(null != vote.getFile()){
+					List<File> files = fileService.list(vote.getFile());
+					resp.setFile(files.get(0).getFurl());
+				}
 			} else {
 				resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
 			}
@@ -183,7 +189,20 @@ public class InvestmentMeetingVoteService {
 			temp.setSuggest(form.getSuggest());
 		}
 		if (!StringUtils.isEmpty(form.getFile())) {
-			temp.setFile(form.getFile());
+			String fkey = null;
+			if (null != hisVote && null != hisVote.getFile()) {
+				fkey = hisVote.getFile();
+			} else {
+				fkey = StringUtil.uuid();
+			}
+			List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
+			SaveFileForm fileform = new SaveFileForm();
+			fileform.setFurl(form.getFile());
+			fileform.setName("vote" + asset.getName());
+			fileform.setSize(1);
+			fileForms.add(fileform);
+			fileService.save(fileForms, fkey, File.CATE_User, operator);
+			temp.setFile(fkey);
 		}
 		temp.setVoteTime(DateUtil.getSqlCurrentDate());
 		temp.setState(voteStatus);

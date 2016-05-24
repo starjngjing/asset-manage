@@ -86,16 +86,18 @@
 				<form id="addTargetConventionForm" name="addTargetConventionForm" method="post">
 					<div class="form-group">
 						<label>会议编号</label>
-						<input name="sn" type="text" class="form-control input-sm" placeholder="会议编号">
+						<input name="sn" type="text" class="form-control input-sm" placeholder="会议编号" required data-error="会议编号不能为空">
+						<div class="help-block with-errors text-red"></div>
 					</div>
 					<div class="form-group">
 						<label>会议主题</label>
-						<input name="title" type="text" class="form-control input-sm" placeholder="会议主题">
+						<input name="title" type="text" class="form-control input-sm" placeholder="会议主题" required data-error="会议主题不能为空">
+						<div class="help-block with-errors text-red"></div>
 					</div>
 					<div class="form-group">
 						<label>参会人</label>
-						<select name="participant" class="form-control input-sm" data-placeholder="参会人" style="width: 100%;">
-            </select>
+						<select id="participant" name="participant" class="form-control input-sm" data-placeholder="参会人" style="width: 100%;" >
+            			</select>
 					</div>
 					<div class="form-group">
 						<label>会议时间</label>
@@ -103,13 +105,13 @@
 							<div class="input-group-addon">
 								<i class="fa fa-calendar"></i>
 							</div>
-							<input name="conferenceTime" type="text" class="form-control datepicker" placeholder="会议时间" data-date-format="YYYY-MM-DD HH:mm:ss">
+							<input name="conferenceTime" type="text" class="form-control datepicker" placeholder="会议时间" data-date-format="YYYY-MM-DD HH:mm:ss" required>
 						</div>
 					</div>
 					<div class="form-group">
 						<label>相关标的</label>
-						<select name="target" class="form-control input-sm" data-placeholder="相关标的" style="width: 100%;">
-            </select>
+						<select id="target" name="target" class="form-control input-sm" data-placeholder="相关标的" style="width: 100%;">
+            			</select>
 					</div>
 				</form>
 			</div>

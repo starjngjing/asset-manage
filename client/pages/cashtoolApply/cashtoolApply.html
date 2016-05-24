@@ -98,13 +98,15 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金代码</label>
-								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码">
+								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码" required data-error="基金代码不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金名称</label>
-								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称">
+								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称" required data-error="基金名称不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -283,13 +285,13 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金代码</label>
-								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码">
+								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码" readonly="readonly">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金名称</label>
-								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称">
+								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称" readonly="readonly">
 							</div>
 						</div>
 						<div class="col-sm-4">

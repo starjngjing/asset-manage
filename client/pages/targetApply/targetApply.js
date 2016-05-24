@@ -86,12 +86,7 @@ define([
 					field: 'expAror',
 					formatter: function(val, row) {
 						if (val)
-							if (val == row.expArorSec) {
-								return val.toFixed(2) + "%";
-							} else {
-								var maxAro = parseFloat(row.expArorSec);
-								return val.toFixed(2) + '-' + maxAro.toFixed(2) + "%";
-							}
+							return val.toFixed(2) + "%";
 					}
 				}, {
 					field: 'state',
@@ -126,10 +121,29 @@ define([
 							type: 'button',
 							class: 'item-invalid',
 							isRender: row.state != 'invalid'
+						}, {
+							text: '检查项',
+							type: 'button',
+							class: 'item-checklist',
+							isRender: row.state == 'collecting'
 						}];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
+						'click .item-checklist': function(e, value, row) {
+							http.post(config.api.targetCheckList, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								},
+								function(obj) {
+									var data = obj.rows;
+									checkConditionsSource = data;
+									$('#checkConditionsTable').bootstrapTable('load', checkConditionsSource)
+									$('#checkConditionsModal ').modal('show')
+								});
+						},
 						'click .item-edit': function(e, value, row) {
 							http.post(config.api.targetDetQuery, {
 								data: {
@@ -138,7 +152,7 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
-//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
+								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
 								$('#editTargetModal').modal('show');
 							})
@@ -178,8 +192,17 @@ define([
 							})
 						},
 						'click .item-detail': function(e, value, row) {
-							$$.detailAutoFix($('#detTargetForm'), row); // 自动填充详情
-							$('#targetDetailModal').modal('show');
+							http.post(config.api.targetDetQuery, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result.investment;
+								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+								$('#targetDetailModal').modal('show');
+							})
+
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
@@ -202,8 +225,7 @@ define([
 				}]
 			};
 
-			var prjPageOptions = {
-			}
+			var prjPageOptions = {}
 			var projectTableConfig = {
 				ajax: function(origin) {
 					http.post(config.api.targetProjectList, {
@@ -221,11 +243,11 @@ define([
 				queryParams: function(val) {
 					var form = document.projectSearchForm
 					$.extend(prjPageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
-					
+
 					prjPageOptions.rows = val.limit
 					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
 					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id				
-					
+
 					return val
 				},
 				columns: [{
@@ -257,26 +279,22 @@ define([
 					//操作
 					align: 'center',
 					formatter: function(val, row) {
-						var buttons = [						               
-						    {
-								text: '详情',
-								type: 'button',
-								class: 'item-project-detail',
-								isRender: true
-						    },
-						    {
-								text: '修改',
-								type: 'button',
-								class: 'item-project-update',
-								isRender: true
-						    },
-						    {
-						    	text: '删除',
-						    	type: 'button',
-						    	class: 'item-project-delete',
-						    	isRender: true
-						    }
-						];
+						var buttons = [{
+							text: '详情',
+							type: 'button',
+							class: 'item-project-detail',
+							isRender: true
+						}, {
+							text: '修改',
+							type: 'button',
+							class: 'item-project-update',
+							isRender: true
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-project-delete',
+							isRender: true
+						}];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
@@ -342,20 +360,20 @@ define([
 			};
 			// 初始化表格
 			$('#targetApplyTable').bootstrapTable(tableConfig)
-			
+
 			// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-			
+
 			// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
 				$('#addTargetModal').modal('show')
 			})
-			
+
 			//新建标的按钮点击事件
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
-			
+
 			//修改标的按钮点击事件
 			$('#editTarget').on('click', function() {
 				editTarget();
@@ -363,11 +381,13 @@ define([
 
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
-				if(!targetInfo) {
+				if (!targetInfo) {
 					alert('请选择投资标的');
 					return false;
 				}
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+
+				$('#projectForm').clearForm(); // 先清理表单
 				
 				$('#projectForm').resetForm(); // 先清理表单
 				
@@ -376,12 +396,12 @@ define([
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
-			
+
 			// 保存底层项目按钮点击事件
 			$('#projectSubmit').on('click', function() {
 				saveProject();
 			})
-			
+
 			// 新增/修改底层项目-项目类型下拉列表选项改变事件
 			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
@@ -406,7 +426,7 @@ define([
 						$('#prjWarrantorInfo').show().find('input').attr('disabled', false);
 					else
 						$('#prjWarrantorInfo').hide().find('input').attr('disabled', 'disabled');
-					
+
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
@@ -419,73 +439,69 @@ define([
 						$('#prjPledgeInfo').show().find('input').attr('disabled', false);
 					else
 						$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
-					
+
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
 			})
 
 			// 检查项确认数据源
-			var checkConditionsSource = [{
-				id: 'a1',
-				text: '第一项',
-				remark: '',
-				file: ''
-			}, {
-				id: 'a2',
-				text: '第二项',
-				remark: '',
-				file: ''
-			}, {
-				id: 'a3',
-				text: '第三项',
-				remark: '',
-				file: ''
-			}, {
-				id: 'a4',
-				text: '第四项',
-				remark: '',
-				file: ''
-			}, {
-				id: 'a5',
-				text: '第五项',
-				remark: '',
-				file: ''
-			}, {
-				id: 'a6',
-				text: '第六项',
-				remark: '',
-				file: ''
-			}]
+			//			var checkConditionsSource = [{
+			//				id: 'a1',
+			//				text: '第一项',
+			//				remark: '',
+			//				file: ''
+			//			}, {
+			//				id: 'a2',
+			//				text: '第二项',
+			//				remark: '',
+			//				file: ''
+			//			}, {
+			//				id: 'a3',
+			//				text: '第三项',
+			//				remark: '',
+			//				file: ''
+			//			}, {
+			//				id: 'a4',
+			//				text: '第四项',
+			//				remark: '',
+			//				file: ''
+			//			}, {
+			//				id: 'a5',
+			//				text: '第五项',
+			//				remark: '',
+			//				file: ''
+			//			}, {
+			//				id: 'a6',
+			//				text: '第六项',
+			//				remark: '',
+			//				file: ''
+			//			}]
+			var checkConditionsSource;
 			// 临时存储已选数量
 			var checkConditionsCount = 0
-			// 临时存储操作检查项
+				// 临时存储操作检查项
 			var currentCheckCondition = null
-			// 确认项表格配置
+				// 确认项表格配置
 			var checkConditionsTableConfig = {
-				data: checkConditionsSource,
-				columns: [
-					{
+					data: checkConditionsSource,
+					columns: [{
 						checkbox: true
-					},
-					{
+					}, {
 						field: 'text'
-					},
-					{
+					}, {
 						width: 100,
 						align: 'center',
-						formatter: function () {
-							var buttons = [
-								{
-									text: '附件与备注',
-									type: 'button',
-									class: 'item-file'
-								}
-							]
+						formatter: function() {
+							var buttons = [{
+								text: '附件与备注',
+								type: 'button',
+								class: 'item-file'
+							}]
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
-							'click .item-file': function (e, value, row) {
+							'click .item-file': function(e, value, row) {
 								currentCheckCondition = row
 								var form = document.fileAndRemarkForm
 								form.remark.value = row.remark
@@ -501,67 +517,68 @@ define([
 								$('#fileAndRemarkModal').modal('show')
 							}
 						}
+					}],
+					// 单选按钮选中一项时
+					onCheck: function(row) {
+						row.checked = true
+						checkConditionsCount += 1
+						var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
+						renderProgressbar(percentage)
+					},
+					// 单选按钮取消一项时
+					onUncheck: function(row) {
+						row.checked = false
+						checkConditionsCount -= 1
+						var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
+						renderProgressbar(percentage)
+					},
+					// 全选按钮选中时
+					onCheckAll: function(rows) {
+						checkConditionsSource.forEach(function(item) {
+							item.checked = true
+						})
+						checkConditionsCount = checkConditionsSource.length
+						renderProgressbar(100)
+					},
+					// 全选按钮取消时
+					onUncheckAll: function() {
+						checkConditionsSource.forEach(function(item) {
+							item.checked = false
+						})
+						checkConditionsCount = 0
+						renderProgressbar(0)
 					}
-				],
-				// 单选按钮选中一项时
-				onCheck: function (row) {
-					row.checked = true
-					checkConditionsCount += 1
-					var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
-					renderProgressbar(percentage)
-				},
-				// 单选按钮取消一项时
-				onUncheck: function (row) {
-					row.checked = false
-					checkConditionsCount -= 1
-					var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
-					renderProgressbar(percentage)
-				},
-				// 全选按钮选中时
-				onCheckAll: function (rows) {
-					checkConditionsSource.forEach(function (item) {
-						item.checked = true
-					})
-					checkConditionsCount =  checkConditionsSource.length
-					renderProgressbar(100)
-				},
-				// 全选按钮取消时
-				onUncheckAll: function () {
-					checkConditionsSource.forEach(function (item) {
-						item.checked = false
-					})
-					checkConditionsCount =  0
-					renderProgressbar(0)
 				}
-			}
-			// 初始化确认项表格
+				// 初始化确认项表格
 			$('#checkConditionsTable').bootstrapTable(checkConditionsTableConfig)
-			// 初始化附件与备注 - 附件上传
+				// 初始化附件与备注 - 附件上传
 			$$.uploader({
-				container: $('#checkUploader'),
-				success: function(file) {
-					$('#checkFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
-					$('#checkFile').find('span').html(file.name)
-					document.fileAndRemarkForm.file.value = file.url
-				}
-			})
-			// 附件与备注确定按钮点击事件
-			$('#doAddFileAndRemark').on('click', function () {
-				var form = document.fileAndRemarkForm
-				currentCheckCondition.remark = form.remark.value.trim()
-				currentCheckCondition.file = form.file.value
-				$('#fileAndRemarkModal').modal('hide')
-			})
-			// 确认检查项 - 确定按钮点击事件
-			$('#doConfirmCheckConditions').on('click', function () {
+					container: $('#checkUploader'),
+					success: function(file) {
+						$('#checkFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
+						$('#checkFile').find('span').html(file.name)
+						document.fileAndRemarkForm.file.value = file.url
+					}
+				})
+				// 附件与备注确定按钮点击事件
+			$('#doAddFileAndRemark').on('click', function() {
+					var form = document.fileAndRemarkForm
+					currentCheckCondition.remark = form.remark.value.trim()
+					currentCheckCondition.file = form.file.value
+					$('#fileAndRemarkModal').modal('hide')
+				})
+				// 确认检查项 - 确定按钮点击事件
+			$('#doConfirmCheckConditions').on('click', function() {
 				document.checkConditionsForm.checkConditions.value = JSON.stringify(checkConditionsSource)
 				console.log(checkConditionsSource)
 				$('#checkConditionsForm').ajaxSubmit({
-
+					type: "post", //提交方式  
+					url: config.api.confirmCheckList,
+					success: function(data) {
+						$('#checkConditionsModal').modal('hide')
+					}
 				})
 			})
-
-			$('#checkConditionsModal ').modal('show')
 
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
@@ -585,8 +602,8 @@ define([
 			}
 		})
 	}
-	
-	function editTarget(){
+
+	function editTarget() {
 		$('#editTargetForm').ajaxSubmit({
 			url: config.api.targetEdit,
 			success: function(result) {
@@ -612,7 +629,7 @@ define([
 		})
 	}
 
-	function renderProgressbar (percentage) {
+	function renderProgressbar(percentage) {
 		var currentClass = ''
 		if (percentage <= 30) {
 			currentClass = 'progress-bar-primary'

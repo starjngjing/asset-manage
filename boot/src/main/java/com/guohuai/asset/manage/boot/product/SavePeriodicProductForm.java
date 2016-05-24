@@ -89,5 +89,6 @@ public class SavePeriodicProductForm implements Serializable {
 	@Enumerations(values = { "R1", "R2", "R3", "R4", "R5" }, message = "风险等级参数错误")
 	private String riskLevel;//风险等级
 	private String files;//附加文件
+	private String assetPoolOid;//资产池
 	
 }

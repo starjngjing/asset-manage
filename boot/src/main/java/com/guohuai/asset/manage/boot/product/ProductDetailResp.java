@@ -35,8 +35,8 @@ public class ProductDetailResp extends BaseResp {
 		this.manageRate = p.getManageRate().toPlainString();//托管费率
 		this.fixedManageRate = p.getFixedManageRate().toPlainString();//固定管理费率
 		if(p.getAssetPool()!=null) {
-			this.investmentOid =  p.getAssetPool().getOid();
-			this.investment = p.getAssetPool().getName();
+			this.assetPoolOid =  p.getAssetPool().getOid();
+			this.assetPoolName = p.getAssetPool().getName();
 		}
 		this.raiseStartDate = p.getRaiseStartDate()!=null?DateUtil.formatDate(p.getRaiseStartDate().getTime()):"";//募集开始时间
 		this.raiseStartDateType = p.getRaiseStartDateType();
@@ -166,8 +166,8 @@ public class ProductDetailResp extends BaseResp {
 	private String incomeCalcBasis;//收益计算基础
 	private String manageRate;//托管费率
 	private String fixedManageRate;//固定管理费率
-	private String investmentOid;//资产池Oid
-	private String investment;//资产池名称
+	private String assetPoolOid;//资产池Oid
+	private String assetPoolName;//资产池名称
 	private String raiseStartDate;//募集开始时间
 	private String raiseStartDateType;//募集开始时间类型
 	private int raisePeriod;//募集期:()个自然日

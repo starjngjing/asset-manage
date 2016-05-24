@@ -163,6 +163,7 @@ define([
 			$$.searchInit($('#cashToolSearchForm'), $('#cashToolApplyTable'))
 				// 新建标的按钮点击事件
 			$('#cashToolAdd').on('click', function() {
+					util.form.validator.init($("#addCashToolForm")); // 初始化表单验证
 					$('#addCashToolModal').modal('show')
 				})
 				// 新建底层资产按钮点击事件

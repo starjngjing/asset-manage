@@ -117,13 +117,17 @@ public class InvestmentService {
 	 * @param oid
 	 * @param state
 	 * @param operator
+	 * @param suggest
 	 */
-	public void precheck(String oid, String state, String operator) {
+	public void precheck(String oid, String state, String operator, String suggest) {
 		Investment investment = this.getInvestmentDet(oid);
 		if (investment == null || !Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
 			throw new RuntimeException();
 		}
 		investment.setState(state);
+		if(!StringUtils.isEmpty(suggest)){
+			investment.setRejectDesc(suggest);
+		}
 		this.updateInvestment(investment, operator);
 	}
 

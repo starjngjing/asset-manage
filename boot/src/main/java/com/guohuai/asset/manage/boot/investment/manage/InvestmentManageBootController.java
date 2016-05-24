@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.manage;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
+import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -47,6 +51,8 @@ public class InvestmentManageBootController extends BaseController {
 	private InvestmentService investmentService;
 	@Autowired
 	private InvestmentLogService investmentLogService;
+	@Autowired
+	private InvestmentMeetingCheckService investmentMeetingCheckService;
 
 	/**
 	 * 投资标的列表
@@ -99,7 +105,7 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid InvestmentManageForm form) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.createInvestment(form);
 		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
 		investment = investmentService.saveInvestment(investment, operator);
@@ -115,7 +121,7 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid InvestmentManageForm form) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(form.getOid());
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
 				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
@@ -138,11 +144,11 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(@RequestParam(required = true) String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
 		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
 				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
-			//标的状态不是待预审或驳回不能提交预审
+			// 标的状态不是待预审或驳回不能提交预审
 			throw new RuntimeException();
 		}
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
@@ -159,11 +165,33 @@ public class InvestmentManageBootController extends BaseController {
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> invalid(@RequestParam(required = true) String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		investmentService.saveInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.invalid, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	/**
+	 * 根据标的oid获得检查项列表
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "checkList", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkList(@RequestParam(required = true) String oid) {
+		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid);
+		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "confirmCheckList", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> confirmCheckList(
+			@RequestParam(required = true) String checkConditions) {
+		String operatpr = super.getLoginAdmin();
+		List<InvestmentCheckListConfirmForm> form = JSONArray.parseArray(checkConditions,
+				InvestmentCheckListConfirmForm.class);
+		investmentMeetingCheckService.confirmCheckList(form,operatpr);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

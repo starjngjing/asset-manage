@@ -164,12 +164,12 @@ define([
 										columns: [{
 											field: 'name'
 										}, {
-											field: 'status',
+											field: 'voteStatus',
 											formatter: function(val) {
 												switch (val) {
-													case 'yes':
+													case 'approve':
 														return '<span class="text-green">通过</span>';
-													case 'no':
+													case 'notapprove':
 														return '<span class="text-red">驳回</span>';
 													default:
 														return '<span>-</span>';
@@ -427,6 +427,8 @@ define([
 			$$.searchInit($('#searchForm'), $('#targetConventionTable'))
 				// 新建会议按钮点击事件
 			$('#targetConventionAdd').on('click', function() {
+				$('#addTargetConventionForm').clearForm() // 先清理表单
+				util.form.validator.init($("#addTargetConventionForm")) // 初始化表单验证
 				$('#addTargetConventionModal').modal('show')
 			})
 
@@ -625,7 +627,7 @@ define([
 				currentOpTarget.checkConditions = conditionsData.map(function(item) {
 					return item.text
 				})
-				currentOpTarget.status = 'yes'
+				currentOpTarget.voteStatus = 'approve'
 				$('#finishTargetConventionTable').bootstrapTable('load', $('#finishTargetConventionTable').bootstrapTable('getData'))
 				$('#checkConditionsModal').modal('hide')
 			})
@@ -633,10 +635,11 @@ define([
 			// 驳回理由按钮点击事件
 			$('#doAddRejectComment').on('click', function() {
 				currentOpTarget.rejectComment = document.rejectForm.rejectComment.value.trim()
-				currentOpTarget.status = 'no'
+				currentOpTarget.voteStatus = 'notapprove'
 				$('#finishTargetConventionTable').bootstrapTable('load', $('#finishTargetConventionTable').bootstrapTable('getData'))
 				$('#rejectCommentModal').modal('hide')
 			})
+			
 
 			// 会议确认“确认”按钮点击事件
 			$('#doFinishTargetConvention').on('click', function() {

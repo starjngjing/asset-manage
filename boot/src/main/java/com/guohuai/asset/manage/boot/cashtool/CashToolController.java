@@ -106,7 +106,7 @@ public class CashToolController extends BaseController {
 
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		if (!CashTool.CASHTOOL_STATE_waitPretrial.equals(entity.getState())
 				&& !CashTool.CASHTOOL_STATE_reject.equals(entity.getState())) {
@@ -122,7 +122,7 @@ public class CashToolController extends BaseController {
 
 	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid CashToolManageForm form) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(form.getOid());
 		if (!CashTool.CASHTOOL_STATE_waitPretrial.equals(entity.getState())
 				&& !CashTool.CASHTOOL_STATE_reject.equals(entity.getState())) {
@@ -146,7 +146,7 @@ public class CashToolController extends BaseController {
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		entity.setState(CashTool.CASHTOOL_STATE_invalid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
@@ -185,7 +185,7 @@ public class CashToolController extends BaseController {
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> checkPass(String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_collecting, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
@@ -198,7 +198,7 @@ public class CashToolController extends BaseController {
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid, String suggest) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
+		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_reject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}

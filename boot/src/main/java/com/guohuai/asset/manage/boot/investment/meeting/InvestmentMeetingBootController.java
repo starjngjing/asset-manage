@@ -224,7 +224,8 @@ public class InvestmentMeetingBootController extends BaseController {
 	 */
 	@RequestMapping(value = "open", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> open(@RequestParam(required = true) String oid) {
-		investmentMeetingService.openMeeting(oid, super.getLoginAdmin());
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.openMeeting(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -236,7 +237,8 @@ public class InvestmentMeetingBootController extends BaseController {
 	 */
 	@RequestMapping(value = "stop", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> stop(@RequestParam(required = true) String oid) {
-		investmentMeetingService.stopMeeting(oid, super.getLoginAdmin());
+		String operator = super.getLoginAdmin();
+		investmentMeetingService.stopMeeting(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

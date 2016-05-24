@@ -31,6 +31,8 @@ define(function() {
 			projectDetail: this.host + "/ams/boot/project/getByOid", // 查询底层项目详情
 			targetProjectDelete: this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
 			saveProject: this.host + "/ams/boot/project/save", //保存底层项目
+			targetCheckList: this.host + '/ams/target/targetManage/checkList',   //过会标的检查项列表
+			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList',   //过会标的检查项确认
 			targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 			targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 			targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
