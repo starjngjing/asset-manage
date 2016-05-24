@@ -304,7 +304,7 @@ define([
 									http.post(config.api.duration.assetPool.getAll, function (result) {
 										var select = document.updateProductForm.assetPoolOid
 										result.rows.forEach(function (item, index) {
-											select.append('<option value="' + item.oid + '">' + item.name + '</option>')
+											$(select).append('<option value="' + item.oid + '">' + item.name + '</option>')
 										})
 										select.value = data.assetPoolOid
 									})
@@ -551,7 +551,7 @@ define([
 				http.post(config.api.duration.assetPool.getAll, function (result) {
 					var select = document.addProductForm.assetPoolOid
 					result.rows.forEach(function (item, index) {
-						select.append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.name + '</option>')
+						$(select).append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.name + '</option>')
 					})
 				})
 				$('#addProductModal').modal('show')
