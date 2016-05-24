@@ -87,7 +87,7 @@ define([
 
       fromList.find('.box').append(fromHeader).append(fromBody)
       toList.find('.box').append(toHeader).append(toBody)
-      container.append(fromList).append(toList)
+      container.empty().append(fromList).append(toList)
 
       function generateHeader (title) {
         return $('<div class="box-header"><h6 style="margin: 0;">' + title + '</h6></div>')
