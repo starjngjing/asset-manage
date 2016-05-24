@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.duration.capital;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -17,10 +18,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "T_GAM_ASSETPOOL_CASH_LOG")
-public class CapitalEntity {
+public class CapitalEntity implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id
-	private String id;
+	private String oid;
 	// 关联资产池
 	private String assetPoolOid;
 	// 科目

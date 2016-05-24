@@ -1,8 +1,11 @@
 package com.guohuai.asset.manage.boot.duration.target;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.boot.duration.order.FundForm;
@@ -60,5 +63,25 @@ public class TargetService {
 		}
 		
 		return form;
+	}
+
+	/**
+	 * 根据 标的名称 获取 信托（计划） 列表（支持模糊查询）
+	 * @param oid
+	 * @return
+	 */
+	public List<FundForm> getTrustListByName(String name) {
+		List<FundForm> formList = Lists.newArrayList();
+		
+		CashTool entity = cashToolService.findByOid(name);
+//		if (null != entity) {
+//			form.setAssetPoolCashtoolOid(entity.getTicker());
+//			form.setName(entity.getSecShortName());
+//			form.setType(entity.getEtfLof());
+//			form.setYearYield7(entity.getWeeklyYield());
+//			form.setNetRevenue(entity.getDailyProfit());
+//		}
+		
+		return formList;
 	}
 }

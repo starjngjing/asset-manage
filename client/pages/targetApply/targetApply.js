@@ -206,8 +206,9 @@ define([
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
-							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
-
+							//console.info("targetInfo---------->" + JSON.stringify(targetInfo))
+							
+							$('#projectSearchForm').resetForm();// 先清理搜索项目表单
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 							// 给项目表单的 标的id属性赋值
@@ -303,9 +304,13 @@ define([
 							$('#projectDetailModal').modal('show');
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
-							$('#projectForm').clearForm(); // 先清理表单
+							$('#projectForm').resetForm(); // 先清理表单
 							util.form.validator.init($("#projectForm")); // 初始化表单验证
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+							
+							// 给项目表单的 标的id属性赋值
+							$("#targetOid")[0].value = targetInfo.oid;
+							//row.targetOid = targetInfo.oid;
 							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
 							$('#projectModal').modal('show');
 						},
@@ -315,8 +320,8 @@ define([
 								container: $('#doConfirm'),
 								trigger: this,
 								accept: function() {
-									//									console.log('targetInfo===>' + JSON.stringify(targetInfo));
-									//									console.log('项目row===>' + JSON.stringify(row));
+									//console.log('targetInfo===>' + JSON.stringify(targetInfo));
+									//console.log('项目row===>' + JSON.stringify(row));
 									http.post(config.api.targetProjectDelete, {
 										data: {
 											targetOid: targetInfo.oid,
@@ -368,6 +373,11 @@ define([
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 				$('#projectForm').clearForm(); // 先清理表单
+				
+				$('#projectForm').resetForm(); // 先清理表单
+				
+				// 给项目表单的 标的id属性赋值
+				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})

@@ -16,7 +16,7 @@ public class AssetPoolForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private String oid;
 	private String name;
 	// 资产规模
 	private BigDecimal scale;

@@ -40,14 +40,26 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
+	 * 新建审核
+	 * @return
+	 */
+	@RequestMapping(value = "/auditPool", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> auditPool(String operation, String oid) {
+		assetPoolService.auditPool(operation, oid, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
 	 * 获取所有的资产池列表
 	 * @return
 	 */
-	@RequestMapping(value = "/getAll", method = { RequestMethod.GET })
+	@RequestMapping(value = "/getAll", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getAll() {
 		List<AssetPoolForm> list = assetPoolService.getAllList();
 		Response r = new Response();
-		r.with("result", list);
+		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }
