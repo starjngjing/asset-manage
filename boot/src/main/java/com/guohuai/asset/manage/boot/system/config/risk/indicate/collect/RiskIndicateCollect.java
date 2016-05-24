@@ -16,6 +16,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 风险指标数据采集表
+ * 
+ * @author Arthur
+ *
+ */
+
 @Entity
 @Table(name = "T_GAM_CCR_RISK_INDICATE_COLLECT")
 @Data

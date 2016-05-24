@@ -12,6 +12,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 担保对象权数配置
+ * 
+ * @author Arthur
+ *
+ */
+
 @Entity
 @Table(name = "T_GAM_CCP_WARRANTOR")
 @Data
