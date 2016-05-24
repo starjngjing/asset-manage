@@ -218,13 +218,13 @@ public class Investment extends UUID implements Serializable {
 	 */
 	private String typeName;
 	/**
-	 * 状态
-	 */
-	private String state;
-	/**
 	 * 生命周期
 	 */
 	private String lifeState;
+	/**
+	 * 状态
+	 */
+	private String state;
 	/**
 	 * 创建人
 	 */

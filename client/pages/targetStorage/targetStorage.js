@@ -74,9 +74,9 @@ define([
               
             },
             { // 状态
-            	field: 'state',
+            	field: 'lifeState',
 				formatter: function(val) {
-					return util.enum.transform('targetStates', val);
+					return util.enum.transform('targetLifeStates', val);
 				}
             
             },
@@ -96,26 +96,26 @@ define([
             	      text: '成立',
             	      type: 'button',
             	      class: 'item-establish',
-            	      isRender: row.state == 'collecting',
+            	      isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
             	    },
             	    {
               	      text: '不成立',
               	      type: 'button',
               	      class: 'item-unEstablish',
-              	      isRender: row.state == 'collecting',
+              	      isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
               	    },
               	    {
               	    	text: '本息兑付',
               	    	type: 'button',
               	    	class: 'item-targetIncome',
-              	    	isRender: row.state == 'establish',
+              	    	isRender: row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
 //              	    	isRender: true,
               	    },
               	    {
               	    	text: '逾期',
               	    	type: 'button',
               	    	class: 'item-overdue',
-              	    	isRender: row.state == 'establish',
+              	    	isRender: row.lifeState === 'STAND_UP',// 只有已经成立后的标的才能进行逾期
               	    },
               	    {
               	      text: '移除出库',
