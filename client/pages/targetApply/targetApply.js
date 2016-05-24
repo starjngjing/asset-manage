@@ -379,6 +379,73 @@ define([
 				});
 			})
 
+			// 检查项确认数据源
+			var checkConditionsSource = [{
+				id: 'a1',
+				text: '第一项'
+			}, {
+				id: 'a2',
+				text: '第二项'
+			}, {
+				id: 'a3',
+				text: '第三项'
+			}, {
+				id: 'a4',
+				text: '第四项'
+			}, {
+				id: 'a5',
+				text: '第五项'
+			}, {
+				id: 'a6',
+				text: '第六项'
+			}]
+			// 临时存储已选数量
+			var checkConditionsCount = 0
+			// 根据数据源生成html
+			var checkConditionsHtml = checkConditionsSource.map(function (item) {
+				return '<div class="form-group"><input type="checkbox" class="icheck"/> ' + item.text + '</div>'
+			})
+			// 写入页面和绑定事件
+			$('#checkConditionsContainer').append(checkConditionsHtml.join(''))
+			$('#checkConditionsContainer').find('input')
+				.on('ifChanged', function () {
+					if (this.checked) {
+						checkConditionsCount += 1
+					} else {
+						checkConditionsCount -= 1
+					}
+					var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
+					var currentClass = ''
+					if (percentage <= 30) {
+						currentClass = 'progress-bar-primary'
+					} else if (percentage > 30 && percentage <= 60) {
+						currentClass = 'progress-bar-danger'
+					} else if (percentage > 60 && percentage <= 99) {
+						currentClass = 'progress-bar-yellow'
+					} else {
+						currentClass = 'progress-bar-success'
+					}
+					$('#checkConditionsProgress')
+						.removeClass('progress-bar-primary')
+						.removeClass('progress-bar-danger')
+						.removeClass('progress-bar-yellow')
+						.removeClass('progress-bar-success')
+						.addClass(currentClass)
+						.css({
+							width: percentage + '%'
+						})
+				})
+			// 确认检查项 - 确定按钮点击事件
+			$('#doConfirmCheckConditions').on('click', function () {
+				$('#checkConditionsContainer').find('input').each(function (index, item) {
+					checkConditionsSource.checked = item.checked
+				})
+				document.checkConditionsForm.checkConditions.value = JSON.stringify(checkConditionsSource)
+				$('#checkConditionsForm').ajaxSubmit({
+
+				})
+			})
+
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
 				pageOptions.size = val.limit
