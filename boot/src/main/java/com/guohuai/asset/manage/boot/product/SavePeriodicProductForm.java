@@ -1,14 +1,11 @@
 package com.guohuai.asset.manage.boot.product;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
-import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.Length;
@@ -54,13 +51,13 @@ public class SavePeriodicProductForm implements Serializable {
 	private String raiseStatrtDate;//募集开始时间
 	@Range(min = 1, max = 240, message = "募集期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "募集期参数错误")
-	private int raisePeriod;//募集期:()个自然日
+	private String raisePeriod;//募集期:()个自然日
 	@Range(min = 1, max = 240, message = "起息日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "起息日参数错误")
-	private int interestsFirstDate;//起息日:募集满额后()个自然日
+	private String interestsFirstDate;//起息日:募集满额后()个自然日
 	@Range(min = 1, max = 240, message = "存续期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "存续期参数错误")
-	private int durationPeriod;//存续期:()个自然日
+	private String durationPeriod;//存续期:()个自然日
 	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")
 	@NotBlank(message = "预期年化收益不可为空")
 	private String expAror;//预期年化收益率
@@ -68,23 +65,23 @@ public class SavePeriodicProductForm implements Serializable {
 	private String expArorSec;//预期年化收益率区间
 	@Digits(integer = 12, fraction = 0, message = "募集总份额参数错误")
 	@Min(value = 1, message = "募集总份额参数错误")
-//	@NotBlank(message = "募集总份额不可为空")
-	private int raisedTotalNumber;//募集总份额
+	@NotBlank(message = "募集总份额不可为空")
+	private String raisedTotalNumber;//募集总份额
 	@Digits(integer = 12, fraction = 4, message = "单位份额净值参数错误")
 	@NotBlank(message = "单位份额净值不可为空")
 	private String netUnitShare;//单位份额净值
 	@Digits(integer = 12, fraction = 0, message = "单笔投资最低份额参数错误")
 	@Min(value = 1, message = "单笔投资最低份额参数错误")
-	private int investMin;//单笔投资最低份额
+	private String investMin;//单笔投资最低份额
 	@Digits(integer = 12, fraction = 0, message = "单笔投资最高份额参数错误")
-	private int investMax;//单笔投资最高份额
+	private String investMax;//单笔投资最高份额
 	@Digits(integer = 12, fraction = 0, message = "申购上限参数错误")
-	private int purchaseLimit;//申购上限
+	private String purchaseLimit;//申购上限
 	@Digits(integer = 12, fraction = 0, message = "单笔投资追加份额参数错误")
-	private int investAdditional;//单笔投资追加份额
+	private String investAdditional;//单笔投资追加份额
 	@Range(min = 1, max = 240, message = "还本付息日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "还本付息日参数错误")
-	private int accrualDate;//还本付息日 存续期结束后第()个自然日
+	private String accrualDate;//还本付息日 存续期结束后第()个自然日
 	private String investComment;//投资标的
 	@Length(max = 10000, message = "产品说明长度不能超过10000（包含）！")
 	@NotBlank
