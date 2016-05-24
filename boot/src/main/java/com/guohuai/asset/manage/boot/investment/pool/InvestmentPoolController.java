@@ -286,4 +286,16 @@ public class InvestmentPoolController extends BaseController {
 		return new BaseResp();
 	}
 
+	/**
+	 * 查询正在募集期的标的列表
+	 * 
+	 * @Title: getRecruitment
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 */
+	public void getRecruitment() {
+		// TODO
+		// 募集截止日<当前日期 && lifeState = PREPARE
+	}
 }
