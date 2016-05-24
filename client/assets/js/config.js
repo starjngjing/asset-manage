@@ -28,6 +28,7 @@ define(function() {
 			cashToolRevenueSave: this.host + "/ams/boot/cashToolPool/cashToolRevenueSave", // 现金管理工具收益采集
 			targetIncomeSave: this.host + "/ams/boot/investmentPool/targetIncomeSave", // 投资标的本息兑付
 			targetProjectList: this.host + "/ams/boot/project/projectlist", // 查询投资标的下的底层项目
+			projectDetail: this.host + "/ams/boot/project/getByOid", // 查询底层项目详情
 			targetProjectDelete: this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
 			saveProject: this.host + "/ams/boot/project/save", //保存底层项目
 			targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
