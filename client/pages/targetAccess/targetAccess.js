@@ -164,11 +164,11 @@ define([
 				pageList: [10, 20, 30, 50, 100],
 				queryParams: function(val) {
 					var form = document.projectSearchForm
-					$.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
-
+					$.extend(prjPageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+					
 					prjPageOptions.rows = val.limit
 					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
-					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id				
+					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id					
 
 					return val
 				},

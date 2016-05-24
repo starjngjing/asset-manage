@@ -32,7 +32,6 @@ public class InvestmentMeetingVoteBootController extends BaseController{
 
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<MeetingInvestmentListResp> list() {
-//		String operator = super.getLoginAdmin();
 		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		List<MeetingInvestmentDetResp> list = investmentMeetingVoteService.getInvestmentByParticipant(operator);
 		MeetingInvestmentListResp resps = new MeetingInvestmentListResp(list);

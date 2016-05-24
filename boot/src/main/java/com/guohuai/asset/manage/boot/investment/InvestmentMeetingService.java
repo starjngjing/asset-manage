@@ -24,6 +24,8 @@ import com.guohuai.asset.manage.boot.investment.meeting.SummaryDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.SummaryFileDet;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
+import com.guohuai.operate.api.AdminSdk;
+import com.guohuai.operate.api.objs.admin.AdminObj;
 
 @Service
 @Transactional
@@ -49,6 +51,9 @@ public class InvestmentMeetingService {
 
 	@Autowired
 	private InvestmentLogService investmentLogService;
+	
+	@Autowired
+	private AdminSdk adminSdk;
 
 	/**
 	 * 获得投资标的过会列表
@@ -160,7 +165,8 @@ public class InvestmentMeetingService {
 		resp.setMeetingOid(meeting.getOid());
 		resp.setFkey(files.get(0).getFkey());
 		resp.setUpdateTime(files.get(0).getUpdateTime());
-		resp.setOperator(files.get(0).getOperator());
+		AdminObj adminObj = adminSdk.getAdmin(files.get(0).getOperator());
+		resp.setOperator(adminObj.getName());
 		resps.add(resp);
 		return resps;
 	}
@@ -264,7 +270,7 @@ public class InvestmentMeetingService {
 		for (MeetingInvestmentDetResp req : list) {
 			TargetEventType logType = null;
 			Investment investment = investmentService.getInvestment(req.getOid());
-			if ("yes".equals(req.getVoteStatus())) {
+			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_collecting);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项
@@ -275,7 +281,7 @@ public class InvestmentMeetingService {
 					investmentMeetingCheckService.saveOrUpdateMeetingCheck(check, operator);
 				}
 				logType = TargetEventType.collecting;
-			} else if ("no".equals(req.getVoteStatus())) {
+			} else if (InvestmentMeetingVote.VOTE_STATUS_notapprove.equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_reject);
 				investment.setRejectDesc(req.getRejectComment());
 				logType = TargetEventType.checkreject;

@@ -79,8 +79,6 @@ define([
 							$('#targetOid').val(row.oid);
 							//删除会议报告表
 							$('#voteProgressTable').bootstrapTable('destroy')
-								//删除会议纪要表
-							$('#voteSummaryTable').bootstrapTable('destroy')
 							var voteProgressTableConfig = {
 								ajax: function(origin) {
 									http.post(config.api.meetingTargetVoteDet, {
@@ -127,6 +125,8 @@ define([
 								}]
 							}
 							$('#voteProgressTable').bootstrapTable(voteProgressTableConfig)
+								//删除会议纪要表
+							$('#voteSummaryTable').bootstrapTable('destroy')
 								// 过会纪要表格配置
 							var voteSummaryTableConfig = {
 								ajax: function(origin) {

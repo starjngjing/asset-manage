@@ -288,7 +288,7 @@
 						<div id="assetGrid" class="box box-primary">
 							<!-- Grid头部 -->
 							<div class="box-header">
-								
+
 							</div>
 							<!-- Grid内容体 -->
 							<div class="box-body">
@@ -749,9 +749,16 @@
         </button>
 				<h4 class="modal-title">标的预审</h4>
 			</div>
-			<form id="accessFrom" name="accessFrom" method="post">
-				<input id="coid" name="oid" type="hidden" value="" />
-			</form>
+			<!-- 预审意见 -->
+			<div class="modal-body">
+				<div class="form-group">
+					<label>预审意见</label>
+					<form id="accessFrom" name="accessFrom" method="post">
+						<textarea name="suggest" rows="3" class="form-control input-sm" placeholder="请输入预审意见"></textarea>
+						<input id="coid" name="oid" type="hidden" value="" />
+					</form>
+				</div>
+			</div>
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>

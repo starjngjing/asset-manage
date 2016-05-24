@@ -85,8 +85,8 @@ public class InvestmentCheckBootController extends BaseController {
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> checkPass(@RequestParam(required = true) String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
-		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator);
+		String operator = super.getLoginAdmin();
+		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator, null);
 		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkpass, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
@@ -98,9 +98,10 @@ public class InvestmentCheckBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(@RequestParam(required = true) String oid) {
-		String operator = "2400f52794b311e59bdf000c298d4ab5";
-		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_reject, operator);
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(@RequestParam(required = true) String oid,
+			@RequestParam String suggest) {
+		String operator = super.getLoginAdmin();
+		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_reject, operator, suggest);
 		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkreject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
