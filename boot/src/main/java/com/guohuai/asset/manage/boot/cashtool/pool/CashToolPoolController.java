@@ -43,9 +43,9 @@ import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.component.exception.AMPException;
-import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -172,12 +172,12 @@ public class CashToolPoolController extends BaseController {
 	 */
 	@RequestMapping("removeCashTool")
 	@ApiOperation(value = "现金管理工具移除出库")
-	public CommonResp removeCashTool(String oid) {
+	public BaseResp removeCashTool(String oid) {
 		log.debug("现金管理工具移除出库接口!!!");
 		String loginId = super.getLoginAdmin();
 		log.debug("获取操作员id:" + loginId);
 		this.cashToolService.remove(oid, loginId);
-		return CommonResp.builder().errorMessage("移除出库成功！").attached("").build();
+		return new BaseResp();
 	}
 
 
@@ -193,7 +193,7 @@ public class CashToolPoolController extends BaseController {
 	 */
 	@RequestMapping("cashToolRevenueSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public CommonResp cashToolRevenueSave(@Valid CashToolRevenueForm cashToolRevenueForm) {
+	public BaseResp cashToolRevenueSave(@Valid CashToolRevenueForm cashToolRevenueForm) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
@@ -202,6 +202,6 @@ public class CashToolPoolController extends BaseController {
 		}
 		cashToolRevenueForm.setOperator(loginId);
 		CashToolRevenue cashToolRevenue = cashToolRevenueService.save(cashToolRevenueForm);
-		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(cashToolRevenue.getOid()).build();
+		return new BaseResp();
 	}
 }

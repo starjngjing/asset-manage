@@ -33,9 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
 import com.guohuai.asset.manage.component.exception.AMPException;
-import com.guohuai.asset.manage.component.resp.CommonResp;
 import com.guohuai.asset.manage.component.util.Section;
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -188,7 +188,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("establish")
 	@ApiOperation(value = "标的成立")
-	public CommonResp establish(@Valid EstablishForm form) {
+	public BaseResp establish(@Valid EstablishForm form) {
 		log.debug("投资标的成立接口!!!");
 		String loginId = null; 
 		try {
@@ -198,7 +198,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.establish(form);
-		return CommonResp.builder().errorMessage("标的成立成功！").attached("").build();
+		return new BaseResp();
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("unEstablish")
 	@ApiOperation(value = "标的不成立")
-	public CommonResp unEstablish(@Valid UnEstablishForm form) {
+	public BaseResp unEstablish(@Valid UnEstablishForm form) {
 		log.debug("投资标的成立接口!!!");
 		String loginId = null; 
 		try {
@@ -221,7 +221,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.unEstablish(form);
-		return CommonResp.builder().errorMessage("标的不成立成功！").attached("").build();
+		return new BaseResp();
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("targetIncomeSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public CommonResp interestSave(@Valid TargetIncomeForm interestForm) {
+	public BaseResp interestSave(@Valid TargetIncomeForm interestForm) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
@@ -245,7 +245,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		interestForm.setOperator(loginId);
 		TargetIncome interest = targetIncomeService.save(interestForm);
-		return CommonResp.builder().errorMessage("投资标的本息兑付成功！").attached(interest.getOid()).build();
+		return new BaseResp();
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
-	public CommonResp overdue(@Valid TargetOverdueForm form) {
+	public BaseResp overdue(@Valid TargetOverdueForm form) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
@@ -271,7 +271,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.overdue(form);
-		return CommonResp.builder().errorMessage("标的逾期登记成功！").attached("").build();
+		return new BaseResp();
 	}
 
 }

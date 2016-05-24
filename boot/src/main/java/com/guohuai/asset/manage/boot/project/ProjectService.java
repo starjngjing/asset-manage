@@ -123,5 +123,20 @@ public class ProjectService {
 	public List<Project> findByTargetId(String targetOid) {
 		return this.projectDao.findByTargetOid(targetOid);
 	}
+	
+	/**
+	 * 通过id查询底层项目
+	 * 
+	 * @Title: findByOid
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param oid
+	 * @return
+	 * @return Project 返回类型
+	 */
+	public Project findByOid(String oid) {
+		return this.projectDao.findOne(oid);
+	}
 
 }

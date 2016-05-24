@@ -9,27 +9,28 @@ import com.guohuai.asset.manage.component.web.view.PageResp;
 
 //import com.guohuai.asset.hill.component.web.view.PageResp;
 
-public class ProjectListResp extends PageResp<ProjectResp> {
+public class ProjectListResp extends PageResp<Project> {
 
 	public ProjectListResp() {
 		super();
 	}
 
-	public ProjectListResp(Page<Project> Approvals) {
-		this(Approvals.getContent(), Approvals.getTotalElements());
+	public ProjectListResp(Page<Project> page) {
+		this(page.getContent(), page.getTotalElements());
 	}
 
-	public ProjectListResp(List<Project> approvals) {
-		this(approvals, approvals.size());
+	public ProjectListResp(List<Project> list) {
+		this(list, list.size());
 	}
 
-	public ProjectListResp(List<Project> Approvals, long total) {
+	public ProjectListResp(List<Project> list, long total) {
 		this();
 		super.setTotal(total);
-		for (Project approval : Approvals) {
-			ProjectResp pr = new ProjectResp();
-			BeanUtils.copyProperties(approval, pr);
-			super.getRows().add(pr);
+		for (Project prj : list) {
+//			ProjectResp pr = new ProjectResp();
+//			BeanUtils.copyProperties(approval, prj);
+//			super.getRows().add(pr);
+			super.getRows().add(prj);
 		}
 	}
 
