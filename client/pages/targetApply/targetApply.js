@@ -382,69 +382,140 @@ define([
 			// 检查项确认数据源
 			var checkConditionsSource = [{
 				id: 'a1',
-				text: '第一项'
+				text: '第一项',
+				remark: '',
+				file: ''
 			}, {
 				id: 'a2',
-				text: '第二项'
+				text: '第二项',
+				remark: '',
+				file: ''
 			}, {
 				id: 'a3',
-				text: '第三项'
+				text: '第三项',
+				remark: '',
+				file: ''
 			}, {
 				id: 'a4',
-				text: '第四项'
+				text: '第四项',
+				remark: '',
+				file: ''
 			}, {
 				id: 'a5',
-				text: '第五项'
+				text: '第五项',
+				remark: '',
+				file: ''
 			}, {
 				id: 'a6',
-				text: '第六项'
+				text: '第六项',
+				remark: '',
+				file: ''
 			}]
 			// 临时存储已选数量
 			var checkConditionsCount = 0
-			// 根据数据源生成html
-			var checkConditionsHtml = checkConditionsSource.map(function (item) {
-				return '<div class="form-group"><input type="checkbox" class="icheck"/> ' + item.text + '</div>'
-			})
-			// 写入页面和绑定事件
-			$('#checkConditionsContainer').append(checkConditionsHtml.join(''))
-			$('#checkConditionsContainer').find('input')
-				.on('ifChanged', function () {
-					if (this.checked) {
-						checkConditionsCount += 1
-					} else {
-						checkConditionsCount -= 1
+			// 临时存储操作检查项
+			var currentCheckCondition = null
+			// 确认项表格配置
+			var checkConditionsTableConfig = {
+				data: checkConditionsSource,
+				columns: [
+					{
+						checkbox: true
+					},
+					{
+						field: 'text'
+					},
+					{
+						width: 100,
+						align: 'center',
+						formatter: function () {
+							var buttons = [
+								{
+									text: '附件与备注',
+									type: 'button',
+									class: 'item-file'
+								}
+							]
+							return util.table.formatter.generateButton(buttons)
+						},
+						events: {
+							'click .item-file': function (e, value, row) {
+								currentCheckCondition = row
+								var form = document.fileAndRemarkForm
+								form.remark.value = row.remark
+								form.file.value = row.file
+								if (row.file) {
+									$('#checkFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + row.file)
+									$('#checkFile').find('span').html('下载')
+								} else {
+									$('#checkFile').show().find('a').attr('href', '#')
+									$('#checkFile').find('span').html('')
+									$('#checkFile').hide()
+								}
+								$('#fileAndRemarkModal').modal('show')
+							}
+						}
 					}
+				],
+				// 单选按钮选中一项时
+				onCheck: function (row) {
+					row.checked = true
+					checkConditionsCount += 1
 					var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
-					var currentClass = ''
-					if (percentage <= 30) {
-						currentClass = 'progress-bar-primary'
-					} else if (percentage > 30 && percentage <= 60) {
-						currentClass = 'progress-bar-danger'
-					} else if (percentage > 60 && percentage <= 99) {
-						currentClass = 'progress-bar-yellow'
-					} else {
-						currentClass = 'progress-bar-success'
-					}
-					$('#checkConditionsProgress')
-						.removeClass('progress-bar-primary')
-						.removeClass('progress-bar-danger')
-						.removeClass('progress-bar-yellow')
-						.removeClass('progress-bar-success')
-						.addClass(currentClass)
-						.css({
-							width: percentage + '%'
-						})
-				})
+					renderProgressbar(percentage)
+				},
+				// 单选按钮取消一项时
+				onUncheck: function (row) {
+					row.checked = false
+					checkConditionsCount -= 1
+					var percentage = Math.round(checkConditionsCount / checkConditionsSource.length * 100)
+					renderProgressbar(percentage)
+				},
+				// 全选按钮选中时
+				onCheckAll: function (rows) {
+					checkConditionsSource.forEach(function (item) {
+						item.checked = true
+					})
+					checkConditionsCount =  checkConditionsSource.length
+					renderProgressbar(100)
+				},
+				// 全选按钮取消时
+				onUncheckAll: function () {
+					checkConditionsSource.forEach(function (item) {
+						item.checked = false
+					})
+					checkConditionsCount =  0
+					renderProgressbar(0)
+				}
+			}
+			// 初始化确认项表格
+			$('#checkConditionsTable').bootstrapTable(checkConditionsTableConfig)
+			// 初始化附件与备注 - 附件上传
+			$$.uploader({
+				container: $('#checkUploader'),
+				success: function(file) {
+					$('#checkFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
+					$('#checkFile').find('span').html(file.name)
+					document.fileAndRemarkForm.file.value = file.url
+				}
+			})
+			// 附件与备注确定按钮点击事件
+			$('#doAddFileAndRemark').on('click', function () {
+				var form = document.fileAndRemarkForm
+				currentCheckCondition.remark = form.remark.value.trim()
+				currentCheckCondition.file = form.file.value
+				$('#fileAndRemarkModal').modal('hide')
+			})
 			// 确认检查项 - 确定按钮点击事件
 			$('#doConfirmCheckConditions').on('click', function () {
-				$('#checkConditionsContainer').find('input').each(function (index, item) {
-					checkConditionsSource.checked = item.checked
-				})
 				document.checkConditionsForm.checkConditions.value = JSON.stringify(checkConditionsSource)
+				console.log(checkConditionsSource)
 				$('#checkConditionsForm').ajaxSubmit({
 
 				})
 			})
+
+			$('#checkConditionsModal ').modal('show')
 
 			function getQueryParams(val) {
 				var form = document.targetSearchForm
@@ -493,6 +564,28 @@ define([
 				$('#targetApplyTable').bootstrapTable('refresh'); // 标的标的重新加载
 			}
 		})
+	}
+
+	function renderProgressbar (percentage) {
+		var currentClass = ''
+		if (percentage <= 30) {
+			currentClass = 'progress-bar-primary'
+		} else if (percentage > 30 && percentage <= 60) {
+			currentClass = 'progress-bar-danger'
+		} else if (percentage > 60 && percentage <= 99) {
+			currentClass = 'progress-bar-yellow'
+		} else {
+			currentClass = 'progress-bar-success'
+		}
+		$('#checkConditionsProgress')
+			.removeClass('progress-bar-primary')
+			.removeClass('progress-bar-danger')
+			.removeClass('progress-bar-yellow')
+			.removeClass('progress-bar-success')
+			.addClass(currentClass)
+			.css({
+				width: percentage + '%'
+			})
 	}
 
 })
