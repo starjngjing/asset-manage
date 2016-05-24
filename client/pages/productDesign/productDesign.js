@@ -300,7 +300,14 @@ define([
 //											$('#updateProductType01Area').hide()
 //											break
 //									}
-									
+
+									http.post(config.api.duration.assetPool.getAll, function (result) {
+										var select = document.updateProductForm.assetPoolOid
+										result.rows.forEach(function (item, index) {
+											select.append('<option value="' + item.oid + '">' + item.name + '</option>')
+										})
+										select.value = data.assetPoolOid
+									})
 									
 									$('#updateProductModal').modal('show');
 								} else {
@@ -541,7 +548,13 @@ define([
 
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
-    		$('#addProductModal').modal('show')
+				http.post(config.api.duration.assetPool.getAll, function (result) {
+					var select = document.addProductForm.assetPoolOid
+					result.rows.forEach(function (item, index) {
+						select.append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.name + '</option>')
+					})
+				})
+				$('#addProductModal').modal('show')
     	})    	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
