@@ -322,9 +322,11 @@ define([
 			};
 			// 初始化表格
 			$('#targetApplyTable').bootstrapTable(tableConfig)
-				// 搜索表单初始化
+			
+			// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
-				// 新建标的按钮点击事件
+			
+			// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
 				$('#addTargetModal').modal('show')
 			})
@@ -333,6 +335,7 @@ define([
 			$('#saveTarget').on('click', function() {
 				saveTarget();
 			})
+			
 			//修改标的按钮点击事件
 			$('#editTarget').on('click', function() {
 				editTarget();
@@ -350,10 +353,13 @@ define([
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
+			
 			// 保存底层项目按钮点击事件
 			$('#projectSubmit').on('click', function() {
 				saveProject();
 			})
+			
+			// 新增/修改底层项目-项目类型下拉列表选项改变事件
 			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if (ptt === 'PROJECTTYPE_01') { // 金融
@@ -370,6 +376,7 @@ define([
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
 			});
 
+			// 新增/修改底层项目-是否有担保人单选按钮改变事件
 			$(document.projectForm.warrantor).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有担保人
 					if ($(this).val() === 'yes')
@@ -382,6 +389,7 @@ define([
 				});
 			})
 
+			// 新增/修改底层项目-是否有抵押人单选按钮改变事件
 			$(document.projectForm.pledge).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有抵押人
 					if ($(this).val() === 'yes')
