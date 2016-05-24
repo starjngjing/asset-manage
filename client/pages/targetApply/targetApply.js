@@ -265,6 +265,12 @@ define([
 								isRender: true
 						    },
 						    {
+								text: '修改',
+								type: 'button',
+								class: 'item-project-update',
+								isRender: true
+						    },
+						    {
 						    	text: '删除',
 						    	type: 'button',
 						    	class: 'item-project-delete',
@@ -278,6 +284,13 @@ define([
 							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
 							$('#projectDetailModal').modal('show');
+						},
+						'click .item-project-update': function(e, value, row) { // 底层项目修改
+							$('#projectForm').clearForm(); // 先清理表单
+							util.form.validator.init($("#projectForm")); // 初始化表单验证
+							$$.detailAutoFix($('#targetDetail'), row); // 自动填充详情
+							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
+							$('#projectModal').modal('show');
 						},
 						'click .item-project-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
@@ -336,6 +349,7 @@ define([
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
 			})
+			// 保存底层项目按钮点击事件
 			$('#projectSubmit').on('click', function() {
 				saveProject();
 			})
