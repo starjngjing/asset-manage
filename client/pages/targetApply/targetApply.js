@@ -186,7 +186,6 @@ define([
 							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
 
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
-							$$.formAutoFix($('#targetDetail'), targetInfo); // 自动填充表单
 
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
@@ -288,7 +287,7 @@ define([
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
 							$('#projectForm').clearForm(); // 先清理表单
 							util.form.validator.init($("#projectForm")); // 初始化表单验证
-							$$.detailAutoFix($('#targetDetail'), row); // 自动填充详情
+							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
 							$('#projectModal').modal('show');
 						},
@@ -327,13 +326,9 @@ define([
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
 				// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
-					$('#addTargetModal').modal('show')
-				})
-				// 新建底层资产按钮点击事件
-
-			$('#assetAdd').on('click', function() {
-				$('#addAssetModal').modal('show')
+				$('#addTargetModal').modal('show')
 			})
+			
 			//新建标的按钮点击事件
 			$('#saveTarget').on('click', function() {
 				saveTarget();
@@ -345,6 +340,12 @@ define([
 
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
+				if(!targetInfo) {
+					alert('请选择投资标的');
+					return false;
+				}
+				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+				
 				$('#projectForm').clearForm(); // 先清理表单
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
 				$('#projectModal').modal('show');
