@@ -53,8 +53,8 @@ public class OrderController {
 	 * @param oid
 	 * 			标的oid
 	 */
-	@RequestMapping(value = "/auditFund", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> auditFund(@RequestBody FundForm form) {
+	@RequestMapping(value = "/auditForFund", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> auditForFund(@RequestBody FundForm form) {
 		orderService.auditFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
@@ -66,8 +66,8 @@ public class OrderController {
 	 * @param oid
 	 * 			标的oid
 	 */
-	@RequestMapping(value = "/appointMentForFund", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> appointMentForFund(@RequestBody FundForm form) {
+	@RequestMapping(value = "/appointmentForFund", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> appointmentForFund(@RequestBody FundForm form) {
 		orderService.appointMentForFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
@@ -99,6 +99,83 @@ public class OrderController {
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+
+	/**
+	 * 信托（计划）申购 审核
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/auditForTrust", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> auditForTrust(@RequestBody TrustForm form) {
+		orderService.purchaseForTrust(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
+	 * 信托（计划）申购 预约
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/appointmentForTrust", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> appointmentForTrust(@RequestBody TrustForm form) {
+		orderService.purchaseForTrust(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
+	 * 信托（计划）申购 确认
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/orderConfirmForTrust", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> orderConfirmForTrust(@RequestBody TrustForm form) {
+		orderService.purchaseForTrust(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 信托（计划）本息兑付
+	 * @param from
+	 */
+	@RequestMapping(value = "/applyForIncome", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> applyForIncome(@RequestBody TrustForm form) {
+		orderService.transfer(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 信托（计划）本息兑付 审核
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/auditForIncome", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> auditForIncome(@RequestBody TrustForm form) {
+		orderService.auditTrust(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 信托（计划）本息兑付 确认
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/orderConfirmForIncome", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> orderConfirmForIncome(@RequestBody TrustForm form) {
+		orderService.orderConfirmForTrust(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 	
 	/**
 	 * 信托（计划）转让
@@ -113,11 +190,11 @@ public class OrderController {
 	}
 	
 	/**
-	 * 信托（计划）申购审核
+	 * 信托（计划）转让 审核
 	 * @param oid
 	 * 			标的oid
 	 */
-	@RequestMapping(value = "/auditTrust", method = { RequestMethod.POST })
+	@RequestMapping(value = "/auditForTransfer", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditTrust(@RequestBody TrustForm form) {
 		orderService.auditTrust(form, "STAR");
 		Response r = new Response();
@@ -126,25 +203,12 @@ public class OrderController {
 	}
 	
 	/**
-	 * 信托（计划）资金预约
+	 * 信托（计划）转让 确认
 	 * @param oid
 	 * 			标的oid
 	 */
-	@RequestMapping(value = "/appointMentForTrust", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> appointMentForTrust(@RequestBody TrustForm form) {
-		orderService.appointMentForTrust(form, "STAR");
-		Response r = new Response();
-		r.with("result", "SUCCESSED!");
-		return new ResponseEntity<Response>(r, HttpStatus.OK);
-	}
-	
-	/**
-	 * 信托（计划）订单确认
-	 * @param oid
-	 * 			标的oid
-	 */
-	@RequestMapping(value = "/orderConfirmForTrust", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> orderConfirmForTrust(@RequestBody TrustForm form) {
+	@RequestMapping(value = "/orderConfirmForTransfer", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> orderConfirmForTransfer(@RequestBody TrustForm form) {
 		orderService.orderConfirmForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");

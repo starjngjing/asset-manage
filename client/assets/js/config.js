@@ -156,6 +156,13 @@ define(function() {
 					}
 				}
 			},
+			duration: {
+				assetPool: {
+					create: this.host + "/ams/duration/assetPool/createPool",
+					audit: this.host + "/ams/duration/assetPool/auditPool",
+					getAll: this.host + "/ams/duration/assetPool/getAll",
+				}
+			},
 			role: {
 				list: this.host + '/operate/admin/ctrl/role/list'					// 角色列表
 			},

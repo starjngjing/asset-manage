@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -23,12 +24,15 @@ public class AssetPoolService {
 	
 	/**
 	 * 新建资产池
+	 * @param form
+	 * @param uid
 	 */
 	public void createPool(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = new AssetPoolEntity();
 		try {
 			entity.setOid(StringUtil.uuid());
 			BeanUtils.copyProperties(entity, form);
+			entity.setState("未成立");
 			entity.setCreater(uid);
 			entity.setCreateTime(DateUtil.getSqlCurrentDate());
 			
@@ -40,9 +44,17 @@ public class AssetPoolService {
 	
 	/**
 	 * 新建审核
+	 * @param operation
+	 * 				yes：同意
+	 * 				no：不同意
+	 * @param oid
+	 * @param uid
 	 */
-	public void auditPool() {
-		
+	public void auditPool(String operation, String oid, String uid) {
+		if ("yes".equals(operation)) {
+			AssetPoolEntity entity = assetPoolDao.findOne(oid);
+			entity.setState("成立");
+		}
 	}
 
 	/**
@@ -50,8 +62,22 @@ public class AssetPoolService {
 	 * @return
 	 */
 	public List<AssetPoolForm> getAllList() {
+		List<AssetPoolForm> formList = Lists.newArrayList();
+		List<AssetPoolEntity> entityList = assetPoolDao.findAll();
+		if (!entityList.isEmpty()) {
+			AssetPoolForm form = null;
+			for (AssetPoolEntity entity : entityList) {
+				form = new AssetPoolForm();
+				try {
+					BeanUtils.copyProperties(form, entity);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				formList.add(form);
+			}
+		}
 		
-		return null;
+		return formList;
 	}
 	
 	/**
@@ -59,8 +85,22 @@ public class AssetPoolService {
 	 * @return
 	 */
 	public List<JSONObject> getAllNameList() {
+		List<JSONObject> jsonObjList = Lists.newArrayList();
+		List<Object> objList = assetPoolDao.findAllNameList();
+		if (!objList.isEmpty()) {
+			Object[] obs = null;
+			JSONObject jsonObj = null;
+			for (Object obj : objList) {
+				obs = (Object[]) obj;
+				jsonObj = new JSONObject();
+				jsonObj.put("oid", obs[0]);
+				jsonObj.put("name", obs[1]);
+				
+				jsonObjList.add(jsonObj);
+			}
+		}
 		
-		return null;
+		return jsonObjList;
 	}
 	
 	/**
@@ -69,7 +109,14 @@ public class AssetPoolService {
 	 * @return
 	 */
 	public AssetPoolForm getById(String pid) {
+		AssetPoolForm form = new AssetPoolForm();
+		AssetPoolEntity entity = assetPoolDao.findOne(pid);
+		try {
+			BeanUtils.copyProperties(form, entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		return null;
+		return form;
 	}
 }
