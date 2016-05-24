@@ -3,12 +3,20 @@ package com.guohuai.asset.manage.boot.investment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +25,9 @@ import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp
 @Service
 @Transactional
 public class InvestmentMeetingAssetService {
+	
+	@Autowired
+	private InvestmentService investmentService;
 
 	@Autowired
 	private InvestmentMeetingAssetDao investmentMeetingAssetDao;
@@ -103,6 +114,28 @@ public class InvestmentMeetingAssetService {
 			investments.add(entity);
 		}
 		return investments;
+	}
+	
+	public InvestmentMeeting getNewMeetingByInvestment(String investmentOid){
+		InvestmentMeeting res = new InvestmentMeeting();
+		Investment investment = investmentService.getInvestment(investmentOid);
+		if(null == investment){
+			throw new RuntimeException();
+		}
+		Specification<InvestmentMeetingAsset> spec = new Specification<InvestmentMeetingAsset>() {
+			@Override
+			public Predicate toPredicate(Root<InvestmentMeetingAsset> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.get("investment").as(Investment.class), investment);
+			}
+		};
+		Direction sortDirection = Direction.DESC;
+		Pageable pageable = new PageRequest(0, 1, new Sort(new Order(sortDirection, "investmentMeeting.createTime")));
+		Page<InvestmentMeetingAsset> pageData = this.getMeetingAssetList(spec, pageable);
+		if(null != pageData && pageData.getContent().size() > 0){
+			InvestmentMeetingAsset asset = pageData.getContent().get(0);
+			BeanUtils.copyProperties(asset.getInvestmentMeeting(), res);
+		}
+		return res;
 	}
 
 }

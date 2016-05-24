@@ -200,6 +200,28 @@ define([
 							}, function(result) {
 								var data = result.investment;
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+								if (data.state != 'reject') {
+									$("#rejectDesc").hide()
+								} else {
+									$("#rejectDesc").show()
+								}
+								if (data.state == 'collecting') {
+									http.post(config.api.targetNewMeeting, {
+										data: {
+											investmentOid: row.oid
+										},
+										contentType: 'form'
+									}, function(result) {
+										var data = result.data;
+										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
+										$('#editTargetModal').modal('show');
+									})
+
+									$('#meetingDet').show();
+								} else {
+									$('#meetingDet').hide();
+								}
+
 								$('#targetDetailModal').modal('show');
 							})
 
@@ -207,8 +229,8 @@ define([
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
 							//console.info("targetInfo---------->" + JSON.stringify(targetInfo))
-							
-							$('#projectSearchForm').resetForm();// 先清理搜索项目表单
+
+							$('#projectSearchForm').resetForm(); // 先清理搜索项目表单
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 							// 给项目表单的 标的id属性赋值
@@ -307,7 +329,7 @@ define([
 							$('#projectForm').resetForm(); // 先清理表单
 							util.form.validator.init($("#projectForm")); // 初始化表单验证
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
-							
+
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
 							//row.targetOid = targetInfo.oid;
@@ -373,9 +395,9 @@ define([
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 				$('#projectForm').clearForm(); // 先清理表单
-				
+
 				$('#projectForm').resetForm(); // 先清理表单
-				
+
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证

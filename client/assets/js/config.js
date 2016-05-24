@@ -85,6 +85,7 @@ define(function() {
 			meetingStop: this.host + '/ams/target/targetMeeting/stop', //获得会议纪要详情
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
 			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
+			targetNewMeeting: this.host = '/ams/target/targetMeeting/targetMeeting', //根据标的获取最新会议
 			channelQuery: this.host + '/ams/channel/query',              //渠道-列表查询
 		    addChannel: this.host + '/ams/channel/add', 				 //渠道-新增
 		    channelinfo: this.host + '/ams/channel/channelinfo',		 //渠道-获取详情
@@ -194,7 +195,7 @@ define(function() {
 			children: []
 		}, {
 			id: "collecting",
-			text: "募集中",
+			text: "过会完成",
 			children: []
 		}, {
 			id: "establish",
