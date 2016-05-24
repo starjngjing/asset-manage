@@ -31,7 +31,7 @@ public class ProjectService {
 	@Autowired
 	private ProjectDao projectDao;
 	@Autowired
-	private InvestmentDao investmentDao;
+	private InvestmentDao investmentDao; 
 	@Autowired
 	private InvestmentService investmentService;
 
