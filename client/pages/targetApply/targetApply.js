@@ -281,9 +281,24 @@ define([
 					},
 					events: {
 						'click .item-project-detail': function(e, value, row) { // 底层项目详情
-							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
-							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
-							$('#projectDetailModal').modal('show');
+							http.post(config.api.projectDetail, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result.data;
+								if(!data){
+									alert('查询底层项目详情失败');
+								} else {
+									$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
+//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
+									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
+									$('#projectDetailModal').modal('show');
+								}
+							});
+							
+							
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
 							$('#projectForm').resetForm(); // 先清理表单
