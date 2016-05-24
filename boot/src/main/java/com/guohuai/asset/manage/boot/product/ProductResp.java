@@ -77,10 +77,10 @@ public class ProductResp extends BaseResp {
 	private int durationPeriod;//存续期:()个自然日
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private int raisedTotalNumber;//募集总份额
+	private long raisedTotalNumber;//募集总份额
 	private String netUnitShare;//单位份额净值
 	private int investMin;//单笔投资最低份额
-	private int investMax;//单笔投资最高份额
+	private long investMax;//单笔投资最高份额
 	private int investAdditional;//单笔投资追加份额
 	private int netMaxRredeemDay;//单日净赎回上限
 	private int minRredeem;//单笔净赎回下限

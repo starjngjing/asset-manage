@@ -119,11 +119,11 @@ public class Product implements Serializable {
 	private int durationPeriod;//存续期:()个自然日
 	private BigDecimal expAror;//预期年化收益率
 	private BigDecimal expArorSec;//预期年化收益率区间
-	private int raisedTotalNumber;//募集总份额
+	private long raisedTotalNumber;//募集总份额
 	private BigDecimal netUnitShare;//单位份额净值
 	private int investMin;//单笔投资最低份额
-	private int investMax;//单笔投资最高份额
-	private int purchaseLimit;//申购上限
+	private long investMax;//单笔投资最高份额
+	private long purchaseLimit;//申购上限
 	private int investAdditional;//单笔投资追加份额
 	private int accrualDate;//还本付息日 存续期结束后第()个自然日
 	private int netMaxRredeemDay;//单日净赎回上限
@@ -147,8 +147,8 @@ public class Product implements Serializable {
 	private Timestamp updateTime;//更新时间
 	private String operator;//操作员
 	private String publisher;//发行人
-	private int currentVolume;//当前份额
-	private int collectedVolume;//已募份额
+	private long currentVolume;//当前份额
+	private long collectedVolume;//已募份额
 	private int purchaseNum;//已投次数
 	private int lockCollectedVolume;//锁定已募份额
 	

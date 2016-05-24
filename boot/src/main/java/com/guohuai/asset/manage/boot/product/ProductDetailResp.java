@@ -47,7 +47,7 @@ public class ProductDetailResp extends BaseResp {
 		this.expAror = p.getExpAror().toPlainString();//预期年化收益率
 		this.expArorSec = p.getExpArorSec().toPlainString();//预期年化收益率区间
 		if(p.getExpAror()!=null) {
-			if(p.getExpAror()!=p.getExpArorSec()) {
+			if(p.getExpArorSec()!=null && p.getExpAror().doubleValue()!=p.getExpArorSec().doubleValue()) {
 				this.expectedRate = p.getExpAror().toPlainString()+"%~"+p.getExpArorSec().toPlainString()+"%";
 			} else {
 				this.expectedRate = p.getExpAror().toPlainString()+"%";
@@ -140,7 +140,9 @@ public class ProductDetailResp extends BaseResp {
 		this.purchaseLimitStr = p.getPurchaseLimit()>0?p.getPurchaseLimit()+"份":"";
 		this.investAdditionalStr = p.getInvestAdditional()>0?p.getInvestAdditional()+"份":"";
 		this.netUnitShareStr = !"".equals(this.netUnitShare)?this.netUnitShare+"元":"";
-		if(!"DAY".equals(this.payModeOid)) {
+		if("DAY".equals(this.payModeOid)) {
+			this.payModeNameStr = this.payModeName;
+		} else {
 			this.payModeNameStr = p.getPayModeDate()>0?this.payModeName+"第"+p.getPayModeDate()+"天":"";
 		}
 		if("FIRSTRACKTIME".equals(p.getSetupDateType()) && "".equals(this.setupDate)) {
@@ -174,7 +176,7 @@ public class ProductDetailResp extends BaseResp {
 	private String expectedRate;//预期年化收益率
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private int raisedTotalNumber;//募集总份额
+	private long raisedTotalNumber;//募集总份额
 	private int accrualDate;//还本付息日 存续期结束后第()个自然日
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String setupDateType;//产品成立时间类型
@@ -193,8 +195,8 @@ public class ProductDetailResp extends BaseResp {
 	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
 	private String redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
 	private int investMin;//单笔投资最低份额
-	private int investMax;//单笔投资最高份额
-	private int purchaseLimit;//申购上限
+	private long investMax;//单笔投资最高份额
+	private long purchaseLimit;//申购上限
 	private int investAdditional;//单笔投资追加份额
 	private String netUnitShare;//单位份额净值
 	private String investComment;//投资标的
@@ -212,8 +214,8 @@ public class ProductDetailResp extends BaseResp {
 	
 	private int redeemTimingTaskDate;//赎回定时任务天数	 默认每日
 	private String publisher;//发行人
-	private int currentVolume;//当前份额
-	private int collectedVolume;//已募份额
+	private long currentVolume;//当前份额
+	private long collectedVolume;//已募份额
 	private int purchaseNum;//已投次数
 	private int lockCollectedVolume;//锁定已募份额
 	

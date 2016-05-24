@@ -491,4 +491,46 @@ public class ProductController extends BaseController {
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
 	
+	/**
+	 * 验证名称是否唯一
+	 * @param name
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "/validateName", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateName(@RequestParam String name,@RequestParam(required=false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.productService.validateSingle("name", name, id);
+		return new ResponseEntity<BaseResp>(pr, single>0?HttpStatus.CONFLICT:HttpStatus.OK);
+	}
+	
+	/**
+	 * 验证全称是否唯一
+	 * @param name
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "/validateFullName", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateFullName(@RequestParam String fullName,@RequestParam(required=false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.productService.validateSingle("fullName", fullName, id);
+		return new ResponseEntity<BaseResp>(pr, single>0?HttpStatus.CONFLICT:HttpStatus.OK);
+	}
+	
+	/**
+	 * 验证编码是否唯一
+	 * @param name
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "/validateCode", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateCode(@RequestParam String code,@RequestParam(required=false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.productService.validateSingle("code", code, id);
+		return new ResponseEntity<BaseResp>(pr, single>0?HttpStatus.CONFLICT:HttpStatus.OK);
+	}
+	
 }

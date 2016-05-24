@@ -255,7 +255,53 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
+									$(document.updateProductForm.name).attr("data-fetch-id",data.oid)
+									$(document.updateProductForm.fullName).attr("data-fetch-id",data.oid)
+									$(document.updateProductForm.code).attr("data-fetch-id",data.oid)
 									$$.formAutoFix($('#updateProductForm'), data); // 自动填充表单
+									$('#updateProductForm').validator('validate')
+									
+									if ('PRODUCTTYPE_01'==data.typeOid) {
+										if('MANUALINPUT'==data.raiseStartDateType) {
+											$('#raiseStartDateType').removeClass('col-sm-4').addClass('col-sm-2')
+											$('#raiseStartDateType').next('.col-sm-2').show()
+										} else if('FIRSTRACKTIME'==data.raiseStartDateType) {
+											$('#raiseStartDateType').removeClass('col-sm-2').addClass('col-sm-4')
+											$('#raiseStartDateType').next('.col-sm-2').hide()
+										}
+										$('#updateProductType01Area').show()
+										$('#updateProductType02Area').hide()
+									} else if ('PRODUCTTYPE_02'==data.typeOid) {
+										if('MANUALINPUT'==data.setupDateType) {
+											$('#setupDateType').removeClass('col-sm-4').addClass('col-sm-2')
+											$('#setupDateType').next('.col-sm-2').show()
+										} else if('FIRSTRACKTIME'==data.setupDateType) {
+											$('#setupDateType').removeClass('col-sm-2').addClass('col-sm-4')
+											$('#setupDateType').next('.col-sm-2').hide()
+										}
+										if('DAY'==data.payModeOid) {
+											$('#payModeOid').removeClass('col-sm-2').addClass('col-sm-4')
+											$('#payModeOid').next('.col-sm-2').hide()
+										} else {
+											$('#payModeOid').removeClass('col-sm-4').addClass('col-sm-2')
+											$('#payModeOid').next('.col-sm-2').show()
+										}
+										$('#updateProductType02Area').show()
+										$('#updateProductType01Area').hide()
+									}
+									
+//									switch (data.typeOid) {
+//										case 'PRODUCTTYPE_01':
+//											$('#updateProductType01Area').show()
+//											$('#updateProductType02Area').hide()
+//											break
+//										case 'PRODUCTTYPE_02':
+//											$('#updateProductType02Area').show()
+//											$('#updateProductType01Area').hide()
+//											break
+//									}
+									
+									
 									$('#updateProductModal').modal('show');
 								} else {
 									alert(查询失败);
@@ -409,61 +455,87 @@ define([
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
+    	util.form.validator.init($('#addProductForm'))
+    	util.form.validator.init($('#updateProductForm'))
 
-			// 产品类型下拉菜单关联区域显隐
-			// input disabled 设置为 disabled的时候将不做验证
-			$('#addProductTypeSelect').on('change', function () {
-				switch (this.value) {
-					case 'PRODUCTTYPE_01':
-						$('#addProductType01Area').show().find('input').attr('disabled', false)
-						$('#addProductType02Area').hide().find('input').attr('disabled', 'disabled')
-						break
-					case 'PRODUCTTYPE_02':
-						$('#addProductType02Area').show().find('input').attr('disabled', false)
-						$('#addProductType01Area').hide().find('input').attr('disabled', 'disabled')
-						break
-				}
-				// 重置验证逻辑
-				$('#addProductForm').validator('destroy')
-				util.form.validator.init($('#addProductForm'))
-			})
-			$('#updateProductTypeSelect').on('change', function () {
-				switch (this.value) {
-					case 'PRODUCTTYPE_01':
-						$('#updateProductType01Area').show().find('input').attr('disabled', false)
-						$('#updateProductType02Area').hide().find('input').attr('disabled', 'disabled')
-						break
-					case 'PRODUCTTYPE_02':
-						$('#updateProductType02Area').show().find('input').attr('disabled', false)
-						$('#updateProductType01Area').hide().find('input').attr('disabled', 'disabled')
-						break
-				}
-				// 重置验证逻辑
-				$('#updateProductForm').validator('destroy')
-				util.form.validator.init($('#updateProductForm'))
-			})
 
-			// 募集开始时间&成立时间select联动
-			$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
-				var col = $(this).parent().parent()
-				switch (this.value) {
-					case 'FIRSTRACKTIME':
-						col.removeClass('col-sm-2').addClass('col-sm-4')
-						col.next('.col-sm-2').hide()
-						break
-					case 'MANUALINPUT':
-						col.removeClass('col-sm-4').addClass('col-sm-2')
-						col.next('.col-sm-2').show()
-						break
-				}
-			}).change()
 
-			// 确认日input后缀按钮联动
-			$('.select-button').find('li a').on('click', function () {
-				var ul = $(this).parent().parent()
-				ul.prev('button').html(this.innerText + ' <span class="fa fa-caret-down"></span>')
-				ul.next('input').val($(this).attr('value'))
-			})
+
+		// 产品类型下拉菜单关联区域显隐
+		// input disabled 设置为 disabled的时候将不做验证
+		$('#addProductTypeSelect').on('change', function () {
+			switch (this.value) {
+				case 'PRODUCTTYPE_01':
+					$('#addProductType01Area').show().find('input').attr('disabled', false)
+					$('#addProductType02Area').hide().find('input').attr('disabled', 'disabled')
+					break
+				case 'PRODUCTTYPE_02':
+					$('#addProductType02Area').show().find('input').attr('disabled', false)
+					$('#addProductType01Area').hide().find('input').attr('disabled', 'disabled')
+					break
+			}
+			// 重置验证逻辑
+			$('#addProductForm').validator('destroy')
+			util.form.validator.init($('#addProductForm'))
+		})
+			
+		$('#updateProductTypeSelect').on('change', function () {
+			switch (this.value) {
+				case 'PRODUCTTYPE_01':
+					$('#updateProductType01Area').show().find('input').attr('disabled', false)
+					$('#updateProductType02Area').hide().find('input').attr('disabled', 'disabled')
+					break
+				case 'PRODUCTTYPE_02':
+					$('#updateProductType02Area').show().find('input').attr('disabled', false)
+					$('#updateProductType01Area').hide().find('input').attr('disabled', 'disabled')
+					break
+			}
+			// 重置验证逻辑
+			$('#updateProductForm').validator('destroy')
+			util.form.validator.init($('#updateProductForm'))
+		})
+
+		// 募集开始时间&成立时间select联动 
+		$('select[name=raiseStartDateType],select[name=setupDateType]').on('change', function () {
+			var col = $(this).parent().parent()
+			switch (this.value) {
+				case 'FIRSTRACKTIME':
+					col.removeClass('col-sm-2').addClass('col-sm-4')
+					col.next('.col-sm-2').hide()
+					break
+				case 'MANUALINPUT':
+					col.removeClass('col-sm-4').addClass('col-sm-2')
+					col.next('.col-sm-2').show()
+					break
+			}
+		}).change()
+		
+		//  付息方式select联动
+		$('select[name=payModeOid]').on('change', function () {
+			var col = $(this).parent().parent()
+			switch (this.value) {
+				case 'DAY':
+					col.removeClass('col-sm-2').addClass('col-sm-4')
+					col.next('.col-sm-2').hide()
+					break
+				case 'WEEK':
+					col.removeClass('col-sm-4').addClass('col-sm-2')
+					col.next('.col-sm-2').show()
+					break
+				case 'MONTH':
+					col.removeClass('col-sm-4').addClass('col-sm-2')
+					col.next('.col-sm-2').show()
+					break
+			}
+		}).change()
+		
+
+		// 确认日input后缀按钮联动
+		$('.select-button').find('li a').on('click', function () {
+			var ul = $(this).parent().parent()
+			ul.prev('button').html(this.innerText + ' <span class="fa fa-caret-down"></span>')
+			ul.next('input').val($(this).attr('value'))
+		})
 
 			util.form.validator.init($('#addProductForm'))
 
@@ -530,7 +602,7 @@ define([
 		$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
 			
 		// 新建产品“保存”按钮点击事件
-    	$('#saveProductSubmit').on('click', function () {
+    	$('#addProductSubmit').on('click', function () {
     		var typeOid = $("#addProductTypeSelect  option:selected").val();
 			document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
 			if(document.addProductForm.expArorSec.value=="") {

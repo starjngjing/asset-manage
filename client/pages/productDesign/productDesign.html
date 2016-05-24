@@ -101,7 +101,11 @@
                 <label>产品编码</label>
                 <input name="code" type="text"
                        class="form-control input-sm"
-                       placeholder="产品编码">
+                       placeholder="产品编码" 
+                       required="required" 
+                       data-error="产品编码已存在" 
+                       data-remote="/ams/product/validateCode">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -109,7 +113,11 @@
                 <label>产品简称</label>
                 <input name="name" type="text"
                        class="form-control input-sm"
-                       placeholder="产品简称">
+                       placeholder="产品简称" 
+                       required="required" 
+                       data-error="产品简称已存在" 
+                       data-remote="/ams/product/validateName">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -117,7 +125,11 @@
                 <label>产品全称</label>
                 <input name="fullName" type="text"
                        class="form-control input-sm"
-                       placeholder="产品全称">
+                       placeholder="产品全称" 
+                       required="required" 
+                       data-error="产品全称已存在" 
+                       data-remote="/ams/product/validateFullName">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -137,7 +149,9 @@
                 <label>产品管理人</label>
                 <input name="administrator" type="text"
                        class="form-control input-sm"
-                       placeholder="产品管理人">
+                       placeholder="产品管理人" required="required" 
+                       data-error="产品管理人必填">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -156,7 +170,9 @@
                 <div class="input-group input-group-sm">
                   <input name="expAror" type="text"
                          class="form-control"
-                         placeholder="从">
+                         placeholder="从" required="required" 
+                         data-validfloat="4.4" data-error="预期年化收益只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%</span>
                 </div>
               </div>
@@ -167,7 +183,10 @@
                 <div class="input-group input-group-sm range">
                   <input name="expArorSec" type="text"
                          class="form-control"
-                         placeholder="到">
+                         placeholder="到" 
+                         data-validfloat="4.4" 
+                         data-error="预期年化收益只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%</span>
                 </div>
               </div>
@@ -207,8 +226,12 @@
                 <label>收益计算基础</label>
                 <div class="input-group input-group-sm">
                   <input name="incomeCalcBasis" type="text"
-                         class="form-control"
-                         placeholder="收益计算基础">
+                         class="form-control" 
+                         placeholder="收益计算基础" 
+                         data-validint="0-366"
+                         data-error="收益计算基础不能大于366">
+                  <div class="help-block with-errors text-red"></div>
+                  
                   <span class="input-group-addon">天</span>
                 </div>
               </div>
@@ -219,7 +242,10 @@
                 <div class="input-group input-group-sm">
                   <input name="manageRate" type="text"
                          class="form-control"
-                         placeholder="托管费率">
+                         placeholder="托管费率" 
+                         data-validfloat="4.4" 
+                         data-error="托管费率只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
               </div>
@@ -230,7 +256,10 @@
                 <div class="input-group input-group-sm">
                   <input name="fixedManageRate" type="text"
                          class="form-control"
-                         placeholder="固定管理费率">
+                         placeholder="固定管理费率"
+                         data-validfloat="4.4" 
+                         data-error="固定管理费率只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
               </div>
@@ -263,8 +292,11 @@
                 <div class="form-group">
                   <label>募集期</label>
                   <div class="input-group input-group-sm">
-                    <input name="raisePeriod" type="number"
-                           class="form-control">
+                    <input name="raisePeriod" type="text"
+                           class="form-control"
+                           data-validint="0-240"
+                           data-error="募集期应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -274,8 +306,11 @@
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">募集满额后第</span>
-                    <input name="interestsFirstDate" type="number"
-                           class="form-control">
+                    <input name="interestsFirstDate" type="text"
+                           class="form-control"
+                           data-validint="0-240"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -286,8 +321,11 @@
                 <div class="form-group">
                   <label>存续期</label>
                   <div class="input-group input-group-sm">
-                    <input name="durationPeriod" type="number"
-                           class="form-control">
+                    <input name="durationPeriod" type="text"
+                           class="form-control"
+                           data-validint="0-10000"
+                           data-error="应该小于10000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -296,8 +334,11 @@
                 <div class="form-group">
                   <label>募集总份额</label>
                   <div class="input-group input-group-sm">
-                    <input name="raisedTotalNumber" type="number"
-                           class="form-control">
+                    <input name="raisedTotalNumber" type="text"
+                           class="form-control"
+                           data-validint="0-100000000000"
+                           data-error="应该小于100000000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -307,8 +348,11 @@
                   <label>到期最晚还本付息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">存续期结束后</span>
-                    <input name="accrualDate" type="number"
-                           class="form-control">
+                    <input name="accrualDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日内</span>
                   </div>
                 </div>
@@ -362,8 +406,11 @@
                   <label>&nbsp;</label>
                   <div class="input-group input-group-sm">
                   	<span class="input-group-addon">第</span>
-                    <input name="payModeDate" type="number"
-                           class="form-control">
+                    <input name="payModeDate" type="text"
+                           class="form-control"
+                           data-validint="0-31"
+                           data-error="应该小于31">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">天</span>
                   </div>
                 </div>
@@ -375,8 +422,11 @@
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">一旦申购将冻结此金额</span>
-                    <input name="lockPeriod" type="number"
-                           class="form-control">
+                    <input name="lockPeriod" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -385,8 +435,11 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <input name="interestsDate" type="number"
-                           class="form-control">
+                    <input name="interestsDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -398,8 +451,11 @@
                   <label>申购确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">申购订单确认日后</span>
-                    <input name="purchaseConfirmDate" type="number"
-                           class="form-control">                     
+                    <input name="purchaseConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -422,8 +478,11 @@
                 <div class="form-group">
                   <label>单日净赎回上限</label>
                   <div class="input-group input-group-sm">
-                    <input name="netMaxRredeemDay" type="number"
-                           class="form-control">
+                    <input name="netMaxRredeemDay" type="text"
+                           class="form-control"
+                           data-validint="0-10000000"
+                           data-error="应该小于10000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -432,8 +491,11 @@
                 <div class="form-group">
                   <label>单笔赎回下限</label>
                   <div class="input-group input-group-sm">
-                    <input name="minRredeem" type="number"
-                           class="form-control">
+                    <input name="minRredeem" type="text"
+                           class="form-control"
+                           data-validint="0-10000000"
+                           data-error="应该小于10000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -445,8 +507,11 @@
                   <label>赎回确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">赎回订单确认日后</span>
-                    <input name="redeemConfirmDate" type="number"
-                           class="form-control">
+                    <input name="redeemConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -499,8 +564,11 @@
               <div class="form-group">
                 <label>单笔投资最低份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investMin" type="number"
-                         class="form-control">
+                  <input name="investMin" type="text"
+                         class="form-control"
+                         data-validint="1-10000000"
+                         data-error="应该小于10000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -509,8 +577,11 @@
               <div class="form-group">
                 <label>投资最高份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investMax" type="number"
-                         class="form-control">
+                  <input name="investMax" type="text"
+                         class="form-control"
+                         data-validint="0-100000000000"
+                         data-error="应该小于100000000000">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -519,8 +590,11 @@
               <div class="form-group">
                 <label>申购上限</label>
                 <div class="input-group input-group-sm">
-                  <input name="purchaseLimit" type="number"
-                         class="form-control">
+                  <input name="purchaseLimit" type="text"
+                         class="form-control"
+                         data-validint="0-10000000"
+                         data-error="应该小于10000000">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -531,8 +605,11 @@
               <div class="form-group">
                 <label>单笔投资追加份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investAdditional" type="number"
-                         class="form-control">
+                  <input name="investAdditional" type="text"
+                         class="form-control"
+                         data-validint="1-10000000"
+                         data-error="应该小于10000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -542,7 +619,11 @@
                 <label>单位份额净值</label>
                 <div class="input-group input-group-sm">
                   <input name="netUnitShare" type="text"
-                         class="form-control">
+                         class="form-control" 
+                         required="required" 
+                         data-validfloat="12.4" 
+                         data-error="单位份额净值只能为前12位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">元</span>
                 </div>
               </div>
@@ -586,7 +667,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="saveProductSubmit" type="button" class="btn btn-primary btn-submit addProductSubmit">保 存</button>
+        <button id="addProductSubmit" type="button" class="btn btn-primary btn-submit addProductSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -615,7 +696,12 @@
                 <label>产品编码</label>
                 <input name="code" type="text"
                        class="form-control input-sm"
-                       placeholder="产品编码">
+                       placeholder="产品编码" 
+                       required="required" 
+                       data-error="产品编码已存在" 
+                       data-remote="/ams/product/validateCode" 
+                       data-fetch-id="">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -623,7 +709,12 @@
                 <label>产品简称</label>
                 <input name="name" type="text"
                        class="form-control input-sm"
-                       placeholder="产品简称">
+                       placeholder="产品简称" 
+                       required="required" 
+                       data-error="产品简称已存在" 
+                       data-remote="/ams/product/validateName" 
+                       data-fetch-id="">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -631,7 +722,12 @@
                 <label>产品全称</label>
                 <input name="fullName" type="text"
                        class="form-control input-sm"
-                       placeholder="产品全称">
+                       placeholder="产品全称" 
+                       required="required" 
+                       data-error="产品全称已存在" 
+                       data-remote="/ams/product/validateFullName" 
+                       data-fetch-id="">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -719,7 +815,10 @@
                 <div class="input-group input-group-sm">
                   <input name="incomeCalcBasis" type="text"
                          class="form-control"
-                         placeholder="收益计算基础">
+                         placeholder="收益计算基础"
+                         data-validint="0-366"
+                         data-error="收益计算基础不能大于366">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">天</span>
                 </div>
               </div>
@@ -730,7 +829,10 @@
                 <div class="input-group input-group-sm">
                   <input name="manageRate" type="text"
                          class="form-control"
-                         placeholder="托管费率">
+                         placeholder="托管费率"
+                         data-validfloat="4.4" 
+                         data-error="托管费率只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
               </div>
@@ -741,7 +843,10 @@
                 <div class="input-group input-group-sm">
                   <input name="fixedManageRate" type="text"
                          class="form-control"
-                         placeholder="固定管理费率">
+                         placeholder="固定管理费率"
+                         data-validfloat="4.4" 
+                         data-error="固定管理费率只能为前四位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
               </div>
@@ -751,7 +856,7 @@
           <div id="updateProductType01Area">
             <p class="form-header">封闭式产品信息</p>
             <div class="row">
-              <div class="col-sm-2">
+              <div id="raiseStartDateType" class="col-sm-2">
                 <div class="form-group">
                   <label>募集开始时间</label>
                   <select name="raiseStartDateType" class="form-control input-sm">
@@ -763,7 +868,7 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <input   name="raiseStatrtDate" type="text"
+                  <input name="raiseStatrtDate" type="text"
                            class="form-control input-sm datepicker"
                            placeholder="请填写时间"
                            data-date-format="YYYY-MM-DD HH:mm:ss">
@@ -773,8 +878,11 @@
                 <div class="form-group">
                   <label>募集期</label>
                   <div class="input-group input-group-sm">
-                    <input name="raisePeriod" type="number"
-                           class="form-control">
+                    <input name="raisePeriod" type="text"
+                           class="form-control"
+                           data-validint="0-240"
+                           data-error="募集期应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -784,8 +892,11 @@
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">募集满额后第</span>
-                    <input name="interestsFirstDate" type="number"
-                           class="form-control">
+                    <input name="interestsFirstDate" type="text"
+                           class="form-control"
+                            data-validint="0-240"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -796,8 +907,11 @@
                 <div class="form-group">
                   <label>存续期</label>
                   <div class="input-group input-group-sm">
-                    <input name="durationPeriod" type="number"
-                           class="form-control">
+                    <input name="durationPeriod" type="text"
+                           class="form-control"
+                           data-validint="0-10000"
+                           data-error="应该小于10000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -806,8 +920,11 @@
                 <div class="form-group">
                   <label>募集总份额</label>
                   <div class="input-group input-group-sm">
-                    <input name="raisedTotalNumber" type="number"
-                           class="form-control">
+                    <input name="raisedTotalNumber" type="text"
+                           class="form-control"
+                           data-validint="0-100000000000"
+                           data-error="应该小于100000000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -817,8 +934,11 @@
                   <label>到期最晚还本付息日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">存续期结束后</span>
-                    <input name="accrualDate" type="number"
-                           class="form-control">
+                    <input name="accrualDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日内</span>
                   </div>
                 </div>
@@ -829,7 +949,7 @@
           <div id="updateProductType02Area">
             <p class="form-header">开放式产品信息</p>
             <div class="row">
-              <div class="col-sm-2">
+              <div id="setupDateType" class="col-sm-2">
                 <div class="form-group">
                   <label>成立时间</label>
                   <select name="setupDateType" class="form-control input-sm">
@@ -857,7 +977,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-sm-2">
+              <div id="payModeOid" class="col-sm-2">
                 <div class="form-group">
                   <label>付息方式</label>
                   <select name="payModeOid" class="form-control input-sm">
@@ -872,8 +992,11 @@
                   <label>&nbsp;</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">第</span>
-                    <input name="payModeDate" type="number"
-                           class="form-control">
+                    <input name="payModeDate" type="text"
+                           class="form-control"
+                           data-validint="0-31"
+                           data-error="应该小于31">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">天</span>
                   </div>
                 </div>
@@ -885,8 +1008,11 @@
                   <label>锁定期</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">一旦申购将冻结此金额</span>
-                    <input name="lockPeriod" type="number"
-                           class="form-control">
+                    <input name="lockPeriod" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -895,8 +1021,11 @@
                 <div class="form-group">
                   <label>起息日</label>
                   <div class="input-group input-group-sm">
-                    <input name="interestsDate" type="number"
-                           class="form-control">
+                    <input name="interestsDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
                 </div>
@@ -908,8 +1037,11 @@
                   <label>申购确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">申购订单确认日后</span>
-                    <input name="purchaseConfirmDate" type="number"
-                           class="form-control">                     
+                    <input name="purchaseConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -932,8 +1064,11 @@
                 <div class="form-group">
                   <label>单日净赎回上限</label>
                   <div class="input-group input-group-sm">
-                    <input name="netMaxRredeemDay" type="number"
-                           class="form-control">
+                    <input name="netMaxRredeemDay" type="text"
+                           class="form-control"
+                           data-validint="0-10000000"
+                           data-error="应该小于10000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -942,8 +1077,11 @@
                 <div class="form-group">
                   <label>单笔赎回下限</label>
                   <div class="input-group input-group-sm">
-                    <input name="minRredeem" type="number"
-                           class="form-control">
+                    <input name="minRredeem" type="text"
+                           class="form-control"
+                           data-validint="0-10000000"
+                           data-error="应该小于10000000">
+                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
                 </div>
@@ -955,8 +1093,11 @@
                   <label>赎回确认日</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-addon">赎回订单确认日后</span>
-                    <input name="redeemConfirmDate" type="number"
-                           class="form-control">
+                    <input name="redeemConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -1009,8 +1150,11 @@
               <div class="form-group">
                 <label>单笔投资最低份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investMin" type="number"
-                         class="form-control">
+                  <input name="investMin" type="text"
+                         class="form-control"
+                         data-validint="1-10000000"
+                         data-error="应该小于10000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -1019,8 +1163,11 @@
               <div class="form-group">
                 <label>投资最高份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investMax" type="number"
-                         class="form-control">
+                  <input name="investMax" type="text"
+                         class="form-control"
+                         data-validint="1-100000000000"
+                         data-error="应该小于100000000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -1029,8 +1176,11 @@
               <div class="form-group">
                 <label>申购上限</label>
                 <div class="input-group input-group-sm">
-                  <input name="purchaseLimit" type="number"
-                         class="form-control">
+                  <input name="purchaseLimit" type="text"
+                         class="form-control"
+                         data-validint="1-10000000"
+                         data-error="应该小于10000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -1041,8 +1191,11 @@
               <div class="form-group">
                 <label>单笔投资追加份额</label>
                 <div class="input-group input-group-sm">
-                  <input name="investAdditional" type="number"
-                         class="form-control">
+                  <input name="investAdditional" type="text"
+                         class="form-control"
+                         data-validint="1-10000000"
+                         data-error="应该小于10000000大于1">
+                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
               </div>
@@ -1052,7 +1205,10 @@
                 <label>单位份额净值</label>
                 <div class="input-group input-group-sm">
                   <input name="netUnitShare" type="text"
-                         class="form-control">
+                         class="form-control"
+                         data-validfloat="12.4" 
+                         data-error="单位份额净值只能为前12位后四位小数">
+                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">元</span>
                 </div>
               </div>
@@ -1081,6 +1237,7 @@
               <option value="R5">R5(激进型)</option>
             </select>
           </div>
+          <input name="files" type="hidden"/>
         </form>
         <div class="form-group" id="updateProductUploader"></div>
         <table id="updateProductUploadTable" class="table table-bordered table-striped">
@@ -1095,7 +1252,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="updateProductSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="updateProductSubmit" type="button" class="btn btn-primary btn-submit updateProductSubmit">保 存</button>
       </div>
     </div>
   </div>
