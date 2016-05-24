@@ -291,6 +291,7 @@ define([
 							
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
+							//row.targetOid = targetInfo.oid;
 							$$.formAutoFix($('#projectForm'), row); // 自动填充详情
 							$('#projectModal').modal('show');
 						},
@@ -300,8 +301,8 @@ define([
 								container: $('#doConfirm'),
 								trigger: this,
 								accept: function() {
-									//									console.log('targetInfo===>' + JSON.stringify(targetInfo));
-									//									console.log('项目row===>' + JSON.stringify(row));
+									//console.log('targetInfo===>' + JSON.stringify(targetInfo));
+									//console.log('项目row===>' + JSON.stringify(row));
 									http.post(config.api.targetProjectDelete, {
 										data: {
 											targetOid: targetInfo.oid,
