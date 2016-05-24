@@ -183,8 +183,9 @@ define([
 						},
 						'click .item-project': function(e, value, row) { // 底层项目 按钮点击事件
 							targetInfo = row; // 变更某一行 投资标的信息
-							console.info("targetInfo---------->" + JSON.stringify(targetInfo))
-
+							//console.info("targetInfo---------->" + JSON.stringify(targetInfo))
+							
+							$('#projectSearchForm').resetForm();// 先清理搜索项目表单
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 							// 给项目表单的 标的id属性赋值
