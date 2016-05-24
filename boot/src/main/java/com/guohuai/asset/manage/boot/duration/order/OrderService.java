@@ -142,7 +142,7 @@ public class OrderService {
 	 * 			标的oid
 	 * @param uid
 	 */
-	public void auditFund(FundForm form, String uid) {
+	public void auditForFund(FundForm form, String uid) {
 		// 录入申购订单的审核信息
 		FundOrderEntity order = this.getFundOrderByOid(form.getOid());
 		order.setAuditVolume(form.getVolume());
@@ -182,7 +182,7 @@ public class OrderService {
 	 * 			标的oid
 	 * @param uid
 	 */
-	public void appointMentForFund(FundForm form, String uid) {
+	public void appointmentForFund(FundForm form, String uid) {
 		// 录入申购订单的资金预约信息
 		FundOrderEntity order = this.getFundOrderByOid(form.getOid());
 		order.setReserveVolume(form.getVolume());
@@ -328,7 +328,7 @@ public class OrderService {
 	 * 			标的oid
 	 * @param uid
 	 */
-	public void appointMentForTrust(TrustForm form, String uid) {
+	public void appointmentForTrust(TrustForm form, String uid) {
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setOrderOid(form.getOid());
@@ -387,7 +387,7 @@ public class OrderService {
 	 * @param form
 	 * @param uid
 	 */
-	public void income(TrustForm form, String uid) {
+	public void applyForIncome(TrustForm form, String uid) {
 		TrustIncomeEntity entity = new TrustIncomeEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setAssetPoolTargetOid(form.getAssetPoolOid());
@@ -415,7 +415,7 @@ public class OrderService {
 	 * 			标的oid
 	 * @param uid
 	 */
-	public void auditTrustForIncome(TrustForm form, String uid) {
+	public void auditForIncome(TrustForm form, String uid) {
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setOrderOid(form.getOid());
@@ -497,7 +497,7 @@ public class OrderService {
 	 * 			标的oid
 	 * @param uid
 	 */
-	public void auditTrustForTransfer(TrustForm form, String uid) {
+	public void auditForTransfer(TrustForm form, String uid) {
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setOrderOid(form.getOid());

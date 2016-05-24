@@ -55,7 +55,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditForFund", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditForFund(@RequestBody FundForm form) {
-		orderService.auditFund(form, "STAR");
+		orderService.auditForFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -68,7 +68,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/appointmentForFund", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> appointmentForFund(@RequestBody FundForm form) {
-		orderService.appointMentForFund(form, "STAR");
+		orderService.appointmentForFund(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -120,7 +120,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/appointmentForTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> appointmentForTrust(@RequestBody TrustForm form) {
-		orderService.purchaseForTrust(form, "STAR");
+		orderService.appointmentForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -133,7 +133,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/orderConfirmForTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> orderConfirmForTrust(@RequestBody TrustForm form) {
-		orderService.purchaseForTrust(form, "STAR");
+		orderService.orderConfirmForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -145,7 +145,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/applyForIncome", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> applyForIncome(@RequestBody TrustForm form) {
-		orderService.transfer(form, "STAR");
+		orderService.applyForIncome(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -158,7 +158,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditForIncome", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditForIncome(@RequestBody TrustForm form) {
-		orderService.auditTrust(form, "STAR");
+		orderService.auditForIncome(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -171,7 +171,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/orderConfirmForIncome", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> orderConfirmForIncome(@RequestBody TrustForm form) {
-		orderService.orderConfirmForTrust(form, "STAR");
+		orderService.orderConfirmForIncome(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -181,8 +181,8 @@ public class OrderController {
 	 * 信托（计划）转让
 	 * @param from
 	 */
-	@RequestMapping(value = "/transfer", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> transfer(@RequestBody TrustForm form) {
+	@RequestMapping(value = "/applyForTransfer", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> applyForTransfer(@RequestBody TrustForm form) {
 		orderService.transfer(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
@@ -196,7 +196,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditForTransfer", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditTrust(@RequestBody TrustForm form) {
-		orderService.auditTrust(form, "STAR");
+		orderService.auditForTransfer(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -209,7 +209,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/orderConfirmForTransfer", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> orderConfirmForTransfer(@RequestBody TrustForm form) {
-		orderService.orderConfirmForTrust(form, "STAR");
+		orderService.orderConfirmForTransfer(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
