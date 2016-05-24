@@ -126,10 +126,18 @@ define([
 							type: 'button',
 							class: 'item-invalid',
 							isRender: row.state != 'invalid'
+						},{
+							text: '检查项',
+							type: 'button',
+							class: 'item-checklist',
+							isRender: row.state == 'collecting'
 						}];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
+						'click .item-checklist': function(e, value, row) {
+							$('#checkConditionsModal').modal('show');
+						},
 						'click .item-edit': function(e, value, row) {
 							http.post(config.api.targetDetQuery, {
 								data: {
@@ -403,7 +411,7 @@ define([
 			var checkConditionsCount = 0
 			// 根据数据源生成html
 			var checkConditionsHtml = checkConditionsSource.map(function (item) {
-				return '<div class="form-group"><input type="checkbox" class="icheck"/> ' + item.text + '</div>'
+				return '<div class="form-group"><input type="checkbox" class="icheck" /> ' + item.text + '</div>' 
 			})
 			// 写入页面和绑定事件
 			$('#checkConditionsContainer').append(checkConditionsHtml.join(''))
