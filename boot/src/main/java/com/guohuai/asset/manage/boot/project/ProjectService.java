@@ -18,16 +18,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDao;
+import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.component.exception.AMPException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class ProjectService {
 
 	@Autowired
 	private ProjectDao projectDao;
 	@Autowired
-	private InvestmentDao investmentDao;
+	private InvestmentDao investmentDao; 
+	@Autowired
+	private InvestmentService investmentService;
 
 	public Page<Project> list(Specification<Project> spec, int page, int size, String sortDirection, String sortField) {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
@@ -50,26 +56,29 @@ public class ProjectService {
 	 * @Title: save
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
-	 * @param approv
+	 * @see: 
+	 * @param projectForm
 	 * @return
-	 * @return Approval 返回类型
+	 * @return Project 返回类型
 	 */	
-	public Project save(ProjectForm approv) {
-		if (null == approv)
+	public Project save(ProjectForm projectForm) {
+		if (null == projectForm)
 			throw AMPException.getException("底层项目不能为空");
-		String targetOid = approv.getTargetOid();
+		String targetOid = projectForm.getTargetOid();
 		if (StringUtils.isBlank(targetOid))
 			throw AMPException.getException("投资标的id不能为空");
+		String oid = projectForm.getOid(); // 项目id
+		if (StringUtils.isBlank(oid))
+			log.info("投资标的id=[" + targetOid + "]新增底层项目");
+		else
+			log.info("投资标的id=[" + targetOid + "]修改底层项目");
 
 		Project prj = new Project();
-		BeanUtils.copyProperties(approv, prj);
+		BeanUtils.copyProperties(projectForm, prj);
 
-		Investment investment = this.investmentDao.findOne(targetOid);
-		if (null == investment)
-			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
+		Investment investment = this.investmentService.getInvestment(targetOid);
 		prj.setInvestment(investment);
-		
+
 		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 
@@ -81,7 +90,7 @@ public class ProjectService {
 	 * @Title: deleteByTargetOidAndOid 
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see: 
 	 * @param oid void    返回类型
 	 */
 	public void deleteByTargetOidAndOid(String targetOid, String oid) {
@@ -93,7 +102,7 @@ public class ProjectService {
 	 * @Title: deleteByTargetOid 
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see:
 	 * @param oid void    返回类型
 	 */
 	public void deleteByTargetOid(String targetOid) {
