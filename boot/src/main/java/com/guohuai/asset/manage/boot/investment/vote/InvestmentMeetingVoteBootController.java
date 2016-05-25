@@ -32,7 +32,7 @@ public class InvestmentMeetingVoteBootController extends BaseController{
 
 	@RequestMapping(value = "list", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<MeetingInvestmentListResp> list() {
-		String operator = super.getLoginAdmin();
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		List<MeetingInvestmentDetResp> list = investmentMeetingVoteService.getInvestmentByParticipant(operator);
 		MeetingInvestmentListResp resps = new MeetingInvestmentListResp(list);
 		return new ResponseEntity<MeetingInvestmentListResp>(resps, HttpStatus.OK);
@@ -40,7 +40,7 @@ public class InvestmentMeetingVoteBootController extends BaseController{
 	
 	@RequestMapping(value = "vote", method = { RequestMethod.POST, RequestMethod.GET })
 	public ResponseEntity<BaseResp> agree(MeetingVoteForm form){
-		String operator = super.getLoginAdmin();
+		String operator = "2400f52794b311e59bdf000c298d4ab5";
 		investmentMeetingVoteService.doMeetingVote(form, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}

@@ -139,7 +139,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint ="1-9999" data-error="资产期限必须为正整数">
+								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint="1-9999" data-error="资产期限必须为正整数">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -297,7 +297,7 @@
 								<label>&nbsp;</label>
 								<div>
 									<button id="riskOptions" type="button" class="btn btn-default btn-sm">风险指标配置</button>
-								</div>								
+								</div>
 							</div>
 						</div>
 					</div>
@@ -425,7 +425,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint ="1-9999" data-error="资产期限必须为正整数">
+								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint="1-9999" data-error="资产期限必须为正整数">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -1295,7 +1295,7 @@
 							<div class="form-group">
 								<label>抵押率</label>
 								<div class="input-group input-group-sm">
-									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率" required  maxlength="6" data-validfloat="3.2" data-error="抵押率不能为空且最大为3位整数2位小数">
+									<input name="pledgeRatio" type="text" class="form-control input-sm" placeholder="抵押率" required maxlength="6" data-validfloat="3.2" data-error="抵押率不能为空且最大为3位整数2位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -1392,7 +1392,7 @@
 							<div class="form-group">
 								<label>SPV通道费</label>
 								<div class="input-group input-group-sm">
-									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费"  maxlength="20" data-validfloat="10.5" data-error="SPV通道费最大为10位整数5位小数">
+									<input name="spvTariff" type="text" class="form-control input-sm" placeholder="SPV通道费" maxlength="20" data-validfloat="10.5" data-error="SPV通道费最大为10位整数5位小数">
 									<span class="input-group-addon">万</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -1847,36 +1847,50 @@
 <div id="checkConditionsModal" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
+
 			<!-- 模态窗头部 -->
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title">确认检查项</h4>
+				<h4 class="modal-title">过会检查项</h4>
 			</div>
 			<!-- 模态窗内容体 -->
 			<div class="modal-body">
-				<p><b>请勾选完成检查项</b></p>
-				<table id="checkConditionsTable" class="table table-bordered table-striped">
+				<div id='cofrimCheckListDiv'>
+					<p><b>请勾选完成检查项</b></p>
+					<table id="checkConditionsTable" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th></th>
+								<th>确认项名称</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+					<div class="progress progress-xs progress-striped active">
+						<div id="checkConditionsProgress" class="progress-bar" style="width: 0"></div>
+					</div>
+					<form id="checkConditionsForm" name="checkConditionsForm" method="post">
+						<input type="hidden" name="checkConditions" />
+					</form>
+				</div>
+				<p><b>已确认检查项</b></p>
+				<table id="checkListConfrimTable" class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th></th>
-							<th>确认项名称</th>
-							<th>操作</th>
+							<th>检查项名称</th>
+							<th>确认说明</th>
+							<th>确认时间</th>
+							<th>确认人</th>
 						</tr>
 					</thead>
 				</table>
-				<div class="progress progress-xs progress-striped active">
-					<div id="checkConditionsProgress" class="progress-bar" style="width: 0"></div>
-				</div>
-				<form id="checkConditionsForm" name="checkConditionsForm" method="post">
-					<input type="hidden" name="checkConditions" />
-				</form>
 			</div>
 			<!-- 模态窗底部 -->
-			<div class="modal-footer">
+			<div id='cofrimCheckListBtnDiv' class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
-				<button id="doConfirmCheckConditions" type="button" class="btn btn-primary btn-sm">确 定</button>
+				<button id="doConfirmCheckConditions" type="button" class="btn btn-primary btn-sm">确 认</button>
 			</div>
 		</div>
 	</div>
