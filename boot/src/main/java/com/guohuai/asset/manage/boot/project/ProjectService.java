@@ -90,6 +90,7 @@ public class ProjectService {
 		prj.setInvestment(investment);
 		
 		/* 计算项目风险系数开始 */
+		// 计算公式 : Max(保证方式担保方式权数 * 保证方式担保期数权数, 抵押方式担保方式权数 * 抵押方式担保期数权数, 质押方式担保方式权数 * 质押方式担保期数权数) * 投资标的评分
 		List<CCPWarrantyMode> modeList = cCPWarrantyModeDao.findAll(); // 查询担保方式权数配置		
 		List<CCPWarrantyExpire> expireList = cCPWarrantyExpireDao.findAll(); // 查询担保期限权数配置
 
