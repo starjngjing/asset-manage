@@ -72,7 +72,18 @@ public class ProjectForm implements Cloneable, Serializable {
 	/**
 	 * 担保方式
 	 */
-	private CCPWarrantyModeForm guarantee;
+	@Size(max = 32, message = "保证方式oid最大32个字符！")
+	private String guaranteeModeOid; // CCPWarrantyModeForm
+	@Size(max = 64, message = "保证方式名称最大32个字符！")
+	private String guaranteeModeTitle;
+	@Digits(integer = 4, fraction = 4, message = "保证方式权重最大4位整数4位小数")
+	private BigDecimal guaranteeModeWeight;
+	@Size(max = 32, message = "保证方式担保期限oid最大32个字符！")
+	private String guaranteeModeExpireOid; // CCPWarrantyModeForm111
+	@Size(max = 64, message = "保证方式担保期限名称最大32个字符！")
+	private String guaranteeModeExpireTitle;
+	@Digits(integer = 4, fraction = 4, message = "保证方式担保期限权重最大4位整数4位小数")
+	private BigDecimal guaranteeModeExpireWeight;
 	
 	@NotNull(message = "是否有抵押不能为空")
 	@Size(max = 32, message = "是否有抵押最大32个字符！")
@@ -100,11 +111,38 @@ public class ProjectForm implements Cloneable, Serializable {
 	/**
 	 * 抵押方式
 	 */
-	private CCPWarrantyModeForm mortgage;
+	@Size(max = 32, message = "抵押方式oid最大32个字符！")
+	private String mortgageModeOid; // CCPWarrantyModeForm
+	@Size(max = 64, message = "抵押方式名称最大32个字符！")
+	private String mortgageModeTitle;
+	@Digits(integer = 4, fraction = 4, message = "抵押方式权重最大4位整数4位小数")
+	private BigDecimal mortgageModeWeight;
+	@Size(max = 32, message = "抵押方式担保期限oid最大32个字符！")
+	private String mortgageModeExpireOid; // CCPWarrantyModeForm111
+	@Size(max = 64, message = "抵押方式担保期限名称最大32个字符！")
+	private String mortgageModeExpireTitle;
+	@Digits(integer = 4, fraction = 4, message = "抵押方式担保期限权重最大4位整数4位小数")
+	private BigDecimal mortgageModeExpireWeight;
+	
 	/**
 	 * 质押方式
 	 */
-	private CCPWarrantyModeForm hypothecation;
+	@Size(max = 32, message = "质押方式oid最大32个字符！")
+	private String hypothecationModeOid; // CCPWarrantyModeForm
+	@Size(max = 64, message = "质押方式名称最大32个字符！")
+	private String hypothecationModeTitle;
+	@Digits(integer = 4, fraction = 4, message = "质押方式权重最大4位整数4位小数")
+	private BigDecimal hypothecationModeWeight;
+	@Size(max = 32, message = "质押方式担保期限oid最大32个字符！")
+	private String hypothecationModeExpireOid; // CCPWarrantyModeForm111
+	@Size(max = 64, message = "质押方式担保期限名称最大32个字符！")
+	private String hypothecationModeExpireTitle;
+	@Digits(integer = 4, fraction = 4, message = "质押方式担保期限权重最大4位整数4位小数")
+	private BigDecimal hypothecationModeExpireWeight;
+	/**
+	 * 风险系数
+	 */
+	private BigDecimal riskFactor;
 	
 	@Digits(integer = 10, fraction = 4, message = "保证金最大10位整数4位小数")	
 	private BigDecimal margin;

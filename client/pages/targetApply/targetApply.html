@@ -1209,10 +1209,20 @@
 							<div class="form-group">
 								<label>保证方式</label>
 								<div class="input-group input-group-sm">
-									<select name="warrantorType" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="保证方式不能为空">
+									<select name="guaranteeModeOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="保证方式不能为空">
 										<option value="">请选择</option>
-										<option value="">商业银行及政策性银行保证（含境内外资银行）</option>
-										<option value="">非银行金融机构保证（含境内外资非银行金融机构）</option>
+									</select>
+								</div>
+								<div class="help-block with-errors text-red"></div>
+							</div>
+							<input type="hidden" name="warrantorTypeWeight" />
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>担保期限权数</label>
+								<div class="input-group input-group-sm">
+									<select name="guaranteeModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="担保期限权数不能为空">
+										<option value="">请选择</option>
 									</select>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -1239,12 +1249,7 @@
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>出质人</label>
-								<input name="pledgor" type="text" class="form-control input-sm" placeholder="出质人" maxlength="32">
-							</div>
-						</div>
+						
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>抵押物所在地</label>
@@ -1316,16 +1321,26 @@
 							<div class="form-group">
 								<label>抵押方式</label>
 								<div class="input-group input-group-sm">
-									<select name="pledgeType" type="text" class="form-control input-sm" placeholder="抵押方式" required data-error="抵押方式不能为空">
+									<select name="mortgageModeOid" type="text" class="form-control input-sm" placeholder="抵押方式" required data-error="抵押方式不能为空">
 										<option>请选择</option>
 									</select>
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
-						<input type="hidden" name="pledgeTypeWeight" />
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>抵押担保期限权数</label>
+								<div class="input-group input-group-sm">
+									<select name="mortgageModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
+										<option value="">请选择</option>
+									</select>
+								</div>
+								<div class="help-block with-errors text-red"></div>
+							</div>
+							<input type="hidden" name="warrantorTypeWeight" />
 						</div>
 					</div>
-					<!--
 					<div class="form-group">
 		              <label>是否有质押</label>
 		              <div class="row form-style">
@@ -1337,25 +1352,36 @@
 		                </div>
 		              </div>
 		            </div>
-					<div class="row">
+					<div class="row" id="prjHypothecation">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>质押人</label>
-								<input name="hypothecationor" type="text" class="form-control input-sm" maxlength="32" placeholder="抵押人">
+								<label>出质人</label>
+								<input name="pledgor" type="text" class="form-control input-sm" placeholder="出质人" maxlength="32">
 							</div>
-						</div>	
+						</div>
                         <div class="col-sm-12">
 							<div class="form-group">
 								<label>质押方式</label>
 								<div class="input-group input-group-sm">
-									<select name="hypothecationType" type="text" class="form-control input-sm" placeholder="质押方式" required data-error="方式不能为空"></select>
+									<select name="hypothecationModeOid" type="text" class="form-control input-sm" placeholder="质押方式" required data-error="方式不能为空"></select>
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
 							<input type="hidden" name="hypothecationWeight" />
 						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>质押担保期限权数</label>
+								<div class="input-group input-group-sm">
+									<select name="hypothecationModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
+										<option value="">请选择</option>
+									</select>
+								</div>
+								<div class="help-block with-errors text-red"></div>
+							</div>
+						</div>
 					</div>
-						-->
+						
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">

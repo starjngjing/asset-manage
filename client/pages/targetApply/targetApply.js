@@ -513,16 +513,29 @@ define([
 
 			// 新增/修改底层项目-是否有抵押人单选按钮改变事件
 			$(document.projectForm.pledge).each(function(index, item) {
-					$(item).on('ifChecked', function(e) { // 是否有抵押人
-						if ($(this).val() === 'yes')
-							$('#prjPledgeInfo').show().find('input').attr('disabled', false);
-						else
-							$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
+				$(item).on('ifChecked', function(e) { // 是否有抵押人
+					if ($(this).val() === 'yes')
+						$('#prjPledgeInfo').show().find('input').attr('disabled', false);
+					else
+						$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
 
-						$('#projectForm').validator('destroy'); // 先销毁验证规则
-						util.form.validator.init($('#projectForm')); // 然后添加验证规则
-					});
-				})
+					$('#projectForm').validator('destroy'); // 先销毁验证规则
+					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+				});
+			})
+
+			// 新增/修改底层项目-是否有质押人单选按钮改变事件
+			$(document.projectForm.hypothecation).each(function(index, item) {
+				$(item).on('ifChecked', function(e) { // 是否有质押人
+					if ($(this).val() === 'yes')
+						$('#prjHypothecation').show().find('input').attr('disabled', false);
+					else
+						$('#prjHypothecation').hide().find('input').attr('disabled', 'disabled');
+
+					$('#projectForm').validator('destroy'); // 先销毁验证规则
+					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+				});
+			})
 				//标的详情过会表决表配置
 			var voteTableConfig = {
 					data: '',
@@ -772,6 +785,7 @@ define([
 
 	/**
 	 * 初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表
+	 * 初始化:担保方式担保期限权数下拉列表,抵押方式担保期限权数下拉列表,质押方式担保期限权数下拉列表
 	 */
 	function initSel() {
 		http.post(config.api.system.config.ccp.warrantyMode.search, {
@@ -779,12 +793,12 @@ define([
 			contentType: 'form'
 		}, function(data) {
 			if (data) { // 返回的是list
-				var warrantorTypeSel = $(projectForm.warrantorType); // 保证方式select
-				var pledgeTypeSel = $(projectForm.pledgeType); // 抵押方式select
-				var hypothecationTypeSel = $(projectForm.hypothecationType); // 质押方式select
+				var warrantorTypeSel = $(projectForm.guaranteeModeOid); // 保证方式select
+				var pledgeTypeSel = $(projectForm.mortgageModeOid); // 抵押方式select
+				var hypothecationTypeSel = $(projectForm.hypothecationModeOid); // 质押方式select
 				$.each(data, function(i, item) {
-					var oid = item.oid; // 
-					var title = item.title; // 
+					var oid = item.oid; // oid
+					var title = item.title; // 名称 
 					var weight = item.weight; // 权重
 					var type = item.type; // 类型
 					/**
@@ -794,13 +808,36 @@ define([
 					 * HYPOTHECATION-质押方式
 					 */
 					var option = $("<option>").val(oid).text(title);
-					if ('GUARANTEE' === type) {
+					if ('GUARANTEE' === type && warrantorTypeSel) {
 						warrantorTypeSel.append(option);
-					} else if ('MORTGAGE' === type) {
+					} else if ('MORTGAGE' === type && pledgeTypeSel) {
 						pledgeTypeSel.append(option);
-					} else if('HYPOTHECATION' === type) {
+					} else if('HYPOTHECATION' === type && hypothecationTypeSel) {
 						hypothecationTypeSel.append(option);
 					}
+
+				});
+			}
+		});
+		
+		// 担保期限权数
+		http.post(config.api.system.config.ccp.warrantyExpire.search, {
+			data: {},
+			contentType: 'form'
+		}, function(data) {
+			console.info(data)
+			if (data) { // 返回的是list
+				var warrantorExpireSel = $(projectForm.guaranteeModeExpireOid); // 保证方式担保期限权数select
+				var pledgeExpireSel = $(projectForm.mortgageModeExpireOid); // 抵押方式担保期限权数select
+				var hypothecationExpireSel = $(projectForm.hypothecationModeExpireOid); // 质押方式担保期限权数select
+				$.each(data, function(i, item) {
+					var oid = item.oid; // oid
+					var title = item.title; // 名称
+					var weight = item.weight; // 权重
+					
+					warrantorExpireSel.append($("<option>").val(oid).text(title));
+					pledgeExpireSel.append($("<option>").val(oid).text(title));
+					hypothecationExpireSel.append($("<option>").val(oid).text(title));
 
 				});
 			}

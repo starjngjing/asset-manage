@@ -1,9 +1,11 @@
 package com.guohuai.asset.manage.boot.project;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDao;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
+import com.guohuai.asset.manage.boot.system.config.project.warrantyExpire.CCPWarrantyExpire;
+import com.guohuai.asset.manage.boot.system.config.project.warrantyExpire.CCPWarrantyExpireDao;
+import com.guohuai.asset.manage.boot.system.config.project.warrantyMode.CCPWarrantyMode;
+import com.guohuai.asset.manage.boot.system.config.project.warrantyMode.CCPWarrantyModeDao;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +40,10 @@ public class ProjectService {
 	private InvestmentDao investmentDao;
 	@Autowired
 	private InvestmentService investmentService;
+	@Autowired
+	private CCPWarrantyModeDao cCPWarrantyModeDao;
+	@Autowired
+	private CCPWarrantyExpireDao cCPWarrantyExpireDao;
 
 	public Page<Project> list(Specification<Project> spec, int page, int size, String sortDirection, String sortField) {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
@@ -74,10 +84,69 @@ public class ProjectService {
 			log.info("投资标的id=[" + targetOid + "]修改底层项目");
 
 		Project prj = new Project();
-		BeanUtils.copyProperties(projectForm, prj);
+		BeanUtils.copyProperties(projectForm, prj);	
 
 		Investment investment = this.investmentService.getInvestment(targetOid);
 		prj.setInvestment(investment);
+		
+		/* 计算项目风险系数开始 */
+		List<CCPWarrantyMode> modeList = cCPWarrantyModeDao.findAll(); // 查询担保方式权数配置		
+		List<CCPWarrantyExpire> expireList = cCPWarrantyExpireDao.findAll(); // 查询担保期限权数配置
+
+		BigDecimal guaranteeModeWeight = new BigDecimal(0), mortgageModeWeight = new BigDecimal(0), hypothecationModeWeight = new BigDecimal(0);
+		String guaranteeModeOid = prj.getGuaranteeModeOid(), mortgageModeOid = prj.getMortgageModeOid(), hypothecationModeOid = prj.getHypothecationModeOid();
+		for (CCPWarrantyMode mode : modeList) {
+			String mOid = mode.getOid();
+			if (StringUtils.equals(guaranteeModeOid, mOid)) {
+				guaranteeModeWeight = mode.getWeight();
+				prj.setGuaranteeModeWeight(guaranteeModeWeight);
+				prj.setGuaranteeModeTitle(mode.getTitle());
+			}
+			if (StringUtils.equals(mortgageModeOid, mOid)) {
+				mortgageModeWeight = mode.getWeight();
+				prj.setMortgageModeWeight(mortgageModeWeight);
+				prj.setMortgageModeTitle(mode.getTitle());
+			}
+			if (StringUtils.equals(hypothecationModeOid, mOid)) {
+				hypothecationModeWeight = mode.getWeight();
+				prj.setHypothecationModeWeight(mortgageModeWeight);
+				prj.setHypothecationModeTitle(mode.getTitle());
+			}
+		}
+
+		BigDecimal guaranteeModeExpireWeight = new BigDecimal(0), mortgageModeExpireWeight = new BigDecimal(0), hypothecationModeExpireWeight = new BigDecimal(0);
+		String guaranteeModeExpireOid = prj.getGuaranteeModeExpireOid(), mortgageModeExpireOid = prj.getMortgageModeExpireOid(), hypothecationModeExpireOid = prj.getHypothecationModeExpireOid();
+		for (CCPWarrantyExpire expire : expireList) {
+			String eOid = expire.getOid();
+			if (StringUtils.equals(guaranteeModeExpireOid, eOid)) {
+				guaranteeModeExpireWeight = expire.getWeight();
+				prj.setGuaranteeModeExpireWeight(guaranteeModeExpireWeight);
+				prj.setGuaranteeModeExpireTitle(expire.getTitle());
+			}
+			if (StringUtils.equals(mortgageModeExpireOid, eOid)) {
+				mortgageModeExpireWeight = expire.getWeight();
+				prj.setMortgageModeExpireWeight(mortgageModeExpireWeight);
+				prj.setMortgageModeExpireTitle(expire.getTitle());
+			}
+			if (StringUtils.equals(hypothecationModeExpireOid, eOid)) {
+				hypothecationModeExpireWeight = expire.getWeight();
+				prj.setHypothecationModeExpireWeight(hypothecationModeExpireWeight);
+				prj.setHypothecationModeExpireTitle(expire.getTitle());
+			}
+		}
+		
+		BigDecimal guaranteeRato = guaranteeModeWeight.multiply(guaranteeModeExpireWeight); // 担保系数
+		BigDecimal mortgageRato = mortgageModeWeight.multiply(mortgageModeExpireWeight); // 抵押系数
+		BigDecimal hypothecation = hypothecationModeWeight.multiply(hypothecationModeExpireWeight); // 质押系数
+
+		double maxRato = NumberUtils.max(new double[] { guaranteeRato.doubleValue(), mortgageRato.doubleValue(), hypothecation.doubleValue() });// 取最大值
+
+		BigDecimal targetRato = new BigDecimal(0.8); // TODO 标的的评分
+		BigDecimal riskFactor = targetRato.multiply(new BigDecimal(maxRato)); // 计算出项目的风险系数
+		
+		prj.setRiskFactor(riskFactor);
+		log.info("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor.doubleValue());
+		/* 计算项目风险系数结束 */
 
 		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
