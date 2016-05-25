@@ -214,7 +214,55 @@ define([
 									}, function(result) {
 										var data = result.data;
 										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
-										
+										$('#detVoteTable').bootstrapTable('destroy'); 
+										var voteTableConfig = {
+											ajax: function(origin) {
+												http.post(config.api.meetingTargetVoteDet, {
+													data: {
+														meetingOid: data.oid,
+														targetOid: row.oid
+													},
+													contentType: 'form'
+												}, function(rlt) {
+													origin.success(rlt)
+												})
+											},
+											columns: [{
+												field: 'role',
+												align: 'center'
+											}, {
+												field: 'voteStatus',
+												align: 'center',
+												formatter: function(val) {
+													return util.enum.transform('voteStates', val);
+												}
+											}, {
+												field: 'name',
+												align: 'center'
+											}, {
+												field: 'time',
+												align: 'center'
+											}, {
+												align: 'center',
+												formatter: function(val, row) {
+													var buttons = [{
+														text: '下载',
+														type: 'button',
+														class: 'item-download',
+														isRender: row.file != null
+													}];
+													return util.table.formatter.generateButton(buttons);
+												},
+												events: {
+													'click .item-download': function(e, value, row) {
+														location.href = 'http://api.guohuaigroup.com' + row.file
+													}
+												}
+											}]
+										}
+										detVoteTable
+										// 初始化表决状态表格
+										$('#detVoteTable').bootstrapTable(voteTableConfig)
 									})
 									$('#meetingDet').show();
 								} else {
@@ -326,17 +374,16 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.data;
-								if(!data){
+								if (!data) {
 									alert('查询底层项目详情失败');
 								} else {
 									$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
-//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
+									//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
 									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
 									$('#projectDetailModal').modal('show');
 								}
 							});
-							
-							
+
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
 							$('#projectForm').resetForm(); // 先清理表单
@@ -346,7 +393,7 @@ define([
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
 							//row.targetOid = targetInfo.oid;
-							
+
 							http.post(config.api.projectDetail, {
 								data: {
 									oid: row.oid
@@ -354,10 +401,10 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.data;
-								if(!data){
+								if (!data) {
 									alert('查询底层项目详情失败');
 								} else {
-//									$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
+									//									$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
 									$('#projectModal').modal('show');
 								}
