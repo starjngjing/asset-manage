@@ -45,14 +45,24 @@ public class Investment extends UUID implements Serializable {
 	public static final String INVESTMENT_STATUS_waitMeeting = "waitMeeting";
 	public static final String INVESTMENT_STATUS_metting = "metting";
 	public static final String INVESTMENT_STATUS_collecting = "collecting";
-	public static final String INVESTMENT_STATUS_establish = "establish"; // 成立
-	public static final String INVESTMENT_STATUS_unEstablish = "unEstablish"; // 成立失败
 	public static final String INVESTMENT_STATUS_reject = "reject"; // reject 驳回
-	public static final String INVESTMENT_STATUS_overdue = "overdue"; // overdue逾期
 	public static final String INVESTMENT_STATUS_invalid = "invalid"; // invalid
 																		// 作废
 	public static final String INVESTMENT_STATUS_meetingpass = "meetingPass"; // 待准入
+	
+	
+	/**
+	 * 标的生命周期状态
+	 */
+	public static final String INVESTMENT_LIFESTATUS_PREPARE = "PREPARE"; // 准备期
+	public static final String INVESTMENT_LIFESTATUS_STAND_UP = "STAND_UP"; // 已成立
+	public static final String INVESTMENT_LIFESTATUS_STAND_FAIL = "STAND_FAIL"; // 成立失败
+	public static final String INVESTMENT_LIFESTATUS_CLOSE = "CLOSE"; // 已结束
+	public static final String INVESTMENT_LIFESTATUS_OVER_TIME = "OVER_TIME"; // 已逾期
 
+	
+	
+	
 	/**
 	 * 标的编号
 	 */
@@ -207,6 +217,10 @@ public class Investment extends UUID implements Serializable {
 	 * 资产类型名称
 	 */
 	private String typeName;
+	/**
+	 * 生命周期
+	 */
+	private String lifeState;
 	/**
 	 * 状态
 	 */

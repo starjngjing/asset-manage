@@ -3,10 +3,19 @@ package com.guohuai.asset.manage.boot.investment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -272,6 +281,7 @@ public class InvestmentMeetingService {
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_collecting);
+				investment.setLifeState(investment.INVESTMENT_LIFESTATUS_PREPARE);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项
 				for (String checkName : checkList) {
@@ -294,4 +304,5 @@ public class InvestmentMeetingService {
 		meeting.setState(InvestmentMeeting.MEETING_STATE_FINISH);
 		this.updateMeeting(meeting, operator);
 	}
+	
 }

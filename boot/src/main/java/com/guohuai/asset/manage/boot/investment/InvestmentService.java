@@ -144,4 +144,5 @@ public class InvestmentService {
 	public List<Object> getInvestmentByName(String name) {
 		return this.investmentDao.getInvestmentByName(name);
 	}
+	
 }

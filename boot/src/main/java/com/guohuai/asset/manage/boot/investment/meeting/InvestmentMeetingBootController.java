@@ -159,7 +159,8 @@ public class InvestmentMeetingBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "meetingTarget", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<MeetingInvestmentDetResp>> meetingTargetList(@RequestParam(required = true) String oid) {
+	public @ResponseBody ResponseEntity<List<MeetingInvestmentDetResp>> meetingTargetList(
+			@RequestParam(required = true) String oid) {
 		List<MeetingInvestmentDetResp> list = investmentMeetingAssetService.getInvestmentByMeeting(oid);
 		return new ResponseEntity<List<MeetingInvestmentDetResp>>(list, HttpStatus.OK);
 	}
@@ -172,7 +173,8 @@ public class InvestmentMeetingBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "meetingTargetVoteDet", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<List<VoteDetResp>> meetingTargetList(@RequestParam(required = true) String meetingOid,@RequestParam(required = true) String targetOid) {
+	public @ResponseBody ResponseEntity<List<VoteDetResp>> meetingTargetList(
+			@RequestParam(required = true) String meetingOid, @RequestParam(required = true) String targetOid) {
 		List<VoteDetResp> resp = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meetingOid, targetOid);
 		return new ResponseEntity<List<VoteDetResp>>(resp, HttpStatus.OK);
 	}
@@ -197,7 +199,8 @@ public class InvestmentMeetingBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "summaryUp", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> summaryUp(@RequestParam(required = true) String files,@RequestParam(required = true) String meetingOid) {
+	public @ResponseBody ResponseEntity<BaseResp> summaryUp(@RequestParam(required = true) String files,
+			@RequestParam(required = true) String meetingOid) {
 		String operator = super.getLoginAdmin();
 		investmentMeetingService.summaryUp(meetingOid, files, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
@@ -253,6 +256,19 @@ public class InvestmentMeetingBootController extends BaseController {
 		String operator = super.getLoginAdmin();
 		investmentMeetingService.finishMeeting(form, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	/**
+	 * 标的最新会议信息
+	 * 
+	 * @param targetoid
+	 * @return
+	 */
+	@RequestMapping(value = "targetMeeting", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<MeetingDetResp> detilForTarget(
+			@RequestParam(required = true) String investmentOid) {
+		InvestmentMeeting meeting = investmentMeetingAssetService.getNewMeetingByInvestment(investmentOid);
+		return new ResponseEntity<MeetingDetResp>(new MeetingDetResp(meeting), HttpStatus.OK);
 	}
 
 }

@@ -111,23 +111,35 @@ public class InvestmentPoolController extends BaseController {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 投资标的备选库
 					Expression<String> exp = root.get("state").as(String.class);					
-					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_establish }));
+					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting}));
+					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_PREPARE }));
 				} else if (op.equals("holdList")) { // 已持有列表
-					Expression<String> exp = root.get("state").as(String.class);					
-					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_establish }));
+//					Expression<String> exp = root.get("state").as(String.class);					
+//					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting }));
+					
+					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
 					
 					Expression<BigDecimal> expHa = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.gt(expHa, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
 					predicate.add(p);					
 				} else if (op.equals("noHoldList")) { // 未持有列表
-					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+//					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
+					
+					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
 					
 					Expression<BigDecimal> exp = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.or(cb.isNull(exp), cb.le(exp, new BigDecimal(0))); //持有金额为空或者大于0: holdAmount is null or holdAmount < 0
 					predicate.add(p); 
 				} else if (op.equals("historyList")) { // 历史列表
 					Expression<String> exp = root.get("state").as(String.class);					
-					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_unEstablish, Investment.INVESTMENT_STATUS_overdue, Investment.INVESTMENT_STATUS_invalid }));
+					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_invalid }));
+					
+//					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+//					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_FAIL })); //未成立
+					
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
 				}
@@ -274,4 +286,16 @@ public class InvestmentPoolController extends BaseController {
 		return new BaseResp();
 	}
 
+	/**
+	 * 查询正在募集期的标的列表
+	 * 
+	 * @Title: getRecruitment
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 */
+	public void getRecruitment() {
+		// TODO
+		// 募集截止日<当前日期 && lifeState = PREPARE
+	}
 }
