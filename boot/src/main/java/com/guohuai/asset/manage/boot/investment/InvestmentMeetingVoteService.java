@@ -131,7 +131,7 @@ public class InvestmentMeetingVoteService {
 			if (vote != null) {
 				resp.setVoteStatus(vote.getState());
 				resp.setTime(vote.getVoteTime());
-				if (null != vote.getFile()) {
+				if (!StringUtils.isEmpty(vote.getFile())) {
 					List<File> files = fileService.list(vote.getFile());
 					resp.setFile(files.get(0).getFurl());
 				}

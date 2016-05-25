@@ -236,38 +236,16 @@ define([
 									}, function(result) {
 										var data = result.data;
 										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
-										$('#detVoteTable').bootstrapTable('destroy');
-										var voteTableConfig = {
-												ajax: function(origin) {
-													http.post(config.api.meetingTargetVoteDet, {
-														data: {
-															meetingOid: data.oid,
-															targetOid: row.oid
-														},
-														contentType: 'form'
-													}, function(rlt) {
-														origin.success(rlt)
-													})
+										http.post(config.api.meetingTargetVoteDet, {
+												data: {
+													meetingOid: data.oid,
+													targetOid: row.oid
 												},
-												columns: [{
-													field: 'role',
-													align: 'center'
-												}, {
-													field: 'voteStatus',
-													align: 'center',
-													formatter: function(val) {
-														return util.enum.transform('voteStates', val);
-													}
-												}, {
-													field: 'name',
-													align: 'center'
-												}, {
-													field: 'time',
-													align: 'center'
-												}]
-											}
-											// 初始化表决状态表格
-										$('#detVoteTable').bootstrapTable(voteTableConfig)
+												contentType: 'form'
+											},
+											function(obj) {
+												$('#detVoteTable').bootstrapTable('load', obj)
+											});
 									})
 									$('#meetingDet').show();
 								} else {
@@ -484,10 +462,10 @@ define([
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 				$('#projectForm').resetForm(); // 先清理表单
-				
+
 				//初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表	 
 				initSel();
-				
+
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
@@ -531,17 +509,55 @@ define([
 
 			// 新增/修改底层项目-是否有抵押人单选按钮改变事件
 			$(document.projectForm.pledge).each(function(index, item) {
-				$(item).on('ifChecked', function(e) { // 是否有抵押人
-					if ($(this).val() === 'yes')
-						$('#prjPledgeInfo').show().find('input').attr('disabled', false);
-					else
-						$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
+					$(item).on('ifChecked', function(e) { // 是否有抵押人
+						if ($(this).val() === 'yes')
+							$('#prjPledgeInfo').show().find('input').attr('disabled', false);
+						else
+							$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
 
-					$('#projectForm').validator('destroy'); // 先销毁验证规则
-					util.form.validator.init($('#projectForm')); // 然后添加验证规则
-				});
-			})
-			//已确认检查项表格配置
+						$('#projectForm').validator('destroy'); // 先销毁验证规则
+						util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					});
+				})
+				//标的详情过会表决表配置
+			var voteTableConfig = {
+					data: '',
+					columns: [{
+						field: 'role',
+						align: 'center'
+					}, {
+						field: 'voteStatus',
+						align: 'center',
+						formatter: function(val) {
+							return util.enum.transform('voteStates', val);
+						}
+					}, {
+						field: 'name',
+						align: 'center'
+					}, {
+						field: 'time',
+						align: 'center'
+					}, {
+						align: 'center',
+						formatter: function(val, row) {
+							var buttons = [{
+								text: '下载',
+								type: 'button',
+								class: 'item-download',
+								isRender: row.file != null && row.file != ''
+							}];
+							return util.table.formatter.generateButton(buttons);
+						},
+						events: {
+							'click .item-download': function(e, value, row) {
+								location.href = 'http://api.guohuaigroup.com' + row.file
+							}
+						}
+					}]
+				}
+				// 初始化表决状态表格
+			$('#detVoteTable').bootstrapTable(voteTableConfig)
+				//已确认检查项表格配置
 			var confrimCheckListConfig = {
 				data: '',
 				columns: [{
@@ -556,6 +572,22 @@ define([
 				}, {
 					field: 'checker',
 					align: 'center'
+				}, {
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download',
+							isRender: row.file != null && row.file != ''
+						}];
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.file
+						}
+					}
 				}]
 			}
 			$('#checkListConfrimTable').bootstrapTable(confrimCheckListConfig)
@@ -733,7 +765,7 @@ define([
 				width: percentage + '%'
 			})
 	}
-	
+
 	/**
 	 * 初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表
 	 */
@@ -742,7 +774,7 @@ define([
 			data: {},
 			contentType: 'form'
 		}, function(data) {
-			if(data) { // 返回的是list
+			if (data) { // 返回的是list
 				var warrantorTypeSel = $(projectForm.warrantorType); // 保证方式select
 				var pledgeTypeSel = $(projectForm.pledgeType); // 抵押方式select
 				var pledgeType2Sel = $(projectForm.pledgeType2); // 质押方式select
@@ -758,14 +790,14 @@ define([
 					 * HYPOTHECATION-质押方式
 					 */
 					var option = $("<option>").val(oid).text(title);
-					if('GUARANTEE' === type) {
+					if ('GUARANTEE' === type) {
 						warrantorTypeSel.append(option);
-					} else if('MORTGAGE' === type) {
+					} else if ('MORTGAGE' === type) {
 						pledgeTypeSel.append(option);
-					} else if('HYPOTHECATION' === type) {
+					} else if ('HYPOTHECATION' === type) {
 						pledgeType2Sel.append(option);
 					}
-					
+
 				});
 			}
 		})

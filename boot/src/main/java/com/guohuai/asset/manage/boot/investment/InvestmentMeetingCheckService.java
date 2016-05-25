@@ -95,6 +95,10 @@ public class InvestmentMeetingCheckService {
 				AdminObj admin = adminsSdk.getAdmin(entity.getChecker());
 				det.setChecker(admin.getName());
 			}
+			if (!StringUtils.isEmpty(entity.getCheckFile())) {
+				List<File> files = fileService.list(entity.getCheckFile());
+				det.setFile(files.get(0).getFurl());
+			}
 			res.add(det);
 		}
 		return res;
