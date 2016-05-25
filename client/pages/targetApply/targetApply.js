@@ -468,8 +468,6 @@ define([
 				}
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
-				$('#projectForm').clearForm(); // 先清理表单
-
 				$('#projectForm').resetForm(); // 先清理表单
 
 				// 给项目表单的 标的id属性赋值

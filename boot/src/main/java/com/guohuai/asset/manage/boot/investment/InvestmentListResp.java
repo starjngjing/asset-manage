@@ -19,7 +19,7 @@ public class InvestmentListResp extends PageResp<Investment> {
 	}
 
 	public InvestmentListResp(List<Investment> approvals) {
-		this(approvals, approvals.size());
+		this(approvals, null == approvals ? 0 : approvals.size());
 	}
 
 	public InvestmentListResp(List<Investment> Approvals, long total) {
