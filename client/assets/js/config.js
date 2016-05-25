@@ -153,10 +153,12 @@ define(function() {
 				}
 			},
 			duration: {
-				assetPool: {
-					create: this.host + "/ams/duration/assetPool/createPool",
-					audit: this.host + "/ams/duration/assetPool/auditPool",
-					getAll: this.host + "/ams/duration/assetPool/getAll",
+				assetPool: {	// 资产池
+					create: this.host + "/ams/duration/assetPool/createPool",		// 新建资产池
+					audit: this.host + "/ams/duration/assetPool/auditPool",			// 审核资产池
+					getAll: this.host + "/ams/duration/assetPool/getAll",				// 获取全部资产池
+					getById: this.host + '/ams/duration/assetPool/getPoolByOid',		// 获取单条资产池
+					getNameList: this.host + '/ams/duration/assetPool/getAllNameList'		//获取资产池下拉菜单列表
 				}
 			},
 			role: {
