@@ -484,7 +484,10 @@ define([
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 				$('#projectForm').resetForm(); // 先清理表单
-
+				
+				//初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表	 
+				initSel();
+				
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
@@ -729,6 +732,43 @@ define([
 			.css({
 				width: percentage + '%'
 			})
+	}
+	
+	/**
+	 * 初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表
+	 */
+	function initSel() {
+		http.post(config.api.system.config.ccp.warrantyMode.search, {
+			data: {},
+			contentType: 'form'
+		}, function(data) {
+			if(data) { // 返回的是list
+				var warrantorTypeSel = $(projectForm.warrantorType); // 保证方式select
+				var pledgeTypeSel = $(projectForm.pledgeType); // 抵押方式select
+				var pledgeType2Sel = $(projectForm.pledgeType2); // 质押方式select
+				$.each(data, function(i, item) {
+					var oid = item.oid; // 
+					var title = item.title; // 
+					var weight = item.weight; // 权重
+					var type = item.type; // 类型
+					/**
+					 * type:
+					 * GUARANTEE-保证方式;
+					 * MORTGAGE-抵押方式
+					 * HYPOTHECATION-质押方式
+					 */
+					var option = $("<option>").val(oid).text(title);
+					if('GUARANTEE' === type) {
+						warrantorTypeSel.append(option);
+					} else if('MORTGAGE' === type) {
+						pledgeTypeSel.append(option);
+					} else if('HYPOTHECATION' === type) {
+						pledgeType2Sel.append(option);
+					}
+					
+				});
+			}
+		})
 	}
 
 })

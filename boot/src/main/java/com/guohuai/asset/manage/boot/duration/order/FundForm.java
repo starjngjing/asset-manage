@@ -32,7 +32,7 @@ public class FundForm implements Serializable {
 	private Date incomeDate; 
 	// 申购额度
 	private BigDecimal volume;
-	// 是否全部赎回
+	// 是否全部赎回（是：yes；否：no）
 	private String allFlag;
 	// 发起赎回日
 	private Date redeemDate; 
@@ -40,14 +40,22 @@ public class FundForm implements Serializable {
 	private Date backDate; 
 	// 收益截止日
 	private Date endYield;
-	// 赎回金额
-	private BigDecimal returnAmount;
+	// 当前持有额度
+	private BigDecimal holdVolume;
+	// 赎回份额
+	private BigDecimal returnVolume;
 	// 年化收益率
 	private BigDecimal incomeRate;
 	// 每万份收益
 	private BigDecimal netRevenue;
 	// 七日年化收益
 	private BigDecimal yearYield7;
+	// 风险等级
+	private String riskLevel;
+	// 分红方式
+	private String dividendType;
+	// 最新流通份额
+	private BigDecimal circulationShares;
 	// 申请人
 	private String asker;
 	// 审核人

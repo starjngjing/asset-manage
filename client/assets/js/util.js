@@ -131,6 +131,20 @@ define([
      */
     form: {
       /**
+       * 重置表单
+       * @param form 表单 jquery对象
+       */
+      reset: function (form) {
+        form.resetForm()
+        form.find('select').change()
+        form.find('.icheck').each(function (index, item) {
+          if (item.checked) {
+            $(item).iCheck('check')
+          }
+        })
+        form.find('.origin-select').select2('val', '')
+      },
+      /**
        * 表单验证工具
        */
       validator: {
@@ -150,6 +164,7 @@ define([
          * 浮点数校验，例如 data-validfloat="10.2"，10.2 表示小数点前面10位后面2位，默认前后各10位
          * @param $el 验证表单元素 jquery对象
          * @returns 验证结果 {boolean}
+         * FIXME 目前默认值不起作用，框架导致，待修改
          */
         validfloat: function ($el) {
           var value = $el.val().trim()
@@ -169,6 +184,7 @@ define([
          * 整数校验，例如 data-validint="1-1000"，1-1000 表示许可范围从1到1000
          * @param $el 验证表单元素 jquery对象
          * @returns 验证结果 {boolean}
+         * FIXME 目前默认值不起作用，框架导致，待修改
          */
         validint: function ($el) {
           var value = $el.val().trim()

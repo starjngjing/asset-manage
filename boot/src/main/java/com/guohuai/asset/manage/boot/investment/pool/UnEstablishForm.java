@@ -12,7 +12,9 @@ package com.guohuai.asset.manage.boot.investment.pool;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +44,7 @@ public class UnEstablishForm implements Serializable {
 	 * 募集期收益
 	 */
 	@NotNull(message = "投资标的募集期收益不能为空")
+	@Digits(integer = 10, fraction = 4, message = "投资标的募集期收益最大10位整数4位小数")
 	private BigDecimal collectIncomeRate;
 
 	// @NotNull(message = "投资标的收益截止日期不能为空")
@@ -50,5 +53,6 @@ public class UnEstablishForm implements Serializable {
 	/**
 	 * 操作员
 	 */
+	@Size(max = 32, message = "操作人最大32个字符！")
 	private String operator;
 }

@@ -108,9 +108,28 @@ public class AssetPoolService {
 	 * @param pid
 	 * @return
 	 */
-	public AssetPoolForm getById(String pid) {
-		AssetPoolForm form = new AssetPoolForm();
+	public AssetPoolEntity getByOid(String pid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(pid);
+		
+		return entity;
+	}
+	
+	/**
+	 * 保存
+	 * @param entity
+	 */
+	public void save(AssetPoolEntity entity) {
+		assetPoolDao.save(entity);
+	}
+	
+	/**
+	 * 根据资产池id获取对应的资产池详情
+	 * @param pid
+	 * @return
+	 */
+	public AssetPoolForm getPoolByOid(String pid) {
+		AssetPoolForm form = new AssetPoolForm();
+		AssetPoolEntity entity = this.getByOid(pid);
 		try {
 			BeanUtils.copyProperties(form, entity);
 		} catch (Exception e) {
@@ -118,5 +137,48 @@ public class AssetPoolService {
 		}
 		
 		return form;
+	}
+	
+	/**
+	 * 编辑资产池
+	 * @param form
+	 * @param uid
+	 */
+	public void editPool(AssetPoolForm form, String uid) {
+		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
+		try {
+			BeanUtils.copyProperties(entity, form);
+			entity.setState("未成立");
+			entity.setCreater(uid);
+			entity.setCreateTime(DateUtil.getSqlCurrentDate());
+			
+			assetPoolDao.save(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 获取所有资产池列表
+	 * @param name
+	 * @return
+	 */
+	public List<AssetPoolForm> getListByName(String name) {
+		List<AssetPoolForm> formList = Lists.newArrayList();
+		List<AssetPoolEntity> entityList = assetPoolDao.getListByName(name);
+		if (!entityList.isEmpty()) {
+			AssetPoolForm form = null;
+			for (AssetPoolEntity entity : entityList) {
+				form = new AssetPoolForm();
+				try {
+					BeanUtils.copyProperties(form, entity);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				formList.add(form);
+			}
+		}
+		
+		return formList;
 	}
 }

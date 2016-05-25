@@ -64,9 +64,9 @@ function (http, config, util, $$) {
 						field: 'createTime'
 					},
 					{
-						width: 150,
+						width: 180,
 						align: 'center',
-						formatter: function (val, row, index) {
+						formatter: function () {
 							var buttons = [
 								{
 									text: '详情',
@@ -96,6 +96,31 @@ function (http, config, util, $$) {
 			$('#roleTable').bootstrapTable(tableConfig)
 			// 初始化权限表格搜索表单
 			$$.searchInit($('#searchForm'), $('#roleTable'))
+
+			// 初始化新建角色表单验证
+			util.form.validator.init($('#addRoleForm'))
+
+			// 新建角色按钮点击事件
+			var chosenAuths = []
+			$('#addRole').on('click', function () {
+				// 权限选择组件初始化
+				http.post(config.api.auth.list, function (result) {
+					$$.switcher({
+						container: $('#addRoleAuths'),
+						fromTitle: '可选权限',
+						toTitle: '已选权限',
+						fromArray: result.rows,
+						toArray: chosenAuths,
+						field: 'name'
+					})
+				})
+				$('#addRoleModal').modal('show')
+			})
+
+			// 新建按钮 - 确定按钮点击事件
+			$('#doAddRole').on('click', function () {
+				var form = document.addRoleForm
+			})
 
 			function getQueryParams (val) {
 				// 参数 val 是bootstrap-table默认的与服务器交互的数据，包含分页、排序数据
