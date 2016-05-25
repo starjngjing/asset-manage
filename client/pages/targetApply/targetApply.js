@@ -214,6 +214,7 @@ define([
 									}, function(result) {
 										var data = result.data;
 										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
+										
 									})
 									$('#meetingDet').show();
 								} else {
