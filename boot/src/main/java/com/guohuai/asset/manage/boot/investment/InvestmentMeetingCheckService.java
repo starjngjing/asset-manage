@@ -71,14 +71,18 @@ public class InvestmentMeetingCheckService {
 	 * @param investmentOid
 	 * @return
 	 */
-	public List<InvestmentCheckDetResp> getMeetingCheckListByInvestmentOid(String investmentOid) {
+	public List<InvestmentCheckDetResp> getMeetingCheckListByInvestmentOid(String investmentOid, String state) {
 		List<InvestmentCheckDetResp> res = new ArrayList<InvestmentCheckDetResp>();
 		Investment investment = investmentService.getInvestment(investmentOid);
 		if (null == investment) {
 			throw new RuntimeException();
 		}
-		List<InvestmentMeetingCheck> lists = investmentMeetingCheckDao.findByInvestmentAndState(investment,
-				InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck);
+		List<InvestmentMeetingCheck> lists = null;
+		if(null == state){
+			lists = investmentMeetingCheckDao.findByInvestment(investment);
+		}else {
+			lists = investmentMeetingCheckDao.findByInvestmentAndState(investment, state);
+		}
 		for (InvestmentMeetingCheck entity : lists) {
 			res.add(new InvestmentCheckDetResp(entity));
 		}

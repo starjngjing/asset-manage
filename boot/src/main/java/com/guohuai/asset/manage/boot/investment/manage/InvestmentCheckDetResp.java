@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.manage;
 
+import java.sql.Timestamp;
+
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 
 import lombok.Data;
@@ -23,6 +25,8 @@ public class InvestmentCheckDetResp {
 		this.state = entity.getState();
 		this.remark = entity.getCheckDesc();
 		this.file = entity.getCheckFile();
+		this.time = entity.getCheckTime();
+		this.checker = entity.getChecker();
 	}
 
 	private String id;
@@ -30,5 +34,7 @@ public class InvestmentCheckDetResp {
 	private String state;
 	private String remark;
 	private String file;
+	private Timestamp time;
+	private String checker;
 
 }

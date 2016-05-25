@@ -96,13 +96,15 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号">
+								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称">
+								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -128,15 +130,17 @@
 							<div class="form-group">
 								<label>资产规模</label>
 								<div class="input-group input-group-sm">
-									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模">
+									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模" required data-validfloat="12.2" data-error="资产规模最多支持两位小数数字">
 									<span class="input-group-addon">万</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限">
+								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint ="1-9999" data-error="资产期限必须为正整数">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -153,27 +157,30 @@
 							<div class="form-group">
 								<label>预计收益</label>
 								<div class="input-group input-group-sm">
-									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益">
+									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益" required data-validfloat="12.2" data-error="预计收益为两位小数">
 									<span class="input-group-addon">%</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>预计年化收益</label>
 								<div class="input-group input-group-sm">
-									<input name="expAror" type="text" class="form-control" placeholder="预计年化收益">
+									<input name="expAror" type="text" class="form-control" placeholder="预计年化收益" required data-validfloat="12.2" data-error="预计年化收益为两位小数">
 									<span class="input-group-addon">%</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>起购金额</label>
 								<div class="input-group input-group-sm">
-									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额">
+									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额" required data-validfloat="12.2" data-error="起购金额为两位小数">
 									<span class="input-group-addon">元</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -194,7 +201,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='createCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
 								</div>
 							</div>
 						</div>
@@ -205,7 +212,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
 								</div>
 							</div>
 						</div>
@@ -348,7 +355,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="saveTarget" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="addTargetSubmit" type="button" class="btn btn-primary btn-submit addTargetSubmit">保 存</button>
 			</div>
 		</div>
 	</div>
@@ -375,13 +382,15 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号">
+								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称">
+								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -407,15 +416,17 @@
 							<div class="form-group">
 								<label>资产规模</label>
 								<div class="input-group input-group-sm">
-									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模">
+									<input name="raiseScope" type="text" class="form-control input-sm" placeholder="资产规模" required data-validfloat="12.2" data-error="资产规模最多支持两位小数数字">
 									<span class="input-group-addon">万</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>资产期限</label>
-								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限">
+								<input name="life" type="text" class="form-control input-sm" placeholder="资产期限" required data-validint ="1-9999" data-error="资产期限必须为正整数">
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -432,27 +443,30 @@
 							<div class="form-group">
 								<label>预计收益</label>
 								<div class="input-group input-group-sm">
-									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益">
+									<input name="expIncome" type="text" class="form-control input-sm" placeholder="预计收益" required data-validfloat="12.2" data-error="预计收益为两位小数">
 									<span class="input-group-addon">%</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>预计年化收益</label>
 								<div class="input-group input-group-sm">
-									<input name="expAror" type="text" class="form-control" placeholder="预计年化收益">
+									<input name="expAror" type="text" class="form-control" placeholder="预计年化收益" required data-validfloat="12.2" data-error="预计年化收益为两位小数">
 									<span class="input-group-addon">%</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>起购金额</label>
 								<div class="input-group input-group-sm">
-									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额">
+									<input name="floorVolume" type="text" class="form-control input-sm" placeholder="起购金额" required data-validfloat="12.2" data-error="起购金额为两位小数">
 									<span class="input-group-addon">元</span>
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -473,7 +487,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='editCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
 								</div>
 							</div>
 						</div>
@@ -484,7 +498,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='editCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
 								</div>
 							</div>
 						</div>
@@ -617,7 +631,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="editTarget" type="button" class="btn btn-primary btn-submit">修 改</button>
+				<button id="editTargetSubmit" type="button" class="btn btn-primary btn-submit editTargetSubmit">修 改</button>
 			</div>
 		</div>
 	</div>
@@ -895,14 +909,14 @@
 								</dl>
 							</div>
 							<div class="col-sm-12">
+								过会表决概况
 								<table id="detVoteTable" class="table table-bordered table-striped">
 									<thead>
 										<tr>
 											<th>角色名称</th>
-											<th> 表决意见</th>
+											<th>表决意见</th>
 											<th>表决人</th>
 											<th>表时间</th>
-											<th>附件</th>
 										</tr>
 									</thead>
 								</table>
@@ -1190,16 +1204,19 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-12">
 							<div class="form-group">
 								<label>保证方式</label>
 								<div class="input-group input-group-sm">
 									<select name="warrantorType" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="保证方式不能为空">
 										<option value="">请选择</option>
+										<option value="">商业银行及政策性银行保证（含境内外资银行）</option>
+										<option value="">非银行金融机构保证（含境内外资非银行金融机构）</option>
 									</select>
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
+							<input type="hidden" name="warrantorTypeWeight" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -1294,7 +1311,7 @@
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-12">
 							<div class="form-group">
 								<label>抵押方式</label>
 								<div class="input-group input-group-sm">
@@ -1304,6 +1321,7 @@
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
+						<input type="hidden" name="pledgeTypeWeight" />
 						</div>
 					</div>
 					<!--
@@ -1325,7 +1343,7 @@
 								<input name="mortgager2" type="text" class="form-control input-sm" maxlength="32" placeholder="抵押人">
 							</div>
 						</div>	
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
 							<div class="form-group">
 								<label>质押方式</label>
 								<div class="input-group input-group-sm">
@@ -1333,6 +1351,7 @@
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
+							<input type="hidden" name="pledgeType2Weight" />
 						</div>
 					</div>
 						-->

@@ -26,6 +26,7 @@ import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
+import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
@@ -174,14 +175,27 @@ public class InvestmentManageBootController extends BaseController {
 	}
 
 	/**
-	 * 根据标的oid获得检查项列表
+	 * 根据标的oid获得未确认检查项列表
 	 * 
 	 * @param oid
 	 * @return
 	 */
 	@RequestMapping(value = "checkList", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkList(@RequestParam(required = true) String oid) {
-		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid);
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListNotCheck(@RequestParam(required = true) String oid) {
+		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,
+				InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck);
+		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
+	}
+	
+	/**
+	 * 根据标的oid获得所有检查项列表
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "checkListAll", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListAll(@RequestParam(required = true) String oid) {
+		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,null);
 		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
 	}
 
@@ -191,7 +205,7 @@ public class InvestmentManageBootController extends BaseController {
 		String operatpr = super.getLoginAdmin();
 		List<InvestmentCheckListConfirmForm> form = JSONArray.parseArray(checkConditions,
 				InvestmentCheckListConfirmForm.class);
-		investmentMeetingCheckService.confirmCheckList(form,operatpr);
+		investmentMeetingCheckService.confirmCheckList(form, operatpr);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

@@ -151,6 +151,8 @@ define([
 								},
 								contentType: 'form'
 							}, function(result) {
+								$('#editTargetForm').clearForm(); // 先清理表单
+								util.form.validator.init($("#editTargetForm")); // 初始化表单验证
 								var data = result.investment;
 								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
@@ -205,7 +207,7 @@ define([
 								} else {
 									$("#rejectDesc").show()
 								}
-								if (data.state == 'collecting') {
+								if (data.state == 'collecting' || data.state == 'meeting') {
 									http.post(config.api.targetNewMeeting, {
 										data: {
 											investmentOid: row.oid
@@ -214,54 +216,37 @@ define([
 									}, function(result) {
 										var data = result.data;
 										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
-										$('#detVoteTable').bootstrapTable('destroy'); 
+										$('#detVoteTable').bootstrapTable('destroy');
 										var voteTableConfig = {
-											ajax: function(origin) {
-												http.post(config.api.meetingTargetVoteDet, {
-													data: {
-														meetingOid: data.oid,
-														targetOid: row.oid
-													},
-													contentType: 'form'
-												}, function(rlt) {
-													origin.success(rlt)
-												})
-											},
-											columns: [{
-												field: 'role',
-												align: 'center'
-											}, {
-												field: 'voteStatus',
-												align: 'center',
-												formatter: function(val) {
-													return util.enum.transform('voteStates', val);
-												}
-											}, {
-												field: 'name',
-												align: 'center'
-											}, {
-												field: 'time',
-												align: 'center'
-											}, {
-												align: 'center',
-												formatter: function(val, row) {
-													var buttons = [{
-														text: '下载',
-														type: 'button',
-														class: 'item-download',
-														isRender: row.file != null
-													}];
-													return util.table.formatter.generateButton(buttons);
+												ajax: function(origin) {
+													http.post(config.api.meetingTargetVoteDet, {
+														data: {
+															meetingOid: data.oid,
+															targetOid: row.oid
+														},
+														contentType: 'form'
+													}, function(rlt) {
+														origin.success(rlt)
+													})
 												},
-												events: {
-													'click .item-download': function(e, value, row) {
-														location.href = 'http://api.guohuaigroup.com' + row.file
+												columns: [{
+													field: 'role',
+													align: 'center'
+												}, {
+													field: 'voteStatus',
+													align: 'center',
+													formatter: function(val) {
+														return util.enum.transform('voteStates', val);
 													}
-												}
-											}]
-										}
-										detVoteTable
-										// 初始化表决状态表格
+												}, {
+													field: 'name',
+													align: 'center'
+												}, {
+													field: 'time',
+													align: 'center'
+												}]
+											}
+											// 初始化表决状态表格
 										$('#detVoteTable').bootstrapTable(voteTableConfig)
 									})
 									$('#meetingDet').show();
@@ -447,16 +432,26 @@ define([
 
 			// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
+				$('#addTargetForm').resetForm(); // 先清理表单
+				util.form.validator.init($("#addTargetForm")); // 初始化表单验证
 				$('#addTargetModal').modal('show')
 			})
 
 			//新建标的按钮点击事件
-			$('#saveTarget').on('click', function() {
+			$('#addTargetSubmit').on('click', function() {
+				if(Date.parse($('#createCollectStartDate').val()) > Date.parse($('#createCollectEndDate').val())){
+					alert('募集起始日不能大于募集截止日');
+					return
+				}
 				saveTarget();
 			})
 
 			//修改标的按钮点击事件
-			$('#editTarget').on('click', function() {
+			$('#editTargetSubmit').on('click', function() {
+				if(Date.parse($('#editCollectStartDate').val()) > Date.parse($('#editCollectEndDate').val())){
+					alert('募集起始日不能大于募集截止日');
+					return
+				}
 				editTarget();
 			})
 
@@ -469,7 +464,10 @@ define([
 				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 				$('#projectForm').resetForm(); // 先清理表单
-
+				
+				//初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表	 
+				initSel();
+				
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
@@ -524,38 +522,6 @@ define([
 				});
 			})
 
-			// 检查项确认数据源
-			//			var checkConditionsSource = [{
-			//				id: 'a1',
-			//				text: '第一项',
-			//				remark: '',
-			//				file: ''
-			//			}, {
-			//				id: 'a2',
-			//				text: '第二项',
-			//				remark: '',
-			//				file: ''
-			//			}, {
-			//				id: 'a3',
-			//				text: '第三项',
-			//				remark: '',
-			//				file: ''
-			//			}, {
-			//				id: 'a4',
-			//				text: '第四项',
-			//				remark: '',
-			//				file: ''
-			//			}, {
-			//				id: 'a5',
-			//				text: '第五项',
-			//				remark: '',
-			//				file: ''
-			//			}, {
-			//				id: 'a6',
-			//				text: '第六项',
-			//				remark: '',
-			//				file: ''
-			//			}]
 			var checkConditionsSource;
 			// 临时存储已选数量
 			var checkConditionsCount = 0
@@ -728,6 +694,43 @@ define([
 			.css({
 				width: percentage + '%'
 			})
+	}
+	
+	/**
+	 * 初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表
+	 */
+	function initSel() {
+		http.post(config.api.system.config.ccp.warrantyMode.search, {
+			data: {},
+			contentType: 'form'
+		}, function(data) {
+			if(data) { // 返回的是list
+				var warrantorTypeSel = $(projectForm.warrantorType); // 保证方式select
+				var pledgeTypeSel = $(projectForm.pledgeType); // 抵押方式select
+				var pledgeType2Sel = $(projectForm.pledgeType2); // 质押方式select
+				$.each(data, function(i, item) {
+					var oid = item.oid; // 
+					var title = item.title; // 
+					var weight = item.weight; // 权重
+					var type = item.type; // 类型
+					/**
+					 * type:
+					 * GUARANTEE-保证方式;
+					 * MORTGAGE-抵押方式
+					 * HYPOTHECATION-质押方式
+					 */
+					var option = $("<option>").val(oid).text(title);
+					if('GUARANTEE' === type) {
+						warrantorTypeSel.append(option);
+					} else if('MORTGAGE' === type) {
+						pledgeTypeSel.append(option);
+					} else if('HYPOTHECATION' === type) {
+						pledgeType2Sel.append(option);
+					}
+					
+				});
+			}
+		})
 	}
 
 })
