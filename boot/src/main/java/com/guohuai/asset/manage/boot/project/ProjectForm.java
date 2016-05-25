@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.guohuai.asset.manage.boot.system.config.project.warrantyMode.CCPWarrantyModeForm;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,43 +34,96 @@ public class ProjectForm implements Cloneable, Serializable {
 	@NotNull(message = "项目类型不能为空")
 	private String projectType;
 	private String projectTypeName;
+	@Size(max = 32, message = "项目经理最大32个字符！")
 	private String projectManager;
+	@Size(max = 128, message = "城市最大128个字符！")
 	private String projectCity;
+	@Size(max = 128, message = "资金方所在地最大128个字符！")
 	private String funderAddr;
+	@Size(max = 1024, message = "资金资金用途最大1024个字符！")
 	private String fundUsage;
+	@Size(max = 1024, message = "项目还款来源最大1024个字符！")
 	private String payment;
+	@Size(max = 32, message = "外部项目曾信最大32个字符！")
 	private String trustMeasures;
+	@Size(max = 32, message = "外部项目曾信措施最大32个字符！")
 	private String trustMeasuresName;
+	@Size(max = 1024, message = "房地产项目所在地最大1024个字符！")
 	private String projectAddr;
+	@Size(max = 32, message = "开发商排名最大32个字符！")
 	private String developerRank;
+	@Size(max = 32, message = "房地产项目属性最大32个字符！")
 	private String estateProp;
+	@Size(max = 32, message = "房地产项目属性名称最大32个字符！")
 	private String estatePropName;
+	@Size(max = 32, message = "完工情况最大32个字符！")
 	private String estateCompletion;
+	@Size(max = 64, message = "政府层级最大64个字符！")
 	private String govLevel;
+	@NotNull(message = "是否有担保人不能为空")
+	@Size(max = 32, message = "是否有担保人最大32个字符！")
 	private String warrantor;
+	@Size(max = 1024, message = "担保人所在地最大1024个字符！")
 	private String warrantorAddr;
+	@Digits(integer = 10, fraction = 4, message = "担保人总资产最大10位整数4位小数")
 	private BigDecimal warrantorCapital;
+	@Digits(integer = 10, fraction = 4, message = "担保人负债最大10位整数4位小数")
 	private BigDecimal warrantorDebt;
+	/**
+	 * 担保方式
+	 */
+	private CCPWarrantyModeForm guarantee;
+	
+	@NotNull(message = "是否有抵押不能为空")
+	@Size(max = 32, message = "是否有抵押最大32个字符！")
 	private String pledge;
+	@Size(max = 32, message = "抵押人最大32个字符！")
 	private String mortgager;
+	@Size(max = 32, message = "出质人最大32个字符！")
 	private String pledgor;
+	@Size(max = 1024, message = "抵押物所在地最大1024个字符！")
 	private String pledgeAddr;
+	@Size(max = 1024, message = "抵押物形态最大1024个字符！")
 	private String pledgeType;
+	@Size(max = 64, message = "抵押物数量或者面积最大64个字符！")
 	private String pledgeWeight;
+	@Size(max = 1024, message = "抵押物名称或者坐落最大1024个字符！")
 	private String pledgeName;
-	private String pledgeAssessment;
+	@Size(max = 64, message = "抵押物评估机构最大64个字符！")
+	private String pledgeAssessment;	
+	@Digits(integer = 10, fraction = 4, message = "抵押物评估价值最大10位整数4位小数")
 	private BigDecimal pledgeValuation;
+	@Size(max = 32, message = "抵押顺位最大32个字符！")
 	private String pledgePriority;
+	@Digits(integer = 4, fraction = 4, message = "抵押率最大4位整数4位小数")
 	private BigDecimal pledgeRatio;
+	/**
+	 * 抵押方式
+	 */
+	private CCPWarrantyModeForm mortgage;
+	/**
+	 * 质押方式
+	 */
+	private CCPWarrantyModeForm hypothecation;
+	
+	@Digits(integer = 10, fraction = 4, message = "保证金最大10位整数4位小数")	
 	private BigDecimal margin;
+	@Digits(integer = 10, fraction = 4, message = "项目成本最大10位整数4位小数")
 	private BigDecimal projectScale;
+	@Digits(integer = 10, fraction = 4, message = "融资成本最大10位整数4位小数")
 	private BigDecimal financeCosts;
+	@Size(max = 64, message = "SPV最大64个字符！")
 	private String spv;
+	@Digits(integer = 4, fraction = 4, message = "SPV通道费率最大4位整数4位小数")
 	private BigDecimal spvTariff;
+	@Size(max = 32, message = "项目评级最大32个字符！")
 	private String projectGrade;
+	@Size(max = 32, message = "项目评级机构最大32个字符！")
 	private String gradeAssessment;
 	private Timestamp gradeTime;
+	@Size(max = 32, message = "创建人最大32个字符！")
 	private String creator;
+	@Size(max = 32, message = "操作人最大32个字符！")
 	private String operator;
 	private Timestamp createTime;
 	private Timestamp updateTime;

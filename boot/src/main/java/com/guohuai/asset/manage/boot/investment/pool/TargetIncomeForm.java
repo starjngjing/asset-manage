@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,6 +53,7 @@ public class TargetIncomeForm implements Cloneable, Serializable {
 	 * 实际收益
 	 */
 	@NotNull(message = "实际收益不能为空")
+	@Digits(integer = 10, fraction = 4, message = "实际收益最大10位整数4位小数")
 	private BigDecimal incomeRate;
 
 	/**
@@ -62,6 +65,7 @@ public class TargetIncomeForm implements Cloneable, Serializable {
 	/**
 	 * 操作员
 	 */
+	@Size(max = 32, message = "创建人最大32个字符！")
 	private String operator;
 
 	/**

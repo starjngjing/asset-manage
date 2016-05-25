@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,17 +60,25 @@ public class CashToolRevenueForm implements Cloneable, Serializable {
 	 * 万份收益
 	 */
 	@NotNull(message = "万份收益不能为空")
+	@Digits(integer = 4, fraction = 4, message = "万份收益最大4位整数4位小数")
 	private BigDecimal dailyProfit;
+	
 
+	// @NotNull(message = "投资标的收益截止日期不能为空")
+	// private Timestamp arorFirstDate;
+	
+	
 	/**
 	 * 7日年化收益率
 	 */
 	@NotNull(message = "7日年化收益率不能为空")
+	@Digits(integer = 4, fraction = 4, message = "7日年化收益率最大4位整数4位小数")
 	private BigDecimal weeklyYield;
 
 	/**
 	 * 操作员
 	 */
+	@Size(max = 32, message = "操作人最大32个字符！")
 	private String operator;
 
 	/**
