@@ -141,8 +141,28 @@ define([
 									var data = obj.rows;
 									checkConditionsSource = data;
 									$('#checkConditionsTable').bootstrapTable('load', checkConditionsSource)
+									if (data == '') {
+										//隐藏确认检查项
+										$('#cofrimCheckListDiv').hide()
+										$('#cofrimCheckListBtnDiv').hide()
+									} else {
+										//显示确认检查项
+										$('#cofrimCheckListDiv').show()
+										$('#cofrimCheckListBtnDiv').show()
+									}
 									$('#checkConditionsModal ').modal('show')
 								});
+							http.post(config.api.targetCheckListConfrim, {
+									data: {
+										oid: row.oid
+									},
+									contentType: 'form'
+								},
+								function(obj) {
+									var data = obj.rows;
+									$('#checkListConfrimTable').bootstrapTable('load', data)
+								});
+
 						},
 						'click .item-edit': function(e, value, row) {
 							http.post(config.api.targetDetQuery, {
@@ -439,7 +459,7 @@ define([
 
 			//新建标的按钮点击事件
 			$('#addTargetSubmit').on('click', function() {
-				if(Date.parse($('#createCollectStartDate').val()) > Date.parse($('#createCollectEndDate').val())){
+				if (Date.parse($('#createCollectStartDate').val()) > Date.parse($('#createCollectEndDate').val())) {
 					alert('募集起始日不能大于募集截止日');
 					return
 				}
@@ -448,7 +468,7 @@ define([
 
 			//修改标的按钮点击事件
 			$('#editTargetSubmit').on('click', function() {
-				if(Date.parse($('#editCollectStartDate').val()) > Date.parse($('#editCollectEndDate').val())){
+				if (Date.parse($('#editCollectStartDate').val()) > Date.parse($('#editCollectEndDate').val())) {
 					alert('募集起始日不能大于募集截止日');
 					return
 				}
@@ -518,7 +538,24 @@ define([
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
 			})
-
+			//已确认检查项表格配置
+			var confrimCheckListConfig = {
+				data: '',
+				columns: [{
+					field: 'text',
+					align: 'center'
+				}, {
+					field: 'remark',
+					align: 'center'
+				}, {
+					field: 'time',
+					align: 'center'
+				}, {
+					field: 'checker',
+					align: 'center'
+				}]
+			}
+			$('#checkListConfrimTable').bootstrapTable(confrimCheckListConfig)
 			var checkConditionsSource;
 			// 临时存储已选数量
 			var checkConditionsCount = 0
@@ -529,6 +566,7 @@ define([
 					data: checkConditionsSource,
 					columns: [{
 						checkbox: true
+
 					}, {
 						field: 'text'
 					}, {
