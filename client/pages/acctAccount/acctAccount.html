@@ -1,0 +1,304 @@
+<!-- 页面头部 -->
+<section class="content-header">
+  <h1>
+    科目设置
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 会计分录</a></li>
+    <li class="active">科目设置</li>
+  </ol>
+</section>
+
+<!-- 主要内容 -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- 主体Grid -->
+      <div class="box box-primary">
+        <!-- Grid头部 -->
+        <div class="box-header">
+          <h3 class="box-title">标题</h3>
+
+          <div class="box-tools">
+            <button id="assetPoolAdd" class="btn btn-default btn-sm">
+              <i class="fa fa-plus"></i> 新增资产池
+            </button>
+          </div>
+        </div>
+        <!-- Grid内容体 -->
+        <div class="box-body">
+          <!-- 主体数据表格 -->
+          <table id="assetPoolTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>资产池名称</th>
+              <th>规模（万）</th>
+              <th>现金比例（%）</th>
+              <th>现金管理比例（%）</th>
+              <th>信托计划比例（%）</th>
+              <th>可用现金（万）</th>
+              <th>冻结资金（万）</th>
+              <th>在途资金（万）</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 新增资产池弹窗 -->
+<div id="addAssetPoolModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">新增资产池</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 新增表单 -->
+        <form id="addAssetPoolForm" name="addAssetPoolForm" method="post">
+          <div class="form-group">
+            <label>资产池名称</label>
+            <input name="name" type="text"
+                   class="form-control input-sm"
+                   placeholder="请输入资产池名称"
+                   data-minlength="2"
+                   maxlength="50"
+                   data-error="资产池名称必须在2-50个字符以内" required>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>资产池规模</label>
+            <input name="scale" type="text"
+                   class="form-control input-sm"
+                   placeholder="请输入资产池规模"
+                   data-validint="0-100000000" required>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="help-block with-errors text-red"></div>
+          <div class="form-group">
+            <label>投资范围</label>
+            <select name="scopes" class="form-control input-sm origin-select"
+                    multiple="multiple"
+                    style="width: 100%;"
+                    data-enum-fetch="TARGETTYPE"
+                    required></select>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>现金比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="cashRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入现金比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>现金管理类工具比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="cashtoolRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入现金管理类工具比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>信托计划比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="targetRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入信托计划比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doAddAssetPool" type="button" class="btn btn-primary addAssetPoolSubmit">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 编辑资产池弹窗 -->
+<div id="updateAssetPoolModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">新增资产池</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="updateAssetPoolForm" name="updateAssetPoolForm" method="post">
+          <div class="form-group">
+            <label>资产池名称</label>
+            <input name="name" type="text"
+                   class="form-control input-sm"
+                   placeholder="请输入资产池名称"
+                   data-minlength="2"
+                   maxlength="50"
+                   data-error="资产池名称必须在2-50个字符以内" required>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>资产池规模</label>
+            <input name="scale" type="text"
+                   class="form-control input-sm"
+                   placeholder="请输入资产池规模"
+                   data-validint="0-100000000" required>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="help-block with-errors text-red"></div>
+          <div class="form-group">
+            <label>投资范围</label>
+            <select name="scopes" class="form-control input-sm origin-select"
+                    multiple="multiple"
+                    style="width: 100%;"
+                    data-enum-fetch="TARGETTYPE"
+                    required></select>
+
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>现金比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="cashRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入现金比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>现金管理类工具比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="cashtoolRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入现金管理类工具比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+          <div class="form-group">
+            <label>信托计划比例</label>
+
+            <div class="input-group input-group-sm">
+              <input name="targetRate" type="text"
+                     class="form-control input-sm"
+                     placeholder="请输入信托计划比例"
+                     data-validfloat="3.4"
+                     data-validpercentage="true" required>
+              <span class="input-group-addon">%</span>
+            </div>
+            <div class="help-block with-errors text-red"></div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doUpdateAssetPool" type="button" class="btn btn-primary updateAssetPoolSubmit">确 定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 资产池审核弹窗 -->
+<div id="auditAssetPoolModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">审核资产池</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>资产池名称:</dt>
+          <dd>
+            <div data-detail-fetch="name"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>资产池规模:</dt>
+          <dd>
+            <div data-detail-fetch="scale"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>投资范围:</dt>
+          <dd>
+            <div data-detail-fetch="scopes"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>现金比例:</dt>
+          <dd>
+            <div data-detail-fetch="cashRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>现金管理类工具比例:</dt>
+          <dd>
+            <div data-detail-fetch="cashtoolRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>信托计划比例:</dt>
+          <dd>
+            <div data-detail-fetch="targetRate"></div>
+          </dd>
+        </dl>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doUnAuditAssetPool" type="button" class="btn btn-warning">不通过</button>
+        <button id="doAuditAssetPool" type="button" class="btn btn-primary">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
