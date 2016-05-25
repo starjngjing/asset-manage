@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,15 +193,16 @@ public class InvestmentPoolController extends BaseController {
 	
 	/**
 	 * 标的成立
-	 * 
-	 * @Title: establish
+	 * @Title: establish 
 	 * @author vania
-	 * @version 1.0 @see:
-	 * @return CommonResp 返回类型
+	 * @version 1.0
+	 * @see: 
+	 * @param form
+	 * @return ResponseEntity<BaseResp>    返回类型
 	 */
 	@RequestMapping("establish")
 	@ApiOperation(value = "标的成立")
-	public BaseResp establish(@Valid EstablishForm form) {
+	public @ResponseBody ResponseEntity<BaseResp> establish(@Valid EstablishForm form) {
 		log.debug("投资标的成立接口!!!");
 		String loginId = null; 
 		try {
@@ -210,7 +212,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.establish(form);
-		return new BaseResp();
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 	/**
@@ -223,17 +225,17 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("unEstablish")
 	@ApiOperation(value = "标的不成立")
-	public BaseResp unEstablish(@Valid UnEstablishForm form) {
+	public @ResponseBody ResponseEntity<BaseResp> unEstablish(@Valid UnEstablishForm form) {
 		log.debug("投资标的成立接口!!!");
-		String loginId = null; 
+		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
 		} catch (Exception e) {
-			
+
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.unEstablish(form);
-		return new BaseResp();
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 	/**
@@ -248,7 +250,7 @@ public class InvestmentPoolController extends BaseController {
 	 */
 	@RequestMapping("targetIncomeSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public BaseResp interestSave(@Valid TargetIncomeForm interestForm) {
+	public @ResponseBody ResponseEntity<BaseResp> interestSave(@Valid TargetIncomeForm interestForm) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
@@ -257,7 +259,7 @@ public class InvestmentPoolController extends BaseController {
 		}
 		interestForm.setOperator(loginId);
 		TargetIncome interest = targetIncomeService.save(interestForm);
-		return new BaseResp();
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 	/**
@@ -270,11 +272,11 @@ public class InvestmentPoolController extends BaseController {
 	 * @param days
 	 * @param rate
 	 * @param overdueFine
-	 * @return CommonResp 返回类型
+	 * @return ResponseEntity<BaseResp> 返回类型
 	 */
 	@RequestMapping("overdue")
 	@ApiOperation(value = "标的逾期")
-	public BaseResp overdue(@Valid TargetOverdueForm form) {
+	public @ResponseBody ResponseEntity<BaseResp> overdue(@Valid TargetOverdueForm form) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
@@ -283,19 +285,21 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.overdue(form);
-		return new BaseResp();
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 	/**
 	 * 查询正在募集期的标的列表
-	 * 
-	 * @Title: getRecruitment
+	 * @Title: getRecruitment 
 	 * @author vania
 	 * @version 1.0
-	 * @see:
+	 * @see: TODO
+	 * @return ResponseEntity<InvestmentListResp>    返回类型
 	 */
-	public void getRecruitment() {
-		// TODO
-		// 募集截止日<当前日期 && lifeState = PREPARE
+	@RequestMapping("getRecruitment")
+	@ApiOperation(value = "查询正在募集期的标的列表")
+	public @ResponseBody ResponseEntity<InvestmentListResp> getRecruitment() {	
+		List<Investment> list = this.investmentPoolService.getRecruitment(new Date(System.currentTimeMillis()));
+		return new ResponseEntity<InvestmentListResp>(new InvestmentListResp(list), HttpStatus.OK);
 	}
 }

@@ -1,7 +1,15 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +26,7 @@ import com.guohuai.asset.manage.boot.investment.InvestmentDao;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
+import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -182,5 +191,38 @@ public class InvestmentPoolService {
 		targetOverdueDao.save(to); // 添加逾期对象
 		investmentLogService.saveInvestmentLog(it, TargetEventType.overdue, form.getOperator()); // 保存标的操作日志
 		return it;
+	}
+	
+	/**
+	 * 查询指定募集截止日以前的所有投资标的
+	 * @Title: getRecruitment 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param collectEndDate   募集截止日
+	 * @return List<Investment>    返回类型
+	 */
+	public List<Investment> getRecruitment(final Date collectEndDate) {
+		if (null == collectEndDate)
+			throw AMPException.getException("投资标的ID不能为空"); // 默认为当前时间
+		// 募集截止日<当前日期 && lifeState = PREPARE
+		Specification<Investment> spec = new Specification<Investment>() {
+			
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {	
+				List<Predicate> predicate = new ArrayList<>();
+				
+				Expression<String> exp = root.get("lifeState").as(String.class); // 标的生命周期					
+				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE }));//lifeState = PREPARE
+				
+				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日
+				Predicate p = cb.lessThanOrEqualTo(expHa, collectEndDate); //募集截止日 <= 指定日期	
+				predicate.add(p);		
+				
+				Predicate[] pre = new Predicate[predicate.size()];
+				return query.where(predicate.toArray(pre)).getRestriction();
+			}
+		};
+		return investmentDao.findAll(spec);
 	}
 }
