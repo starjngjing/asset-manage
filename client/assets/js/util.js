@@ -142,7 +142,7 @@ define([
             $(item).iCheck('check')
           }
         })
-        form.find('origin-select').select2('val', '')
+        form.find('.origin-select').select2('val', '')
       },
       /**
        * 表单验证工具
