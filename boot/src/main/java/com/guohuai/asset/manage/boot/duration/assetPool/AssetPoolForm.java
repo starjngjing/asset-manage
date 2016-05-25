@@ -20,6 +20,8 @@ public class AssetPoolForm implements Serializable {
 	private String name;
 	// 资产规模
 	private BigDecimal scale;
+	// 投资范围
+	private String[] scopes;
 	// 现金比例
 	private BigDecimal cashRate;
 	// 货币基金（现金类管理工具）比例

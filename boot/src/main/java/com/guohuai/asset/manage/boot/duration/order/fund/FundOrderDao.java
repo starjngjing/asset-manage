@@ -10,9 +10,9 @@ public interface FundOrderDao extends JpaRepository<FundOrderEntity, String>, Jp
 
 	public FundOrderEntity findByOid(String oid);
 	
-	@Query("from FundOrderEntity a where a.cashToolEntity.oid = ?1 and a.state < 1")
+	@Query("from FundOrderEntity a where a.cashtoolOid = ?1 and a.state < 1")
 	public List<FundOrderEntity> findByPidForAppointment(String pid);
 	
-	@Query("from FundOrderEntity a where a.cashToolEntity.oid = ?1 and a.state = 1")
+	@Query("from FundOrderEntity a where a.cashtoolOid = ?1 and a.state = 1")
 	public List<FundOrderEntity> findByPidForConfirm(String pid);
 }

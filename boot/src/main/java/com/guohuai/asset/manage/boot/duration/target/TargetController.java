@@ -42,7 +42,7 @@ public class TargetController {
 	 */
 	@RequestMapping(value = "/getAssetPool", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getAssetPool(@RequestBody String pid) {
-		AssetPoolForm form = assetPoolService.getById(pid);
+		AssetPoolForm form = assetPoolService.getPoolByOid(pid);
 		Response r = new Response();
 		r.with("result", form);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

@@ -214,4 +214,17 @@ public class OrderController {
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+	
+	/**
+	 * 货币基金（现金管理工具）的持仓信息
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/getFundByOid", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getFundByOid(String oid) {
+		FundForm form = orderService.getFundByOid(oid);
+		Response r = new Response();
+		r.with("result", form);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 }
