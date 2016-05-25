@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,8 @@ import com.guohuai.asset.manage.boot.investment.manage.InvestmentCheckDetResp;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentCheckListConfirmForm;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
+import com.guohuai.operate.api.AdminSdk;
+import com.guohuai.operate.api.objs.admin.AdminObj;
 
 @Service
 @Transactional
@@ -31,6 +34,9 @@ public class InvestmentMeetingCheckService {
 
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private AdminSdk adminsSdk;
 
 	/**
 	 * 获得投资标的过会检查项列表
@@ -84,7 +90,12 @@ public class InvestmentMeetingCheckService {
 			lists = investmentMeetingCheckDao.findByInvestmentAndState(investment, state);
 		}
 		for (InvestmentMeetingCheck entity : lists) {
-			res.add(new InvestmentCheckDetResp(entity));
+			InvestmentCheckDetResp det = new InvestmentCheckDetResp(entity);
+			if(entity.getChecker() != null){
+				AdminObj admin = adminsSdk.getAdmin(entity.getChecker());
+				det.setChecker(admin.getName());
+			}
+			res.add(det);
 		}
 		return res;
 	}
@@ -105,7 +116,7 @@ public class InvestmentMeetingCheckService {
 				continue;
 			check.setState(InvestmentMeetingCheck.MEETINGCHEC_STATUS_check);
 			check.setCheckDesc(form.getRemark());
-			if (null != form.getFile()) {
+			if (!StringUtils.isEmpty(form.getFile())) {
 				String fkey = StringUtil.uuid();
 				List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
 				SaveFileForm fileform = new SaveFileForm();

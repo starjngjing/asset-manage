@@ -180,13 +180,28 @@ public class InvestmentManageBootController extends BaseController {
 	 * @param oid
 	 * @return
 	 */
-	@RequestMapping(value = "checkList", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListNotCheck(@RequestParam(required = true) String oid) {
+	@RequestMapping(value = "checkListNotConfrim", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListNotConfrim(
+			@RequestParam(required = true) String oid) {
 		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,
 				InvestmentMeetingCheck.MEETINGCHEC_STATUS_notcheck);
 		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
 	}
-	
+
+	/**
+	 * 根据标的oid获得已确认检查项列表
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "checkListConfrim", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListConfrim(
+			@RequestParam(required = true) String oid) {
+		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,
+				InvestmentMeetingCheck.MEETINGCHEC_STATUS_check);
+		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
+	}
+
 	/**
 	 * 根据标的oid获得所有检查项列表
 	 * 
@@ -194,11 +209,18 @@ public class InvestmentManageBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkListAll", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkListAll(@RequestParam(required = true) String oid) {
-		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,null);
+	public @ResponseBody ResponseEntity<InvestmentCheckListResp> checkList(@RequestParam(required = true) String oid) {
+		List<InvestmentCheckDetResp> checkList = investmentMeetingCheckService.getMeetingCheckListByInvestmentOid(oid,
+				null);
 		return new ResponseEntity<InvestmentCheckListResp>(new InvestmentCheckListResp(checkList), HttpStatus.OK);
 	}
 
+	/**
+	 * 过会检查项确认
+	 * 
+	 * @param checkConditions
+	 * @return
+	 */
 	@RequestMapping(value = "confirmCheckList", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> confirmCheckList(
 			@RequestParam(required = true) String checkConditions) {

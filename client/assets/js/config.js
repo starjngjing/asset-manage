@@ -86,7 +86,8 @@ define(function() {
 			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
 			targetNewMeeting: this.host + '/ams/target/targetMeeting/targetMeeting', //根据标的获取最新会议
 			targetCheckListAll : this.host + '/ams/target/targetManage/checkListAll', //标的全部检查项列表
-			targetCheckList: this.host + '/ams/target/targetManage/checkList',   //标的未确认检查项列表
+			targetCheckList: this.host + '/ams/target/targetManage/checkListNotConfrim',   //标的未确认检查项列表
+			targetCheckListConfrim: this.host + '/ams/target/targetManage/checkListConfrim',   //标的已确认检查项列表
 			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList',   //过会标的检查项确认
 		    channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
 			addChannel: this.host + '/ams/channel/add', //渠道-新增

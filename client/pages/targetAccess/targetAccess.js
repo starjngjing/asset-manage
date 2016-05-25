@@ -78,12 +78,7 @@ define([
 						field: 'expAror',
 						formatter: function(val, row) {
 							if (val)
-								if (val == row.expArorSec) {
-									return val.toFixed(2) + "%";
-								} else {
-									var maxAro = parseFloat(row.expArorSec);
-									return val.toFixed(2) + '-' + maxAro.toFixed(2) + "%";
-								}
+								return val.toFixed(2) + "%";
 						}
 					}, {
 						field: 'state',

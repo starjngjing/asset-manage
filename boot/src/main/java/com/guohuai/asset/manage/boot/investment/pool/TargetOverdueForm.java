@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,8 +49,10 @@ public class TargetOverdueForm implements Serializable {
 	@NotNull(message = "逾期天数不能为空")
 	private Integer overdueDays;
 	@NotNull(message = "逾期利率不能为空")
+	@Digits(integer = 4, fraction = 4, message = "逾期利率最大4位整数4位小数")
 	private BigDecimal overdueRate;
 //	@NotNull(message = "滞纳金不能为空")
+	@Digits(integer = 10, fraction = 4, message = "滞纳金最大10位整数4位小数")
 	private BigDecimal overdueFine;
 
 	// @NotNull(message = "投资标的收益截止日期不能为空")
@@ -57,6 +61,7 @@ public class TargetOverdueForm implements Serializable {
 	/**
 	 * 操作员
 	 */
+	@Size(max = 32, message = "操作人最大32个字符！")
 	private String operator;
 	private Timestamp createTime;
 }
