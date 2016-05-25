@@ -3,18 +3,16 @@ package com.guohuai.asset.manage.boot.duration.order;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
-import com.guohuai.asset.manage.boot.duration.order.fund.FundAuditDao;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundAuditEntity;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
-import com.guohuai.asset.manage.boot.duration.order.fund.FundOrderDao;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundOrderEntity;
-import com.guohuai.asset.manage.boot.duration.order.fund.FundRedeemDao;
-import com.guohuai.asset.manage.boot.duration.order.fund.FundRedeemEntity;
+import com.guohuai.asset.manage.boot.duration.order.fund.FundService;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustAuditDao;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustAuditEntity;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeDao;
@@ -47,17 +45,11 @@ public class OrderService {
 	private static final String REDEEM 		= "redeem";
 	private static final String INCOME 		= "income";
 	private static final String TRANSFER	= "transfer";
+	
+	private static final String APPLY 		= "apply";
 	private static final String AUDIT 		= "audit";
 	private static final String APPOINTMENT = "appointment";
 	private static final String CONFIRM 	= "confirm";
-	
-	@Autowired
-	private FundOrderDao fundOrderDao;
-	
-	@Autowired
-	private FundRedeemDao fundRedeemDao;
-	@Autowired
-	private FundAuditDao fundAuditDao;
 	
 	@Autowired
 	private TrustPurchaseDao targetPurchaseDao;
@@ -68,6 +60,8 @@ public class OrderService {
 	@Autowired
 	private TrustAuditDao targetAuditDao;
 	
+	@Autowired
+	private FundService fundService;
 	@Autowired
 	private CapitalService capitalService;
 
@@ -80,27 +74,29 @@ public class OrderService {
 		FundOrderEntity entity = new FundOrderEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setInvestDate(form.getInvestDate());
-		entity.setIncomeDate(form.getIncomeDate());
 		entity.setVolume(form.getVolume());
 		entity.setType("purchase");
 		entity.setAsker(uid);
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
 		
-		FundEntity cashTool = new FundEntity();
-		cashTool.setOid(StringUtil.uuid());
-		cashTool.setCashtoolOid(form.getAssetPoolCashtoolOid());
-		cashTool.setAssetPoolOid(form.getAssetPoolOid());
-		cashTool.setPurchaseVolume(form.getVolume());
-		cashTool.setFrozenCapital(form.getVolume());
+		fundService.save(entity);
+	
+		FundEntity cashTool = fundService.getFundByCashtoolOid(form.getAssetPoolCashtoolOid());
+		if (null == cashTool) {
+			cashTool = new FundEntity();
+			cashTool.setOid(StringUtil.uuid());
+			cashTool.setCashtoolOid(form.getAssetPoolCashtoolOid());
+			cashTool.setAssetPoolOid(form.getAssetPoolOid());
+		}
+		cashTool.setPurchaseVolume(cashTool.getPurchaseVolume().add(form.getVolume()));
+		cashTool.setFrozenCapital(cashTool.getFrozenCapital().add(form.getVolume()));
 		cashTool.setState(FundEntity.INVESTING);
 		
-		entity.setCashToolEntity(cashTool);
-		
-		fundOrderDao.save(entity);
+		fundService.save(cashTool);
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
-				entity.getOid(), FUND, form.getVolume(), BigDecimal.ZERO, PURCHASE, uid);
+				entity.getOid(), FUND, form.getVolume(), BigDecimal.ZERO, PURCHASE, APPLY, uid);
 	}
 	
 	/**
@@ -112,28 +108,26 @@ public class OrderService {
 		FundOrderEntity entity = new FundOrderEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setRedeemDate(form.getRedeemDate());
-		entity.setBackDate(form.getBackDate());
-		entity.setEndYield(form.getEndYield());
-		entity.setReturnAmount(form.getReturnAmount());
+		entity.setReturnVolume(form.getReturnVolume());
 		entity.setType("redeem");
 		entity.setAllFlag(form.getAllFlag());
 		entity.setAsker(uid);
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
 		
-		FundEntity cashTool = new FundEntity();
-		cashTool.setOid(StringUtil.uuid());
-		cashTool.setCashtoolOid(form.getAssetPoolCashtoolOid());
-		cashTool.setAssetPoolOid(form.getAssetPoolOid());
-		cashTool.setRedeemVolume(form.getVolume());
-		cashTool.setState(FundEntity.INVESTING);
+		fundService.save(entity);
 		
-		entity.setCashToolEntity(cashTool);
+		FundEntity cashTool = fundService.getFundByCashtoolOid(form.getAssetPoolCashtoolOid());
+		cashTool.setAmount(cashTool.getAmount().subtract(form.getVolume()));
+		cashTool.setRedeemVolume(cashTool.getRedeemVolume().add(form.getVolume()));
+		cashTool.setOnWayCapital(cashTool.getOnWayCapital().add(form.getVolume()));
+		if ("yes".equals(form.getAllFlag()))
+			cashTool.setState(FundEntity.INVESTEND);
 		
-		fundOrderDao.save(entity);
+		fundService.save(cashTool);
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
-				entity.getOid(), FUND, form.getVolume(), BigDecimal.ZERO, REDEEM, uid);
+				entity.getOid(), FUND, form.getVolume(), BigDecimal.ZERO, REDEEM, APPLY, uid);
 	}
 	
 	/**
@@ -144,14 +138,15 @@ public class OrderService {
 	 */
 	public void auditForFund(FundForm form, String uid) {
 		// 录入申购订单的审核信息
-		FundOrderEntity order = this.getFundOrderByOid(form.getOid());
+		FundOrderEntity order = fundService.getFundOrderByOid(form.getOid());
 		order.setAuditVolume(form.getVolume());
 		order.setState(form.getState());
 		order.setAuditor(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
-		fundOrderDao.save(order);
+		fundService.save(order);
 		
+		// 审核记录
 		FundAuditEntity entity = new FundAuditEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setOrderOid(form.getOid());
@@ -163,17 +158,16 @@ public class OrderService {
 		entity.setAuditor(uid);
 		entity.setAuditTime(DateUtil.getSqlCurrentDate());
 		
-		fundAuditDao.save(entity);
+		fundService.save(entity);
 		
 		// 资金变动记录
-		String operation = "申购" + FUND;
-		BigDecimal capital = order.getVolume();
 		if ("redeem".equals(order.getType())) {
-			operation = "赎回" + FUND;
-			capital = order.getReturnAmount();
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getReturnVolume(), REDEEM, AUDIT, uid);
+		} else {
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getVolume(), PURCHASE, AUDIT, uid);
 		}
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
-				entity.getOid(), operation, form.getVolume(), capital, AUDIT, uid);
 	}
 	
 	/**
@@ -184,19 +178,13 @@ public class OrderService {
 	 */
 	public void appointmentForFund(FundForm form, String uid) {
 		// 录入申购订单的资金预约信息
-		FundOrderEntity order = this.getFundOrderByOid(form.getOid());
+		FundOrderEntity order = fundService.getFundOrderByOid(form.getOid());
 		order.setReserveVolume(form.getVolume());
 		order.setState(form.getState());
 		order.setReserver(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
-		// 在途资金
-		if (FundOrderEntity.STATE_SUCCESS.equals(form.getState())) {
-			if ("redeem".equals(order.getType()))
-				order.getCashToolEntity().setOnWayCapital(form.getVolume());
-		}
-		
-		fundOrderDao.save(order);
+		fundService.save(order);
 
 		FundAuditEntity entity = new FundAuditEntity();
 		entity.setOid(StringUtil.uuid());
@@ -209,15 +197,16 @@ public class OrderService {
 		entity.setAuditor(uid);
 		entity.setAuditTime(DateUtil.getSqlCurrentDate());
 		
-		fundAuditDao.save(entity);
+		fundService.save(entity);
 		
 		// 资金变动记录
-		String operation = "申购" + FUND;
 		if ("redeem".equals(order.getType())) {
-			operation = "赎回" + FUND;
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getReturnVolume(), REDEEM, APPOINTMENT, uid);
+		} else {
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getVolume(), PURCHASE, APPOINTMENT, uid);
 		}
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
-				entity.getOid(), operation, form.getVolume(), order.getAuditVolume(), APPOINTMENT, uid);
 	}
 	
 	/**
@@ -228,22 +217,13 @@ public class OrderService {
 	 */
 	public void orderConfirmForFund(FundForm form, String uid) {
 		// 录入申购订单的确认信息
-		FundOrderEntity order = this.getFundOrderByOid(form.getOid());
+		FundOrderEntity order = fundService.getFundOrderByOid(form.getOid());
 		order.setInvestVolume(form.getVolume());
 		order.setState(form.getState());
 		order.setConfirmer(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
-		if (FundOrderEntity.STATE_SUCCESS.equals(form.getState())) {
-			if ("purchase".equals(order.getType())) {
-				order.getCashToolEntity().setAmount(form.getVolume());
-				order.getCashToolEntity().setFrozenCapital(BigDecimal.ZERO);
-			} else {
-				
-			}
-		}
-		
-		fundOrderDao.save(order);
+		fundService.save(order);
 
 		FundAuditEntity entity = new FundAuditEntity();
 		entity.setOid(StringUtil.uuid());
@@ -256,15 +236,16 @@ public class OrderService {
 		entity.setAuditor(uid);
 		entity.setAuditTime(DateUtil.getSqlCurrentDate());
 		
-		fundAuditDao.save(entity);
+		fundService.save(entity);
 		
 		// 资金变动记录
-		String operation = "申购" + FUND;
 		if ("redeem".equals(order.getType())) {
-			operation = "赎回" + FUND;
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getReturnVolume(), REDEEM, CONFIRM, uid);
+		} else {
+			capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
+					entity.getOid(), FUND, form.getVolume(), order.getVolume(), PURCHASE, CONFIRM, uid);
 		}
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getAssetPoolCashtoolOid(), 
-				entity.getOid(), operation, form.getVolume(), order.getReserveVolume(), CONFIRM, uid);
 	}
 	
 	/**
@@ -289,7 +270,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), TRUST, form.getVolume(), BigDecimal.ZERO, PURCHASE, uid);
+				entity.getOid(), TRUST, form.getVolume(), BigDecimal.ZERO, PURCHASE, APPLY, uid);
 	}
 	
 	/**
@@ -319,7 +300,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), TRUST, form.getVolume(), order.getApplyVolume(), AUDIT, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getApplyVolume(), PURCHASE, AUDIT, uid);
 	}
 	
 	/**
@@ -349,7 +330,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), TRUST, form.getVolume(), order.getAuditVolume(), APPOINTMENT, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getApplyVolume(), PURCHASE, APPOINTMENT, uid);
 	}
 	
 	/**
@@ -379,9 +360,9 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), TRUST, form.getVolume(), order.getReserveVolume(), CONFIRM, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getApplyVolume(), PURCHASE, CONFIRM, uid);
 	}
-/******************************************************/	
+	
 	/**
 	 * 信托（计划）本息兑付订单
 	 * @param form
@@ -406,7 +387,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), TRUST, form.getVolume(), BigDecimal.ZERO, INCOME, uid);
+				entity.getOid(), TRUST, form.getVolume(), BigDecimal.ZERO, INCOME, APPLY, uid);
 	}
 	
 	/**
@@ -436,7 +417,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), "本息兑付", form.getVolume(), order.getIncome(), AUDIT, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getIncome(), INCOME, AUDIT, uid);
 	}
 	
 	/**
@@ -466,7 +447,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), "本息兑付", form.getVolume(), order.getAuditIncome(), CONFIRM, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getAuditIncome(), INCOME, CONFIRM, uid);
 	}
 	
 	/**
@@ -488,7 +469,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), "转让", form.getTranVolume(), BigDecimal.ZERO, TRANSFER, uid);
+				entity.getOid(), TRUST, form.getVolume(), BigDecimal.ZERO, TRANSFER, APPLY, uid);
 	}
 	
 	/**
@@ -518,7 +499,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), "转让", form.getTranVolume(), order.getTranVolume(), AUDIT, uid);
+				entity.getOid(), TRUST, form.getVolume(), order.getTranVolume(), TRANSFER, AUDIT, uid);
 	}
 	
 	/**
@@ -548,29 +529,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
-				entity.getOid(), "转让", form.getTranVolume(), order.getAuditVolume(), CONFIRM, uid);
-	}
-	
-	/**
-	 * 根据订单oid获取 申购 的信托（计划）订单
-	 * @param oid
-	 * @return
-	 */
-	public FundOrderEntity getFundOrderByOid(String oid) {
-		FundOrderEntity entity = fundOrderDao.findByOid(oid);
-		
-		return entity;
-	}
-	
-	/**
-	 * 根据订单oid获取 申购 的信托（计划）订单
-	 * @param oid
-	 * @return
-	 */
-	public FundRedeemEntity getFundRedeemOrderByOid(String oid) {
-		FundRedeemEntity entity = fundRedeemDao.findByOid(oid);
-		
-		return entity;
+				entity.getOid(), TRUST, form.getVolume(), order.getTranVolume(), TRANSFER, CONFIRM, uid);
 	}
 	
 	/**
@@ -607,6 +566,25 @@ public class OrderService {
 	}
 	
 	/**
+	 * 获取现金管理类工具的持仓信息
+	 * @param oid
+	 * @return
+	 */
+	public FundForm getFundByOid(String oid) {
+		FundForm form = new FundForm();
+		FundEntity entity = fundService.getFundByOid(oid);
+		if (null != entity) {
+			try {
+				BeanUtils.copyProperties(form, entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return form;
+	}
+	
+	/**
 	 * 根据资产池id获取 预约中 的信托（计划）列表
 	 * @param pid
 	 * 			资产池id
@@ -616,7 +594,7 @@ public class OrderService {
 		List<FundForm> list = Lists.newArrayList();
 		
 		List<FundOrderEntity> entityList = Lists.newArrayList();
-		entityList = fundOrderDao.findByPidForAppointment(pid);
+		entityList = fundService.findByPidForAppointment(pid);
 		if (!entityList.isEmpty()) {
 			FundForm form = null;
 			for (FundOrderEntity entity : entityList) {

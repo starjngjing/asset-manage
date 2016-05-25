@@ -41,6 +41,9 @@ public class TargetService {
 			form.setType(entity.getEtfLof());
 			form.setYearYield7(entity.getWeeklyYield());
 			form.setNetRevenue(entity.getDailyProfit());
+			form.setRiskLevel(entity.getRiskLevel());
+			form.setDividendType(entity.getDividendType());
+			form.setCirculationShares(entity.getCirculationShares());
 		}
 		
 		return form;
