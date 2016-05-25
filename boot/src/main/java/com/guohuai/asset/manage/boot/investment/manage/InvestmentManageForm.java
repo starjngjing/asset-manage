@@ -186,6 +186,10 @@ public class InvestmentManageForm implements Serializable {
 	 */
 	private String operator;
 	/**
+	 * 风险配置
+	 */
+	private String riskOption;
+	/**
 	 * 创建时间
 	 */
 	private Timestamp createTime;

@@ -536,6 +536,159 @@ define([
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				});
 			})
+			
+			// 标的风险采集
+			$('#eventCollect').on('click', function() {
+				// TODO 这里要调下, 标的模块要设置标的的oid
+				//var relative = "xxxxxxxxxxxxxxxx";
+				var relative = "55555555";
+				// TODO 这里要设置数据采集类型
+				var type = "SCORE";
+				http.post(config.api.system.config.ccr.options.preCollect, {
+						data: {
+							type: 'SCORE'
+						},
+						contentType: 'form'
+					},
+					function(val) {
+
+						http.post(config.api.system.config.ccr.indicate.collect.preUpdate, {
+								data: {
+									relative: relative
+								},
+								contentType: 'form'
+							},
+							function(predata) {
+
+								var initdata = {
+
+								};
+
+								if (predata && predata.length > 0) {
+									$.each(predata, function(i, item) {
+										initdata[item.indicateOid] = item;
+									});
+								};
+
+
+								$(document.collectForm.relative).val(relative);
+
+								$(document.collectForm.type).val(type);
+
+								$('#collectModalContent').empty();
+
+								if (val && val.length > 0) {
+
+									var content = $('#collectModalContent');
+
+									$.each(val, function(i, collect) {
+										$('<h6><b>' + collect.cateTitle + '</b></h6>').appendTo(content);
+
+										$.each(collect.indicates, function(j, indicate) {
+											var form = $('<form></form>');
+											form.appendTo(content);
+
+											var indicateOid = $('<input type="hidden" name="indicateOid" value="' + indicate.indicateOid + '" />');
+											indicateOid.appendTo(form);
+
+											var row = $('<div class="row"></div>');
+											row.appendTo(form);
+											var col = $('<div class="col-sm-12 col-xs-6"></div>');
+											col.appendTo(row);
+											var formGroup = $('<div class="form-group"></div>');
+											formGroup.appendTo(col);
+											var inputGroup = $('<div class="input-group input-group-sm"></div>');
+											inputGroup.appendTo(formGroup);
+
+											var inputTitle = $('<div class="input-group-addon">' + indicate.indicateTitle + '</div>');
+											inputTitle.appendTo(inputGroup);
+
+											if (indicate.indicateType == 'NUMBER') {
+												var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
+												inputOcx.appendTo(inputGroup);
+												$.each(indicate.options, function(k, option) {
+													var check = false;
+													if (initdata[indicate.indicateOid] && initdata[indicate.indicateOid].collectOption == option.oid) {
+														check = true;
+													}
+													if (!initdata[indicate.indicateOid] && option.dft == 'YES') {
+														check = true;
+													}
+													var inputOption = $('<option value="' + option.oid + '" ' + (check ? 'selected' : '') + '>' + option.title + '</option>');
+													inputOption.appendTo(inputOcx);
+												});
+											}
+
+											if (indicate.indicateType == 'NUMRANGE') {
+												var inputOcx = $('<input name="collectData" type="text" value="' + (initdata[indicate.indicateOid] ? initdata[indicate.indicateOid].collectData : '') + '" class="form-control">');
+												inputOcx.appendTo(inputGroup);
+											}
+
+											if (indicate.indicateType == 'TEXT') {
+												var inputOcx = $('<select name="options" class="form-control input-sm"></select>');
+												inputOcx.appendTo(inputGroup);
+												$.each(indicate.options, function(k, option) {
+													var check = false;
+													if (initdata[indicate.indicateOid] && initdata[indicate.indicateOid].collectOption == option.oid) {
+														check = true;
+													}
+													if (!initdata[indicate.indicateOid] && option.dft == 'YES') {
+														check = true;
+													}
+													var inputOption = $('<option value="' + option.oid + '" ' + (check ? 'selected' : '') + '>' + option.title + '</option>');
+													inputOption.appendTo(inputOcx);
+												});
+											}
+
+											if (indicate.indicateUnit && indicate.indicateUnit != '') {
+												var inputSuffix = $('<span class="input-group-addon">' + indicate.indicateUnit + '</span>');
+												inputSuffix.appendTo(inputGroup);
+											}
+
+										});
+
+									});
+								}
+
+								$('#collectModal').modal('show');
+
+							});
+
+					});
+			});
+			
+			$('#collectButton').on('click', function() {
+
+				var data = {
+					relative: document.collectForm.relative.value,
+					type: document.collectForm.type.value,
+					datas: []
+				}
+
+				$('#collectModalContent').find('form').each(function(x, form) {
+					var config = {};
+					$.each($(form).serializeArray(), function(i, v) {
+						config[v.name] = v.value.trim();
+					});
+					data.datas.push(config);
+				});
+
+				// TODO 这个 data 对象是采集页面录入的数据, 可以根据具体业务场景使用
+				console.log(data);
+				$(document.addTargetForm.riskOption).val(JSON.stringify(data));
+				/*
+				http.post(config.api.system.config.ccr.indicate.collect.save, {
+					data: JSON.stringify(data)
+				}, function(rlt) {
+					$('#collectForm').resetForm();
+					$('#collectModalContent').empty();
+
+					$('#collectModal').modal('hide');
+				});
+				*/
+			});
+			
+			
 				//标的详情过会表决表配置
 			var voteTableConfig = {
 					data: '',

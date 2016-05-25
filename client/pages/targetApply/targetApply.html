@@ -296,8 +296,9 @@
 							<div class="form-group">
 								<label>&nbsp;</label>
 								<div>
-									<button id="riskOptions" type="button" class="btn btn-default btn-sm">风险指标配置</button>
+									<button id="eventCollect" type="button" class="btn btn-default btn-sm">风险指标配置</button>
 								</div>
+								<input type="hidden" id="riskOption" name="riskOption" />
 							</div>
 						</div>
 					</div>
@@ -1956,6 +1957,35 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
 				<button id="doAddFileAndRemark" type="button" class="btn btn-primary btn-sm">确 定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 投资标的信用等级信息采集  -->
+<div id="collectModal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">信用指标采集</h4>
+			</div>
+			<form id="collectForm" name="collectForm">
+				<input name="relative" type="hidden" />
+				<input name="type" type="hidden" />
+			</form>
+			<!-- 模态窗内容体 -->
+			<div id="collectModalContent" class="modal-body">
+
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="collectButton" type="button" class="btn btn-primary btn-submit">保 存</button>
 			</div>
 		</div>
 	</div>

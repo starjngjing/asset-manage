@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
@@ -30,6 +32,7 @@ import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectForm;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 
@@ -107,9 +110,9 @@ public class InvestmentManageBootController extends BaseController {
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid InvestmentManageForm form) {
 		String operator = super.getLoginAdmin();
-		Investment investment = investmentService.createInvestment(form);
-		investment.setState(Investment.INVESTMENT_STATUS_waitPretrial);
-		investment = investmentService.saveInvestment(investment, operator);
+		form.setOperator(operator);
+		Investment investment = investmentService.saveInvestment(form);
+		
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.create, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
