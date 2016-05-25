@@ -177,6 +177,26 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result;
+									
+									switch (data.typeOid) {
+										case 'PRODUCTTYPE_01':
+											$('#detailProductType01Area').show()
+											$('#detailProductType02Area').hide()
+											break
+										case 'PRODUCTTYPE_02':
+											$('#detailProductType02Area').show()
+											$('#detailProductType01Area').hide()
+											break
+									}
+									
+									var productDetailFiles = []
+									if(data.files!=null && data.files.length>0) {
+										for(var i=0;i<data.files.length;i++){
+											productDetailFiles.push(data.files[i])
+										}
+									}
+									$('#productDetailFileTable').bootstrapTable('load', productDetailFiles)
+									
 									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
 								} else {
@@ -234,6 +254,41 @@ define([
     	$('#productAuditTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productAuditTable'))
+    	
+    	// 详情附件表格配置
+    	var productDetailFileTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					field: 'operator',
+				},
+				{
+					field: 'createTime',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.furl
+						}
+					}
+				}
+			]
+		}
+    	// 详情附件表格初始化
+		$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
+    	
     	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
