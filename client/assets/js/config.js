@@ -224,6 +224,36 @@ define(function() {
 			children: []
 		}],
 		/**
+		 * 标的生命周期
+		 */
+		targetLifeStates: [
+			{
+				id: "PREPARE",
+				text: "准备期",
+				children: []
+			},
+			{
+				id: "STAND_UP",
+				text: "已成立",
+				children: []
+			},
+			{
+				id: "STAND_FAIL",
+				text: "成立失败",
+				children: []
+			},
+			{
+				id: "CLOSE",
+				text: "已结束",
+				children: []
+			},
+			{
+				id: "OVER_TIME",
+				text: "已逾期",
+				children: []
+			},
+		],
+		/**
 		 * conventionStates 过会状态
 		 */
 		conventionStates: [

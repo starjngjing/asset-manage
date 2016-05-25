@@ -126,7 +126,7 @@ public class InvestmentPoolService {
 		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
-		it.setState(Investment.INVESTMENT_STATUS_establish); // 重置为成立
+		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP); // 重置为成立
 
 		this.investmentDao.save(it);
 		investmentLogService.saveInvestmentLog(it, TargetEventType.establish, form.getOperator()); // 保存标的操作日志
@@ -148,7 +148,7 @@ public class InvestmentPoolService {
 		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
-		it.setState(Investment.INVESTMENT_STATUS_unEstablish); // 重置为成立
+		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_FAIL); // 重置为成立失败
 
 		this.investmentDao.save(it);
 		investmentLogService.saveInvestmentLog(it, TargetEventType.unEstablish, form.getOperator()); // 保存标的操作日志
@@ -171,7 +171,7 @@ public class InvestmentPoolService {
 		Investment it = investmentService.getInvestment(oid);
 
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
-		it.setState(Investment.INVESTMENT_STATUS_overdue); // 重置为逾期
+		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_OVER_TIME); // 重置为逾期
 		
 		TargetOverdue to = new TargetOverdue();
 		BeanUtils.copyProperties(form, to);
