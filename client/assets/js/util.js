@@ -131,6 +131,20 @@ define([
      */
     form: {
       /**
+       * 重置表单
+       * @param form 表单 jquery对象
+       */
+      reset: function (form) {
+        form.resetForm()
+        form.find('select').change()
+        form.find('.icheck').each(function (index, item) {
+          if (item.checked) {
+            $(item).iCheck('check')
+          }
+        })
+        form.find('origin-select').select2('val', '')
+      },
+      /**
        * 表单验证工具
        */
       validator: {
