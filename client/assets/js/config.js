@@ -31,8 +31,6 @@ define(function() {
 			projectDetail: this.host + "/ams/boot/project/getByOid", // 查询底层项目详情
 			targetProjectDelete: this.host + "/ams/boot/project/deleteProject", // 删除投资标的下的底层项目
 			saveProject: this.host + "/ams/boot/project/save", //保存底层项目
-			targetCheckList: this.host + '/ams/target/targetManage/checkList',   //过会标的检查项列表
-			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList',   //过会标的检查项确认
 			targetListQuery: this.host + '/ams/target/targetManage/list', //标的列表查询
 			targetDetQuery: this.host + '/ams/target/targetManage/detail', //标的详情查询
 			targetAdd: this.host + '/ams/target/targetManage/add', //新建标的
@@ -87,6 +85,9 @@ define(function() {
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
 			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
 			targetNewMeeting: this.host + '/ams/target/targetMeeting/targetMeeting', //根据标的获取最新会议
+			targetCheckListAll : this.host + '/ams/target/targetManage/checkListAll', //标的全部检查项列表
+			targetCheckList: this.host + '/ams/target/targetManage/checkList',   //标的未确认检查项列表
+			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList',   //过会标的检查项确认
 		    channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
 			addChannel: this.host + '/ams/channel/add', //渠道-新增
 			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
