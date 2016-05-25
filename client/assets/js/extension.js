@@ -94,8 +94,7 @@ define([
       }
 
       function generateBody (fromList, toList, fromArr, toArr, sign) {
-        var bodyHeight = (fromArr.length + toArr.length) * 39 + 18
-        var body = $('<div class="box-body" style="height: ' + bodyHeight + 'px"></div>')
+        var body = $('<div class="box-body" style="height: 300px; overflow-y: auto;"></div>')
         var ul = $('<ul class="todo-list"></ul>')
         fromArr.forEach(function (item, index) {
           ul.append(generateCell(fromList, toList, fromArr, toArr, field, formatter, item, index, sign))
