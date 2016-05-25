@@ -134,7 +134,7 @@ define([
         custom: {
           validfloat: util.form.validator.validfloat,
           validint: util.form.validator.validint,
-          validpercentage:validpercentage
+          validpercentage: validpercentage
         },
         errors: {
           validfloat: '数据格式不正确',
@@ -162,8 +162,9 @@ define([
         pageOptions.page = parseInt(val.offset / val.limit) + 1
         return val
       }
+
       // 自定义验证 - 现金比例/现金管理类工具比例/信托计划比例 加起来不能超过100
-      function validpercentage ($el) {
+      function validpercentage($el) {
         var form = $el.closest('form')
         var parts = form.find('input[data-validpercentage]')
         var percentage = 0
