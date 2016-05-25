@@ -205,39 +205,7 @@ define([
 											productDetailFiles.push(data.files[i])
 										}
 									}
-									var productDetailFileTableConfig = {
-										data:productDetailFiles,
-										columns: [
-											{
-												field: 'name',
-											},
-											{
-												field: 'operator',
-											},
-											{
-												field: 'createTime',
-											},
-											{
-												width: 100,
-												align: 'center',
-												formatter: function() {
-													var buttons = [{
-														text: '下载',
-														type: 'button',
-														class: 'item-download'
-													}]
-													return util.table.formatter.generateButton(buttons)
-												},
-												events: {
-													'click .item-download': function(e, value, row) {
-														location.href = 'http://api.guohuaigroup.com' + row.furl
-													}
-												}
-											}
-										]
-									}
-			
-									$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
+									$('#productDetailFileTable').bootstrapTable('load', productDetailFiles)
 									
 									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
@@ -290,17 +258,6 @@ define([
 										$('#updateProductType01Area').hide()
 									}
 									
-//									switch (data.typeOid) {
-//										case 'PRODUCTTYPE_01':
-//											$('#updateProductType01Area').show()
-//											$('#updateProductType02Area').hide()
-//											break
-//										case 'PRODUCTTYPE_02':
-//											$('#updateProductType02Area').show()
-//											$('#updateProductType01Area').hide()
-//											break
-//									}
-
 									http.post(config.api.duration.assetPool.getAll, function (result) {
 										var select = document.updateProductForm.assetPoolOid
 										$(select).empty()
@@ -309,6 +266,14 @@ define([
 										})
 										select.value = data.assetPoolOid
 									})
+									
+									var updateProductFiles = []
+									if(data.files!=null && data.files.length>0) {
+										for(var i=0;i<data.files.length;i++){
+											updateProductFiles.push(data.files[i])
+										}
+									}
+									$('#updateProductUploadTable').bootstrapTable('load', updateProductFiles)
 									
 									$('#updateProductModal').modal('show');
 								} else {
@@ -465,9 +430,40 @@ define([
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
     	util.form.validator.init($('#addProductForm'))
     	util.form.validator.init($('#updateProductForm'))
-
-
-
+    	
+    	// 详情附件表格配置
+    	var productDetailFileTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					field: 'operator',
+				},
+				{
+					field: 'createTime',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.furl
+						}
+					}
+				}
+			]
+		}
+    	// 详情附件表格初始化
+		$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
 
 		// 产品类型下拉菜单关联区域显隐
 		// input disabled 设置为 disabled的时候将不做验证
@@ -627,6 +623,7 @@ define([
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.savePeriodic,
       			success: function (addResult) {
+      				util.form.reset($('#addProductForm'))
         			$('#addProductModal').modal('hide')
         			$('#productDesignTable').bootstrapTable('refresh')
       			}
@@ -635,6 +632,7 @@ define([
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.saveCurrent,
       			success: function (addResult) {
+      				util.form.reset($('#addProductForm'))
         			$('#addProductModal').modal('hide')
         			$('#productDesignTable').bootstrapTable('refresh')
       			}
@@ -642,51 +640,51 @@ define([
     		}
   		})
 
-			// 编辑产品上传附件表格数据源
-			var updateProductUploadFiles = []
-			// 编辑产品初始化上传附件插件，在success里将上传成功附件插入到表格中
-			$$.uploader({
-				container: $('#updateProductUploader'),
-				success: function(file) {
-					file.furl = file.url
-					updateProductUploadFiles.push(file)
-					$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
-				}
-			})
-			// 编辑产品附件表格配置
-			var updateProductUploadTableConfig = {
-				columns: [{
-					field: 'name',
-				}, {
-					width: 100,
-					align: 'center',
-					formatter: function() {
-						var buttons = [{
-							text: '下载',
-							type: 'button',
-							class: 'item-download'
-						}, {
-							text: '删除',
-							type: 'button',
-							class: 'item-delete'
-						}]
-						return util.table.formatter.generateButton(buttons)
-					},
-					events: {
-						'click .item-download': function(e, value, row) {
-							location.href = 'http://api.guohuaigroup.com' + row.url
-						},
-						'click .item-delete': function(e, value, row) {
-							var index = updateProductUploadFiles.indexOf(row)
-							updateProductUploadFiles.splice(index, 1)
-							$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
-						}
-					}
-				}]
+		// 编辑产品上传附件表格数据源
+		var updateProductUploadFiles = []
+		// 编辑产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+		$$.uploader({
+			container: $('#updateProductUploader'),
+			success: function(file) {
+				file.furl = file.url
+				updateProductUploadFiles.push(file)
+				$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
 			}
-			// 编辑产品附件表格初始化
-			$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
-			// 编辑产品“保存”按钮点击事件
+		})
+		// 编辑产品附件表格配置
+		var updateProductUploadTableConfig = {
+			columns: [{
+				field: 'name',
+			}, {
+				width: 100,
+				align: 'center',
+				formatter: function() {
+					var buttons = [{
+						text: '下载',
+						type: 'button',
+						class: 'item-download'
+					}, {
+						text: '删除',
+						type: 'button',
+						class: 'item-delete'
+					}]
+					return util.table.formatter.generateButton(buttons)
+				},
+				events: {
+					'click .item-download': function(e, value, row) {
+						location.href = 'http://api.guohuaigroup.com' + row.url
+					},
+					'click .item-delete': function(e, value, row) {
+						var index = updateProductUploadFiles.indexOf(row)
+						updateProductUploadFiles.splice(index, 1)
+						$('#updateProductUploadTable').bootstrapTable('load', updateProductUploadFiles)
+					}
+				}
+			}]
+		}
+		// 编辑产品附件表格初始化
+		$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
+		// 编辑产品“保存”按钮点击事件
     	$('#updateProductSubmit').on('click', function () {
     		var typeOid = $("#typeOid").val();
 				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)

@@ -135,14 +135,21 @@ define([
        * @param form 表单 jquery对象
        */
       reset: function (form) {
+        var selects = form.find('select')
+        var ichecks = form.find('.icheck')
+        var select2s = form.find('.origin-select')
         form.resetForm()
-        form.find('select').change()
-        form.find('.icheck').each(function (index, item) {
+        selects.each(function (index, item) {
+          $(item).change()
+        })
+        ichecks.each(function (index, item) {
           if (item.checked) {
             $(item).iCheck('check')
           }
         })
-        form.find('.origin-select').select2('val', '')
+        select2s.each(function (index, item) {
+          $(item).select2('val', '')
+        })
       },
       /**
        * 表单验证工具
