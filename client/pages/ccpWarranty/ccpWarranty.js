@@ -61,7 +61,7 @@ define([
 							$$.formAutoFix($('#updateCcpWarrantorForm'), row);
 						},
 						'click .item-delete': function(e, value, row) {
-							$("#confirmTitle").html("确定删除担保对象权数配置？");
+							$("#deleteCcpWarrantorConfirmTitle").html("确定删除担保对象权数配置？");
 							$$.confirm({
 								container: $('#deleteCcpWarrantorModal'),
 								trigger: this,
@@ -171,7 +171,7 @@ define([
 							$$.formAutoFix($('#updateCcpWarrantyModeForm'), row);
 						},
 						'click .item-delete': function(e, value, row) {
-							$("#confirmTitle").html("确定删除担保对象权数配置？");
+							$("#deleteCcpWarrantyModeConfirmTitle").html("确定删除担保对象权数配置？");
 							$$.confirm({
 								container: $('#deleteCcpWarrantyModeModal'),
 								trigger: this,
@@ -263,7 +263,7 @@ define([
 							$$.formAutoFix($('#updateCcpWarrantyExpireForm'), row);
 						},
 						'click .item-delete': function(e, value, row) {
-							$("#confirmTitle").html("确定删除担保期限权数配置？");
+							$("#deleteCcpWarrantyExpireConfirmTitle").html("确定删除担保期限权数配置？");
 							$$.confirm({
 								container: $('#deleteCcpWarrantyExpireModal'),
 								trigger: this,
