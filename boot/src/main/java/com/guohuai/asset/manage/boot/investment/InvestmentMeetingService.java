@@ -281,6 +281,7 @@ public class InvestmentMeetingService {
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
 				investment.setState(Investment.INVESTMENT_STATUS_collecting);
+				investment.setLifeState(investment.INVESTMENT_LIFESTATUS_PREPARE);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项
 				for (String checkName : checkList) {

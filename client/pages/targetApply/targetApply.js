@@ -214,14 +214,11 @@ define([
 									}, function(result) {
 										var data = result.data;
 										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
-										$('#editTargetModal').modal('show');
 									})
-
 									$('#meetingDet').show();
 								} else {
 									$('#meetingDet').hide();
 								}
-
 								$('#targetDetailModal').modal('show');
 							})
 
