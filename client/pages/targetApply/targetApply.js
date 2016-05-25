@@ -379,6 +379,9 @@ define([
 							$("#targetOid")[0].value = targetInfo.oid;
 							//row.targetOid = targetInfo.oid;
 
+							//初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表	 
+							initSel();
+
 							http.post(config.api.projectDetail, {
 								data: {
 									oid: row.oid
@@ -389,7 +392,8 @@ define([
 								if (!data) {
 									alert('查询底层项目详情失败');
 								} else {
-									//									$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
+									
+									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
 									$('#projectModal').modal('show');
 								}
@@ -707,7 +711,7 @@ define([
 			if(data) { // 返回的是list
 				var warrantorTypeSel = $(projectForm.warrantorType); // 保证方式select
 				var pledgeTypeSel = $(projectForm.pledgeType); // 抵押方式select
-				var pledgeType2Sel = $(projectForm.pledgeType2); // 质押方式select
+				var hypothecationTypeSel = $(projectForm.hypothecationType); // 质押方式select
 				$.each(data, function(i, item) {
 					var oid = item.oid; // 
 					var title = item.title; // 
@@ -725,7 +729,7 @@ define([
 					} else if('MORTGAGE' === type) {
 						pledgeTypeSel.append(option);
 					} else if('HYPOTHECATION' === type) {
-						pledgeType2Sel.append(option);
+						hypothecationTypeSel.append(option);
 					}
 					
 				});
