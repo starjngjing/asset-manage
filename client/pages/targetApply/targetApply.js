@@ -537,11 +537,17 @@ define([
 				});
 			})
 			
+			
+			$('#addEventCollect').on('click', function() {
+				eventCollect('');
+			}
+			$('#editEventCollect').on('click', function() {
+				eventCollect($(document.editTargetForm.oid).val());
+			}
 			// 标的风险采集
-			$('#eventCollect').on('click', function() {
+			function eventCollect(relative) {
 				// TODO 这里要调下, 标的模块要设置标的的oid
 				//var relative = "xxxxxxxxxxxxxxxx";
-				var relative = "55555555";
 				// TODO 这里要设置数据采集类型
 				var type = "SCORE";
 				http.post(config.api.system.config.ccr.options.preCollect, {
@@ -655,7 +661,7 @@ define([
 							});
 
 					});
-			});
+			}
 			
 			$('#collectButton').on('click', function() {
 
@@ -676,6 +682,7 @@ define([
 				// TODO 这个 data 对象是采集页面录入的数据, 可以根据具体业务场景使用
 				console.log(data);
 				$(document.addTargetForm.riskOption).val(JSON.stringify(data));
+				$(document.editTargetForm.riskOption).val(JSON.stringify(data));
 				$('#collectModal').modal('hide');
 				/*
 				http.post(config.api.system.config.ccr.indicate.collect.save, {
