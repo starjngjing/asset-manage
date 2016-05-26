@@ -100,6 +100,13 @@ define([
             		return val;
             	}
             },
+            { // 风险等级
+            	align: 'center',
+				field: 'riskRate',
+				formatter: function(val) {
+					return util.table.convertRisk(val);
+				}            
+            },
             {
 //              field: 'operator',
               width: 260,

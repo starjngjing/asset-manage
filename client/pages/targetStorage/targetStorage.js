@@ -80,18 +80,18 @@ define([
 				}
             
             },
-            { // 风险等级
-            	field: 'riskRate',
-				formatter: function(val) {
-					return val;
-				}
-            
-            },
             { // 已持有份额
             	field: 'holdAmount',
             	formatter: function (val) {
             		return val;
             	}
+            },
+            { // 风险等级
+            	align: 'center',
+				field: 'riskRate',
+				formatter: function(val) {
+					return util.table.convertRisk(val);
+				}            
             },
             {
 //              field: 'operator',
