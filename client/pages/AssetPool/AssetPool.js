@@ -12,7 +12,7 @@ define([
     init: function () {
       // 分页配置
       var pageOptions = {
-        poolName: "",
+        name: "",
         page: 1,
         rows: 10
       }
@@ -62,13 +62,29 @@ define([
           {// 状态
             field: 'state',
             formatter: function (val) {
-              return '<span class="' + (val === '未审核' ? 'text-green' : 'text-red') + '">' + val + '</span>'
+              var className = ''
+              var str = ''
+              switch (parseInt(val)) {
+                case 0:
+                  className = 'text-yellow'
+                  str = '未审核'
+                  break
+                case 1:
+                  className = 'text-green'
+                  str = '成立'
+                  break
+                case -1:
+                  className = 'text-red'
+                  str = '未通过'
+                  break
+              }
+              return '<span class="' + className + '">' + str + '</span>'
             }
           },
           {
             width: 180,
             align: 'center',
-            formatter: function () {
+            formatter: function (val, row) {
               var buttons = [{
                 text: '详情',
                 type: 'button',
@@ -76,11 +92,13 @@ define([
               }, {
                 text: '审核',
                 type: 'button',
-                class: 'item-audit'
+                class: 'item-audit',
+                isRender: parseInt(row.state) === 0
               }, {
                 text: '编辑',
                 type: 'button',
-                class: 'item-update'
+                class: 'item-update',
+                isRender: parseInt(row.state) !== 1
               }]
               return util.table.formatter.generateButton(buttons)
             },
@@ -89,27 +107,34 @@ define([
                 util.nav.dispatch('AssetPoolDuration', 'id=' + row.oid)
               },
               'click .item-audit': function (e, val, row) {
+                currentPool = row
                 http.post(config.api.duration.assetPool.getById, {
                   data: {
                     oid: row.oid
                   },
                   contentType: 'form'
                 }, function (json) {
+                  var scopeStr = ''
+                  json.result.scopes.forEach(function (item) {
+                    scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
+                  })
+                  json.result.scopeStr = scopeStr
                   $$.detailAutoFix($('#auditAssetPoolModal'), json.result)
                   $('#auditAssetPoolModal').modal('show')
                 })
               },
               'click .item-update': function (e, val, row) {
+                currentPool = row
                 http.post(config.api.duration.assetPool.getById, {
                   data: {
                     oid: row.oid
                   },
                   contentType: 'form'
                 }, function (json) {
-                  console.log(json)
+                  $$.formAutoFix($('#updateAssetPoolForm'), json.result)
+                  $(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
+                  $('#updateAssetPoolModal').modal('show')
                 })
-                $$.formAutoFix($('#updateAssetPoolForm'), row)
-                $('#updateAssetPoolModal').modal('show')
               }
             }
           }
@@ -146,11 +171,50 @@ define([
       $('#doAddAssetPool').on('click', function () {
         $('#addAssetPoolForm').ajaxSubmit({
           url: config.api.duration.assetPool.create,
-          success: function (result) {
-            console.log(result)
+          success: function () {
             util.form.reset($('#addAssetPoolForm'))
+            $('#assetPoolTable').bootstrapTable('refresh');
             $('#addAssetPoolModal').modal('hide')
           }
+        })
+      })
+      // 编辑资产池 - 确定按钮点击事件
+      $('#doUpdateAssetPool').on('click', function () {
+        $('#updateAssetPoolForm').ajaxSubmit({
+          url: config.api.duration.assetPool.edit,
+          success: function () {
+            util.form.reset($('#updateAssetPoolForm'))
+            $('#assetPoolTable').bootstrapTable('refresh');
+            $('#updateAssetPoolModal').modal('hide')
+          }
+        })
+      })
+      // 缓存当前操作数据
+      var currentPool = null
+      // 审核 - 不通过按钮点击事件
+      $('#doUnAuditAssetPool').on('click', function () {
+        http.post(config.api.duration.assetPool.audit, {
+          data: {
+            oid: currentPool.oid,
+            operation: 'no'
+          },
+          contentType: 'form'
+        }, function () {
+          $('#assetPoolTable').bootstrapTable('refresh');
+          $('#auditAssetPoolModal').modal('hide')
+        })
+      })
+      // 审核 - 通过按钮点击事件
+      $('#doAuditAssetPool').on('click', function () {
+        http.post(config.api.duration.assetPool.audit, {
+          data: {
+            oid: currentPool.oid,
+            operation: 'yes'
+          },
+          contentType: 'form'
+        }, function () {
+          $('#assetPoolTable').bootstrapTable('refresh');
+          $('#auditAssetPoolModal').modal('hide')
         })
       })
 
