@@ -105,7 +105,13 @@ public class ProjectService {
 
 		prj = this.calculateProjectRiskFactor(modeList, expireList, investment, prj);
 		/* 计算项目风险系数结束 */
-
+		
+		/* 重新计算标的的风险系数 */
+		BigDecimal riskRate = this.getMaxRiskFactor(targetOid);
+		investment.setRiskRate(riskRate);
+		investmentDao.save(investment);
+		/* 重新计算标的的风险系数 */
+		
 		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 
@@ -154,7 +160,7 @@ public class ProjectService {
 			Project prj = list.get(i);
 			this.calculateProjectRiskFactor(modeList, expireList, investment, prj); // 计算项目风险系数
 			prj.setInvestment(investment);
-			this.projectDao.save(prj); // 重新保存项目
+			prj = this.projectDao.save(prj); // 重新保存项目
 			dbs[i] = list.get(i).getRiskFactor().doubleValue(); // 获取每一个项目的项目风险系数
 		}
 		// max = getMaxRiskFactor(targetOid); // 通过数据库查询最大的项目风险系数

@@ -27,6 +27,7 @@ import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
+import scala.deprecated;
 
 @Service
 @Transactional
@@ -95,11 +96,11 @@ public class InvestmentService {
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
+		entity = this.investmentDao.save(entity);
 		/* 计算标的风险开始 */
 		this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
-		
-		return this.investmentDao.save(entity);
+		return entity;
 	}
 
 	/**
@@ -150,6 +151,7 @@ public class InvestmentService {
 		/* 计算标的风险结束 */
 		return entity;
 	}
+	
 	/**
 	 * 修改投资标的
 	 * 
@@ -157,13 +159,41 @@ public class InvestmentService {
 	 * @param operator
 	 * @return
 	 */
+	@Deprecated
 	public Investment updateInvestment(Investment entity, String operator) {
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
+		entity = this.investmentDao.save(entity);
 		/* 计算标的风险开始 */
 		this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
-		return this.investmentDao.save(entity);
+		return entity;
+	}
+	
+	/**
+	 * 修改投资标的
+	 * 
+	 * @param entity
+	 * @param operator
+	 * @return
+	 */
+	public Investment updateInvestment(InvestmentManageForm form) {
+		Investment investment = getInvestment(form.getOid());
+		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
+				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+			throw new RuntimeException();
+		}
+		Investment temp = createInvestment(form);
+		temp.setState(investment.getState());
+		temp.setCreateTime(investment.getCreateTime());
+		temp.setCreator(investment.getCreator());
+		
+		temp.setUpdateTime(DateUtil.getSqlCurrentDate());
+		Investment entity = this.investmentDao.save(temp);
+		/* 计算标的风险开始 */
+		entity = this.calculateRiskRate(entity);
+		/* 计算标的风险结束 */
+		return entity;
 	}
 
 	/**
@@ -174,9 +204,6 @@ public class InvestmentService {
 	 */
 	public Investment createInvestment(InvestmentManageForm form) {
 		Investment entity = new Investment();
-		if (StringUtils.isEmpty(form.getOid())) {
-			entity.setOid(StringUtil.uuid());
-		}
 		try {
 			BeanUtils.copyProperties(form, entity);
 			// 资产规模 万转元

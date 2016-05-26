@@ -126,16 +126,9 @@ public class InvestmentManageBootController extends BaseController {
 	@RequestMapping(value = "edit", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid InvestmentManageForm form) {
 		String operator = super.getLoginAdmin();
-		Investment investment = investmentService.getInvestmentDet(form.getOid());
-		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
-				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
-			throw new RuntimeException();
-		}
-		Investment temp = investmentService.createInvestment(form);
-		temp.setState(investment.getState());
-		temp.setCreateTime(investment.getCreateTime());
-		temp.setCreator(investment.getCreator());
-		investment = investmentService.updateInvestment(temp, operator);
+		form.setOperator(operator);
+		
+		Investment investment = investmentService.updateInvestment(form);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.edit, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
