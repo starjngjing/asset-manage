@@ -676,6 +676,7 @@ define([
 				// TODO 这个 data 对象是采集页面录入的数据, 可以根据具体业务场景使用
 				console.log(data);
 				$(document.addTargetForm.riskOption).val(JSON.stringify(data));
+				$('#collectModal').modal('hide');
 				/*
 				http.post(config.api.system.config.ccr.indicate.collect.save, {
 					data: JSON.stringify(data)

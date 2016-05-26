@@ -197,4 +197,17 @@ public class InvestmentManageForm implements Serializable {
 	 * 更新时间
 	 */
 	private Timestamp updateTime;
+	
+	/**
+	 * 标的总评分
+	 */
+	private Integer collectScore;
+	/**
+	 * 标的总评分系数
+	 */
+	private BigDecimal collectScoreWeight;
+	/**
+	 * 标的风险系数
+	 */
+	private BigDecimal riskRate;
 }

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -246,6 +247,25 @@ public class Investment extends UUID implements Serializable {
 	 */
 	private String rejectDesc;
 
+	/**
+	 * 风险配置
+	 */
+	@Transient
+	private String riskOption;
+	
+	/**
+	 * 标的总评分
+	 */
+	private Integer collectScore;
+	/**
+	 * 标的总评分系数
+	 */
+	private BigDecimal collectScoreWeight;
+	/**
+	 * 标的风险系数
+	 */
+	private BigDecimal riskRate;
+	
 	public Investment(String oid, String name) {
 		this.oid = oid;
 		this.name = name;

@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
@@ -44,7 +50,10 @@ public class ProjectService {
 	private CCPWarrantyModeDao cCPWarrantyModeDao;
 	@Autowired
 	private CCPWarrantyExpireDao cCPWarrantyExpireDao;
-
+	
+	@PersistenceContext
+	private EntityManager em;//注入entitymanager
+	
 	public Page<Project> list(Specification<Project> spec, int page, int size, String sortDirection, String sortField) {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page, size, new Sort(order));
@@ -90,9 +99,88 @@ public class ProjectService {
 		prj.setInvestment(investment);
 		
 		/* 计算项目风险系数开始 */
-		// 计算公式 : Max(保证方式担保方式权数 * 保证方式担保期数权数, 抵押方式担保方式权数 * 抵押方式担保期数权数, 质押方式担保方式权数 * 质押方式担保期数权数) * 投资标的评分
+		// 计算公式 : Max(保证方式担保方式权数 * 保证方式担保期数权数, 抵押方式担保方式权数 * 抵押方式担保期数权数, 质押方式担保方式权数 * 质押方式担保期数权数) * 标的信用等级系数
 		List<CCPWarrantyMode> modeList = cCPWarrantyModeDao.findAll(); // 查询担保方式权数配置		
 		List<CCPWarrantyExpire> expireList = cCPWarrantyExpireDao.findAll(); // 查询担保期限权数配置
+
+		prj = this.calculateProjectRiskFactor(modeList, expireList, investment, prj);
+		/* 计算项目风险系数结束 */
+
+		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+
+		return this.projectDao.save(prj);
+	}
+
+	
+
+	/**
+	 * 计算标的下面所有项目的项目系数
+	 * @Title: calculateInvestmentRisk 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param targetOid
+	 * @return BigDecimal    标的下面所有项目的最大的风险系数
+	 */
+	public BigDecimal calculateInvestmentRisk(String targetOid) {
+		return calculateInvestmentRisk(this.investmentService.getInvestment(targetOid));
+	}
+	
+	/**
+	 * 计算标的下面所有项目的项目系数
+	 * @Title: calculateInvestmentRisk 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param investment
+	 * @return BigDecimal    标的下面所有项目的最大的风险系数
+	 */
+	public BigDecimal calculateInvestmentRisk(Investment investment) {
+		BigDecimal max = null;
+		String targetOid = investment.getOid();
+		if (StringUtils.isBlank(targetOid))
+			throw AMPException.getException("投资标的id不能为空");
+		List<Project> list = this.findByTargetId(targetOid);
+		int size = null == list ? 0 : list.size();
+		if (0 == size) {
+			log.info("标的id=" + targetOid + "下暂无底层项目");
+			return max;
+		}
+		List<CCPWarrantyMode> modeList = cCPWarrantyModeDao.findAll(); // 查询担保方式权数配置
+		List<CCPWarrantyExpire> expireList = cCPWarrantyExpireDao.findAll(); // 查询担保期限权数配置
+		double[] dbs = new double[size]; // 项目风险系数数组
+		for (int i = 0; i < size; i++) {
+			Project prj = list.get(i);
+			this.calculateProjectRiskFactor(modeList, expireList, investment, prj); // 计算项目风险系数
+			prj.setInvestment(investment);
+			this.projectDao.save(prj); // 重新保存项目
+			dbs[i] = list.get(i).getRiskFactor().doubleValue(); // 获取每一个项目的项目风险系数
+		}
+		// max = getMaxRiskFactor(targetOid); // 通过数据库查询最大的项目风险系数
+		max = new BigDecimal(NumberUtils.max(dbs));// 取最大的项目风险系数
+		return max;
+	}
+	
+	/**
+	 * 计算项目风险系数
+	 * @Title: calculateProjectRiskFactor 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param modeList
+	 * @param expireList
+	 * @param investment
+	 * @param prj
+	 * @return Project    返回类型
+	 */
+	public Project calculateProjectRiskFactor(List<CCPWarrantyMode> modeList, List<CCPWarrantyExpire> expireList, Investment investment, Project prj) {
+		if (null == modeList || null == expireList) {
+			log.warn("担保方式权数配置或者担保期限权数配置为空");
+			return prj;
+		}
+		/* 计算项目风险系数开始 */
+		// 计算公式 : Max(保证方式担保方式权数 * 保证方式担保期数权数, 抵押方式担保方式权数 * 抵押方式担保期数权数, 质押方式担保方式权数 * 质押方式担保期数权数) * 标的信用等级系数
 
 		BigDecimal guaranteeModeWeight = new BigDecimal(0), mortgageModeWeight = new BigDecimal(0), hypothecationModeWeight = new BigDecimal(0);
 		String guaranteeModeOid = prj.getGuaranteeModeOid(), mortgageModeOid = prj.getMortgageModeOid(), hypothecationModeOid = prj.getHypothecationModeOid();
@@ -142,19 +230,42 @@ public class ProjectService {
 
 		double maxRato = NumberUtils.max(new double[] { guaranteeRato.doubleValue(), mortgageRato.doubleValue(), hypothecation.doubleValue() });// 取最大值
 
-		BigDecimal targetRato = new BigDecimal(0.8); // TODO 标的的评分
-		BigDecimal riskFactor = targetRato.multiply(new BigDecimal(maxRato)); // 计算出项目的风险系数
-		
-		prj.setRiskFactor(riskFactor);
+		BigDecimal collectScoreWeight = investment.getCollectScoreWeight(); // 标的[信用等级系数]
+		log.info("标的的[信用等级系数]为: " + collectScoreWeight);
+		BigDecimal riskFactor = null;
+		if (null != collectScoreWeight) {
+			riskFactor = collectScoreWeight.multiply(new BigDecimal(maxRato)); // 计算出项目的风险系数
+			prj.setRiskFactor(riskFactor);
+		}
 		log.info("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor.doubleValue());
-		/* 计算项目风险系数结束 */
-
-		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-
-		return this.projectDao.save(prj);
+		return prj;
 	}
-	
+
+	/**
+	 * 求标的下面所有项目的最大的风险系数
+	 * 
+	 * @Title: getMaxRiskFactor
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param targetOid
+	 * @return BigDecimal 返回类型
+	 */
+	public BigDecimal getMaxRiskFactor(String targetOid) {
+		if (StringUtils.isBlank(targetOid))
+			throw AMPException.getException("投资标的id不能为空");
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<BigDecimal> query = cb.createQuery(BigDecimal.class);
+		Root<Project> root = query.from(Project.class);
+
+		// Expression<BigDecimal> maxExp = root.get("").as(BigDecimal.class);
+		// query.select(cb.max(maxExp));
+		query.select(cb.max(root.get("riskFactor")));
+
+		query.where(cb.equal(root.get("targetOid"), targetOid));
+		return em.createQuery(query).getSingleResult();
+	}
+
 	/**
 	 * 删除底层项目
 	 * @Title: deleteByTargetOidAndOid 
