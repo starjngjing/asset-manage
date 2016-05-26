@@ -1,16 +1,20 @@
 package com.guohuai.asset.manage.boot.duration.order.trust;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TrustTransDao extends JpaRepository<TrustTransEntity, String>, JpaSpecificationExecutor<TrustTransEntity> {
 
-	@Query("from TrustTransEntity a where a.assetPoolTargetOid = ?1 and a.state < 2")
-	public Page<TrustTransEntity> findTransByPidForAppointment(String pid, Pageable pageable);
+	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
+	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.assetPoolTargetOid"
+	  		+ " WHERE a.targetOid = ?1 and a.state < 2", nativeQuery = true)
+	public List<TrustTransEntity> findTransByPidForAppointment(String pid);
 	
-	@Query("from TrustTransEntity a where a.assetPoolTargetOid = ?1 and a.state = 2")
-	public Page<TrustTransEntity> findTransByPidForConfirm(String pid, Pageable pageable);
+	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
+	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.assetPoolTargetOid"
+	  		+ " WHERE a.targetOid = ?1 and a.state = 2", nativeQuery = true)
+	public List<TrustTransEntity> findTransByPidForConfirm(String pid);
 }

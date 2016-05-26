@@ -1,10 +1,10 @@
 package com.guohuai.asset.manage.boot.duration.order.trust;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -117,12 +117,11 @@ public class TrustService {
 	/**
 	 * 获取预约中的申购订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustOrderEntity> findPurchaseByPidForAppointment(String pid, Pageable pageable) {
-		Page<TrustOrderEntity> list = trustPurchaseDao.findPurchaseByPidForAppointment(pid, pageable);
+	public List<TrustOrderEntity> findPurchaseByPidForAppointment(String pid) {
+		List<TrustOrderEntity> list = trustPurchaseDao.findPurchaseByPidForAppointment(pid);
 		
 		return list;
 	}
@@ -130,12 +129,11 @@ public class TrustService {
 	/**
 	 * 获取预约中的本息兑付订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustIncomeEntity> findIncomeByPidForAppointment(String pid, Pageable pageable) {
-		Page<TrustIncomeEntity> list = trustIncomeDao.findIncomeByPidForAppointment(pid, pageable);
+	public List<TrustIncomeEntity> findIncomeByPidForAppointment(String pid) {
+		List<TrustIncomeEntity> list = trustIncomeDao.findIncomeByPidForAppointment(pid);
 		
 		return list;
 	}
@@ -143,12 +141,11 @@ public class TrustService {
 	/**
 	 * 获取预约中的转让订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustTransEntity> findTransByPidForAppointment(String pid, Pageable pageable) {
-		Page<TrustTransEntity> list = trustTransDao.findTransByPidForAppointment(pid, pageable);
+	public List<TrustTransEntity> findTransByPidForAppointment(String pid) {
+		List<TrustTransEntity> list = trustTransDao.findTransByPidForAppointment(pid);
 		
 		return list;
 	}
@@ -156,12 +153,11 @@ public class TrustService {
 	/**
 	 * 获取已确认的申购订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustOrderEntity> findPurchaseByPidForConfirm(String pid, Pageable pageable) {
-		Page<TrustOrderEntity> list = trustPurchaseDao.findPurchaseByPidForConfirm(pid, pageable);
+	public List<TrustOrderEntity> findPurchaseByPidForConfirm(String pid) {
+		List<TrustOrderEntity> list = trustPurchaseDao.findPurchaseByPidForConfirm(pid);
 		
 		return list;
 	}
@@ -169,12 +165,11 @@ public class TrustService {
 	/**
 	 * 获取已确认的本息兑付订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustIncomeEntity> findIncomeByPidForConfirm(String pid, Pageable pageable) {
-		Page<TrustIncomeEntity> list = trustIncomeDao.findIncomeByPidForConfirm(pid, pageable);
+	public List<TrustIncomeEntity> findIncomeByPidForConfirm(String pid) {
+		List<TrustIncomeEntity> list = trustIncomeDao.findIncomeByPidForConfirm(pid);
 		
 		return list;
 	}
@@ -182,12 +177,11 @@ public class TrustService {
 	/**
 	 * 获取已确认的转让订单
 	 * @param pid
-	 * @param pageable
 	 * @return
 	 */
 	@Transactional
-	public Page<TrustTransEntity> findTransByPidForConfirm(String pid, Pageable pageable) {
-		Page<TrustTransEntity> list = trustTransDao.findTransByPidForConfirm(pid, pageable);
+	public List<TrustTransEntity> findTransByPidForConfirm(String pid) {
+		List<TrustTransEntity> list = trustTransDao.findTransByPidForConfirm(pid);
 		
 		return list;
 	}

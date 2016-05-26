@@ -97,4 +97,7 @@ public class TrustForm implements Serializable {
 	private int capitalFlag;
 	// 本金返还
 	private BigDecimal capital;
+	
+	// 类型（申购，本息兑付，转让）
+	private String type;
 }

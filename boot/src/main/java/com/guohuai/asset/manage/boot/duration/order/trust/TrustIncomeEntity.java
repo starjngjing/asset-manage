@@ -35,7 +35,11 @@ public class TrustIncomeEntity implements Serializable {
 	@Id
 	private String oid;
 	// 关联资产池投资标的
-	private String assetPoolTargetOid;
+	private String targetOid;
+	// 标的名称
+	private String targetName;
+	// 类型
+	private String targetType;
 	// 兑付期数
 	private int seq;
 	// 实际收益率
@@ -50,6 +54,8 @@ public class TrustIncomeEntity implements Serializable {
 	private BigDecimal capital;
 	// 收益支付日
 	private Date incomeDate;
+	// 主题评级	
+	private String subjectRating;	
 	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）
 	private String state;
 	// 申请人

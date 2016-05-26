@@ -182,7 +182,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/applyForTransfer", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> applyForTransfer(TrustForm form) {
-		orderService.transfer(form, "STAR");
+		orderService.applyForTransfer(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

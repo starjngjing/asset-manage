@@ -283,11 +283,14 @@ public class OrderService {
 
 		order.setOid(StringUtil.uuid());
 		order.setTargetOid(form.getTargetOid());
+		order.setTargetName(form.getTargetName());
+		order.setTargetType(form.getTargetType());
 		order.setAssetPoolOid(form.getAssetPoolOid());
 		order.setInvestDate(form.getInvestDate());
 		order.setIncomeDate(form.getIncomeDate());
 		order.setApplyVolume(form.getVolume());
 		order.setIncomeRate(form.getIncomeRate());
+		order.setSubjectRating(form.getSubjectRating());
 		order.setState(TrustOrderEntity.STATE_AUDIT);
 		order.setAsker(uid);
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
@@ -423,13 +426,15 @@ public class OrderService {
 	public void applyForIncome(TrustForm form, String uid) {
 		TrustIncomeEntity entity = new TrustIncomeEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setAssetPoolTargetOid(form.getOid());
-		entity.setAssetPoolTargetOid(form.getAssetPoolOid());
+		entity.setTargetOid(form.getTargetOid());
+		entity.setTargetName(form.getTargetName());
+		entity.setTargetType(form.getTargetType());
 		entity.setSeq(1);
 		entity.setState(TrustIncomeEntity.STATE_AUDIT);
 		entity.setIncomeRate(form.getIncomeRate());
 		entity.setIncome(form.getIncome());
 		entity.setIncomeDate(form.getIncomeDate());
+		entity.setSubjectRating(form.getSubjectRating());
 		// 是否兑付本金
 		if (1 == form.getCapitalFlag()) {
 			entity.setCapital(form.getCapital());
@@ -519,13 +524,16 @@ public class OrderService {
 	 * @param from
 	 */
 	@Transactional
-	public void transfer(TrustForm form, String uid) {
+	public void applyForTransfer(TrustForm form, String uid) {
 		TrustTransEntity entity = new TrustTransEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setAssetPoolTargetOid(form.getAssetPoolOid());
+		entity.setTargetOid(form.getTargetOid());
+		entity.setTargetName(form.getTargetName());
+		entity.setTargetType(form.getTargetType());
 		entity.setTranVolume(form.getTranVolume());
 		entity.setTranDate(form.getTranDate());
 		entity.setTranCash(form.getTranCash());
+		entity.setSubjectRating(form.getSubjectRating());
 		entity.setState(TrustTransEntity.STATE_AUDIT);
 		entity.setCreater(uid);
 		entity.setAsker(uid);
@@ -665,7 +673,7 @@ public class OrderService {
 	}
 	
 	/**
-	 * 根据资产池id获取 预约中 的信托（计划）列表
+	 * 根据资产池id获取 预约中 的货币基金（现金管理工具）列表
 	 * @param pid
 	 * 			资产池id
 	 * @return
@@ -712,7 +720,7 @@ public class OrderService {
 	}
 	
 	/**
-	 * 根据资产池id获取 成立中 信托（计划）列表
+	 * 根据资产池id获取 成立中 货币基金（现金管理工具）列表
 	 * @param pid
 	 * 			资产池id
 	 * @return
@@ -748,20 +756,73 @@ public class OrderService {
 	}
 	
 	/**
-	 * 根据资产池id获取 预约中 的货币基金（现金管理工具）列表
+	 * 根据资产池id获取 预约中 的信托（计划）列表
 	 * @param pid
 	 * 			资产池id
 	 * @return
 	 */
 	@Transactional
 	public List<TrustForm> getTrustListForAppointmentByPid(String pid) {
-		List<TrustForm> list = Lists.newArrayList();
+		List<TrustForm> formList = Lists.newArrayList();
+		TrustForm form = null;
 		
-		return list;
+		List<TrustOrderEntity> orderList = trustService.findPurchaseByPidForAppointment(pid);
+		if (!orderList.isEmpty()) {
+			for (TrustOrderEntity entity : orderList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getApplyVolume());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("申购");
+				
+				formList.add(form);
+			}
+		}
+		List<TrustIncomeEntity> incomeList = trustService.findIncomeByPidForAppointment(pid);
+		if (!incomeList.isEmpty()) {
+			for (TrustIncomeEntity entity : incomeList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getIncome());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("申购");
+				
+				formList.add(form);
+			}
+		}
+		List<TrustTransEntity> transList = trustService.findTransByPidForAppointment(pid);
+		if (!transList.isEmpty()) {
+			for (TrustTransEntity entity : transList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getTranVolume());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("申购");
+				
+				formList.add(form);
+			}
+		}
+		
+		return formList;
 	}
 	
 	/**
-	 * 根据资产池id获取 成立中 的货币基金（现金管理工具）列表
+	 * 根据资产池id获取 成立中 的信托（计划）列表
 	 * @param pid
 	 * 			资产池id
 	 * @return

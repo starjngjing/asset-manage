@@ -36,6 +36,10 @@ public class TrustOrderEntity implements Serializable {
 	private String oid;
 	// 关联投资标的
 	private String targetOid;
+	// 标的名称
+	private String targetName;
+	// 类型
+	private String targetType;
 	// 关联资产池
 	private String assetPoolOid;
 	// 投资日
@@ -52,6 +56,8 @@ public class TrustOrderEntity implements Serializable {
 	private BigDecimal investVolume;
 	// 收益率
 	private BigDecimal incomeRate;
+	// 主题评级	
+	private String subjectRating;	
 	// 申请人
 	private String asker;
 	// 审核人
