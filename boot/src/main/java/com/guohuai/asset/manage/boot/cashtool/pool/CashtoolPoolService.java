@@ -21,8 +21,8 @@ import com.guohuai.asset.manage.boot.cashtool.log.CashToolLogService;
 
 /**
  * 
- * <p>Title: CashtoolRevenueService.java</p>    
- * <p>本息兑付Service </p>   
+ * <p>Title: CashtoolPoolService.java</p>    
+ * <p>现金管理工具备选库Service </p>   
  * @author vania      
  * @version 1.0    
  * @created 2016年5月18日 下午3:31:20
