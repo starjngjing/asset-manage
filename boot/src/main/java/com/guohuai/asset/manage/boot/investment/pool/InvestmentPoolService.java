@@ -202,7 +202,7 @@ public class InvestmentPoolService {
 	 * @param collectEndDate   募集截止日
 	 * @return List<Investment>    返回类型
 	 */
-	public List<Investment> getRecruitment(final Date collectEndDate) {
+	public List<Investment> getCollecting(final Date collectEndDate) {
 		if (null == collectEndDate)
 			throw AMPException.getException("投资标的ID不能为空"); // 默认为当前时间
 		// 募集截止日<当前日期 && lifeState = PREPARE
@@ -213,11 +213,46 @@ public class InvestmentPoolService {
 				List<Predicate> predicate = new ArrayList<>();
 				
 				Expression<String> exp = root.get("lifeState").as(String.class); // 标的生命周期					
-				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE }));//lifeState = PREPARE
+				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE, Investment.INVESTMENT_LIFESTATUS_STAND_UP }));//lifeState = PREPARE
 				
 				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日
 				Predicate p = cb.lessThanOrEqualTo(expHa, collectEndDate); //募集截止日 <= 指定日期	
 				predicate.add(p);		
+				
+				Predicate[] pre = new Predicate[predicate.size()];
+				return query.where(predicate.toArray(pre)).getRestriction();
+			}
+		};
+		return investmentDao.findAll(spec);
+	}
+	
+	
+	/**
+	 * 查询指定类型的所有投资标的
+	 * @Title: getCollecting 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param projectTypes   标的类型数组
+	 * @return List<Investment>    返回类型
+	 */
+	public List<Investment> getCollecting(final String[] projectTypes) {
+		Specification<Investment> spec = new Specification<Investment>() {
+			
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {	
+				List<Predicate> predicate = new ArrayList<>();
+				if (null != projectTypes && projectTypes.length > 0) {
+					Expression<String> expType = root.get("type").as(String.class); // 标的类型
+					predicate.add(expType.in(projectTypes));// type =  PREPARE
+				}
+				
+				Expression<String> exp = root.get("lifeState").as(String.class); // 标的生命周期					
+				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE, Investment.INVESTMENT_LIFESTATUS_STAND_UP }));//lifeState = PREPARE
+				
+//				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日
+//				Predicate p = cb.lessThanOrEqualTo(expHa, collectEndDate); //募集截止日 <= 指定日期	
+//				predicate.add(p);		
 				
 				Predicate[] pre = new Predicate[predicate.size()];
 				return query.where(predicate.toArray(pre)).getRestriction();

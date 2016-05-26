@@ -299,7 +299,7 @@ public class InvestmentPoolController extends BaseController {
 	@RequestMapping("getRecruitment")
 	@ApiOperation(value = "查询正在募集期的标的列表")
 	public @ResponseBody ResponseEntity<InvestmentListResp> getRecruitment() {	
-		List<Investment> list = this.investmentPoolService.getRecruitment(new Date(System.currentTimeMillis()));
+		List<Investment> list = this.investmentPoolService.getCollecting(new Date(System.currentTimeMillis()));
 		return new ResponseEntity<InvestmentListResp>(new InvestmentListResp(list), HttpStatus.OK);
 	}
 }
