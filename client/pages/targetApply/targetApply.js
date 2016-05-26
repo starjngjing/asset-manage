@@ -508,14 +508,14 @@ define([
 			$(document.projectForm.projectType).change(function() { // 项目类型
 				var ptt = $(this).val();
 				if (ptt === 'PROJECTTYPE_01') { // 金融
-					$("#estateDiv").hide().find('input').attr('disabled', 'disabled');
-					$("#financeDiv").show().find('input').attr('disabled', false);
+					$("#estateDiv").hide().find(':input').attr('disabled', 'disabled');
+					$("#financeDiv").show().find(':input').attr('disabled', false);
 				} else if (ptt === 'PROJECTTYPE_02') { // 房地产
-					$("#estateDiv").show().find('input').attr('disabled', false);
-					$("#financeDiv").hide().find('input').attr('disabled', 'disabled');
+					$("#estateDiv").show().find(':input').attr('disabled', false);
+					$("#financeDiv").hide().find(':input').attr('disabled', 'disabled');
 				} else {
-					$("#estateDiv").hide().find('input').attr('disabled', 'disabled');
-					$("#financeDiv").hide().find('input').attr('disabled', 'disabled');
+					$("#estateDiv").hide().find(':input').attr('disabled', 'disabled');
+					$("#financeDiv").hide().find(':input').attr('disabled', 'disabled');
 				}
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
@@ -525,9 +525,9 @@ define([
 			$(document.projectForm.warrantor).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有担保人
 					if ($(this).val() === 'yes')
-						$('#prjWarrantorInfo').show().find('input').attr('disabled', false);
+						$('#prjWarrantorInfo').show().find(':input').attr('disabled', false);
 					else
-						$('#prjWarrantorInfo').hide().find('input').attr('disabled', 'disabled');
+						$('#prjWarrantorInfo').hide().find(':input').attr('disabled', 'disabled');
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
@@ -538,9 +538,9 @@ define([
 			$(document.projectForm.pledge).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有抵押人
 					if ($(this).val() === 'yes')
-						$('#prjPledgeInfo').show().find('input').attr('disabled', false);
+						$('#prjPledgeInfo').show().find(':input').attr('disabled', false);
 					else
-						$('#prjPledgeInfo').hide().find('input').attr('disabled', 'disabled');
+						$('#prjPledgeInfo').hide().find(':input').attr('disabled', 'disabled');
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
@@ -551,9 +551,9 @@ define([
 			$(document.projectForm.hypothecation).each(function(index, item) {
 				$(item).on('ifChecked', function(e) { // 是否有质押人
 					if ($(this).val() === 'yes')
-						$('#prjHypothecation').show().find('input').attr('disabled', false);
+						$('#prjHypothecation').show().find(':input').attr('disabled', false);
 					else
-						$('#prjHypothecation').hide().find('input').attr('disabled', 'disabled');
+						$('#prjHypothecation').hide().find(':input').attr('disabled', 'disabled');
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
