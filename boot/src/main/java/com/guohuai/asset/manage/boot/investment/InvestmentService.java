@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.manage.InvestmentManageForm;
+import com.guohuai.asset.manage.boot.project.ProjectService;
+import com.guohuai.asset.manage.boot.system.config.project.warrantor.CCPWarrantor;
+import com.guohuai.asset.manage.boot.system.config.project.warrantor.CCPWarrantorService;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectForm;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectResp;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectService;
@@ -37,7 +40,10 @@ public class InvestmentService {
 	InvestmentLogService investmentLogService;
 	@Autowired
 	RiskIndicateCollectService riskIndicateCollectService;
-
+	@Autowired
+	CCPWarrantorService cCPWarrantorService;
+	@Autowired
+	ProjectService projectService;
 	/**
 	 * 获得投资标的列表
 	 * 
@@ -89,27 +95,61 @@ public class InvestmentService {
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
-		String riskOption = form.getRiskOption(); // 风险配置对象
-		if (StringUtils.isNotBlank(riskOption)) {
-			RiskIndicateCollectForm collForm = JSON.parseObject(riskOption, RiskIndicateCollectForm.class);
-			collForm.setRelative(entity.getOid()); // 把投资标的的oid存入relative
-			List<RiskIndicateCollectResp> list = riskIndicateCollectService.save(collForm);
-			/* 计算标的风险开始 */
-			// TODO
-			// 计算公式: sum(CollectScore)
-			if (null != list) {
-				int sum = 0;
-				for (RiskIndicateCollectResp rc : list) {
-					sum += rc.getCollectScore();
-				}
-				log.info("投资标的的风险总分: " + sum);
-			}
-			/* 计算标的风险结束 */
-		}
+		/* 计算标的风险开始 */
+		this.calculateRiskRate(entity);
+		/* 计算标的风险结束 */
 		
 		return this.investmentDao.save(entity);
 	}
 
+	/**
+	 * 计算标的风险开始
+	 * @Title: calculateRiskRate 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param entity
+	 * @return Investment    返回类型
+	 */
+	public Investment calculateRiskRate(Investment entity) {
+		/* 计算标的风险开始 */
+		String riskOption = entity.getRiskOption(); // 风险配置对象
+		if (StringUtils.isNotBlank(riskOption)) {
+			RiskIndicateCollectForm collForm = JSON.parseObject(riskOption, RiskIndicateCollectForm.class);
+			collForm.setRelative(entity.getOid()); // 把投资标的的oid存入relative
+			List<RiskIndicateCollectResp> list = riskIndicateCollectService.save(collForm);
+			// TODO
+			// 计算公式: sum(CollectScore)
+			int sum = 0; // 标的信用等级评分总和
+			BigDecimal weight = null; // 标的信用等级系数
+			if (null != list) {
+				for (RiskIndicateCollectResp rc : list) {
+					sum += rc.getCollectScore();
+				}
+				log.info("投资标的的风险总分: " + sum);
+				entity.setCollectScore(sum);
+				CCPWarrantor cCPWarrantor = cCPWarrantorService.getByScoreBetween(sum); // 根据标的风险总分获取[标的信用等级系数]
+				if (null != cCPWarrantor) {
+					weight = cCPWarrantor.getWeight();
+					log.info("投资标的id=" + entity.getOid() + "的信用等级对象为: " + JSON.toJSONString(cCPWarrantor));
+				} else {
+					log.warn("找不到风险总分:" + sum + "对应的信用等级系数区间");
+				}
+			}
+			log.info("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
+			entity.setCollectScoreWeight(weight);
+			
+			// 根据[标的信用等级系数]计算本标的下所有项目的[项目系数]
+			BigDecimal riskRate = projectService.calculateInvestmentRisk(entity); //返回标的下面所有项目的最大的风险系数
+			
+			// 取max(各个项目的[项目系数])作为标的的[风险系数]
+//			riskRate = projectService.getMaxRiskFactor(entity.getOid());
+			entity.setRiskRate(riskRate);
+			log.info("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
+		}
+		/* 计算标的风险结束 */
+		return entity;
+	}
 	/**
 	 * 修改投资标的
 	 * 
@@ -120,6 +160,9 @@ public class InvestmentService {
 	public Investment updateInvestment(Investment entity, String operator) {
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
+		/* 计算标的风险开始 */
+		this.calculateRiskRate(entity);
+		/* 计算标的风险结束 */
 		return this.investmentDao.save(entity);
 	}
 

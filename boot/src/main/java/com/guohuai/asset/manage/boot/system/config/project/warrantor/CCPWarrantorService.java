@@ -3,9 +3,15 @@ package com.guohuai.asset.manage.boot.system.config.project.warrantor;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.component.exception.AMPException;
@@ -69,4 +75,26 @@ public class CCPWarrantorService {
 		return list;
 	}
 
+	/**
+	 * 根据分数区间查询担保对象权数
+	 * @Title: getByScoreBetween
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param score
+	 * @return CCPWarrantor 返回类型
+	 */
+	public CCPWarrantor getByScoreBetween(Integer score) {
+		Specification<CCPWarrantor> spec = new Specification<CCPWarrantor>() {
+
+			@Override
+			public Predicate toPredicate(Root<CCPWarrantor> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Expression<Integer> expV = cb.literal(score);
+				Expression<Integer> expLow = root.get("lowScore").as(Integer.class);
+				Expression<Integer> expHigh = root.get("highScore").as(Integer.class);
+				return cb.between(expV, expLow, expHigh);
+			}
+		};
+		return this.ccpWarrantorDao.findOne(spec);
+	}
 }
