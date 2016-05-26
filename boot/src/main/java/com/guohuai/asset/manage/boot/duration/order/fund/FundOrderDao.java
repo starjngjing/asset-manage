@@ -10,9 +10,19 @@ public interface FundOrderDao extends JpaRepository<FundOrderEntity, String>, Jp
 
 	public FundOrderEntity findByOid(String oid);
 	
-	@Query("from FundOrderEntity a where a.cashtoolOid = ?1 and a.state < 1")
-	public List<FundOrderEntity> findByPidForAppointment(String pid);
+	/*@Query("from FundOrderEntity a where a.assetPoolCashtoolOid = ?1 and a.state < 2")
+	public Page<FundOrderEntity> findByPidForAppointment(String pid, Pageable pageable);*/
 	
-	@Query("from FundOrderEntity a where a.cashtoolOid = ?1 and a.state = 1")
-	public List<FundOrderEntity> findByPidForConfirm(String pid);
+	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_CASHTOOL a"
+				+ " LEFT JOIN T_GAM_ASSETPOOL_CASHTOOL_ORDER b ON a.oid = b.assetPoolCashtoolOid"
+				+ " WHERE a.assetPoolOid = ?1 and a.state < 2 limit ?2, ?3", nativeQuery = true)
+	public List<FundOrderEntity> findByPidForAppointment(String pid, int sNO, int eNo);
+	
+	/*@Query("from FundOrderEntity a where a.assetPoolCashtoolOid = ?1 and a.state = 2")
+	public Page<FundOrderEntity> findByPidForConfirm(String pid, Pageable pageable);*/
+	
+	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_CASHTOOL a"
+			+ " LEFT JOIN T_GAM_ASSETPOOL_CASHTOOL_ORDER b ON a.oid = b.assetPoolCashtoolOid"
+			+ " WHERE a.assetPoolOid = ?1 and a.state < 2 limit ?2, ?3", nativeQuery = true)
+	public List<FundOrderEntity> findByPidForConfirm(String pid, int sNO, int eNo);
 }

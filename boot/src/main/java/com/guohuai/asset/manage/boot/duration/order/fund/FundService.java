@@ -2,7 +2,10 @@ package com.guohuai.asset.manage.boot.duration.order.fund;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,14 +16,13 @@ public class FundService {
 	@Autowired
 	private FundOrderDao fundOrderDao;
 	@Autowired
-	private FundRedeemDao fundRedeemDao;
-	@Autowired
 	private FundAuditDao fundAuditDao;
 	
 	/**
 	 * 录入申购订单
 	 * @param entity
 	 */
+	@Transactional
 	public void save(FundOrderEntity entity) {
 		fundOrderDao.save(entity);
 	}
@@ -29,22 +31,16 @@ public class FundService {
 	 * 录入持仓信息
 	 * @param entity
 	 */
+	@Transactional
 	public void save(FundEntity entity) {
 		fundDao.save(entity);
-	}
-	
-	/**
-	 * 录入赎回订单
-	 * @param entity
-	 */
-	public void save(FundRedeemEntity entity) {
-		fundRedeemDao.save(entity);
 	}
 	
 	/**
 	 * 录入审核订单
 	 * @param entity
 	 */
+	@Transactional
 	public void save(FundAuditEntity entity) {
 		fundAuditDao.save(entity);
 	}
@@ -54,8 +50,9 @@ public class FundService {
 	 * @param cashtoolOid
 	 * @return
 	 */
-	public FundEntity getFundByCashtoolOid(String cashtoolOid) {
-		FundEntity entity = fundDao.findByCashtoolOid(cashtoolOid);
+	@Transactional
+	public FundEntity getFundByCashtoolOid(String oid) {
+		FundEntity entity = fundDao.findOne(oid);
 		
 		return entity;
 	}
@@ -65,6 +62,7 @@ public class FundService {
 	 * @param oid
 	 * @return
 	 */
+	@Transactional
 	public FundEntity getFundByOid(String oid) {
 		FundEntity entity = fundDao.findOne(oid);
 		
@@ -76,19 +74,9 @@ public class FundService {
 	 * @param oid
 	 * @return
 	 */
+	@Transactional
 	public FundOrderEntity getFundOrderByOid(String oid) {
 		FundOrderEntity entity = fundOrderDao.findByOid(oid);
-		
-		return entity;
-	}
-	
-	/**
-	 * 根据订单oid获取 赎回 的信托（计划）订单
-	 * @param oid
-	 * @return
-	 */
-	public FundRedeemEntity getFundRedeemOrderByOid(String oid) {
-		FundRedeemEntity entity = fundRedeemDao.findByOid(oid);
 		
 		return entity;
 	}
@@ -98,8 +86,11 @@ public class FundService {
 	 * @param pid
 	 * @return
 	 */
-	public List<FundOrderEntity> findByPidForAppointment(String pid) {
-		List<FundOrderEntity> list = fundOrderDao.findByPidForAppointment(pid);
+	@Transactional
+	public List<FundOrderEntity> findByPidForAppointment(String pid, Pageable pageable) {
+		int sNo = pageable.getPageNumber();
+		int eNo = pageable.getPageSize();
+		List<FundOrderEntity> list = fundOrderDao.findByPidForAppointment(pid, sNo, eNo);
 		
 		return list;
 	}
@@ -109,8 +100,11 @@ public class FundService {
 	 * @param pid
 	 * @return
 	 */
-	public List<FundOrderEntity> findByPidForConfirm(String pid) {
-		List<FundOrderEntity> list = fundOrderDao.findByPidForConfirm(pid);
+	@Transactional
+	public List<FundOrderEntity> findByPidForConfirm(String pid, Pageable pageable) {
+		int sNo = pageable.getPageNumber();
+		int eNo = pageable.getPageSize();
+		List<FundOrderEntity> list = fundOrderDao.findByPidForConfirm(pid, sNo, eNo);
 		
 		return list;
 	}

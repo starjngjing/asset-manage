@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.duration.order.fund;
+package com.guohuai.asset.manage.boot.duration.order.trust;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,16 +12,25 @@ import javax.persistence.Table;
 import lombok.Data;
 
 /**
- * 现金类管理工具--申购订单表
+ * 投资标的--申购订单表
  * @author star.zhu
  * 2016年5月17日
  */
 @Data
 @Entity
-@Table(name = "T_GAM_ASSETPOOL_PURCHASE_ORDER")
-public class FundPurchaseEntity implements Serializable {
+@Table(name = "T_GAM_ASSETPOOL_TARGET_ORDER")
+public class TrustOrderEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 状态
+	 */
+	public static final String STATE_FAIL			= "-2";
+	public static final String STATE_AUDIT			= "-1";
+	public static final String STATE_APPOINTMENT	= "0";
+	public static final String STATE_CONFIRM		= "1";
+	public static final String STATE_SUCCESS 		= "2";
 	
 	@Id
 	private String oid;
@@ -41,18 +50,16 @@ public class FundPurchaseEntity implements Serializable {
 	private BigDecimal reserveVolume;
 	// 确认额度
 	private BigDecimal investVolume;
-	// 年化收益率
+	// 收益率
 	private BigDecimal incomeRate;
-	// 每万份收益
-	private BigDecimal netRevenue;
-	// 七日年化收益
-	private BigDecimal yearYield7;
 	// 申请人
 	private String asker;
 	// 审核人
 	private String auditor; 
 	// 预约人
 	private String reserver; 
+	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）
+	private String state;
 	// 确认人
 	private String confirmer; 
 	// 操作员

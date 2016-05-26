@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -27,6 +28,7 @@ public class CapitalEntity implements Serializable {
 	// 关联资产池
 	private String assetPoolOid;
 	// 科目
+	@Column(name = "logSubject")
 	private String subject;
 	// 关联投资标的申购订单
 	private String targetOrderOid;

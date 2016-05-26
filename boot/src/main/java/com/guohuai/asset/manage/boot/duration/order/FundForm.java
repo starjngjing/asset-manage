@@ -19,13 +19,13 @@ public class FundForm implements Serializable {
 
 	private String oid;
 	// 关联产品现金管理工具
-	private String assetPoolCashtoolOid;
+	private String cashtoolOid;
 	// 关联资产池
 	private String assetPoolOid;
 	// 产品现金管理工具名称
-	private String name;
+	private String cashtoolName;
 	// 产品现金管理工具类型
-	private String type;
+	private String cashtoolType;
 	// 投资日
 	private Date investDate; 
 	// 起息日
@@ -64,8 +64,16 @@ public class FundForm implements Serializable {
 	private String reserver; 
 	// 确认人
 	private String confirmer; 
+	// 审核额度
+	private BigDecimal auditVolume;
+	// 预约额度
+	private BigDecimal reserveVolume;
+	// 确认额度
+	private BigDecimal investVolume;
 	// 状态（审核/预约/确认 的结果 成功/失败）
 	private String state;
+	// 操作类型（purchase：申购；redeem：赎回）
+	private String optType;
 	// 操作员
 	private String operator;
 	// UpdateTime
