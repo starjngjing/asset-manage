@@ -496,6 +496,17 @@
           // https://github.com/select2/select2/issues/1436
           $.fn.modal.Constructor.prototype.enforceFocus = function() {}
 
+          // fix 第二层modal退出后导致的第一层modal滚动失效问题
+          // https://github.com/NodeBB/NodeBB/issues/2754
+          $('#mainContent').delegate('.modal', 'hidden.bs.modal', function () {
+            var firstModal = $('.modal.in:last', 'body').data('bs.modal')
+            if (firstModal) {
+              firstModal.$body.addClass('modal-open');
+              firstModal.enforceFocus();
+              firstModal.handleUpdate();
+            }
+          })
+
           // select2 i18n初始化
           $.fn.select2.defaults.set('language', 'zh-CN');
 
