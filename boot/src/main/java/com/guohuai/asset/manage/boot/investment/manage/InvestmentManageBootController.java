@@ -156,7 +156,7 @@ public class InvestmentManageBootController extends BaseController {
 			throw new RuntimeException();
 		}
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
-		investmentService.saveInvestment(investment, operator);
+		investmentService.updateInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
@@ -172,7 +172,7 @@ public class InvestmentManageBootController extends BaseController {
 		String operator = super.getLoginAdmin();
 		Investment investment = investmentService.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
-		investmentService.saveInvestment(investment, operator);
+		investmentService.updateInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.invalid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
