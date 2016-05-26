@@ -301,6 +301,7 @@ public class OrderService {
 		trustEntity.setOid(StringUtil.uuid());
 		trustEntity.setTargetOid(form.getTargetOid());
 		trustEntity.setOrderOid(order.getOid());
+		trustEntity.setAssetPoolOid(form.getAssetPoolOid());
 		trustEntity.setPurchase(PURCHASE);
 		trustEntity.setState(TrustOrderEntity.STATE_AUDIT);
 		trustEntity.setApplyAmount(form.getVolume());

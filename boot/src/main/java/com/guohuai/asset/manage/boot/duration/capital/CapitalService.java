@@ -170,14 +170,18 @@ public class CapitalService {
 		entity.setOid(StringUtil.uuid());
 		entity.setAssetPoolOid(pid);
 		entity.setOperator(uid);
+		entity.setFreezeCash(BigDecimal.ZERO);
+		entity.setUnfreezeCash(BigDecimal.ZERO);
+		entity.setTransitCash(BigDecimal.ZERO);
+		entity.setUntransitCash(BigDecimal.ZERO);
 		if (APPLY.equals(operationType)) {
-			capitalWithApply(sn, target, capital, operationType, poolEntity, entity);
+			capitalWithApply(sn, target, capital, operation, poolEntity, entity);
 		} else if (AUDIT.equals(operationType)) {
-			capitalWithAudit(sn, target, capital, account, operationType, poolEntity, entity, state);
+			capitalWithAudit(sn, target, capital, account, operation, poolEntity, entity, state);
 		} else if (APPOINTMENT.equals(operationType)) {
-			capitalWithAppointment(sn, target, capital, account, operationType, poolEntity, entity, state);
+			capitalWithAppointment(sn, target, capital, account, operation, poolEntity, entity, state);
 		} else if (CONFIRM.equals(operationType)) {
-			capitalWithConfirm(sn, target, capital, account, operationType, poolEntity, entity, state);
+			capitalWithConfirm(sn, target, capital, account, operation, poolEntity, entity, state);
 		}
 		entity.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		

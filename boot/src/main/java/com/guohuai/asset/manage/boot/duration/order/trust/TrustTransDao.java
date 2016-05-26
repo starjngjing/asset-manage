@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface TrustTransDao extends JpaRepository<TrustTransEntity, String>, JpaSpecificationExecutor<TrustTransEntity> {
 
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
-	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.assetPoolTargetOid"
+	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.targetOid"
 	  		+ " WHERE a.targetOid = ?1 and a.state < 2", nativeQuery = true)
 	public List<TrustTransEntity> findTransByPidForAppointment(String pid);
 	
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
-	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.assetPoolTargetOid"
+	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.targetOid"
 	  		+ " WHERE a.targetOid = ?1 and a.state = 2", nativeQuery = true)
 	public List<TrustTransEntity> findTransByPidForConfirm(String pid);
 }

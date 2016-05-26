@@ -141,7 +141,7 @@ public class Investment extends UUID implements Serializable {
 	/**
 	 * 预计年化收益区间
 	 */
-	private String expArorSec;
+//	private String expArorSec;
 	/**
 	 * 主题评级
 	 */

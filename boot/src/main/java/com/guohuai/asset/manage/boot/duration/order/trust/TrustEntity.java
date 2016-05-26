@@ -23,7 +23,9 @@ public class TrustEntity implements Serializable {
 	// 关联订单
 	private String orderOid;
 	// 关联产品
-	private String productOid;
+	private String assetPoolOid;
+	// 收益分配方式
+	private String returnsType;
 	// 申购类型(PURCHASE;TRANS_IN)
 	private String purchase;
 	// 状态(申请中;审核成功;审核失败;预约中;预约失败;投资成功;已转出;投资结束)
