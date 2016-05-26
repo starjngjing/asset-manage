@@ -183,6 +183,7 @@ define([
 								var data = result.investment;
 								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
+								$('#editTargetForm').validator('validate'); // 手动校验一把
 								$('#editTargetModal').modal('show');
 							})
 						},
@@ -445,6 +446,7 @@ define([
 			$('#targetAdd').on('click', function() {
 				$('#addTargetForm').resetForm(); // 先清理表单
 				util.form.validator.init($("#addTargetForm")); // 初始化表单验证
+				$('#addTargetForm').validator('validate'); // 手动校验一把
 				$('#addTargetModal').modal('show')
 			})
 
