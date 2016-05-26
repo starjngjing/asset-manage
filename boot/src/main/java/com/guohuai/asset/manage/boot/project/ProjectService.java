@@ -243,7 +243,7 @@ public class ProjectService {
 			riskFactor = collectScoreWeight.multiply(new BigDecimal(maxRato)); // 计算出项目的风险系数
 			prj.setRiskFactor(riskFactor);
 		}
-		log.info("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor.doubleValue());
+		log.info("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor);
 		return prj;
 	}
 
@@ -268,7 +268,7 @@ public class ProjectService {
 		// query.select(cb.max(maxExp));
 		query.select(cb.max(root.get("riskFactor")));
 
-		query.where(cb.equal(root.get("targetOid"), targetOid));
+		query.where(cb.equal(root.get("investment").get("oid").as(String.class), targetOid));
 		return em.createQuery(query).getSingleResult();
 	}
 
