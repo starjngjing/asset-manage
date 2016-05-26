@@ -95,6 +95,29 @@ define([
 					}
 				}, {
 					align: 'center',
+					field: 'riskRate',
+					formatter: function(val) {
+						// -,0.4)低风险
+						// [0.4,0.6)中风险
+						// [0.6,+)高风险
+						var str ;
+						//if(val)
+						return val;
+					},
+					cellStyle:function(val, row,idx){
+						var color = 'green';
+						if(!val)color = 'green';
+						else if(val<0.4)color='blue'
+						else if(0.4 <= val && val< 0.6)color='yellow'
+						else if(0.6<val)color='red'
+						return {
+						    classes: 'text-nowrap another-class',
+						    css: {"color": color}
+						  };
+					}
+				}, 
+				{
+					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
 							text: '查看详情',
@@ -393,6 +416,7 @@ define([
 									
 									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
+									$('#projectForm').validator('validate'); // 手动校验一把
 									$('#projectModal').modal('show');
 								}
 							});
@@ -473,6 +497,7 @@ define([
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
+				$('#projectForm').validator('validate'); // 手动校验一把
 				$('#projectModal').modal('show');
 			})
 
@@ -496,6 +521,7 @@ define([
 				}
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
+				$('#projectForm').validator('validate'); // 手动校验一把
 			});
 
 			// 新增/修改底层项目-是否有担保人单选按钮改变事件
@@ -508,6 +534,7 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -521,6 +548,7 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -534,16 +562,17 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 			
 			
 			$('#addEventCollect').on('click', function() {
 				eventCollect('');
-			})
+			});
 			$('#editEventCollect').on('click', function() {
 				eventCollect($(document.editTargetForm.oid).val());
-			})
+			});
 			// 标的风险采集
 			function eventCollect(relative) {
 				// TODO 这里要调下, 标的模块要设置标的的oid

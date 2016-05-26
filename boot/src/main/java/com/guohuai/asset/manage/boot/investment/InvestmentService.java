@@ -24,10 +24,8 @@ import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskInd
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectService;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
-import com.guohuai.asset.manage.component.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
-import scala.deprecated;
 
 @Service
 @Transactional
