@@ -416,6 +416,7 @@ define([
 									
 									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
+									$('#projectForm').validator('validate'); // 手动校验一把
 									$('#projectModal').modal('show');
 								}
 							});
@@ -496,6 +497,7 @@ define([
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
 				util.form.validator.init($("#projectForm")); // 初始化表单验证
+				$('#projectForm').validator('validate'); // 手动校验一把
 				$('#projectModal').modal('show');
 			})
 
@@ -519,6 +521,7 @@ define([
 				}
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
+				$('#projectForm').validator('validate'); // 手动校验一把
 			});
 
 			// 新增/修改底层项目-是否有担保人单选按钮改变事件
@@ -531,6 +534,7 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -544,6 +548,7 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -557,6 +562,7 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
+					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 			
