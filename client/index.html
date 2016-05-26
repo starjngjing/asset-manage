@@ -387,6 +387,7 @@
           var config = requireModules[0]
           var $$ = requireModules[1]
           var http = requireModules[2]
+          var util = requireModules[3]
 
           // 获取hash，通过hash定位到当前页面，hash中 '?' 及以后的部分作为参数内容，不作为页面判断依据
           var hash = ''
@@ -434,6 +435,11 @@
                     .on('blur', function () {
                       $(document).off('keydown.formInput')
                     })
+                  // 面包屑导航点击按钮初始化
+                  $('[data-jump-to]').on('click', function () {
+                    var pageName = $(this).attr('data-jump-to')
+                    util.nav.dispatch(pageName)
+                  })
                   // icheck datetimepicker全局初始化
                   $$.inputPluginsInit($('#mainContent'))
                   // 枚举值自动填充，非首次加载
