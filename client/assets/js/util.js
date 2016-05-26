@@ -34,7 +34,7 @@ define([
 				str = '高'
 				className = 'bg-red'
 			}
-			return '<span style="padding: 1px 12px;" class="' + className + '">' + str + '</span>';
+			return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
 		},
       /**
        * 常用 formatter

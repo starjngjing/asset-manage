@@ -228,6 +228,7 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') {
 									$("#rejectDesc").hide()
