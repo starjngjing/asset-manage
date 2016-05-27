@@ -251,6 +251,20 @@ define([
             location.hash = '#' + pageName + '?' + querystring
           }
         })
+      },
+      /**
+       * 获取hash中的参数，转成json object
+       * @param hash
+       * @returns json object
+       */
+      getHashObj: function (hash) {
+        var querystring = hash.substr(hash.indexOf('?') + 1)
+        var obj = {}
+        querystring.split('&').forEach(function (item) {
+          var arr = item.split('=')
+          obj[arr[0]] = arr[1]
+        })
+        return obj
       }
     },
     /**

@@ -82,13 +82,14 @@ define([
             }
           },
           {
-            width: 180,
+            width: 120,
             align: 'center',
             formatter: function (val, row) {
               var buttons = [{
-                text: '详情',
+                text: '查看详情',
                 type: 'button',
-                class: 'item-detail'
+                class: 'item-detail',
+                isRender: parseInt(row.state) === 1
               }, {
                 text: '审核',
                 type: 'button',

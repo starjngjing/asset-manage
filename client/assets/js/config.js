@@ -161,6 +161,11 @@ define(function() {
 					getAll: this.host + "/ams/duration/assetPool/getAll",				// 获取全部资产池
 					getById: this.host + '/ams/duration/assetPool/getPoolByOid',		// 获取单条资产池
 					getNameList: this.host + '/ams/duration/assetPool/getAllNameList'		//获取资产池下拉菜单列表
+				},
+				order: {	// 订单
+					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund',	// 货币基金申购
+					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust',	// 信托计划申购
+					getTargetList: this.host + '/ams/duration/product/getTargetList',	 // 获取标的列表
 				}
 			},
 			role: {
