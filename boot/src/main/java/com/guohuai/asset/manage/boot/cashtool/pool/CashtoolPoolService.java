@@ -58,11 +58,11 @@ public class CashtoolPoolService {
 			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {	
 				List<Predicate> predicate = new ArrayList<>();
 				if (null != cashtoolTypes && cashtoolTypes.length > 0) {
-					Expression<String> expType = root.get("etfLof").as(String.class); // 标的类型
+					Expression<String> expType = root.get("etfLof").as(String.class); // 现金管理工具类型
 					predicate.add(expType.in(cashtoolTypes));// type =  PREPARE
 				}
 				
-				Expression<String> exp = root.get("state").as(String.class); // 标的生命周期					
+				Expression<String> exp = root.get("state").as(String.class); // 现金管理工具状态					
 				predicate.add(exp.in(new Object[] { CashTool.CASHTOOL_STATE_collecting }));//state = PREPARE
 				
 //				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日

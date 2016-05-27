@@ -76,7 +76,7 @@ public class TargetService {
 			TrustForm form = null;
 			for (Investment inv : list) {
 				form = new TrustForm();
-				form.setTargetOid(inv.getSn());
+				form.setTargetOid(inv.getOid());
 				form.setTargetName(inv.getName());
 				form.setTargetType(inv.getType());
 				form.setExpSetDate(inv.getExpSetDate());
