@@ -87,7 +87,22 @@ function (http, config, util, $$) {
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
-
+							'click .item-delete': function (e, val, row) {
+								$$.confirm({
+									container: $('#confirmModal'),
+									trigger: this,
+									accept: function () {
+										http.post(config.api.role.delete, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form'
+										}, function (result) {
+											$('#roleTable').bootstrapTable('refresh')
+										})
+									}
+								})
+							}
 						}
 					}
 				]
@@ -128,7 +143,9 @@ function (http, config, util, $$) {
 					url: config.api.role.save,
 					success: function (result) {
 						$(form).find('input[name=auths]').remove()
-						console.log(result)
+						util.form.reset($(form))
+						$('#roleTable').bootstrapTable('refresh')
+						$('#addRoleModal').modal('hide')
 					}
 				})
 			})
