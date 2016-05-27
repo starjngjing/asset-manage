@@ -103,7 +103,7 @@ define([
             	      text: '估值',
             	      type: 'button',
             	      class: 'item-assess',
-            	      isRender: true
+            	      isRender: false
             	    },
             	    {
             	      text: '成立',
@@ -141,7 +141,7 @@ define([
               	    	type: 'button',
               	    	class: 'item-financialData',
               	    	//isRender: row.state == 'establish',
-              	    	isRender: true,
+              	    	isRender: false,
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
