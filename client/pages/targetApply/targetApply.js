@@ -97,23 +97,7 @@ define([
 					align: 'center',
 					field: 'riskRate',
 					formatter: function(val) {
-						// -,0.4)低风险
-						// [0.4,0.6)中风险
-						// [0.6,+)高风险
-						var str ;
-						//if(val)
-						return val;
-					},
-					cellStyle:function(val, row,idx){
-						var color = 'green';
-						if(!val)color = 'green';
-						else if(val<0.4)color='blue'
-						else if(0.4 <= val && val< 0.6)color='yellow'
-						else if(0.6<val)color='red'
-						return {
-						    classes: 'text-nowrap another-class',
-						    css: {"color": color}
-						  };
+						return util.table.convertRisk(val);
 					}
 				}, 
 				{
@@ -199,6 +183,7 @@ define([
 								var data = result.investment;
 								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
+								$('#editTargetForm').validator('validate'); // 手动校验一把
 								$('#editTargetModal').modal('show');
 							})
 						},
@@ -244,6 +229,7 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') {
 									$("#rejectDesc").hide()
@@ -460,6 +446,7 @@ define([
 			$('#targetAdd').on('click', function() {
 				$('#addTargetForm').resetForm(); // 先清理表单
 				util.form.validator.init($("#addTargetForm")); // 初始化表单验证
+				$('#addTargetForm').validator('validate'); // 手动校验一把
 				$('#addTargetModal').modal('show')
 			})
 

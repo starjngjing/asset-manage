@@ -11,6 +11,31 @@ define([
      * table操作实用工具
      */
     table: {
+    	/**
+    	 * 格式化风险等级
+    	 * @param {Object} val
+    	 */
+		convertRisk:function(val){
+			// -,0.4)低风险
+			// [0.4,0.6)中风险
+			// [0.6,+)高风险
+			var str = '';
+			var className = '';
+			if(!val){
+				str = '无'
+				className = 'bg-green'
+			}else if (val < 0.4) {
+				str = '低'
+				className = 'bg-blue'
+			} else if (0.4 <= val && val < 0.6) {
+				str = '中'
+				className = 'bg-yellow'
+			} else {
+				str = '高'
+				className = 'bg-red'
+			}
+			return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
+		},
       /**
        * 常用 formatter
        */

@@ -2,12 +2,23 @@ package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +45,7 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/createPool", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> createPool(@RequestBody AssetPoolForm form) {
+	public @ResponseBody ResponseEntity<Response> createPool(AssetPoolForm form) {
 		assetPoolService.createPool(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
@@ -49,7 +60,7 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/auditPool", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> auditPool(String operation, String oid) {
+	public @ResponseBody ResponseEntity<Response> auditPool(@RequestParam String operation, @RequestParam String oid) {
 		assetPoolService.auditPool(operation, oid, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
@@ -57,14 +68,30 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
-	 * 获取所有的资产池列表
+	 * 获取所有的资产池列表，支持模糊查询
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAll() {
-		List<AssetPoolForm> list = assetPoolService.getAllList();
+	public @ResponseBody ResponseEntity<Response> getAll(@RequestParam String name,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
+			@RequestParam(required = false, defaultValue = "createTime") String sortField,
+			@RequestParam(required = false, defaultValue = "desc") String sort) {
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Specification<AssetPoolEntity> spec = new Specification<AssetPoolEntity>() {
+			@Override
+			public Predicate toPredicate(Root<AssetPoolEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.like(root.get("name").as(String.class), "%" + name + "%");
+			}
+		};
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		List<AssetPoolForm> list = assetPoolService.getAllList(spec, pageable);
 		Response r = new Response();
 		r.with("rows", list);
+		r.with("total", list.size());
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 
@@ -74,7 +101,7 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getPoolByOid", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getPoolByOid(String oid) {
+	public @ResponseBody ResponseEntity<Response> getPoolByOid(@RequestParam String oid) {
 		AssetPoolForm form = assetPoolService.getPoolByOid(oid);
 		Response r = new Response();
 		r.with("result", form);
@@ -87,22 +114,10 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/editPool", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> editPool(@RequestBody AssetPoolForm form) {
+	public @ResponseBody ResponseEntity<Response> editPool(AssetPoolForm form) {
 		assetPoolService.editPool(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
-		return new ResponseEntity<Response>(r, HttpStatus.OK);
-	}
-
-	/**
-	 * 根据名称获取所有的资产池列表，支持模糊查询
-	 * @return
-	 */
-	@RequestMapping(value = "/getListByName", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getListByName(String name) {
-		List<AssetPoolForm> list = assetPoolService.getAllList();
-		Response r = new Response();
-		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 

@@ -21,15 +21,22 @@ public class FundOrderEntity implements Serializable {
 	/**
 	 * 状态
 	 */
-	public static final String STATE_SUCCESS 	= "0";
-	public static final String STATE_FAIL		= "-1";
+	public static final String STATE_FAIL			= "-2";
+	public static final String STATE_AUDIT			= "-1";
+	public static final String STATE_APPOINTMENT	= "0";
+	public static final String STATE_CONFIRM		= "1";
+	public static final String STATE_SUCCESS 		= "2";
 
 	@Id
 	private String oid;
 	// 关联产品现金管理工具
-	private String cashtoolOid;
-	// 类型(purchase;redeem)
+	private String assetPoolCashtoolOid;
+	// 产品现金管理工具名称
+	private String name;
+	// 产品现金管理工具类型
 	private String type;
+	// 类型(purchase;redeem)
+	private String optType;
 	// 投资日
 	private Date investDate; 
 	// 起息日
@@ -70,7 +77,7 @@ public class FundOrderEntity implements Serializable {
 	private BigDecimal reserveVolume;
 	// 确认额度
 	private BigDecimal investVolume;
-	// 状态（-1：未审核，0：未确认，1：确认）
+	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）
 	private String state;
 	// 操作员
 	private String operator;

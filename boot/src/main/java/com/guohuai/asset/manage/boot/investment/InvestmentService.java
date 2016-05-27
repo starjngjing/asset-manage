@@ -189,6 +189,7 @@ public class InvestmentService {
 		temp.setUpdateTime(DateUtil.getSqlCurrentDate());
 		Investment entity = this.investmentDao.save(temp);
 		/* 计算标的风险开始 */
+		entity.setRiskOption(form.getRiskOption()); // TODO 因为数据库里面没有RiskOption这个字段   所以要重新设置一下
 		entity = this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
 		return entity;
