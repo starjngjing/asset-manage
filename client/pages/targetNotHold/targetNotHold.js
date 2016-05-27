@@ -111,7 +111,7 @@ define([
 //              field: 'operator',
               width: 260,
               align: 'center',
-              formatter: function (val) {
+              formatter: function (val, row) {
             	  var buttons = [
             	    {
             	      text: '成立',
