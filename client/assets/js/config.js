@@ -169,7 +169,9 @@ define(function() {
 				}
 			},
 			role: {
-				list: this.host + '/operate/admin/ctrl/role/list'					// 角色列表
+				list: this.host + '/operate/admin/ctrl/role/list',					// 角色列表
+				save: this.host + '/operate/admin/ctrl/role/save',					// 新建角色
+				delete: this.host + '/operate/admin/ctrl/role/delete',			// 删除角色
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list'					// 权限列表

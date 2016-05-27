@@ -120,6 +120,17 @@ function (http, config, util, $$) {
 			// 新建按钮 - 确定按钮点击事件
 			$('#doAddRole').on('click', function () {
 				var form = document.addRoleForm
+				form.systemOid.value = 'GAH'
+				chosenAuths.forEach(function (item) {
+					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')
+				})
+				$(form).ajaxSubmit({
+					url: config.api.role.save,
+					success: function (result) {
+						$(form).find('input[name=auths]').remove()
+						console.log(result)
+					}
+				})
 			})
 
 			function getQueryParams (val) {
