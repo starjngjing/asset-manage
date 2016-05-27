@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.acct.docword;
+package com.guohuai.asset.manage.boot.acct.doc.word;
 
 import java.util.ArrayList;
 import java.util.HashMap;

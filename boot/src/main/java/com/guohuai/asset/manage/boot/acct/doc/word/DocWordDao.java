@@ -1,4 +1,4 @@
-package com.guohuai.asset.manage.boot.acct.docword;
+package com.guohuai.asset.manage.boot.acct.doc.word;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

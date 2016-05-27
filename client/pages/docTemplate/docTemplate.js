@@ -2,54 +2,172 @@
  * 凭证模板
  */
 define([
-  'http',
-  'config',
-  'util',
-  'extension'
-], function (http, config, util, $$) {
-  return {
-    name: 'docTemplate',
-    init: function () {
-      // 分页配置
-      var pageOptions = {
-        poolName: "",
-        page: 1,
-        rows: 10
-      }
-      // 数据表格配置
-      var tableConfig = {
-        ajax: function (origin) {
-          http.post(config.api.duration.assetPool.getAll, {
-            data: pageOptions,
-            contentType: 'form'
-          }, function (rlt) {
-            origin.success(rlt)
-          })
-        },
-        pageNumber: pageOptions.page,
-        pageSize: pageOptions.rows,
-        pagination: true,
-        sidePagination: 'server',
-        pageList: [10, 20, 30, 50, 100],
-        queryParams: getQueryParams,
-        onLoadSuccess: function () {
-        },
-        columns: []
-      }
+	'http',
+	'config',
+	'util',
+	'extension'
+], function(http, config, util, $$) {
+	return {
+		name: 'docTemplate',
+		init: function() {
+			http.post(config.api.acct.doc.type.search, {
+				data: {},
+				contentType: 'form'
+			}, function(val) {
+				$.each(val, function(i, v) {
+					$(document.searchForm.templateType).append('<option value="' + v.oid + '">' + v.name + '</option>')
+				});
+			});
 
-      // 初始化数据表格
-      $('#assetPoolTable').bootstrapTable(tableConfig);
+			var queryParams = {
+				templateType: '',
+				templateName: '',
+				page: 1,
+				size: 10
+			};
 
-      $('#updateTemplateModal').modal('show')
+			$('#dataTable').bootstrapTable({
+				classes: '',
+				ajax: function(origin) {
+					http.post(config.api.acct.doc.template.entry.search, {
+						data: queryParams,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				queryParams: function(val) {
+					var form = document.searchForm;
+					queryParams.templateType = form.templateType.value.trim();
+					queryParams.templateName = form.templateName.value.trim();
+					queryParams.size = val.limit;
+					queryParams.page = parseInt(val.offset / val.limit) + 1
+				},
+				pageNumber: queryParams.page,
+				pageSize: queryParams.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				columns: [{
+					field: 'typeName',
+					formatter: function(val, row, index) {
+						return row.master ? val : '';
+					},
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}, {
+					field: 'templateName',
+					formatter: function(val, row, index) {
+						return row.master ? val : '';
+					},
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}, {
+					field: 'entryDigest',
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}, {
+					field: 'accountOid',
+					formatter: function(val, row, index) {
+						return val + '&nbsp;&nbsp;' + row.accountName;
+					},
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}, {
+					field: 'entryDirection',
+					formatter: function(val, row, index) {
+						if (val == 'Dr') {
+							return '借';
+						} else if (val == 'Cr') {
+							return '贷';
+						} else if (val == 'Er') {
+							return '平';
+						} else {
+							return '';
+						}
+					},
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}, {
+					align: 'center',
+					field: 'entryOid',
+					formatter: function(val, row, index) {
 
-      function getQueryParams(val) {
-        var form = document.searchForm
-        $.extend(pageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
+						var updateButton = {
+							text: '修改',
+							type: 'button',
+							class: 'item-update',
+							isRender: true
+						};
 
-        pageOptions.rows = val.limit
-        pageOptions.page = parseInt(val.offset / val.limit) + 1
-        return val
-      }
-    }
-  }
+						var buttons = [updateButton];
+						return row.master ? util.table.formatter.generateButton(buttons) : '';
+					},
+					events: {
+						'click .item-update': function(e, value, row) {}
+					},
+					cellStyle: function(val, row, index) {
+						return {
+							css: {
+								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+							}
+						}
+					}
+				}],
+				onLoadSuccess: function(data) {
+					$.each(data.rows, function(i, item) {
+						if (item.master) {
+							$('#dataTable').bootstrapTable('mergeCells', {
+								index: i,
+								field: 'typeName',
+								colspan: 1,
+								rowspan: item.rowspan
+							});
+							$('#dataTable').bootstrapTable('mergeCells', {
+								index: i,
+								field: 'templateName',
+								colspan: 1,
+								rowspan: item.rowspan
+							});
+							$('#dataTable').bootstrapTable('mergeCells', {
+								index: i,
+								field: 'entryOid',
+								colspan: 1,
+								rowspan: item.rowspan
+							});
+						}
+					});
+				}
+
+			});
+
+			$$.searchInit($('#searchForm'), $('#dataTable'));
+
+		}
+	}
 })

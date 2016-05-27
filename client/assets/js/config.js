@@ -106,6 +106,16 @@ define(function() {
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
 			},
 			acct: {
+				doc: {
+					type: {
+						search: this.host + '/ams/acct/doc/type/search'
+					},
+					template: {
+						entry: {
+							search: this.host + '/ams/acct/doc/template/entry/search'
+						}
+					}
+				},
 				account: {
 					search: this.host + '/ams/acct/account/search',
 					update: this.host + '/ams/acct/account/update'
