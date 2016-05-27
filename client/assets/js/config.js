@@ -105,6 +105,12 @@ define(function() {
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
 			},
+			acct: {
+				account: {
+					search: this.host + '/ams/acct/account/search',
+					update: this.host + '/ams/acct/account/update'
+				}
+			},
 			system: {
 				config: {
 					ccp: {
