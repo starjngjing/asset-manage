@@ -106,7 +106,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/auditForTrust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditForTrust(TrustForm form) {
-		orderService.purchaseForTrust(form, "STAR");
+		orderService.auditForTrust(form, "STAR");
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -222,6 +222,45 @@ public class OrderController {
 	@RequestMapping(value = "/getFundByOid", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getFundByOid(String oid) {
 		FundForm form = orderService.getFundByOid(oid);
+		Response r = new Response();
+		r.with("result", form);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 货币基金（现金管理工具）的订单信息
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/getFundOrderByOid", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getFundOrderByOid(String oid) {
+		FundForm form = orderService.getFundOrderByOid(oid);
+		Response r = new Response();
+		r.with("result", form);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 信托（计划） 的持仓信息
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/getTrustByOid", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getTrustByOid(String oid) {
+		TrustForm form = orderService.getTrustByOid(oid);
+		Response r = new Response();
+		r.with("result", form);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 信托（计划） 的订单信息
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/getTrustOrderByOid", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getTrustOrderByOid(String oid, String type) {
+		TrustForm form = orderService.getTrustOrderByOid(oid, type);
 		Response r = new Response();
 		r.with("result", form);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

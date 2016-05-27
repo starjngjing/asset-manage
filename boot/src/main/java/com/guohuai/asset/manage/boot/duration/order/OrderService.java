@@ -22,6 +22,7 @@ import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeEntity;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustOrderEntity;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustService;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustTransEntity;
+import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -178,10 +179,10 @@ public class OrderService {
 		
 		// 资金变动记录
 		if ("redeem".equals(order.getType())) {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getAuditVolume(), order.getReturnVolume(), REDEEM, AUDIT, uid, form.getState());
 		} else {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getAuditVolume(), order.getVolume(), PURCHASE, AUDIT, uid, form.getState());
 		}
 	}
@@ -221,10 +222,10 @@ public class OrderService {
 		
 		// 资金变动记录
 		if ("redeem".equals(order.getType())) {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getReserveVolume(), order.getReturnVolume(), REDEEM, APPOINTMENT, uid, form.getState());
 		} else {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getReserveVolume(), order.getVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
 		}
 	}
@@ -264,10 +265,10 @@ public class OrderService {
 		
 		// 资金变动记录
 		if ("redeem".equals(order.getType())) {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getInvestVolume(), order.getReturnVolume(), REDEEM, CONFIRM, uid, form.getState());
 		} else {
-			capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
+			capitalService.capitalFlow(form.getAssetPoolOid(), order.getAssetPoolCashtoolOid(), 
 					order.getOid(), FUND, form.getInvestVolume(), order.getVolume(), PURCHASE, CONFIRM, uid, form.getState());
 		}
 	}
@@ -299,10 +300,12 @@ public class OrderService {
 		
 		TrustEntity trustEntity = new TrustEntity();
 		trustEntity.setOid(StringUtil.uuid());
-		trustEntity.setTargetOid(form.getTargetOid());
+//		trustEntity.setTargetOid(form.getTargetOid());
+		trustEntity.getTarget().setOid(form.getTargetOid());
 		trustEntity.setOrderOid(order.getOid());
 		trustEntity.setAssetPoolOid(form.getAssetPoolOid());
 		trustEntity.setPurchase(PURCHASE);
+		trustEntity.setIncomeDate(form.getIncomeDate());
 		trustEntity.setState(TrustOrderEntity.STATE_AUDIT);
 		trustEntity.setApplyAmount(form.getVolume());
 		
@@ -320,7 +323,7 @@ public class OrderService {
 	 * @param uid
 	 */
 	@Transactional
-	public void auditTrust(TrustForm form, String uid) {
+	public void auditForTrust(TrustForm form, String uid) {
 		// 录入申购订单的审核信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
 		order.setAuditVolume(form.getAuditVolume());
@@ -344,7 +347,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getAuditVolume(), order.getApplyVolume(), PURCHASE, AUDIT, uid, form.getState());
 	}
 	
@@ -379,7 +382,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getReserveVolume(), order.getApplyVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
 	}
 	
@@ -414,7 +417,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getInvestVolume(), order.getApplyVolume(), PURCHASE, CONFIRM, uid, form.getState());
 	}
 	
@@ -481,7 +484,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(form.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getVolume(), order.getIncome(), INCOME, AUDIT, uid, form.getState());
 	}
 	
@@ -516,7 +519,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(form.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getVolume(), order.getAuditIncome(), INCOME, CONFIRM, uid, form.getState());
 	}
 	
@@ -578,7 +581,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(form.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getVolume(), order.getTranVolume(), TRANSFER, AUDIT, uid, form.getState());
 	}
 	
@@ -613,7 +616,7 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
+		capitalService.capitalFlow(form.getAssetPoolOid(), order.getTargetOid(), 
 				order.getOid(), TRUST, form.getVolume(), order.getTranVolume(), TRANSFER, CONFIRM, uid, form.getState());
 	}
 	
@@ -623,8 +626,8 @@ public class OrderService {
 	 * @return
 	 */
 	@Transactional
-	public FundOrderEntity getFundOrderByOid(String oid) {
-		FundOrderEntity entity = fundService.getFundOrderByOid(oid);
+	public TrustOrderEntity getTrustPurchaseOrderByOid(String oid) {
+		TrustOrderEntity entity = trustService.getTrustOrderByOid(oid);
 		
 		return entity;
 	}
@@ -665,6 +668,29 @@ public class OrderService {
 		if (null != entity) {
 			try {
 				BeanUtils.copyProperties(form, entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return form;
+	}
+	
+	/**
+	 * 获取现金管理类工具的订单信息
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public FundForm getFundOrderByOid(String oid) {
+		FundForm form = new FundForm();
+		FundOrderEntity entity = fundService.getFundOrderByOid(oid);
+		if (null != entity) {
+			try {
+				BeanUtils.copyProperties(form, entity);
+				form.setCashtoolOid(entity.getAssetPoolCashtoolOid());
+				form.setCashtoolName(entity.getName());
+				form.setCashtoolType(entity.getType());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -757,6 +783,77 @@ public class OrderService {
 	}
 	
 	/**
+	 * 获取信托计划的持仓信息
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public TrustForm getTrustByOid(String oid) {
+		TrustForm form = new TrustForm();
+		TrustEntity entity = trustService.getTrustByOid(oid);
+		if (null != entity) {
+			try {
+				BeanUtils.copyProperties(form, entity);
+				Investment target = entity.getTarget();
+				form.setTargetOid(target.getOid());
+				form.setTargetName(target.getName());
+				form.setTargetType(target.getType());
+				form.setExpSetDate(target.getExpSetDate());
+				form.setHoldAmount(entity.getInvestAmount());
+				form.setSubjectRating(target.getSubjectRating());
+				form.setRaiseScope(target.getRaiseScope());
+				form.setAccrualType(target.getAccrualType());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return form;
+	}
+	
+	/**
+	 * 获取信托计划的订单信息
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public TrustForm getTrustOrderByOid(String oid, String type) {
+		TrustForm form = new TrustForm();
+		if ("申购".equals(type)) {
+			TrustOrderEntity entity = trustService.getTrustOrderByOid(oid);
+			if (null != entity) {
+				try {
+					BeanUtils.copyProperties(form, entity);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} else if ("本息兑付".equals(type)) {
+			TrustIncomeEntity entity = trustService.getTrustIncomeOrderByOid(oid);
+			if (null != entity) {
+				try {
+					BeanUtils.copyProperties(form, entity);
+					form.setAuditVolume(entity.getAuditIncome());
+					form.setInvestVolume(entity.getInvestIncome());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			TrustTransEntity entity = trustService.getTrustTransOrderByOid(oid);
+			if (null != entity) {
+				try {
+					BeanUtils.copyProperties(form, entity);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return form;
+	}
+	
+	/**
 	 * 根据资产池id获取 预约中 的信托（计划）列表
 	 * @param pid
 	 * 			资产池id
@@ -796,12 +893,78 @@ public class OrderService {
 				form.setExpAror(entity.getIncomeRate());
 				form.setSubjectRating(entity.getSubjectRating());
 				form.setState(entity.getState());
-				form.setType("申购");
+				form.setType("本息兑付");
 				
 				formList.add(form);
 			}
 		}
 		List<TrustTransEntity> transList = trustService.findTransByPidForAppointment(pid);
+		if (!transList.isEmpty()) {
+			for (TrustTransEntity entity : transList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getTranVolume());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("转让");
+				
+				formList.add(form);
+			}
+		}
+		
+		return formList;
+	}
+	
+	/**
+	 * 根据资产池id获取 成立中 的信托（计划）列表
+	 * @param pid
+	 * 			资产池id
+	 * @return
+	 */
+	@Transactional
+	public List<TrustForm> getTrustListByPid(String pid) {
+		List<TrustForm> formList = Lists.newArrayList();
+		TrustForm form = null;
+		
+		List<TrustOrderEntity> orderList = trustService.findPurchaseByPidForConfirm(pid);
+		if (!orderList.isEmpty()) {
+			for (TrustOrderEntity entity : orderList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getApplyVolume());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("申购");
+				
+				formList.add(form);
+			}
+		}
+		List<TrustIncomeEntity> incomeList = trustService.findIncomeByPidForConfirm(pid);
+		if (!incomeList.isEmpty()) {
+			for (TrustIncomeEntity entity : incomeList) {
+				form = new TrustForm();
+				form.setOid(entity.getOid());
+				form.setTargetOid(entity.getTargetOid());
+				form.setTargetName(entity.getTargetName());
+				form.setTargetType(entity.getTargetType());
+				form.setVolume(entity.getIncome());
+				form.setExpAror(entity.getIncomeRate());
+				form.setSubjectRating(entity.getSubjectRating());
+				form.setState(entity.getState());
+				form.setType("申购");
+				
+				formList.add(form);
+			}
+		}
+		List<TrustTransEntity> transList = trustService.findTransByPidForConfirm(pid);
 		if (!transList.isEmpty()) {
 			for (TrustTransEntity entity : transList) {
 				form = new TrustForm();
@@ -820,18 +983,5 @@ public class OrderService {
 		}
 		
 		return formList;
-	}
-	
-	/**
-	 * 根据资产池id获取 成立中 的信托（计划）列表
-	 * @param pid
-	 * 			资产池id
-	 * @return
-	 */
-	@Transactional
-	public List<TrustForm> getTrustListByPid(String pid) {
-		List<TrustForm> list = Lists.newArrayList();
-		
-		return list;
 	}
 }
