@@ -19,7 +19,7 @@ public class TargetIncomeListResp extends PageResp<TargetIncome> {
 	}
 
 	public TargetIncomeListResp(List<TargetIncome> list) {
-		this(list, list.size());
+		this(list, null == list ? 0 : list.size());
 	}
 
 	public TargetIncomeListResp(List<TargetIncome> list, long total) {
