@@ -99,6 +99,12 @@ define([
               align: 'center',
               formatter: function (val, row) {
             	  var buttons = [
+            	  	{
+            	      text: '估值',
+            	      type: 'button',
+            	      class: 'item-assess',
+            	      isRender: true
+            	    },
             	    {
             	      text: '成立',
             	      type: 'button',
@@ -141,6 +147,10 @@ define([
             	  return util.table.formatter.generateButton(buttons);
               },
               events: {
+	              'click .item-assess': function (e, value, row) { // 标的估值
+	              	  // 需求还未确定
+	              	  alert('敬请期待!!!');
+	              },
                   'click .item-establish': function (e, value, row) { // 标的成立
                 	  // 初始化   付息日 
                       for ( var i = 1; i <= 30; i++) {
@@ -206,7 +216,7 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
-                		  $$.detailAutoFix($('#targetIncomeForm'), data);	// 自动填充详情
+                		  $$.detailAutoFix($('#targetDetailIncome'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
                 	  util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
@@ -280,7 +290,8 @@ define([
                 	  
                   },
                   'click .item-financialData': function(e, value, row) {// 财务数据
-                	  
+                	  // 需求还未确定
+                	  alert('敬请期待!!!');
                   }
                 
               }
@@ -424,7 +435,6 @@ define([
           return val
         }
         
-      
     }
   }
 })
