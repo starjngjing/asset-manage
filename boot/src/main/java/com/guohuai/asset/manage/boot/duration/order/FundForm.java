@@ -41,7 +41,7 @@ public class FundForm implements Serializable {
 	// 收益截止日
 	private Date endYield;
 	// 当前持有额度
-	private BigDecimal holdVolume;
+	private BigDecimal amount;
 	// 赎回份额
 	private BigDecimal returnVolume;
 	// 年化收益率
@@ -70,6 +70,16 @@ public class FundForm implements Serializable {
 	private BigDecimal reserveVolume;
 	// 确认额度
 	private BigDecimal investVolume;
+	// 起息份额
+	private BigDecimal interestAcount;
+	// 申购中份额
+	private BigDecimal purchaseVolume;
+	// 赎回中份额
+	private BigDecimal redeemVolume;
+	// 冻结资金
+	private BigDecimal frozenCapital;
+	// 在途资金
+	private BigDecimal onWayCapital;
 	// 状态（审核/预约/确认 的结果 成功/失败）
 	private String state;
 	// 操作类型（purchase：申购；redeem：赎回）
