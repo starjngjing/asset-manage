@@ -65,7 +65,7 @@ public class TargetController {
 	@RequestMapping(value = "/getTargetList", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getTargetList(@RequestParam String pid) {
 		String[] scopes = scopeService.getScopes(pid);
-		List<FundForm> fundList = targetService.getFundListByScopes(scopes);
+		List<FundForm> fundList = targetService.getFundListByScopes(null);
 		List<TrustForm> trustList = targetService.getTrustListByScopes(scopes);
 		Response r = new Response();
 		r.with("fund", fundList);

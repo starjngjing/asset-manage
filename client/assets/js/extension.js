@@ -78,8 +78,8 @@ define([
       var field = options.field || 'text'
       var formatter = options.formatter || null
 
-      var fromList = $('<div class="col-sm-6"><div class="box box-primary"></div></div>')
-      var toList = $('<div class="col-sm-6"><div class="box box-primary"></div></div>')
+      var fromList = $('<div class="col-sm-6"><div class="box" style="border: 1px solid #d2d6de;"></div></div>')
+      var toList = $('<div class="col-sm-6"><div class="box" style="border: 1px solid #d2d6de;"></div></div>')
       var fromHeader = generateHeader(fromTitle)
       var toHeader = generateHeader(toTitle)
       var fromBody = generateBody(fromList, toList, fromArray, toArray)
@@ -90,7 +90,7 @@ define([
       container.empty().append(fromList).append(toList)
 
       function generateHeader (title) {
-        return $('<div class="box-header"><h6 style="margin: 0;">' + title + '</h6></div>')
+        return $('<div class="box-header" style="border-bottom: 1px solid #d2d6de;"><h6 style="margin: 0;">' + title + '</h6></div>')
       }
 
       function generateBody (fromList, toList, fromArr, toArr, sign) {

@@ -2,13 +2,15 @@
  * 资产池存续期管理
  */
 define([
+  'http',
   'config',
-  'util'
-], function (config, util) {
+  'util',
+  'extension'
+], function (http, config, util, $$) {
   return {
     name: 'AssetPoolDuration',
     init: function () {
-      // js逻辑写在这里
+      var pid = util.nav.getHashObj(location.hash).id
 
       // 饼图生成
       var pieChart = echarts.init(document.getElementById('pieChart'))
@@ -16,16 +18,6 @@ define([
       // 柱状图生成
       var barChart = echarts.init(document.getElementById('barChart'))
       barChart.setOption(getBarOptions(config))
-
-      // 资产申购按钮点击事件
-      $('#buyAsset').on('click', function () {
-        $('#buyAssetModal').modal('show')
-      })
-
-      // 出入金明细按钮点击事件
-      $('#showAccountDetail').on('click', function () {
-        $('#accountDetailModal').modal('show')
-      })
 
       // 资产申购类型radio change事件
       $(document.buyAssetForm.type).on('ifChecked', function () {
@@ -36,6 +28,84 @@ define([
           $('#buyAssetShowFund').hide()
           $('#buyAssetShowTrust').show()
         }
+      })
+
+      // 资产申购表单初始化
+      util.form.validator.init($('#buyAssetForm'))
+
+      // 资产申购按钮点击事件
+      $('#buyAsset').on('click', function () {
+        http.post(config.api.duration.order.getTargetList, {
+          data: {
+            pid: pid
+          },
+          contentType: 'form'
+        }, function (json) {
+          targetNames = json
+          var fundTargetNameOptions = ''
+          var trustTargetNameOptions = ''
+          json.fund.forEach(function (item) {
+            fundTargetNameOptions += '<option value="' + item.cashtoolOid + '">' + item.cashtoolName + '</option>'
+          })
+          json.trust.forEach(function (item) {
+            trustTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
+          })
+          $('#fundTargetName').html(fundTargetNameOptions).trigger('change')
+          $('#trustTargetName').html(trustTargetNameOptions).trigger('change')
+        })
+        http.post(config.api.duration.assetPool.getNameList, function (json) {
+          var assetPoolOptions = ''
+          json.rows.forEach(function (item) {
+            assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
+          })
+          $(document.buyAssetForm.assetPoolOid).html(assetPoolOptions)
+        })
+        $('#buyAssetModal').modal('show')
+      })
+
+      // 缓存标的名称数组值
+      var targetNames = null
+
+      // 资产申购标的名称下拉菜单change事件
+      $('#fundTargetName').on('change', function () {
+        var source = targetNames.fund.filter(function (item) {
+          return item.targetOid === this.value
+        }.bind(this))
+        if (source[0]) {
+          source[0].cashtoolType = util.enum.transform('TARGETTYPE', source[0].cashtoolType)
+          $$.formAutoFix($('#buyAssetForm'), source[0])
+        }
+      })
+      $('#trustTargetName').on('change', function () {
+        var source = targetNames.trust.filter(function (item) {
+          return item.targetOid === this.value
+        }.bind(this))
+        if (source[0]) {
+          source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
+          $$.formAutoFix($('#buyAssetForm'), source[0])
+        }
+      })
+
+      // 资产申购 - 提交审核按钮点击事件
+      $('#doPurchase').on('click', function () {
+        var form = document.buyAssetForm
+        var url = ''
+        if (form.type.value === 'fund') {
+          url = config.api.duration.order.purchaseForFund
+        } else {
+          url = config.api.duration.order.purchaseForTrust
+        }
+        $(form).ajaxSubmit({
+          url: url,
+          success: function (result) {
+            console.log(result)
+          }
+        })
+      })
+
+      // 出入金明细按钮点击事件
+      $('#showAccountDetail').on('click', function () {
+        $('#accountDetailModal').modal('show')
       })
     }
   }
