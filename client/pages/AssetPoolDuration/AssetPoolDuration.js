@@ -174,7 +174,13 @@ define([
                   },
                   contentType: 'form'
                 }, function (json) {
-                  //if (row.operation === '')
+                  if (row.operation === '现金管理工具申赎') {
+                    $$.detailAutoFix($('#fundDetailModal'), json.result)
+                    $('#fundDetailModal').modal('show')
+                  } else {
+                    $$.detailAutoFix($('#trustDetailModal'), json.result)
+                    $('#trustDetailModal').modal('show')
+                  }
                 })
               }
             }

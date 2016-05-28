@@ -1456,3 +1456,261 @@
     </div>
   </div>
 </div>
+
+<!-- 出入金明细 现金类管理工具弹窗 -->
+<div id="fundDetailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">出入金详情</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>标的名称:</dt>
+          <dd>
+            <div data-detail-fetch="cashtoolName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的类型:</dt>
+          <dd>
+            <div data-detail-fetch="cashtoolType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>每万份收益:</dt>
+          <dd>
+            <div data-detail-fetch="netRevenue"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>7日年化收益:</dt>
+          <dd>
+            <div data-detail-fetch="yearYield7"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>风险等级:</dt>
+          <dd>
+            <div data-detail-fetch="riskLevel"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>分红方式:</dt>
+          <dd>
+            <div data-detail-fetch="dividendType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>最新流通份额:</dt>
+          <dd>
+            <div data-detail-fetch="circulationShares"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>投资日:</dt>
+          <dd>
+            <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>当前持有额度:</dt>
+          <dd>
+            <div data-detail-fetch="amount"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>申购额度:</dt>
+          <dd>
+            <div data-detail-fetch="volume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>赎回额度:</dt>
+          <dd>
+            <div data-detail-fetch="returnVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForOrdering">
+          <dt>审核额度:</dt>
+          <dd>
+            <div data-detail-fetch="auditVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept">
+          <dt>预约额度:</dt>
+          <dd>
+            <div data-detail-fetch="reserveVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept">
+          <dt>确认额度:</dt>
+          <dd>
+            <div data-detail-fetch="investVolume"></div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 出入金明细 信托计划弹窗 -->
+<div id="trustDetailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">信托计划审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>标的名称:</dt>
+          <dd>
+            <div data-detail-fetch="targetName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的类型:</dt>
+          <dd>
+            <div data-detail-fetch="targetType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>管理资产池:</dt>
+          <dd>
+            <div data-detail-fetch="assetPoolName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>收益率:</dt>
+          <dd>
+            <div data-detail-fetch="incomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>预计年化收益:</dt>
+          <dd>
+            <div data-detail-fetch="expAror"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>成立日:</dt>
+          <dd>
+            <div data-detail-fetch="setDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>投资日:</dt>
+          <dd>
+            <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>付息方式:</dt>
+          <dd>
+            <div data-detail-fetch="accrualType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>首付息日:</dt>
+          <dd>
+            <div data-detail-fetch="arorFirstDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>付息日:</dt>
+          <dd>
+            <div data-detail-fetch="accrualDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>合同年天数:</dt>
+          <dd>
+            <div data-detail-fetch="contractDays"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的规模:</dt>
+          <dd>
+            <div data-detail-fetch="raiseScope"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的限期:</dt>
+          <dd>
+            <div data-detail-fetch="life"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>起购金额:</dt>
+          <dd>
+            <div data-detail-fetch="floorVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>持有份额:</dt>
+          <dd>
+            <div data-detail-fetch="holdAmount"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>主体评级:</dt>
+          <dd>
+            <div data-detail-fetch="subjectRating"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集起始日:</dt>
+          <dd>
+            <div data-detail-fetch="collectStartDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集截止日:</dt>
+          <dd>
+            <div data-detail-fetch="collectEndDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集期收益:</dt>
+          <dd>
+            <div data-detail-fetch="collectIncomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>申购额度:</dt>
+          <dd>
+            <div data-detail-fetch="volume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForOrdering" style="display: none;">
+          <dt>审核额度:</dt>
+          <dd>
+            <div data-detail-fetch="auditVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept" style="display: none;">
+          <dt>预约额度:</dt>
+          <dd>
+            <div data-detail-fetch="reserveVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept" style="display: none;">
+          <dt>确认额度:</dt>
+          <dd>
+            <div data-detail-fetch="investVolume"></div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
