@@ -25,11 +25,13 @@ public class OrderController {
 	/**
 	 * 货币基金（现金管理工具）申购
 	 * @param form
+	 * @param type
+	 * 			申购方式：assetPool（资产池）；order（订单）
 	 * @return
 	 */
 	@RequestMapping(value = "/purchaseForFund", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> purchaseForFund(FundForm form) {
-		orderService.purchaseForFund(form, "STAR");
+	public @ResponseBody ResponseEntity<Response> purchaseForFund(FundForm form, String type) {
+		orderService.purchaseForFund(form, "STAR", type);
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -246,8 +248,8 @@ public class OrderController {
 	 * 			标的oid
 	 */
 	@RequestMapping(value = "/getTrustByOid", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getTrustByOid(String oid) {
-		TrustForm form = orderService.getTrustByOid(oid);
+	public @ResponseBody ResponseEntity<Response> getTrustByOid(String oid, String type) {
+		TrustForm form = orderService.getTrustByOid(oid, type);
 		Response r = new Response();
 		r.with("result", form);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

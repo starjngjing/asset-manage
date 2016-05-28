@@ -6,7 +6,10 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -30,11 +33,14 @@ public class FundOrderEntity implements Serializable {
 	@Id
 	private String oid;
 	// 关联产品现金管理工具
-	private String assetPoolCashtoolOid;
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assetPoolCashtoolOid", referencedColumnName = "oid")
+	private FundEntity fundEntity;
+//	private String assetPoolCashtoolOid;
 	// 产品现金管理工具名称
-	private String name;
+//	private String name;
 	// 产品现金管理工具类型
-	private String type;
+//	private String type;
 	// 类型(purchase;redeem)
 	private String optType;
 	// 投资日
@@ -42,15 +48,15 @@ public class FundOrderEntity implements Serializable {
 	// 起息日
 	private Date incomeDate; 
 	// 每万份收益
-	private BigDecimal netRevenue;
+//	private BigDecimal netRevenue;
 	// 七日年化收益
-	private BigDecimal yearYield7;
+//	private BigDecimal yearYield7;
 	// 风险等级
-	private String riskLevel;
+//	private String riskLevel;
 	// 分红方式
-	private String dividendType;
+//	private String dividendType;
 	// 最新流通份额
-	private BigDecimal circulationShares;
+//	private BigDecimal circulationShares;
 	// 申购额度
 	private BigDecimal volume;
 	// 发起赎回日

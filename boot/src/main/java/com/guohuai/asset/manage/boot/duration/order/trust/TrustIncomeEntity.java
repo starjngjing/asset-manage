@@ -6,7 +6,10 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -35,15 +38,18 @@ public class TrustIncomeEntity implements Serializable {
 	@Id
 	private String oid;
 	// 关联资产池投资标的
-	private String targetOid;
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "targetOid", referencedColumnName = "oid")
+	private TrustEntity trustEntity;
+//	private String targetOid;
 	// 标的名称
-	private String targetName;
+//	private String targetName;
 	// 类型
-	private String targetType;
+//	private String targetType;
 	// 兑付期数
 	private int seq;
 	// 实际收益率
-	private BigDecimal incomeRate; 
+//	private BigDecimal incomeRate; 
 	// 实际收益
 	private BigDecimal income; 
 	// 审核收益
@@ -55,7 +61,7 @@ public class TrustIncomeEntity implements Serializable {
 	// 收益支付日
 	private Date incomeDate;
 	// 主题评级	
-	private String subjectRating;	
+//	private String subjectRating;	
 	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）
 	private String state;
 	// 申请人

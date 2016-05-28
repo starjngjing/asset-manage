@@ -12,4 +12,6 @@ public interface DocTemplateEntryDao extends JpaRepository<DocTemplateEntry, Str
 	@Query("from DocTemplateEntry e where e.template in ?1 order by e.template.oid asc, e.seq asc")
 	public List<DocTemplateEntry> search(List<DocTemplate> templates);
 
+	public List<DocTemplateEntry> findByTemplate(DocTemplate template);
+
 }

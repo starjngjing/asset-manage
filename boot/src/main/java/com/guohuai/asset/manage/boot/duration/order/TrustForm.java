@@ -3,6 +3,9 @@ package com.guohuai.asset.manage.boot.duration.order;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
+
+import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeForm;
 
 import lombok.Data;
 
@@ -65,6 +68,8 @@ public class TrustForm implements Serializable {
 	private Date collectEndDate;	
 	// 募集期收益	
 	private BigDecimal collectIncomeRate;
+	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
+	private String profitType;
 	// 申请人
 	private String asker;
 	// 审核人
@@ -100,4 +105,7 @@ public class TrustForm implements Serializable {
 	
 	// 类型（申购，本息兑付，转让）
 	private String type;
+	
+	// 本息兑付数据
+	private List<TrustIncomeForm> incomeFormList;
 }

@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.duration.assetPool;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,11 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
+import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
+import com.guohuai.asset.manage.boot.duration.order.fund.FundService;
+import com.guohuai.asset.manage.boot.duration.order.trust.TrustEntity;
+import com.guohuai.asset.manage.boot.duration.order.trust.TrustService;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -30,6 +36,10 @@ public class AssetPoolService {
 	
 	@Autowired
 	private ScopeService scopeService;
+	@Autowired
+	private FundService fundService;
+	@Autowired
+	private TrustService trustService;
 	
 	/**
 	 * 新建资产池
@@ -43,6 +53,10 @@ public class AssetPoolService {
 			BeanUtils.copyProperties(entity, form);
 			entity.setOid(StringUtil.uuid());
 			entity.setCashPosition(form.getScale());
+			entity.setFreezeCash(BigDecimal.ZERO);
+			entity.setTransitCash(BigDecimal.ZERO);
+			entity.setConfirmProfit(BigDecimal.ZERO);
+			entity.setFactProfit(BigDecimal.ZERO);
 			entity.setState("未审核");
 			entity.setCreater(uid);
 			entity.setCreateTime(DateUtil.getSqlCurrentDate());
@@ -213,5 +227,82 @@ public class AssetPoolService {
 		}
 		
 		return formList;
+	}
+
+	/**
+	 * 计算资产池当日的确认收益
+	 * @return
+	 */
+	@Scheduled(cron = "0 30 0 * * ?")
+	@Transactional
+	public void calcPoolProfit() {
+		// 所有资产池列表
+		List<AssetPoolEntity> poolList = assetPoolDao.findAll();
+		if (null != poolList && !poolList.isEmpty()) {
+			for (AssetPoolEntity entity : poolList) {
+				poolList.add(this.calcPoolProfit(entity));
+			}
+			
+			assetPoolDao.save(poolList);
+		}
+		
+	}
+	
+	/**
+	 * 计算资产池当日的确认收益
+	 * @param assetPool
+	 * @return
+	 */
+	@Transactional
+	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool) {
+		// 确认收益
+		BigDecimal confirmProfit = BigDecimal.ZERO;
+		// 当日收益
+		BigDecimal dayProfit = BigDecimal.ZERO;
+		
+		// 持仓的现金管理工具
+		List<FundEntity> fundList = fundService.findFundListByPid(assetPool.getOid());
+		if (null != fundList && !fundList.isEmpty()) {
+			for (FundEntity entity : fundList) {
+				dayProfit = entity.getAmount().multiply(
+						entity.getCashTool().getDailyProfit()
+						.divide(new BigDecimal(10000)))
+						.setScale(4, BigDecimal.ROUND_HALF_UP);
+				confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+				entity.setAmount(entity.getAmount().add(dayProfit)
+						.setScale(4, BigDecimal.ROUND_HALF_UP));
+			}
+		}
+		
+		// 持仓的货基标的
+		List<TrustEntity> trustList = trustService.findTargetListByPid(assetPool.getOid());
+		if (null != trustList && !trustList.isEmpty()) {
+			for (TrustEntity entity : trustList) {
+				// 判断是否成立
+				if ("STAND_UP".equals(entity.getTarget().getLifeState())) {
+					// 判断收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
+					if ("amortized_cost".equals(entity.getProfitType())) {
+						dayProfit = entity.getInvestAmount()
+								.multiply(entity.getTarget().getExpAror())
+								.divide(new BigDecimal(entity.getTarget().getContractDays()))
+								.setScale(4, BigDecimal.ROUND_HALF_UP);
+						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+					}
+				} else {
+					// 判断是否在募集期
+					if (!DateUtil.compare_current(entity.getTarget().getCollectEndDate())) {
+						dayProfit = entity.getInvestAmount()
+								.multiply(entity.getTarget().getCollectIncomeRate())
+								.divide(new BigDecimal(entity.getTarget().getContractDays()))
+								.setScale(4, BigDecimal.ROUND_HALF_UP);
+						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+					}
+				}
+			}
+		}
+		
+		assetPool.setConfirmProfit(confirmProfit);
+		
+		return assetPool;
 	}
 }

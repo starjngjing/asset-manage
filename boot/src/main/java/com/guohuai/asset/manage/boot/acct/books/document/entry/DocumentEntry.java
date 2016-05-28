@@ -37,6 +37,9 @@ public class DocumentEntry implements Serializable {
 	@JoinColumn(name = "bookOid", referencedColumnName = "oid")
 	private AccountBook book;
 
+	private String relative;
+	private String ticket;
+
 	private String digest;
 	private BigDecimal drAmount;
 	private BigDecimal crAmount;

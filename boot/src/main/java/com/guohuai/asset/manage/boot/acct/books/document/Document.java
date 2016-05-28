@@ -29,6 +29,15 @@ public class Document implements Serializable {
 
 	private static final long serialVersionUID = 4672944310612688105L;
 
+	// 现金管理工具 调仓
+	public static final String TYPE_CASHTOOL_WAREHOUSE = "CASHTOOL_WAREHOUSE";
+	// 信托计划 申购
+	public static final String TYPE_TARGET_PURCHASE = "TARGET_PURCHASE";
+	// 信托计划 转让
+	public static final String TYPE_TARGET_TRANSFER = "TARGET_TRANSFER";
+	// 信托计划 本息兑付
+	public static final String TYPE_TARGET_INCOME = "TARGET_INCOME";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -38,7 +47,7 @@ public class Document implements Serializable {
 	private String relative;
 	private String ticket;
 	private int acctSn;
-	private Date acctDatee;
+	private Date acctDate;
 	private int invoiceNum;
 	private BigDecimal drAmount;
 	private BigDecimal crAmount;

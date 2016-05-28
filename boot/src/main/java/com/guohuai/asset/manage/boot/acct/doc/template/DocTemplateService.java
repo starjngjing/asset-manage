@@ -57,4 +57,9 @@ public class DocTemplateService {
 
 	}
 
+	@Transactional
+	public DocTemplate safeGet(String oid) {
+		return this.docTemplateDao.findOne(oid);
+	}
+
 }

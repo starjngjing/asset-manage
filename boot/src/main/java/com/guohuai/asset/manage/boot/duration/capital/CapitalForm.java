@@ -1,9 +1,7 @@
 package com.guohuai.asset.manage.boot.duration.capital;
 
 import java.math.BigDecimal;
-import java.util.Date;
-
-import javax.persistence.Id;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -15,17 +13,15 @@ import lombok.Data;
 @Data
 public class CapitalForm {
 
-	@Id
-	private String id;
-	private Date currDate;
+	private String oid;
+	// 订单oid
+	private String orderOid;
+	// 创建日期
+	private Timestamp createTime;
 	// 操作类型（申购，赎回，转让）
 	private String operation;
 	// 金额
 	private BigDecimal capital;
-	// 投资的标的名
-	private String target;
-	// 
-	private String type;
 	// 状态（未审核，资金处理中，完成）
 	private String status;
 }

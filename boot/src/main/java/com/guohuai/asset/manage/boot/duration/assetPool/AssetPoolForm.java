@@ -34,6 +34,10 @@ public class AssetPoolForm implements Serializable {
 	private BigDecimal freezeCash;
 	// 在途资金
 	private BigDecimal transitCash;
+	// 确认收益
+	private BigDecimal confirmProfit;
+	// 实现收益
+	private BigDecimal factProfit;
 	// 状态
 	private String state;
 	// 创建者

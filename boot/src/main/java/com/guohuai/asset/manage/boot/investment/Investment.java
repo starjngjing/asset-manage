@@ -265,6 +265,14 @@ public class Investment extends UUID implements Serializable {
 	 * 标的风险系数
 	 */
 	private BigDecimal riskRate;
+	/**
+	 * 收益起始日
+	 */
+	private Date incomeStartDate;
+	/**
+	 * 收益截止日
+	 */
+	private Date incomeEndDate;
 	
 	public Investment(String oid, String name) {
 		this.oid = oid;
