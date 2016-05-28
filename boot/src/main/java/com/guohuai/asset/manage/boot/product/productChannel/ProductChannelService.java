@@ -1,9 +1,9 @@
 package com.guohuai.asset.manage.boot.product.productChannel;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,8 +15,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.guohuai.asset.manage.boot.channel.Channel;
 import com.guohuai.asset.manage.boot.channel.ChannelDao;
@@ -31,8 +29,6 @@ import com.guohuai.asset.manage.component.web.view.PageResp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 
 @Service
 @Transactional
@@ -191,7 +187,7 @@ public class ProductChannelService {
 		Product product = this.productService.getProductById(productChannel.getProduct().getOid());
 		Channel channel = this.channelDao.findOne(productChannel.getChannel().getOid());
 
-		if(!Product.STATE_Admitpass.equals(product.getStatus())){
+		if(!Product.STATE_Admitpass.equals(product.getState())){
 			throw AMPException.getException(90017);
 		}
 		if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApprovelStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
@@ -205,19 +201,18 @@ public class ProductChannelService {
 			this.productChannelDao.saveAndFlush(productChannel);
 			
 			if(Product.DATE_TYPE_FirstRackTime.equals(product.getRaiseStartDateType()) && product.getRaiseStartDate()==null) {
-				Date raiseStatrtDate = new Date();
-				product.setRaiseStartDate(new Timestamp(raiseStatrtDate.getTime()));
-				product.setRaiseEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriod()).getTime()));//募集结束时间
-				product.setSetupDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriod()+product.getInterestsFirstDate()).getTime()));//产品成立时间（存续期开始时间）
-				product.setDurationPeriodEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriod()+product.getInterestsFirstDate()+product.getDurationPeriod()).getTime()));//存续期结束时间
+				java.util.Date raiseStatrtDate = new java.util.Date();
+				product.setRaiseStartDate(new Date(raiseStatrtDate.getTime()));
+				product.setRaiseEndDate(new Date(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriodDays()).getTime()));//募集结束时间
+				product.setSetupDate(new Date(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriodDays()+product.getInterestsFirstDays()).getTime()));//产品成立时间（存续期开始时间）
+				product.setDurationPeriodEndDate(new Date(DateUtil.addDay(raiseStatrtDate, product.getRaisePeriodDays()+product.getInterestsFirstDays()+product.getDurationPeriodDays()).getTime()));//存续期结束时间
 				//到期最晚还本付息日 指存续期结束后的还本付息最迟发生在存续期后的第X个自然日的23:59:59为止
-				Date repayDate = DateUtil.addDay(raiseStatrtDate, product.getRaisePeriod()+product.getInterestsFirstDate()+product.getDurationPeriod()+product.getAccrualDate());
-				String repayDateStr = DateUtil.format(repayDate, DateUtil.datePattern);
-				product.setAccrualLastDate(new Timestamp(DateUtil.parseDate(repayDateStr+" 23:59:59", DateUtil.datetimePattern).getTime()));//到期还款时间
+				java.util.Date repayDate = DateUtil.addDay(raiseStatrtDate, product.getRaisePeriodDays()+product.getInterestsFirstDays()+product.getDurationPeriodDays()+product.getAccrualRepayDays());
+				product.setRepayDate(new Date(repayDate.getTime()));//到期还款时间
 				productDao.saveAndFlush(product);
 			} else if(Product.DATE_TYPE_FirstRackTime.equals(product.getSetupDateType()) && product.getSetupDate()==null) {
-				Date setupDate = new Date();
-				product.setSetupDate(new Timestamp(setupDate.getTime()));
+				java.util.Date setupDate = new java.util.Date();
+				product.setSetupDate(new Date(setupDate.getTime()));
 				productDao.saveAndFlush(product);
 			}
 		} else {

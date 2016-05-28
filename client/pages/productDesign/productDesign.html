@@ -92,7 +92,7 @@
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
-        <!-- 新增/编辑事件表单 -->
+        <!-- 新增事件表单 -->
         <form id="addProductForm" name="addProductForm" method="post">
           <p class="form-header">产品概况</p>
           <div class="row">
@@ -103,7 +103,7 @@
                        class="form-control input-sm"
                        placeholder="产品编码" 
                        required="required" 
-                       data-error="产品编码已存在" 
+                       data-remote-error="产品编码已存在" 
                        data-remote="/ams/product/validateCode">
                 <div class="help-block with-errors text-red"></div>
               </div>
@@ -115,7 +115,7 @@
                        class="form-control input-sm"
                        placeholder="产品简称" 
                        required="required" 
-                       data-error="产品简称已存在" 
+                       data-remote-error="产品简称已存在" 
                        data-remote="/ams/product/validateName">
                 <div class="help-block with-errors text-red"></div>
               </div>
@@ -127,7 +127,7 @@
                        class="form-control input-sm"
                        placeholder="产品全称" 
                        required="required" 
-                       data-error="产品全称已存在" 
+                       data-remote-error="产品全称已存在" 
                        data-remote="/ams/product/validateFullName">
                 <div class="help-block with-errors text-red"></div>
               </div>
@@ -172,9 +172,9 @@
                          class="form-control"
                          placeholder="从" required="required" 
                          data-validfloat="4.4" data-error="预期年化收益只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-2">
@@ -186,9 +186,9 @@
                          placeholder="到" 
                          data-validfloat="4.4" 
                          data-error="预期年化收益只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -230,10 +230,9 @@
                          placeholder="收益计算基础" 
                          data-validint="0-366"
                          data-error="收益计算基础不能大于366">
-                  <div class="help-block with-errors text-red"></div>
-                  
                   <span class="input-group-addon">天</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -245,9 +244,9 @@
                          placeholder="托管费率" 
                          data-validfloat="4.4" 
                          data-error="托管费率只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -259,9 +258,9 @@
                          placeholder="固定管理费率"
                          data-validfloat="4.4" 
                          data-error="固定管理费率只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -296,9 +295,9 @@
                            class="form-control"
                            data-validint="0-240"
                            data-error="募集期应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -310,9 +309,9 @@
                            class="form-control"
                            data-validint="0-240"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -325,9 +324,9 @@
                            class="form-control"
                            data-validint="0-10000"
                            data-error="应该小于10000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -338,9 +337,9 @@
                            class="form-control"
                            data-validint="0-100000000000"
                            data-error="应该小于100000000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -352,9 +351,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日内</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -410,9 +409,9 @@
                            class="form-control"
                            data-validint="0-31"
                            data-error="应该小于31">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">天</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -426,9 +425,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -439,9 +438,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -455,7 +454,6 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -472,6 +470,7 @@
                       <input name="purchaseConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -482,9 +481,9 @@
                            class="form-control"
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -495,9 +494,9 @@
                            class="form-control"
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -511,7 +510,6 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -528,6 +526,7 @@
                       <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-8">
@@ -555,6 +554,7 @@
                            data-date-format="HH:mm:ss">
                     <span class="input-group-addon">发起代付指令</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -565,12 +565,12 @@
                 <label>单笔投资最低份额</label>
                 <div class="input-group input-group-sm">
                   <input name="investMin" type="text"
-                         class="form-control"
-                         data-validint="1-10000000"
-                         data-error="应该小于10000000大于1">
-                    <div class="help-block with-errors text-red"></div>
+                        class="form-control"
+                        data-validint="1-10000000"
+                        data-error="应该小于10000000大于1">
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -581,12 +581,12 @@
                          class="form-control"
                          data-validint="0-100000000000"
                          data-error="应该小于100000000000">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div> 
-            <div class="col-sm-4">
+            <!--<div class="col-sm-4">
               <div class="form-group">
                 <label>申购上限</label>
                 <div class="input-group input-group-sm">
@@ -594,13 +594,11 @@
                          class="form-control"
                          data-validint="0-10000000"
                          data-error="应该小于10000000">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
-            </div>
-          </div>
-          <div class="row">
+            </div>-->
             <div class="col-sm-4">
               <div class="form-group">
                 <label>单笔投资追加份额</label>
@@ -609,11 +607,15 @@
                          class="form-control"
                          data-validint="1-10000000"
                          data-error="应该小于10000000大于1">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
+            
+            
+          </div>
+          <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
                 <label>单位份额净值</label>
@@ -623,9 +625,9 @@
                          required="required" 
                          data-validfloat="12.4" 
                          data-error="单位份额净值只能为前12位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">元</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -686,7 +688,7 @@
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
-        <!-- 新增/编辑事件表单 -->
+        <!-- 编辑事件表单 -->
         <form id="updateProductForm" name="updateProductForm" method="post">
           <p class="form-header">产品概况</p>
           <input name="oid" type="hidden">
@@ -818,9 +820,9 @@
                          placeholder="收益计算基础"
                          data-validint="0-366"
                          data-error="收益计算基础不能大于366">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">天</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -832,9 +834,9 @@
                          placeholder="托管费率"
                          data-validfloat="4.4" 
                          data-error="托管费率只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -846,9 +848,9 @@
                          placeholder="固定管理费率"
                          data-validfloat="4.4" 
                          data-error="固定管理费率只能为前四位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">%每年</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -882,9 +884,9 @@
                            class="form-control"
                            data-validint="0-240"
                            data-error="募集期应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -896,9 +898,9 @@
                            class="form-control"
                             data-validint="0-240"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -911,9 +913,9 @@
                            class="form-control"
                            data-validint="0-10000"
                            data-error="应该小于10000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -924,9 +926,9 @@
                            class="form-control"
                            data-validint="0-100000000000"
                            data-error="应该小于100000000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -938,9 +940,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日内</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -996,9 +998,9 @@
                            class="form-control"
                            data-validint="0-31"
                            data-error="应该小于31">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">天</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -1012,9 +1014,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -1025,9 +1027,9 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">个自然日</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -1041,7 +1043,6 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -1058,6 +1059,7 @@
                       <input name="purchaseConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -1068,9 +1070,9 @@
                            class="form-control"
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -1081,9 +1083,9 @@
                            class="form-control"
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
-                    <div class="help-block with-errors text-red"></div>
                     <span class="input-group-addon">份</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -1097,7 +1099,6 @@
                            class="form-control"
                            data-validint="0-244"
                            data-error="应该小于244">
-                    <div class="help-block with-errors text-red"></div>
                     <div class="input-group-btn open">
                       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         个自然日内
@@ -1114,6 +1115,7 @@
                       <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
                     </div>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
               <div class="col-sm-8">
@@ -1141,6 +1143,7 @@
                            data-date-format="HH:mm:ss">
                     <span class="input-group-addon">发起代付指令</span>
                   </div>
+                  <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
             </div>
@@ -1154,9 +1157,9 @@
                          class="form-control"
                          data-validint="1-10000000"
                          data-error="应该小于10000000大于1">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -1167,12 +1170,12 @@
                          class="form-control"
                          data-validint="1-100000000000"
                          data-error="应该小于100000000000大于1">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div> 
-            <div class="col-sm-4">
+          <!--  <div class="col-sm-4">
               <div class="form-group">
                 <label>申购上限</label>
                 <div class="input-group input-group-sm">
@@ -1180,13 +1183,11 @@
                          class="form-control"
                          data-validint="1-10000000"
                          data-error="应该小于10000000大于1">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
-            </div>
-          </div>
-          <div class="row">
+            </div>-->
             <div class="col-sm-4">
               <div class="form-group">
                 <label>单笔投资追加份额</label>
@@ -1195,11 +1196,14 @@
                          class="form-control"
                          data-validint="1-10000000"
                          data-error="应该小于10000000大于1">
-                    <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">份</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
+            
+          </div>
+          <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
                 <label>单位份额净值</label>
@@ -1208,9 +1212,9 @@
                          class="form-control"
                          data-validfloat="12.4" 
                          data-error="单位份额净值只能为前12位后四位小数">
-                  <div class="help-block with-errors text-red"></div>
                   <span class="input-group-addon">元</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -1552,14 +1556,14 @@
 							</dd>
 						</dl>
 					</div>
-					<div class="col-sm-6">
+					<!--<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>申购上限:</dt>
 							<dd>
 								<div data-detail-fetch="purchaseLimitStr"></div>
 							</dd>
 						</dl>
-					</div>
+					</div>-->
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>笔投资追加份额:</dt>
