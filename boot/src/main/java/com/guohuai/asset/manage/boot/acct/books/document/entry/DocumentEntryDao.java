@@ -12,4 +12,7 @@ public interface DocumentEntryDao extends JpaRepository<DocumentEntry, String> {
 	@Query("from DocumentEntry e where e.document in ?1 order by e.document.updateTime desc, e.seq asc")
 	public List<DocumentEntry> search(List<Document> documents);
 
+	@Query("from DocumentEntry e where e.document = ?1 order by e.seq asc")
+	public List<DocumentEntry> search(Document document);
+
 }

@@ -123,7 +123,8 @@ define(function() {
 				book: {
 					document: {
 						entry: {
-							search: this.host + '/ams/acct/books/document/entry/search'
+							search: this.host + '/ams/acct/books/document/entry/search',
+							detail: this.host + '/ams/acct/books/document/entry/detail'
 						}
 					}
 				}

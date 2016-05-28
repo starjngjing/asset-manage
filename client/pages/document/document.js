@@ -48,7 +48,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -60,7 +60,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -69,7 +69,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -81,7 +81,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -95,7 +95,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -109,7 +109,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -123,7 +123,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -134,9 +134,9 @@ define([
 					formatter: function(val, row, index) {
 
 						var updateButton = {
-							text: '修改',
+							text: '明细',
 							type: 'button',
-							class: 'item-update',
+							class: 'item-detail',
 							isRender: true
 						};
 
@@ -144,12 +144,14 @@ define([
 						return row.master ? util.table.formatter.generateButton(buttons) : '';
 					},
 					events: {
-						'click .item-update': function(e, value, row) {}
+						'click .item-detail': function(e, value, row) {
+							console.log(value);
+						}
 					},
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F9F9F9' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
 							}
 						}
 					}
@@ -188,6 +190,8 @@ define([
 			});
 
 			$$.searchInit($('#searchForm'), $('#dataTable'));
+
+			$('#updateDocTemplateModal').modal('show');
 
 		}
 	}

@@ -67,4 +67,15 @@ public class DocumentEntryService {
 		return ep;
 	}
 
+	@Transactional
+	public DocumentEntryDetail detail(String documentOid) {
+		Document document = this.documentService.get(documentOid);
+		List<DocumentEntry> entries = this.documentEntryDao.search(document);
+		DocumentEntryDetail detail = new DocumentEntryDetail(document);
+		for (DocumentEntry e : entries) {
+			detail.getDetails().add(new DocumentEntryDetail.Detail(e));
+		}
+		return detail;
+	}
+
 }
