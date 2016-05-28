@@ -74,6 +74,8 @@ public class CashToolPoolController extends BaseController {
 	CashToolService cashToolService;
 	@Autowired
 	CashtoolRevenueService cashToolRevenueService;
+	@Autowired
+	CashtoolPoolService cashToolPoolService;
 
 	
 
@@ -201,7 +203,7 @@ public class CashToolPoolController extends BaseController {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
 		cashToolRevenueForm.setOperator(loginId);
-		CashToolRevenue cashToolRevenue = cashToolRevenueService.save(cashToolRevenueForm);
+		CashToolRevenue cashToolRevenue = cashToolPoolService.cashToolRevenue(cashToolRevenueForm);
 		return new BaseResp();
 	}
 }
