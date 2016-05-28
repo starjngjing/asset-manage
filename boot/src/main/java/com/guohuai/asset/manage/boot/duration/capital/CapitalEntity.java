@@ -23,6 +23,17 @@ public class CapitalEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final BigDecimal init0 = BigDecimal.ZERO;
+	
+	public CapitalEntity() {
+		this.freezeCash = init0;
+		this.unfreezeCash = init0;
+		this.transitCash = init0;
+		this.untransitCash = init0;
+		this.inputCash = init0;
+		this.outputCash = init0;
+	}
+	
 	@Id
 	private String oid;
 	// 关联资产池

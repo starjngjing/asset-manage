@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,13 @@ public class DocumentEntryController extends BaseController {
 		DocumentEntryPage ep = this.documentEntryService.search(form.getStartDate(), form.getEndDate(), form.getPage() - 1, form.getSize());
 
 		return new ResponseEntity<DocumentEntryPage>(ep, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/detail", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<DocumentEntryDetail> detail(@RequestParam String documentOid) {
+		super.checkLogin();
+		DocumentEntryDetail d = this.documentEntryService.detail(documentOid);
+		return new ResponseEntity<DocumentEntryDetail>(d, HttpStatus.OK);
 	}
 
 }

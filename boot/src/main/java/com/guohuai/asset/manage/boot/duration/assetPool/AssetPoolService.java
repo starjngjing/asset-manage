@@ -167,7 +167,13 @@ public class AssetPoolService {
 	@Transactional
 	public AssetPoolForm getPoolByOid(String pid) {
 		AssetPoolForm form = new AssetPoolForm();
-		AssetPoolEntity entity = this.getByOid(pid);
+		AssetPoolEntity entity = new AssetPoolEntity();
+		if (null == pid || "".equals(pid)) {
+			entity = assetPoolDao.getLimitOne();
+			pid = entity.getOid();
+		} else {
+			entity = this.getByOid(pid);
+		}
 		String[] scopes = scopeService.getScopes(pid);
 		try {
 			BeanUtils.copyProperties(form, entity);
@@ -191,8 +197,8 @@ public class AssetPoolService {
 			BeanUtils.copyProperties(entity, form);
 			entity.setCashPosition(form.getScale());
 			entity.setState("未审核");
-			entity.setCreater(uid);
-			entity.setCreateTime(DateUtil.getSqlCurrentDate());
+			entity.setOperator(uid);
+			entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 			
 			assetPoolDao.save(entity);
 			
@@ -202,6 +208,22 @@ public class AssetPoolService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 编辑资产池账户信息
+	 * @param form
+	 * @param uid
+	 */
+	@Transactional
+	public void editPoolForCash(AssetPoolForm form, String uid) {
+		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
+		entity.setState("未审核");
+		entity.setCashPosition(form.getCashPosition());
+		entity.setOperator(uid);
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		
+		assetPoolDao.save(entity);
 	}
 
 	/**

@@ -17,6 +17,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.component.exception.AMPException;
+
 @Service
 public class DocumentService {
 
@@ -62,6 +64,15 @@ public class DocumentService {
 		} else {
 			return this.documentDao.findAll(pageable);
 		}
+	}
+
+	@Transactional
+	public Document get(String oid) {
+		Document d = this.documentDao.findOne(oid);
+		if (null == d) {
+			throw new AMPException(String.format("No data found for oid '%s'.", oid));
+		}
+		return d;
 	}
 
 }

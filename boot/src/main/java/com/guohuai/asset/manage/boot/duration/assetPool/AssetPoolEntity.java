@@ -21,6 +21,19 @@ import lombok.Data;
 public class AssetPoolEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final BigDecimal init0 = BigDecimal.ZERO;
+	
+	public AssetPoolEntity() {
+		this.scale = init0;
+		this.cashRate = init0;
+		this.cashtoolRate = init0;
+		this.targetRate = init0;
+		this.cashPosition = init0;
+		this.freezeCash = init0;
+		this.transitCash = init0;
+		this.confirmProfit = init0;
+		this.factProfit = init0;
+	}
 
 	@Id
 	private String oid;

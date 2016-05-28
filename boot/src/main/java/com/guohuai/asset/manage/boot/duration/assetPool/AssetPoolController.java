@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalForm;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.Response;
 
@@ -38,6 +40,8 @@ public class AssetPoolController extends BaseController {
 	
 	@Autowired
 	private AssetPoolService assetPoolService;
+	@Autowired
+	private CapitalService capitalService;
 
 	/**
 	 * 新建资产池
@@ -122,6 +126,19 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
+	 * 编辑资产池账户信息
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/editPoolForCash", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> editPoolForCash(AssetPoolForm form) {
+		assetPoolService.editPoolForCash(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
 	 * 获取所有资产池的名称列表，包含id
 	 * @return
 	 */
@@ -130,6 +147,27 @@ public class AssetPoolController extends BaseController {
 		List<JSONObject> jsonList = assetPoolService.getAllNameList();
 		Response r = new Response();
 		r.with("rows", jsonList);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
+	 * 获取所有资产池的资金明细
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllCapitalList", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getAllCapitalList(String pid,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
+			@RequestParam(required = false, defaultValue = "createTime") String sortField,
+			@RequestParam(required = false, defaultValue = "desc") String sort) {
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		List<CapitalForm> list = capitalService.getCapitalListByPid(pid, pageable);
+		Response r = new Response();
+		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }
