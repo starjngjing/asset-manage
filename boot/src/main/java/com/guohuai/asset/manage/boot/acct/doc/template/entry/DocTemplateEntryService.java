@@ -1,8 +1,12 @@
 package com.guohuai.asset.manage.boot.acct.doc.template.entry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,6 +58,16 @@ public class DocTemplateEntryService {
 		}
 
 		return ep;
+	}
+
+	@Transactional
+	public Map<String, DocTemplateEntry> entryMap(DocTemplate template) {
+		List<DocTemplateEntry> entries = this.docTemplateEntryDao.findByTemplate(template);
+		Map<String, DocTemplateEntry> maps = new HashMap<String, DocTemplateEntry>();
+		for (DocTemplateEntry e : entries) {
+			maps.put(e.getOid(), e);
+		}
+		return maps;
 	}
 
 }

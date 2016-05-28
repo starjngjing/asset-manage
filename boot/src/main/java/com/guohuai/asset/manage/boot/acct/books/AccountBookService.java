@@ -57,7 +57,7 @@ public class AccountBookService {
 	}
 
 	@Transactional
-	public AccountBook saveGet(String relative, Account account) {
+	public AccountBook safeGet(String relative, Account account) {
 		AccountBook book = this.accountBookDao.findByRelativeAndAccount(relative, account);
 		if (null == book) {
 			book = new AccountBook();
@@ -68,6 +68,32 @@ public class AccountBookService {
 			book.setOpeningBalance(BigDecimal.ZERO);
 			book = this.accountBookDao.save(book);
 		}
+		return book;
+	}
+
+	@Transactional
+	public AccountBook drCredit(AccountBook book, BigDecimal cash) {
+		book.setBalance(book.getBalance().add(cash));
+		book = this.accountBookDao.save(book);
+
+		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
+			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
+			this.drCredit(parent, cash);
+		}
+
+		return book;
+	}
+
+	@Transactional
+	public AccountBook crCredit(AccountBook book, BigDecimal cash) {
+		book.setBalance(book.getBalance().subtract(cash));
+		book = this.accountBookDao.save(book);
+
+		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
+			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
+			this.crCredit(parent, cash);
+		}
+
 		return book;
 	}
 
