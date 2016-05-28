@@ -87,7 +87,7 @@ define([
       })
 
       // 资产申购 - 提交审核按钮点击事件
-      $('#doPurchase').on('click', function () {
+      $('#doBuyAsset').on('click', function () {
         var form = document.buyAssetForm
         var url = ''
         if (form.type.value === 'fund') {
@@ -385,10 +385,57 @@ define([
               }
             }
           },
+          {
+            width: 120,
+            align: 'center',
+            formatter: function () {
+              var buttons = [{
+                text: '申购',
+                type: 'button',
+                class: 'item-purchase'
+              }, {
+                text: '赎回',
+                type: 'button',
+                class: 'item-redeem'
+              }]
+              return util.table.formatter.generateButton(buttons)
+            },
+            events: {
+              'click .item-purchase': function (e, val, row) {
+                http.post(config.api.duration.order.getFundByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  $$.formAutoFix($('#purchaseForm'), json.result)
+                })
+                $('#purchaseModal').modal('show')
+              },
+              'click .item-redeem': function (e, val, row) {
+                http.post(config.api.duration.order.getFundByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  $$.formAutoFix($('#redeemForm'), json.result)
+                })
+                $('#redeemModal').modal('show')
+              }
+            }
+          }
         ]
       }
       // 现金类管理工具表格初始化
       $('#toolTable').bootstrapTable(toolTableConfig)
+
+      // 现金类管理工具 - 申购表格验证初始化
+      util.form.validator.init($('#purchaseForm'))
+      // 现金类管理工具 - 赎回表格验证初始化
+      util.form.validator.init($('#redeemForm'))
 
       // 现金类管理工具审核/预约/确认 - 通过按钮点击事件
       $('#doFundCheck').on('click', function () {
@@ -411,6 +458,7 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
+            $('#toolTable').bootstrapTable('refresh')
             $('#fundCheckModal').modal('hide')
           }
         })
@@ -437,6 +485,34 @@ define([
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
             $('#fundCheckModal').modal('hide')
+          }
+        })
+      })
+
+      // 现金类管理工具 - 申购弹窗 - 提交审核按钮点击事件
+      $('#doPurchase').on('click', function () {
+        var form = document.purchaseForm
+        $(form).ajaxSubmit({
+          url: config.api.duration.order.purchaseForFund,
+          success: function () {
+            util.form.reset($(form))
+            $('#orderingToolTable').bootstrapTable('refresh')
+            $('#toolTable').bootstrapTable('refresh')
+            $('#purchaseModal').modal('hide')
+          }
+        })
+      })
+
+      // 现金类管理工具 - 赎回弹窗 - 提交审核按钮点击事件
+      $('#doRedeem').on('click', function () {
+        var form = document.redeemForm
+        $(form).ajaxSubmit({
+          url: config.api.duration.order.redeem,
+          success: function () {
+            util.form.reset($(form))
+            $('#orderingToolTable').bootstrapTable('refresh')
+            $('#toolTable').bootstrapTable('refresh')
+            $('#purchaseModal').modal('hide')
           }
         })
       })
@@ -638,6 +714,8 @@ define([
       // 信托计划审核表单初始化
       util.form.validator.init($('#trustCheckForm'))
 
+      // 缓存本息兑付期数信息
+      var seqs = []
       // 信托计划分页信息
       var trustPageOptions = {
         page: 1,
@@ -722,10 +800,31 @@ define([
               return util.table.formatter.generateButton(buttons)
             },
             events: {
+              'click .item-income': function (e, val, row) {
+                http.post(config.api.duration.order.getTrustByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: 'income'
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  seqs = json.result.incomeFormList
+                  var form = document.trustIncomeForm
+                  var seq = $(form.seq).empty()
+                  form.oid.value = json.result.oid
+                  form.assetPoolOid.value = json.result.assetPoolOid
+                  seqs.forEach(function (item) {
+                    seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
+                  })
+                  seq.change()
+                })
+                $('#trustIncomeModal').modal('show')
+              },
               'click .item-transfer': function (e, val, row) {
                 http.post(config.api.duration.order.getTrustByOid, {
                   data: {
-                    oid: row.oid
+                    oid: row.oid,
+                    type: 'transfer'
                   },
                   contentType: 'form'
                 }, function (json) {
@@ -745,8 +844,25 @@ define([
       // 信托计划表格初始化
       $('#trustTable').bootstrapTable(trustTableConfig)
 
+      // 信托计划本息兑付表单初始化
+      util.form.validator.init($('#trustIncomeForm'))
       // 信托计划转让表单初始化
       util.form.validator.init($('#trustTransferForm'))
+
+      // 信托计划本息兑付表单下拉菜单初始化
+      $(document.trustIncomeForm.seq).on('change', function () {
+        var val = this.value
+        seqs.forEach(function (item, index) {
+          if (item.seq == val) {
+            $$.formAutoFix($(document.trustIncomeForm), item)
+            if (index === seqs.length - 1) {
+              $('#capitalArea').show()
+            } else {
+              $('#capitalArea').hide()
+            }
+          }
+        })
+      })
 
       // 信托计划审核/预约/确认 - 通过按钮点击事件
       $('#doTrustCheck').on('click', function () {
@@ -769,6 +885,7 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingTrustTable').bootstrapTable('refresh')
+            $('#trustTable').bootstrapTable('refresh')
             $('#trustCheckModal').modal('hide')
           }
         })
@@ -803,12 +920,25 @@ define([
       $('#doTrustTransfer').on('click', function () {
         $('#trustTransferForm').ajaxSubmit({
           url: config.api.duration.order.applyForTransfer,
-          success: function (result) {
-            console.log(result)
+          success: function () {
+            $('#orderingTrustTable').bootstrapTable('refresh')
+            $('#trustTable').bootstrapTable('refresh')
+            $('#trustTransferModal').modal('hide')
           }
         })
       })
 
+      // 信托计划 - 本息兑付按钮点击事件
+      $('#doTrustIncome').on('click', function () {
+        $('#trustIncomeForm').ajaxSubmit({
+          url: config.api.duration.order.applyForIncome,
+          success: function () {
+            $('#orderingTrustTable').bootstrapTable('refresh')
+            $('#trustTable').bootstrapTable('refresh')
+            $('#trustIncomeModal').modal('hide')
+          }
+        })
+      })
     }
   }
 })

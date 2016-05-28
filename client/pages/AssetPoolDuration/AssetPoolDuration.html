@@ -445,7 +445,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="doPurchase" type="button" class="btn btn-primary btn-submit buyAssetSubmit">提交审核</button>
+        <button id="doBuyAsset" type="button" class="btn btn-primary btn-submit buyAssetSubmit">提交审核</button>
       </div>
     </div>
   </div>
@@ -783,45 +783,80 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">信托计划审核</h4>
+        <h4 class="modal-title">本息兑付</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
         <form id="trustIncomeForm" name="trustIncomeForm" method="post">
           <input name="oid" type="hidden"/>
           <input name="assetPoolOid" type="hidden"/>
-          <input name="state" type="hidden"/>
-          <div class="form-group" style="display: none;">
-            <label>审核额度</label>
-            <div class="input-group input-group-sm">
-              <input name="auditVolume" type="text"
-                     class="form-control"
-                     placeholder="审核额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
-              <span class="input-group-addon">万</span>
+          <div class="form-group">
+            <label>期数</label>
+            <select name="seq" class="form-control"></select>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>预期收益率</label>
+                <input name="expIncomeRate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>预期收益</label>
+                <input name="expIncome" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
             </div>
           </div>
-          <div class="form-group" style="display: none;">
-            <label>预约额度</label>
-            <div class="input-group input-group-sm">
-              <input name="reserveVolume" type="text"
-                     class="form-control"
-                     placeholder="预约额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
-              <span class="input-group-addon">万</span>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>本息兑付日</label>
+                <input name="incomeDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="capitalArea" class="form-group" style="display: none;">
+                <label>本金返还</label>
+                <div class="input-group input-group-sm">
+                  <input name="capital" type="text"
+                         class="form-control"
+                         readonly="readonly">
+                  <span class="input-group-addon">万</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group" style="display: none;">
-            <label>确认额度</label>
-            <div class="input-group input-group-sm">
-              <input name="investVolume" type="text"
-                     class="form-control"
-                     placeholder="确认额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
-              <span class="input-group-addon">万</span>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>实际收益率</label>
+                <div class="input-group input-group-sm">
+                  <input name="incomeRate" type="text"
+                         class="form-control"
+                         placeholder="实际收益率"
+                         data-validfloat="4.4" required>
+                  <span class="input-group-addon">%</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>实际收益</label>
+                <div class="input-group input-group-sm">
+                  <input name="income" type="text"
+                         class="form-control"
+                         placeholder="实际收益"
+                         data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+              </div>
             </div>
           </div>
         </form>
@@ -829,7 +864,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="doTrustIncome" type="button" class="btn btn-primary btn-submit trustCheckSubmit">确 认</button>
+        <button id="doTrustIncome" type="button" class="btn btn-primary btn-submit trustIncomeSubmit">确 认</button>
       </div>
     </div>
   </div>
@@ -844,7 +879,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">信托计划审核</h4>
+        <h4 class="modal-title">转让</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
@@ -1037,6 +1072,233 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 现金类管理工具 - 申购弹窗 -->
+<div id="purchaseModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">申购</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="purchaseForm" name="purchaseForm" method="post">
+          <input type="hidden" name="oid"/>
+          <input type="hidden" name="cashtoolOid"/>
+          <input type="hidden" name="assetPoolOid"/>
+          <div class="form-group">
+            <label>标的名称</label>
+            <input name="cashtoolName" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>标的类型</label>
+                <input name="cashtoolType" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>每万份收益</label>
+                <input name="netRevenue" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>7日年化收益</label>
+                <input name="yearYield7" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>关联资产池</label>
+                <input name="assetPoolName" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>投资日</label>
+                <div class="input-group input-group-sm">
+                  <input name="investDate" type="text"
+                         class="form-control datepicker"
+                         placeholder="请选择时间"
+                         data-date-format="YYYY-MM-DD" required>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>申购额度</label>
+                <div class="input-group input-group-sm">
+                  <input name="volume" type="text"
+                         class="form-control"
+                         placeholder="申购额度"
+                         data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doPurchase" type="button" class="btn btn-primary btn-submit purchaseSubmit">提交审核</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 现金类管理工具 - 赎回弹窗 -->
+<div id="redeemModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">赎回</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <form id="redeemForm" name="redeemForm" method="post">
+          <input type="hidden" name="oid"/>
+          <input type="hidden" name="cashtoolOid"/>
+          <input type="hidden" name="assetPoolOid"/>
+          <div class="form-group">
+            <label>标的名称</label>
+            <input name="cashtoolName" type="text"
+                   class="form-control input-sm"
+                   readonly="readonly">
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>标的类型</label>
+                <input name="cashtoolType" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>每万份收益</label>
+                <input name="netRevenue" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>7日年化收益</label>
+                <input name="yearYield7" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>关联资产池</label>
+                <input name="assetPoolName" type="text"
+                       class="form-control input-sm"
+                       readonly="readonly">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>投资日</label>
+                <input name="investDate" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>持有额度</label>
+                <input name="holdVolume" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>赎回发起日</label>
+                <div class="input-group input-group-sm">
+                  <input name="redeemDate" type="text"
+                         class="form-control datepicker"
+                         placeholder="请选择时间"
+                         data-date-format="YYYY-MM-DD" required>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>赎回额度</label>
+                <div class="input-group input-group-sm">
+                  <input name="returnVolume" type="text"
+                         class="form-control"
+                         placeholder="申购额度"
+                         data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>是否全部赎回</label>
+            <div class="form-style">
+              <div class="row">
+                <div class="col-md-3">
+                  <input type="radio" name="allFlag" value="no" class="icheck" checked/> 否
+                </div>
+                <div class="col-md-3">
+                  <input type="radio" name="allFlag" value="yes" class="icheck"/> 是
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doRedeem" type="button" class="btn btn-primary btn-submit redeemSubmit">提交审核</button>
       </div>
     </div>
   </div>

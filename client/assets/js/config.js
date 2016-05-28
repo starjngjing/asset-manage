@@ -180,6 +180,7 @@ define(function() {
 				},
 				order: {	// 订单
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund',	// 货币基金申购
+					redeem: this.host + '/ams/duration/order/redeem',	// 现金类管理工具赎回
 					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust',	// 信托计划申购
 					getTargetList: this.host + '/ams/duration/product/getTargetList',	 // 获取标的列表
 					getTrustListForAppointment: this.host + '/ams/duration/product/getTrustListForAppointment',	// 获取 预约中信托（计划）列表
@@ -190,6 +191,7 @@ define(function() {
 					appointmentForTrust: this.host + '/ams/duration/order/appointmentForTrust',	// 信托计划预约
 					orderConfirmForTrust: this.host + '/ams/duration/order/orderConfirmForTrust',	// 信托计划确认
 					applyForTransfer: this.host + '/ams/duration/order/applyForTransfer',	// 信托计划转让
+					applyForIncome: this.host + '/ams/duration/order/applyForIncome',	// 信托计划本息兑付
 					getFundListForAppointment: this.host + '/ams/duration/product/getFundListForAppointment',	// 获取 预约中现金类管理工具列表
 					getFundList: this.host + '/ams/duration/product/getFundList',	// 获取 现金类管理工具列表
 					getFundOrderByOid: this.host + '/ams/duration/order/getFundOrderByOid',	// 根据ID获取预约中现金类管理工具
