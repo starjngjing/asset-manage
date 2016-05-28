@@ -239,9 +239,9 @@ function (http, config, util, $$) {
 		  // 初始化数据表格
 		  $('#channelTable').bootstrapTable(tableConfig);
 		  $$.searchInit($('#searchForm'), $('#channelTable'));
-		  //$('#channelForm').validator();
+		 
 		  util.form.validator.init($('#channelForm'))
-			//$('#channelForm').validator('validate')
+			$('#channelForm').validator('validate')
 
 		  function getQueryParams (val) {
         // 参数 val 是bootstrap-table默认的与服务器交互的数据，包含分页、排序数据
