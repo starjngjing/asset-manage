@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "T_MONEY_PLATFORM_CHANNEL_APPROVAL")
+@Table(name = "T_GAM_PRODUCT_CHANNEL")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

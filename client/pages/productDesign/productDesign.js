@@ -258,7 +258,7 @@ define([
 										$('#updateProductType01Area').hide()
 									}
 									
-									http.post(config.api.duration.assetPool.getAll, function (result) {
+									http.post(config.api.duration.assetPool.getNameList, function (result) {
 										var select = document.updateProductForm.assetPoolOid
 										$(select).empty()
 										result.rows.forEach(function (item, index) {
@@ -539,7 +539,7 @@ define([
 
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
-				http.post(config.api.duration.assetPool.getAll, function (result) {
+				http.post(config.api.duration.assetPool.getNameList, function (result) {
 					var select = document.addProductForm.assetPoolOid
 					$(select).empty()
 					result.rows.forEach(function (item, index) {
