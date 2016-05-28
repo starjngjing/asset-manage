@@ -168,6 +168,7 @@ public class AssetPoolController extends BaseController {
 		List<CapitalForm> list = capitalService.getCapitalListByPid(pid, pageable);
 		Response r = new Response();
 		r.with("rows", list);
+		r.with("total", list.size());
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }

@@ -224,6 +224,7 @@ public class AssetPoolService {
 		entity.setCashtoolRate(form.getCashtoolRate());
 		entity.setTargetRate(form.getTargetRate());
 		entity.setCashPosition(form.getCashPosition());
+		entity.setState("成立");
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
