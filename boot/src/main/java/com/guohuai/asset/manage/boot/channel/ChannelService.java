@@ -125,7 +125,7 @@ public class ChannelService {
 		channelApprove.setRequester(operator);
 		channelApprove.setRequestTime(now);
 		//审批表 标记为待审批
-		channelApprove.setApproveResult(ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
+		channelApprove.setApproveStatus(ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
 		channelApprove.setCreateTime(now);
 		channelApprove.setUpdateTime(now);
 		this.serviceChannelApprove.saveChanApprEntity(channelApprove);

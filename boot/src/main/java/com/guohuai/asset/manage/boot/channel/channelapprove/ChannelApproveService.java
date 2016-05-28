@@ -39,7 +39,7 @@ public class ChannelApproveService {
 					.channelOid(en.getChannel().getOid())
 					.channelName(en.getChannelName()).channelApprovelCode(en.getChannelApproveCode())
 					.requestType(en.getRequestType()).requester(en.getRequester())
-					.approvelMan(en.getApproveMan()).approvelResult(en.getApproveResult())
+					.approvelMan(en.getApproveMan()).approvelResult(en.getApproveStatus())
 					.remark(en.getRemark()).requestTime(en.getRequestTime())
 					.updateTime(en.getUpdateTime()).build();
 			list.add(rep);
@@ -80,7 +80,7 @@ public class ChannelApproveService {
 		}
 		//审批人
 		en.setApproveMan(operator);
-		en.setApproveResult(req.getApprResult());
+		en.setApproveStatus(req.getApprResult());
 		
 		if(ChannelApprove.CHANAPPROVE_APPROVERESULT_PASS.equals(req.getApprResult())){
 			//审批通过

@@ -72,7 +72,7 @@ public class ChannelApprove extends UUID implements Serializable{
 	/**
 	 * 审批结果
 	 */
-	private String approveResult;
+	private String approveStatus;
 	/**
 	 * 评论
 	 */
