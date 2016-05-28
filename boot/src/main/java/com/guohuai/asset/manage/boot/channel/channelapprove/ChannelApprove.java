@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 @Entity
-@Table(name = "T_GAM_CHANNEL_APPROVAL")
+@Table(name = "T_MONEY_PLATFORM_CHANNEL_APPROVAL")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -52,7 +52,7 @@ public class ChannelApprove extends UUID implements Serializable{
 	/**
 	 * 渠道审批编号
 	 */
-	private String channelApprovelCode;
+	private String channelApproveCode;
 	/**
 	 * 申请类型
 	 */
@@ -68,11 +68,11 @@ public class ChannelApprove extends UUID implements Serializable{
 	/**
 	 * 审批人
 	 */
-	private String approvelMan;
+	private String approveMan;
 	/**
 	 * 审批结果
 	 */
-	private String approvelResult;
+	private String approveStatus;
 	/**
 	 * 评论
 	 */
