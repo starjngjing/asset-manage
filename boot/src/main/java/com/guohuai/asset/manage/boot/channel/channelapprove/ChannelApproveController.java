@@ -42,7 +42,7 @@ public class ChannelApproveController extends BaseController {
 					@Spec(params = "requester", path = "requester", spec = Like.class),
 					@Spec(params = "channelApprovelCode", path = "channelApprovelCode", spec = Like.class),
 					@Spec(params = "requestType", path = "requestType", spec = In.class),					
-					@Spec(params = "approvelResult", path = "approvelResult", spec = In.class),
+					@Spec(params = "approvelResult", path = "approveStatus", spec = In.class),
 					@Spec(params = "reqTimeBegin", path = "requestTime", spec = DateAfterInclusive.class),
 					@Spec(params = "reqTimeEnd", path = "requestTime", spec = DateBeforeInclusive.class),}) 
 	         		Specification<ChannelApprove> spec,
