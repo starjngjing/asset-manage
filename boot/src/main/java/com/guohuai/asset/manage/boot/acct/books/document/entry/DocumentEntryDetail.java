@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.guohuai.asset.manage.boot.acct.books.document.Document;
 import com.guohuai.asset.manage.component.util.DateUtil;
+import com.guohuai.asset.manage.component.util.NumberToCN;
 
 import lombok.Data;
 
@@ -23,6 +24,11 @@ public class DocumentEntryDetail {
 		this.docPeriod = DateUtil.format(d.getAcctDate(), "yyyy年第M期");
 		this.invoiceNum = d.getInvoiceNum();
 		this.createTime = d.getCreateTime();
+		this.dr = amounts(d.getDrAmount());
+		this.cr = amounts(d.getCrAmount());
+		this.drAmount = d.getDrAmount();
+		this.crAmount = d.getCrAmount();
+		this.amountCN = NumberToCN.number2CNMontrayUnit(d.getDrAmount());
 	}
 
 	private String oid;
@@ -33,6 +39,11 @@ public class DocumentEntryDetail {
 	private String docPeriod;
 	private int invoiceNum;
 	private Timestamp createTime;
+	private String[] dr;
+	private String[] cr;
+	private BigDecimal drAmount;
+	private BigDecimal crAmount;
+	private String amountCN;
 
 	private List<Detail> details = new ArrayList<Detail>();
 

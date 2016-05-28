@@ -168,7 +168,7 @@ define([
 
 			$$.searchInit($('#searchForm'), $('#dataTable'));
 
-			$('#updateDocTemplateModal').modal('show')
+			// $('#updateDocTemplateModal').modal('show')
 
 		}
 	}

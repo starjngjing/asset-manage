@@ -15,7 +15,7 @@ define([
 				startDate: '',
 				endDate: '',
 				page: 1,
-				size: 3
+				size: 10
 			};
 
 			$('#dataTable').bootstrapTable({
@@ -39,7 +39,7 @@ define([
 				pageSize: queryParams.size,
 				pagination: true,
 				sidePagination: 'server',
-				pageList: [3, 20, 30, 50, 100],
+				pageList: [10, 20, 30, 50, 100],
 				columns: [{
 					field: 'documentAcctDate',
 					formatter: function(val, row, index) {
@@ -48,7 +48,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -60,7 +60,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -69,7 +69,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -81,7 +81,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -95,7 +95,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -109,7 +109,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -123,7 +123,7 @@ define([
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -145,13 +145,74 @@ define([
 					},
 					events: {
 						'click .item-detail': function(e, value, row) {
-							console.log(value);
+							http.post(config.api.acct.book.document.entry.detail, {
+								data: {
+									documentOid: value
+								},
+								contentType: 'form'
+							}, function(r) {
+								console.log(r);
+								$('#detailModal').find('.doc-title').html(r.docTitle);
+								$('#detailModal').find('.doc-number').html('凭证字&nbsp;' + r.docWord + r.acctSn + '号');
+								$('#detailModal').find('.doc-date').html('日期&nbsp;' + r.acctDate);
+								$('#detailModal').find('.doc-term').html(r.docPeriod);
+								$('#detailModal').find('.doc-attach').html('附单据&nbsp;' + r.invoiceNum + '&nbsp;张');
+								$('#detailModal').find('.doc-updatetime').html('录入时间:&nbsp;' + r.createTime);
+								$('#detailModal').find('.doc-detail').empty();
+
+								$.each(r.details, function(i, e) {
+									var tr = $('<tr></tr>');
+									$('<td class="lsize lcontent">' + e.digest + '</td>').appendTo(tr);
+									$('<td class="lsize lcontent">' + e.accountCode + '&nbsp;' + e.accountName + '</td>').appendTo(tr);
+
+									var drTd = $('<td></td>');
+									drTd.appendTo(tr);
+									var dr = $('<ul class="number-body"></ul>');
+									dr.appendTo(drTd);
+									for (var x = 0; x < 11; x++) {
+										$('<li>' + (e.dr[x] == ' ' ? '&nbsp;' : e.dr[x]) + '</li>').appendTo(dr);
+									}
+
+									var crTd = $('<td></td>');
+									crTd.appendTo(tr);
+									var cr = $('<ul class="number-body"></ul>');
+									cr.appendTo(crTd);
+									for (var x = 0; x < 11; x++) {
+										$('<li>' + (e.cr[x] == ' ' ? '&nbsp;' : e.cr[x]) + '</li>').appendTo(cr);
+									}
+
+									$('#detailModal').find('.doc-detail').append(tr);
+								});
+
+								var sum = $('<tr></tr>');
+								$('<td class="lsize" colspan="2" style="text-align: left; padding-left: 15px;">合计：' + r.amountCN + '</td>').appendTo(sum);
+
+								var sdrTd = $('<td></td>');
+								sdrTd.appendTo(sum);
+								var sdr = $('<ul class="number-body"></ul>');
+								sdr.appendTo(sdrTd);
+								for (var x = 0; x < 11; x++) {
+									$('<li>' + (r.dr[x] == ' ' ? '&nbsp;' : r.dr[x]) + '</li>').appendTo(sdr);
+								}
+
+								var scrTd = $('<td></td>');
+								scrTd.appendTo(sum);
+								var scr = $('<ul class="number-body"></ul>');
+								scr.appendTo(scrTd);
+								for (var x = 0; x < 11; x++) {
+									$('<li>' + (r.cr[x] == ' ' ? '&nbsp;' : r.cr[x]) + '</li>').appendTo(scr);
+								}
+
+								$('#detailModal').find('.doc-detail').append(sum);
+
+								$('#detailModal').modal('show');
+							});
 						}
 					},
 					cellStyle: function(val, row, index) {
 						return {
 							css: {
-								'background-color': row.index % 2 == 0 ? '#F8FF94' : '#FFFFFF'
+								'background-color': row.index % 2 == 0 ? '#FAFFBA' : '#FFFFFF'
 							}
 						}
 					}
@@ -190,8 +251,6 @@ define([
 			});
 
 			$$.searchInit($('#searchForm'), $('#dataTable'));
-
-			$('#updateDocTemplateModal').modal('show');
 
 		}
 	}
