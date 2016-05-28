@@ -204,7 +204,9 @@ define(function() {
 			role: {
 				list: this.host + '/operate/admin/ctrl/role/list',					// 角色列表
 				save: this.host + '/operate/admin/ctrl/role/save',					// 新建角色
+				update: this.host + '/operate/admin/ctrl/role/update',			// 修改角色
 				delete: this.host + '/operate/admin/ctrl/role/delete',			// 删除角色
+				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths',	// 获取角色权限
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list'					// 权限列表

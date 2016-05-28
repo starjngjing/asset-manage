@@ -12,6 +12,8 @@ function (http, config, util, $$) {
 	  name: 'role',
 	  init: function (){
 			var confirm = $('#confirmModal')
+			// 缓存选取的权限
+			var chosenAuths = []
 			// 分页配置
 			var pageOptions = {
 				number: 1,
@@ -87,6 +89,61 @@ function (http, config, util, $$) {
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
+							'click .item-detail': function (e, val, row) {
+								http.post(config.api.role.getRoleAuths, {
+									data: {
+										roleOid: row.oid,
+										stats: false,
+										system: 'GAH'
+									},
+									contentType: 'form'
+								}, function (result) {
+									row.auths = result.rows.map(function (item) {
+										return '<p>' + item.name + '</p>'
+									}).join('')
+									$$.detailAutoFix($('#detailModal'), row)
+								})
+								$('#detailModal').modal('show')
+							},
+							'click .item-update': function (e, val, row) {
+								// 权限选择组件初始化
+								http.post(config.api.role.getRoleAuths, {
+									data: {
+										roleOid: row.oid,
+										stats: false,
+										system: 'GAH'
+									},
+									contentType: 'form'
+								}, function (result) {
+									var form = document.updateRoleForm
+									form.oid.value = row.oid
+									form.name.value = row.name
+									$(form).validator('validate')
+									chosenAuths = result.rows
+									http.post(config.api.auth.list, function (auths) {
+										auths.rows.forEach(function (item) {
+											if (chosenAuths.indexOf(item) >= 0) {
+												console.log('asd')
+											}
+										})
+										var fromArray = auths.rows.filter(function (item) {
+											var hasArr = chosenAuths.filter(function (chosen) {
+												return chosen.oid === item.oid
+											})
+											return !hasArr.length
+										})
+										$$.switcher({
+											container: $('#updateRoleAuths'),
+											fromTitle: '可选权限',
+											toTitle: '已选权限',
+											fromArray: fromArray,
+											toArray: chosenAuths,
+											field: 'name'
+										})
+									})
+								})
+								$('#updateRoleModal').modal('show')
+							},
 							'click .item-delete': function (e, val, row) {
 								$$.confirm({
 									container: $('#confirmModal'),
@@ -97,7 +154,7 @@ function (http, config, util, $$) {
 												oid: row.oid
 											},
 											contentType: 'form'
-										}, function (result) {
+										}, function () {
 											$('#roleTable').bootstrapTable('refresh')
 										})
 									}
@@ -114,10 +171,12 @@ function (http, config, util, $$) {
 
 			// 初始化新建角色表单验证
 			util.form.validator.init($('#addRoleForm'))
+			// 初始化修改角色表单验证
+			util.form.validator.init($('#updateRoleForm'))
 
 			// 新建角色按钮点击事件
-			var chosenAuths = []
 			$('#addRole').on('click', function () {
+				chosenAuths = []
 				// 权限选择组件初始化
 				http.post(config.api.auth.list, function (result) {
 					$$.switcher({
@@ -132,7 +191,7 @@ function (http, config, util, $$) {
 				$('#addRoleModal').modal('show')
 			})
 
-			// 新建按钮 - 确定按钮点击事件
+			// 新建角色 - 确定按钮点击事件
 			$('#doAddRole').on('click', function () {
 				var form = document.addRoleForm
 				form.systemOid.value = 'GAH'
@@ -141,11 +200,29 @@ function (http, config, util, $$) {
 				})
 				$(form).ajaxSubmit({
 					url: config.api.role.save,
-					success: function (result) {
+					success: function () {
 						$(form).find('input[name=auths]').remove()
 						util.form.reset($(form))
 						$('#roleTable').bootstrapTable('refresh')
 						$('#addRoleModal').modal('hide')
+					}
+				})
+			})
+
+			// 修改角色 - 确定按钮点击事件
+			$('#doUpdateRole').on('click', function () {
+				var form = document.updateRoleForm
+				form.systemOid.value = 'GAH'
+				chosenAuths.forEach(function (item) {
+					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')
+				})
+				$(form).ajaxSubmit({
+					url: config.api.role.update,
+					success: function () {
+						$(form).find('input[name=auths]').remove()
+						util.form.reset($(form))
+						$('#roleTable').bootstrapTable('refresh')
+						$('#updateRoleModal').modal('hide')
 					}
 				})
 			})
