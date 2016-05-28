@@ -126,6 +126,19 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
+	 * 编辑资产池账户信息
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/editPoolForCash", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> editPoolForCash(AssetPoolForm form) {
+		assetPoolService.editPoolForCash(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
 	 * 获取所有资产池的名称列表，包含id
 	 * @return
 	 */
@@ -142,8 +155,8 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllCapitalList", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAllCapitalList() {
-		List<CapitalForm> list = capitalService.getAllList();
+	public @ResponseBody ResponseEntity<Response> getAllCapitalList(String pid) {
+		List<CapitalForm> list = capitalService.getCapitalListByPid(pid);
 		Response r = new Response();
 		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

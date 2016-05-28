@@ -26,12 +26,4 @@ public class CapitalForm {
 	private BigDecimal capital;
 	// 状态（未审核，资金处理中，完成）
 	private String status;
-	// 冻结资金入金
-	private BigDecimal freezeCash;
-	// 冻结资金出金
-	private BigDecimal unfreezeCash;
-	// 在途资金入金
-	private BigDecimal transitCash;
-	// 在途资金出金
-	private BigDecimal untransitCash;
 }

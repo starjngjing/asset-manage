@@ -267,4 +267,29 @@ public class OrderController {
 		r.with("result", form);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+	
+	/**
+	 * 订单信息（资金明细）
+	 * @param oid
+	 * 			标的oid
+	 */
+	@RequestMapping(value = "/getTargetOrderByOidForCapital", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getTargetOrderByOidForCapital(String oid, String type) {
+		Response r = new Response();
+		if ("现金管理工具申赎".equals(type)) {
+			FundForm form = orderService.getFundOrderByOid(oid);
+			r.with("result", form);
+		} else if ("信托标的申购".equals(type)) {
+			TrustForm form = orderService.getTrustOrderByOid(oid, "申购");
+			r.with("result", form);
+		} else if ("本息兑付".equals(type)) {
+			TrustForm form = orderService.getTrustOrderByOid(oid, "本息兑付");
+			r.with("result", form);
+		} else {
+			TrustForm form = orderService.getTrustOrderByOid(oid, "转让");
+			r.with("result", form);
+		}
+		
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 }

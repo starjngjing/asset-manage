@@ -83,6 +83,55 @@ public class CapitalService {
 		
 		return formList;
 	}
+
+	/**
+	 * 获取资产池的出入金明细
+	 * @return
+	 */
+	@Transactional
+	public List<CapitalForm> getCapitalListByPid(String pid) {
+		List<CapitalForm> formList = Lists.newArrayList();
+		List<CapitalEntity> list = capitalDao.findByOid(pid);
+		if (!list.isEmpty()) {
+			CapitalForm form = null;
+			String type = null;
+			for (CapitalEntity entity : list) {
+				form = new CapitalForm();
+				form.setSubject(entity.getSubject());
+				type = entity.getSubject().substring(0, 2);
+				if (null != entity.getCashtoolOrderOid()) {
+					form.setOrderOid(entity.getCashtoolOrderOid());
+					form.setCapital(entity.getFreezeCash());
+					form.setOperation("现金管理工具申赎");
+				} else if (null != entity.getTargetOrderOid()) {
+					form.setOrderOid(entity.getTargetOrderOid());
+					form.setCapital(entity.getFreezeCash());
+					form.setOperation("信托标的申购");
+				} else if (null != entity.getTargetIncomeOid()) {
+					form.setOrderOid(entity.getTargetIncomeOid());
+					form.setCapital(entity.getTransitCash());
+					form.setOperation("本息兑付");
+				} else if (null != entity.getTargetTransOid()) {
+					form.setOrderOid(entity.getTargetTransOid());
+					form.setCapital(entity.getTransitCash());
+					form.setOperation("转让");
+				}
+				if ("申购".equals(type)) {
+					form.setStatus("未审核");
+				} else if ("审核".equals(type)) {
+					form.setStatus("资金处理中");
+				} else if ("预约".equals(type)) {
+					form.setStatus("资金处理中");
+				} else if ("确认".equals(type)) {
+					form.setStatus("完成");
+				}
+				
+				formList.add(form);
+			}
+		}
+		
+		return formList;
+	}
 	
 	/**
 	 * 资金明细
