@@ -175,6 +175,12 @@ define([
             field: 'volume'
           },
           {
+            field: 'optType',
+            formatter: function (val) {
+              return val === 'purchase' ? '申购' : '赎回'
+            }
+          },
+          {
             field: 'state',
             formatter: function (val) {
               switch (val) {
@@ -213,6 +219,13 @@ define([
             events: {
               'click .item-audit': function (e, val, row) {
                 var modal = $('#fundCheckModal')
+                if (row.optType === 'purchase') {
+                  $('#purchaseArea').show()
+                  $('#redeemArea').hide()
+                } else {
+                  $('#purchaseArea').hide()
+                  $('#redeemArea').show()
+                }
                 http.post(config.api.duration.order.getFundOrderByOid, {
                   data: {
                     oid: row.oid,
@@ -245,6 +258,13 @@ define([
               },
               'click .item-ordering': function (e, val, row) {
                 var modal = $('#fundCheckModal')
+                if (row.optType === 'purchase') {
+                  $('#purchaseArea').show()
+                  $('#redeemArea').hide()
+                } else {
+                  $('#purchaseArea').hide()
+                  $('#redeemArea').show()
+                }
                 http.post(config.api.duration.order.getFundOrderByOid, {
                   data: {
                     oid: row.oid,
@@ -277,6 +297,13 @@ define([
               },
               'click .item-accpet': function (e, val, row) {
                 var modal = $('#fundCheckModal')
+                if (row.optType === 'purchase') {
+                  $('#purchaseArea').show()
+                  $('#redeemArea').hide()
+                } else {
+                  $('#purchaseArea').hide()
+                  $('#redeemArea').show()
+                }
                 http.post(config.api.duration.order.getFundOrderByOid, {
                   data: {
                     oid: row.oid,
@@ -518,7 +545,7 @@ define([
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
             $('#toolTable').bootstrapTable('refresh')
-            $('#purchaseModal').modal('hide')
+            $('#redeemModal').modal('hide')
           }
         })
       })
@@ -1038,7 +1065,7 @@ define([
         var form = document.trustCheckForm
         form.state.value = '0'
         var url = ''
-        switch (form.type) {
+        switch (form.type.value) {
           case '申购':
             switch (form.opType.value) {
               case 'audit':

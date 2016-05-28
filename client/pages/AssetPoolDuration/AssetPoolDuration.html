@@ -89,6 +89,7 @@
             <th>最新流通份额</th>
             <th>投资日</th>
             <th>申购额度</th>
+            <th>操作类型</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -527,10 +528,16 @@
             <div data-detail-fetch="amount"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <dl id="purchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申购额度:</dt>
           <dd>
             <div data-detail-fetch="volume"></div>
+          </dd>
+        </dl>
+        <dl id="redeemArea" class="dl-horizontal" style="display: none;">
+          <dt>赎回额度:</dt>
+          <dd>
+            <div data-detail-fetch="returnVolume"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal labelForOrdering" style="display: none;">
