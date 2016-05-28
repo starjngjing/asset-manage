@@ -218,10 +218,25 @@ public class AssetPoolService {
 	@Transactional
 	public void editPoolForCash(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
-		entity.setState("未审核");
-		entity.setCashPosition(form.getCashPosition());
-		entity.setOperator(uid);
-		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+//		entity.setState("未审核");
+//		entity.setCashPosition(form.getCashPosition());
+//		entity.setOperator(uid);
+//		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		try {
+			BeanUtils.copyProperties(entity, form);
+			entity.setCashPosition(form.getScale());
+//			entity.setState("未审核");
+			entity.setOperator(uid);
+			entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+			
+			assetPoolDao.save(entity);
+			
+			for (String s : form.getScopes()) {
+				scopeService.save(entity, s);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		assetPoolDao.save(entity);
 	}
