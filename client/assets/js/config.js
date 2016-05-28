@@ -119,6 +119,13 @@ define(function() {
 				account: {
 					search: this.host + '/ams/acct/account/search',
 					update: this.host + '/ams/acct/account/update'
+				},
+				book: {
+					document: {
+						entry: {
+							search: this.host + '/ams/acct/books/document/entry/search'
+						}
+					}
 				}
 			},
 			system: {

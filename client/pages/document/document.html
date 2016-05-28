@@ -1,0 +1,69 @@
+<!-- 页面头部 -->
+<section class="content-header">
+	<h1>凭证查询</h1>
+	<ol class="breadcrumb">
+		<li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 会计分录</a></li>
+		<li class="active">凭证查询</li>
+	</ol>
+</section>
+
+<!-- 主要内容 -->
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+			<!-- 主体Grid -->
+			<div id="dataGrid" class="box box-primary">
+				<!-- Grid头部 -->
+				<div class="box-header">
+					<h3 class="box-title">凭证列表</h3>
+					<div class="box-tools"></div>
+				</div>
+				<!-- Grid内容体 -->
+				<div class="box-body">
+					<!-- 搜索项表单 -->
+					<form id="searchForm" name="searchForm" method="post" class="search-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>申请日期</label>
+									<div class="input-group input-group-sm">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+										<input name="startDate" type="text" class="form-control datepicker" data-date-format="YYYY-MM-DD" placeholder="从">
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>&nbsp;</label>
+									<div class="input-group input-group-sm range">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+										<input name="endDate" type="text" class="form-control datepicker" data-date-format="YYYY-MM-DD" placeholder="到">
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 主体数据表格 -->
+					<table id="dataTable" class="table table-bordered">
+						<thead>
+							<tr>
+								<th>日期</th>
+								<th>凭证字号</th>
+								<th>摘要</th>
+								<th>科目</th>
+								<th>借方金额</th>
+								<th>贷方金额</th>
+								<th>录入时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
