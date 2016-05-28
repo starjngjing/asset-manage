@@ -38,4 +38,10 @@ public class AccountService {
 		return a;
 	}
 
+	@Transactional
+	public List<Account> list() {
+		List<Account> list = this.accountDao.findAll();
+		return list;
+	}
+
 }
