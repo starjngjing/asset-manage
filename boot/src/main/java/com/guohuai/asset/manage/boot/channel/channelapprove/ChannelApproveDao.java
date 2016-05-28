@@ -13,5 +13,5 @@ public interface ChannelApproveDao extends JpaRepository<ChannelApprove, String>
 	@Query(value = "FROM ChannelApprove c WHERE c.channel = ?1 ORDER BY c.updateTime DESC")
 	public List<ChannelApprove> getByChannel(Channel channel);
 	
-	public List<ChannelApprove> findByChannelAndApproveResult(Channel en, String approveResult);
+	public List<ChannelApprove> findByChannelAndApproveStatus(Channel en, String approveStatus);
 }
