@@ -37,9 +37,9 @@ public class ChannelApproveService {
 		for (ChannelApprove en : enchapproves) {
 			ChannelApproveQueryRep rep = new ChannelApproveQueryRepBuilder().oid(en.getOid())
 					.channelOid(en.getChannel().getOid())
-					.channelName(en.getChannelName()).channelApprovelCode(en.getChannelApprovelCode())
+					.channelName(en.getChannelName()).channelApprovelCode(en.getChannelApproveCode())
 					.requestType(en.getRequestType()).requester(en.getRequester())
-					.approvelMan(en.getApprovelMan()).approvelResult(en.getApprovelResult())
+					.approvelMan(en.getApproveMan()).approvelResult(en.getApproveResult())
 					.remark(en.getRemark()).requestTime(en.getRequestTime())
 					.updateTime(en.getUpdateTime()).build();
 			list.add(rep);
@@ -79,12 +79,12 @@ public class ChannelApproveService {
 			throw AMPException.getException(70003);
 		}
 		//审批人
-		en.setApprovelMan(operator);
-		en.setApprovelResult(req.getApprResult());
+		en.setApproveMan(operator);
+		en.setApproveResult(req.getApprResult());
 		
 		if(ChannelApprove.CHANAPPROVE_APPROVERESULT_PASS.equals(req.getApprResult())){
 			//审批通过
-			channel.setApprovelStatus(Channel.CHANNEL_APPROVESTATUS_PASS);
+			channel.setApproveStatus(Channel.CHANNEL_APPROVESTATUS_PASS);
 			//通过后将渠道状态设置为申请时的状态
 			if(ChannelApprove.CHANAPPROVE_REQUESTTYPE_ON.equals(en.getRequestType())){
 				channel.setChannelStatus(Channel.CHANNEL_STATUS_ON);
@@ -93,7 +93,7 @@ public class ChannelApproveService {
 			}			
 		}else if(ChannelApprove.CHANAPPROVE_APPROVERESULT_REFUSED.equals(req.getApprResult())){
 			//审批驳回
-			channel.setApprovelStatus(Channel.CHANNEL_APPROVESTATUS_REFUSED);
+			channel.setApproveStatus(Channel.CHANNEL_APPROVESTATUS_REFUSED);
 		}
 		en.setRemark(req.getRemark());
 		en.setUpdateTime(now);

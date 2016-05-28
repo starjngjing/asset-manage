@@ -130,7 +130,7 @@ public class ProductChannelService {
 		}
 		List<ProductChannel> newProductChannels =  new ArrayList<ProductChannel>();
 		for(Channel channel : channels) {
-			if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApprovelStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
+			if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApproveStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
 				if(!exiChannelOids.contains(channel.getOid())) {
 					ProductChannel.ProductChannelBuilder productChannelBuilder = ProductChannel.builder().oid(StringUtil.uuid());
 					{
@@ -190,7 +190,7 @@ public class ProductChannelService {
 		if(!Product.STATE_Admitpass.equals(product.getState())){
 			throw AMPException.getException(90017);
 		}
-		if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApprovelStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
+		if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApproveStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
 			if(!ProductChannel.MARKET_STATE_Noshelf.equals(productChannel.getMarketState())
 					|| !ProductChannel.MARKET_STATE_Offshelf.equals(productChannel.getMarketState())) {
 				throw AMPException.getException(90017);

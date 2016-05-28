@@ -52,7 +52,7 @@ public class ChannelApprove extends UUID implements Serializable{
 	/**
 	 * 渠道审批编号
 	 */
-	private String channelApprovelCode;
+	private String channelApproveCode;
 	/**
 	 * 申请类型
 	 */
@@ -68,11 +68,11 @@ public class ChannelApprove extends UUID implements Serializable{
 	/**
 	 * 审批人
 	 */
-	private String approvelMan;
+	private String approveMan;
 	/**
 	 * 审批结果
 	 */
-	private String approvelResult;
+	private String approveResult;
 	/**
 	 * 评论
 	 */

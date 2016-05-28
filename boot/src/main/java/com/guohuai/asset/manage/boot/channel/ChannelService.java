@@ -42,7 +42,7 @@ public class ChannelService {
 					.channelId(ench.getChannelId()).channelFee(ench.getChannelFee())
 					.joinType(ench.getJoinType()).partner(ench.getPartner())
 					.channelContactName(ench.getChannelContactName()).channelStatus(ench.getChannelStatus())
-					.approvelStatus(ench.getApprovelStatus()).deleteStatus(ench.getDeleteStatus())
+					.approvelStatus(ench.getApproveStatus()).deleteStatus(ench.getDeleteStatus())
 					.build();
 			list.add(rep);
 		}
@@ -93,7 +93,7 @@ public class ChannelService {
 		rep.setChannelEmail(en.getChannelEmail());
 		rep.setChannelPhone(en.getChannelPhone());			
 		rep.setChannelStatus(en.getChannelStatus());    
-		rep.setApprovelStatus(en.getApprovelStatus());
+		rep.setApprovelStatus(en.getApproveStatus());
 		rep.setDeleteStatus(en.getDeleteStatus());
 		return rep;
 	}
@@ -119,18 +119,18 @@ public class ChannelService {
 		ChannelApprove channelApprove = new ChannelApprove();
 		channelApprove.setChannel(chan);
 		channelApprove.setChannelName(chan.getChannelName());
-		channelApprove.setChannelApprovelCode(StringUtil.uuid());
+		channelApprove.setChannelApproveCode(StringUtil.uuid());
 		channelApprove.setRequestType(requestType);
 		//申请人
 		channelApprove.setRequester(operator);
 		channelApprove.setRequestTime(now);
 		//审批表 标记为待审批
-		channelApprove.setApprovelResult(ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
+		channelApprove.setApproveResult(ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
 		channelApprove.setCreateTime(now);
 		channelApprove.setUpdateTime(now);
 		this.serviceChannelApprove.saveChanApprEntity(channelApprove);
 		//待审批
-		chan.setApprovelStatus(Channel.CHANNEL_APPROVESTATUS_toApprove);
+		chan.setApproveStatus(Channel.CHANNEL_APPROVESTATUS_toApprove);
 		chan.setUpdateTime(now);
 		this.daoChannel.save(chan);
 		return rep;
