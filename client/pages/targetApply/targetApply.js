@@ -103,6 +103,7 @@ define([
 						return util.table.convertRisk(val);
 					}
 				}, {
+					width: 400,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
