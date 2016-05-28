@@ -434,8 +434,9 @@ public class OrderService {
 			trustEntity.setAssetPoolOid(order.getAssetPoolOid());
 			trustEntity.setPurchase(PURCHASE);
 //			trustEntity.setIncomeDate(form.getIncomeDate());
-			trustEntity.setState(TrustOrderEntity.STATE_AUDIT);
+			trustEntity.setState(TrustEntity.INVESTING);
 			trustEntity.setApplyAmount(form.getInvestVolume());
+			trustEntity.setInvestAmount(form.getInvestVolume());
 			
 			trustService.save(trustEntity);
 		} else
@@ -925,6 +926,8 @@ public class OrderService {
 				form.setSubjectRating(target.getSubjectRating());
 				form.setRaiseScope(target.getRaiseScope());
 				form.setAccrualType(target.getAccrualType());
+				form.setIncome(target.getExpIncome());
+				form.setState(target.getState());
 				
 				// 本息兑付
 				if ("income".equals(type)) {

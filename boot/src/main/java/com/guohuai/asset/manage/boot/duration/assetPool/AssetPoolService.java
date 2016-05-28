@@ -266,7 +266,7 @@ public class AssetPoolService {
 	 * 计算资产池当日的确认收益
 	 * @return
 	 */
-	@Scheduled(cron = "0 30 0 * * ?")
+	@Scheduled(cron = "0 15 6 * * ?")
 	@Transactional
 	public void calcPoolProfit() {
 		// 所有资产池列表

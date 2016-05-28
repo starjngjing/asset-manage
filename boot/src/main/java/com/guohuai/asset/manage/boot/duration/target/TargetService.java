@@ -95,6 +95,13 @@ public class TargetService {
 				form.setCollectStartDate(inv.getCollectStartDate());
 				form.setCollectEndDate(inv.getCollectEndDate());
 				form.setCollectIncomeRate(inv.getCollectIncomeRate());
+				form.setFloorVolume(inv.getFloorVolume());
+				form.setIncome(inv.getExpIncome());
+				form.setSetDate(inv.getSetDate());
+				form.setRaiseScope(inv.getRaiseScope());
+				form.setLife(inv.getLife());
+				form.setState(inv.getState());
+				
 				
 				formList.add(form);
 			}
