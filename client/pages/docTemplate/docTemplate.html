@@ -59,3 +59,136 @@
 		</div>
 	</div>
 </section>
+
+<!-- 修改凭证模板弹窗 -->
+<div id="updateDocTemplateModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" style="overflow-x: auto;">
+	<div class="modal-dialog modal-lg" role="document" style="width: 1200px;">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class=" modal-title">修改凭证模板</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<div class="doc-grid">
+					<div class="doc-grid-title">
+						<h2>记账凭证</h2>
+						<span class="doc-info doc-number">凭证字记 25 号</span>
+						<span class="doc-info doc-date">日期 2016-01-31</span>
+						<span class="doc-info doc-term">2016年第3期</span>
+						<span class="doc-info doc-attach">附单据 5 张</span>
+					</div>
+					<table class="main-table">
+						<thead>
+						<tr>
+							<td class="lsize" style="width: 280px;">摘要</td>
+							<td class="lsize" style="width: 325px;">会计项目</td>
+							<td>
+								<p class="number-header">借方金额</p>
+								<ul class="number-body">
+									<li>亿</li><li>千</li><li>百</li><li>十</li><li>万</li>
+									<li>千</li><li>百</li><li>十</li><li>元</li><li>角</li><li>分</li>
+								</ul>
+							</td>
+							<td>
+								<table class="inside-table">
+									<p class="number-header">贷方金额</p>
+									<ul class="number-body">
+										<li>亿</li><li>千</li><li>百</li><li>十</li><li>万</li>
+										<li>千</li><li>百</li><li>十</li><li>元</li><li>角</li><li>分</li>
+									</ul>
+								</table>
+							</td>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td class="lsize lcontent">
+								<input type="text" class="form-control"/>
+							</td>
+							<td class="lsize lcontent">
+								110101 短期投资_股票
+							</td>
+							<td>
+								<ul class="number-body">
+									<li>1</li>
+									<li>2</li>
+									<li>3</li>
+									<li>4</li>
+									<li>5</li>
+									<li>6</li>
+									<li>7</li>
+									<li>8</li>
+									<li>9</li>
+									<li>0</li>
+									<li>0</li>
+								</ul>
+							</td>
+							<td>
+								<ul class="number-body">
+									<li>1</li>
+									<li>2</li>
+									<li>3</li>
+									<li>4</li>
+									<li>5</li>
+									<li>6</li>
+									<li>7</li>
+									<li>8</li>
+									<li>9</li>
+									<li>0</li>
+									<li>0</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td class="lsize" colspan="2" style="text-align: left; padding-left: 15px;">合计：</td>
+							<td>
+								<ul class="number-body">
+									<li>1</li>
+									<li>2</li>
+									<li>3</li>
+									<li>4</li>
+									<li>5</li>
+									<li>6</li>
+									<li>7</li>
+									<li>8</li>
+									<li>9</li>
+									<li>0</li>
+									<li>0</li>
+								</ul>
+							</td>
+							<td>
+								<ul class="number-body">
+									<li>1</li>
+									<li>2</li>
+									<li>3</li>
+									<li>4</li>
+									<li>5</li>
+									<li>6</li>
+									<li>7</li>
+									<li>8</li>
+									<li>9</li>
+									<li>0</li>
+									<li>0</li>
+								</ul>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<div class="doc-grid-footer">
+						<p class="doc-creator">制单人：ghdev222</p>
+						<span class="doc-createtime">录入时间：2016-08-23 11:32:00</span>
+						<span class="doc-updatetime">最后修改时间：2016-08-23 11:32:00</span>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="doChooseAssetPool" type="button" class="btn btn-primary">确 定</button>
+			</div>
+		</div>
+	</div>
+</div>

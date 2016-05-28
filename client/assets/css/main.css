@@ -273,3 +273,142 @@ table.treetable tr.expanded span.indenter a:before {
   font-size: 18px;
   cursor: pointer;
 }
+
+/* doc template */
+.doc-grid{
+  width: 1075px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.doc-grid-title{
+  height: 60px;
+  position: relative;
+}
+
+.doc-grid-title h2{
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+}
+
+.doc-grid-title .doc-info{
+  line-height: 40px;
+  position: absolute;
+}
+
+.doc-grid-title .doc-number{
+  left: 0;
+  bottom: 0;
+}
+
+.doc-grid-title .doc-date{
+  left: 200px;
+  bottom: 0;
+}
+
+.doc-grid-title .doc-term{
+  left: 620px;
+  bottom: 5px;
+}
+
+.doc-grid-title .doc-attach{
+  right: 0;
+  bottom: 0;
+}
+
+.doc-grid .main-table{
+  width: 100%;
+  border: 2px solid #666;
+  text-align: center;
+}
+
+.doc-grid .main-table > thead > tr{
+  height: 50px;
+}
+
+.doc-grid .main-table > tbody > tr{
+  height: 60px;
+}
+
+.doc-grid .main-table > thead > tr > td,
+.doc-grid .main-table > tbody > tr > td{
+  border: 1px solid #666;
+}
+
+.doc-grid .main-table > thead > tr > td.lsize,
+.doc-grid .main-table > tbody > tr > td.lsize{
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.doc-grid .main-table > tbody > tr > td.lsize.lcontent{
+  font-weight: normal;
+  text-align: left;
+}
+
+.doc-grid .number-header{
+  height: 27px;
+  margin: 0;
+  border-bottom: 1px solid #ccc;
+  line-height: 27px;
+}
+
+.doc-grid .number-body{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.doc-grid thead .number-body {
+  height: 23px;
+  line-height: 23px;
+}
+
+.doc-grid tbody .number-body {
+  height: 60px;
+  line-height: 60px;
+}
+
+.doc-grid .number-body li{
+  width: 9.09%;
+  border-left: 1px solid #ccc;
+  list-style-type: none;
+  float: left;
+}
+.doc-grid tbody .number-body li{
+  font-size: 14px;
+  font-weight: 800;
+}
+.doc-grid .number-body li:first-of-type{
+  border-left: 0;
+}
+.doc-grid .number-body li:nth-of-type(4),
+.doc-grid .number-body li:nth-of-type(7){
+  border-left-color: rgba(0, 192, 239, .5);
+}
+.doc-grid .number-body li:nth-of-type(10){
+  border-left-color: rgba(221, 75, 57, .5);
+}
+
+.doc-grid .doc-grid-footer{
+  position: relative;
+}
+
+.doc-grid .doc-grid-footer .doc-creator{
+  margin: 15px 0 0 0;
+  font-size: 14px;
+}
+
+.doc-grid .doc-grid-footer .doc-createtime{
+  position: absolute;
+  right: 256px;
+  bottom: 1px;
+}
+
+.doc-grid .doc-grid-footer .doc-updatetime{
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+}

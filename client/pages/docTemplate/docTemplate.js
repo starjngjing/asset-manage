@@ -168,6 +168,8 @@ define([
 
 			$$.searchInit($('#searchForm'), $('#dataTable'));
 
+			$('#updateDocTemplateModal').modal('show')
+
 		}
 	}
 })
