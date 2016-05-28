@@ -1415,10 +1415,11 @@ function validpercentage($el) {
 function pageInit (pid, http, config) {
   http.post(config.api.duration.assetPool.getById, {
     data: {
-      oid: pid
+      oid: pid || ''
     },
     contentType: 'form'
   }, function (json) {
+    console.log(json)
     var detail = json.result
     $('#detailPoolScale').html(detail.scale)
     $('#detailPoolCash').html(detail.cashPosition)
