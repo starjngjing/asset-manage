@@ -72,7 +72,7 @@ define([
 							case 'UPDATE': return '修改'
 							case 'AUDITING': return '审核中'
 							case 'AUDITFAIL': return '审核不通过'
-							case 'AUDITFAIL': return '审核通过'
+							case 'AUDITPASS': return '审核通过'
 							case 'REVIEWFAIL': return '复核不通过'
 							case 'REVIEWPASS': return '复核通过'
 							case 'ADMITFAIL': return '准入不通过'
