@@ -509,7 +509,7 @@ public class OrderService {
 		TrustIncomeEntity order = trustService.getTrustIncomeOrderByOid(form.getOid());
 		order.setAuditIncome(form.getAuditVolume());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
-			order.setState(TrustIncomeEntity.STATE_APPOINTMENT);
+			order.setState(TrustIncomeEntity.STATE_CONFIRM);
 		else
 			order.setState(TrustIncomeEntity.STATE_FAIL);
 		order.setAuditor(uid);
@@ -617,7 +617,7 @@ public class OrderService {
 		TrustTransEntity order = trustService.getTrustTransOrderByOid(form.getOid());
 		order.setAuditVolume(form.getAuditVolume());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
-			order.setState(TrustTransEntity.STATE_APPOINTMENT);
+			order.setState(TrustTransEntity.STATE_CONFIRM);
 		else
 			order.setState(TrustTransEntity.STATE_FAIL);
 		order.setAuditor(uid);

@@ -193,20 +193,20 @@ public class AssetPoolService {
 	@Transactional
 	public void editPool(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
-		try {
-			BeanUtils.copyProperties(entity, form);
-			entity.setCashPosition(form.getScale());
-			entity.setState("未审核");
-			entity.setOperator(uid);
-			entity.setUpdateTime(DateUtil.getSqlCurrentDate());
-			
-			assetPoolDao.save(entity);
-			
-			for (String s : form.getScopes()) {
-				scopeService.save(entity, s);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		entity.setName(form.getName());
+		entity.setScale(form.getScale());
+		entity.setCashRate(form.getCashRate());
+		entity.setCashtoolRate(form.getCashtoolRate());
+		entity.setTargetRate(form.getTargetRate());
+		entity.setCashPosition(form.getCashPosition());
+		entity.setState("未审核");
+		entity.setOperator(uid);
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		
+		assetPoolDao.save(entity);
+		
+		for (String s : form.getScopes()) {
+			scopeService.save(entity, s);
 		}
 	}
 	
@@ -218,24 +218,20 @@ public class AssetPoolService {
 	@Transactional
 	public void editPoolForCash(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
-//		entity.setState("未审核");
-//		entity.setCashPosition(form.getCashPosition());
-//		entity.setOperator(uid);
-//		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
-		try {
-			BeanUtils.copyProperties(entity, form);
-			entity.setCashPosition(form.getScale());
-//			entity.setState("未审核");
-			entity.setOperator(uid);
-			entity.setUpdateTime(DateUtil.getSqlCurrentDate());
-			
-			assetPoolDao.save(entity);
-			
-			for (String s : form.getScopes()) {
-				scopeService.save(entity, s);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		entity.setName(form.getName());
+		entity.setScale(form.getScale());
+		entity.setCashRate(form.getCashRate());
+		entity.setCashtoolRate(form.getCashtoolRate());
+		entity.setTargetRate(form.getTargetRate());
+		entity.setCashPosition(form.getCashPosition());
+		entity.setState("成立");
+		entity.setOperator(uid);
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		
+		assetPoolDao.save(entity);
+		
+		for (String s : form.getScopes()) {
+			scopeService.save(entity, s);
 		}
 		
 		assetPoolDao.save(entity);
