@@ -166,6 +166,21 @@ define(function() {
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund',	// 货币基金申购
 					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust',	// 信托计划申购
 					getTargetList: this.host + '/ams/duration/product/getTargetList',	 // 获取标的列表
+					getTrustListForAppointment: this.host + '/ams/duration/product/getTrustListForAppointment',	// 获取 预约中信托（计划）列表
+					getTrustList: this.host + '/ams/duration/product/getTrustList',	// 获取 信托（计划）列表
+					getTrustOrderByOid: this.host + '/ams/duration/order/getTrustOrderByOid',	// 根据ID获取预约中信托计划
+					getTrustByOid: this.host + '/ams/duration/order/getTrustByOid',	// 根据ID获取已成立信托计划
+					auditForTrust: this.host + '/ams/duration/order/auditForTrust',	// 信托计划审核
+					appointmentForTrust: this.host + '/ams/duration/order/appointmentForTrust',	// 信托计划预约
+					orderConfirmForTrust: this.host + '/ams/duration/order/orderConfirmForTrust',	// 信托计划确认
+					applyForTransfer: this.host + '/ams/duration/order/applyForTransfer',	// 信托计划转让
+					getFundListForAppointment: this.host + '/ams/duration/product/getFundListForAppointment',	// 获取 预约中现金类管理工具列表
+					getFundList: this.host + '/ams/duration/product/getFundList',	// 获取 现金类管理工具列表
+					getFundOrderByOid: this.host + '/ams/duration/order/getFundOrderByOid',	// 根据ID获取预约中现金类管理工具
+					getFundByOid: this.host + '/ams/duration/order/getFundByOid',	// 根据ID获取现金类管理工具
+					auditForFund: this.host + '/ams/duration/order/auditForFund',	// 信托计划审核
+					appointmentForFund: this.host + '/ams/duration/order/appointmentForFund',	// 信托计划预约
+					orderConfirmForFund: this.host + '/ams/duration/order/orderConfirmForFund',	// 信托计划确认
 				}
 			},
 			role: {
