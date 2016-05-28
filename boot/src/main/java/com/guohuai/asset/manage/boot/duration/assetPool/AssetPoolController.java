@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalForm;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.Response;
 
@@ -38,6 +40,8 @@ public class AssetPoolController extends BaseController {
 	
 	@Autowired
 	private AssetPoolService assetPoolService;
+	@Autowired
+	private CapitalService capitalService;
 
 	/**
 	 * 新建资产池
@@ -130,6 +134,18 @@ public class AssetPoolController extends BaseController {
 		List<JSONObject> jsonList = assetPoolService.getAllNameList();
 		Response r = new Response();
 		r.with("rows", jsonList);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
+	 * 获取所有资产池的资金明细
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllCapitalList", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getAllCapitalList() {
+		List<CapitalForm> list = capitalService.getAllList();
+		Response r = new Response();
+		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }

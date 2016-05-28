@@ -48,31 +48,32 @@ public class CapitalService {
 			String type = null;
 			for (CapitalEntity entity : list) {
 				form = new CapitalForm();
+				form.setSubject(entity.getSubject());
 				type = entity.getSubject().substring(0, 2);
 				if (null != entity.getCashtoolOrderOid()) {
 					form.setOrderOid(entity.getCashtoolOrderOid());
 					form.setCapital(entity.getFreezeCash());
+					form.setOperation("现金管理工具申赎");
 				} else if (null != entity.getTargetOrderOid()) {
 					form.setOrderOid(entity.getTargetOrderOid());
 					form.setCapital(entity.getFreezeCash());
+					form.setOperation("信托标的申购");
 				} else if (null != entity.getTargetIncomeOid()) {
 					form.setOrderOid(entity.getTargetIncomeOid());
 					form.setCapital(entity.getTransitCash());
+					form.setOperation("本息兑付");
 				} else if (null != entity.getTargetTransOid()) {
 					form.setOrderOid(entity.getTargetTransOid());
 					form.setCapital(entity.getTransitCash());
+					form.setOperation("转让");
 				}
 				if ("申购".equals(type)) {
-					form.setOperation("申购");
 					form.setStatus("未审核");
 				} else if ("审核".equals(type)) {
-					form.setOperation("审核");
 					form.setStatus("资金处理中");
 				} else if ("预约".equals(type)) {
-					form.setOperation("预约");
 					form.setStatus("资金处理中");
 				} else if ("确认".equals(type)) {
-					form.setOperation("确认");
 					form.setStatus("完成");
 				}
 				

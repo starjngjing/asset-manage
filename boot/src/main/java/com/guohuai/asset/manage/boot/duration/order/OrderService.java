@@ -81,8 +81,13 @@ public class OrderService {
 			entity.setCashTool(cashTool);
 			entity.setAssetPoolOid(form.getAssetPoolOid());
 			entity.setState(FundEntity.INVESTEND);
+			entity.setAmount(BigDecimal.ZERO);
+			entity.setFrozenCapital(BigDecimal.ZERO);
+			entity.setPurchaseVolume(BigDecimal.ZERO);
+			entity.setRedeemVolume(BigDecimal.ZERO);
+		} else {
+			entity = fundService.getFundByOid(form.getOid());
 		}
-		entity = fundService.getFundByOid(form.getOid());
 		entity.setPurchaseVolume(form.getVolume());
 		entity.setFrozenCapital(form.getVolume());
 		
@@ -123,6 +128,7 @@ public class OrderService {
 		
 		FundOrderEntity order = new FundOrderEntity();
 		order.setOid(StringUtil.uuid());
+		order.setFundEntity(entity);
 		order.setRedeemDate(form.getRedeemDate());
 		order.setReturnVolume(form.getReturnVolume());
 		order.setOptType("redeem");
@@ -258,6 +264,8 @@ public class OrderService {
 		}
 		fundEntity.setPurchaseVolume(BigDecimal.ZERO);
 		fundEntity.setFrozenCapital(BigDecimal.ZERO);
+		fundEntity.setRedeemVolume(BigDecimal.ZERO);
+		fundEntity.setOnWayCapital(BigDecimal.ZERO);
 		order.setConfirmer(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -521,7 +529,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(order.getTrustEntity().getAssetPoolOid(), order.getTrustEntity().getTarget().getOid(), 
-				order.getOid(), TRUST, form.getVolume(), order.getIncome(), INCOME, AUDIT, uid, form.getState());
+				order.getOid(), TRUST, form.getAuditVolume(), order.getIncome(), INCOME, AUDIT, uid, form.getState());
 	}
 	
 	/**
@@ -1042,7 +1050,7 @@ public class OrderService {
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
-					form.setType("申赎");
+					form.setType("申购");
 
 					formList.add(form);
 				}
