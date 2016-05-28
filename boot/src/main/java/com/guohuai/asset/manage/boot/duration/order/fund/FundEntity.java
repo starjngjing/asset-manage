@@ -20,12 +20,23 @@ import lombok.Data;
 public class FundEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	/**
 	 * 状态
 	 */
 	public static final String INVESTING = "0";
 	public static final String INVESTEND = "-1";
+	
+	public FundEntity() {
+		this.amount = init0;
+		this.interestAcount = init0;
+		this.purchaseVolume = init0;
+		this.redeemVolume = init0;
+		this.frozenCapital = init0;
+		this.onWayCapital = init0;
+	}
 
 	@Id
 	private String oid;

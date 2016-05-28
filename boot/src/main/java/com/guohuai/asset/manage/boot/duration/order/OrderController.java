@@ -274,15 +274,15 @@ public class OrderController {
 	 * 			标的oid
 	 */
 	@RequestMapping(value = "/getTargetOrderByOidForCapital", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getTargetOrderByOidForCapital(String oid, String type) {
+	public @ResponseBody ResponseEntity<Response> getTargetOrderByOidForCapital(String oid, String operation) {
 		Response r = new Response();
-		if ("现金管理工具申赎".equals(type)) {
+		if ("现金管理工具申赎".equals(operation)) {
 			FundForm form = orderService.getFundOrderByOid(oid);
 			r.with("result", form);
-		} else if ("信托标的申购".equals(type)) {
+		} else if ("信托标的申购".equals(operation)) {
 			TrustForm form = orderService.getTrustOrderByOid(oid, "申购");
 			r.with("result", form);
-		} else if ("本息兑付".equals(type)) {
+		} else if ("本息兑付".equals(operation)) {
 			TrustForm form = orderService.getTrustOrderByOid(oid, "本息兑付");
 			r.with("result", form);
 		} else {

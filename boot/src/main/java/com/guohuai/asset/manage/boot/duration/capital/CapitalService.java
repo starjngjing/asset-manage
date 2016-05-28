@@ -7,6 +7,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -89,13 +91,13 @@ public class CapitalService {
 	 * @return
 	 */
 	@Transactional
-	public List<CapitalForm> getCapitalListByPid(String pid) {
+	public List<CapitalForm> getCapitalListByPid(String pid, Pageable pageable) {
 		List<CapitalForm> formList = Lists.newArrayList();
-		List<CapitalEntity> list = capitalDao.findByOid(pid);
-		if (!list.isEmpty()) {
+		Page<CapitalEntity> list = capitalDao.findByOid(pid, pageable);
+		if (null != list.getContent() && !list.getContent().isEmpty()) {
 			CapitalForm form = null;
 			String type = null;
-			for (CapitalEntity entity : list) {
+			for (CapitalEntity entity : list.getContent()) {
 				form = new CapitalForm();
 				form.setSubject(entity.getSubject());
 				type = entity.getSubject().substring(0, 2);

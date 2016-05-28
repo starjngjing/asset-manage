@@ -155,8 +155,17 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllCapitalList", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAllCapitalList(String pid) {
-		List<CapitalForm> list = capitalService.getCapitalListByPid(pid);
+	public @ResponseBody ResponseEntity<Response> getAllCapitalList(String pid,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "10") int rows,
+			@RequestParam(required = false, defaultValue = "createTime") String sortField,
+			@RequestParam(required = false, defaultValue = "desc") String sort) {
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		List<CapitalForm> list = capitalService.getCapitalListByPid(pid, pageable);
 		Response r = new Response();
 		r.with("rows", list);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

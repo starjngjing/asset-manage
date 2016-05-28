@@ -519,7 +519,7 @@ public class OrderService {
 		
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setOrderOid(form.getOid());
+		entity.setOrderOid(order.getTrustEntity().getOrderOid());
 		entity.setAuditType(TrustAuditEntity.TYPE_AUDIT + "-Income");
 		entity.setAuditState(form.getState());
 		entity.setAuditor(uid);
@@ -561,7 +561,7 @@ public class OrderService {
 		
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setOrderOid(form.getOid());
+		entity.setOrderOid(order.getTrustEntity().getOrderOid());
 		entity.setAuditType(TrustAuditEntity.TYPE_CONFIRM + "-Income");
 		entity.setAuditState(form.getState());
 		entity.setAuditor(uid);
@@ -627,7 +627,7 @@ public class OrderService {
 		
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setOrderOid(form.getOid());
+		entity.setOrderOid(order.getTrustEntity().getOrderOid());
 		entity.setAuditType(TrustAuditEntity.TYPE_AUDIT + "-Transfer");
 		entity.setAuditState(form.getState());
 		entity.setAuditor(uid);
@@ -669,7 +669,7 @@ public class OrderService {
 		
 		TrustAuditEntity entity = new TrustAuditEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setOrderOid(form.getOid());
+		entity.setOrderOid(order.getTrustEntity().getOrderOid());
 		entity.setAuditType(TrustAuditEntity.TYPE_CONFIRM + "-Transfer");
 		entity.setAuditState(form.getState());
 		entity.setAuditor(uid);
@@ -964,6 +964,7 @@ public class OrderService {
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setVolume(entity.getApplyVolume());
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -985,6 +986,8 @@ public class OrderService {
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setVolume(entity.getIncome());
+					form.setAuditVolume(entity.getAuditIncome());
+					form.setInvestVolume(entity.getInvestIncome());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
