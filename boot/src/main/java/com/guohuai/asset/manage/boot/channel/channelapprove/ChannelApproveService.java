@@ -129,6 +129,6 @@ public class ChannelApproveService {
 	 * @return
 	 */
 	public List<ChannelApprove> findByChannelAndApprovelResult(Channel chen){
-		return this.daoChannelApprove.findByChannelAndApprovelResult(chen, ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
+		return this.daoChannelApprove.findByChannelAndApproveResult(chen, ChannelApprove.CHANAPPROVE_APPROVESTATUS_toApprove);
 	}
 }
