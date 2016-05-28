@@ -12,23 +12,7 @@ define([
     init: function () {
       var pid = util.nav.getHashObj(location.hash).id
 
-      http.post(config.api.duration.assetPool.getById, {
-        data: {
-          oid: pid
-        },
-        contentType: 'form'
-      }, function (json) {
-        console.log(json.result)
-        var detail = json.result
-        $('#detailPoolScale').html(detail.scale)
-        $('#detailPoolCash').html(detail.cashPosition)
-        // 饼图生成
-        var pieChart = echarts.init(document.getElementById('pieChart'))
-        pieChart.setOption(getPieOptions(config, detail))
-        // 柱状图生成
-        var barChart = echarts.init(document.getElementById('barChart'))
-        barChart.setOption(getBarOptions(config, detail))
-      })
+      pageInit(pid, http, config)
 
       // 资产申购类型radio change事件
       $(document.buyAssetForm.buyType).on('ifChecked', function () {
@@ -118,8 +102,86 @@ define([
 
       // 出入金明细按钮点击事件
       $('#showAccountDetail').on('click', function () {
+        $('#accountDetailTable').bootstrapTable('refresh')
         $('#accountDetailModal').modal('show')
       })
+
+      // 出入金明细表格配置
+      var accountDetailPageOptions = {
+        //page: 1,
+        //rows: 10,
+        pid: pid
+      }
+      var accountDetailTableConfig = {
+        ajax: function (origin) {
+          http.post(config.api.duration.order.getAllCapitalList, {
+            data: accountDetailPageOptions,
+            contentType: 'form'
+          }, function (rlt) {
+            origin.success(rlt)
+          })
+        },
+        //pageNumber: accountDetailPageOptions.page,
+        //pageSize: accountDetailPageOptions.rows,
+        //pagination: true,
+        sidePagination: 'server',
+        //pageList: [10, 20, 30, 50, 100],
+        //queryParams: function (val) {
+        //  accountDetailPageOptions.rows = val.limit
+        //  accountDetailPageOptions.page = parseInt(val.offset / val.limit) + 1
+        //  return val
+        //},
+        columns: [
+          {
+            width: 60,
+            align: 'center',
+            formatter: function (val, row, index) {
+              return index + 1
+            }
+          },
+          {
+            field: 'subject'
+          },
+          {
+            field: 'createTime'
+          },
+          {
+            field: 'operation'
+          },
+          {
+            field: 'capital'
+          },
+          {
+            field: 'status'
+          },
+          {
+            width: 100,
+            align: 'center',
+            formatter: function () {
+              var buttons = [{
+                text: '查看详情',
+                type: 'button',
+                class: 'item-detail'
+              }]
+              return util.table.formatter.generateButton(buttons)
+            },
+            events: {
+              'click .item-detail': function (e, val, row) {
+                http.post(config.api.duration.order.getTargetOrderByOidForCapital, {
+                  data: {
+                    oid: row.orderOid,
+                    operation: row.operation
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  //if (row.operation === '')
+                })
+              }
+            }
+          }
+        ]
+      }
+      $('#accountDetailTable').bootstrapTable(accountDetailTableConfig)
 
       // 预约中现金类管理工具分页信息
       var orderingToolPageOptions = {
@@ -1200,6 +1262,16 @@ define([
           $('#updateAssetPoolModal').modal('show')
         })
       })
+      // 编辑资产池 - 确定按钮点击事件
+      $('#doUpdateAssetPool').on('click', function () {
+        $('#updateAssetPoolForm').ajaxSubmit({
+          url: config.api.duration.order.editPoolForCash,
+          success: function () {
+            pageInit(pid, http, config)
+            $('#updateAssetPoolModal').modal('hide')
+          }
+        })
+      })
     }
   }
 })
@@ -1330,4 +1402,23 @@ function validpercentage($el) {
     percentage += Number(item.value)
   })
   return !(percentage > 100)
+}
+
+function pageInit (pid, http, config) {
+  http.post(config.api.duration.assetPool.getById, {
+    data: {
+      oid: pid
+    },
+    contentType: 'form'
+  }, function (json) {
+    var detail = json.result
+    $('#detailPoolScale').html(detail.scale)
+    $('#detailPoolCash').html(detail.cashPosition)
+    // 饼图生成
+    var pieChart = echarts.init(document.getElementById('pieChart'))
+    pieChart.setOption(getPieOptions(config, detail))
+    // 柱状图生成
+    var barChart = echarts.init(document.getElementById('barChart'))
+    barChart.setOption(getBarOptions(config, detail))
+  })
 }

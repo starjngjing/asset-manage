@@ -210,6 +210,9 @@ define(function() {
 					orderConfirmForIncome: this.host + '/ams/duration/order/orderConfirmForIncome',	// 信托计划本息兑付确认
 					auditForTransfer: this.host + '/ams/duration/order/auditForTransfer',		// 信托计划转让审核
 					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer',		// 信托计划转让确认
+					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash',		// 编辑账户
+					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList',		// 出入金明细
+					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital'	// 出入金详情
 				}
 			},
 			role: {
