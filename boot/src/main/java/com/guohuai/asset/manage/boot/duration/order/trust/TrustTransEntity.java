@@ -6,7 +6,10 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -35,11 +38,14 @@ public class TrustTransEntity implements Serializable {
 	@Id
 	private String oid;
 	// 关联资产池投资标的
-	private String targetOid;
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "targetOid", referencedColumnName = "oid")
+	private TrustEntity trustEntity;
+//	private String targetOid;
 	// 标的名称
-	private String targetName;
+//	private String targetName;
 	// 类型
-	private String targetType;
+//	private String targetType;
 	// 转让份额
 	private BigDecimal tranVolume;
 	// 审核额度
@@ -51,9 +57,9 @@ public class TrustTransEntity implements Serializable {
 	// 转让溢价
 	private BigDecimal tranCash; 
 	// 实际收益率
-	private BigDecimal incomeRate; 
+//	private BigDecimal incomeRate; 
 	// 主题评级	
-	private String subjectRating;	
+//	private String subjectRating;	
 	// 转让操作员
 	private String creater;
 	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）

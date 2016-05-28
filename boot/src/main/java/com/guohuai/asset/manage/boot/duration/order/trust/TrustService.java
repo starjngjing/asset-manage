@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -74,6 +76,18 @@ public class TrustService {
 	@Transactional
 	public TrustEntity getTrustByOid(String oid) {
 		TrustEntity entity = trustDao.findOne(oid);
+		
+		return entity;
+	}
+	
+	/**
+	 * 获取持仓信息
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public TrustEntity getTrustByOrderOid(String orderOid) {
+		TrustEntity entity = trustDao.findByOrderOid(orderOid);
 		
 		return entity;
 	}
@@ -182,6 +196,44 @@ public class TrustService {
 	@Transactional
 	public List<TrustTransEntity> findTransByPidForConfirm(String pid) {
 		List<TrustTransEntity> list = trustTransDao.findTransByPidForConfirm(pid);
+		
+		return list;
+	}
+	
+	/**
+	 * 获取已确认订单
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public List<TrustEntity> findByPidForConfirm(String pid, Pageable pageable) {
+		Page<TrustEntity> list = trustDao.findByPidForConfirm(pid, pageable);
+		if (null != list.getContent() && list.getContent().size() > 0) {
+			return list.getContent();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 获取全平台的持仓列表
+	 * @return
+	 */
+	@Transactional
+	public List<TrustEntity> findTargetList() {
+		List<TrustEntity> list = trustDao.findAll();
+		
+		return list;
+	}
+	
+	/**
+	 * 获取资产池的持仓列表
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public List<TrustEntity> findTargetListByPid(String pid) {
+		List<TrustEntity> list = trustDao.findFundListByPid(pid);
 		
 		return list;
 	}

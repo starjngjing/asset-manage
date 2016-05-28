@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +53,7 @@ public class FundService {
 	 */
 	@Transactional
 	public FundEntity getFundByCashtoolOid(String oid) {
-		FundEntity entity = fundDao.findOne(oid);
+		FundEntity entity = fundDao.findByCashtoolOid(oid);
 		
 		return entity;
 	}
@@ -76,7 +77,7 @@ public class FundService {
 	 */
 	@Transactional
 	public FundOrderEntity getFundOrderByOid(String oid) {
-		FundOrderEntity entity = fundOrderDao.findByOid(oid);
+		FundOrderEntity entity = fundOrderDao.findOne(oid);
 		
 		return entity;
 	}
@@ -101,10 +102,34 @@ public class FundService {
 	 * @return
 	 */
 	@Transactional
-	public List<FundOrderEntity> findByPidForConfirm(String pid, Pageable pageable) {
-		int sNo = pageable.getPageNumber();
-		int eNo = pageable.getPageSize();
-		List<FundOrderEntity> list = fundOrderDao.findByPidForConfirm(pid, sNo, eNo);
+	public List<FundEntity> findByPidForConfirm(String pid, Pageable pageable) {
+		Page<FundEntity> list = fundDao.findByPidForConfirm(pid, pageable);
+		if (null != list.getContent() && list.getContent().size() > 0) {
+			return list.getContent();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 获取全平台的持仓列表
+	 * @return
+	 */
+	@Transactional
+	public List<FundEntity> findFundList() {
+		List<FundEntity> list = fundDao.findAll();
+		
+		return list;
+	}
+	
+	/**
+	 * 获取资产池的持仓列表
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public List<FundEntity> findFundListByPid(String pid) {
+		List<FundEntity> list = fundDao.findFundListByPid(pid);
 		
 		return list;
 	}

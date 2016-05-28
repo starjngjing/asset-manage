@@ -21,6 +21,12 @@ import lombok.Data;
 public class TrustEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 状态
+	 */
+	public static final String INVESTING = "0";
+	public static final String INVESTEND = "-1";
 
 	@Id
 	private String oid;
@@ -40,7 +46,7 @@ public class TrustEntity implements Serializable {
 	// 投资日
 	private Date investDate; 
 	// 起息日
-	private Date incomeDate; 
+//	private Date incomeDate; 
 	// 状态(申请中;审核成功;审核失败;预约中;预约失败;投资成功;已转出;投资结束)
 	private String state;
 	// 申请份额
@@ -57,4 +63,6 @@ public class TrustEntity implements Serializable {
 	private BigDecimal transInAmount;
 	// 转入费用
 	private BigDecimal transInFee;
+	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
+	private String profitType;
 }

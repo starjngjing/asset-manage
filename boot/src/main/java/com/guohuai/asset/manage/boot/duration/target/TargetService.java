@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.duration.target;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,9 +15,13 @@ import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.boot.cashtool.pool.CashtoolPoolService;
 import com.guohuai.asset.manage.boot.duration.order.FundForm;
 import com.guohuai.asset.manage.boot.duration.order.TrustForm;
+import com.guohuai.asset.manage.boot.duration.order.trust.TrustEntity;
+import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeForm;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.pool.InvestmentPoolService;
+import com.guohuai.asset.manage.boot.investment.pool.TargetIncome;
+import com.guohuai.asset.manage.component.util.DateUtil;
 
 /**
  * 存续期--产品服务接口
@@ -47,7 +53,7 @@ public class TargetService {
 			FundForm form = null;
 			for (CashTool ct : list) {
 				form = new FundForm();
-				form.setCashtoolOid(ct.getTicker());
+				form.setCashtoolOid(ct.getOid());
 				form.setCashtoolName(ct.getSecShortName());
 				form.setCashtoolType(ct.getEtfLof());
 				form.setNetRevenue(ct.getDailyProfit());
@@ -103,10 +109,21 @@ public class TargetService {
 	 * @return
 	 */
 	@Transactional
+	public CashTool getCashToolByOid(String oid) {
+		
+		return cashToolService.findByOid(oid);
+	}
+
+	/**
+	 * 根据 oid 获取 货币基金（现金类管理工具） 详情
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
 	public FundForm getFundByOid(String oid) {
 		FundForm form = new FundForm();
 		
-		CashTool entity = cashToolService.findByOid(oid);
+		CashTool entity = this.getCashToolByOid(oid);
 		if (null != entity) {
 			form.setCashtoolOid(entity.getTicker());
 			form.setCashtoolName(entity.getSecShortName());
@@ -127,10 +144,21 @@ public class TargetService {
 	 * @return
 	 */
 	@Transactional
+	public Investment getInvestmentByOid(String oid) {
+		
+		return investmentService.getInvestmentDet(oid);
+	}
+
+	/**
+	 * 根据 oid 获取 信托（计划） 详情
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
 	public TrustForm getTrustByOid(String oid) {
 		TrustForm form = new TrustForm();
 		
-		Investment entity = investmentService.getInvestmentDet(oid);
+		Investment entity = this.getInvestmentByOid(oid);
 		if (null != entity) {
 			form.setTargetOid(entity.getSn());
 			form.setTargetName(entity.getName());
@@ -170,6 +198,118 @@ public class TargetService {
 //			form.setYearYield7(entity.getWeeklyYield());
 //			form.setNetRevenue(entity.getDailyProfit());
 //		}
+		
+		return formList;
+	}
+	
+	/**
+	 * 本息兑付数据
+	 * @param target
+	 * 				标的对象
+	 * @param targetOid
+	 * @param entity
+	 * 				持仓对象
+	 * @return
+	 */
+	public List<TrustIncomeForm> getIncomeData(Investment target, TrustEntity entity) {
+		List<TrustIncomeForm> formList = Lists.newArrayList();
+		List<TargetIncome> list = investmentPoolService.getTargetIncome(target.getOid());
+		// 日利息 算法：利息=本金×收益率%÷365天(有时是360天)
+		BigDecimal day_yield = new BigDecimal(0);
+		TrustIncomeForm form = null;
+		if (target.getContractDays() != 0)
+			day_yield = entity.getInvestAmount()
+					.multiply(entity.getTarget().getExpAror().divide(TrustIncomeForm.NUM100))
+					.divide(new BigDecimal(target.getContractDays()), 4, BigDecimal.ROUND_HALF_UP);
+		
+		// 获取付息方式 OTP:一次性；CYCLE:周期
+		String pay_mode = target.getAccrualType();
+		if ("ACCRUALTYPE_05".equals(pay_mode)) {
+			form = new TrustIncomeForm();
+			// 付息日
+			form.setIncomeDate(new java.sql.Date(DateUtil.addDay(target.getExpSetDate(), target.getLifed()).getTime()));
+			// 本金
+			form.setCapital(entity.getInvestAmount());
+			// 预期利益	算法：日利息*实际存续天数
+			form.setExpIncome(new BigDecimal(target.getLifed()).multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
+			form.setExpIncomeRate(target.getExpAror());
+			// 实际值
+			form.setIncome(form.getExpIncome());
+			form.setIncomeRate(form.getExpIncomeRate());
+			form.setSeq(1);
+			
+			formList.add(form);
+		} else {
+			// 设置周期递增基数
+			int addNum = 0;
+			// 获取付息周期 M:月；Q:季；H_Y:半年；Y:年
+			if ("ACCRUALTYPE_01".equals(pay_mode)) {
+				addNum = 1;
+			} else if ("ACCRUALTYPE_02".equals(pay_mode)) {
+				addNum = 3;
+			} else if ("ACCRUALTYPE_03".equals(pay_mode)) {
+				addNum = 6;
+			} else if ("ACCRUALTYPE_04".equals(pay_mode)) {
+				addNum = 12;
+			}
+			// 付息日
+			Date sdate = null;
+			// 获取付息周期的方式 NATURAL:自然；CONTRACT:合同
+			if ("CONTRACT_YEAR".equals(target.getAccrualCycleType())) {
+				// 首付日（收益分配基准日）算法：首付日自动为“收益起始日”+“周期”
+				sdate = DateUtil.lastDate(
+						DateUtil.addMonth(
+								new java.util.Date(target.getIncomeStartDate().getTime()), addNum));
+			} else {
+				sdate = target.getArorFirstDate();
+			}
+			// 剩余结算天数
+			int pay_days = target.getLifed();
+			// 当天月天数
+			int curr_month_days = 0;
+			
+			do {
+				int seq = 1;
+				form = new TrustIncomeForm();
+				form.setCapital(entity.getInvestAmount());
+				form.setIncomeDate(sdate);
+				// 判断剩余结算天数是否满足当天月，如果不满足，则以剩余结算天数进行收益结算
+				curr_month_days = DateUtil.getDaysOfMonth(new java.util.Date(target.getIncomeStartDate().getTime()));
+				if (pay_days > curr_month_days) {
+					form.setExpIncome(new BigDecimal(curr_month_days)
+							.multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
+					pay_days = pay_days - curr_month_days;
+				} else {
+					form.setExpIncome(new BigDecimal(pay_days)
+							.multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
+				}
+				// 收益基准日=收益截止日+1
+				if (DateUtil.compare_date(target.getIncomeEndDate(), sdate) == 0)
+					sdate = DateUtil.addDay(sdate, 1);
+				
+				form.setExpIncomeRate(target.getExpAror());
+				form.setIncome(form.getExpIncome());
+				form.setIncomeRate(form.getExpIncomeRate());
+				sdate = DateUtil.addMonth(sdate, addNum);
+				if (DateUtil.compare_date(target.getIncomeEndDate(), sdate) < 0) {
+					sdate = new Date(target.getIncomeEndDate().getTime());
+				}
+				form.setSeq(seq);
+				
+				formList.add(form);
+			} while (DateUtil.compare_date(target.getIncomeEndDate(), sdate) >= 0);
+		}
+		
+		if (null != list && list.size() > 0) {
+			for (TargetIncome in : list) {
+				form = new TrustIncomeForm();
+				form = formList.get(in.getSeq());
+				form.setExpIncome(in.getIncome());
+				form.setExpIncomeRate(in.getIncomeRate());
+				form.setIncome(in.getIncome());
+				form.setIncomeRate(in.getIncomeRate());
+			}
+		}
 		
 		return formList;
 	}

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.duration.order.OrderService;
@@ -40,8 +41,46 @@ public class CapitalService {
 	 */
 	@Transactional
 	public List<CapitalForm> getAllList() {
+		List<CapitalForm> formList = Lists.newArrayList();
+		List<CapitalEntity> list = capitalDao.findAll();
+		if (!list.isEmpty()) {
+			CapitalForm form = null;
+			String type = null;
+			for (CapitalEntity entity : list) {
+				form = new CapitalForm();
+				type = entity.getSubject().substring(0, 2);
+				if (null != entity.getCashtoolOrderOid()) {
+					form.setOrderOid(entity.getCashtoolOrderOid());
+					form.setCapital(entity.getFreezeCash());
+				} else if (null != entity.getTargetOrderOid()) {
+					form.setOrderOid(entity.getTargetOrderOid());
+					form.setCapital(entity.getFreezeCash());
+				} else if (null != entity.getTargetIncomeOid()) {
+					form.setOrderOid(entity.getTargetIncomeOid());
+					form.setCapital(entity.getTransitCash());
+				} else if (null != entity.getTargetTransOid()) {
+					form.setOrderOid(entity.getTargetTransOid());
+					form.setCapital(entity.getTransitCash());
+				}
+				if ("申购".equals(type)) {
+					form.setOperation("申购");
+					form.setStatus("未审核");
+				} else if ("审核".equals(type)) {
+					form.setOperation("审核");
+					form.setStatus("资金处理中");
+				} else if ("预约".equals(type)) {
+					form.setOperation("预约");
+					form.setStatus("资金处理中");
+				} else if ("确认".equals(type)) {
+					form.setOperation("确认");
+					form.setStatus("完成");
+				}
+				
+				formList.add(form);
+			}
+		}
 		
-		return null;
+		return formList;
 	}
 	
 	/**
@@ -170,10 +209,6 @@ public class CapitalService {
 		entity.setOid(StringUtil.uuid());
 		entity.setAssetPoolOid(pid);
 		entity.setOperator(uid);
-		entity.setFreezeCash(BigDecimal.ZERO);
-		entity.setUnfreezeCash(BigDecimal.ZERO);
-		entity.setTransitCash(BigDecimal.ZERO);
-		entity.setUntransitCash(BigDecimal.ZERO);
 		if (APPLY.equals(operationType)) {
 			capitalWithApply(sn, target, capital, operation, poolEntity, entity);
 		} else if (AUDIT.equals(operationType)) {
@@ -218,27 +253,27 @@ public class CapitalService {
 			else
 				entity.setTargetOrderOid(sn);
 			// 可用现金
-			poolEntity.setCashPosition(poolEntity.getCashPosition().subtract(capital));
+			poolEntity.setCashPosition(poolEntity.getCashPosition().subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			// 冻结资金
-			poolEntity.setFreezeCash(poolEntity.getFreezeCash().add(capital));
+			poolEntity.setFreezeCash(poolEntity.getFreezeCash().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("redeem".equals(operation)) {
 			entity.setTransitCash(capital);
 			entity.setSubject("赎回" + target);
 			entity.setCashtoolOrderOid(sn);
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("income".equals(operation)) {
 			entity.setTransitCash(capital);
 			entity.setSubject("本息兑付");
 			entity.setTargetIncomeOid(sn);
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("transfer".equals(operation)) {
 			entity.setTransitCash(capital);
 			entity.setSubject("资产转让");
 			entity.setTargetTransOid(sn);
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		}
 		entity.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		
@@ -285,15 +320,15 @@ public class CapitalService {
 			entity.setSubject("审批申请中" + target + "订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 冻结资金
-				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account));
+				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 可用现金
-					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital));
+					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 					// 冻结资金
-					poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).add(capital));
+					poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("redeem".equals(operation)) {
@@ -303,11 +338,11 @@ public class CapitalService {
 			entity.setSubject("审批赎回中" + target + "订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("income".equals(operation)) {
@@ -317,11 +352,11 @@ public class CapitalService {
 			entity.setSubject("审批本息兑付订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("transfer".equals(operation)) {
@@ -331,11 +366,11 @@ public class CapitalService {
 			entity.setSubject("审批资产转让订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		}
@@ -384,15 +419,15 @@ public class CapitalService {
 			entity.setSubject("预约申请中" + target + "订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 冻结资金
-				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account));
+				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 可用现金
-					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital));
+					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 					// 冻结资金
-					poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).add(capital));
+					poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("redeem".equals(operation)) {
@@ -402,11 +437,11 @@ public class CapitalService {
 			entity.setSubject("预约赎回中" + target + "订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("income".equals(operation)) {
@@ -416,11 +451,11 @@ public class CapitalService {
 			entity.setSubject("预约本息兑付订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		} else if ("transfer".equals(operation)) {
@@ -430,11 +465,11 @@ public class CapitalService {
 			entity.setSubject("预约资产转让订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
-				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+				poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 在途资金
-					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital));
+					poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 			}
 		}
@@ -483,16 +518,16 @@ public class CapitalService {
 			entity.setSubject("确认申请中" + target + "订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 冻结资金
-				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account));
+				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
 					// 可用现金
-					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital));
+					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 				// 冻结资金
-				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account));
+				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 		} else if ("redeem".equals(operation)) {
 			entity.setCashtoolOrderOid(sn);
@@ -501,10 +536,10 @@ public class CapitalService {
 			entity.setSubject("确认赎回中" + target + "订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("income".equals(operation)) {
 			entity.setTargetIncomeOid(sn);
 			entity.setUnfreezeCash(account);
@@ -512,10 +547,10 @@ public class CapitalService {
 			entity.setSubject("确认本息兑付订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("transfer".equals(operation)) {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);
@@ -523,10 +558,10 @@ public class CapitalService {
 			entity.setSubject("确认资产转让订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
 				// 可用现金
-				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital));
+				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 			// 在途资金
-			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account));
+			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 		}
 		entity.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		

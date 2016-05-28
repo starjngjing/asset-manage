@@ -108,7 +108,7 @@ public class TargetController {
 	public @ResponseBody ResponseEntity<Response> getFundList(@RequestParam String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int rows,
-			@RequestParam(required = false, defaultValue = "createTime") String sortField,
+			@RequestParam(required = false, defaultValue = "oid") String sortField,
 			@RequestParam(required = false, defaultValue = "desc") String sort) {
 		Direction sortDirection = Direction.DESC;
 		if (!"desc".equals(sort)) {
@@ -158,15 +158,15 @@ public class TargetController {
 	public @ResponseBody ResponseEntity<Response> getTrustList(@RequestParam String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int rows,
-			@RequestParam(required = false, defaultValue = "createTime") String sortField,
+			@RequestParam(required = false, defaultValue = "oid") String sortField,
 			@RequestParam(required = false, defaultValue = "desc") String sort) {
-//		Direction sortDirection = Direction.DESC;
-//		if (!"desc".equals(sort)) {
-//			sortDirection = Direction.ASC;
-//		}
-//		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+		Direction sortDirection = Direction.DESC;
+		if (!"desc".equals(sort)) {
+			sortDirection = Direction.ASC;
+		}
+		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		
-		List<TrustForm> list = orderService.getTrustListByPid(pid);
+		List<TrustForm> list = orderService.getTrustListByPid(pid, pageable);
 		Response r = new Response();
 		r.with("rows", list);
 		r.with("total", list.size());

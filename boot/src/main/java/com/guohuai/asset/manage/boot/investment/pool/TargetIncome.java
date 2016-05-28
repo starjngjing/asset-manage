@@ -64,9 +64,14 @@ public class TargetIncome extends UUID {
 	private Integer seq;
 
 	/**
-	 * 实际收益
+	 * 实际收益率
 	 */
 	private BigDecimal incomeRate;
+	
+	/**
+	 * 实际收益
+	 */
+	private BigDecimal income;
 
 	/**
 	 * 收益支付日
