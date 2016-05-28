@@ -1362,26 +1362,28 @@ function getPieOptions (config, source) {
       {
         name:'投资占比',
         type:'pie',
-        radius: ['50%', '70%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '18',
-              fontWeight: 'bold'
-            }
-          }
-        },
-        labelLine: {
-          normal: {
-            show: false
-          }
-        },
+        //radius: ['50%', '70%'],
+        radius: '75%',
+        center: ['55%', '50%'],
+        //avoidLabelOverlap: false,
+        //label: {
+        //  normal: {
+        //    show: false,
+        //    position: 'center'
+        //  },
+        //  emphasis: {
+        //    show: true,
+        //    textStyle: {
+        //      fontSize: '18',
+        //      fontWeight: 'bold'
+        //    }
+        //  }
+        //},
+        //labelLine: {
+        //  normal: {
+        //    show: false
+        //  }
+        //},
         data:[
           {value:source.cashRate, name:'现金'},
           {value:source.cashtoolRate, name:'现金类管理工具'},
