@@ -20,7 +20,7 @@ define([
       barChart.setOption(getBarOptions(config))
 
       // 资产申购类型radio change事件
-      $(document.buyAssetForm.type).on('ifChecked', function () {
+      $(document.buyAssetForm.buyType).on('ifChecked', function () {
         if (this.value === 'fund') {
           $('#buyAssetShowFund').show()
           $('#buyAssetShowTrust').hide()
@@ -90,7 +90,7 @@ define([
       $('#doBuyAsset').on('click', function () {
         var form = document.buyAssetForm
         var url = ''
-        if (form.type.value === 'fund') {
+        if (form.buyType.value === 'fund') {
           url = config.api.duration.order.purchaseForFund
         } else {
           url = config.api.duration.order.purchaseForTrust
@@ -148,7 +148,10 @@ define([
             field: 'cashtoolName'
           },
           {
-            field: 'cashtoolType'
+            field: 'cashtoolType',
+            formatter: function (val) {
+              return util.enum.transform('CASHTOOLTYPE', val)
+            }
           },
           {
             field: 'netRevenue'
@@ -351,7 +354,10 @@ define([
             field: 'cashtoolName'
           },
           {
-            field: 'cashtoolType'
+            field: 'cashtoolType',
+            formatter: function (val) {
+              return util.enum.transform('CASHTOOLTYPE', val)
+            }
           },
           {
             field: 'netRevenue'
@@ -563,7 +569,10 @@ define([
             field: 'setDate'
           },
           {
-            field: 'accrualType'
+            field: 'accrualType',
+            formatter: function (val) {
+              return util.enum.transform('ACCRUALTYPE', val)
+            }
           },
           {
             field: 'raiseScope'
@@ -573,6 +582,9 @@ define([
           },
           {
             field: 'subjectRating'
+          },
+          {
+            field: 'type'
           },
           {
             field: 'state',
@@ -592,21 +604,44 @@ define([
             }
           },
           {
-            width: 180,
+            width: 256,
             align: 'center',
-            formatter: function () {
+            formatter: function (val, row) {
               var buttons = [{
                 text: '审核',
                 type: 'button',
-                class: 'item-audit'
+                class: 'item-audit',
+                isRender: row.type === '申购'
               }, {
                 text: '预约',
                 type: 'button',
-                class: 'item-ordering'
+                class: 'item-ordering',
+                isRender: row.type === '申购'
               }, {
                 text: '确认',
                 type: 'button',
-                class: 'item-accpet'
+                class: 'item-accpet',
+                isRender: row.type === '申购'
+              }, {
+                text: '本息兑付审核',
+                type: 'button',
+                class: 'item-income-audit',
+                isRender: row.type === '本息兑付'
+              }, {
+                text: '本息兑付确认',
+                type: 'button',
+                class: 'item-income-accpet',
+                isRender: row.type === '本息兑付'
+              }, {
+                text: '转让审核',
+                type: 'button',
+                class: 'item-transfer-audit',
+                isRender: row.type === '转让'
+              }, {
+                text: '转让确认',
+                type: 'button',
+                class: 'item-transfer-accpet',
+                isRender: row.type === '转让'
               }]
               return util.table.formatter.generateButton(buttons)
             },
@@ -623,6 +658,71 @@ define([
                   var result = json.result
                   var form = document.trustCheckForm
                   form.oid.value = result.oid
+                  form.type.value = row.type
+                  form.opType.value = 'audit'
+                  form.assetPoolOid.value = pid
+                  var formGroups = $(form).find('.form-group')
+                  formGroups.each(function (index, item) {
+                    if (!index) {
+                      $(item).css({display: 'block'}).find('input').attr('disabled', false)
+                    } else {
+                      $(item).css({display: 'none'}).find('input').attr('disabled', 'disabled')
+                    }
+                  })
+                  $(form).validator('destroy')
+                  util.form.validator.init($(form))
+                  modal.find('.labelForOrdering').css({display: 'none'})
+                  modal.find('.labelForAccept').css({display: 'none'})
+                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  $$.detailAutoFix(modal, result)
+                })
+                modal.modal('show')
+              },
+              'click .item-income-audit': function (e, val, row) {
+                var modal = $('#trustCheckModal')
+                http.post(config.api.duration.order.getTrustOrderByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  var result = json.result
+                  var form = document.trustCheckForm
+                  form.oid.value = result.oid
+                  form.type.value = row.type
+                  form.opType.value = 'audit'
+                  form.assetPoolOid.value = pid
+                  var formGroups = $(form).find('.form-group')
+                  formGroups.each(function (index, item) {
+                    if (!index) {
+                      $(item).css({display: 'block'}).find('input').attr('disabled', false)
+                    } else {
+                      $(item).css({display: 'none'}).find('input').attr('disabled', 'disabled')
+                    }
+                  })
+                  $(form).validator('destroy')
+                  util.form.validator.init($(form))
+                  modal.find('.labelForOrdering').css({display: 'none'})
+                  modal.find('.labelForAccept').css({display: 'none'})
+                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  $$.detailAutoFix(modal, result)
+                })
+                modal.modal('show')
+              },
+              'click .item-transfer-audit': function (e, val, row) {
+                var modal = $('#trustCheckModal')
+                http.post(config.api.duration.order.getTrustOrderByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  var result = json.result
+                  var form = document.trustCheckForm
+                  form.oid.value = result.oid
+                  form.type.value = row.type
                   form.opType.value = 'audit'
                   form.assetPoolOid.value = pid
                   var formGroups = $(form).find('.form-group')
@@ -654,6 +754,7 @@ define([
                   var result = json.result
                   var form = document.trustCheckForm
                   form.oid.value = result.oid
+                  form.type.value = row.type
                   form.opType.value = 'ordering'
                   form.assetPoolOid.value = pid
                   var formGroups = $(form).find('.form-group')
@@ -685,6 +786,71 @@ define([
                   var result = json.result
                   var form = document.trustCheckForm
                   form.oid.value = result.oid
+                  form.type.value = row.type
+                  form.opType.value = 'accept'
+                  form.assetPoolOid.value = pid
+                  var formGroups = $(form).find('.form-group')
+                  formGroups.each(function (index, item) {
+                    if (index === 2) {
+                      $(item).css({display: 'block'}).find('input').attr('disabled', false)
+                    } else {
+                      $(item).css({display: 'none'}).find('input').attr('disabled', 'disabled')
+                    }
+                  })
+                  $(form).validator('destroy')
+                  util.form.validator.init($(form))
+                  modal.find('.labelForOrdering').css({display: 'block'})
+                  modal.find('.labelForAccept').css({display: 'block'})
+                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  $$.detailAutoFix(modal, result)
+                })
+                modal.modal('show')
+              },
+              'click .item-income-accpet': function (e, val, row) {
+                var modal = $('#trustCheckModal')
+                http.post(config.api.duration.order.getTrustOrderByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  var result = json.result
+                  var form = document.trustCheckForm
+                  form.oid.value = result.oid
+                  form.type.value = row.type
+                  form.opType.value = 'accept'
+                  form.assetPoolOid.value = pid
+                  var formGroups = $(form).find('.form-group')
+                  formGroups.each(function (index, item) {
+                    if (index === 2) {
+                      $(item).css({display: 'block'}).find('input').attr('disabled', false)
+                    } else {
+                      $(item).css({display: 'none'}).find('input').attr('disabled', 'disabled')
+                    }
+                  })
+                  $(form).validator('destroy')
+                  util.form.validator.init($(form))
+                  modal.find('.labelForOrdering').css({display: 'block'})
+                  modal.find('.labelForAccept').css({display: 'block'})
+                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  $$.detailAutoFix(modal, result)
+                })
+                modal.modal('show')
+              },
+              'click .item-transfer-accpet': function (e, val, row) {
+                var modal = $('#trustCheckModal')
+                http.post(config.api.duration.order.getTrustOrderByOid, {
+                  data: {
+                    oid: row.oid,
+                    type: row.type
+                  },
+                  contentType: 'form'
+                }, function (json) {
+                  var result = json.result
+                  var form = document.trustCheckForm
+                  form.oid.value = result.oid
+                  form.type.value = row.type
                   form.opType.value = 'accept'
                   form.assetPoolOid.value = pid
                   var formGroups = $(form).find('.form-group')
@@ -762,7 +928,10 @@ define([
             field: 'setDate'
           },
           {
-            field: 'accrualType'
+            field: 'accrualType',
+            formatter: function (val) {
+              return util.enum.transform('ACCRUALTYPE', val)
+            }
           },
           {
             field: 'raiseScope'
@@ -869,15 +1038,39 @@ define([
         var form = document.trustCheckForm
         form.state.value = '0'
         var url = ''
-        switch (form.opType.value) {
-          case 'audit':
-            url = config.api.duration.order.auditForTrust
+        switch (form.type) {
+          case '申购':
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForTrust
+                break
+              case 'ordering':
+                url = config.api.duration.order.appointmentForTrust
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForTrust
+                break
+            }
             break
-          case 'ordering':
-            url = config.api.duration.order.appointmentForTrust
+          case '本息兑付':
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForIncome
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForIncome
+                break
+            }
             break
           default:
-            url = config.api.duration.order.orderConfirmForTrust
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForTransfer
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForTransfer
+                break
+            }
             break
         }
         $(form).ajaxSubmit({

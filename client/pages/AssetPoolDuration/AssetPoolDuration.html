@@ -142,6 +142,7 @@
             <th>标的规模</th>
             <th>持有份额</th>
             <th>主题评级</th>
+            <th>类型</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -185,14 +186,15 @@
       <!-- 模态窗内容体 -->
       <div class="modal-body">
         <form id="buyAssetForm" name="buyAssetForm" method="post">
+          <input name="type" type="hidden" value="assetPool"/>
           <div class="form-group">
             <label>申购类型</label>
             <div class="row form-style">
               <div class="col-sm-4">
-                <input name="type" type="radio" value="fund" class="icheck" checked> 现金管理工具
+                <input name="buyType" type="radio" value="fund" class="icheck" checked> 现金管理工具
               </div>
               <div class="col-sm-4">
-                <input name="type" type="radio" value="trust" class="icheck"> 信托计划
+                <input name="buyType" type="radio" value="trust" class="icheck"> 信托计划
               </div>
             </div>
           </div>
@@ -440,6 +442,13 @@
             <label>关联资产池</label>
             <select name="assetPoolOid" class="form-control input-sm"></select>
           </div>
+          <div class="form-group">
+            <label>收益方式</label>
+            <select name="profitType" class="form-control input-sm">
+              <option value="amortized_cost" selected>摊余成本法</option>
+              <option value="book_value" selected>账面价值法</option>
+            </select>
+          </div>
         </form>
       </div>
       <!-- 模态窗底部 -->
@@ -510,6 +519,12 @@
           <dt>投资日:</dt>
           <dd>
             <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>当前持有额度:</dt>
+          <dd>
+            <div data-detail-fetch="amount"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal">
@@ -630,6 +645,12 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
+          <dt>投资日:</dt>
+          <dd>
+            <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
           <dt>付息方式:</dt>
           <dd>
             <div data-detail-fetch="accrualType"></div>
@@ -702,12 +723,6 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>投资日:</dt>
-          <dd>
-            <div data-detail-fetch="investDate"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
           <dt>申购额度:</dt>
           <dd>
             <div data-detail-fetch="volume"></div>
@@ -729,6 +744,7 @@
           <input name="oid" type="hidden"/>
           <input name="opType" type="hidden"/>
           <input name="assetPoolOid" type="hidden"/>
+          <input name="type" type="hidden"/>
           <input name="state" type="hidden"/>
           <div class="form-group" style="display: none;">
             <label>审核额度</label>
@@ -1094,6 +1110,7 @@
           <input type="hidden" name="oid"/>
           <input type="hidden" name="cashtoolOid"/>
           <input type="hidden" name="assetPoolOid"/>
+          <input type="hidden" name="type" value="order"/>
           <div class="form-group">
             <label>标的名称</label>
             <input name="cashtoolName" type="text"
@@ -1190,8 +1207,6 @@
       <div class="modal-body">
         <form id="redeemForm" name="redeemForm" method="post">
           <input type="hidden" name="oid"/>
-          <input type="hidden" name="cashtoolOid"/>
-          <input type="hidden" name="assetPoolOid"/>
           <div class="form-group">
             <label>标的名称</label>
             <input name="cashtoolName" type="text"
@@ -1246,7 +1261,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>持有额度</label>
-                <input name="holdVolume" type="text"
+                <input name="amount" type="text"
                        class="form-control"
                        readonly="readonly">
               </div>

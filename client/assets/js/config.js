@@ -199,6 +199,10 @@ define(function() {
 					auditForFund: this.host + '/ams/duration/order/auditForFund',	// 信托计划审核
 					appointmentForFund: this.host + '/ams/duration/order/appointmentForFund',	// 信托计划预约
 					orderConfirmForFund: this.host + '/ams/duration/order/orderConfirmForFund',	// 信托计划确认
+					auditForIncome: this.host + '/ams/duration/order/auditForIncome',	// 信托计划本息兑付审核
+					orderConfirmForIncome: this.host + '/ams/duration/order/orderConfirmForIncome',	// 信托计划本息兑付确认
+					auditForTransfer: this.host + '/ams/duration/order/auditForTransfer',		// 信托计划转让审核
+					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer',		// 信托计划转让确认
 				}
 			},
 			role: {
