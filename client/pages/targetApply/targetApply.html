@@ -118,7 +118,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>付息方式</label>
-								<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式">
+								<select name='accrualType' class="form-control input-sm" data-enum-fetch="ACCRUALTYPE">
+                </select>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -405,7 +406,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>付息方式</label>
-								<input name="accrualType" type="text" class="form-control input-sm" placeholder="付息方式">
+								<select name='accrualType' class="form-control input-sm" data-enum-fetch="ACCRUALTYPE">
+                </select>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -946,6 +948,8 @@
 		</div>
 	</div>
 </div>
+
+
 <!-- 底层资产管理弹窗 -->
 <div id="projectDataModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
@@ -1074,7 +1078,7 @@
 						<dl class="dl-horizontal">
 							<dt>付息方式:</dt>
 							<dd>
-								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
+								<div data-detail-fetch="accrualType" data-enum-transform="ACCRUALTYPE"></div>
 							</dd>
 						</dl>
 					</div>
@@ -1112,6 +1116,14 @@
 								<input name="projectManager" type="text" class="form-control input-sm" maxlength="32" placeholder="项目经理">
 							</div>
 						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label>城市</label>
+								<input name="projectCity" type="text" class="form-control input-sm" maxlength="128" placeholder="城市"></input>
+							</div>
+						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>项目类型</label>
@@ -1123,15 +1135,15 @@
                 				</select>
 								<div class="help-block with-errors text-red"></div>
 							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label>城市</label>
-								<textarea name="projectCity" type="text" class="form-control input-sm" maxlength="128" placeholder="城市"></textarea>
-							</div>
-						</div>
+						</div>						
 					</div>
-					<div class="row" id="financeDiv">
+					
+					<div class="panel panel-default" id="financeDiv">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">金融类项目</h3>
+					  </div>
+					  <div class="panel-body">
+						<div class="row" >
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>资金方所在地</label>
@@ -1163,7 +1175,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="row" id="estateDiv">
+					  </div>
+					</div>
+					
+					<div class="panel panel-default" id="estateDiv">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">地产类项目</h3>
+					  </div>
+					  <div class="panel-body">
+						<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>房地产项目所在地</label>
@@ -1181,8 +1201,12 @@
 								<label>房地产项目属性</label>
 								<select name='estateProp' class="form-control input-sm" 
 									data-enum-fetch="ESTATEPROPTYPE" 
-									data-enum-text="请选择">
+									data-enum-text="请选择"
+									required
+									data-error="房地产项目属性不能为空"
+									>
             					</select>
+            					<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -1191,6 +1215,8 @@
 								<input name="sn" type="estateCompletion" class="form-control input-sm" placeholder="完工情况" maxlength="32" required>
 							</div>
 						</div>
+					</div>
+					 </div>
 					</div>
 					<div class="form-group">
 						<label>是否有担保人</label>
@@ -1203,7 +1229,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="row" id="prjWarrantorInfo">
+					<div class="panel panel-default" id="prjWarrantorInfo">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">担保人信息</h3>
+					  </div>
+					  <div class="panel-body">
+					  
+						<div class="row" >
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>担保人所在地</label>
@@ -1232,7 +1264,7 @@
 							<div class="form-group">
 								<label>保证方式</label>
 								<div class="input-group input-group-sm">
-									<select name="guaranteeModeOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="保证方式不能为空">
+									<select name="guaranteeModeOid" class="form-control input-sm" placeholder="保证方式" required data-error="保证方式不能为空">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -1244,7 +1276,7 @@
 							<div class="form-group">
 								<label>担保期限权数</label>
 								<div class="input-group input-group-sm">
-									<select name="guaranteeModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="担保期限权数不能为空">
+									<select name="guaranteeModeExpireOid" class="form-control input-sm" placeholder="保证方式" required data-error="担保期限权数不能为空">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -1253,6 +1285,10 @@
 							<input type="hidden" name="warrantorTypeWeight" />
 						</div>
 					</div>
+					  </div>
+					</div>
+					
+					
 					<div class="form-group">
 						<label>是否有抵押</label>
 						<div class="row form-style">
@@ -1264,7 +1300,12 @@
 							</div>
 						</div>
 					</div>
-					<div class="row" id="prjPledgeInfo">
+					<div class="panel panel-default" id="prjPledgeInfo">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">抵押人信息</h3>
+					  </div>
+					  <div class="panel-body">
+						<div class="row" >
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>抵押人</label>
@@ -1344,7 +1385,7 @@
 							<div class="form-group">
 								<label>抵押方式</label>
 								<div class="input-group input-group-sm">
-									<select name="mortgageModeOid" type="text" class="form-control input-sm" placeholder="抵押方式" required data-error="抵押方式不能为空">
+									<select name="mortgageModeOid" class="form-control input-sm" placeholder="抵押方式" required data-error="抵押方式不能为空">
 										<option>请选择</option>
 									</select>
 								</div>
@@ -1355,7 +1396,7 @@
 							<div class="form-group">
 								<label>抵押担保期限权数</label>
 								<div class="input-group input-group-sm">
-									<select name="mortgageModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
+									<select name="mortgageModeExpireOid" class="form-control input-sm" placeholder="抵押担保期限权数" required data-error="抵押担保期限权数不能为空">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -1363,6 +1404,8 @@
 							</div>
 							<input type="hidden" name="warrantorTypeWeight" />
 						</div>
+					</div>
+					  </div>
 					</div>
 					<div class="form-group">
 		              <label>是否有质押</label>
@@ -1375,7 +1418,12 @@
 		                </div>
 		              </div>
 		            </div>
-					<div class="row" id="prjHypothecation">
+		            <div class="panel panel-default" id="prjHypothecation">
+		              <div class="panel-heading">
+					    <h3 class="panel-title">质押人信息</h3>
+					  </div>
+					  <div class="panel-body">
+						<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>出质人</label>
@@ -1386,7 +1434,9 @@
 							<div class="form-group">
 								<label>质押方式</label>
 								<div class="input-group input-group-sm">
-									<select name="hypothecationModeOid" type="text" class="form-control input-sm" placeholder="质押方式" required data-error="方式不能为空"></select>
+									<select name="hypothecationModeOid" class="form-control input-sm" placeholder="质押方式" required data-error="质押方式不能为空">
+										<option value="">请选择</option>
+									</select>
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
@@ -1396,7 +1446,7 @@
 							<div class="form-group">
 								<label>质押担保期限权数</label>
 								<div class="input-group input-group-sm">
-									<select name="hypothecationModeExpireOid" type="text" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
+									<select name="hypothecationModeExpireOid" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -1404,7 +1454,8 @@
 							</div>
 						</div>
 					</div>
-						
+					  </div>
+		            </div>
 					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
@@ -1530,7 +1581,7 @@
 						<dl class="dl-horizontal">
 							<dt>付息方式:</dt>
 							<dd>
-								<div data-detail-fetch="accrualType" data-enum-transform="TARGETTYPE"></div>
+								<div data-detail-fetch="accrualType" data-enum-transform="ACCRUALTYPE"></div>
 							</dd>
 						</dl>
 					</div>

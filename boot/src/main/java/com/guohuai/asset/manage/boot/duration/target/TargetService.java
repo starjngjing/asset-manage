@@ -136,6 +136,18 @@ public class TargetService {
 			form.setTargetName(entity.getName());
 			form.setTargetType(entity.getType());
 			form.setIncomeRate(entity.getExpAror());
+			form.setSubjectRating(entity.getSubjectRating());
+			form.setExpSetDate(entity.getExpSetDate());
+			form.setExpAror(entity.getExpAror());
+			form.setAccrualType(entity.getAccrualType());
+			form.setArorFirstDate(entity.getArorFirstDate());
+			form.setContractDays(entity.getContractDays());
+			form.setRaiseScope(entity.getRaiseScope());
+			form.setLife(entity.getLife());
+			form.setFloorVolume(entity.getFloorVolume());
+			form.setCollectStartDate(entity.getCollectStartDate());
+			form.setCollectEndDate(entity.getCollectEndDate());
+			form.setCollectIncomeRate(entity.getCollectIncomeRate());
 		}
 		
 		return form;

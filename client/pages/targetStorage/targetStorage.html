@@ -37,8 +37,6 @@
                   <label>标的类型</label>
                   <select name="type" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
                     <option value="" selected>不限</option>
-                    <option value="ok">已验证</option>
-                    <option value="no">未验证</option>
                   </select>
                 </div>
               </div>
@@ -63,6 +61,29 @@
                 </div>
                 <div class="col-sm-2">
                   <input type="radio" name="raiseScope" value=":1000000000-" class="icheck"> >10 亿
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>已持有份额</label>
+              <div class="row form-style">
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value="" class="icheck" checked> 不限
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value="-1000000" class="icheck"> <100万
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value=":1000000-10000000" class="icheck"> 100万 - 1000万
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value=":1000000-100000000" class="icheck"> 1000万 - 1亿
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value=":100000000-1000000000" class="icheck"> 1亿 - 10亿
+                </div>
+                <div class="col-sm-2">
+                  <input type="radio" name="holdAmount" value=":1000000000-" class="icheck"> >10 亿
                 </div>
               </div>
             </div>
@@ -450,43 +471,56 @@
 					</thead>
 				</table>
 				<p class="form-header"></p>
+				<div class="row" id="targetDetailIncome">
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>标的名称:</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>付息方式:</dt>
+							<dd>
+								<div data-detail-fetch="accrualType" data-enum-transform="ACCRUALTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>预期收益率:</dt>
+							<dd>
+								<div data-detail-fetch="expAror"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>付息日:</dt>
+							<dd>
+								<div data-detail-fetch="accrualDate"></div>
+							</dd>
+						</dl>
+					</div>
+				</div>
         <!-- 编辑表单 -->
-        <form id="targetIncomeForm" name="targetIncomeForm" method="post">        	
+        <form id="targetIncomeForm" name="targetIncomeForm" method="post">  	
 	      	<div class="row">
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>付息周期</label>
 	      				<input name="seq" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="付息周期" required>
+			                   placeholder="付息周期" required
+			                   data-validint="1-999" 
+                   			 data-error="付息周期必须为1到999的整数">
 	      			</div>
+	      			<div class="help-block with-errors text-red"></div>
 	      		</div>
 	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>付息方式</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>收益日</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>预期收益</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>收益分配基准日</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>实际收益</label>
 	      				<div class="input-group input-group-sm">			            
@@ -494,14 +528,14 @@
 			                   class="form-control input-sm"
 			                   placeholder="实际收益" required
 			                   data-validfloat="3.4" 
-                   			 data-error="募集期收益必须为前2位后4位小数">
+                   			 data-error="实际收益必须为前2位后4位小数">
 			            <span class="input-group-addon">%</span>
 			          </div>
 		            <div class="help-block with-errors text-red"></div>
 	      			</div>
 	      		</div>
 	      		
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>收益支付日</label>
 	      				<div class="input-group input-group-sm">
@@ -513,14 +547,6 @@
 				                   placeholder="收益支付日" required data-error="收益支付日不能为空">
 				          </div>
 			            <div class="help-block with-errors text-red"></div>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<div class="col-sm-3">
-                  <input type="checkbox" name="sure" value="" class="icheck" checked> 确认本息兑付
-                </div>	      				
 	      			</div>
 	      		</div>
 	      		

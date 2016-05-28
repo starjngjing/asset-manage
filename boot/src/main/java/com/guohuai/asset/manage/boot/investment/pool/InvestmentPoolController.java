@@ -125,7 +125,7 @@ public class InvestmentPoolController extends BaseController {
 					Expression<BigDecimal> expHa = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.gt(expHa, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
 					predicate.add(p);					
-				} else if (op.equals("noHoldList")) { // 未持有列表
+				} else if (op.equals("notHoldList")) { // 未持有列表
 //					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
@@ -268,7 +268,7 @@ public class InvestmentPoolController extends BaseController {
 	 * @Title: overdue
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see: 
 	 * @param days
 	 * @param rate
 	 * @param overdueFine
@@ -293,7 +293,7 @@ public class InvestmentPoolController extends BaseController {
 	 * @Title: getRecruitment 
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see: 
 	 * @return ResponseEntity<InvestmentListResp>    返回类型
 	 */
 	@RequestMapping("getRecruitment")
@@ -301,5 +301,21 @@ public class InvestmentPoolController extends BaseController {
 	public @ResponseBody ResponseEntity<InvestmentListResp> getRecruitment() {	
 		List<Investment> list = this.investmentPoolService.getCollecting(new Date(System.currentTimeMillis()));
 		return new ResponseEntity<InvestmentListResp>(new InvestmentListResp(list), HttpStatus.OK);
+	}
+
+	/**
+	 * 根据标的id查询所有的本息兑付数据
+	 * @Title: getTargetIncome 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param targetOid
+	 * @return ResponseEntity<TargetIncomeListResp>    返回类型
+	 */
+	@RequestMapping("getTargetIncome")
+	@ApiOperation(value = "根据标的id查询所有的本息兑付数据")
+	public @ResponseBody ResponseEntity<TargetIncomeListResp> getTargetIncome(@RequestParam() String targetOid) {
+		List<TargetIncome> list = investmentPoolService.getTargetIncome(targetOid);
+		return new ResponseEntity<TargetIncomeListResp>(new TargetIncomeListResp(list), HttpStatus.OK);
 	}
 }

@@ -45,6 +45,9 @@ public class InvestmentPoolService {
 	private TargetOverdueDao targetOverdueDao;
 	
 	@Autowired
+	private TargetIncomeDao targetIncomeDao;
+	
+	@Autowired
 	InvestmentLogService investmentLogService;
 
 	/**
@@ -259,5 +262,19 @@ public class InvestmentPoolService {
 			}
 		};
 		return investmentDao.findAll(spec);
+	}
+
+	/**
+	 * 根据标的id查询所有的本息兑付数据
+	 * 
+	 * @Title: getTargetIncome
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param targetOid 投资标的id
+	 * @return List<TargetIncome> 返回类型
+	 */
+	public List<TargetIncome> getTargetIncome(String targetOid) {
+		return targetIncomeDao.findByTargetOidOrderBySeq(targetOid);
 	}
 }

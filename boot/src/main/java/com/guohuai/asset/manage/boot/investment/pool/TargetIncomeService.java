@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -49,13 +50,16 @@ public class TargetIncomeService {
 			throw AMPException.getException("投资标的id不能为空");
 		
 		TargetIncome interest = new TargetIncome();
-		BeanUtils.copyProperties(interestForm, interest);
+		BeanUtils.copyProperties(interestForm, interest);		
 
 		Investment investment = this.investmentDao.findOne(targetOid);
 		if (null == investment)
 			throw AMPException.getException("找不到id为[" + targetOid + "]的投资标的");
 		interest.setInvestment(investment);
-
+		
+		// 保存之前先删除标的某一期本兮兑付的数据
+		targetIncomeDao.deleteByTargetOidAndSeq(targetOid, interestForm.getSeq());
+		
 		interest.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		interest.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		return targetIncomeDao.save(interest);
@@ -77,5 +81,18 @@ public class TargetIncomeService {
 	 */
 	public Page<TargetIncome> getTargetIncomeList(Specification<TargetIncome> spec, Pageable pageable) {
 		return targetIncomeDao.findAll(spec, pageable);
+	}
+	
+	/**
+	 * 根据标的id查询所有的本息兑付数据
+	 * @Title: findByTargetOidOrderBySeq 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param targetOid
+	 * @return List<TargetIncome>    返回类型
+	 */
+	public List<TargetIncome> findByTargetOidOrderBySeq(String targetOid) {
+		return this.targetIncomeDao.findByTargetOidOrderBySeq(targetOid);
 	}
 }

@@ -1,7 +1,7 @@
 <!-- 页面头部 -->
 <section class="content-header">
   <h1>
-    持仓标的管理
+    投资标的备选库
   </h1>
   <ol class="breadcrumb">
     <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 投资标的管理</a></li>
@@ -37,8 +37,6 @@
                   <label>标的类型</label>
                   <select name="type" class="form-control input-sm" data-enum-fetch="TARGETTYPE" data-enum-text="全部">
                     <option value="" selected>不限</option>
-                    <option value="ok">已验证</option>
-                    <option value="no">未验证</option>
                   </select>
                 </div>
               </div>
@@ -160,6 +158,25 @@
 </section>
 
 
+
+<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+<div id="doConfirm" class="popover func-delete-popover">
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<p id="confirmTitle"></p>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!-- 成立模态窗 默认大小 -->
 <div id="establishModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -221,27 +238,27 @@
 	      	<div class="row">
 	      		<div class="col-sm-12">
 	      			<div class="form-group">
-	            <label>风控</label>
-	            <textarea name="risk" rows="3"
-	                      class="form-control input-sm"
-	                      placeholder="请输入内容" required></textarea>
+		            <label>风控</label>
+		            <textarea name="risk" rows="3"
+		                      class="form-control input-sm"
+		                      placeholder="请输入内容" maxlength="1024" required data-error="风控不能为空"></textarea>
+            	<div class="help-block with-errors text-red"></div>
           		</div>
 	      		</div>
 	      	</div>
 	      	<div class="row">
       			<div class="col-sm-6">
           		<div class="form-group">
-			          <div class="form-group">
-				          <label>成立日期</label>
-				          <div class="input-group input-group-sm">
-				            <div class="input-group-addon">
-				              <i class="fa fa-calendar"></i>
-				            </div>
-				            <input name="setDate" type="text"
-				                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
-				                   placeholder="成立日期">
-				          </div>
-				        </div>  
+			          <label>成立日期</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="setDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="成立日期" required data-error="成立日期不能为空">
+			          </div>
+		            <div class="help-block with-errors text-red"></div>
 			        </div>          		
           	</div>
           	<div class="col-sm-6"></div>
@@ -256,8 +273,9 @@
 			            </div>
 			            <input name="arorFirstDate" type="text"
 			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
-			                   placeholder="">
+			                   placeholder="" required data-error="收益起始日不能为空">
 			          </div>
+			          <div class="help-block with-errors text-red"></div>
 			        </div>
           	</div>
           	<div class="col-sm-6">
@@ -269,8 +287,9 @@
 			            </div>
 			            <input name="arorFirstDate" type="text"
 			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
-			                   placeholder="">
+			                   placeholder="" required data-error="收益起始日不能为空">
 			          </div>
+			          <div class="help-block with-errors text-red"></div>
 			        </div>          		
           	</div>
           </div>
@@ -284,8 +303,9 @@
 			            </div>
 			            <input name="arorFirstDate" type="text"
 			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
-			                   placeholder="首付息日">
+			                   placeholder="首付息日" required data-error="首付息日不能为空">
 			          </div>
+			          <div class="help-block with-errors text-red"></div>
 			        </div>
 		        </div>
           	<div class="col-sm-6">
@@ -295,10 +315,11 @@
 			            <div class="input-group-addon">
 			              <i class="fa">T+</i>			              
 			            </div>
-			            <select name="accrualDate" class="form-control input-sm">
+			            <select name="accrualDate" class="form-control input-sm" required data-error="首付息日不能为空">
 			            </select>
 			            <span class="input-group-addon">工作日以内</span>
 			          </div>
+		            <div class="help-block with-errors text-red"></div>
 			        </div>          		
           	</div>
           </div>
@@ -310,9 +331,12 @@
 			          <div class="input-group input-group-sm">			            
 			            <input name="collectIncomeRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="募集期收益" required>
+			                   placeholder="募集期收益" required 
+			                   data-validfloat="3.4" 
+                   			 data-error="募集期收益必须为前2位后4位小数">
 			            <span class="input-group-addon">%</span>
 			          </div>
+		            <div class="help-block with-errors text-red"></div>
 			        </div>
 		        </div>
           	
@@ -324,7 +348,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="establishSubmit" type="button" class="btn btn-primary btn-submit establishSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -391,7 +415,6 @@
 	      			</div>
 	      		</div>
 	      	</div>	      	
-	        
 	        <div class="row">
 	        	<div class="col-sm-6">
 	          	<div class="form-group">
@@ -399,21 +422,22 @@
 			          <div class="input-group input-group-sm">			            
 			            <input name="collectIncomeRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="募集期收益" required>
+			                   placeholder="募集期收益" required 
+			                   data-validfloat="3.4" 
+                   			 data-error="募集期收益必须为前2位后4位小数">
 			            <span class="input-group-addon">%</span>
 			          </div>
+			          <div class="help-block with-errors text-red"></div>
 			        </div>
-		        </div>
-          	
+		        </div>          	
           </div>
-          
           <input name="oid" type="hidden" data-detail-fetch="oid">
         </form>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="unEstablishSubmit" type="button" class="btn btn-primary btn-submit unEstablishSubmit">保 存</button>
       </div>
     </div>
   </div>
@@ -434,55 +458,84 @@
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
+      	<table id="incomeTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>编号</th>
+							<th>兑付期数</th>
+							<th>实际收益</th>
+							<th>收益支付日</th>
+							<th>录入时间</th>
+							<th>操作员</th>
+						</tr>
+					</thead>
+				</table>
+				<p class="form-header"></p>
+				<div class="row" id="targetDetailIncome">
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>标的名称:</dt>
+							<dd>
+								<div data-detail-fetch="name"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>付息方式:</dt>
+							<dd>
+								<div data-detail-fetch="accrualType" data-enum-transform="ACCRUALTYPE"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>预期收益率:</dt>
+							<dd>
+								<div data-detail-fetch="expAror"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-12">
+						<dl class="dl-horizontal">
+							<dt>付息日:</dt>
+							<dd>
+								<div data-detail-fetch="accrualDate"></div>
+							</dd>
+						</dl>
+					</div>
+				</div>
         <!-- 编辑表单 -->
-        <form id="targetIncomeForm" name="targetIncomeForm" method="post">        	
+        <form id="targetIncomeForm" name="targetIncomeForm" method="post">  	
 	      	<div class="row">
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>付息周期</label>
 	      				<input name="seq" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="付息周期" required>
+			                   placeholder="付息周期" required
+			                   data-validint="1-999" 
+                   			 data-error="付息周期必须为1到999的整数">
 	      			</div>
+	      			<div class="help-block with-errors text-red"></div>
 	      		</div>
 	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>付息方式</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>收益日</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>预期收益</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<label>收益分配基准日</label>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>实际收益</label>
 	      				<div class="input-group input-group-sm">			            
 			            <input name="incomeRate" type="text"
 			                   class="form-control input-sm"
-			                   placeholder="募集期收益" required>
+			                   placeholder="实际收益" required
+			                   data-validfloat="3.4" 
+                   			 data-error="实际收益必须为前2位后4位小数">
 			            <span class="input-group-addon">%</span>
 			          </div>
+		            <div class="help-block with-errors text-red"></div>
 	      			</div>
 	      		</div>
 	      		
-	      		<div class="col-sm-12">
+	      		<div class="col-sm-6">
 	      			<div class="form-group">
 	      				<label>收益支付日</label>
 	      				<div class="input-group input-group-sm">
@@ -491,16 +544,9 @@
 				            </div>
 				            <input name="incomeDate" type="text"
 				                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
-				                   placeholder="收益支付日">
+				                   placeholder="收益支付日" required data-error="收益支付日不能为空">
 				          </div>
-	      			</div>
-	      		</div>
-	      		
-	      		<div class="col-sm-12">
-	      			<div class="form-group">
-	      				<div class="col-sm-3">
-                  <input type="checkbox" name="sure" value="" class="icheck" checked> 确认本息兑付
-                </div>	      				
+			            <div class="help-block with-errors text-red"></div>
 	      			</div>
 	      		</div>
 	      		
@@ -512,8 +558,291 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+        <button id="targetIncomeSubmit" type="button" class="btn btn-primary btn-submit targetIncomeSubmit">保 存</button>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- 逾期模态窗 默认大小 -->
+<div id="overdueModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">逾期</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <!-- 编辑表单 -->
+        <form id="overdueForm" name="overdueForm" method="post">
+        	<p class="form-header">标的概况</p>
+        	<div class="form-group">
+            <label>标的名称</label>
+            <input data-detail-fetch="name" type="text"
+                   class="form-control input-sm"
+                   disabled="disabled">
+          </div>
+          <div class="row">
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的类型</label>
+		            <input data-detail-fetch="type" data-enum-transform="TARGETTYPE"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+		            <label>标的规模</label>
+		            <input data-detail-fetch="raiseScope"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+		          </div>
+          	</div>
+          </div>
+	      	<div class="row">
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>年化收益率:</lable>
+	      				<input data-detail-fetch="expArorSec"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-6">
+	      			<div class="form-group">
+	      				<lable>标的期限:</lable>
+	      				<input data-detail-fetch="lifed"
+		            	     type="text" class="form-control input-sm"
+		                   disabled="disabled">
+	      			</div>
+	      		</div>
+	      		<div class="col-sm-12">
+	      			<div class="form-group">
+	            <label>风控</label>
+	            <textarea name="risk" rows="3"
+	                      class="form-control input-sm"
+	                      placeholder="" disabled></textarea>
+          		</div>
+	      		</div>
+      			<div class="col-sm-6">
+          		<div class="form-group">
+			          <div class="form-group">
+				          <label>成立日期</label>
+				          <div class="input-group input-group-sm">
+				            <div class="input-group-addon">
+				              <i class="fa fa-calendar"></i>
+				            </div>
+				            <input name="setDate" type="text"
+				                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+				                   placeholder="成立日期" disabled="disabled">
+				          </div>
+				        </div>  
+			        </div>          		
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益起始日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="" disabled="disabled">
+			          </div>
+			        </div>
+          	</div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>收益截止日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="" disabled="disabled">
+			          </div>
+			        </div>          		
+          	</div>
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>首付息日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="arorFirstDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="首付息日" disabled="disabled">
+			          </div>
+			        </div>
+		        </div>
+          	<div class="col-sm-6">
+          		<div class="form-group">
+			          <label>付息日</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa">T+</i>			              
+			            </div>
+			            <select name="accrualDate" class="form-control input-sm" disabled="disabled">
+			            </select>
+			            <span class="input-group-addon">工作日以内</span>
+			          </div>
+			        </div>          		
+          	</div>
+	        
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>募集期收益</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="collectIncomeRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="募集期收益" disabled="disabled">
+			            <span class="input-group-addon">%</span>
+			          </div>
+			        </div>
+		        </div>
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>逾期日期</label>
+			          <div class="input-group input-group-sm">
+			            <div class="input-group-addon">
+			              <i class="fa fa-calendar"></i>
+			            </div>
+			            <input name="overdueDate" type="text"
+			                   class="form-control datepicker" data-date-format="YYYY-MM-DD"
+			                   placeholder="逾期日期" required data-error="逾期日期不能为空">
+			          </div>
+			          <div class="help-block with-errors text-red"></div>
+			        </div>
+		        </div>
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>逾期天数</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="overdueDays" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="逾期天数" required maxlength="10" data-validint="1-1000000000" data-error="逾期天数必须为10位以内整数">
+			            <span class="input-group-addon">天</span>
+			          </div>
+			          <div class="help-block with-errors text-red"></div>
+			        </div>
+		        </div>
+	        	
+	        	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>逾期利率</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="overdueRate" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="逾期利率"
+			                   data-validfloat="2.4"
+                   			 data-error="逾期利率必须为前两位后四位小数"
+			                   >
+			            <span class="input-group-addon">%</span>
+			          </div>
+			          <div class="help-block with-errors text-red"></div>
+			        </div>
+		        </div>
+		        <!--
+          	<div class="col-sm-6">
+	          	<div class="form-group">
+			          <label>逾期滞纳金</label>
+			          <div class="input-group input-group-sm">			            
+			            <input name="overdueFine" type="text"
+			                   class="form-control input-sm"
+			                   placeholder="逾期滞纳金" >
+			          </div>
+			        </div>
+		        </div>
+	        -->
+          </div>
+          
+          <input name="oid" type="hidden" data-detail-fetch="oid">
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="overdueSubmit" type="button" class="btn btn-primary btn-submit overdueSubmit">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 财务数据 弹窗 -->
+<div id="financialDataModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">财务数据</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- 主体Grid -->
+						<div id="assetGrid" class="box box-primary">
+							<!-- Grid头部 -->
+							<div class="box-header">
+								<h3 class="box-title"></h3>
+								<div class="box-tools">
+									<button id="projectAdd" class="btn btn-default btn-sm">
+					                    <i class="fa fa-plus"></i> 财务数据
+					                  </button>
+								</div>
+							</div>
+							<!-- Grid内容体 -->
+							<div class="box-body">
+								<!-- 搜索项表单 
+								<form id="projectSearchForm" name="projectSearchForm" method="post" class="search-body">
+									<div class="row">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>项目名称</label>
+												<input name="projectName" type="text" class="form-control input-sm" placeholder="搜索项目名称">
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>项目经理</label>
+												<input name="projectManager" type="text" class="form-control input-sm" placeholder="搜索项目经理">
+											</div>
+										</div>
+									</div>
+								</form>-->
+								<!-- 主体数据表格 -->
+								<table id="projectTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>编号</th>
+											<th>名称</th>
+											<th>项目经理</th>
+											<th>类型</th>
+											<th>城市</th>
+											<th>创建时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

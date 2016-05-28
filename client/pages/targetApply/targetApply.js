@@ -48,7 +48,10 @@ define([
 				}, {
 					field: 'name'
 				}, {
-					field: 'accrualType'
+					field: 'accrualType',
+					formatter: function(val) {
+						return util.enum.transform('ACCRUALTYPE', val);
+					}
 				}, {
 					field: 'expSetDate'
 				}, {
@@ -99,8 +102,7 @@ define([
 					formatter: function(val) {
 						return util.table.convertRisk(val);
 					}
-				}, 
-				{
+				}, {
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
@@ -399,7 +401,7 @@ define([
 								if (!data) {
 									alert('查询底层项目详情失败');
 								} else {
-									
+
 									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
 									$('#projectForm').validator('validate'); // 手动校验一把
@@ -552,8 +554,7 @@ define([
 					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
-			
-			
+
 			$('#addEventCollect').on('click', function() {
 				eventCollect('');
 			});
@@ -591,7 +592,6 @@ define([
 										initdata[item.indicateOid] = item;
 									});
 								};
-
 
 								$(document.collectForm.relative).val(relative);
 
@@ -678,7 +678,7 @@ define([
 
 					});
 			}
-			
+
 			$('#collectButton').on('click', function() {
 
 				var data = {
@@ -711,9 +711,8 @@ define([
 				});
 				*/
 			});
-			
-			
-				//标的详情过会表决表配置
+
+			//标的详情过会表决表配置
 			var voteTableConfig = {
 					data: '',
 					columns: [{
@@ -989,14 +988,14 @@ define([
 						warrantorTypeSel.append(option);
 					} else if ('MORTGAGE' === type && pledgeTypeSel) {
 						pledgeTypeSel.append(option);
-					} else if('HYPOTHECATION' === type && hypothecationTypeSel) {
+					} else if ('HYPOTHECATION' === type && hypothecationTypeSel) {
 						hypothecationTypeSel.append(option);
 					}
 
 				});
 			}
 		});
-		
+
 		// 担保期限权数
 		http.post(config.api.system.config.ccp.warrantyExpire.search, {
 			data: {},
@@ -1011,7 +1010,7 @@ define([
 					var oid = item.oid; // oid
 					var title = item.title; // 名称
 					var weight = item.weight; // 权重
-					
+
 					warrantorExpireSel.append($("<option>").val(oid).text(title));
 					pledgeExpireSel.append($("<option>").val(oid).text(title));
 					hypothecationExpireSel.append($("<option>").val(oid).text(title));
