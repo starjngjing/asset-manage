@@ -1,11 +1,11 @@
 package com.guohuai.asset.manage.boot.product;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class ProductService {
 
 		Product.ProductBuilder pb = Product.builder().oid(StringUtil.uuid());
 		{
-			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
+			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).state(Product.STATE_Create).isDeleted(Product.NO);
 		}
 		{
 			// 产品类型 
@@ -96,32 +96,31 @@ public class ProductService {
 			//募集开始时间类型;募集期:()个自然日;起息日:募集满额后()个自然日 存续期数;存续期单位;存续期:()个自然日
 			pb.raiseStartDateType(form.getRaiseStartDateType());
 			if(!StringUtil.isEmpty(form.getRaisePeriod())) {
-				pb.raisePeriod(Integer.valueOf(form.getRaisePeriod()));
+				pb.raisePeriodDays(Integer.valueOf(form.getRaisePeriod()));
 			}
 			if(!StringUtil.isEmpty(form.getInterestsFirstDate())) {
-				pb.interestsFirstDate(Integer.valueOf(form.getInterestsFirstDate()));
+				pb.interestsFirstDays(Integer.valueOf(form.getInterestsFirstDate()));
 			}
 			if(!StringUtil.isEmpty(form.getDurationPeriod())) {
-				pb.durationPeriod(Integer.valueOf(form.getDurationPeriod()));
+				pb.durationPeriodDays(Integer.valueOf(form.getDurationPeriod()));
 			}
 		}
 		{
 			//募集开始时间  募集期:()个自然日  起息日:募集满额后()个自然日  存续期:()个自然日
 			if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType())) {
-				Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
-				pb.raiseStartDate(new Timestamp(raiseStartDate.getTime()));
+				java.util.Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
+				pb.raiseStartDate(new Date(raiseStartDate.getTime()));
 				
 				if(!StringUtil.isEmpty(form.getRaisePeriod())) {
-					pb.raiseEndDate(new Timestamp(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())).getTime()));//募集结束时间
+					pb.raiseEndDate(new Date(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())).getTime()));//募集结束时间
 					if(!StringUtil.isEmpty(form.getInterestsFirstDate())) {
-						pb.setupDate(new Timestamp(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())).getTime()));//产品成立时间（存续期开始时间）
+						pb.setupDate(new Date(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())).getTime()));//产品成立时间（存续期开始时间）
 						if(!StringUtil.isEmpty(form.getDurationPeriod())) {
-							pb.durationPeriodEndDate(new Timestamp(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())).getTime()));//存续期结束时间
+							pb.durationPeriodEndDate(new Date(DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())).getTime()));//存续期结束时间
 							if(!StringUtil.isEmpty(form.getAccrualDate())) {
-								Date repayDate = DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())+Integer.valueOf(form.getAccrualDate()));
+								java.util.Date repayDate = DateUtil.addDay(raiseStartDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())+Integer.valueOf(form.getAccrualDate()));
 								//到期最晚还本付息日 指存续期结束后的还本付息最迟发生在存续期后的第X个自然日的23:59:59为止
-								String repayDateStr = DateUtil.format(repayDate, DateUtil.datePattern);
-								pb.accrualLastDate(new Timestamp(DateUtil.parseDate(repayDateStr+" 23:59:59", DateUtil.datetimePattern).getTime()));//到期还款时间
+								pb.repayDate(new Date(repayDate.getTime()));//到期还款时间
 							}
 						}
 					}
@@ -158,7 +157,7 @@ public class ProductService {
 				pb.netUnitShare(new BigDecimal(form.getNetUnitShare()));
 			}
 			if(!StringUtil.isEmpty(form.getAccrualDate())) {
-				pb.accrualDate(Integer.valueOf(form.getAccrualDate()));
+				pb.accrualRepayDays(Integer.valueOf(form.getAccrualDate()));
 			}
 		}
 		{
@@ -197,7 +196,7 @@ public class ProductService {
 
 		Product.ProductBuilder pb = Product.builder().oid(StringUtil.uuid());
 		{
-			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).status(Product.STATE_Create).isDeleted(Product.NO);
+			pb.code(form.getCode()).name(form.getName()).fullName(form.getFullName()).administrator(form.getAdministrator()).state(Product.STATE_Create).isDeleted(Product.NO);
 		}
 		{
 			// 产品类型 
@@ -208,7 +207,7 @@ public class ProductService {
 			// 付利方式
 			pb.payModeOid(form.getPayModeOid());
 			if(!StringUtil.isEmpty(form.getPayModeDate())) {
-				pb.payModeDate(Integer.valueOf(form.getPayModeDate()));
+				pb.payModeDay(Integer.valueOf(form.getPayModeDate()));
 			}
 		}
 		if(!StringUtil.isEmpty(form.getAssetPoolOid())) {
@@ -232,28 +231,28 @@ public class ProductService {
 			//赎回确认日:()个;赎回确认日类型:自然日或交易日
 			pb.setupDateType(form.getSetupDateType());
 			if(!StringUtil.isEmpty(form.getInterestsDate())) {
-				pb.interestsFirstDate(Integer.valueOf(form.getInterestsDate()));
+				pb.interestsFirstDays(Integer.valueOf(form.getInterestsDate()));
 			}
 			if(!StringUtil.isEmpty(form.getLockPeriod())) {
-				pb.lockPeriod(Integer.valueOf(form.getLockPeriod()));
+				pb.lockPeriodDays(Integer.valueOf(form.getLockPeriod()));
 			}
 			
 			if(!StringUtil.isEmpty(form.getPurchaseConfirmDate())) {
-				pb.purchaseConfirmDate(Integer.valueOf(form.getPurchaseConfirmDate()));
+				pb.purchaseConfirmDays(Integer.valueOf(form.getPurchaseConfirmDate()));
 			}
 			
 			if(!StringUtil.isEmpty(form.getRedeemConfirmDate())) {
-				pb.redeemConfirmDate(Integer.valueOf(form.getRedeemConfirmDate()));
+				pb.redeemConfirmDays(Integer.valueOf(form.getRedeemConfirmDate()));
 			}
-			pb.purchaseConfirmDateType(form.getPurchaseConfirmDateType())
-			.redeemConfirmDateType(form.getRedeemConfirmDateType())
-			.redeemTimingTaskDateType(form.getRedeemTimingTaskDateType()).redeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()))
-			.redeemTimingTaskDate(1);//redeemTimingTaskDate 默认每日
+			pb.purchaseConfirmDaysType(form.getPurchaseConfirmDateType())
+			.redeemConfirmDaysType(form.getRedeemConfirmDateType())
+			.redeemTimingTaskDaysType(form.getRedeemTimingTaskDateType()).redeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()))
+			.redeemTimingTaskDays(1);//redeemTimingTaskDate 默认每日
 			//产品成立时间（存续期开始时间）
 			
 			if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType())) {
-				Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
-				pb.setupDate(new Timestamp(setupDate.getTime()));
+				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
+				pb.setupDate(new Date(setupDate.getTime()));
 			}
 		}
 		{
@@ -396,7 +395,7 @@ public class ProductService {
 			product.setName(form.getName());
 			product.setFullName(form.getFullName());
 			product.setAdministrator(form.getAdministrator());
-			product.setStatus(Product.STATE_Update);
+			product.setState(Product.STATE_Update);
 			product.setReveal(form.getReveal());
 			product.setCurrency(form.getCurrency());
 			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
@@ -422,32 +421,31 @@ public class ProductService {
 			//募集开始时间类型;募集期:()个自然日;起息日:募集满额后()个自然日;存续期:()个自然日
 			product.setRaiseStartDateType(form.getRaiseStartDateType());
 			if(!StringUtil.isEmpty(form.getRaisePeriod())) {
-				product.setRaisePeriod(Integer.valueOf(form.getRaisePeriod()));
+				product.setRaisePeriodDays(Integer.valueOf(form.getRaisePeriod()));
 			}
 			if(!StringUtil.isEmpty(form.getInterestsFirstDate())) {
-				product.setInterestsFirstDate(Integer.valueOf(form.getInterestsFirstDate()));
+				product.setInterestsFirstDays(Integer.valueOf(form.getInterestsFirstDate()));
 			}
 			if(!StringUtil.isEmpty(form.getDurationPeriod())) {
-				product.setDurationPeriod(Integer.valueOf(form.getDurationPeriod()));
+				product.setDurationPeriodDays(Integer.valueOf(form.getDurationPeriod()));
 			}
 		}
 		if(Product.DATE_TYPE_FirstRackTime.equals(form.getRaiseStartDateType())) {
 			product.setRaiseStartDate(null);
 		} else {
-			Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
-			product.setRaiseStartDate(new Timestamp(raiseStatrtDate.getTime()));
+			java.util.Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
+			product.setRaiseStartDate(new Date(raiseStatrtDate.getTime()));
 			
 			if(!StringUtil.isEmpty(form.getRaisePeriod())) {
-				product.setRaiseEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())).getTime()));//募集结束时间
+				product.setRaiseEndDate(new Date(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())).getTime()));//募集结束时间
 				if(!StringUtil.isEmpty(form.getInterestsFirstDate())) {
-					product.setSetupDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())).getTime()));//产品成立时间（存续期开始时间）
+					product.setSetupDate(new Date(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())).getTime()));//产品成立时间（存续期开始时间）
 					if(!StringUtil.isEmpty(form.getDurationPeriod())) {
-						product.setDurationPeriodEndDate(new Timestamp(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())).getTime()));//存续期结束时间
+						product.setDurationPeriodEndDate(new Date(DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())).getTime()));//存续期结束时间
 						if(!StringUtil.isEmpty(form.getAccrualDate())) {
 							//到期最晚还本付息日 指存续期结束后的还本付息最迟发生在存续期后的第X个自然日的23:59:59为止
-							Date repayDate = DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())+Integer.valueOf(form.getAccrualDate()));
-							String repayDateStr = DateUtil.format(repayDate, DateUtil.datePattern);
-							product.setAccrualLastDate(new Timestamp(DateUtil.parseDate(repayDateStr+" 23:59:59", DateUtil.datetimePattern).getTime()));//到期还款时间
+							java.util.Date repayDate = DateUtil.addDay(raiseStatrtDate, Integer.valueOf(form.getRaisePeriod())+Integer.valueOf(form.getInterestsFirstDate())+Integer.valueOf(form.getDurationPeriod())+Integer.valueOf(form.getAccrualDate()));
+							product.setRepayDate(new Date(repayDate.getTime()));//到期还款时间
 						}
 					}
 				}
@@ -474,7 +472,7 @@ public class ProductService {
 				product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
 			}
 			if(!StringUtil.isEmpty(form.getAccrualDate())) {
-				product.setAccrualDate(Integer.valueOf(form.getAccrualDate()));
+				product.setAccrualRepayDays(Integer.valueOf(form.getAccrualDate()));
 			}
 		}
 		{
@@ -548,7 +546,7 @@ public class ProductService {
 			product.setName(form.getName());
 			product.setFullName(form.getFullName());
 			product.setAdministrator(form.getAdministrator());
-			product.setStatus(Product.STATE_Update);
+			product.setState(Product.STATE_Update);
 			product.setReveal(form.getReveal());
 			product.setCurrency(form.getCurrency());
 			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
@@ -560,7 +558,7 @@ public class ProductService {
 			// 付利方式
 			product.setPayModeOid(form.getPayModeOid());
 			if(!StringUtil.isEmpty(form.getPayModeDate())) {
-				product.setPayModeDate(Integer.valueOf(form.getPayModeDate()));
+				product.setPayModeDay(Integer.valueOf(form.getPayModeDate()));
 			}
 		}
 		{
@@ -583,29 +581,29 @@ public class ProductService {
 		{
 			product.setSetupDateType(form.getSetupDateType());
 			if(!StringUtil.isEmpty(form.getInterestsDate())) {
-				product.setInterestsFirstDate(Integer.valueOf(form.getInterestsDate()));
+				product.setInterestsFirstDays(Integer.valueOf(form.getInterestsDate()));
 			}
 			if(!StringUtil.isEmpty(form.getLockPeriod())) {
-				product.setLockPeriod(Integer.valueOf(form.getLockPeriod()));
+				product.setLockPeriodDays(Integer.valueOf(form.getLockPeriod()));
 			}
 			if(!StringUtil.isEmpty(form.getPurchaseConfirmDate())) {
-				product.setPurchaseConfirmDate(Integer.valueOf(form.getPurchaseConfirmDate()));
+				product.setPurchaseConfirmDays(Integer.valueOf(form.getPurchaseConfirmDate()));
 			}
-			product.setPurchaseConfirmDateType(form.getPurchaseConfirmDateType());
+			product.setPurchaseConfirmDaysType(form.getPurchaseConfirmDateType());
 			
 			if(!StringUtil.isEmpty(form.getRedeemConfirmDate())) {
-				product.setRedeemConfirmDate(Integer.valueOf(form.getRedeemConfirmDate()));
+				product.setRedeemConfirmDays(Integer.valueOf(form.getRedeemConfirmDate()));
 			}
-			product.setRedeemConfirmDateType(form.getRedeemConfirmDateType());
-			product.setRedeemTimingTaskDateType(form.getRedeemTimingTaskDateType());
+			product.setRedeemConfirmDaysType(form.getRedeemConfirmDateType());
+			product.setRedeemTimingTaskDaysType(form.getRedeemTimingTaskDateType());
 			product.setRedeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()));
 			
 			if(Product.DATE_TYPE_FirstRackTime.equals(form.getSetupDateType())) {
 				form.setSetupDate(null);
 			} else {
 			//产品成立时间（存续期开始时间）
-				Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
-				product.setSetupDate(new Timestamp(setupDate.getTime()));
+				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
+				product.setSetupDate(new Date(setupDate.getTime()));
 			}
 		}
 		{
@@ -766,7 +764,7 @@ public class ProductService {
 			if(!Product.AUDIT_STATE_Nocommit.equals(product.getAuditState())) {
 				throw AMPException.getException(90012);
 			}
-			product.setStatus(Product.STATE_Auditing);
+			product.setState(Product.STATE_Auditing);
 			product.setAuditState(Product.AUDIT_STATE_Auditing);
 			product.setOperator(operator);
 			product.setUpdateTime(now);
@@ -795,7 +793,7 @@ public class ProductService {
 		}
 		
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Auditpass);
+		product.setState(Product.STATE_Auditpass);
 		product.setAuditState(Product.AUDIT_STATE_Reviewing);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
@@ -820,7 +818,7 @@ public class ProductService {
 			throw AMPException.getException(90013);
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Auditfail);
+		product.setState(Product.STATE_Auditfail);
 		product.setAuditState(Product.AUDIT_STATE_Nocommit);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
@@ -846,7 +844,7 @@ public class ProductService {
 			throw AMPException.getException(90014);
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Reviewpass);
+		product.setState(Product.STATE_Reviewpass);
 		product.setAuditState(Product.AUDIT_STATE_Approvaling);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
@@ -871,7 +869,7 @@ public class ProductService {
 			throw AMPException.getException(90014);
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Reviewfail);
+		product.setState(Product.STATE_Reviewfail);
 		product.setAuditState(Product.AUDIT_STATE_Auditing);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
@@ -897,7 +895,7 @@ public class ProductService {
 			throw AMPException.getException(90015);
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Admitpass);
+		product.setState(Product.STATE_Admitpass);
 		product.setAuditState(Product.AUDIT_STATE_Approval);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
@@ -922,7 +920,7 @@ public class ProductService {
 			throw AMPException.getException(90015);
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setStatus(Product.STATE_Admitfail);
+		product.setState(Product.STATE_Admitfail);
 		product.setAuditState(Product.AUDIT_STATE_Reviewing);
 		product.setOperator(operator);
 		product.setUpdateTime(now);

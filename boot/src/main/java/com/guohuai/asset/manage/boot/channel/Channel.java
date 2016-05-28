@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 @Entity
-@Table(name = "T_GAM_CHANNEL")
+@Table(name = "T_MONEY_PLATFORM_CHANNEL")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor

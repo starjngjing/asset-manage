@@ -27,7 +27,7 @@ import java.sql.Time;
  *
  */
 @Entity
-@Table(name = "T_GAM_PRODUCT")
+@Table(name = "T_GAM_PRODUCT_bak")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
@@ -96,76 +96,299 @@ public class Product implements Serializable {
 	
 	@Id
 	private String oid;//产品序号
-	private String code;//产品编号
-	private String name;//产品名称
-	private String fullName;//产品全称
-	private String administrator;//产品管理人
+	
+	/**
+	 * 产品编号
+	 */
+	private String code;
+	
+	/**
+	 * 产品名称
+	 */
+	private String name;
+	
+	/**
+	 * 产品全称
+	 */
+	private String fullName;
+	/**
+	 * 产品管理人
+	 */
+	private String administrator;
+	
+	/**
+	 * 产品类型
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "typeOid", referencedColumnName = "oid")
-	private Dict type;//产品类型
-	private String reveal;//额外增信
-	private String currency;//币种
-	private String incomeCalcBasis;//收益计算基础
-	private BigDecimal manageRate;//托管费率
-	private BigDecimal fixedManageRate;//固定管理费率
-	private String accrualCycleOid;//收益结转周期
-	private String payModeOid;//付利方式
-	private int payModeDate;//付利具体几号
-	private String raiseStartDateType;//募集开始时间类型
-	private Timestamp raiseStartDate;//募集开始时间
-	private int raisePeriod;//募集期:()个自然日
-	private int lockPeriod;//锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
-	private int interestsFirstDate;//起息日:募集满额后()个自然日
-	private int durationPeriod;//存续期:()个自然日
-	private BigDecimal expAror;//预期年化收益率
-	private BigDecimal expArorSec;//预期年化收益率区间
-	private long raisedTotalNumber;//募集总份额
-	private BigDecimal netUnitShare;//单位份额净值
-	private int investMin;//单笔投资最低份额
-	private long investMax;//单笔投资最高份额
-	private long purchaseLimit;//申购上限
-	private int investAdditional;//单笔投资追加份额
-	private int accrualDate;//还本付息日 存续期结束后第()个自然日
-	private int netMaxRredeemDay;//单日净赎回上限
-	private int minRredeem;//单笔净赎回下限
-	private int purchaseConfirmDate;//申购确认日:()个
-	private String purchaseConfirmDateType;//申购确认日类型:自然日或交易日
-	private int redeemConfirmDate;//赎回确认日:()个
-	private String redeemConfirmDateType;//赎回确认日类型:自然日或交易日
-	private String setupDateType;//产品成立时间类型
-	private Timestamp setupDate;//产品成立时间（存续期开始时间）
-	private int redeemTimingTaskDate;//赎回定时任务天数	 默认每日
-	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
-	private Time redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
-	private String investComment;//投资标的
-	private String instruction;//产品说明
-	private String riskLevel;//风险等级
-	private String fileKeys;//附加文件
-	private String status;//产品状态
+	@JoinColumn(name = "type", referencedColumnName = "oid")
+	private Dict type;
 	
-	private Timestamp createTime;//创建时间
-	private Timestamp updateTime;//更新时间
-	private String operator;//操作员
-	private String publisher;//发行人
-	private long currentVolume;//当前份额
-	private long collectedVolume;//已募份额
-	private int purchaseNum;//已投次数
-	private int lockCollectedVolume;//锁定已募份额
+	/**
+	 * 额外增信
+	 */
+	private String reveal;
+	/**
+	 * 币种
+	 */
+	private String currency;
 	
-	private Timestamp raiseEndDate;//募集结束时间
-	private Timestamp raiseFailDate;//募集宣告失败时间
-	private Timestamp durationPeriodEndDate;//存续期结束时间
-	private Timestamp accrualLastDate;//到期还款时间
-	private String isOpenPurchase;//是否开放申购期
-	private String isOpenRemeed;//是否开放赎回期
-	private Date endDate;//产品清算（结束）时间
-	private Timestamp durationRepaymentTime;//存续期内还款时间
-	private String stems;//来源
+	/**
+	 * 收益计算基础
+	 */
+	private String incomeCalcBasis;
+	
+	/**
+	 * 托管费率
+	 */
+	private BigDecimal manageRate = new BigDecimal(0);
+	
+	/**
+	 * 固定管理费率
+	 */
+	private BigDecimal fixedManageRate = new BigDecimal(0);
+	
+	/**
+	 * 收益结转周期
+	 */
+	private String accrualCycleOid;
+	
+	/**
+	 * 付利方式
+	 */
+	private String payModeOid;
+	
+	/**
+	 * 付利具体第几天
+	 */
+	private int payModeDay;
+	
+	/**
+	 * 募集开始时间类型
+	 */
+	private String raiseStartDateType;
+	
+	/**
+	 * 募集开始日
+	 */
+	private Date raiseStartDate;
+	
+	/**
+	 * 募集期
+	 */
+	private Integer raisePeriodDays = 0;
+	/**
+	 * 锁定期
+	 */
+	private Integer lockPeriodDays = 0;
+	/**
+	 * 起息日
+	 */
+	private Integer interestsFirstDays = 0;
+	/**
+	 * 存续期
+	 */
+	private Integer durationPeriodDays = 0;
+	
+	/**
+	 * 预期年化收益率
+	 */
+	private BigDecimal expAror = new BigDecimal(0);
+	
+	/**
+	 * 申购上限
+	 */
+	private long purchaseLimit;
+	
+	/**
+	 * 预期年化收益率区间
+	 */
+	private BigDecimal expArorSec = new BigDecimal(0);
+	
+	/**
+	 * 募集总份额
+	 */
+	private Long raisedTotalNumber = 0l;
+	/**
+	 * 单位份额净值
+	 */
+	private BigDecimal netUnitShare = new BigDecimal(0);
+	/**
+	 * 单笔投资最低份额
+	 */
+	private Integer investMin = 0;
+	/**
+	 * 单笔投资追加份额
+	 */
+	private Integer investAdditional = 0;
+	/**
+	 * 投资最高份额
+	 */
+	private Long investMax = 0l;
+	/**
+	 * 单笔净赎回下限
+	 */
+	private Integer minRredeem = 0;
+	/**
+	 * 单日净赎回上限	
+	 */
+	private Integer netMaxRredeemDay = 0;
+	/**
+	 * 还本付息日
+	 */
+	private Integer accrualRepayDays = 0;
+	/**
+	 * 申购确认日
+	 */
+	private Integer purchaseConfirmDays = 0;
+	/**
+	 * 申购确认日类型
+	 */
+	private String purchaseConfirmDaysType;
+	/**
+	 * 赎回确认日
+	 */
+	private Integer redeemConfirmDays = 0;
+	/**
+	 * 赎回确认日类型	
+	 */
+	private String redeemConfirmDaysType;
+	/**
+	 * 产品成立时间类型
+	 */
+	private String setupDateType;
+	/**
+	 * 产品成立时间
+	 */
+	private Date setupDate;
+	/**
+	 * 赎回定时任务天数
+	 */
+	private Integer redeemTimingTaskDays = 0;
+	/**
+	 * 赎回定时任务类型
+	 */
+	private String redeemTimingTaskDaysType;
+	/**
+	 * 赎回定时任务时间
+	 */
+	private Time redeemTimingTaskTime;
+	/**
+	 * 投资标的
+	 */
+	private String investComment;
+	/**
+	 * 产品说明
+	 */
+	private String instruction;
+	/**
+	 * 风险等级
+	 */
+	private String riskLevel;
+	/**
+	 * 附加文件
+	 */
+	private String fileKeys;
+	/**
+	 * 产品状态
+	 */
+	private String state;
+	
+	/**
+	 * 创建时间
+	 */
+	private Timestamp createTime;
+	
+	/**
+	 * 更新时间
+	 */
+	private Timestamp updateTime;
+	
+	/**
+	 * 操作员
+	 */
+	private String operator;
+	/**
+	 * 募集结束日期
+	 */
+	private Date raiseEndDate;
+	/**
+	 * 募集宣告失败日期
+	 */
+	private Date raiseFailDate;
+	/**
+	 * 存续期结束日期
+	 */
+	private Date durationPeriodEndDate;
+	/**
+	 * 开放申购期
+	 */
+	private String isOpenPurchase;
+	/**
+	 * 开放赎回期
+	 */
+	private String isOpenRemeed;
+	
+	/**
+	 * 产品清算（结束）日期
+	 */
+	private Date endDate;
+	
+	/**
+	 * 存续期内还款日期
+	 */
+	private Date durationRepaymentDate;
+	/**
+	 * 来源
+	 */
+	private String stems;
+	/**
+	 * 是否删除
+	 */
 	private String isDeleted;
+	/**
+	 * 审核状态
+	 */
+	private String auditState;
+	/**
+	 * 当前份额
+	 */
+	private BigDecimal currentMoney = new BigDecimal(0);
+	/**
+	 * 已募份额
+	 */
+	private Integer collectedVolume = 0;
+	/**
+	 * 已投次数
+	 */
+	private Integer purchaseNum = 0;
+	/**
+	 * 锁定已募份额
+	 */
+	private Integer lockCollectedVolume = 0;
 	
+	/**
+	 * 还本付息日期
+	 */
+	private Date repayDate;
+	
+	/**
+	 * 付息状态
+	 */
+	private String repayInterestStatus ;
+	
+	/**
+	 * 还本状态
+	 */
+	private String repayLoanStatus;
+	/**
+	 * 发行人
+	 */
+	private String publisher;
+	/**
+	 * 资产配置
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
-	private AssetPoolEntity assetPool;//资产配置
-	private String auditState;//审核状态
+	private AssetPoolEntity assetPool;
 
 }

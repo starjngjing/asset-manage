@@ -49,10 +49,10 @@ public class SavePeriodicProductForm implements Serializable {
 	private String raiseStartDateType;//募集开始时间类型
 	@DateTimeFormat(pattern = "YYYY-MM-DD HH:MM:SS")
 	private String raiseStatrtDate;//募集开始时间
-	@Range(min = 1, max = 240, message = "募集期参数错误")
+	@Range(min = 0, max = 240, message = "募集期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "募集期参数错误")
 	private String raisePeriod;//募集期:()个自然日
-	@Range(min = 1, max = 240, message = "起息日参数错误")
+	@Range(min = 0, max = 240, message = "起息日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "起息日参数错误")
 	private String interestsFirstDate;//起息日:募集满额后()个自然日
 	@Range(min = 1, max = 240, message = "存续期参数错误")

@@ -52,10 +52,10 @@ public class SaveCurrentProductForm implements Serializable {
 	private String setupDateType;//产品成立时间类型
 	@DateTimeFormat(pattern = "YYYY-MM-DD HH:MM:SS")
 	private String setupDate;//成立时间
-	@Range(min = 1, max = 240, message = "起息日参数错误")
+	@Range(min = 0, max = 240, message = "起息日参数错误")
 	@Digits(integer = 4, fraction = 0, message = "起息日参数错误")
 	private String interestsDate;//起息日:募集满额后()个自然日
-	@Range(min = 1, max = 240, message = "锁定期参数错误")
+	@Range(min = 0, max = 240, message = "锁定期参数错误")
 	@Digits(integer = 4, fraction = 0, message = "锁定期参数错误")
 	private String lockPeriod;//锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
 	@Digits(integer = 4, fraction = 4, message = "预期年化收益参数错误")

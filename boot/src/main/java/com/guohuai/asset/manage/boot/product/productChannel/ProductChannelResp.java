@@ -21,7 +21,7 @@ public class ProductChannelResp extends BaseResp {
 		this.productName = pc.getProduct().getName();//产品
 		this.productCode = pc.getProduct().getCode();//产品
 		this.productFullName = pc.getProduct().getFullName();//产品
-		this.productStatus = pc.getProduct().getStatus();//产品
+		this.productStatus = pc.getProduct().getState();//产品
 		this.operator = pc.getOperator();//申请人
 		this.channelOid = pc.getChannel().getChannelName();//渠道
 		this.channelName = pc.getChannel().getOid();//渠道

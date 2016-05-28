@@ -30,9 +30,9 @@ public class ProductResp extends BaseResp {
 			this.typeName = p.getType().getName();
 		}
 		this.raiseStartDate = p.getRaiseStartDate()!=null?DateUtil.formatDate(p.getRaiseStartDate().getTime()):"";//募集开始时间
-		this.raisePeriod = p.getRaisePeriod();//募集期:()个自然日
-		this.interestsFirstDate = p.getInterestsFirstDate();//起息日:募集满额后()个自然日
-		this.durationPeriod = p.getDurationPeriod();//存续期:()个自然日
+		this.raisePeriod = p.getRaisePeriodDays();//募集期:()个自然日
+		this.interestsFirstDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
+		this.durationPeriod = p.getDurationPeriodDays();//存续期:()个自然日
 		this.expAror = p.getExpAror().toPlainString();//预期年化收益率
 		this.expArorSec = p.getExpArorSec().toPlainString();//预期年化收益率区间
 		this.raisedTotalNumber = p.getRaisedTotalNumber();//募集总份额
@@ -43,18 +43,18 @@ public class ProductResp extends BaseResp {
 		this.netMaxRredeemDay = p.getNetMaxRredeemDay();//单日净赎回上限
 		this.minRredeem = p.getMinRredeem();
 		this.accrualCycleOid = p.getAccrualCycleOid();
-		this.purchaseConfirmDate = p.getPurchaseConfirmDate();//申购确认日:()个
-		this.purchaseConfirmDateType = p.getPurchaseConfirmDateType();//申购确认日类型:自然日或交易日
-		this.redeemConfirmDate = p.getRedeemConfirmDate();//赎回确认日:()个
-		this.redeemConfirmDateType = p.getRedeemConfirmDateType();//赎回确认日类型:自然日或交易日
-		this.redeemTimingTaskDateType = p.getRedeemTimingTaskDateType();//赎回定时任务类型:自然日或交易日
+		this.purchaseConfirmDate = p.getPurchaseConfirmDays();//申购确认日:()个
+		this.purchaseConfirmDateType = p.getPurchaseConfirmDaysType();//申购确认日类型:自然日或交易日
+		this.redeemConfirmDate = p.getRedeemConfirmDays();//赎回确认日:()个
+		this.redeemConfirmDateType = p.getRedeemConfirmDaysType();//赎回确认日类型:自然日或交易日
+		this.redeemTimingTaskDateType = p.getRedeemTimingTaskDaysType();//赎回定时任务类型:自然日或交易日
 		this.redeemTimingTaskTime = p.getRedeemTimingTaskTime()!=null?DateUtil.format(p.getRedeemTimingTaskTime().getTime(), DateUtil.timePattern):"";//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
-		this.accrualDate = p.getAccrualDate();//还本付息日 存续期结束后第()个自然日
+		this.accrualDate = p.getAccrualRepayDays();//还本付息日 存续期结束后第()个自然日
 		this.investComment = p.getInvestComment();//投资标的
 		this.instruction = p.getInstruction();//产品说明
 		this.riskLevel = p.getRiskLevel();//风险等级
 		this.fileKeys = p.getFileKeys();//附加文件
-		this.status = p.getStatus();//产品状态
+		this.status = p.getState();//产品状态
 		this.createTime = DateUtil.formatDate(p.getCreateTime().getTime());//创建时间
 		this.updateTime = DateUtil.formatDate(p.getUpdateTime().getTime());//更新时间
 		this.operator = p.getOperator();//操作员
