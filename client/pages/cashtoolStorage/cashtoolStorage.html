@@ -48,50 +48,30 @@
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label>最新流通份额</label>
-              <div class="row form-style">
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value="" class="icheck" checked> 不限
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value="-1000000" class="icheck"> <100万
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value=":1000000-10000000" class="icheck"> 100万 - 1000万
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value=":1000000-100000000" class="icheck"> 1000万 - 1亿
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value=":100000000-1000000000" class="icheck"> 1亿 - 10亿
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="circulationShares" value=":1000000000-" class="icheck"> >10 亿
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>最新流通份额</label>
+                  <select name="circulationShares" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="-1000000">小于100万</option>
+                    <option value=":1000000-10000000">100万 - 1000万</option>
+                    <option value=":1000000-100000000">1000万 - 1亿</option>
+                    <option value=":100000000-1000000000">1亿 - 10亿</option>
+                    <option value=":1000000000-">大于10亿</option>
+                  </select>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label>7日年化收益率</label>
-              <div class="row form-style">
-                <div class="col-sm-2">
-                  <input type="radio" name="weeklyYield" value="" class="icheck" checked> 不限
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="weeklyYield" value="-0.03" class="icheck"> <3%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="weeklyYield" value=":0.03-0.06" class="icheck"> 3% - 6%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="weeklyYield" value=":0.06-0.1" class="icheck"> 6% - 10%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="weeklyYield" value=":0.1-0.15" class="icheck"> 10% - 15%
-                </div>
-                <div class="col-sm-2">
-                  <input type="radio" name="expAror" value=":0.15" class="icheck"> >15%
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>7日年化收益率</label>
+                  <select name="weeklyYield" class="form-control input-sm">
+                    <option value="" selected>不限</option>
+                    <option value="-0.03">小于3%</option>
+                    <option value=":0.03-0.06">3% - 6%</option>
+                    <option value=":0.06-0.1">6% - 10%</option>
+                    <option value=":0.1-0.15">10% - 15%</option>
+                    <option value=":0.15-">大于15%</option>
+                  </select>
                 </div>
               </div>
             </div>
