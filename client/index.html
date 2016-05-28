@@ -65,231 +65,280 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           <!-- search form -->
-          <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="搜索导航栏">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form>
+          <!--<form action="#" method="get" class="sidebar-form">-->
+            <!--<div class="input-group">-->
+              <!--<input type="text" name="q" class="form-control" placeholder="搜索导航栏">-->
+              <!--<span class="input-group-btn">-->
+                <!--<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>-->
+              <!--</span>-->
+            <!--</div>-->
+          <!--</form>-->
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul id="sidebarMenu" class="sidebar-menu">
-            <li class="header">渠道管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="channel">
-                <i class="fa fa-adn"></i>
-                <span>全部渠道</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="channelapply">
-                <i class="fa fa-adn"></i>
-                <span>渠道审批</span>
-              </a>
-            </li>
-             <li>
-              <a href="javascript:void(0)" data-gh-route="channeldetail">
-                <i class="fa fa-adn"></i>
-                <span>渠道详情</span>
-              </a>
-            </li>
-            <li class="header">投资标的管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetApply">
-                <i class="fa fa-adn"></i>
-                <span>标的申请管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetAccess">
-                <i class="fa fa-amazon"></i>
-                <span>标的会前审查</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetConvention">
-                <i class="fa fa-android"></i>
-                <span>标的过会管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetVote">
-                <i class="fa fa-angellist"></i>
-                <span>标的过会表决</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetStorage">
-                <i class="fa fa-apple"></i>
-                <span>投资标的备选库</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetHold">
-                <i class="fa fa-apple"></i>
-                <span>持仓标的管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetNotHold">
-                <i class="fa fa-apple"></i>
-                <span>未持仓标的管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="targetHistory">
-                <i class="fa fa-apple"></i>
-                <span>历史标的管理</span>
-              </a>
-            </li>
-            <li class="header">现金类管理工具管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="cashtoolApply">
-                <i class="fa fa-adn"></i>
-                <span>现金类管理工具申请</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="cashtoolAccess">
-                <i class="fa fa-amazon"></i>
-                <span>现金类管理工具审查</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="cashtoolStorage">
-                <i class="fa fa-amazon"></i>
-                <span>现金类管理工具备选库</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="cashtoolHistory">
-                <i class="fa fa-amazon"></i>
-                <span>历史现金类管理工具</span>
-              </a>
-            </li>
-            <li class="header">产品管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="productDesign">
-                <i class="fa fa-behance"></i>
-                <span>产品申请管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="productAudit">
-                <i class="fa fa-bitbucket"></i>
-                <span>审核列表</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="productReview">
-                <i class="fa fa-bitcoin"></i>
-                <span>复核列表</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="productAccess">
-                <i class="fa fa-black-tie"></i>
-                <span>产品准入管理</span>
-              </a>
-            </li>
             <li class="header">运营管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="AssetPool">
-                <i class="fa fa-buysellads"></i>
-                <span>资产池管理</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="AssetPoolDuration">
-                <i class="fa fa-buysellads"></i>
-                <span>资产池存续期管理</span>
-              </a>
-            </li>
-            <li>
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-cc-amex"></i>
-                <span>持有人名册管理</span>
+                <i class="fa fa-truck"></i>
+                <span>渠道管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="channel">
+                    <i class="fa fa-circle-o"></i> 全部渠道
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="channelapply">
+                    <i class="fa fa-circle-o"></i> 渠道审批
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="channeldetail">
+                    <i class="fa fa-circle-o"></i> 渠道详情
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-cc-visa"></i>
-                <span>未确认持有人订单管理</span>
+                <i class="fa fa-building-o"></i>
+                <span>投资标的管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetApply">
+                    <i class="fa fa-circle-o"></i> 标的申请管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetAccess">
+                    <i class="fa fa-circle-o"></i> 标的会前审查
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetConvention">
+                    <i class="fa fa-circle-o"></i> 标的过会管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetVote">
+                    <i class="fa fa-circle-o"></i> 标的过会表决
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetStorage">
+                    <i class="fa fa-circle-o"></i> 投资标的备选库
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetHold">
+                    <i class="fa fa-circle-o"></i> 持仓标的管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetNotHold">
+                    <i class="fa fa-circle-o"></i> 未持仓标的管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="targetHistory">
+                    <i class="fa fa-circle-o"></i> 历史标的管理
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li class="header">资金管理</li>
-            <li>
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-chrome"></i>
-                <span>资金流管理</span>
+                <i class="fa fa-credit-card"></i>
+                <span>现金类管理工具管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="cashtoolApply">
+                    <i class="fa fa-circle-o"></i> 现金类管理工具申请
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="cashtoolAccess">
+                    <i class="fa fa-circle-o"></i> 现金类管理工具审查
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="cashtoolStorage">
+                    <i class="fa fa-circle-o"></i> 现金类管理工具备选库
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="cashtoolHistory">
+                    <i class="fa fa-circle-o"></i> 历史现金类管理工具
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-codepen"></i>
-                <span>备付金管理</span>
+                <i class="fa fa-cubes"></i>
+                <span>产品管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="productDesign">
+                    <i class="fa fa-circle-o"></i> 产品申请管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="productAudit">
+                    <i class="fa fa-circle-o"></i> 审核列表
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="productReview">
+                    <i class="fa fa-circle-o"></i> 复核列表
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="productAccess">
+                    <i class="fa fa-circle-o"></i> 产品准入管理
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-connectdevelop"></i>
-                <span>日常出入金管理</span>
+                <i class="fa fa-tachometer"></i>
+                <span>运营管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="AssetPool">
+                    <i class="fa fa-circle-o"></i> 资产池管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="AssetPoolDuration">
+                    <i class="fa fa-circle-o"></i> 资产池存续期管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="fa fa-circle-o"></i> 持有人名册管理
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)">
+                    <i class="fa fa-circle-o"></i> 未确认持有人订单管理
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li class="header">订单管理</li>
-            <li>
+            <!--<li class="treeview">-->
+              <!--<a href="javascript:void(0)">-->
+                <!--<i class="fa fa-money"></i>-->
+                <!--<span>资金管理</span>-->
+                <!--<i class="fa fa-angle-left pull-right"></i>-->
+              <!--</a>-->
+              <!--<ul class="treeview-menu">-->
+                <!--<li>-->
+                  <!--<a href="javascript:void(0)">-->
+                    <!--<i class="fa fa-circle-o"></i> 资金流管理-->
+                  <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                  <!--<a href="javascript:void(0)">-->
+                    <!--<i class="fa fa-circle-o"></i> 备付金管理-->
+                  <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                  <!--<a href="javascript:void(0)">-->
+                    <!--<i class="fa fa-circle-o"></i> 日常出入金管理-->
+                  <!--</a>-->
+                <!--</li>-->
+              <!--</ul>-->
+            <!--</li>-->
+            <!--<li class="treeview">-->
+              <!--<a href="javascript:void(0)">-->
+                <!--<i class="fa fa-adn"></i>-->
+                <!--<span>订单管理</span>-->
+                <!--<i class="fa fa-angle-left pull-right"></i>-->
+              <!--</a>-->
+              <!--<ul class="treeview-menu">-->
+                <!--<li>-->
+                  <!--<a href="javascript:void(0)">-->
+                    <!--<i class="fa fa-circle-o"></i> 销售平台订单管理-->
+                  <!--</a>-->
+                <!--</li>-->
+              <!--</ul>-->
+            <!--</li>-->
+            <li class="treeview">
               <a href="javascript:void(0)">
-                <i class="fa fa-connectdevelop"></i>
-                <span>销售平台订单管理</span>
+                <i class="fa fa-book"></i>
+                <span>会计分录</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="document">
+                    <i class="fa fa-circle-o"></i> 凭证查询
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li class="header">会计分录</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="acctAccount">
-                <i class="fa fa-connectdevelop"></i>
-                <span>科目设置</span>
+            <li class="header">系统设置</li>
+            <li class="treeview">
+              <a href="javascript:void(0)">
+                <i class="fa fa-user"></i>
+                <span>权限管理</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="role">
+                    <i class="fa fa-circle-o"></i> 角色管理
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="docTemplate">
-                <i class="fa fa-connectdevelop"></i>
-                <span>凭证模板</span>
+            <li class="treeview">
+              <a href="javascript:void(0)">
+                <i class="fa fa-cogs"></i>
+                <span>系统配置</span>
+                <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="ccpWarranty">
+                    <i class="fa fa-circle-o"></i> 资产准入评分模型
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="riskIndicate">
+                    <i class="fa fa-circle-o"></i> 风险关键指标维护
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="ccpRiskScore">
+                    <i class="fa fa-circle-o"></i> 信用等级评分模型
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="acctAccount">
+                    <i class="fa fa-circle-o"></i> 科目设置
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" data-gh-route="docTemplate">
+                    <i class="fa fa-circle-o"></i> 凭证模板
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="document">
-                <i class="fa fa-connectdevelop"></i>
-                <span>凭证查询</span>
-              </a>
-            </li>
-            <li class="header">权限管理</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="role">
-                <i class="fa fa-connectdevelop"></i>
-                <span>角色管理</span>
-              </a>
-            </li>
-            <li class="header">系统配置</li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="ccpWarranty">
-                <i class="fa fa-connectdevelop"></i>
-                <span>资产准入评分模型</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="riskIndicate">
-                <i class="fa fa-connectdevelop"></i>
-                <span>风险关键指标维护</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" data-gh-route="ccpRiskScore">
-                <i class="fa fa-connectdevelop"></i>
-                <span>信用等级评分模型</span>
-              </a>
-            </li>
+
           </ul>
         </section>
         <!-- /.sidebar -->

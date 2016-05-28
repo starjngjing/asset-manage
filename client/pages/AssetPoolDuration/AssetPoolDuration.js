@@ -108,8 +108,8 @@ define([
 
       // 出入金明细表格配置
       var accountDetailPageOptions = {
-        //page: 1,
-        //rows: 10,
+        page: 1,
+        rows: 10,
         pid: pid
       }
       var accountDetailTableConfig = {
@@ -121,16 +121,16 @@ define([
             origin.success(rlt)
           })
         },
-        //pageNumber: accountDetailPageOptions.page,
-        //pageSize: accountDetailPageOptions.rows,
-        //pagination: true,
+        pageNumber: accountDetailPageOptions.page,
+        pageSize: accountDetailPageOptions.rows,
+        pagination: true,
         sidePagination: 'server',
-        //pageList: [10, 20, 30, 50, 100],
-        //queryParams: function (val) {
-        //  accountDetailPageOptions.rows = val.limit
-        //  accountDetailPageOptions.page = parseInt(val.offset / val.limit) + 1
-        //  return val
-        //},
+        pageList: [10, 20, 30, 50, 100],
+        queryParams: function (val) {
+          accountDetailPageOptions.rows = val.limit
+          accountDetailPageOptions.page = parseInt(val.offset / val.limit) + 1
+          return val
+        },
         columns: [
           {
             width: 60,
