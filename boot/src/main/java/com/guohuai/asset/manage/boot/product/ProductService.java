@@ -147,9 +147,9 @@ public class ProductService {
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
 				pb.investMax(Long.valueOf(form.getInvestMax()));
 			}
-			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
-				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
-			}
+//			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
+//				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
+//			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
 				pb.investAdditional(Integer.valueOf(form.getInvestAdditional()));
 			}
@@ -272,9 +272,9 @@ public class ProductService {
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
 				pb.investMax(Long.valueOf(form.getInvestMax()));
 			}
-			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
-				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
-			}
+//			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
+//				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
+//			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
 				pb.investAdditional(Integer.valueOf(form.getInvestAdditional()));
 			}
@@ -462,9 +462,9 @@ public class ProductService {
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
 				product.setInvestMax(Long.valueOf(form.getInvestMax()));
 			}
-			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
-				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
-			}
+//			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
+//				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
+//			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
 				product.setInvestAdditional(Integer.valueOf(form.getInvestAdditional()));
 			}
@@ -613,9 +613,9 @@ public class ProductService {
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
 				product.setInvestMax(Long.valueOf(form.getInvestMax()));
 			}
-			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
-				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
-			}
+//			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
+//				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
+//			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
 				product.setInvestAdditional(Integer.valueOf(form.getInvestAdditional()));
 			}

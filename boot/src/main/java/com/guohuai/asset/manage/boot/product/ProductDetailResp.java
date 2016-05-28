@@ -77,7 +77,7 @@ public class ProductDetailResp extends BaseResp {
 		
 		this.investMin = p.getInvestMin();//单笔投资最低份额
 		this.investMax = p.getInvestMax();//单笔投资最高份额
-		this.purchaseLimit = p.getPurchaseLimit();//申购上限
+//		this.purchaseLimit = p.getPurchaseLimit();//申购上限
 		this.investAdditional = p.getInvestAdditional();//单笔投资追加份额
 		this.netUnitShare = p.getNetUnitShare().toPlainString();//单位份额净值
 		this.investComment = p.getInvestComment();//投资标的
@@ -138,7 +138,7 @@ public class ProductDetailResp extends BaseResp {
 		this.redeemTimingTaskTimeStr = !"".equals(this.redeemTimingTaskTime)?"每"   +(StringUtil.isEmpty(p.getRedeemTimingTaskDaysType())==true?"":ProductEnum.enums.get(p.getRedeemTimingTaskDaysType()))+   ""+this.redeemTimingTaskTime+"发起代付指令":"";
 		this.investMinStr = p.getInvestMin()>0?p.getInvestMin()+"份":"";
 		this.investMaxStr = p.getInvestMax()>0?p.getInvestMax()+"份":"";
-		this.purchaseLimitStr = p.getPurchaseLimit()>0?p.getPurchaseLimit()+"份":"";
+//		this.purchaseLimitStr = p.getPurchaseLimit()>0?p.getPurchaseLimit()+"份":"";
 		this.investAdditionalStr = p.getInvestAdditional()>0?p.getInvestAdditional()+"份":"";
 		this.netUnitShareStr = !"".equals(this.netUnitShare)?this.netUnitShare+"元":"";
 		if("DAY".equals(this.payModeOid)) {
@@ -197,7 +197,7 @@ public class ProductDetailResp extends BaseResp {
 	private String redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
 	private int investMin;//单笔投资最低份额
 	private long investMax;//单笔投资最高份额
-	private long purchaseLimit;//申购上限
+//	private long purchaseLimit;//申购上限
 	private int investAdditional;//单笔投资追加份额
 	private String netUnitShare;//单位份额净值
 	private String investComment;//投资标的
@@ -253,7 +253,7 @@ public class ProductDetailResp extends BaseResp {
 	private String redeemTimingTaskTimeStr;
 	private String investMinStr;//单笔投资最低份额
 	private String investMaxStr;//单笔投资最高份额
-	private String purchaseLimitStr;//申购上限
+//	private String purchaseLimitStr;//申购上限
 	private String investAdditionalStr;//单笔投资追加份额
 	private String netUnitShareStr;//单位份额净值
 

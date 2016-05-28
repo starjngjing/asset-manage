@@ -194,10 +194,10 @@ public class Product implements Serializable {
 	 */
 	private BigDecimal expAror = new BigDecimal(0);
 	
-	/**
-	 * 申购上限
-	 */
-	private long purchaseLimit;
+//	/**
+//	 * 申购上限
+//	 */
+//	private long purchaseLimit;
 	
 	/**
 	 * 预期年化收益率区间
