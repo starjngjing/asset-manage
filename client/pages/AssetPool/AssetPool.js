@@ -155,8 +155,20 @@ define([
       $('#assetPoolAdd').on('click', function () {
         $('#addAssetPoolModal').modal('show')
       })
-      // 新增资产池表单验证初始化
+      // 新增/修改资产池表单验证初始化
       $('#addAssetPoolForm').validator({
+        custom: {
+          validfloat: util.form.validator.validfloat,
+          validint: util.form.validator.validint,
+          validpercentage: validpercentage
+        },
+        errors: {
+          validfloat: '数据格式不正确',
+          validint: '数据格式不正确',
+          validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+        }
+      })
+      $('#updateAssetPoolForm').validator({
         custom: {
           validfloat: util.form.validator.validfloat,
           validint: util.form.validator.validint,

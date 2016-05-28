@@ -12,12 +12,23 @@ define([
     init: function () {
       var pid = util.nav.getHashObj(location.hash).id
 
-      // 饼图生成
-      var pieChart = echarts.init(document.getElementById('pieChart'))
-      pieChart.setOption(getPieOptions(config))
-      // 柱状图生成
-      var barChart = echarts.init(document.getElementById('barChart'))
-      barChart.setOption(getBarOptions(config))
+      http.post(config.api.duration.assetPool.getById, {
+        data: {
+          oid: pid
+        },
+        contentType: 'form'
+      }, function (json) {
+        console.log(json.result)
+        var detail = json.result
+        $('#detailPoolScale').html(detail.scale)
+        $('#detailPoolCash').html(detail.cashPosition)
+        // 饼图生成
+        var pieChart = echarts.init(document.getElementById('pieChart'))
+        pieChart.setOption(getPieOptions(config, detail))
+        // 柱状图生成
+        var barChart = echarts.init(document.getElementById('barChart'))
+        barChart.setOption(getBarOptions(config, detail))
+      })
 
       // 资产申购类型radio change事件
       $(document.buyAssetForm.buyType).on('ifChecked', function () {
@@ -1159,11 +1170,41 @@ define([
           }
         })
       })
+
+      // 修改资产池投资范围select2初始化
+      $(document.updateAssetPoolForm.scopes).select2()
+      // 修改资产池表单验证初始化
+      $('#updateAssetPoolForm').validator({
+        custom: {
+          validfloat: util.form.validator.validfloat,
+          validint: util.form.validator.validint,
+          validpercentage: validpercentage
+        },
+        errors: {
+          validfloat: '数据格式不正确',
+          validint: '数据格式不正确',
+          validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+        }
+      })
+
+      // 编辑账户按钮点击事件
+      $('#updateAccount').on('click', function () {
+        http.post(config.api.duration.assetPool.getById, {
+          data: {
+            oid: pid
+          },
+          contentType: 'form'
+        }, function (json) {
+          $$.formAutoFix($('#updateAssetPoolForm'), json.result)
+          $(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
+          $('#updateAssetPoolModal').modal('show')
+        })
+      })
     }
   }
 })
 
-function getBarOptions (config) {
+function getBarOptions (config, source) {
   return {
     tooltip: {
       trigger: 'axis'
@@ -1171,7 +1212,7 @@ function getBarOptions (config) {
     legend: {
       orient: 'vertical',
       x: 'left',
-      data:['现金','冻结资金','在途资金'],
+      data:['可用现金','冻结资金','在途资金'],
     },
     grid: {
       top: 10,
@@ -1190,7 +1231,7 @@ function getBarOptions (config) {
       data:[]
     }],
     series: [{
-      name: '现金',
+      name: '可用现金',
       type: 'bar',
       label: {
         normal: {
@@ -1201,7 +1242,7 @@ function getBarOptions (config) {
           }
         }
       },
-      data: [100]
+      data: [source.cashPosition]
     }, {
       name: '冻结资金',
       type: 'bar',
@@ -1214,7 +1255,7 @@ function getBarOptions (config) {
           }
         }
       },
-      data: [30]
+      data: [source.freezeCash]
     }, {
       name: '在途资金',
       type: 'bar',
@@ -1228,13 +1269,13 @@ function getBarOptions (config) {
           }
         }
       },
-      data: [80]
+      data: [source.transitCash]
     }],
     color: config.colors
   }
 }
 
-function getPieOptions (config) {
+function getPieOptions (config, source) {
   return {
     tooltip: {
       trigger: 'item',
@@ -1243,11 +1284,11 @@ function getPieOptions (config) {
     legend: {
       orient: 'vertical',
       x: 'left',
-      data:['现金','冻结资金','在途资金']
+      data:['现金','现金类管理工具','信托计划']
     },
     series: [
       {
-        name:'资金构成',
+        name:'投资占比',
         type:'pie',
         radius: ['50%', '70%'],
         avoidLabelOverlap: false,
@@ -1270,12 +1311,23 @@ function getPieOptions (config) {
           }
         },
         data:[
-          {value:100, name:'现金'},
-          {value:450, name:'冻结资金'},
-          {value:300, name:'在途资金'}
+          {value:source.cashRate, name:'现金'},
+          {value:source.cashtoolRate, name:'现金类管理工具'},
+          {value:source.targetRate, name:'信托计划'}
         ]
       }
     ],
     color: config.colors
   }
+}
+
+// 自定义验证 - 现金比例/现金管理类工具比例/信托计划比例 加起来不能超过100
+function validpercentage($el) {
+  var form = $el.closest('form')
+  var parts = form.find('input[data-validpercentage]')
+  var percentage = 0
+  parts.each(function (index, item) {
+    percentage += Number(item.value)
+  })
+  return !(percentage > 100)
 }
