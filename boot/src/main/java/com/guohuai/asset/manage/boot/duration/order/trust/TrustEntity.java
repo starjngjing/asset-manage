@@ -21,12 +21,22 @@ import lombok.Data;
 public class TrustEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	/**
 	 * 状态
 	 */
 	public static final String INVESTING = "0";
 	public static final String INVESTEND = "-1";
+	
+	public TrustEntity() {
+		this.confirmAmount = init0;
+		this.investAmount = init0;
+		this.transOutAmount = init0;
+		this.transOutFee = init0;
+		this.transInAmount = init0;
+		this.transInFee = init0;
+	}
 
 	@Id
 	private String oid;

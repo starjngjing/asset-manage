@@ -659,7 +659,8 @@ public class OrderService {
 			trustEntity.setInvestAmount(trustEntity.getInvestAmount().subtract(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			trustEntity.setTransOutAmount(trustEntity.getTransOutAmount().add(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			trustEntity.setTransOutFee(trustEntity.getTransOutFee().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-			trustEntity.setState(TrustEntity.INVESTEND);
+			if (trustEntity.getInvestAmount().compareTo(BigDecimal.ZERO) < 1)
+				trustEntity.setState(TrustEntity.INVESTEND);
 			trustService.save(trustEntity);
 		} else
 			order.setState(TrustTransEntity.STATE_FAIL);
@@ -858,6 +859,7 @@ public class OrderService {
 					form.setCirculationShares(cashTool.getCirculationShares());
 					form.setRiskLevel(cashTool.getRiskLevel());
 					form.setDividendType(cashTool.getDividendType());
+					form.setAmount(entity.getAmount());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -1056,6 +1058,7 @@ public class OrderService {
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
+					form.setVolume(entity.getApplyVolume());
 					form.setType("申购");
 
 					formList.add(form);
