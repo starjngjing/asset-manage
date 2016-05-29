@@ -10,9 +10,11 @@ define([
   return {
     name: 'AssetPoolDuration',
     init: function () {
-      var pid = util.nav.getHashObj(location.hash).id
+      var pageState = {
+        pid: util.nav.getHashObj(location.hash).id
+      }
 
-      pageInit(pid, http, config)
+      pageInit(pageState, http, config)
 
       // 资产申购类型radio change事件
       $(document.buyAssetForm.buyType).on('ifChecked', function () {
@@ -32,7 +34,7 @@ define([
       $('#buyAsset').on('click', function () {
         http.post(config.api.duration.order.getTargetList, {
           data: {
-            pid: pid
+            pid: pageState.pid
           },
           contentType: 'form'
         }, function (json) {
@@ -50,10 +52,11 @@ define([
         })
         http.post(config.api.duration.assetPool.getNameList, function (json) {
           var assetPoolOptions = ''
+          var select = document.buyAssetForm.assetPoolOid
           json.rows.forEach(function (item) {
             assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
           })
-          $(document.buyAssetForm.assetPoolOid).html(assetPoolOptions)
+          $(select).html(assetPoolOptions).val(pageState.pid)
         })
         $('#buyAssetModal').modal('show')
       })
@@ -67,7 +70,7 @@ define([
           return item.cashtoolOid === this.value
         }.bind(this))
         if (source[0]) {
-          source[0].cashtoolType = util.enum.transform('TARGETTYPE', source[0].cashtoolType)
+          source[0].cashtoolType = util.enum.transform('CASHTOOLTYPE', source[0].cashtoolType)
           $$.formAutoFix($('#buyAssetForm'), source[0])
         }
       })
@@ -77,6 +80,7 @@ define([
         }.bind(this))
         if (source[0]) {
           source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
+          source[0].accrualType = util.enum.transform('ACCRUALTYPE', source[0].accrualType)
           $$.formAutoFix($('#buyAssetForm'), source[0])
         }
       })
@@ -95,6 +99,7 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
+            $('#orderingTrustTable').bootstrapTable('refresh')
             $('#buyAssetModal').modal('hide')
           }
         })
@@ -110,7 +115,7 @@ define([
       var accountDetailPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       var accountDetailTableConfig = {
         ajax: function (origin) {
@@ -175,9 +180,11 @@ define([
                   contentType: 'form'
                 }, function (json) {
                   if (row.operation === '现金管理工具申赎') {
+                    json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
                     $$.detailAutoFix($('#fundDetailModal'), json.result)
                     $('#fundDetailModal').modal('show')
                   } else {
+                    json.result.targetType = util.enum.transform('TARGETTYPE', json.result.targetType)
                     $$.detailAutoFix($('#trustDetailModal'), json.result)
                     $('#trustDetailModal').modal('show')
                   }
@@ -193,7 +200,7 @@ define([
       var orderingToolPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 预约中现金类管理工具表格配置
       var orderingToolTableConfig = {
@@ -317,7 +324,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -330,7 +337,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'none'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -356,7 +363,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'ordering'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 1) {
@@ -369,7 +376,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -395,7 +402,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -408,7 +415,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'block'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -424,7 +431,7 @@ define([
       var toolPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 现金类管理工具表格配置
       var toolTableConfig = {
@@ -571,6 +578,7 @@ define([
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
             $('#toolTable').bootstrapTable('refresh')
+            pageInit(pageState, http, config)
             $('#fundCheckModal').modal('hide')
           }
         })
@@ -633,7 +641,7 @@ define([
       var orderingTrustPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 预约中信托计划表格配置
       var orderingTrustTableConfig = {
@@ -766,7 +774,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -779,7 +787,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'none'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -798,7 +806,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -811,7 +819,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'none'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -830,7 +838,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -843,7 +851,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'none'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -862,7 +870,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'ordering'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 1) {
@@ -875,7 +883,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'none'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -894,7 +902,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -907,7 +915,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'block'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -926,7 +934,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -939,7 +947,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'block'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -958,7 +966,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -971,7 +979,7 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'block'})
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -992,7 +1000,7 @@ define([
       var trustPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 信托计划表格配置
       var trustTableConfig = {
@@ -1106,7 +1114,7 @@ define([
                   var result = json.result
                   var form = document.trustTransferForm
                   form.oid.value = result.oid
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
                   $$.detailAutoFix($('#trustTransferModal'), result)
                 })
@@ -1185,6 +1193,7 @@ define([
             util.form.reset($(form))
             $('#orderingTrustTable').bootstrapTable('refresh')
             $('#trustTable').bootstrapTable('refresh')
+            pageInit(pageState, http, config)
             $('#trustCheckModal').modal('hide')
           }
         })
@@ -1259,7 +1268,7 @@ define([
       $('#updateAccount').on('click', function () {
         http.post(config.api.duration.assetPool.getById, {
           data: {
-            oid: pid
+            oid: pageState.pid
           },
           contentType: 'form'
         }, function (json) {
@@ -1273,7 +1282,7 @@ define([
         $('#updateAssetPoolForm').ajaxSubmit({
           url: config.api.duration.order.editPoolForCash,
           success: function () {
-            pageInit(pid, http, config)
+            pageInit(pageState, http, config)
             $('#updateAssetPoolModal').modal('hide')
           }
         })
@@ -1391,9 +1400,12 @@ function getPieOptions (config, source) {
         //  }
         //},
         data:[
-          {value:source.cashRate, name:'现金'},
-          {value:source.cashtoolRate, name:'现金类管理工具'},
-          {value:source.targetRate, name:'信托计划'}
+          // {value:source.cashRate, name:'现金'},
+          // {value:source.cashtoolRate, name:'现金类管理工具'},
+          // {value:source.targetRate, name:'信托计划'}
+          {value:source.cashFactRate, name:'现金'},
+          {value:source.cashtoolFactRate, name:'现金类管理工具'},
+          {value:source.targetFactRate, name:'信托计划'}
         ]
       }
     ],
@@ -1412,15 +1424,15 @@ function validpercentage($el) {
   return !(percentage > 100)
 }
 
-function pageInit (pid, http, config) {
+function pageInit (pageState, http, config) {
   http.post(config.api.duration.assetPool.getById, {
     data: {
-      oid: pid || ''
+      oid: pageState.pid || ''
     },
     contentType: 'form'
   }, function (json) {
-    console.log(json)
     var detail = json.result
+    pageState.pid = detail.oid
     $('#detailPoolScale').html(detail.scale)
     $('#detailPoolCash').html(detail.cashPosition)
     // 饼图生成

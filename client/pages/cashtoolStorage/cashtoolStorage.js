@@ -127,14 +127,8 @@ define([
                   },
                   'click .item-cashToolRevenue': function (e, value, row) { // 收益采集-显示弹窗
                 	  cashtool = row;
-                	// 初始化数据表格                      
-                      http.post(config.api.listCashToolRevenue, {
-			              data: revenuePageOptions,
-			              contentType: 'form'
-			            }, function (rlt) {
-			              $('#revenueTable').bootstrapTable('load', rlt)
-			            })
-                      
+                	  
+                	  $('#revenueTable').bootstrapTable('refresh');                      
                 	  
                 	  http.post(config.api.cashtoolDetQuery, {
                 		  data: {
@@ -178,29 +172,23 @@ define([
           rows: 10
         }
         // 数据表格配置
-        var revenueTableConfig = {
-        	/*
+        var revenueTableConfig = {        	
           ajax: function (origin) {
-            http.post(config.api.listCashToolRevenue, {
-              data: revenuePageOptions,
-              contentType: 'form'
-            }, function (rlt) {
-              origin.success(rlt)
-            })
+          	if(revenuePageOptions.cashtoolOid) {
+	            http.post(config.api.listCashToolRevenue, {
+	              data: revenuePageOptions,
+	              contentType: 'form'
+	            }, function (rlt) {
+	              origin.success(rlt)
+	            })
+            }
           },
-          */
-          data:"",
           pageNumber: revenuePageOptions.page,
           pageSize: revenuePageOptions.rows,
           pagination: true,
           sidePagination: 'server',
           pageList: [10, 20, 30, 50, 100],
-          queryParams: function (val) {	              
-              revenuePageOptions.cashtoolOid = cashtool.oid;
-              revenuePageOptions.rows = val.limit
-              revenuePageOptions.page = parseInt(val.offset / val.limit) + 1
-              return val
-            },
+          queryParams: getRevenueQueryParams,
           onLoadSuccess: function () {},
           columns: [
             {
@@ -263,6 +251,18 @@ define([
           
           pageOptions.rows = val.limit
           pageOptions.page = parseInt(val.offset / val.limit) + 1
+          return val
+        }
+
+        function getRevenueQueryParams (val) {
+        	
+          //var form = document.searchForm
+          //$.extend(revenuePageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象          
+          
+          revenuePageOptions.cashtoolOid = cashtool ? cashtool.oid : "";
+          revenuePageOptions.rows = val.limit
+          revenuePageOptions.page = parseInt(val.offset / val.limit) + 1
+          
           return val
         }
       
