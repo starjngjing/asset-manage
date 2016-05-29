@@ -91,28 +91,28 @@
             <label>渠道名称</label>
             <input name="channelName" type="text" id="editChanelName"
                    class="form-control input-sm"
-                   placeholder="请输入渠道名称">            
+                   placeholder="请输入渠道名称" required>            
           </div>         
           <div class="form-group">
             <label>渠道机构</label>
             <input name="partner" type="text"
                    class="form-control input-sm"
-                   placeholder="请输入所属渠道机构">
+                   placeholder="请输入所属渠道机构" required>
           </div>
           <div class="form-group">
             <label>渠道费率(%)</label>
             <input name="channelFee" type="text"
                    class="form-control input-sm"
                    placeholder="请输入渠道费率(%)" 
-                   data-validfloat="10.2"
-                   data-error="费率格式小数2位" required>            
+                   data-validfloat="10.4"
+                   data-error="费率格式小数4位" required>            
             <div class="help-block with-errors text-red"></div>         
           </div>
           <div class="form-group">
             <label>接入方式</label>
             <div class="row form-style">
               <div class="col-sm-3">
-                <input type="radio" name="joinType" value="ftp" class="icheck" checked> FTP文件
+                <input type="radio" name="joinType" value="ftp" class="icheck"> FTP文件
               </div>
               <div class="col-sm-3">
                 <input type="radio" name="joinType" value="api" class="icheck"> API接口

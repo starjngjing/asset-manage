@@ -559,6 +559,7 @@ public class CapitalService {
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity,
 			String state) {
+		BigDecimal rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
 		if ("purchase".equals(operation)) {
 			if (target.equals(OrderService.FUND)) {
 				entity.setCashtoolOrderOid(sn);
@@ -575,7 +576,6 @@ public class CapitalService {
 				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
-					BigDecimal rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
 					poolEntity.setCashFactRate(poolEntity.getCashFactRate()
 							.subtract(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
 					if (target.equals(OrderService.FUND)) {
@@ -597,6 +597,10 @@ public class CapitalService {
 			entity.setFreezeCash(capital);
 			entity.setSubject("确认赎回中" + target + "订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
+				poolEntity.setCashFactRate(poolEntity.getCashFactRate()
+						.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+				poolEntity.setCashtoolFactRate(poolEntity.getCashtoolFactRate()
+						.subtract(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 可用现金
 				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
@@ -619,6 +623,10 @@ public class CapitalService {
 			entity.setFreezeCash(capital);
 			entity.setSubject("确认资产转让订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
+				poolEntity.setCashFactRate(poolEntity.getCashFactRate()
+						.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+				poolEntity.setTargetFactRate(poolEntity.getTargetFactRate()
+						.subtract(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 可用现金
 				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}

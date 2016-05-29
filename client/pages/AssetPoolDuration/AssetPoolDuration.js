@@ -1441,5 +1441,10 @@ function pageInit (pageState, http, config) {
     // 柱状图生成
     var barChart = echarts.init(document.getElementById('barChart'))
     barChart.setOption(getBarOptions(config, detail))
+    // FIXME
+    $('#orderingToolTable').bootstrapTable('refresh')
+    $('#toolTable').bootstrapTable('refresh')
+    $('#orderingTrustTable').bootstrapTable('refresh')
+    $('#trustTable').bootstrapTable('refresh')
   })
 }

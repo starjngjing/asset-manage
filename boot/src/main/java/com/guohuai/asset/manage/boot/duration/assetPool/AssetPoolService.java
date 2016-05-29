@@ -222,12 +222,26 @@ public class AssetPoolService {
 	@Transactional
 	public void editPoolForCash(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
+		// 原规模
+		BigDecimal scale = entity.getScale();
+		// 当前规模
+		BigDecimal nscale = entity.getScale().subtract(entity.getCashPosition()
+				.add(form.getCashPosition())).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal cashRate = form.getCashPosition().divide(nscale)
+				.multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal cashtoolRate = entity.getCashtoolFactRate().multiply(scale)
+				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal targetRate = entity.getTargetFactRate().multiply(scale)
+				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
 		entity.setName(form.getName());
 		entity.setScale(form.getScale());
 		entity.setCashRate(form.getCashRate());
 		entity.setCashtoolRate(form.getCashtoolRate());
 		entity.setTargetRate(form.getTargetRate());
 		entity.setCashPosition(form.getCashPosition());
+		entity.setCashFactRate(cashRate);
+		entity.setCashtoolFactRate(cashtoolRate);
+		entity.setTargetFactRate(targetRate);
 		entity.setState("成立");
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
