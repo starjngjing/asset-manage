@@ -372,7 +372,7 @@ define([
 					}
     			},
     			{
-    				field: 'channelCode',
+    				field: 'channelId',
     				align: 'center'
 				},
 				{
