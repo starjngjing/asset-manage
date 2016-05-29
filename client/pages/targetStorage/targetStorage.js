@@ -260,7 +260,7 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
-                		  $$.detailAutoFix($('#overdueForm'), data);	// 自动填充详情
+                		  $$.detailAutoFix($('#targetDetailOverdue'), data);	// 自动填充详情
 //                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
                 	  });
                 	  util.form.validator.init($("#overdueForm")); // 初始化表单验证
