@@ -152,51 +152,33 @@ define([
 	              	  alert('敬请期待!!!');
 	              },
                   'click .item-establish': function (e, value, row) { // 标的成立
-                	  // 初始化   付息日 
-                      for ( var i = 1; i <= 30; i++) {
-	                      	var option = $("<option>").val(i).text(i);
-	                      	$(establishForm.accrualDate).append(option);
-	              		}
-                      $(establishForm.accrualDate).val(10); // 默认10个工作日
-                	  
-                	http.post(config.api.targetDetQuery, {
-                        data: {
-                        	oid:row.oid
-                        },
-                        contentType: 'form'
-                      },
-                	  function (obj) {
-                    	  var data  = obj.investment;
-                    	  if(!data){
-                    		  toastr.error('标的详情数据不存在', '错误信息', {
-                    			    timeOut: 10000
-                    			  });
-                    	  }
-                	  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
-                	  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
-                	});
-                	util.form.validator.init($("#establishForm")); // 初始化表单验证
-                	$('#establishModal').modal('show');
+                  	  if (row.holdAmount <= 0) {
+                  	  	$("#confirmTitle").html("标的无持有份额,确定要成立？");
+						  $$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								initEstablish(row);
+							}
+						  });
+                  	  } else {
+                  	  	initEstablish(row);
+                  	  }
                   },
                   'click .item-unEstablish': function (e, value, row) { // 标的不成立
-                	  http.post(config.api.targetDetQuery, {
-                		  data: {
-                			  oid:row.oid
-                		  },
-                		  contentType: 'form'
-                	  },
-                	  function (obj) {
-                		  var data  = obj.investment;
-                		  if(!data){
-                			  toastr.error('标的详情数据不存在', '错误信息', {
-                				  timeOut: 10000
-                			  });
-                		  }
-                		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
-                		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
-                	  });
-                	  util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
-                	  $('#unEstablishModal').modal('show');
+                  	if (row.holdAmount > 0) {
+                  	  	$("#confirmTitle").html("标的已持有份额,确定不成立？");
+						  $$.confirm({
+							container: $('#doConfirm'),
+							trigger: this,
+							accept: function() {
+								initUnEstablish(row);
+							}
+						  });
+                  	  } else {
+                  	  	initUnEstablish(row);
+                  	  }
+                  	
                   },
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
                 	  targetInfo = row;
@@ -216,6 +198,7 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
+                		  data.targetOid = data.oid;
                 		  $$.detailAutoFix($('#targetDetailIncome'), data);	// 自动填充详情
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
@@ -429,6 +412,57 @@ define([
         	});
         	
         });
+        
+        function initEstablish(row){
+        	
+		  // 初始化   付息日 
+	      for ( var i = 1; i <= 30; i++) {
+	          	var option = $("<option>").val(i).text(i);
+	          	$(establishForm.accrualDate).append(option);
+	  		}
+	      $(establishForm.accrualDate).val(10); // 默认10个工作日
+		  
+		  http.post(config.api.targetDetQuery, {
+	        data: {
+	        	oid:row.oid
+		        },
+	        contentType: 'form'
+	      },
+		  function (obj) {
+	    	  var data  = obj.investment;
+	    	  if(!data){
+	    		  toastr.error('标的详情数据不存在', '错误信息', {
+	    			    timeOut: 10000
+	    			  });
+	    	  }
+			  $$.detailAutoFix($('#establishForm'), data);	// 自动填充详情
+			  $$.formAutoFix($('#establishForm'), data); // 自动填充表单
+			});
+			util.form.validator.init($("#establishForm")); // 初始化表单验证
+			$('#establishModal').modal('show');
+        }
+        
+        function initUnEstablish(row){
+        	
+    	  http.post(config.api.targetDetQuery, {
+    		  data: {
+    			  oid:row.oid
+    		  },
+    		  contentType: 'form'
+    	  },
+    	  function (obj) {
+    		  var data  = obj.investment;
+    		  if(!data){
+    			  toastr.error('标的详情数据不存在', '错误信息', {
+    				  timeOut: 10000
+    			  });
+    		  }
+    		  $$.detailAutoFix($('#unEstablishForm'), data);	// 自动填充详情
+    		  $$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
+    	  });
+    	  util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
+    	  $('#unEstablishModal').modal('show');
+        }
 
         function getQueryParams (val) {
           var form = document.searchForm
@@ -440,6 +474,20 @@ define([
           return val
         }
         
+        function formatTargetData(t){
+        	if(t) {
+        		t.expAror = t.expAror || t.expAror.toFixed(2) + '%';
+        		t.expAror = t.expAror || t.expAror.toFixed(2) + '%';
+        		t.collectIncomeRate = t.collectIncomeRate || t.collectIncomeRate.toFixed(2) + '%';
+        	}
+        }
+        
+        function formatProjectData(p){
+        	if(p) {
+        		p.pledgeRatio = p.pledgeRatio || p.pledgeRatio.toFixed(2) + '%';
+        		p.spvTariff = p.spvTariff || p.spvTariff.toFixed(2) + '%';
+        	}
+        }
     }
   }
 })
