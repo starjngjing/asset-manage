@@ -67,7 +67,7 @@ define([
           return item.cashtoolOid === this.value
         }.bind(this))
         if (source[0]) {
-          source[0].cashtoolType = util.enum.transform('TARGETTYPE', source[0].cashtoolType)
+          source[0].cashtoolType = util.enum.transform('CASHTOOLTYPE', source[0].cashtoolType)
           $$.formAutoFix($('#buyAssetForm'), source[0])
         }
       })
@@ -77,6 +77,7 @@ define([
         }.bind(this))
         if (source[0]) {
           source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
+          source[0].accrualType = util.enum.transform('ACCRUALTYPE', source[0].accrualType)
           $$.formAutoFix($('#buyAssetForm'), source[0])
         }
       })
@@ -571,6 +572,7 @@ define([
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
             $('#toolTable').bootstrapTable('refresh')
+            pageInit(pid, http, config)
             $('#fundCheckModal').modal('hide')
           }
         })
@@ -1185,6 +1187,7 @@ define([
             util.form.reset($(form))
             $('#orderingTrustTable').bootstrapTable('refresh')
             $('#trustTable').bootstrapTable('refresh')
+            pageInit(pid, http, config)
             $('#trustCheckModal').modal('hide')
           }
         })
@@ -1391,9 +1394,12 @@ function getPieOptions (config, source) {
         //  }
         //},
         data:[
-          {value:source.cashRate, name:'现金'},
-          {value:source.cashtoolRate, name:'现金类管理工具'},
-          {value:source.targetRate, name:'信托计划'}
+          // {value:source.cashRate, name:'现金'},
+          // {value:source.cashtoolRate, name:'现金类管理工具'},
+          // {value:source.targetRate, name:'信托计划'}
+          {value:source.cashFactRate, name:'现金'},
+          {value:source.cashtoolFactRate, name:'现金类管理工具'},
+          {value:source.targetFactRate, name:'信托计划'}
         ]
       }
     ],
