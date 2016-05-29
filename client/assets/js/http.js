@@ -74,7 +74,7 @@ function errorHandle (err) {
   })
   switch (err.errorCode) {
     case 10000:
-      //location.href = 'login.html'
+      location.href = 'login.html'
       break
     default:
       break
