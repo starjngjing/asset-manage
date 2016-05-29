@@ -18,11 +18,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.guohuai.asset.manage.component.web.parameter.PercentJsonDeserializer;
-import com.guohuai.asset.manage.component.web.parameter.PercentJsonSerializer;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
