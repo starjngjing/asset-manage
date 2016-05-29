@@ -29,6 +29,7 @@
 								<th>基金名称</th>
 								<th>基金类型</th>
 								<th>分红方式</th>
+								<th>流通份额</th>
 								<th>业绩比较基准</th>
 								<th>风险等级</th>
 								<th>状态</th>
@@ -148,6 +149,14 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
+								<dt>流通份额</dt>
+								<dd>
+									<div data-detail-fetch="circulationShares"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
 								<dt>是否保本</dt>
 								<dd>
 									<div data-detail-fetch="isGuarFund" data-enum-transform="booleanSelect"></div>
@@ -244,22 +253,6 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>投资领域</dt>
-								<dd>
-									<div data-detail-fetch="investField"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>投资目标</dt>
-								<dd>
-									<div data-detail-fetch="investTarget"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
 								<dt>业绩比较基准</dt>
 								<dd>
 									<div data-detail-fetch="perfBenchmark"></div>
@@ -351,6 +344,22 @@
 								<dt>基金托管费</dt>
 								<dd>
 									<div data-detail-fetch="custody"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-12">
+							<dl class="dl-horizontal">
+								<dt>投资目标</dt>
+								<dd>
+									<div data-detail-fetch="investTarget"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-12">
+							<dl class="dl-horizontal">
+								<dt>投资领域</dt>
+								<dd>
+									<div data-detail-fetch="investField"></div>
 								</dd>
 							</dl>
 						</div>

@@ -46,6 +46,8 @@ define([
 					}, {
 						field: 'dividendType'
 					}, {
+						field: 'circulationShares'
+					}, {
 						field: 'perfBenchmark'
 					}, {
 						field: 'riskLevel'

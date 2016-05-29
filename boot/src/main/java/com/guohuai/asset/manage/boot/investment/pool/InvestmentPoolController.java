@@ -114,7 +114,7 @@ public class InvestmentPoolController extends BaseController {
 					Expression<String> exp = root.get("state").as(String.class);					
 					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting}));
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
-					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_PREPARE }));
+					predicate.add(exp_lifeState.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE, Investment.INVESTMENT_LIFESTATUS_STAND_UP }));
 				} else if (op.equals("holdList")) { // 已持有列表
 //					Expression<String> exp = root.get("state").as(String.class);					
 //					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting }));
@@ -155,8 +155,8 @@ public class InvestmentPoolController extends BaseController {
 		String holdAmount = request.getParameter("holdAmount");
 		spec = this.buildSpec(spec, "holdAmount", holdAmount);		
 
-		String lifed = request.getParameter("lifed");
-		spec = this.buildSpec(spec, "lifed", lifed);		
+		String life = request.getParameter("life");
+		spec = this.buildSpec(spec, "life", life);		
 
 		String expAror = request.getParameter("expAror");
 		spec = this.buildSpec(spec, "expAror", expAror);

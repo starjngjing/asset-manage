@@ -99,13 +99,13 @@ function (http, config, util, $$) {
 										text: '申请停用',
 										type: 'button',
 										class: 'apply',
-										isRender: row.channelStatus == 'on'
+										isRender: row.channelStatus == 'on' && row.approvelStatus !='toApprove'
 									},
 									{
 										text: '申请启用',
 										type: 'button',
 										class: 'apply',
-										isRender: row.channelStatus == 'off'
+										isRender: row.channelStatus == 'off' && row.approvelStatus !='toApprove'
 									},
 									{
 										text: '渠道详情',
@@ -117,7 +117,7 @@ function (http, config, util, $$) {
 										text: '审核意见',
 										type: 'button',
 										class: 'remarks',
-										isRender: true
+										isRender: row.approvelStatus != null || row.approvelStatus != undefined
 									},
 									{
 										text: '编辑',
@@ -129,7 +129,7 @@ function (http, config, util, $$) {
 										text: '删除',
 										type: 'button',
 										class: 'del',
-										isRender: row.channelStatus=='off' && row.deleteStatus=='no'
+										isRender: row.approvelStatus != 'toApprove' && row.channelStatus=='off' && row.deleteStatus=='no'
 									}
 		        	]
 		        	return util.table.formatter.generateButton(buttons);  
@@ -204,7 +204,7 @@ function (http, config, util, $$) {
                 }, function (result) {
                 	$('#editChanelName').attr('readonly',true);                  
                   $$.formAutoFix($('#channelForm'), result); // 自动填充详情
-                  //$('#channelForm').validator('validate')
+                  $('#channelForm').validator('validate')
                 })
 								$('#channelModal').modal('show')
 								.find('.modal-title').html("修改渠道"); 
