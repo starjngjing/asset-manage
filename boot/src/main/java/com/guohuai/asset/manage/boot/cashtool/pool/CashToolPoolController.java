@@ -105,7 +105,7 @@ public class CashToolPoolController extends BaseController {
 				@Spec(params = "etfLof", path = "etfLof", spec = Equal.class) 
 			}) Specification<CashTool> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
-			@RequestParam(defaultValue = "updateTime") String sortField) {
+			@RequestParam(defaultValue = "dailyProfitDate") String sortField) {
 		if (page < 1) {
 			page = 1;
 		}
