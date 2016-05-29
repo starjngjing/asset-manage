@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundAuditEntity;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
@@ -64,6 +65,8 @@ public class OrderService {
 	private CapitalService capitalService;
 	@Autowired
 	private TargetService targetService;
+	@Autowired
+	private AssetPoolService assetPoolService;
 
 	/**
 	 * 货币基金（现金管理工具）申购
@@ -799,6 +802,7 @@ public class OrderService {
 				list.add(form);
 			}
 		}*/
+		pid = assetPoolService.getPid(pid);
 		List<FundOrderEntity> entityList = fundService.findByPidForAppointment(pid, pageable);
 		if (!entityList.isEmpty()) {
 			FundForm form = null;
@@ -843,6 +847,7 @@ public class OrderService {
 	public List<FundForm> getFundListByPid(String pid, Pageable pageable) {
 		List<FundForm> formList = Lists.newArrayList();
 		
+		pid = assetPoolService.getPid(pid);
 		List<FundEntity> entityList = fundService.findByPidForConfirm(pid, pageable);
 		if (null != entityList && !entityList.isEmpty()) {
 			FundForm form = null;
@@ -1034,6 +1039,7 @@ public class OrderService {
 		List<TrustForm> formList = Lists.newArrayList();
 		TrustForm form = null;
 		try {
+			pid = assetPoolService.getPid(pid);
 			List<TrustOrderEntity> orderList = trustService.findPurchaseByPidForAppointment(pid);
 			if (!orderList.isEmpty()) {
 				for (TrustOrderEntity entity : orderList) {
@@ -1141,6 +1147,7 @@ public class OrderService {
 	public List<TrustForm> getTrustListByPid(String pid, Pageable pageable) {
 		List<TrustForm> formList = Lists.newArrayList();
 		
+		pid = assetPoolService.getPid(pid);
 		List<TrustEntity> list = trustService.findByPidForConfirm(pid, pageable);
 		if (null != list && !list.isEmpty()) {
 			TrustForm form = null;

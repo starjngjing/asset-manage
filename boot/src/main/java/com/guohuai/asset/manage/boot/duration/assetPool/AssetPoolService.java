@@ -190,6 +190,19 @@ public class AssetPoolService {
 	}
 	
 	/**
+	 * 当pid为空的时候，默认获取第一个资产池
+	 * @param pid
+	 * @return
+	 */
+	public String getPid(String pid) {
+		if (null == pid || "".equals(pid)) {
+			pid = assetPoolDao.getLimitOne().getOid();
+		}
+		
+		return pid;
+	}
+	
+	/**
 	 * 编辑资产池
 	 * @param form
 	 * @param uid
@@ -284,7 +297,7 @@ public class AssetPoolService {
 	 * 计算资产池当日的确认收益
 	 * @return
 	 */
-	@Scheduled(cron = "0 15 12 * * ?")
+	@Scheduled(cron = "0 30 0 * * ?")
 	@Transactional
 	public void calcPoolProfit() {
 		// 所有资产池列表
