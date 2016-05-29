@@ -161,7 +161,7 @@ public class Product implements Serializable {
 	/**
 	 * 付利具体第几天
 	 */
-	private int payModeDay;
+	private Integer payModeDay = 0;
 
 	/**
 	 * 募集开始时间类型

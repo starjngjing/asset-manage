@@ -2,7 +2,6 @@ package com.guohuai.asset.manage.boot.product;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -18,10 +17,12 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.boot.dict.Dict;
 import com.guohuai.asset.manage.boot.dict.DictService;
@@ -108,7 +109,7 @@ public class ProductService {
 		{
 			//募集开始时间  募集期:()个自然日  起息日:募集满额后()个自然日  存续期:()个自然日
 			if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType())) {
-				java.util.Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
+				java.util.Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datePattern);
 				pb.raiseStartDate(new Date(raiseStartDate.getTime()));
 				
 				if(!StringUtil.isEmpty(form.getRaisePeriod())) {
@@ -245,13 +246,11 @@ public class ProductService {
 				pb.redeemConfirmDays(Integer.valueOf(form.getRedeemConfirmDate()));
 			}
 			pb.purchaseConfirmDaysType(form.getPurchaseConfirmDateType())
-			.redeemConfirmDaysType(form.getRedeemConfirmDateType())
-			.redeemTimingTaskDaysType(form.getRedeemTimingTaskDateType()).redeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()))
-			.redeemTimingTaskDays(1);//redeemTimingTaskDate 默认每日
+			.redeemConfirmDaysType(form.getRedeemConfirmDateType());
 			//产品成立时间（存续期开始时间）
 			
 			if(Product.DATE_TYPE_ManualInput.equals(form.getSetupDateType())) {
-				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
+				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datePattern);
 				pb.setupDate(new Date(setupDate.getTime()));
 			}
 		}
@@ -433,7 +432,7 @@ public class ProductService {
 		if(Product.DATE_TYPE_FirstRackTime.equals(form.getRaiseStartDateType())) {
 			product.setRaiseStartDate(null);
 		} else {
-			java.util.Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datetimePattern);
+			java.util.Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datePattern);
 			product.setRaiseStartDate(new Date(raiseStatrtDate.getTime()));
 			
 			if(!StringUtil.isEmpty(form.getRaisePeriod())) {
@@ -595,14 +594,12 @@ public class ProductService {
 				product.setRedeemConfirmDays(Integer.valueOf(form.getRedeemConfirmDate()));
 			}
 			product.setRedeemConfirmDaysType(form.getRedeemConfirmDateType());
-			product.setRedeemTimingTaskDaysType(form.getRedeemTimingTaskDateType());
-			product.setRedeemTimingTaskTime(Time.valueOf(form.getRedeemTimingTaskTime()));
 			
 			if(Product.DATE_TYPE_FirstRackTime.equals(form.getSetupDateType())) {
 				form.setSetupDate(null);
 			} else {
 			//产品成立时间（存续期开始时间）
-				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datetimePattern);
+				java.util.Date setupDate = DateUtil.parseDate(form.getSetupDate(), DateUtil.datePattern);
 				product.setSetupDate(new Date(setupDate.getTime()));
 			}
 		}
@@ -714,20 +711,7 @@ public class ProductService {
 		PageResp<ProductResp> pagesRep = new PageResp<ProductResp>();
 		if (cas != null && cas.getContent() != null && cas.getTotalElements() > 0) {
 			List<ProductResp> rows = new ArrayList<ProductResp>();
-			List<String> productOids =  new ArrayList<String>();
-			for (Product p : cas) {
-				productOids.add(p.getOid());
-			}
-			Map<String,Integer> channelNum = new HashMap<String,Integer>();
-			List<ProductChannel> pcs = productChannelService.queryProductChannels(productOids);
-			if(pcs!=null && pcs.size()>0) {
-				for(ProductChannel pc : pcs) {
-					if(channelNum.get(pc.getProduct().getOid())==null) {
-						channelNum.put(pc.getProduct().getOid(),0);
-					}
-					channelNum.put(pc.getProduct().getOid(),channelNum.get(pc.getProduct().getOid())+1);
-				}
-			}
+			Map<String,Integer> channelNum = this.getChannelsNum(cas.getContent());
 			
 			for (Product p : cas) {
 				ProductResp queryRep = new ProductResp(p);
@@ -741,6 +725,150 @@ public class ProductService {
 		}
 		pagesRep.setTotal(cas.getTotalElements());
 		return pagesRep;
+	}
+	
+	
+	private Map<String,Integer> getChannelsNum (List<Product> ps){
+		List<String> productOids =  new ArrayList<String>();
+		for (Product p : ps) {
+			productOids.add(p.getOid());
+		}
+		Map<String,Integer> channelNum = new HashMap<String,Integer>();
+		List<ProductChannel> pcs = productChannelService.queryProductChannels(productOids);
+		if(pcs!=null && pcs.size()>0) {
+			for(ProductChannel pc : pcs) {
+				if(channelNum.get(pc.getProduct().getOid())==null) {
+					channelNum.put(pc.getProduct().getOid(),0);
+				}
+				channelNum.put(pc.getProduct().getOid(),channelNum.get(pc.getProduct().getOid())+1);
+			}
+		}
+		return channelNum;
+	}
+	/**
+	 * 查询审核中
+	 * @param spec
+	 * @param pageable
+	 * @return
+	 */
+	public PageResp<ProductLogListResp> auditList(Specification<Product> spec, Pageable pageable) {
+		Page<Product> cas = this.productDao.findAll(spec, pageable);
+		PageResp<ProductLogListResp> pagesRep = new PageResp<ProductLogListResp>();
+		if (cas != null && cas.getContent() != null && cas.getTotalElements() > 0) {
+			List<ProductLogListResp> rows = new ArrayList<ProductLogListResp>();
+			Map<String,Integer> channelNum = this.getChannelsNum(cas.getContent());
+			
+			Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
+			
+			for (Product p : cas) {
+				ProductLogListResp queryRep = new ProductLogListResp(p);
+				if(channelNum.get(p.getOid())!=null) {
+					queryRep.setChannelNum(channelNum.get(p.getOid()));
+				}
+				//申请人和申请时间
+				ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Auditing, ProductLog.AUDIT_STATE_Commited);
+					
+				if(pl!=null) {
+					if(adminObjMap.get(pl.getAuditor())==null) {
+						adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+					}
+					if(adminObjMap.get(pl.getAuditor())!=null) {
+						queryRep.setApplicant(adminObjMap.get(pl.getAuditor()).getName());
+					}
+					queryRep.setApplyTime(DateUtil.formatDatetime(pl.getAuditTime().getTime()));
+				}
+				rows.add(queryRep);
+			}
+			pagesRep.setRows(rows);
+		}
+		pagesRep.setTotal(cas.getTotalElements());
+		
+		return pagesRep;
+	}
+	
+	/**
+	 * 查询复核中
+	 * @param spec
+	 * @param pageable
+	 * @return
+	 */
+	public PageResp<ProductLogListResp> checkList(Specification<Product> spec, Pageable pageable) {
+		PageResp<ProductLogListResp> pagesRep = this.auditList(spec, pageable);
+		List<ProductLogListResp> rows = pagesRep.getRows();
+		
+		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
+			
+		for (ProductLogListResp p : rows) {
+			ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Auditing, ProductLog.AUDIT_STATE_Approval);
+			
+			if(pl!=null) {
+				//审核人 审核时间
+				if(adminObjMap.get(pl.getAuditor())==null) {
+					adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+				}
+				if(adminObjMap.get(pl.getAuditor())!=null) {
+					p.setAuditor(adminObjMap.get(pl.getAuditor()).getName());
+				}
+				p.setAuditTime(DateUtil.formatDatetime(pl.getAuditTime().getTime()));
+			}
+		}
+		return pagesRep;
+	}
+	
+	/**
+	 * 查询准入中
+	 * @param spec
+	 * @param pageable
+	 * @return
+	 */
+	public PageResp<ProductLogListResp> approveList(Specification<Product> spec, Pageable pageable) {
+		PageResp<ProductLogListResp> pagesRep = this.checkList(spec, pageable);
+		List<ProductLogListResp> rows = pagesRep.getRows();
+		
+		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
+		
+		for (ProductLogListResp p : rows) {
+			ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Reviewing, ProductLog.AUDIT_STATE_Approval);
+			if(pl!=null) {
+				//复核人复核时间
+				if(adminObjMap.get(pl.getAuditor())==null) {
+					adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+				}
+				if(adminObjMap.get(pl.getAuditor())!=null) {
+					p.setReviewer(adminObjMap.get(pl.getAuditor()).getName());
+				}
+				p.setReviewTime(DateUtil.formatDatetime(pl.getAuditTime().getTime()));
+			}
+		}
+		return pagesRep;
+	}
+	
+	/**
+	 * 查询productlog
+	 * @param oid
+	 * @param auditType
+	 * @param auditState
+	 * @return
+	 */
+	private ProductLog getProductLog(final String oid, final String auditType, final String auditState) {
+		Direction sortDirection = Direction.DESC;
+		Sort sort = new Sort(new Order(sortDirection, "auditTime"));
+		
+		Specification<ProductLog> spec = new Specification<ProductLog>() {
+			@Override
+			public Predicate toPredicate(Root<ProductLog> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("product").get("oid").as(String.class), oid)
+						, cb.equal(root.get("auditType").as(String.class), auditType)
+						, cb.equal(root.get("auditState").as(String.class), auditState));
+				
+			}
+		};
+		
+		List<ProductLog> pls = this.productLogDao.findAll(spec, sort);
+		if(null!=pls && pls.size()>0) {
+			return pls.get(0);
+		}
+		return null;
 	}
 	
 	

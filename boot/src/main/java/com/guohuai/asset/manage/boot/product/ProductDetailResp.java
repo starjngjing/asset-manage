@@ -77,7 +77,6 @@ public class ProductDetailResp extends BaseResp {
 		
 		this.investMin = p.getInvestMin();//单笔投资最低份额
 		this.investMax = p.getInvestMax();//单笔投资最高份额
-//		this.purchaseLimit = p.getPurchaseLimit();//申购上限
 		this.investAdditional = p.getInvestAdditional();//单笔投资追加份额
 		this.netUnitShare = p.getNetUnitShare().toPlainString();//单位份额净值
 		this.investComment = p.getInvestComment();//投资标的
@@ -116,35 +115,34 @@ public class ProductDetailResp extends BaseResp {
 			this.raiseStartDateStr = this.raiseStartDate;
 		}
 		
-		this.raisePeriodStr = p.getRaisePeriodDays()>0?p.getRaisePeriodDays()+"个自然日":"";//募集期:()个自然日
+		this.raisePeriodStr = p.getRaisePeriodDays()!=null?p.getRaisePeriodDays()+"个自然日":"";//募集期:()个自然日
 		
 		if("PRODUCTTYPE_01".equals(this.typeOid)) {
-			this.interestsFirstDateStr = p.getInterestsFirstDays()>0?"募集满额后第"+p.getInterestsFirstDays()+"个自然日":"";//起息日:募集满额后()个自然日
+			this.interestsFirstDateStr = p.getInterestsFirstDays()!=null?"募集满额后第"+p.getInterestsFirstDays()+"个自然日":"";//起息日:募集满额后()个自然日
 		} else {
-			this.interestsDateStr = p.getInterestsFirstDays()>0?"成立后第"+p.getInterestsFirstDays()+"个自然日":"";//起息日:募集满额后()个自然日
+			this.interestsDateStr = p.getInterestsFirstDays()!=null?"成立后第"+p.getInterestsFirstDays()+"个自然日":"";//起息日:募集满额后()个自然日
 		}
-		this.durationPeriodStr = p.getDurationPeriodDays()>0?p.getDurationPeriodDays()+"个自然日":"";//存续期:()个自然日
-		this.raisedTotalNumberStr = p.getRaisedTotalNumber()>0?p.getRaisedTotalNumber()+"份":"";//募集总份额
-		this.accrualDateStr = p.getAccrualRepayDays()>0?"存续期结束后第"+p.getAccrualRepayDays()+"个自然日":"";
-		this.lockPeriodStr = p.getLockPeriodDays()>0?"一旦申购，将冻结此金额"+p.getLockPeriodDays()+"个自然日":"";
-		this.purchaseConfirmDateStr = p.getPurchaseConfirmDays()>0?
+		this.durationPeriodStr = p.getDurationPeriodDays()!=null?p.getDurationPeriodDays()+"个自然日":"";//存续期:()个自然日
+		this.raisedTotalNumberStr = p.getRaisedTotalNumber()!=null?p.getRaisedTotalNumber()+"份":"";//募集总份额
+		this.accrualDateStr = p.getAccrualRepayDays()!=null?"存续期结束后第"+p.getAccrualRepayDays()+"个自然日":"";
+		this.lockPeriodStr = p.getLockPeriodDays()!=null?"一旦申购，将冻结此金额"+p.getLockPeriodDays()+"个自然日":"";
+		this.purchaseConfirmDateStr = p.getPurchaseConfirmDays()!=null?
 				("申购订单确认日后"+p.getPurchaseConfirmDays()+"个"     +((StringUtil.isEmpty(p.getPurchaseConfirmDaysType())==true?"":ProductEnum.enums.get(p.getPurchaseConfirmDaysType())))     +"内") :"";
 			
-		this.redeemConfirmDateStr = p.getRedeemConfirmDays()>0?
+		this.redeemConfirmDateStr = p.getRedeemConfirmDays()!=null?
 				("赎回订单确认日"+p.getRedeemConfirmDays()+"个"     +( (StringUtil.isEmpty(p.getRedeemConfirmDaysType())==true?"":ProductEnum.enums.get(p.getRedeemConfirmDaysType())) )+     "内"):"";
 		
-		this.netMaxRredeemDayStr = p.getNetMaxRredeemDay()>0?p.getNetMaxRredeemDay()+"份":"";
-		this.minRredeemStr = p.getMinRredeem()>0?p.getMinRredeem()+"份":"";
+		this.netMaxRredeemDayStr = p.getNetMaxRredeemDay()!=null?p.getNetMaxRredeemDay()+"份":"";
+		this.minRredeemStr = p.getMinRredeem()!=null?p.getMinRredeem()+"份":"";
 		this.redeemTimingTaskTimeStr = !"".equals(this.redeemTimingTaskTime)?"每"   +(StringUtil.isEmpty(p.getRedeemTimingTaskDaysType())==true?"":ProductEnum.enums.get(p.getRedeemTimingTaskDaysType()))+   ""+this.redeemTimingTaskTime+"发起代付指令":"";
-		this.investMinStr = p.getInvestMin()>0?p.getInvestMin()+"份":"";
-		this.investMaxStr = p.getInvestMax()>0?p.getInvestMax()+"份":"";
-//		this.purchaseLimitStr = p.getPurchaseLimit()>0?p.getPurchaseLimit()+"份":"";
-		this.investAdditionalStr = p.getInvestAdditional()>0?p.getInvestAdditional()+"份":"";
+		this.investMinStr = p.getInvestMin()!=null?p.getInvestMin()+"份":"";
+		this.investMaxStr = p.getInvestMax()!=null?p.getInvestMax()+"份":"";
+		this.investAdditionalStr = p.getInvestAdditional()!=null?p.getInvestAdditional()+"份":"";
 		this.netUnitShareStr = !"".equals(this.netUnitShare)?this.netUnitShare+"元":"";
 		if("DAY".equals(this.payModeOid)) {
 			this.payModeNameStr = this.payModeName;
 		} else {
-			this.payModeNameStr = p.getPayModeDay()>0?this.payModeName+"第"+p.getPayModeDay()+"天":"";
+			this.payModeNameStr = p.getPayModeDay()!=null?this.payModeName+"第"+p.getPayModeDay()+"天":"";
 		}
 		if("FIRSTRACKTIME".equals(p.getSetupDateType()) && "".equals(this.setupDate)) {
 			this.setupDateStr = "与首次上架时间同时";
@@ -171,34 +169,33 @@ public class ProductDetailResp extends BaseResp {
 	private String assetPoolName;//资产池名称
 	private String raiseStartDate;//募集开始时间
 	private String raiseStartDateType;//募集开始时间类型
-	private int raisePeriod;//募集期:()个自然日
-	private int interestsFirstDate;//起息日:募集满额后()个自然日
-	private int durationPeriod;//存续期:()个自然日
+	private Integer raisePeriod;//募集期:()个自然日
+	private Integer interestsFirstDate;//起息日:募集满额后()个自然日
+	private Integer durationPeriod;//存续期:()个自然日
 	private String expectedRate;//预期年化收益率
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private long raisedTotalNumber;//募集总份额
-	private int accrualDate;//还本付息日 存续期结束后第()个自然日
+	private Long raisedTotalNumber;//募集总份额
+	private Integer accrualDate;//还本付息日 存续期结束后第()个自然日
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String setupDateType;//产品成立时间类型
 	private String accrualCycleOid;//收益结转周期
 	private String accrualCycleName;//收益结转周期
 	private String payModeOid;//付利方式
 	private String payModeName;//付利方式
-	private int payModeDate;//付利具体几号
-	private int lockPeriod;//锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
-	private int purchaseConfirmDate;//申购确认日:()个
+	private Integer payModeDate;//付利具体几号
+	private Integer lockPeriod;//锁定期:()个自然日 一旦申购，将冻结此金额T+5天。
+	private Integer purchaseConfirmDate;//申购确认日:()个
 	private String purchaseConfirmDateType;//申购确认日类型:自然日或交易日
-	private int redeemConfirmDate;//赎回确认日:()个
+	private Integer redeemConfirmDate;//赎回确认日:()个
 	private String redeemConfirmDateType;//赎回确认日类型:自然日或交易日
-	private int netMaxRredeemDay;//单日净赎回上限
-	private int minRredeem;//单笔净赎回下限
+	private Integer netMaxRredeemDay;//单日净赎回上限
+	private Integer minRredeem;//单笔净赎回下限
 	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
 	private String redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
-	private int investMin;//单笔投资最低份额
-	private long investMax;//单笔投资最高份额
-//	private long purchaseLimit;//申购上限
-	private int investAdditional;//单笔投资追加份额
+	private Integer investMin;//单笔投资最低份额
+	private Long investMax;//单笔投资最高份额
+	private Integer investAdditional;//单笔投资追加份额
 	private String netUnitShare;//单位份额净值
 	private String investComment;//投资标的
 	private String instruction;//产品说明
@@ -213,12 +210,12 @@ public class ProductDetailResp extends BaseResp {
 	private String isOpenRemeed;//开放赎回期
 	private List<FileResp> files;
 	
-	private int redeemTimingTaskDate;//赎回定时任务天数	 默认每日
+	private Integer redeemTimingTaskDate;//赎回定时任务天数	 默认每日
 	private String publisher;//发行人
 	private BigDecimal currentMoney;//当前份额
-	private long collectedVolume;//已募份额
-	private int purchaseNum;//已投次数
-	private int lockCollectedVolume;//锁定已募份额
+	private Integer collectedVolume;//已募份额
+	private Integer purchaseNum;//已投次数
+	private Integer lockCollectedVolume;//锁定已募份额
 	
 	private String raiseEndDate;//募集结束时间
 	private String raiseFailDate;//募集宣告失败时间
@@ -238,7 +235,7 @@ public class ProductDetailResp extends BaseResp {
 	private String raiseStartDateStr;//募集开始时间类型
 	private String raisePeriodStr;//募集期:()个自然日
 	private String interestsFirstDateStr;//起息日:募集满额后()个自然日
-	private int interestsDate;//起息日:募集满额后()个自然日
+	private Integer interestsDate;//起息日:募集满额后()个自然日
 	private String interestsDateStr;//起息日:募集满额后()个自然日
 	private String durationPeriodStr;//存续期:()个自然日
 	private String raisedTotalNumberStr;
@@ -253,7 +250,6 @@ public class ProductDetailResp extends BaseResp {
 	private String redeemTimingTaskTimeStr;
 	private String investMinStr;//单笔投资最低份额
 	private String investMaxStr;//单笔投资最高份额
-//	private String purchaseLimitStr;//申购上限
 	private String investAdditionalStr;//单笔投资追加份额
 	private String netUnitShareStr;//单位份额净值
 

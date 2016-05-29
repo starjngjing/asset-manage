@@ -28,6 +28,12 @@ public class AssetPoolForm implements Serializable {
 	private BigDecimal cashtoolRate;
 	// 信托（计划）比例
 	private BigDecimal targetRate;
+	// 现金实际比例
+	private BigDecimal cashFactRate;
+	// 货币基金（现金类管理工具）实际比例
+	private BigDecimal cashtoolFactRate;
+	// 信托（计划）实际比例
+	private BigDecimal targetFactRate;
 	// 可用现金
 	private BigDecimal cashPosition;
 	// 冻结资金

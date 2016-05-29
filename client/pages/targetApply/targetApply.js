@@ -115,7 +115,8 @@ define([
 							text: '底层项目',
 							type: 'button',
 							class: 'item-project',
-							isRender: row.state == 'waitPretrial' || row.state == 'reject'
+							isRender: true,
+							//isRender: row.state == 'waitPretrial' || row.state == 'reject'
 						}, {
 							text: '提交预审',
 							type: 'button',
@@ -281,6 +282,13 @@ define([
 							$('#projectTable').bootstrapTable(projectTableConfig)
 							$('#projectTable').bootstrapTable('refresh'); // 项目表单重新加载
 							$$.searchInit($('#projectSearchForm'), $('#projectTable'))
+							
+							// 控制是否能显示 添加项目按钮
+							if(targetInfo.state == 'waitPretrial' || targetInfo.state == 'reject')
+								$('#projectAdd').show();
+							else 
+								$('#projectAdd').hide();
+							 
 							$('#projectDataModal').modal('show');
 
 						}
@@ -351,12 +359,13 @@ define([
 							text: '修改',
 							type: 'button',
 							class: 'item-project-update',
-							isRender: true
+							isRender: targetInfo.state == 'waitPretrial' || targetInfo.state == 'reject'
 						}, {
 							text: '删除',
 							type: 'button',
 							class: 'item-project-delete',
-							isRender: true
+							//isRender: true
+							isRender: targetInfo.state == 'waitPretrial' || targetInfo.state == 'reject'
 						}];
 						return util.table.formatter.generateButton(buttons);
 					},

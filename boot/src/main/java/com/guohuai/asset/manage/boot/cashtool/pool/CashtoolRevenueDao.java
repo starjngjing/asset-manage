@@ -9,9 +9,16 @@
  */
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
+import java.sql.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CashtoolRevenueDao extends JpaRepository<CashToolRevenue, String>, JpaSpecificationExecutor<CashToolRevenue> {
 
+	@Modifying
+	@Query("delete from CashToolRevenue where dailyProfitDate=?1")
+	public void deleteByDailyProfitDate(Date dailyProfitDate);
 }

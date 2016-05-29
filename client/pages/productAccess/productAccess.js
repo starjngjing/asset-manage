@@ -20,6 +20,9 @@ define([
 			}
 		// 用于存储表格checkbox选中的项
 		var checkItems = []
+		var selectProductOid 
+		// 用于存储选择的渠道checkbox选中的项
+		var checkChannels = []
     	// 数据表格配置
     	var tableConfig = {
     		ajax: function (origin) {
@@ -128,7 +131,7 @@ define([
 					field: 'channelNum'
 				},
 				{
-					field: 'investment',
+					field: 'assetPoolName',
 					align: 'center'
 				},
 				{
@@ -233,20 +236,29 @@ define([
 							})
 						},
 						'click .item-channel': function(e, value, row) {
+		                	selectProductOid = row.oid
 							http.post(
-								config.api.channels, {
-		                		  data: {
-		                			  oid:row.oid
-		                		  },
-		                		  contentType: 'form'
-		                		},
-		                		function (obj) {
-
-		                		  $('#projectModal').modal('show');
-		                		}
-		                	);
+    							config.api.productChooseChannelList, 
+    							{
+ 		   							data: {
+    									productOid:row.oid
+    								},
+    								contentType: 'form'
+    							},
+    							function(result) {
+									if (result.errorCode == 0) {
+										var data = result.rows;
+										$('#productChooseChannelTable').bootstrapTable('load', data)
+										$('#channelModal').modal('show');
+									} else {
+										alert(查询失败);
+									}
+								}
+    						)
+							
 						},
 						'click .item-approve': function(e, value, row) {
+							selectProductOid = row.oid;
 							$("#oid").val(row.oid)
 							$("#admitComment").val("")
 							$$.confirm({
@@ -265,6 +277,7 @@ define([
 							})
 						},
 						'click .item-reject': function(e, value, row) {
+							selectProductOid = row.oid;
 							$("#oid").val(row.oid)
 							$("#admitComment").val("")
 							$$.confirm({
@@ -341,7 +354,109 @@ define([
     		return val
   		}
 		
+		// 数据表格配置
+		var channelsTableConfig = {
+			columns: [
+    			{
+    				checkbox: true,
+    				field: 'selectStatus',
+    				align: 'center',
+    				formatter: function (val, row, index) {
+					    var selectStatus = row.selectStatus
+					    if(true==selectStatus) {
+					        if (checkChannels.indexOf(row) < 0){
+			            		checkChannels.push(row)
+					        }
+					    }
+					    return selectStatus
+					}
+    			},
+    			{
+    				field: 'channelCode',
+    				align: 'center'
+				},
+				{
+			   		field: 'channelName',
+			   		align: 'center'
+				},
+				{
+					align: 'center',
+            		field: 'channelStatus',
+					formatter: function (val, row, index) {
+						var channelStatus = row.channelStatus
+						if("on"==channelStatus) {
+						    return "已启用"
+						} else if("off"==channelStatus) {
+						    return "已停用"
+						}
+					}
+				},
+				{
+					field: 'channelFee',
+					align: 'center',
+					formatter: function (val, row, index) {
+					    var channelFee = row.channelFee
+					    if(channelFee!=null && channelFee!="") {
+					        return channelFee+"%"
+					    }
+						return "";
+					}
+				}
+			],
+			// 单选按钮选中一项时
+			onCheck: function (row) {
+			    if (checkChannels.indexOf(row) < 0){
+			        checkChannels.push(row)
+			    }
+			},
+			// 单选按钮取消一项时
+			onUncheck: function (row) {
+			    checkChannels.splice(checkChannels.indexOf(row), 1)
+			},
+			// 全选按钮选中时
+			onCheckAll: function (rows) {
+			    checkChannels = rows.map(function (item) {
+				    return item
+				})
+			},
+			// 全选按钮取消时
+			onUncheckAll: function () {
+				checkChannels = []
+			}
+		}
+				            		
+		// 数据表格初始化
+    	$('#productChooseChannelTable').bootstrapTable(channelsTableConfig)
+    	
+    	
+    	// 选择渠道点击确定按钮事件
+		$('#doChooseChannel').on('click', function () {
+			// 获取id数组
+			var channelOids = checkChannels.map(function (item) {
+				return item.oid
+			})
+			// 提交数组
+			http.post(
+				config.api.saveProductChannel, 
+				{
+					data: {
+						productOid: selectProductOid, 
+						channelOid: JSON.stringify(channelOids)
+					},
+					contentType: 'form',
+				}, 
+				function(result) {
+					checkChannels = []
+					$('#channelModal').modal('hide')
+					if (result.errorCode == 0) {
+						$('#productAccessTable').bootstrapTable('refresh')
+					}
+				}
+			)
+				
+		})
     	     
+    	  
     }
   }
 })

@@ -135,7 +135,7 @@ define([
 					field: 'channelNum'
 				},
 				{
-					field: 'investment',
+					field: 'assetPoolName',
 					align: 'center'
 				},
 				{
@@ -311,7 +311,7 @@ define([
     							},
     							function(result) {
 									if (result.errorCode == 0) {
-										var data = result;
+										var data = result.rows;
 										$('#productChooseChannelTable').bootstrapTable('load', data)
 										$('#channelModal').modal('show');
 									} else {
@@ -369,7 +369,7 @@ define([
 					}
     			},
     			{
-    				field: 'channelId',
+    				field: 'channelCode',
     				align: 'center'
 				},
 				{
@@ -539,14 +539,21 @@ define([
 
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
-				http.post(config.api.duration.assetPool.getNameList, function (result) {
-					var select = document.addProductForm.assetPoolOid
-					$(select).empty()
-					result.rows.forEach(function (item, index) {
-						$(select).append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.name + '</option>')
-					})
+			http.post(config.api.duration.assetPool.getNameList, function (result) {
+				var select = document.addProductForm.assetPoolOid
+				$(select).empty()
+				result.rows.forEach(function (item, index) {
+					$(select).append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.name + '</option>')
 				})
-				$('#addProductModal').modal('show')
+			})
+			
+			// 新建产品上传附件表格数据源
+			addProductUploadFiles = []
+			$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+		
+			util.form.reset($('#addProductForm'))
+			$('#addProductModal').modal('show')	
+			$('#addProductModal').modal('show')
     	})    	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
