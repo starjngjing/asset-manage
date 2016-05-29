@@ -488,10 +488,7 @@ define([
             field: 'circulationShares'
           },
           {
-            field: 'investDate'
-          },
-          {
-            field: 'volume'
+            field: 'amount'
           },
           {
             field: 'state',
@@ -528,6 +525,7 @@ define([
                   },
                   contentType: 'form'
                 }, function (json) {
+                  json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
                   $$.formAutoFix($('#purchaseForm'), json.result)
                 })
                 $('#purchaseModal').modal('show')
@@ -540,6 +538,7 @@ define([
                   },
                   contentType: 'form'
                 }, function (json) {
+                  json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
                   $$.formAutoFix($('#redeemForm'), json.result)
                 })
                 $('#redeemModal').modal('show')
@@ -1115,7 +1114,8 @@ define([
                   var form = document.trustTransferForm
                   form.oid.value = result.oid
                   form.assetPoolOid.value = pageState.pid
-                  result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
+                  result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
+                  result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
                   $$.detailAutoFix($('#trustTransferModal'), result)
                 })
                 $('#trustTransferModal').modal('show')
