@@ -199,7 +199,7 @@ define([
                 			  });
                 		  }
                 		  data.targetOid = data.oid;
-                		  $$.detailAutoFix($('#targetDetailIncome'), data);	// 自动填充详情
+                		  $$.detailAutoFix($('#targetDetailIncome'), formatTargetData(data));	// 自动填充详情1
                 		  $$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
                 	  });
                 	  util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
@@ -243,7 +243,7 @@ define([
                 				  timeOut: 10000
                 			  });
                 		  }
-                		  $$.detailAutoFix($('#targetDetailOverdue'), data);	// 自动填充详情
+                		  $$.detailAutoFix($('#targetDetailOverdue'), formatTargetData(data));	// 自动填充详情
 //                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
                 	  });
                 	  util.form.validator.init($("#overdueForm")); // 初始化表单验证
@@ -479,18 +479,30 @@ define([
         
         function formatTargetData(t){
         	if(t) {
-        		t.expAror = t.expAror || t.expAror.toFixed(2) + '%';
-        		t.expAror = t.expAror || t.expAror.toFixed(2) + '%';
-        		t.collectIncomeRate = t.collectIncomeRate || t.collectIncomeRate.toFixed(2) + '%';
+        		var t2 = {};
+        		$.extend(t2, t); //合并对象，修改第一个对象
+        		t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
+        		t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
+        		
+        		console.log(t2)
+        		return t2;
         	}
+        	return t;
         }
         
         function formatProjectData(p){
         	if(p) {
-        		p.pledgeRatio = p.pledgeRatio || p.pledgeRatio.toFixed(2) + '%';
-        		p.spvTariff = p.spvTariff || p.spvTariff.toFixed(2) + '%';
+        		var p2={};
+        		$.extend(t2, t); //合并对象，修改第一个对象
+        		
+        		p2.pledgeRatio = p2.pledgeRatio ? p2.pledgeRatio.toFixed(2) + '%' : "";
+        		p2.spvTariff = p2.spvTariff ? p2.spvTariff.toFixed(2) + '%' : "";
+        		
+        		return p2;
         	}
+        	return p;
         }
     }
   }
 })
+
