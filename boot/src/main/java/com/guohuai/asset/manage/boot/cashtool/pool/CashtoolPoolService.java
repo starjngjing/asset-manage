@@ -109,7 +109,7 @@ public class CashtoolPoolService {
 		
 		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, form.getOperator()); // 现金管理工具收益采集
 		
-		this.cashtoolRevenueDao.delete(CashToolRevenue.builder().dailyProfitDate(form.getDailyProfitDate()).build());
+		this.cashtoolRevenueDao.deleteByDailyProfitDate(form.getDailyProfitDate());
 		
 		cr = cashtoolRevenueDao.save(cr);
 		

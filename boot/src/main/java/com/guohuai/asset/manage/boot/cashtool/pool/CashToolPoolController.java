@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolListResp;
@@ -195,15 +196,21 @@ public class CashToolPoolController extends BaseController {
 	 */
 	@RequestMapping("cashToolRevenueSave")
 	@ApiOperation(value = "投资标的本息兑付")
-	public BaseResp cashToolRevenueSave(@Valid CashToolRevenueForm cashToolRevenueForm) {
+	public BaseResp cashToolRevenueSave(@Valid CashToolRevenueForm form) {
 		String loginId = null;
 		try {
 			loginId = super.getLoginAdmin();
 		} catch (Exception e) {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
-		cashToolRevenueForm.setOperator(loginId);
-		CashToolRevenue cashToolRevenue = cashToolPoolService.cashToolRevenue(cashToolRevenueForm);
+		form.setOperator(loginId);
+		CashToolRevenue cashToolRevenue = cashToolPoolService.cashToolRevenue(form);
+		return new BaseResp();
+	}
+	
+	@RequestMapping("test")
+	public BaseResp test(@Valid CashToolRevenueForm form) {
+		log.info("form===>" + JSON.toJSONString(form));
 		return new BaseResp();
 	}
 }

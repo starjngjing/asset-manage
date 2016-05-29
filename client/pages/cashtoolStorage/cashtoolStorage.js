@@ -127,8 +127,14 @@ define([
                   },
                   'click .item-cashToolRevenue': function (e, value, row) { // 收益采集-显示弹窗
                 	  cashtool = row;
-                	// 初始化数据表格
-                      $('#revenueTable').bootstrapTable(revenueTableConfig)
+                	// 初始化数据表格                      
+                      http.post(config.api.listCashToolRevenue, {
+			              data: revenuePageOptions,
+			              contentType: 'form'
+			            }, function (rlt) {
+			              $('#revenueTable').bootstrapTable('load', rlt)
+			            })
+                      
                 	  
                 	  http.post(config.api.cashtoolDetQuery, {
                 		  data: {
@@ -173,6 +179,7 @@ define([
         }
         // 数据表格配置
         var revenueTableConfig = {
+        	/*
           ajax: function (origin) {
             http.post(config.api.listCashToolRevenue, {
               data: revenuePageOptions,
@@ -181,6 +188,8 @@ define([
               origin.success(rlt)
             })
           },
+          */
+          data:"",
           pageNumber: revenuePageOptions.page,
           pageSize: revenuePageOptions.rows,
           pagination: true,
@@ -225,6 +234,8 @@ define([
            ],
         }
 
+		$('#revenueTable').bootstrapTable(revenueTableConfig);
+		
         // 初始化数据表格
         $('#dataTable').bootstrapTable(tableConfig)
         // 搜索表单初始化
