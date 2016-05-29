@@ -10,9 +10,11 @@
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
@@ -121,7 +123,12 @@ public class CashToolPoolController extends BaseController {
 			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();				
 				if (op.equals("storageList")) { // 现金管理工具库列表
-					predicate.add(cb.notEqual(root.get("state").as(String.class), CashTool.CASHTOOL_STATE_delete));
+					Expression<String> exp = root.get("state");
+//					In<String> in = cb.in(exp);
+//					in.in(Arrays.asList(CashTool.CASHTOOL_STATE_delete, CashTool.CASHTOOL_STATE_invalid));
+//					predicate.add(cb.not(in));
+					
+					predicate.add(cb.equal(exp,  CashTool.CASHTOOL_STATE_collecting));
 				} else if (op.equals("historyList")) { // 历史列表
 					Expression<String> exp = root.get("state");					
 					predicate.add(exp.in(new Object[] { CashTool.CASHTOOL_STATE_delete, CashTool.CASHTOOL_STATE_invalid }));
@@ -185,7 +192,7 @@ public class CashToolPoolController extends BaseController {
 
 
 	/**
-	 * 投资标的本息兑付
+	 * 现金管理工具收益采集
 	 * 
 	 * @Title: interestSave
 	 * @author vania
@@ -195,7 +202,7 @@ public class CashToolPoolController extends BaseController {
 	 * @return CommonResp 返回类型
 	 */
 	@RequestMapping("cashToolRevenueSave")
-	@ApiOperation(value = "投资标的本息兑付")
+	@ApiOperation(value = "现金管理工具收益采集")
 	public BaseResp cashToolRevenueSave(@Valid CashToolRevenueForm form) {
 		String loginId = null;
 		try {
