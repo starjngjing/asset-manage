@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
@@ -32,7 +30,6 @@ import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
-import com.guohuai.asset.manage.boot.system.config.risk.indicate.collect.RiskIndicateCollectForm;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 
@@ -112,7 +109,6 @@ public class InvestmentManageBootController extends BaseController {
 		String operator = super.getLoginAdmin();
 		form.setOperator(operator);
 		Investment investment = investmentService.saveInvestment(form);
-		
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.create, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
@@ -127,7 +123,7 @@ public class InvestmentManageBootController extends BaseController {
 	public @ResponseBody ResponseEntity<BaseResp> edit(@Valid InvestmentManageForm form) {
 		String operator = super.getLoginAdmin();
 		form.setOperator(operator);
-		
+
 		Investment investment = investmentService.updateInvestment(form);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.edit, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
@@ -137,6 +133,10 @@ public class InvestmentManageBootController extends BaseController {
 	 * 提交预审
 	 * 
 	 * @param investment
+	 * @return
+	 */
+	/**
+	 * @param oid
 	 * @return
 	 */
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
@@ -151,6 +151,14 @@ public class InvestmentManageBootController extends BaseController {
 		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
 		investmentService.updateInvestment(investment, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);
+		// // 工作流
+		// Task task =
+		// workflowAssetService.getTaskByKeyAndNodeIdAndUserId(investment.getOid(),
+		// WorkflowAssetService.NODE_COMITEXAMINATION, operator);
+		// WorkflowAssetCondition condition = new WorkflowAssetCondition();
+		// condition.setFlowState(true);
+		// condition.setGroupId(WorkflowAssetService.GROUP_DOEXAMINATION);
+		// workflowAssetService.complete(operator, task.getId(), condition);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

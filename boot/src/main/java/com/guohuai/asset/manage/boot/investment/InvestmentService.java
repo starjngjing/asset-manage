@@ -43,6 +43,8 @@ public class InvestmentService {
 	CCPWarrantorService cCPWarrantorService;
 	@Autowired
 	ProjectService projectService;
+	
+
 	/**
 	 * 获得投资标的列表
 	 * 
@@ -78,37 +80,45 @@ public class InvestmentService {
 		entity.setOperator(operator);
 		return this.investmentDao.save(entity);
 	}
+
 	/**
 	 * 新建投资标的
-	 * @Title: saveInvestment 
+	 * 
+	 * @Title: saveInvestment
 	 * @author vania
 	 * @version 1.0
-	 * @see: 
+	 * @see:
 	 * @param form
-	 * @return Investment    返回类型
+	 * @return Investment 返回类型
 	 */
 	public Investment saveInvestment(InvestmentManageForm form) {
 		Investment entity = createInvestment(form);
 		entity.setState(Investment.INVESTMENT_STATUS_waitPretrial);
-		
+
 		entity.setCreateTime(DateUtil.getSqlCurrentDate());
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
-		
+
 		entity = this.investmentDao.save(entity);
 		/* 计算标的风险开始 */
 		this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
+		// 创建工作流
+//		Map<String, Object> variables = new HashMap<>();
+//		variables.put("investment", entity);
+//		variables.put("groupId", WorkflowAssetService.GOURP_COMITEXAMINATION);
+//		workflowService.startWorkflow(form.getOperator(), "targetExamination", entity.getOid(), variables);
 		return entity;
 	}
 
 	/**
 	 * 计算标的风险开始
-	 * @Title: calculateRiskRate 
+	 * 
+	 * @Title: calculateRiskRate
 	 * @author vania
 	 * @version 1.0
 	 * @see: TODO
 	 * @param entity
-	 * @return Investment    返回类型
+	 * @return Investment 返回类型
 	 */
 	public Investment calculateRiskRate(Investment entity) {
 		/* 计算标的风险开始 */
@@ -137,19 +147,19 @@ public class InvestmentService {
 			}
 			log.info("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
 			entity.setCollectScoreWeight(weight);
-			
+
 			// 根据[标的信用等级系数]计算本标的下所有项目的[项目系数]
-			BigDecimal riskRate = projectService.calculateInvestmentRisk(entity); //返回标的下面所有项目的最大的风险系数
-			
+			BigDecimal riskRate = projectService.calculateInvestmentRisk(entity); // 返回标的下面所有项目的最大的风险系数
+
 			// 取max(各个项目的[项目系数])作为标的的[风险系数]
-//			riskRate = projectService.getMaxRiskFactor(entity.getOid());
+			// riskRate = projectService.getMaxRiskFactor(entity.getOid());
 			entity.setRiskRate(riskRate);
 			log.info("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
 		}
 		/* 计算标的风险结束 */
 		return entity;
 	}
-	
+
 	/**
 	 * 修改投资标的
 	 * 
@@ -167,7 +177,7 @@ public class InvestmentService {
 		/* 计算标的风险结束 */
 		return entity;
 	}
-	
+
 	/**
 	 * 修改投资标的
 	 * 
@@ -185,11 +195,13 @@ public class InvestmentService {
 		temp.setState(investment.getState());
 		temp.setCreateTime(investment.getCreateTime());
 		temp.setCreator(investment.getCreator());
-		
+
 		temp.setUpdateTime(DateUtil.getSqlCurrentDate());
 		Investment entity = this.investmentDao.save(temp);
 		/* 计算标的风险开始 */
-		entity.setRiskOption(form.getRiskOption()); // TODO 因为数据库里面没有RiskOption这个字段   所以要重新设置一下
+		entity.setRiskOption(form.getRiskOption()); // TODO
+													// 因为数据库里面没有RiskOption这个字段
+													// 所以要重新设置一下
 		entity = this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
 		return entity;
@@ -240,7 +252,7 @@ public class InvestmentService {
 			throw new RuntimeException();
 		}
 		investment.setState(state);
-		if(!StringUtils.isEmpty(suggest)){
+		if (!StringUtils.isEmpty(suggest)) {
 			investment.setRejectDesc(suggest);
 		}
 		this.updateInvestment(investment, operator);
@@ -259,5 +271,5 @@ public class InvestmentService {
 	public List<Object> getInvestmentByName(String name) {
 		return this.investmentDao.getInvestmentByName(name);
 	}
-	
+
 }
