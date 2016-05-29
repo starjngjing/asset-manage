@@ -12,7 +12,6 @@ define([
     init: function () {
       // js逻辑写在这里
 
-    	var cashtool; // 缓存 选中的某一行的 现金工具信息
         // 分页配置
         var pageOptions = {
         		op:'storageList',
@@ -20,6 +19,7 @@ define([
           rows: 10
         }
         // 数据表格配置
+    	var cashtool; // 缓存 选中的某一行的 现金工具信息
         var tableConfig = {
           ajax: function (origin) {
             http.post(config.api.listCashTool, {
