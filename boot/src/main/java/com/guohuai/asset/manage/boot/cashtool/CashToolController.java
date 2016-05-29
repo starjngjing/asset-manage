@@ -98,6 +98,7 @@ public class CashToolController extends BaseController {
 		cashTool.setState(CashTool.CASHTOOL_STATE_waitPretrial);
 		cashTool.setOperator(operator);
 		cashTool.setCreateTime(DateUtil.getSqlCurrentDate());
+		cashTool.setUpdateTime(DateUtil.getSqlCurrentDate());
 		cashTool = cashToolService.save(cashTool);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
