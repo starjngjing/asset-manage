@@ -200,8 +200,8 @@ define([
                   },
                   'click .item-targetIncome': function (e, value, row) { // 标的本息兑付
                 	  targetInfo = row;
-                  	// 初始化数据表格
-                       $('#incomeTable').bootstrapTable(incomeTableConfig);
+                  	// 初始化数据表格                       
+                	  $('#incomeTable').bootstrapTable('refresh'); 
                 	  
                 	  http.post(config.api.targetDetQuery, {
                 		  data: {
@@ -308,12 +308,14 @@ define([
            // 数据表格配置
            var incomeTableConfig = {
              ajax: function (origin) {
-               http.post(config.api.investmentTargetIncomeList, {
-                 data: incomePageOptions,
-                 contentType: 'form'
-               }, function (rlt) {
-                 origin.success(rlt)
-               })
+             	if(incomePageOptions.targetOid) {
+	               http.post(config.api.investmentTargetIncomeList, {
+	                 data: incomePageOptions,
+	                 contentType: 'form'
+	               }, function (rlt) {
+	                 origin.success(rlt)
+	               })
+	             }
              },
              pageNumber: incomePageOptions.page,
              pageSize: incomePageOptions.rows,
@@ -321,7 +323,7 @@ define([
              sidePagination: 'server',
              pageList: [10, 20, 30, 50, 100],
              queryParams: function (val) {	              
-                 incomePageOptions.targetOid = targetInfo.oid;
+                 incomePageOptions.targetOid = targetInfo? targetInfo.oid:"";
                  incomePageOptions.rows = val.limit
                  incomePageOptions.page = parseInt(val.offset / val.limit) + 1
                  return val
@@ -358,6 +360,9 @@ define([
                },
               ],
            }
+           
+        // 初始化数据表格
+        $('#incomeTable').bootstrapTable(incomeTableConfig);
 
         // 初始化数据表格
         $('#dataTable').bootstrapTable(tableConfig)
