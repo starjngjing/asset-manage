@@ -10,9 +10,11 @@ define([
   return {
     name: 'AssetPoolDuration',
     init: function () {
-      var pid = util.nav.getHashObj(location.hash).id
+      var pageState = {
+        pid: util.nav.getHashObj(location.hash).id
+      }
 
-      pageInit(pid, http, config)
+      pageInit(pageState, http, config)
 
       // 资产申购类型radio change事件
       $(document.buyAssetForm.buyType).on('ifChecked', function () {
@@ -32,7 +34,7 @@ define([
       $('#buyAsset').on('click', function () {
         http.post(config.api.duration.order.getTargetList, {
           data: {
-            pid: pid
+            pid: pageState.pid
           },
           contentType: 'form'
         }, function (json) {
@@ -50,10 +52,11 @@ define([
         })
         http.post(config.api.duration.assetPool.getNameList, function (json) {
           var assetPoolOptions = ''
+          var select = document.buyAssetForm.assetPoolOid
           json.rows.forEach(function (item) {
             assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
           })
-          $(document.buyAssetForm.assetPoolOid).html(assetPoolOptions)
+          $(select).html(assetPoolOptions).val(pageState.pid)
         })
         $('#buyAssetModal').modal('show')
       })
@@ -112,7 +115,7 @@ define([
       var accountDetailPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       var accountDetailTableConfig = {
         ajax: function (origin) {
@@ -195,7 +198,7 @@ define([
       var orderingToolPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 预约中现金类管理工具表格配置
       var orderingToolTableConfig = {
@@ -319,7 +322,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -358,7 +361,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'ordering'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 1) {
@@ -397,7 +400,7 @@ define([
                   form.oid.value = result.oid
                   form.cashtoolOid.value = result.cashtoolOid
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -426,7 +429,7 @@ define([
       var toolPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 现金类管理工具表格配置
       var toolTableConfig = {
@@ -573,7 +576,7 @@ define([
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
             $('#toolTable').bootstrapTable('refresh')
-            pageInit(pid, http, config)
+            pageInit(pageState, http, config)
             $('#fundCheckModal').modal('hide')
           }
         })
@@ -636,7 +639,7 @@ define([
       var orderingTrustPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 预约中信托计划表格配置
       var orderingTrustTableConfig = {
@@ -769,7 +772,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -801,7 +804,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -833,7 +836,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'audit'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (!index) {
@@ -865,7 +868,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'ordering'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 1) {
@@ -897,7 +900,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -929,7 +932,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -961,7 +964,7 @@ define([
                   form.oid.value = result.oid
                   form.type.value = row.type
                   form.opType.value = 'accept'
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   var formGroups = $(form).find('.form-group')
                   formGroups.each(function (index, item) {
                     if (index === 2) {
@@ -995,7 +998,7 @@ define([
       var trustPageOptions = {
         page: 1,
         rows: 10,
-        pid: pid
+        pid: pageState.pid
       }
       // 信托计划表格配置
       var trustTableConfig = {
@@ -1109,7 +1112,7 @@ define([
                   var result = json.result
                   var form = document.trustTransferForm
                   form.oid.value = result.oid
-                  form.assetPoolOid.value = pid
+                  form.assetPoolOid.value = pageState.pid
                   result.cashtoolTypeStr = util.enum.transform('TARGETTYPE', result.cashtoolType)
                   $$.detailAutoFix($('#trustTransferModal'), result)
                 })
@@ -1188,7 +1191,7 @@ define([
             util.form.reset($(form))
             $('#orderingTrustTable').bootstrapTable('refresh')
             $('#trustTable').bootstrapTable('refresh')
-            pageInit(pid, http, config)
+            pageInit(pageState, http, config)
             $('#trustCheckModal').modal('hide')
           }
         })
@@ -1263,7 +1266,7 @@ define([
       $('#updateAccount').on('click', function () {
         http.post(config.api.duration.assetPool.getById, {
           data: {
-            oid: pid
+            oid: pageState.pid
           },
           contentType: 'form'
         }, function (json) {
@@ -1277,7 +1280,7 @@ define([
         $('#updateAssetPoolForm').ajaxSubmit({
           url: config.api.duration.order.editPoolForCash,
           success: function () {
-            pageInit(pid, http, config)
+            pageInit(pageState, http, config)
             $('#updateAssetPoolModal').modal('hide')
           }
         })
@@ -1419,15 +1422,15 @@ function validpercentage($el) {
   return !(percentage > 100)
 }
 
-function pageInit (pid, http, config) {
+function pageInit (pageState, http, config) {
   http.post(config.api.duration.assetPool.getById, {
     data: {
-      oid: pid || ''
+      oid: pageState.pid || ''
     },
     contentType: 'form'
   }, function (json) {
-    console.log(json)
     var detail = json.result
+    pageState.pid = detail.oid
     $('#detailPoolScale').html(detail.scale)
     $('#detailPoolCash').html(detail.cashPosition)
     // 饼图生成
