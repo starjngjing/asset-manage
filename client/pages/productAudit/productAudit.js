@@ -20,6 +20,7 @@ define([
 			}
 		// 用于存储表格checkbox选中的项
 		var checkItems = []
+		var selectProductOid 
     	// 数据表格配置
     	var tableConfig = {
     		ajax: function (origin) {
@@ -128,7 +129,7 @@ define([
 					field: 'channelNum'
 				},
 				{
-					field: 'investment',
+					field: 'assetPoolName',
 					align: 'center'
 				},
 				{
@@ -205,6 +206,7 @@ define([
 							})
 						},
 						'click .item-approve': function(e, value, row) {
+							selectProductOid = row.oid;
 							$("#oid").val(row.oid)
 							$("#auditComment").val("")
 							$$.confirm({
@@ -213,7 +215,7 @@ define([
 								accept: function() {
 									http.post(config.api.productAuditApprove, {
 										data: {
-											oid: row.oid
+											oid: selectProductOid
 										},
 										contentType: 'form',
 									}, function(result) {
@@ -223,6 +225,7 @@ define([
 							})
 						},
 						'click .item-reject': function(e, value, row) {
+							selectProductOid = row.oid;
 							$("#oid").val(row.oid)
 							$("#auditComment").val("")
 							$$.confirm({
@@ -235,7 +238,7 @@ define([
 									} else {
 										http.post(config.api.productAuditReject, {
 											data: {
-												oid: row.oid,
+												oid: selectProductOid,
 												auditComment: auditComment
 											},
 											contentType: 'form',

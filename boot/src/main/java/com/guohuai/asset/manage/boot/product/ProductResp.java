@@ -29,6 +29,10 @@ public class ProductResp extends BaseResp {
 			this.typeOid = p.getType().getOid();//产品类型
 			this.typeName = p.getType().getName();
 		}
+		if(p.getAssetPool()!=null) {
+			this.assetPoolOid =  p.getAssetPool().getOid();
+			this.assetPoolName = p.getAssetPool().getName();
+		}
 		this.raiseStartDate = p.getRaiseStartDate()!=null?DateUtil.formatDate(p.getRaiseStartDate().getTime()):"";//募集开始时间
 		this.raisePeriod = p.getRaisePeriodDays();//募集期:()个自然日
 		this.interestsFirstDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
@@ -71,28 +75,30 @@ public class ProductResp extends BaseResp {
 	private String administrator;//管理人
 	private String typeOid;//产品类型
 	private String typeName;//产品类型
+	private String assetPoolOid;//资产池Oid
+	private String assetPoolName;//资产池名称
 	private String raiseStartDate;//募集开始时间
-	private int raisePeriod;//募集期:()个自然日
-	private int interestsFirstDate;//起息日:募集满额后()个自然日
-	private int durationPeriod;//存续期:()个自然日
+	private Integer raisePeriod;//募集期:()个自然日
+	private Integer interestsFirstDate;//起息日:募集满额后()个自然日
+	private Integer durationPeriod;//存续期:()个自然日
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private long raisedTotalNumber;//募集总份额
+	private Long raisedTotalNumber;//募集总份额
 	private String netUnitShare;//单位份额净值
-	private int investMin;//单笔投资最低份额
-	private long investMax;//单笔投资最高份额
-	private int investAdditional;//单笔投资追加份额
-	private int netMaxRredeemDay;//单日净赎回上限
-	private int minRredeem;//单笔净赎回下限
+	private Integer investMin;//单笔投资最低份额
+	private Long investMax;//单笔投资最高份额
+	private Integer investAdditional;//单笔投资追加份额
+	private Integer netMaxRredeemDay;//单日净赎回上限
+	private Integer minRredeem;//单笔净赎回下限
 	private String accrualCycleOid;//收益结转周期
 	private String accrualCycleName;//收益结转周期
-	private int purchaseConfirmDate;//申购确认日:()个
+	private Integer purchaseConfirmDate;//申购确认日:()个
 	private String purchaseConfirmDateType;//申购确认日类型:自然日或交易日
-	private int redeemConfirmDate;//赎回确认日:()个
+	private Integer redeemConfirmDate;//赎回确认日:()个
 	private String redeemConfirmDateType;//赎回确认日类型:自然日或交易日
 	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
 	private String redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
-	private int accrualDate;//还本付息日 存续期结束后第()个自然日
+	private Integer accrualDate;//还本付息日 存续期结束后第()个自然日
 	private String investComment;//投资标的
 	private String instruction;//产品说明
 	private String riskLevel;//风险等级
@@ -108,7 +114,7 @@ public class ProductResp extends BaseResp {
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String isOpenPurchase;//开放申购期
 	private String isOpenRemeed;//开放赎回期
-	private int channelNum;//取到数
+	private Integer channelNum;//取到数
 	private List<FileResp> files;
 
 }

@@ -205,7 +205,7 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/audit/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public ResponseEntity<PageResp<ProductResp>> auditList(HttpServletRequest request,
+	public ResponseEntity<PageResp<ProductLogListResp>> auditList(HttpServletRequest request,
 			@RequestParam String name,
 			@RequestParam String type,
 			@RequestParam int page, 
@@ -255,8 +255,8 @@ public class ProductController extends BaseController {
 		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
-		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
-		return new ResponseEntity<PageResp<ProductResp>>(rep, HttpStatus.OK);
+		PageResp<ProductLogListResp> rep = this.productService.auditList(spec, pageable);
+		return new ResponseEntity<PageResp<ProductLogListResp>>(rep, HttpStatus.OK);
 	}
 	
 	
@@ -272,7 +272,7 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/check/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public ResponseEntity<PageResp<ProductResp>> checkList(HttpServletRequest request,
+	public ResponseEntity<PageResp<ProductLogListResp>> checkList(HttpServletRequest request,
 			@RequestParam String name,
 			@RequestParam String type,
 			@RequestParam int page, 
@@ -322,8 +322,8 @@ public class ProductController extends BaseController {
 		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
-		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
-		return new ResponseEntity<PageResp<ProductResp>>(rep, HttpStatus.OK);
+		PageResp<ProductLogListResp> rep = this.productService.checkList(spec, pageable);
+		return new ResponseEntity<PageResp<ProductLogListResp>>(rep, HttpStatus.OK);
 	}
 	
 	/**
@@ -338,7 +338,7 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/approve/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public ResponseEntity<PageResp<ProductResp>> approveList(HttpServletRequest request,
+	public ResponseEntity<PageResp<ProductLogListResp>> approveList(HttpServletRequest request,
 			@RequestParam String name,
 			@RequestParam String type,
 			@RequestParam int page, 
@@ -388,8 +388,8 @@ public class ProductController extends BaseController {
 		
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
-		PageResp<ProductResp> rep = this.productService.list(spec, pageable);
-		return new ResponseEntity<PageResp<ProductResp>>(rep, HttpStatus.OK);
+		PageResp<ProductLogListResp> rep = this.productService.approveList(spec, pageable);
+		return new ResponseEntity<PageResp<ProductLogListResp>>(rep, HttpStatus.OK);
 	}
 	
 	/**

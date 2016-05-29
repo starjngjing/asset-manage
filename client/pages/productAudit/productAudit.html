@@ -263,14 +263,6 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>批量赎回定时任务:</dt>
-								<dd>
-									<div data-detail-fetch="redeemTimingTaskTimeStr"></div>
-								</dd>
-							</dl>
-						</div>
           </div>
         </div>
         <div class="row">
@@ -372,14 +364,16 @@
     <input id="oid" type="hidden">
 	  <p class="form-header">理由:</p>
 	  <textarea id="auditComment"></textarea>
+	  
 	  <div class="popover-btn clearfix">
 	    <div class="unit">
-	      <button id="doProductReject" class="btn btn-block btn-primary cancel">驳回</button>
+	      <button class="btn btn-block btn-default cancel">取 消</button>
 	    </div>
 	    <div class="unit">
-	      <button id="doProductPass" class="btn btn-block btn-primary accept">批准</button>
+	      <button id="doProductAudit" class="btn btn-block btn-primary accept">确 定</button>
 	    </div>
 	  </div>
+	  
 	</div>
 </div>
 
