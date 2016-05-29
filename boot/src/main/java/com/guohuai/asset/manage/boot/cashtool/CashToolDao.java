@@ -9,10 +9,16 @@
  */
 package com.guohuai.asset.manage.boot.cashtool;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CashToolDao extends JpaRepository<CashTool, String>, JpaSpecificationExecutor<CashTool> {
@@ -28,4 +34,10 @@ public interface CashToolDao extends JpaRepository<CashTool, String>, JpaSpecifi
 	 */
 	@Query("select ct.oid, ct.secShortName from CashTool ct where ct.secShortName like ?1")
 	public List<Object> getCashToolByName(String secShortName);
+	
+	@Modifying
+	@Query("update CashTool set dailyProfitDate=?2, dailyProfit=?3, weeklyYield=?4 where oid = ?1")
+	public void cashtoolRevenue(String oid, Date dailyProfitDate, BigDecimal dailyProfit, BigDecimal weeklyYield);
+	
+	
 }

@@ -284,7 +284,7 @@
                   <input name="raiseStatrtDate" type="text"
                          class="form-control input-sm datepicker"
                          placeholder="请填写时间"
-                         data-date-format="YYYY-MM-DD HH:mm:ss">
+                         data-date-format="YYYY-MM-DD">
                 </div>
               </div>
               <div class="col-sm-4">
@@ -377,7 +377,7 @@
                   <input name="setupDate" type="text"
                            class="form-control input-sm datepicker"
                            placeholder="请填写时间"
-                           data-date-format="YYYY-MM-DD HH:mm:ss">
+                           data-date-format="YYYY-MM-DD">
                 </div>
               </div>
               <div class="col-sm-4">
@@ -443,6 +443,34 @@
                   <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>赎回确认日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">赎回订单确认日后</span>
+                    <input name="redeemConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="input-group-btn open">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        个自然日内
+                        <span class="fa fa-caret-down"></span>
+                      </button>
+                      <ul class="select-button dropdown-menu">
+                        <li>
+                          <a href="javascirpt:void(0)" value="NATRUE">个自然日内</a>
+                        </li>
+                        <li>
+                          <a href="javascirpt:void(0)" value="TRADE">个交易日内</a>
+                        </li>
+                      </ul>
+                      <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
+                    </div>
+                  </div>
+                  <div class="help-block with-errors text-red"></div>
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-sm-4">
@@ -495,64 +523,6 @@
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
                     <span class="input-group-addon">份</span>
-                  </div>
-                  <div class="help-block with-errors text-red"></div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-4">
-                <div class="form-group">
-                  <label>赎回确认日</label>
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-addon">赎回订单确认日后</span>
-                    <input name="redeemConfirmDate" type="text"
-                           class="form-control"
-                           data-validint="0-244"
-                           data-error="应该小于244">
-                    <div class="input-group-btn open">
-                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        个自然日内
-                        <span class="fa fa-caret-down"></span>
-                      </button>
-                      <ul class="select-button dropdown-menu">
-                        <li>
-                          <a href="javascirpt:void(0)" value="NATRUE">个自然日内</a>
-                        </li>
-                        <li>
-                          <a href="javascirpt:void(0)" value="TRADE">个交易日内</a>
-                        </li>
-                      </ul>
-                      <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
-                    </div>
-                  </div>
-                  <div class="help-block with-errors text-red"></div>
-                </div>
-              </div>
-              <div class="col-sm-8">
-                <div class="form-group">
-                  <label>批量赎回定时任务</label>
-                  <div class="input-group input-group-sm">
-                    <div class="input-group-btn open">
-                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        每自然日
-                        <span class="fa fa-caret-down"></span>
-                      </button>
-                      <ul class="select-button dropdown-menu">
-                        <li>
-                          <a href="javascirpt:void(0)" value="NATRUE">每自然日</a>
-                        </li>
-                        <li>
-                          <a href="javascirpt:void(0)" value="TRADE">每交易日</a>
-                        </li>
-                      </ul>
-                      <input name="redeemTimingTaskDateType" value="NATRUE" type="hidden">
-                    </div>
-                    <input name="redeemTimingTaskTime" type="text"
-                           class="form-control datepicker"
-                           placeholder="请选择时间"
-                           data-date-format="HH:mm:ss">
-                    <span class="input-group-addon">发起代付指令</span>
                   </div>
                   <div class="help-block with-errors text-red"></div>
                 </div>
@@ -873,7 +843,7 @@
                   <input name="raiseStatrtDate" type="text"
                            class="form-control input-sm datepicker"
                            placeholder="请填写时间"
-                           data-date-format="YYYY-MM-DD HH:mm:ss">
+                           data-date-format="YYYY-MM-DD">
                 </div>
               </div>
               <div class="col-sm-4">
@@ -966,7 +936,7 @@
                   <input name="setupDate" type="text"
                            class="form-control input-sm datepicker"
                            placeholder="请填写时间"
-                           data-date-format="YYYY-MM-DD HH:mm:ss">
+                           data-date-format="YYYY-MM-DD">
                 </div>
               </div>
               <div class="col-sm-4">
@@ -1032,6 +1002,34 @@
                   <div class="help-block with-errors text-red"></div>
                 </div>
               </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label>赎回确认日</label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-addon">赎回订单确认日后</span>
+                    <input name="redeemConfirmDate" type="text"
+                           class="form-control"
+                           data-validint="0-244"
+                           data-error="应该小于244">
+                    <div class="input-group-btn open">
+                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        个自然日内
+                        <span class="fa fa-caret-down"></span>
+                      </button>
+                      <ul class="select-button dropdown-menu">
+                        <li>
+                          <a href="javascirpt:void(0)" value="NATRUE">个自然日内</a>
+                        </li>
+                        <li>
+                          <a href="javascirpt:void(0)" value="TRADE">个交易日内</a>
+                        </li>
+                      </ul>
+                      <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
+                    </div>
+                  </div>
+                  <div class="help-block with-errors text-red"></div>
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-sm-4">
@@ -1084,64 +1082,6 @@
                            data-validint="0-10000000"
                            data-error="应该小于10000000">
                     <span class="input-group-addon">份</span>
-                  </div>
-                  <div class="help-block with-errors text-red"></div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-4">
-                <div class="form-group">
-                  <label>赎回确认日</label>
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-addon">赎回订单确认日后</span>
-                    <input name="redeemConfirmDate" type="text"
-                           class="form-control"
-                           data-validint="0-244"
-                           data-error="应该小于244">
-                    <div class="input-group-btn open">
-                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        个自然日内
-                        <span class="fa fa-caret-down"></span>
-                      </button>
-                      <ul class="select-button dropdown-menu">
-                        <li>
-                          <a href="javascirpt:void(0)" value="NATRUE">个自然日内</a>
-                        </li>
-                        <li>
-                          <a href="javascirpt:void(0)" value="TRADE">个交易日内</a>
-                        </li>
-                      </ul>
-                      <input name="redeemConfirmDateType" value="NATRUE" type="hidden">
-                    </div>
-                  </div>
-                  <div class="help-block with-errors text-red"></div>
-                </div>
-              </div>
-              <div class="col-sm-8">
-                <div class="form-group">
-                  <label>批量赎回定时任务</label>
-                  <div class="input-group input-group-sm">
-                    <div class="input-group-btn open">
-                      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        每自然日
-                        <span class="fa fa-caret-down"></span>
-                      </button>
-                      <ul class="select-button dropdown-menu">
-                        <li>
-                          <a href="javascirpt:void(0)" value="NATRUE">每自然日</a>
-                        </li>
-                        <li>
-                          <a href="javascirpt:void(0)" value="TRADE">每交易日</a>
-                        </li>
-                      </ul>
-                      <input name="redeemTimingTaskDateType" value="NATRUE" type="hidden">
-                    </div>
-                    <input name="redeemTimingTaskTime" type="text"
-                           class="form-control datepicker"
-                           placeholder="请选择时间"
-                           data-date-format="HH:mm:ss">
-                    <span class="input-group-addon">发起代付指令</span>
                   </div>
                   <div class="help-block with-errors text-red"></div>
                 </div>
@@ -1526,14 +1466,6 @@
 								<dt>赎回确认日:</dt>
 								<dd>
 									<div data-detail-fetch="redeemConfirmDateStr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>批量赎回定时任务:</dt>
-								<dd>
-									<div data-detail-fetch="redeemTimingTaskTimeStr"></div>
 								</dd>
 							</dl>
 						</div>

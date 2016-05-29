@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolDao;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.boot.cashtool.log.CashToolLogService;
+import com.guohuai.asset.manage.boot.enums.CashToolEventType;
+import com.guohuai.asset.manage.component.exception.AMPException;
 
 /**
  * 
@@ -75,4 +80,42 @@ public class CashtoolPoolService {
 		};
 		return cashtoolDao.findAll(spec);
 	}
+	
+	
+	/**
+	 * 现金管理工具收益采集
+	 * @Title: save 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param form
+	 * @return CashToolRevenue    返回类型
+	 */
+	public CashToolRevenue cashToolRevenue(CashToolRevenueForm form) {
+		String cashtoolOid = form.getCashtoolOid();
+		if (StringUtils.isBlank(cashtoolOid))
+			throw AMPException.getException("现金管理工具id不能为空");
+		
+		CashToolRevenue cr = new CashToolRevenue();
+		BeanUtils.copyProperties(form, cr);
+
+		CashTool cashTool = this.cashtoolDao.findOne(cashtoolOid);
+		if (null == cashTool)
+			throw AMPException.getException("找不到id为[" + cashtoolOid + "]的现金管理工具");
+		cr.setCashTool(cashTool);
+		
+		cr.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		cr.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+		
+		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, form.getOperator()); // 现金管理工具收益采集
+		
+		this.cashtoolRevenueDao.deleteByDailyProfitDate(form.getDailyProfitDate());
+		
+		cr = cashtoolRevenueDao.save(cr);
+		
+		this.cashtoolDao.cashtoolRevenue(cashTool.getOid(), cr.getDailyProfitDate(), cr.getDailyProfit(), cr.getWeeklyYield());
+		
+		return cr;
+	}
+	
 }

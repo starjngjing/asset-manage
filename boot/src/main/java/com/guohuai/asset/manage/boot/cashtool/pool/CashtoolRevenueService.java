@@ -44,16 +44,16 @@ public class CashtoolRevenueService {
 	 * @author vania
 	 * @version 1.0
 	 * @see: 
-	 * @param cashToolRevenueForm
+	 * @param form
 	 * @return CashToolRevenue    返回类型
 	 */
-	public CashToolRevenue save(CashToolRevenueForm cashToolRevenueForm) {
-		String cashtoolOid = cashToolRevenueForm.getCashtoolOid();
+	public CashToolRevenue save(CashToolRevenueForm form) {
+		String cashtoolOid = form.getCashtoolOid();
 		if (StringUtils.isBlank(cashtoolOid))
 			throw AMPException.getException("现金管理工具id不能为空");
 		
 		CashToolRevenue cashToolRevenue = new CashToolRevenue();
-		BeanUtils.copyProperties(cashToolRevenueForm, cashToolRevenue);
+		BeanUtils.copyProperties(form, cashToolRevenue);
 
 		CashTool cashTool = this.cashtoolDao.findOne(cashtoolOid);
 		if (null == cashTool)
@@ -63,8 +63,9 @@ public class CashtoolRevenueService {
 		cashToolRevenue.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		cashToolRevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		
-		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, cashToolRevenueForm.getOperator()); // 现金管理工具收益采集
+		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, form.getOperator()); // 现金管理工具收益采集
 		
+		this.cashtoolRevenueDao.delete(CashToolRevenue.builder().dailyProfitDate(form.getDailyProfitDate()).build());
 		return cashtoolRevenueDao.save(cashToolRevenue);
 	}
 	

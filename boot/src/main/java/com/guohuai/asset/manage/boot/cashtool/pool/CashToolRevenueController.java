@@ -81,7 +81,7 @@ public class CashToolRevenueController extends BaseController {
 				@Spec(params = "cashtoolOid", path = "cashTool.oid", spec = Equal.class) 
 			}) Specification<CashToolRevenue> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
-			@RequestParam(defaultValue = "updateTime") String sortField) {
+			@RequestParam(defaultValue = "dailyProfitDate") String sortField) {
 		if (page < 1) {
 			page = 1;
 		}

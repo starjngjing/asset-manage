@@ -52,7 +52,7 @@ public class ProductChannelController extends BaseController {
 		Specification<Channel> spec = new Specification<Channel>() {
 			@Override
 			public Predicate toPredicate(Root<Channel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("deleteStatus").as(String.class), Channel.CHANNEL_DELESTATUS_NO), cb.equal(root.get("approvelStatus").as(String.class), Channel.CHANNEL_APPROVESTATUS_PASS));
+				return cb.and(cb.equal(root.get("deleteStatus").as(String.class), Channel.CHANNEL_DELESTATUS_NO), cb.equal(root.get("approveStatus").as(String.class), Channel.CHANNEL_APPROVESTATUS_PASS));
 			}
 		};
 		spec = Specifications.where(spec);
