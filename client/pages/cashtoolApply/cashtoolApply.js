@@ -165,6 +165,7 @@ define([
 			$$.searchInit($('#cashToolSearchForm'), $('#cashToolApplyTable'))
 				// 新建标的按钮点击事件
 			$('#cashToolAdd').on('click', function() {
+					$('#addCashToolForm').resetForm();
 					util.form.validator.init($("#addCashToolForm")); // 初始化表单验证
 					$('#addCashToolModal').modal('show')
 				})

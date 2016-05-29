@@ -39,7 +39,10 @@ define([
 					}, {
 						field: 'name'
 					}, {
-						field: 'accrualType'
+						field: 'accrualType',
+						formatter: function(val) {
+							return util.enum.transform('ACCRUALTYPE', val);
+						}
 					}, {
 						field: 'expSetDate'
 					}, {
@@ -133,7 +136,7 @@ define([
 									var data = result.investment;
 									data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
 									$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
-//									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
+									//									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
 									$('#targetDetailModal').modal('show');
 								})
 							}
@@ -161,7 +164,7 @@ define([
 				queryParams: function(val) {
 					var form = document.projectSearchForm
 					$.extend(prjPageOptions, util.form.serializeJson(form)); //合并对象，修改第一个对象
-					
+
 					prjPageOptions.rows = val.limit
 					prjPageOptions.page = parseInt(val.offset / val.limit) + 1
 					prjPageOptions.targetOid = targetInfo.oid.trim(); // 标的id					
