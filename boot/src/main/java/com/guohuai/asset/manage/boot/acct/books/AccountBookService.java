@@ -191,10 +191,10 @@ public class AccountBookService {
 		equitySumIndex = index.getAndIncrement();
 		rsumIndex = index.getAndIncrement();
 
-		AccountBookBalance title = new AccountBookBalance();
-		title.setLname("流动资产：");
-		title.setRname("流动负债：");
-		result.add(0, title);
+		// AccountBookBalance title = new AccountBookBalance();
+		// title.setLname("流动资产：");
+		// title.setRname("流动负债：");
+		// result.add(0, title);
 
 		if (rindex.get() == result.size()) {
 			AccountBookBalance b = new AccountBookBalance();
