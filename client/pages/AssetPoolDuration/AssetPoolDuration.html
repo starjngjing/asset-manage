@@ -97,13 +97,13 @@
             <th></th>
             <th>名称</th>
             <th>类型</th>
-            <th>万份收益</th>
-            <th>7日年化收益</th>
-            <th>风险等级</th>
-            <th>分红方式</th>
-            <th>最新流通份额</th>
+            <th>万份收益(元)</th>
+            <th>7日年化收益(元)</th>
+            <!--<th>风险等级</th>
+            <th>分红方式</th>-->
+            <th>最新流通份额(万元)</th>
             <th>投资日</th>
-            <th>申购额度</th>
+            <th>申购额度(万元)</th>
             <th>操作类型</th>
             <th>状态</th>
             <th>操作</th>
@@ -119,12 +119,12 @@
             <th></th>
             <th>名称</th>
             <th>类型</th>
-            <th>万份收益</th>
-            <th>7日年化收益</th>
-            <th>风险等级</th>
-            <th>分红方式</th>
-            <th>最新流通份额</th>
-            <th>持有额度</th>
+            <th>万份收益(元)</th>
+            <th>7日年化收益(元)</th>
+            <!--<th>风险等级</th>
+            <th>分红方式</th>-->
+            <th>最新流通份额(万元)</th>
+            <th>持有额度(万元)</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -154,8 +154,8 @@
             <th>预计年化收益</th>
             <th>成立日</th>
             <th>付息方式</th>
-            <th>标的规模</th>
-            <th>持有份额</th>
+            <th>标的规模(万元)</th>
+            <th>持有份额(万元)</th>
             <th>主题评级</th>
             <th>类型</th>
             <th>状态</th>
@@ -174,8 +174,8 @@
             <th>预计年化收益</th>
             <th>成立日</th>
             <th>付息方式</th>
-            <th>标的规模</th>
-            <th>持有份额</th>
+            <th>标的规模(万元)</th>
+            <th>持有份额(万元)</th>
             <th>主题评级</th>
             <th>状态</th>
             <th>操作</th>
@@ -536,12 +536,12 @@
             <div data-detail-fetch="investDate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>当前持有额度:</dt>
           <dd>
             <div data-detail-fetch="amount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl id="purchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申购额度:</dt>
           <dd>
@@ -641,18 +641,18 @@
             <div data-detail-fetch="targetTypeStr"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>管理资产池:</dt>
           <dd>
             <div data-detail-fetch="assetPoolName"></div>
           </dd>
-        </dl>
-        <dl class="dl-horizontal">
+        </dl>-->
+        <!--<dl class="dl-horizontal">
           <dt>收益率:</dt>
           <dd>
             <div data-detail-fetch="incomeRate"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>预计年化收益:</dt>
           <dd>
@@ -713,12 +713,12 @@
             <div data-detail-fetch="floorVolume"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>持有份额:</dt>
           <dd>
             <div data-detail-fetch="holdAmount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>主体评级:</dt>
           <dd>
@@ -932,18 +932,18 @@
             <div data-detail-fetch="targetType"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>管理资产池:</dt>
           <dd>
             <div data-detail-fetch="assetPoolName"></div>
           </dd>
-        </dl>
-        <dl class="dl-horizontal">
+        </dl>-->
+        <!--<dl class="dl-horizontal">
           <dt>收益率:</dt>
           <dd>
             <div data-detail-fetch="incomeRate"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>预计年化收益:</dt>
           <dd>
@@ -998,12 +998,12 @@
             <div data-detail-fetch="floorVolume"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>持有份额:</dt>
           <dd>
             <div data-detail-fetch="holdAmount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>主体评级:</dt>
           <dd>
@@ -1037,7 +1037,7 @@
         <dl class="dl-horizontal">
           <dt>持有额度:</dt>
           <dd>
-            <div data-detail-fetch="volume"></div>
+            <div data-detail-fetch="holdAmount"></div>
           </dd>
         </dl>
         <form id="trustTransferForm" name="trustTransferForm" method="post">

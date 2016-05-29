@@ -151,6 +151,18 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
+	 * 获取所有资产池的名称列表，包含id
+	 * @return
+	 */
+	@RequestMapping(value = "/calcPoolProfit", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> calcPoolProfit() {
+		assetPoolService.calcPoolProfit();
+		Response r = new Response();
+		r.with("result", "SUCCESS");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+
+	/**
 	 * 获取所有资产池的资金明细
 	 * @return
 	 */

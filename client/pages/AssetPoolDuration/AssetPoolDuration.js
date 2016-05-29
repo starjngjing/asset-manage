@@ -245,12 +245,12 @@ define([
           {
             field: 'yearYield7'
           },
-          {
-            field: 'riskLevel'
-          },
-          {
-            field: 'dividendType'
-          },
+//        {
+//          field: 'riskLevel'
+//        },
+//        {
+//          field: 'dividendType'
+//        },
           {
             field: 'circulationShares'
           },
@@ -478,12 +478,12 @@ define([
           {
             field: 'yearYield7'
           },
-          {
-            field: 'riskLevel'
-          },
-          {
-            field: 'dividendType'
-          },
+//        {
+//          field: 'riskLevel'
+//        },
+//        {
+//          field: 'dividendType'
+//        },
           {
             field: 'circulationShares'
           },
