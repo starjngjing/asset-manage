@@ -93,9 +93,7 @@ public class CashToolController extends BaseController {
 
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid CashToolManageForm form) {
-		// String operator = super.getLoginAdmin();
-		System.out.println(form.getTicker());
-		String operator = "admin";
+		 String operator = super.getLoginAdmin();
 		CashTool cashTool = cashToolService.createInvestment(form);
 		cashTool.setState(CashTool.CASHTOOL_STATE_waitPretrial);
 		cashTool.setOperator(operator);
