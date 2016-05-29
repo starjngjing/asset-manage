@@ -69,8 +69,8 @@ define([
             		return val;
             	}
             },
-            { // 标的限期（日）
-              field: 'lifed',
+            { // 标的限期
+              field: 'life',
               
             },
             { // 状态
