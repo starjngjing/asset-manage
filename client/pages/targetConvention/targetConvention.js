@@ -561,8 +561,13 @@ define([
 			$('#uploadTargetConventionSummaryTable').bootstrapTable(uploadTargetConventionSummaryTableConfig)
 				// 上传纪要“上传”按钮点击事件
 			$('#doUploadTargetConventionSummary').on('click', function() {
+				if(uploadTargetConventionSummaryFiles.length <= 0){
+					alert('请上传会议纪要附件');
+					return;
+				}
 				var form = document.uploadTargetConventionSummaryForm
 				form.files.value = JSON.stringify(uploadTargetConventionSummaryFiles)
+				alert(uploadTargetConventionSummaryFiles.length);
 				$('#uploadTargetConventionSummaryForm').ajaxSubmit({
 					url: config.api.meetingSummaryUp,
 					success: function(result) {
