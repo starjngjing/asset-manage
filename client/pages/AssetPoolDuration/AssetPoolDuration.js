@@ -11,7 +11,7 @@ define([
     name: 'AssetPoolDuration',
     init: function () {
       var pageState = {
-        pid: util.nav.getHashObj(location.hash).id
+        pid: util.nav.getHashObj(location.hash).id || ''
       }
 
       pageInit(pageState, http, config)
@@ -1441,10 +1441,5 @@ function pageInit (pageState, http, config) {
     // 柱状图生成
     var barChart = echarts.init(document.getElementById('barChart'))
     barChart.setOption(getBarOptions(config, detail))
-    // FIXME
-    $('#orderingToolTable').bootstrapTable('refresh')
-    $('#toolTable').bootstrapTable('refresh')
-    $('#orderingTrustTable').bootstrapTable('refresh')
-    $('#trustTable').bootstrapTable('refresh')
   })
 }
