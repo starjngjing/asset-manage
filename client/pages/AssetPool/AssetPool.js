@@ -42,13 +42,13 @@ define([
             field: 'scale'
           },
           {// 现金比例
-            field: 'cashRate'
+            field: 'cashFactRate'
           },
           {// 货币基金（现金类管理工具）比例
-            field: 'cashtoolRate'
+            field: 'cashtoolFactRate'
           },
           {// 信托（计划）比例
-            field: 'targetRate'
+            field: 'targetFactRate'
           },
           {// 可用现金
             field: 'cashPosition'

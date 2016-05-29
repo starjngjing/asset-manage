@@ -575,6 +575,16 @@ public class CapitalService {
 				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			} else {
 				if (!capital.equals(account)) {
+					BigDecimal rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+					poolEntity.setCashFactRate(poolEntity.getCashFactRate()
+							.subtract(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+					if (target.equals(OrderService.FUND)) {
+						poolEntity.setCashtoolFactRate(poolEntity.getCashtoolFactRate()
+								.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+					} else {
+						poolEntity.setTargetFactRate(poolEntity.getTargetFactRate()
+								.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+					}
 					// 可用现金
 					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}

@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -53,6 +54,9 @@ public class AssetPoolService {
 			BeanUtils.copyProperties(entity, form);
 			entity.setOid(StringUtil.uuid());
 			entity.setCashPosition(form.getScale());
+			entity.setCashFactRate(new BigDecimal(100));
+			entity.setCashtoolFactRate(BigDecimal.ZERO);
+			entity.setTargetFactRate(BigDecimal.ZERO);
 			entity.setFreezeCash(BigDecimal.ZERO);
 			entity.setTransitCash(BigDecimal.ZERO);
 			entity.setConfirmProfit(BigDecimal.ZERO);
@@ -266,7 +270,7 @@ public class AssetPoolService {
 	 * 计算资产池当日的确认收益
 	 * @return
 	 */
-	@Scheduled(cron = "0 15 6 * * ?")
+	@Scheduled(cron = "0 15 12 * * ?")
 	@Transactional
 	public void calcPoolProfit() {
 		// 所有资产池列表
@@ -335,6 +339,7 @@ public class AssetPoolService {
 		}
 		
 		assetPool.setConfirmProfit(confirmProfit);
+		assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		
 		return assetPool;
 	}
