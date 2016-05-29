@@ -96,6 +96,7 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
+            $('#orderingTrustTable').bootstrapTable('refresh')
             $('#buyAssetModal').modal('hide')
           }
         })
