@@ -567,7 +567,6 @@ define([
 				}
 				var form = document.uploadTargetConventionSummaryForm
 				form.files.value = JSON.stringify(uploadTargetConventionSummaryFiles)
-				alert(uploadTargetConventionSummaryFiles.length);
 				$('#uploadTargetConventionSummaryForm').ajaxSubmit({
 					url: config.api.meetingSummaryUp,
 					success: function(result) {
