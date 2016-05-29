@@ -84,6 +84,7 @@ define([
             },
             {
 //              field: 'operator',
+			  visible:true ,
               width: 260,
               align: 'center',
               formatter: function (val) {
