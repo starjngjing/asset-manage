@@ -19,7 +19,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.guohuai.asset.manage.component.web.parameter.PercentJsonDeserializer;
+import com.guohuai.asset.manage.component.web.parameter.PercentJsonSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,7 +78,6 @@ public class CashToolRevenueForm implements Cloneable, Serializable {
 	 */
 	@NotNull(message = "7日年化收益率不能为空")
 	@Digits(integer = 4, fraction = 4, message = "7日年化收益率最大4位整数4位小数")
-	@JsonDeserialize(using = PercentJsonDeserializer.class)
 	private BigDecimal weeklyYield;
 
 	/**
