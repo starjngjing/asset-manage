@@ -32,4 +32,11 @@ public class AccountBookController extends BaseController {
 		return new ResponseEntity<List<AccountBookResp>>(view, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/balance", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<List<AccountBookBalance>> balance() {
+		super.checkLogin();
+		List<AccountBookBalance> view = this.accountBookService.balance();
+		return new ResponseEntity<List<AccountBookBalance>>(view, HttpStatus.OK);
+	}
+
 }

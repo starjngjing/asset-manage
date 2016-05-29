@@ -126,7 +126,8 @@ define(function() {
 							search: this.host + '/ams/acct/books/document/entry/search',
 							detail: this.host + '/ams/acct/books/document/entry/detail'
 						}
-					}
+					},
+					balance: this.host + '/ams/acct/books/balance'
 				}
 			},
 			system: {

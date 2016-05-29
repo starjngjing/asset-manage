@@ -90,7 +90,7 @@ define([
 					halign: 'center',
 					align: 'right',
 					formatter: function(val, row, index) {
-						return val == 0 ? '' : val;
+						return val == 0 ? '' : val.toFixed(2);
 					},
 					cellStyle: function(val, row, index) {
 						return {
@@ -104,7 +104,7 @@ define([
 					halign: 'center',
 					align: 'right',
 					formatter: function(val, row, index) {
-						return val == 0 ? '' : val;
+						return val == 0 ? '' : val.toFixed(2);
 					},
 					cellStyle: function(val, row, index) {
 						return {
