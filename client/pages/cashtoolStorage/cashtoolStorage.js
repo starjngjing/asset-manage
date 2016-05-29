@@ -209,7 +209,10 @@ define([
             },
             {// 7日年化收益
             	field: 'weeklyYield',
-            		
+            	formatter: function(val, row, index) {
+   					if (val)
+						return val.toFixed(2) + "%";
+   				} 
             },
             {// 录入时间
             	field: 'createTime',

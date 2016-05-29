@@ -327,7 +327,10 @@ define([
                },
                {// 实际支付收益
                	field: 'incomeRate',
-               		
+				formatter: function(val, row, index) {
+   					if (val)
+						return val.toFixed(2) + "%";
+   				}                		
                },
                {// 收益支付日
                	field: 'incomeDate',
