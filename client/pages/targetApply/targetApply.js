@@ -131,7 +131,7 @@ define([
 							text: '作废',
 							type: 'button',
 							class: 'item-invalid',
-							isRender: row.state != 'invalid'
+							isRender: row.state != 'invalid' && row.state != 'metting'
 						}, {
 							text: '检查项',
 							type: 'button',
