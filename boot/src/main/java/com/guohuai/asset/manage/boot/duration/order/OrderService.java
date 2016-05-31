@@ -1147,6 +1147,7 @@ public class OrderService {
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
 					form.setInvestDate(entity.getIncomeDate());
+					form.setVolume(entity.getIncome());
 					form.setType("本息兑付");
 					
 					formList.add(form);
@@ -1177,6 +1178,7 @@ public class OrderService {
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
 					form.setInvestDate(entity.getTranDate());
+					form.setVolume(entity.getTranVolume());
 					form.setType("转让");
 					
 					formList.add(form);
