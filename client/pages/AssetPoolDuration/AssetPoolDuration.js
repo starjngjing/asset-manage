@@ -603,6 +603,8 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingToolTable').bootstrapTable('refresh')
+            $('#toolTable').bootstrapTable('refresh')
+            pageInit(pageState, http, config)
             $('#fundCheckModal').modal('hide')
           }
         })
@@ -1219,6 +1221,8 @@ define([
           success: function () {
             util.form.reset($(form))
             $('#orderingTrustTable').bootstrapTable('refresh')
+            $('#trustTable').bootstrapTable('refresh')
+            pageInit(pageState, http, config)
             $('#trustCheckModal').modal('hide')
           }
         })
