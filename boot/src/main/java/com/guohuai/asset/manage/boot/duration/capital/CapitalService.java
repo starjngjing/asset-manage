@@ -559,7 +559,9 @@ public class CapitalService {
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity,
 			String state) {
-		BigDecimal rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal rate = BigDecimal.ZERO;
+		if (null != capital)
+			rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
 		if ("purchase".equals(operation)) {
 			if (target.equals(OrderService.FUND)) {
 				entity.setCashtoolOrderOid(sn);
