@@ -1211,15 +1211,39 @@ define([
         var form = document.trustCheckForm
         form.state.value = '-1'
         var url = ''
-        switch (form.opType) {
-          case 'audit':
-            url = config.api.duration.order.auditForTrust
+        switch (form.type.value) {
+          case '申购':
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForTrust
+                break
+              case 'ordering':
+                url = config.api.duration.order.appointmentForTrust
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForTrust
+                break
+            }
             break
-          case 'ordering':
-            url = config.api.duration.order.appointmentForTrust
+          case '本息兑付':
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForIncome
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForIncome
+                break
+            }
             break
           default:
-            url = config.api.duration.order.orderConfirmForTrust
+            switch (form.opType.value) {
+              case 'audit':
+                url = config.api.duration.order.auditForTransfer
+                break
+              default:
+                url = config.api.duration.order.orderConfirmForTransfer
+                break
+            }
             break
         }
         $(form).ajaxSubmit({
