@@ -125,6 +125,7 @@
             <th>分红方式</th>-->
             <th>最新流通份额(万份)</th>
             <th>持有额度(万元)</th>
+            <th>冻结额度(万元)</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -155,7 +156,7 @@
             <th>成立日</th>
             <th>付息方式</th>
             <th>标的规模(万元)</th>
-            <th>持有份额(万份)</th>
+            <th>预约份额(万份)</th>
             <th>主题评级</th>
             <th>类型</th>
             <th>状态</th>
@@ -176,6 +177,7 @@
             <th>付息方式</th>
             <th>标的规模(万元)</th>
             <th>持有份额(万份)</th>
+            <th>冻结份额(万份)</th>
             <th>主题评级</th>
             <th>状态</th>
             <th>操作</th>
@@ -291,12 +293,20 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
+                  <label>起购金额</label>
+                  <input name="floorVolume" type="text"
+                         class="form-control input-sm"
+                         readonly="readonly">
+                </div>
+              </div>
+              <!--<div class="col-md-6">
+                <div class="form-group">
                   <label>收益率</label>
                   <input name="incomeRate" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
                 </div>
-              </div>
+              </div>-->
             </div>
             <div class="row">
               <div class="col-md-6">
@@ -370,7 +380,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <!--<div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>起购金额</label>
@@ -387,7 +397,7 @@
                          readonly="readonly">
                 </div>
               </div>
-            </div>
+            </div>-->
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -543,7 +553,7 @@
           </dd>
         </dl>-->
         <dl id="purchaseArea" class="dl-horizontal" style="display: none;">
-          <dt>申购额度:</dt>
+          <dt>申请额度:</dt>
           <dd>
             <div data-detail-fetch="volume"></div>
           </dd>
@@ -1284,12 +1294,20 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
+                <label>持有额度</label>
+                <input name="amount" type="text"
+                       class="form-control"
+                       readonly="readonly">
+              </div>
+            </div>
+            <!--<div class="col-md-6">
+              <div class="form-group">
                 <label>关联资产池</label>
                 <input name="assetPoolName" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -1300,14 +1318,14 @@
                        readonly="readonly">
               </div>
             </div>
-            <div class="col-md-6">
+            <!--<div class="col-md-6">
               <div class="form-group">
                 <label>持有额度</label>
                 <input name="amount" type="text"
                        class="form-control"
                        readonly="readonly">
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -1600,12 +1618,12 @@
             <div data-detail-fetch="assetPoolName"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>收益率:</dt>
           <dd>
             <div data-detail-fetch="incomeRate"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>预计年化收益:</dt>
           <dd>

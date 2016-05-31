@@ -271,7 +271,7 @@ define([
             formatter: function (val) {
               switch (val) {
                 case '-2':
-                  return '<span class="text-red">失败</span>'
+                  return '<span class="text-red">未通过</span>'
                 case '-1':
                   return '<span class="text-aqua">待审核</span>'
                 case '0':
@@ -491,11 +491,14 @@ define([
             field: 'amount'
           },
           {
+            field: 'redeemVolume'
+          },
+          {
             field: 'state',
             formatter: function (val) {
               switch (val) {
                 case '-1':
-                  return '<span class="text-aqua">失败</span>'
+                  return '<span class="text-aqua">未通过</span>'
                 case '0':
                   return '<span class="text-blue">成立</span>'
               }
@@ -691,7 +694,7 @@ define([
             field: 'raiseScope'
           },
           {
-            field: 'holdAmount'
+            field: 'volume'
           },
           {
             field: 'subjectRating'
@@ -704,7 +707,7 @@ define([
             formatter: function (val) {
               switch (val) {
                 case '-2':
-                  return '<span class="text-red">失败</span>'
+                  return '<span class="text-red">未通过</span>'
                 case '-1':
                   return '<span class="text-aqua">待审核</span>'
                 case '0':
@@ -1053,6 +1056,9 @@ define([
             field: 'holdAmount'
           },
           {
+            field: 'volume'
+          },
+          {
             field: 'subjectRating'
           },
           {
@@ -1060,7 +1066,7 @@ define([
             formatter: function (val) {
               switch (val) {
                 case '-1':
-                  return '<span class="text-aqua">失败</span>'
+                  return '<span class="text-aqua">未通过</span>'
                 case '0':
                   return '<span class="text-blue">成立</span>'
               }

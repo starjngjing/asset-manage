@@ -166,6 +166,10 @@ public class OrderService {
 			FundEntity fundEntity = fundService.getFundByOid(order.getFundEntity().getOid());
 			fundEntity.setPurchaseVolume(BigDecimal.ZERO);
 			fundEntity.setFrozenCapital(BigDecimal.ZERO);
+			if ("redeem".equals(order.getOptType())) {
+				fundEntity.setAmount(fundEntity.getAmount()
+						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+			}
 			fundService.save(fundEntity);
 		}
 		order.setAuditor(uid);
@@ -216,6 +220,10 @@ public class OrderService {
 			FundEntity fundEntity = fundService.getFundByOid(order.getFundEntity().getOid());
 			fundEntity.setPurchaseVolume(BigDecimal.ZERO);
 			fundEntity.setFrozenCapital(BigDecimal.ZERO);
+			if ("redeem".equals(order.getOptType())) {
+				fundEntity.setAmount(fundEntity.getAmount()
+						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+			}
 			fundService.save(fundEntity);
 		}
 		order.setReserver(uid);
@@ -260,10 +268,16 @@ public class OrderService {
 		FundEntity fundEntity = fundService.getFundByOid(order.getFundEntity().getOid());
 		if (FundAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(FundOrderEntity.STATE_SUCCESS);
-			fundEntity.setAmount(fundEntity.getAmount().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-			fundEntity.setState(FundEntity.INVESTING);
+			if ("purchase".equals(order.getOptType())) {
+				fundEntity.setAmount(fundEntity.getAmount().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setState(FundEntity.INVESTING);
+			}
 		} else {
 			order.setState(FundOrderEntity.STATE_FAIL);
+			if ("redeem".equals(order.getOptType())) {
+				fundEntity.setAmount(fundEntity.getAmount()
+						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+			}
 		}
 		fundEntity.setPurchaseVolume(BigDecimal.ZERO);
 		fundEntity.setFrozenCapital(BigDecimal.ZERO);
@@ -440,6 +454,7 @@ public class OrderService {
 			trustEntity.setState(TrustEntity.INVESTING);
 			trustEntity.setApplyAmount(form.getInvestVolume());
 			trustEntity.setInvestAmount(form.getInvestVolume());
+			trustEntity.setInvestDate(order.getInvestDate());
 			
 			trustService.save(trustEntity);
 		} else
@@ -588,7 +603,6 @@ public class OrderService {
 		
 		TrustTransEntity entity = new TrustTransEntity();
 		entity.setOid(StringUtil.uuid());
-		entity.setTrustEntity(trustEntity);
 //		entity.setTargetOid(form.getTargetOid());
 //		entity.setTargetOid(trustEntity.getTarget().getOid());
 //		entity.setTargetName(trustEntity.getTarget().getName());
@@ -596,6 +610,10 @@ public class OrderService {
 		entity.setTranDate(form.getTranDate());
 		entity.setTranVolume(form.getTranVolume());
 		entity.setTranCash(form.getTranCash());
+		trustEntity.setTransOutAmount(form.getTranVolume());
+		trustEntity.setInvestAmount(trustEntity.getInvestAmount()
+				.subtract(form.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+		entity.setTrustEntity(trustEntity);
 //		entity.setSubjectRating(form.getSubjectRating());
 		entity.setState(TrustTransEntity.STATE_AUDIT);
 		entity.setCreater(uid);
@@ -622,8 +640,15 @@ public class OrderService {
 		order.setAuditVolume(form.getAuditVolume());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(TrustTransEntity.STATE_CONFIRM);
-		else
+		else {
 			order.setState(TrustTransEntity.STATE_FAIL);
+			TrustEntity trustEntity = order.getTrustEntity();
+			trustEntity.setInvestAmount(trustEntity.getInvestAmount()
+					.add(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+			trustEntity.setTransOutAmount(trustEntity.getTransOutAmount()
+					.subtract(order.getTranVolume().setScale(4, BigDecimal.ROUND_HALF_UP)));
+			trustService.save(trustEntity);
+		}
 		order.setAuditor(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -665,8 +690,15 @@ public class OrderService {
 			if (trustEntity.getInvestAmount().compareTo(BigDecimal.ZERO) < 1)
 				trustEntity.setState(TrustEntity.INVESTEND);
 			trustService.save(trustEntity);
-		} else
+		} else {
 			order.setState(TrustTransEntity.STATE_FAIL);
+			TrustEntity trustEntity = order.getTrustEntity();
+			trustEntity.setInvestAmount(trustEntity.getInvestAmount()
+					.add(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+			trustEntity.setTransOutAmount(trustEntity.getTransOutAmount()
+					.subtract(order.getTranVolume().setScale(4, BigDecimal.ROUND_HALF_UP)));
+			trustService.save(trustEntity);
+		}
 		order.setConfirmer(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -930,6 +962,7 @@ public class OrderService {
 				form.setCollectIncomeRate(target.getCollectIncomeRate());
 				form.setExpSetDate(target.getExpSetDate());
 				form.setHoldAmount(entity.getInvestAmount());
+				form.setVolume(entity.getTransOutAmount());
 				form.setSubjectRating(target.getSubjectRating());
 				form.setRaiseScope(target.getRaiseScope());
 				form.setAccrualType(target.getAccrualType());
@@ -968,13 +1001,18 @@ public class OrderService {
 					form.setTargetType(target.getType());
 					form.setExpAror(target.getExpAror());
 					form.setRaiseScope(target.getRaiseScope());
+					form.setSetDate(target.getSetDate());
+					form.setArorFirstDate(target.getArorFirstDate());
+					form.setAccrualDate(target.getAccrualDate());
+					form.setContractDays(target.getContractDays());
 					form.setLife(target.getLifed());
+					form.setFloorVolume(target.getFloorVolume());
+					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setVolume(entity.getApplyVolume());
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -990,7 +1028,13 @@ public class OrderService {
 					form.setTargetType(target.getType());
 					form.setExpAror(target.getExpAror());
 					form.setRaiseScope(target.getRaiseScope());
+					form.setSetDate(target.getSetDate());
+					form.setArorFirstDate(target.getArorFirstDate());
+					form.setAccrualDate(target.getAccrualDate());
+					form.setContractDays(target.getContractDays());
 					form.setLife(target.getLifed());
+					form.setFloorVolume(target.getFloorVolume());
+					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
@@ -998,6 +1042,7 @@ public class OrderService {
 					form.setVolume(entity.getIncome());
 					form.setAuditVolume(entity.getAuditIncome());
 					form.setInvestVolume(entity.getInvestIncome());
+					form.setInvestDate(entity.getTrustEntity().getInvestDate());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -1013,12 +1058,19 @@ public class OrderService {
 					form.setTargetType(target.getType());
 					form.setExpAror(target.getExpAror());
 					form.setRaiseScope(target.getRaiseScope());
+					form.setSetDate(target.getSetDate());
+					form.setArorFirstDate(target.getArorFirstDate());
+					form.setAccrualDate(target.getAccrualDate());
+					form.setContractDays(target.getContractDays());
 					form.setLife(target.getLifed());
+					form.setFloorVolume(target.getFloorVolume());
+					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setVolume(entity.getTranVolume());
+					form.setInvestDate(entity.getTrustEntity().getInvestDate());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -1172,10 +1224,10 @@ public class OrderService {
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setExpSetDate(target.getExpSetDate());
 					form.setHoldAmount(entity.getInvestAmount());
+					form.setVolume(entity.getTransOutAmount());
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
-					form.setHoldAmount(entity.getInvestAmount());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
