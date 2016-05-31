@@ -70,7 +70,19 @@ define([
             	}
             },
             { // 标的限期
-              field: 'life',
+                field: 'life',
+				formatter: function(val, row) {
+					switch (row.lifeUnit) {
+						case "day":
+							return val + '天';
+						case "month":
+							return val + '月';
+						case "year":
+							return val + '年';
+						default:
+							val;
+					}
+				}
               
             },
             { // 状态
