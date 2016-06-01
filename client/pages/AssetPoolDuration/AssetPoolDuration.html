@@ -101,7 +101,7 @@
             <th>7日年化收益(元)</th>
             <!--<th>风险等级</th>
             <th>分红方式</th>-->
-            <th>最新流通份额(万份)</th>
+            <!--<th>最新流通份额(万份)</th>-->
             <th>投资日</th>
             <th>申购额度(万元)</th>
             <th>操作类型</th>
@@ -123,7 +123,7 @@
             <th>7日年化收益(元)</th>
             <!--<th>风险等级</th>
             <th>分红方式</th>-->
-            <th>最新流通份额(万份)</th>
+            <!--<th>最新流通份额(万份)</th>-->
             <th>持有额度(万元)</th>
             <th>冻结额度(万元)</th>
             <th>状态</th>
@@ -152,7 +152,7 @@
           <tr>
             <th></th>
             <th>名称</th>
-            <th>预计年化收益</th>
+            <th>预计年化收益(%)</th>
             <th>成立日</th>
             <th>付息方式</th>
             <th>标的规模(万元)</th>
@@ -172,7 +172,7 @@
           <tr>
             <th></th>
             <th>名称</th>
-            <th>预计年化收益</th>
+            <th>预计年化收益(%)</th>
             <th>成立日</th>
             <th>付息方式</th>
             <th>标的规模(万元)</th>
@@ -232,7 +232,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>每万份收益</label>
+                  <label>每万份收益(元)</label>
                   <input name="netRevenue" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -242,7 +242,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>7日年化收益</label>
+                  <label>7日年化收益(元)</label>
                   <input name="yearYield7" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -266,14 +266,14 @@
                          readonly="readonly">
                 </div>
               </div>
-              <div class="col-md-6">
+              <!--<div class="col-md-6">
                 <div class="form-group">
                   <label>最新流通份额</label>
                   <input name="circulationShares" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
           <div id="buyAssetShowTrust" style="display: none;">
@@ -293,7 +293,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>起购金额</label>
+                  <label>起购金额(万元)</label>
                   <input name="floorVolume" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -311,7 +311,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>预计年化收益</label>
+                  <label>预计年化收益(%)</label>
                   <input name="expAror" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -365,7 +365,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>标的规模</label>
+                  <label>标的规模(万元)</label>
                   <input name="raiseScope" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -373,7 +373,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>标的限期</label>
+                  <label>标的限期(天)</label>
                   <input name="life" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -427,7 +427,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>募集期收益</label>
+                  <label>募集期收益率(%)</label>
                   <input name="collectIncomeRate" type="text"
                          class="form-control input-sm"
                          readonly="readonly">
@@ -534,12 +534,12 @@
             <div data-detail-fetch="dividendType"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>最新流通份额:</dt>
           <dd>
             <div data-detail-fetch="circulationShares"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>投资日:</dt>
           <dd>
@@ -664,7 +664,7 @@
           </dd>
         </dl>-->
         <dl class="dl-horizontal">
-          <dt>预计年化收益:</dt>
+          <dt>预计年化收益率:</dt>
           <dd>
             <div data-detail-fetch="expAror"></div>
           </dd>
@@ -748,7 +748,7 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>募集期收益:</dt>
+          <dt>募集期收益率:</dt>
           <dd>
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
@@ -844,7 +844,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>预期收益率</label>
+                <label>预期收益率(%)</label>
                 <input name="expIncomeRate" type="text"
                        class="form-control"
                        readonly="readonly">
@@ -852,7 +852,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>预期收益</label>
+                <label>预期收益(元)</label>
                 <input name="expIncome" type="text"
                        class="form-control"
                        readonly="readonly">
@@ -1033,7 +1033,7 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>募集期收益:</dt>
+          <dt>募集期收益率:</dt>
           <dd>
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
@@ -1130,7 +1130,7 @@
                     <th>科目</th>
                     <th>创建日期</th>
                     <th>操作类型</th>
-                    <th>金额</th>
+                    <th>金额(万元)</th>
                     <th>状态</th>
                     <th>操作</th>
                   </tr>
@@ -1180,7 +1180,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>每万份收益</label>
+                <label>每万份收益(元)</label>
                 <input name="netRevenue" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
@@ -1190,20 +1190,20 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>7日年化收益</label>
+                <label>7日年化收益(元)</label>
                 <input name="yearYield7" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
               </div>
             </div>
-            <div class="col-md-6">
+            <!--<div class="col-md-6">
               <div class="form-group">
                 <label>关联资产池</label>
                 <input name="assetPoolName" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -1276,7 +1276,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>每万份收益</label>
+                <label>每万份收益(元)</label>
                 <input name="netRevenue" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
@@ -1286,7 +1286,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>7日年化收益</label>
+                <label>7日年化收益(元)</label>
                 <input name="yearYield7" type="text"
                        class="form-control input-sm"
                        readonly="readonly">
@@ -1294,7 +1294,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>持有额度</label>
+                <label>持有额度(万元)</label>
                 <input name="amount" type="text"
                        class="form-control"
                        readonly="readonly">
@@ -1407,7 +1407,7 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>资产池规模</label>
+            <label>资产池规模(万元)</label>
             <input name="scale" type="text"
                    class="form-control input-sm"
                    placeholder="请输入资产池规模"
@@ -1426,7 +1426,7 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>可用现金</label>
+            <label>可用现金(万元)</label>
 
             <input name="cashPosition" type="text"
                    class="form-control input-sm"
@@ -1534,12 +1534,12 @@
             <div data-detail-fetch="dividendType"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>最新流通份额:</dt>
           <dd>
             <div data-detail-fetch="circulationShares"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>投资日:</dt>
           <dd>
@@ -1612,12 +1612,12 @@
             <div data-detail-fetch="targetType"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>管理资产池:</dt>
           <dd>
             <div data-detail-fetch="assetPoolName"></div>
           </dd>
-        </dl>
+        </dl>-->
         <!--<dl class="dl-horizontal">
           <dt>收益率:</dt>
           <dd>
@@ -1625,7 +1625,7 @@
           </dd>
         </dl>-->
         <dl class="dl-horizontal">
-          <dt>预计年化收益:</dt>
+          <dt>预计年化收益率:</dt>
           <dd>
             <div data-detail-fetch="expAror"></div>
           </dd>
@@ -1709,7 +1709,7 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>募集期收益:</dt>
+          <dt>募集期收益率:</dt>
           <dd>
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>

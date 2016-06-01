@@ -610,9 +610,12 @@ public class OrderService {
 		entity.setTranDate(form.getTranDate());
 		entity.setTranVolume(form.getTranVolume());
 		entity.setTranCash(form.getTranCash());
-		trustEntity.setTransOutAmount(form.getTranVolume());
+		trustEntity.setTransOutAmount(trustEntity.getTransOutAmount().add(form.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+		trustEntity.setTransOutFee(trustEntity.getTransOutFee().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 		trustEntity.setInvestAmount(trustEntity.getInvestAmount()
 				.subtract(form.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+		trustService.save(trustEntity);
+		
 		entity.setTrustEntity(trustEntity);
 //		entity.setSubjectRating(form.getSubjectRating());
 		entity.setState(TrustTransEntity.STATE_AUDIT);
@@ -684,9 +687,9 @@ public class OrderService {
 			order.setState(TrustTransEntity.STATE_SUCCESS);
 			
 			TrustEntity trustEntity = trustService.getTrustByOid(order.getTrustEntity().getOid());
-			trustEntity.setInvestAmount(trustEntity.getInvestAmount().subtract(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-			trustEntity.setTransOutAmount(trustEntity.getTransOutAmount().add(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-			trustEntity.setTransOutFee(trustEntity.getTransOutFee().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+//			trustEntity.setInvestAmount(trustEntity.getInvestAmount().subtract(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+//			trustEntity.setTransOutAmount(trustEntity.getTransOutAmount().add(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+//			trustEntity.setTransOutFee(trustEntity.getTransOutFee().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			if (trustEntity.getInvestAmount().compareTo(BigDecimal.ZERO) < 1)
 				trustEntity.setState(TrustEntity.INVESTEND);
 			trustService.save(trustEntity);

@@ -185,6 +185,18 @@ define([
                     $('#fundDetailModal').modal('show')
                   } else {
                     json.result.targetType = util.enum.transform('TARGETTYPE', json.result.targetType)
+                    json.result.accrualType = util.enum.transform('ACCRUALTYPE', json.result.accrualType)
+                    json.result.expAror = json.result.expAror + "\t%"
+                    json.result.raiseScope = parseFloat(json.result.raiseScope) / 10000 + "\t万元"
+                    if (json.result.life) {
+                    	json.result.life = json.result.life + "\t天"
+                    }
+                    json.result.floorVolume = json.result.floorVolume + "\t万元"
+                    if (json.result.holdAmount) {
+                    	json.result.holdAmount = json.result.holdAmount + "\t万元"
+                    }
+                    json.result.collectIncomeRate = json.result.collectIncomeRate + "\t%"
+                    	json.result.volume = json.result.volume + "\t万元"
                     $$.detailAutoFix($('#trustDetailModal'), json.result)
                     $('#trustDetailModal').modal('show')
                   }
@@ -251,9 +263,9 @@ define([
 //        {
 //          field: 'dividendType'
 //        },
-          {
-            field: 'circulationShares'
-          },
+//        {
+//          field: 'circulationShares'
+//        },
           {
             field: 'investDate'
           },
@@ -337,6 +349,9 @@ define([
                   util.form.validator.init($(form))
                   modal.find('.labelForOrdering').css({display: 'none'})
                   modal.find('.labelForAccept').css({display: 'none'})
+                  result.netRevenue = result.netRevenue + '\t元'
+                  result.yearYield7 = result.yearYield7 + '\t元'
+                  result.returnVolume = result.returnVolume + '\t万元'
                   result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
                   $$.detailAutoFix(modal, result)
                 })
@@ -377,6 +392,12 @@ define([
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'none'})
                   result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+                  result.netRevenue = result.netRevenue + '\t元'
+                  result.yearYield7 = result.yearYield7 + '\t元'
+                  result.returnVolume = result.returnVolume + '\t万元'
+                  if (result.auditVolume) {
+                  	result.auditVolume = result.auditVolume + '\t万元'
+                  }
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -416,6 +437,15 @@ define([
                   modal.find('.labelForOrdering').css({display: 'block'})
                   modal.find('.labelForAccept').css({display: 'block'})
                   result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+                  result.netRevenue = result.netRevenue + '\t元'
+                  result.yearYield7 = result.yearYield7 + '\t元'
+                  result.returnVolume = result.returnVolume + '\t万元'
+                  if (result.auditVolume) {
+                  	result.auditVolume = result.auditVolume + '\t万元'
+                  }
+                  if (result.reserveVolume) {
+                  	result.reserveVolume = result.reserveVolume + '\t万元'
+                  }
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -484,9 +514,9 @@ define([
 //        {
 //          field: 'dividendType'
 //        },
-          {
-            field: 'circulationShares'
-          },
+//        {
+//          field: 'circulationShares'
+//        },
           {
             field: 'amount'
           },
@@ -693,7 +723,10 @@ define([
             }
           },
           {
-            field: 'raiseScope'
+            field: 'raiseScope',
+            formatter: function (val) {
+            	return parseInt(val) / 10000
+            }
           },
           {
             field: 'volume'
@@ -793,6 +826,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'none'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -826,6 +867,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'none'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -859,6 +908,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'none'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -892,6 +949,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'none'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -925,6 +990,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'block'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -958,6 +1031,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'block'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -991,6 +1072,14 @@ define([
                   modal.find('.labelForAccept').css({display: 'block'})
                   result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+                  result.volume = result.volume + '\t万元'
+                  result.expAror = result.expAror + '\t%'
+                  if (result.life) {
+                  	result.life = result.life + '\t天'
+                  }
+                  result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+                  result.collectIncomeRate = result.collectIncomeRate + '\t%'
                   $$.detailAutoFix(modal, result)
                 })
                 modal.modal('show')
@@ -1059,7 +1148,10 @@ define([
             }
           },
           {
-            field: 'raiseScope'
+            field: 'raiseScope',
+            formatter: function (val) {
+            	return parseInt(val) / 10000
+            }
           },
           {
             field: 'holdAmount'
@@ -1131,6 +1223,9 @@ define([
                   form.assetPoolOid.value = pageState.pid
                   result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
                   result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+                  result.raiseScope = result.raiseScope + '万元'
+                  result.holdAmount = result.holdAmount + '万元'
+                  result.volume = result.volume + '万元'
                   $$.detailAutoFix($('#trustTransferModal'), result)
                 })
                 $('#trustTransferModal').modal('show')
