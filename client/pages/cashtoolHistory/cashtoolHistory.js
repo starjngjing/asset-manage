@@ -93,12 +93,13 @@ define([
             	      text: '移除出库',
             	      type: 'button',
             	      class: 'item-remove',
-            	      isRender: true
+            	      isRender: row.state !== 'invalid'
             	    },
               	    {
               	    	text: '收益采集',
               	    	type: 'button',
               	    	class: 'item-cashToolRevenue',
+              	    	isRender: row.state === 'collecting'
               	    }
             	  ];
             	  return util.table.formatter.generateButton(buttons);
