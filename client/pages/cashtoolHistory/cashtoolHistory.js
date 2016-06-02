@@ -87,7 +87,7 @@ define([
               visible:false, // 不显示
               width: 260,
               align: 'center',
-              formatter: function (val) {
+              formatter: function (val, row) {
             	  var buttons = [
             	    {
             	      text: '移除出库',
