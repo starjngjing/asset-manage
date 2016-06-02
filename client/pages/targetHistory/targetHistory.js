@@ -131,7 +131,7 @@ define([
 							text: '移除出库',
 							type: 'button',
 							class: 'item-remove',
-							isRender: true,
+							isRender: row.state !== 'invalid' && row.state !== 'metting'
 						}, {
 							text: '财务数据',
 							type: 'button',
