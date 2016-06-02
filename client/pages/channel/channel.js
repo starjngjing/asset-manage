@@ -203,11 +203,10 @@ function (http, config, util, $$) {
                   contentType: 'form',
                 }, function (result) {
                 	$('#editChanelName').attr('readonly',true);                  
-                  $$.formAutoFix($('#channelForm'), result); // 自动填充详情
-                  $('#channelForm').validator('validate')
+                  $$.formAutoFix($('#editChannelForm'), result); // 自动填充详情
+                  $('#editChannelForm').validator('validate')
                 })
-								$('#channelModal').modal('show')
-								.find('.modal-title').html("修改渠道"); 
+								$('#editChannelModal').modal('show')								
               },
               'click .del': function (e, value, row) {
               	confirm.find('.popover-title').html('提示')
@@ -240,8 +239,10 @@ function (http, config, util, $$) {
 		  $('#channelTable').bootstrapTable(tableConfig);
 		  $$.searchInit($('#searchForm'), $('#channelTable'));
 		 
-		  util.form.validator.init($('#channelForm'))
-			$('#channelForm').validator('validate')
+		  util.form.validator.init($('#addChannelForm'))
+		  util.form.validator.init($('#editChannelForm'))
+			$('#addChannelForm').validator('validate')
+			$('#editChannelForm').validator('validate')
 
 		  function getQueryParams (val) {
         // 参数 val 是bootstrap-table默认的与服务器交互的数据，包含分页、排序数据
@@ -258,35 +259,41 @@ function (http, config, util, $$) {
 		bindEvent:function(){
 			var _this = this;
 			
-			//将新增修改渠道页面显示出来
-			$("#addChannel").on("click",function(){
-				$('#editChanelName').attr('readonly',false);
-				 $('#channelForm').clearForm()
-        .find('input[type=hidden]').val('')
+			//将新增渠道页面显示出来
+			$("#addChannel").on("click",function(){				
+				util.form.reset($('#addChannelForm'));       
         _this.channelInfo.oid='';
-				//$(document.channelForm).validator('validate')
-				$('#channelModal').modal('show')
-				.find('.modal-title').html("新建渠道");
+				$(document.addChannelForm).validator('validate');
+				$('#addChannelModal').modal('show');				
 			});
 			
 			//新增渠道
-			$("#channelSubmit").on("click",function(){
-				var url = '';
-				if(_this.channelInfo.oid){
-					url = config.api.editChannel;
-					document.channelForm.oid.value = _this.channelInfo.oid
-				}else{
-					url = config.api.addChannel;					
-				}
-				$('#channelForm').ajaxSubmit({
-          url: url,
+			$("#addChannelSubmit").on("click",function(){			
+				$('#addChannelForm').ajaxSubmit({
+          url: config.api.addChannel,
           success: function (res) {
           	if(res.errorCode==0){
-          		 $('#channelModal').modal('hide')
-            	 $('#channelTable').bootstrapTable('refresh')
+          		$('#addChannelModal').modal('hide')
+            	$('#channelTable').bootstrapTable('refresh')
           	}else{
           		errorHandle(res);
           	}
+          }
+        })
+			});
+			
+			//修改渠道
+			$("#editChannelSubmit").on("click",function(){
+				document.editChannelForm.oid.value = _this.channelInfo.oid
+				$('#editChannelForm').ajaxSubmit({
+          url: config.api.editChannel,
+          success: function (res) {
+            if(res.errorCode==0){
+            	$('#editChannelModal').modal('hide')
+              $('#channelTable').bootstrapTable('refresh')
+            }else{
+            	errorHandle(res);
+            }
           }
         })
 			});

@@ -19,6 +19,7 @@ import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.Clock;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 import com.guohuai.asset.manage.component.web.view.PageResp;
+import com.guohuai.operate.api.AdminSdk;
 
 @Service
 @Transactional
@@ -28,6 +29,8 @@ public class ChannelApproveService {
 	ChannelApproveDao daoChannelApprove;
 	@Autowired
 	ChannelService serviceChannel;
+	@Autowired
+	private AdminSdk adminSdk;
 	
 	@Transactional
 	public PageResp<ChannelApproveQueryRep> channelApproveQuery(Specification<ChannelApprove> spec, Pageable pageable) {		
@@ -35,11 +38,13 @@ public class ChannelApproveService {
 		PageResp<ChannelApproveQueryRep> pageResp = new PageResp<ChannelApproveQueryRep>();
 		List<ChannelApproveQueryRep> list = new ArrayList<ChannelApproveQueryRep>();
 		for (ChannelApprove en : enchapproves) {
+			String requester = adminSdk.getAdmin(en.getRequester()).getName();
+			String approveMan = adminSdk.getAdmin(en.getApproveMan()).getName();
 			ChannelApproveQueryRep rep = new ChannelApproveQueryRepBuilder().oid(en.getOid())
 					.channelOid(en.getChannel().getOid())
 					.channelName(en.getChannelName()).channelApprovelCode(en.getChannelApproveCode())
-					.requestType(en.getRequestType()).requester(en.getRequester())
-					.approvelMan(en.getApproveMan()).approvelResult(en.getApproveStatus())
+					.requestType(en.getRequestType()).requester(requester)
+					.approvelMan(approveMan).approvelResult(en.getApproveStatus())
 					.remark(en.getRemark()).requestTime(en.getRequestTime())
 					.updateTime(en.getUpdateTime()).build();
 			list.add(rep);
