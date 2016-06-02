@@ -404,6 +404,7 @@ function (http, config, util, $$) {
 		  $('#dataTable3').bootstrapTable(tableConfig3);
 		  $('#channelTable').bootstrapTable(channelTableConfig);
 			
+			util.form.validator.init($('#channelForm'))
 			$('#channelForm').validator();
 			
 			$(".eventConfirm").on("click",function(){

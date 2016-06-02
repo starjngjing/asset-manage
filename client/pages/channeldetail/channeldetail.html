@@ -370,7 +370,10 @@
             <label>渠道费率(%)</label>
             <input name="channelFee" type="text"
                    class="form-control"
-                   placeholder="请输入渠道费率" required>
+                   placeholder="请输入渠道费率" 
+                   data-validfloat="10.2"
+                   data-error="费率格式小数2位" required>
+              <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
             <label>渠道机构</label>
