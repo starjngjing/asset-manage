@@ -536,6 +536,15 @@ define([
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				$('#projectForm').validator('validate'); // 手动校验一把
+				
+				$(document.projectForm.projectTypeName).val($(this).text()); // 设置项目类型名称
+			});
+			
+			
+			// 新增/修改底层项目-房地产项目属性下拉列表选项改变事件
+			$(document.projectForm.estateProp).change(function() { // 房地产项目属性
+				var ptt = $(this).val();				
+				$(document.projectForm.estatePropName).val($(this).text()); // 设置房地产项目属性名称
 			});
 
 			// 新增/修改底层项目-是否有担保人单选按钮改变事件
