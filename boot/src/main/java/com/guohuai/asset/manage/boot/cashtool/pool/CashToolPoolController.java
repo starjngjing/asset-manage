@@ -131,7 +131,7 @@ public class CashToolPoolController extends BaseController {
 					predicate.add(cb.equal(exp,  CashTool.CASHTOOL_STATE_collecting));
 				} else if (op.equals("historyList")) { // 历史列表
 					Expression<String> exp = root.get("state");					
-					predicate.add(exp.in(new Object[] { CashTool.CASHTOOL_STATE_delete, CashTool.CASHTOOL_STATE_invalid }));
+					predicate.add(exp.in(new Object[] { CashTool.CASHTOOL_STATE_invalid }));
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
 				}
