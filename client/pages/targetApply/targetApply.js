@@ -399,6 +399,19 @@ define([
 									} else {
 										$("#hypothecationDetail").hide()
 									}
+									
+									/* 判断项目类型 */
+									if(data.projectType === 'PROJECTTYPE_01') { // 金融类项目									
+										$("#estateDetail").hide()
+										$("#financeDetai").show()
+									} else if(data.projectType === 'PROJECTTYPE_02') { // 地产类项目									
+										$("#estateDetail").show()
+										$("#financeDetai").hide()
+									} else {
+										$("#estateDetail").hide()
+										$("#financeDetai").hide()
+									}
+									
 									$('#projectDetailModal').modal('show');
 								}
 							});

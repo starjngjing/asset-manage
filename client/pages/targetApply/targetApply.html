@@ -1553,7 +1553,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- 底层项目详情  弹窗 -->
 <div id="projectDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
@@ -1656,77 +1655,88 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="col-sm-4">
-							<dl class="dl-horizontal">
-								<dt>资金方所在地:</dt>
-								<dd>
-									<div data-detail-fetch="funderAddr"></div>
-								</dd>
-							</dl>
+					</div>
+					<div id="financeDetai">
+						<p class="form-header">金融类项目信息</p>
+						<div class="row">
+							<div class="col-sm-4">
+								<dl class="dl-horizontal">
+									<dt>资金方所在地:</dt>
+									<dd>
+										<div data-detail-fetch="funderAddr"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>资金用途:</dt>
+									<dd>
+										<div data-detail-fetch="fundUsage"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>项目还款来源:</dt>
+									<dd>
+										<div data-detail-fetch="payment"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>外部项目增信措施:</dt>
+									<dd>
+										<div data-detail-fetch="trustMeasures"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>其他外部项目增信措施:</dt>
+									<dd>
+										<div data-detail-fetch="trustMeasuresName"></div>
+									</dd>
+								</dl>
+							</div>
 						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>资金用途:</dt>
-								<dd>
-									<div data-detail-fetch="fundUsage"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>项目还款来源:</dt>
-								<dd>
-									<div data-detail-fetch="payment"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>外部项目增信措施:</dt>
-								<dd>
-									<div data-detail-fetch="trustMeasures"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>其他外部项目增信措施:</dt>
-								<dd>
-									<div data-detail-fetch="trustMeasuresName"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>其他外部项目增信措施:</dt>
-								<dd>
-									<div data-detail-fetch="projectAddr"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>开发商排名:</dt>
-								<dd>
-									<div data-detail-fetch="developerRank"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-4">
-							<dl class="dl-horizontal">
-								<dt>房地产项目属性:</dt>
-								<dd>
-									<div data-detail-fetch="estateProp" data-enum-transform="ESTATEPROPTYPE"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-4">
-							<dl class="dl-horizontal">
-								<dt>完工情况:</dt>
-								<dd>
-									<div data-detail-fetch="estateCompletion"></div>
-								</dd>
-							</dl>
+					</div>
+
+					<div id="estateDetail">
+						<div class="row">
+							<p class="form-header">房地产类项目信息</p>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>房地产项目所在地:</dt>
+									<dd>
+										<div data-detail-fetch="projectAddr"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>开发商排名:</dt>
+									<dd>
+										<div data-detail-fetch="developerRank"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-4">
+								<dl class="dl-horizontal">
+									<dt>房地产项目属性:</dt>
+									<dd>
+										<div data-detail-fetch="estateProp" data-enum-transform="ESTATEPROPTYPE"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-4">
+								<dl class="dl-horizontal">
+									<dt>完工情况:</dt>
+									<dd>
+										<div data-detail-fetch="estateCompletion"></div>
+									</dd>
+								</dl>
+							</div>
 						</div>
 					</div>
 					<div id="warrantorDetail">
