@@ -218,8 +218,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='createCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='createCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集起始日不能为空">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -229,8 +230,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集截至日不能为空">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>
@@ -525,8 +527,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='editCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='editCollectStartDate' name="collectStartDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集起始日不能为空">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -536,8 +539,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='editCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input id='editCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集截至日不能为空">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>

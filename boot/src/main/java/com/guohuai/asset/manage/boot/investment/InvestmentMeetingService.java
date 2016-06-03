@@ -1,8 +1,11 @@
 package com.guohuai.asset.manage.boot.investment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,8 @@ import com.guohuai.asset.manage.boot.investment.meeting.MeetingFinishForm;
 import com.guohuai.asset.manage.boot.investment.meeting.MeetingInvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.SummaryDetResp;
 import com.guohuai.asset.manage.boot.investment.meeting.SummaryFileDet;
+import com.guohuai.asset.manage.boot.workflow.WorkflowAssetService;
+import com.guohuai.asset.manage.boot.workflow.WorkflowConstant;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.operate.api.AdminSdk;
@@ -54,6 +59,9 @@ public class InvestmentMeetingService {
 
 	@Autowired
 	private AdminSdk adminSdk;
+
+//	@Autowired
+//	private WorkflowAssetService workflowAssetService;
 
 	/**
 	 * 获得投资标的过会列表
@@ -104,7 +112,7 @@ public class InvestmentMeetingService {
 	}
 
 	/**
-	 * 创建国会信息
+	 * 创建过会信息
 	 * 
 	 * @param form
 	 * @param operator
@@ -113,29 +121,49 @@ public class InvestmentMeetingService {
 	@Transactional
 	public InvestmentMeeting addMeeting(AddInvestmentMeetingForm form, String operator) {
 		try {
+			InvestmentMeeting temp = investmentMeetingDao.findBySn(form.getSn());
+			if (null != temp)
+				throw new RuntimeException("会议编号重复");
 			InvestmentMeeting entity = InvestmentMeeting.builder().conferenceTime(form.getConferenceTime())
 					.creator(operator).createTime(DateUtil.getSqlCurrentDate()).sn(form.getSn())
 					.state(InvestmentMeeting.MEETING_STATE_NOTOPEN).title(form.getTitle()).build();
 			InvestmentMeeting meeting = this.saveMeeting(entity, operator);
-			this.addTargetStr(form.getTarget(), meeting, operator);
-			this.addParticipant(form.getParticipant(), meeting);
+			Set<String> targets = this.addTargetStr(form.getTarget(), meeting, operator);
+			Set<String> participants = this.addParticipant(form.getParticipant(), meeting);
+			// 工作流
+//			for (String oid : targets) {
+//				workflowAssetService.complete(operator, oid, WorkflowConstant.NODEID_COMITMEETING, "pass",
+//						participants);
+//			}
 			return meeting;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
-	private void addParticipant(String parStr, InvestmentMeeting meeting) throws Exception {
+	/**
+	 * 添加参会人
+	 * 
+	 * @param parStr
+	 * @param meeting
+	 * @return
+	 * @throws Exception
+	 */
+	private Set<String> addParticipant(String parStr, InvestmentMeeting meeting) throws Exception {
+		Set<String> res = new HashSet<String>();
 		String[] arr = parStr.split(",");
 		for (String oid : arr) {
 			InvestmentMeetingUser entity = InvestmentMeetingUser.builder().investmentMeeting(meeting)
 					.participantOid(oid).build();
 			investmentMeetingUserDao.save(entity);
+			res.add(oid);
 		}
+		return res;
 	}
 
-	private void addTargetStr(String targetStr, InvestmentMeeting meeting, String operator) throws Exception {
+	private Set<String> addTargetStr(String targetStr, InvestmentMeeting meeting, String operator) throws Exception {
+		Set<String> res = new HashSet<String>();
 		String[] arr = targetStr.split(",");
 		for (String oid : arr) {
 			Investment temp = investmentService.getInvestmentDet(oid);
@@ -146,7 +174,9 @@ public class InvestmentMeetingService {
 			investmentMeetingAssetDao.save(entity);
 			temp.setState(Investment.INVESTMENT_STATUS_metting);
 			investmentService.updateInvestment(temp, operator);
+			res.add(temp.getOid());
 		}
+		return res;
 	}
 
 	/**
@@ -270,9 +300,11 @@ public class InvestmentMeetingService {
 		}
 		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
 		for (MeetingInvestmentDetResp req : list) {
+			String flowState = "reject";
 			TargetEventType logType = null;
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
+				flowState = "pass";
 				investment.setState(Investment.INVESTMENT_STATUS_collecting);
 				investment.setLifeState(investment.INVESTMENT_LIFESTATUS_PREPARE);
 				String[] checkList = req.getCheckConditions();
@@ -293,9 +325,12 @@ public class InvestmentMeetingService {
 			}
 			investmentService.updateInvestment(investment, operator);
 			investmentLogService.saveInvestmentLog(investment, logType, operator);
+			// 工作流
+//			workflowAssetService.complete(operator, investment.getOid(), WorkflowConstant.NODEID_MEETINGFINISH, flowState);
 		}
 		meeting.setState(InvestmentMeeting.MEETING_STATE_FINISH);
 		this.updateMeeting(meeting, operator);
+
 	}
 
 }

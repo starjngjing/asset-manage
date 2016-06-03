@@ -447,6 +447,10 @@ define([
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
 					url: config.api.meetingAdd,
 					success: function(result) {
+						if(result.errorCode != 0){
+							alert(result.errorMessage);
+							return
+						}
 						$('#targetConventionTable').bootstrapTable('refresh')
 						$('#addTargetConventionModal').modal('hide')
 					}
