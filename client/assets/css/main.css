@@ -416,3 +416,22 @@ table.treetable tr.expanded span.indenter a:before {
   right: 0;
   bottom: 1px;
 }
+
+fieldset{
+  padding: 20px 15px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+fieldset > .fieldset-title{
+  background-color: #fff;
+  padding: 5px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  position: absolute;
+  top: -15px;
+  left: 5px;
+}
+
