@@ -301,13 +301,14 @@ public class AssetPoolService {
 	@Transactional
 	public void calcPoolProfit() {
 		// 所有资产池列表
-		List<AssetPoolEntity> poolList = assetPoolDao.findAll();
+		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
+		List<AssetPoolEntity> saveList = Lists.newArrayList();
 		if (null != poolList && !poolList.isEmpty()) {
 			for (AssetPoolEntity entity : poolList) {
-				poolList.add(this.calcPoolProfit(entity));
+				saveList.add(this.calcPoolProfit(entity));
 			}
 			
-			assetPoolDao.save(poolList);
+			assetPoolDao.save(saveList);
 		}
 		
 	}
@@ -335,6 +336,9 @@ public class AssetPoolService {
 				confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				entity.setAmount(entity.getAmount().add(dayProfit)
 						.setScale(4, BigDecimal.ROUND_HALF_UP));
+				entity.setDailyProfit(dayProfit);
+				entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
+						.setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 		}
 		
@@ -351,6 +355,9 @@ public class AssetPoolService {
 								.divide(new BigDecimal(entity.getTarget().getContractDays()))
 								.setScale(4, BigDecimal.ROUND_HALF_UP);
 						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+						entity.setDailyProfit(dayProfit);
+						entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
+								.setScale(4, BigDecimal.ROUND_HALF_UP));
 					}
 				} else {
 					// 判断是否在募集期
@@ -360,6 +367,9 @@ public class AssetPoolService {
 								.divide(new BigDecimal(entity.getTarget().getContractDays()))
 								.setScale(4, BigDecimal.ROUND_HALF_UP);
 						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+						entity.setDailyProfit(dayProfit);
+						entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
+								.setScale(4, BigDecimal.ROUND_HALF_UP));
 					}
 				}
 			}

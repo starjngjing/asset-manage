@@ -12,6 +12,16 @@
 
 <!-- 主要内容 -->
 <section class="content">
+	<div class="row">
+		<form id="searchForm" name="searchForm" method="post">
+			<div class="col-lg-1">标的名称</div>
+  		<div class="col-lg-2">
+  		<select id="assetPoolName" name="assetPoolName" class="form-control input-sm"></select>
+  		<input name="assetPoolOid" type="hidden"/>
+  	</div>
+		</form>
+	</div>
+	
   <div class="row">
     <div class="col-md-3">
       <div class="box box-primary">
@@ -126,7 +136,9 @@
             <!--<th>最新流通份额(万份)</th>-->
             <th>持有额度(万元)</th>
             <th>冻结额度(万元)</th>
-            <th>状态</th>
+            <!--<th>状态</th>-->
+            <th>每日收益</th>
+            <th>总收益</th>
             <th>操作</th>
           </tr>
           </thead>
@@ -467,7 +479,7 @@
             <label>关联资产池</label>
             <select name="assetPoolOid" class="form-control input-sm"></select>
           </div>
-          <div class="form-group">
+          <div id="profitType" style="display: none;" class="form-group">
             <label>收益方式</label>
             <select name="profitType" class="form-control input-sm">
               <option value="amortized_cost" selected>摊余成本法</option>
@@ -839,7 +851,7 @@
           <input name="assetPoolOid" type="hidden"/>
           <div class="form-group">
             <label>期数</label>
-            <select name="seq" class="form-control"></select>
+            <select name="seq" class="form-control" disabled="disabled"></select>
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -868,7 +880,7 @@
                        readonly="readonly">
               </div>
             </div>
-            <div class="col-md-6">
+            <!--<div class="col-md-6">
               <div id="capitalArea" class="form-group" style="display: none;">
                 <label>本金返还</label>
                 <div class="input-group input-group-sm">
@@ -878,7 +890,7 @@
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -901,6 +913,27 @@
                          class="form-control"
                          placeholder="实际收益"
                          data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group input-group-sm">
+                <input id="ifCapital" name="ifCapitalName" type="checkbox">
+                <span>是否进行本金兑付</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div id="capitalArea" class="form-group" style="display: none;">
+                <label>本金返还</label>
+                <div class="input-group input-group-sm">
+                  <input id="capitalInput" name="capital" type="text"
+                         class="form-control"
+                         readonly="readonly">
                   <span class="input-group-addon">万</span>
                 </div>
               </div>

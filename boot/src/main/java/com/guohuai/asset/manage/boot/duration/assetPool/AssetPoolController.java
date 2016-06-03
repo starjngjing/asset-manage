@@ -183,4 +183,12 @@ public class AssetPoolController extends BaseController {
 		r.with("total", list.size());
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/calcCapital", method = { RequestMethod.GET })
+	public @ResponseBody ResponseEntity<Response> calcCapital() {
+		assetPoolService.calcPoolProfit();
+		Response r = new Response();
+		r.with("result", "SUCCESS");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 }

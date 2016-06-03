@@ -620,6 +620,7 @@ public class CapitalService {
 			}
 			// 在途资金
 			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
+			poolEntity.setFactProfit(poolEntity.getFactProfit().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("transfer".equals(operation)) {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);

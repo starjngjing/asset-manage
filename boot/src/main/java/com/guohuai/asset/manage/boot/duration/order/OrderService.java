@@ -455,6 +455,7 @@ public class OrderService {
 			trustEntity.setApplyAmount(form.getInvestVolume());
 			trustEntity.setInvestAmount(form.getInvestVolume());
 			trustEntity.setInvestDate(order.getInvestDate());
+			trustEntity.setProfitType(order.getProfitType());
 			
 			trustService.save(trustEntity);
 		} else
@@ -565,12 +566,13 @@ public class OrderService {
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(TrustOrderEntity.STATE_SUCCESS);
 			
+			TrustEntity trustEntity = trustService.getTrustByOid(order.getTrustEntity().getOid());
 			if (!BigDecimal.ZERO.equals(order.getCapital())) {
-				TrustEntity trustEntity = trustService.getTrustByOid(order.getTrustEntity().getOid());
 				trustEntity.setInvestAmount(BigDecimal.ZERO);
 				trustEntity.setState(TrustEntity.INVESTEND);
-				trustService.save(trustEntity);
 			}
+			trustEntity.setTotalProfit(form.getInvestVolume());
+			trustService.save(trustEntity);
 		} else
 			order.setState(TrustOrderEntity.STATE_FAIL);
 		order.setConfirmer(uid);
@@ -958,7 +960,7 @@ public class OrderService {
 				form.setArorFirstDate(target.getArorFirstDate());
 				form.setAccrualDate(target.getAccrualDate());
 				form.setContractDays(target.getContractDays());
-				form.setLife(target.getLifed());
+				form.setLife(target.getLife());
 				form.setFloorVolume(target.getFloorVolume());
 				form.setCollectEndDate(target.getCollectEndDate());
 				form.setCollectStartDate(target.getCollectStartDate());
@@ -973,7 +975,7 @@ public class OrderService {
 				form.setState(target.getState());
 				
 				// 本息兑付
-				if ("income".equals(type)) {
+				if ("income".equals(type) && Investment.INVESTMENT_LIFESTATUS_STAND_UP.equals(target.getLifeState())) {
 					List<TrustIncomeForm> list = targetService.getIncomeData(target, entity);
 					form.setIncomeFormList(list);
 				}
@@ -1008,7 +1010,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
@@ -1035,7 +1037,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
@@ -1065,7 +1067,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
@@ -1110,7 +1112,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
@@ -1140,7 +1142,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
@@ -1171,7 +1173,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
@@ -1222,7 +1224,7 @@ public class OrderService {
 					form.setArorFirstDate(target.getArorFirstDate());
 					form.setAccrualDate(target.getAccrualDate());
 					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLifed());
+					form.setLife(target.getLife());
 					form.setFloorVolume(target.getFloorVolume());
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
@@ -1233,6 +1235,7 @@ public class OrderService {
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
+					form.setState(target.getLifeState());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -13,6 +13,16 @@ define([
       var pageState = {
         pid: util.nav.getHashObj(location.hash).id || ''
       }
+      
+      // 资产池切换列表
+      http.post(config.api.duration.assetPool.getNameList, function (json) {
+          var assetPoolOptions = ''
+          var select = document.searchForm.assetPoolName
+          json.rows.forEach(function (item) {
+            assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
+          })
+          $(select).html(assetPoolOptions).val(pageState.pid)
+        })
 
       pageInit(pageState, http, config)
 
@@ -21,9 +31,11 @@ define([
         if (this.value === 'fund') {
           $('#buyAssetShowFund').show()
           $('#buyAssetShowTrust').hide()
+          $('#profitType').hide()
         } else {
           $('#buyAssetShowFund').hide()
           $('#buyAssetShowTrust').show()
+          $('#profitType').show()
         }
       })
 
@@ -81,6 +93,8 @@ define([
         if (source[0]) {
           source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
           source[0].accrualType = util.enum.transform('ACCRUALTYPE', source[0].accrualType)
+          source[0].raiseScope = parseFloat(source[0].raiseScope) / 10000
+          source[0].floorVolume = source[0].floorVolume / 10000
           $$.formAutoFix($('#buyAssetForm'), source[0])
         }
       })
@@ -523,17 +537,23 @@ define([
           {
             field: 'redeemVolume'
           },
-          {
-            field: 'state',
-            formatter: function (val) {
-              switch (val) {
-                case '-1':
-                  return '<span class="text-aqua">未通过</span>'
-                case '0':
-                  return '<span class="text-blue">成立</span>'
-              }
-            }
-          },
+//        {
+//          field: 'state',
+//          formatter: function (val) {
+//            switch (val) {
+//              case '-1':
+//                return '<span class="text-aqua">未通过</span>'
+//              case '0':
+//                return '<span class="text-blue">成立</span>'
+//            }
+//          }
+//        },
+		  {
+		  	field: 'dailyProfit'
+		  },
+		  {
+		  	field: 'totalProfit'
+		  },
           {
             width: 120,
             align: 'center',
@@ -1166,21 +1186,35 @@ define([
             field: 'state',
             formatter: function (val) {
               switch (val) {
-                case '-1':
-                  return '<span class="text-aqua">未通过</span>'
-                case '0':
+                case 'PREPARE':
+                  return '<span class="text-aqua">初始化</span>'
+                case 'STAND_UP':
                   return '<span class="text-blue">成立</span>'
+                case 'STAND_FAIL':
+                  return '<span class="text-blue">成立失败 </span>'
+                case 'CLOSE':
+                  return '<span class="text-blue">结束</span>'
+                case 'OVER_TIME':
+                  return '<span class="text-blue">逾期 </span>'
               }
+//            switch (val) {
+//              case '-1':
+//                return '<span class="text-aqua">未通过</span>'
+//              case '0':
+//                return '<span class="text-blue">成立</span>'
+//            }
             }
           },
           {
             width: 160,
             align: 'center',
-            formatter: function () {
+            formatter: function (val, row) {
               var buttons = [{
                 text: '本息兑付',
                 type: 'button',
-                class: 'item-income'
+                class: 'item-income',
+                // 只有已成立的标的才可以进行本息兑付
+                isRender: row.state === 'STAND_UP'
               }, {
                 text: '转让',
                 type: 'button',
@@ -1202,9 +1236,9 @@ define([
                   var seq = $(form.seq).empty()
                   form.oid.value = json.result.oid
                   form.assetPoolOid.value = json.result.assetPoolOid
-                  seqs.forEach(function (item) {
-                    seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-                  })
+//                seqs.forEach(function (item) {
+//                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
+//                })
                   seq.change()
                 })
                 $('#trustIncomeModal').modal('show')
@@ -1243,19 +1277,44 @@ define([
       util.form.validator.init($('#trustTransferForm'))
 
       // 信托计划本息兑付表单下拉菜单初始化
-      $(document.trustIncomeForm.seq).on('change', function () {
-        var val = this.value
-        seqs.forEach(function (item, index) {
-          if (item.seq == val) {
-            $$.formAutoFix($(document.trustIncomeForm), item)
-            if (index === seqs.length - 1) {
-              $('#capitalArea').show()
-            } else {
-              $('#capitalArea').hide()
-            }
-          }
-        })
-      })
+//    $(document.trustIncomeForm.seq).on('change', function () {
+//      var val = this.value
+//      seqs.forEach(function (item, index) {
+//        if (item.seq == val) {
+//          $$.formAutoFix($(document.trustIncomeForm), item)
+//          if (index === seqs.length - 1) {
+//            $('#capitalArea').show()
+//          } else {
+//            $('#capitalArea').hide()
+//          }
+//        }
+//      })
+//    })
+
+	  // 改变资产池后刷新页面
+	  $(document.searchForm.assetPoolName).on('change', function () {
+	  	pageInit(pageState, http, config)
+	  })
+
+	  // 当选择本金兑付时，显示本金
+	  $(document.trustIncomeForm.ifCapitalName).on('click', function () {
+	  	var flag = $('input[name=ifCapitalName]:checked').val()
+	  	if (flag == 'on') {
+	  		$('#capitalArea').show()
+	  	} else {
+	  		$('#capitalArea').hide()
+	  	}
+	  })
+
+	  // 当实际收益为0时，本金可编辑
+	  $(document.trustIncomeForm.income).on('focusout', function () {
+	  	var val = this.value
+	  	if (parseFloat(val) === 0) {
+	  		$('#capitalInput').removeAttr('readonly')
+	  	} else {
+	  		$('#capitalInput').attr('readonly', 'readonly')
+	  	}
+	  })
 
       // 信托计划审核/预约/确认 - 通过按钮点击事件
       $('#doTrustCheck').on('click', function () {
