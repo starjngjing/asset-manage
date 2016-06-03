@@ -258,7 +258,7 @@ public class InvestmentPoolController extends BaseController {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
 		interestForm.setOperator(loginId);
-		TargetIncome interest = targetIncomeService.save(interestForm);
+		TargetIncome interest = investmentPoolService.targetIncome(interestForm);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

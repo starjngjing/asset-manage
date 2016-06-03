@@ -788,3 +788,301 @@
 	</div>
 </div>
 
+<!-- 标的详情弹窗 -->
+<div id="targetDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">标的详情</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<form id="detTargetForm" name="detTargetForm" method="post">
+					<p class="form-header">标的概况</p>
+					<div class="row">
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>标的编号</dt>
+								<dd>
+									<div data-detail-fetch="sn"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>标的名称</dt>
+								<dd>
+									<div data-detail-fetch="name"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>标的类型</dt>
+								<dd>
+									<div data-detail-fetch="type" data-enum-transform="TARGETTYPE"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>投资方向</dt>
+								<dd>
+									<div data-detail-fetch="investment"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>资产规模（万）</dt>
+								<dd>
+									<div data-detail-fetch="raiseScope"></div>万
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>资产期限</dt>
+								<dd>
+									<div data-detail-fetch="life"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>付息方式</dt>
+								<dd>
+									<div data-detail-fetch="accrualType" data-enum-transform="ACCRUALTYPE"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>预计收益</dt>
+								<dd>
+									<div data-detail-fetch="expIncome"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>预计年化收益</dt>
+								<dd>
+									<div data-detail-fetch="expAror"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>起购金额</dt>
+								<dd>
+									<div data-detail-fetch="floorVolume"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>拟成立日</dt>
+								<dd>
+									<div data-detail-fetch="expSetDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集期</dt>
+								<dd>
+									<div data-detail-fetch="collectDate"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>主体评级</dt>
+								<dd>
+									<div data-detail-fetch="subjectRating"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>评级机构</dt>
+								<dd>
+									<div data-detail-fetch="ratingAgency"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>评级时间</dt>
+								<dd>
+									<div data-detail-fetch="ratingTime"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>内部评级</dt>
+								<dd>
+									<div data-detail-fetch="irb"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>优先级</dt>
+								<dd>
+									<div data-detail-fetch="prior"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>合同年天数</dt>
+								<dd>
+									<div data-detail-fetch="contractDays"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>收益说明</dt>
+								<dd>
+									<div data-detail-fetch="expArorDesc"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>标的状态</dt>
+								<dd>
+									<div data-detail-fetch="state" data-enum-transform="targetStates"></div>
+								</dd>
+							</dl>
+						</div>
+						<div id="rejectDesc" class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>驳回理由</dt>
+								<dd>
+									<div data-detail-fetch="rejectDesc"></div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+					<p class="form-header">优势说明</p>
+					<dl class="dl-horizontal">
+						<dt>优势说明</dt>
+						<dd>
+							<div data-detail-fetch="superiority"></div>
+						</dd>
+					</dl>
+					<p class="form-header">标的实力</p>
+					<dl class="dl-horizontal">
+						<dt>融资方</dt>
+						<dd>
+							<div data-detail-fetch="financer"></div>
+						</dd>
+						<dt>融资方简介</dt>
+						<dd>
+							<div data-detail-fetch="financerDesc"></div>
+						</dd>
+					</dl>
+					<dl class="dl-horizontal">
+						<dt>担保方</dt>
+						<dd>
+							<div data-detail-fetch="warrantor"></div>
+						</dd>
+						<dt>担保简介</dt>
+						<dd>
+							<div data-detail-fetch="warrantorDesc"></div>
+						</dd>
+					</dl>
+					<p class="form-header">资金用途</p>
+					<dl class="dl-horizontal">
+						<dt>资金用途</dt>
+						<dd>
+							<div data-detail-fetch="usages"></div>
+						</dd>
+					</dl>
+					<p class="form-header">还款说明</p>
+					<dl class="dl-horizontal">
+						<dt>还款说明</dt>
+						<dd>
+							<div data-detail-fetch="repayment"></div>
+						</dd>
+					</dl>
+					<p class="form-header">风控措施</p>
+					<dl class="dl-horizontal">
+						<dt>风控措施</dt>
+						<dd>
+							<div data-detail-fetch="risk"></div>
+						</dd>
+					</dl>
+					<dl class="dl-horizontal">
+						<dt>风控风险等级</dt>
+						<dd>
+							<div data-detail-fetch="riskRate"></div>
+						</dd>
+					</dl>
+				</form>
+				<div id="meetingDet">
+					<p class="form-header">过会信息</p>
+					<div class="row">
+						<form id='meetingDetForm'>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>会议编号</dt>
+									<dd>
+										<div data-detail-fetch="sn"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>会议名称</dt>
+									<dd>
+										<div data-detail-fetch="title"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>会议时间</dt>
+									<dd>
+										<div data-detail-fetch="conferenceTime"></div>
+									</dd>
+								</dl>
+							</div>
+							<div class="col-sm-6">
+								<dl class="dl-horizontal">
+									<dt>会议状态</dt>
+									<dd>
+										<div data-detail-fetch="state" data-enum-transform="meetingStates"></div>
+									</dd>
+								</dl>
+							</div>
+						</form>
+						<div class="col-sm-12">
+							过会表决概况
+							<table id="detVoteTable" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>角色名称</th>
+										<th>表决意见</th>
+										<th>表决人</th>
+										<th>表决时间</th>
+										<th>附件</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

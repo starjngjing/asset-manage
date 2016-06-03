@@ -384,6 +384,21 @@ define([
 									$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 									//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
 									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
+									if(data.warrantor === 'yes') { // 担保人信息									
+										$("#warrantorDetail").show()
+									} else {
+										$("#warrantorDetail").hide()
+									}
+									if(data.pledge === 'yes') { // 抵押人信息									
+										$("#pledgeDetail").show()
+									} else {
+										$("#pledgeDetail").hide()
+									}
+									if(data.hypothecation === 'yes') { // 质押人信息									
+										$("#hypothecationDetail").show()
+									} else {
+										$("#hypothecationDetail").hide()
+									}
 									$('#projectDetailModal').modal('show');
 								}
 							});
