@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.guohuai.asset.manage.boot.acct.books.document.WarehouseDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.duration.order.OrderService;
@@ -36,6 +37,8 @@ public class CapitalService {
 	
 	@Autowired
 	private AssetPoolService assetPoolService;
+	@Autowired
+	private WarehouseDocumentService documentService;
 
 	/**
 	 * 获取所有的出入金明细
@@ -584,9 +587,11 @@ public class CapitalService {
 					if (target.equals(OrderService.FUND)) {
 						poolEntity.setCashtoolFactRate(poolEntity.getCashtoolFactRate()
 								.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+						documentService.cashtoolPurchase(poolEntity.getOid(), sn, capital);
 					} else {
 						poolEntity.setTargetFactRate(poolEntity.getTargetFactRate()
 								.add(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
+						documentService.targetPurchase(poolEntity.getOid(), sn, capital);
 					}
 					// 可用现金
 					poolEntity.setCashPosition(poolEntity.getCashPosition().add(account).subtract(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
@@ -606,6 +611,7 @@ public class CapitalService {
 						.subtract(rate).setScale(4, BigDecimal.ROUND_HALF_UP));
 				// 可用现金
 				poolEntity.setCashPosition(poolEntity.getCashPosition().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
+				documentService.cashtoolRedemption(poolEntity.getOid(), sn, capital);
 			}
 			// 在途资金
 			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));

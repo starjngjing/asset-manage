@@ -16,14 +16,14 @@ define([
 
 			// 资产池切换列表
 			http.post(config.api.duration.assetPool.getNameList, function(json) {
-				var assetPoolOptions = ''
-				var select = document.searchForm.assetPoolName
-				json.rows.forEach(function(item) {
-					assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
+					var assetPoolOptions = ''
+					var select = document.searchForm.assetPoolName
+					json.rows.forEach(function(item) {
+						assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
+					})
+					$(select).html(assetPoolOptions).val(pageState.pid)
 				})
-				$(select).html(assetPoolOptions).val(pageState.pid)
-			})
-			// 改变资产池后刷新页面
+				// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = this.value
 				pageInit(pageState, http, config)
@@ -1275,7 +1275,8 @@ define([
 										//                seqs.forEach(function (item) {
 										//                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
 										//                })
-									seq.change()
+										//									seq.change()
+										//									form.capital.value = json.result.capital
 								})
 								$('#trustIncomeModal').modal('show')
 							},
@@ -1327,9 +1328,9 @@ define([
 			//    })
 
 			// 改变资产池后刷新页面
-//			$(document.searchForm.assetPoolName).on('change', function() {
-//				pageInit(pageState, http, config)
-//			})
+			//			$(document.searchForm.assetPoolName).on('change', function() {
+			//				pageInit(pageState, http, config)
+			//			})
 
 			// 当选择本金兑付时，显示本金
 			$(document.trustIncomeForm.ifCapitalName).on('click', function() {
@@ -1348,6 +1349,16 @@ define([
 					$('#capitalInput').removeAttr('readonly')
 				} else {
 					$('#capitalInput').attr('readonly', 'readonly')
+				}
+			})
+
+			// 本金不可超过申购时的金额
+			$('#addAssetPoolForm').validator({
+				custom: {
+					validCapital: validCapital
+				},
+				errors: {
+					validCapital: '本金不可超过申购时的金额'
 				}
 			})
 
@@ -1677,4 +1688,8 @@ function pageInit(pageState, http, config) {
 		var barChart = echarts.init(document.getElementById('barChart'))
 		barChart.setOption(getBarOptions(config, detail))
 	})
+}
+
+function validCapital($el) {
+	
 }
