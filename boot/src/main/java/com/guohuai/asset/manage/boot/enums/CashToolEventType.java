@@ -76,7 +76,7 @@ public enum CashToolEventType {
 	/**
 	 * 移除
 	 */
-	delete("14", "移除"),
+//	delete("14", "移除"),
 	;
 	private String code;
 	private String desc;
