@@ -102,6 +102,11 @@ define([
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-detail',
+							isRender: true
+						}, {
 							text: '估值',
 							type: 'button',
 							class: 'item-assess',
@@ -120,13 +125,13 @@ define([
 							text: '本息兑付',
 							type: 'button',
 							class: 'item-targetIncome',
-							isRender: row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
+							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
 							//              	    	isRender: true,
 						}, {
 							text: '逾期',
 							type: 'button',
 							class: 'item-overdue',
-							isRender: row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行逾期
+							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行逾期
 						}, {
 							text: '移除出库',
 							type: 'button',
@@ -142,6 +147,49 @@ define([
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
+						'click .item-detail': function(e, value, row) { // 标的详情
+							http.post(config.api.targetDetQuery, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result.investment;
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+								if (data.state != 'reject') { // 被驳回
+									$("#rejectDesc").hide()
+								} else {
+									$("#rejectDesc").show()
+								}
+								if (data.state == 'collecting' || data.state == 'meeting') {
+									http.post(config.api.targetNewMeeting, {
+										data: {
+											investmentOid: row.oid
+										},
+										contentType: 'form'
+									}, function(result) {
+										var data = result.data;
+										$$.detailAutoFix($('#meetingDetForm'), data); // 自动填充详情
+										http.post(config.api.meetingTargetVoteDet, {
+												data: {
+													meetingOid: data.oid,
+													targetOid: row.oid
+												},
+												contentType: 'form'
+											},
+											function(obj) {
+												$('#detVoteTable').bootstrapTable('load', obj)
+											});
+									})
+									$('#meetingDet').show();
+								} else {
+									$('#meetingDet').hide();
+								}
+								$('#targetDetailModal').modal('show');
+							})
+
+						},
 						'click .item-assess': function(e, value, row) { // 标的估值
 							// 需求还未确定
 							alert('敬请期待!!!');
