@@ -327,6 +327,10 @@ define(function() {
 			id: "invalid",
 			text: "作废",
 			children: []
+		}, {// 目前本状态无效,统一使用invalid
+			id: "delete",
+			text: "已删除",
+			children: []
 		}],
 		/*
 		 * 是否下拉列表

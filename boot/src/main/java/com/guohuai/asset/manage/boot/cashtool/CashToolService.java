@@ -132,10 +132,10 @@ public class CashToolService {
 	 */
 	public void remove(String oid, String operator) {
 		CashTool ct = this.cashToolDao.findOne(oid);
-		ct.setState(CashTool.CASHTOOL_STATE_delete);
+		ct.setState(CashTool.CASHTOOL_STATE_invalid);
 		ct.setOperator(operator);
 		ct.setUpdateTime(DateUtil.getSqlCurrentDate());
-		cashToolLogService.saveCashToolLog(oid, CashToolEventType.delete, operator);
+		cashToolLogService.saveCashToolLog(oid, CashToolEventType.invalid, operator);
 		this.cashToolDao.save(ct);
 	}
 

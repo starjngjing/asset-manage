@@ -56,7 +56,7 @@ public class CashTool extends UUID {
 	public static final String CASHTOOL_STATE_collecting = "collecting";
 	public static final String CASHTOOL_STATE_reject = "reject";
 	public static final String CASHTOOL_STATE_invalid = "invalid";
-	public static final String CASHTOOL_STATE_delete = "delete";
+//	public static final String CASHTOOL_STATE_delete = "delete";
 
 	/**
 	 * 基金代码
