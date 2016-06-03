@@ -36,7 +36,7 @@ public class Document implements Serializable {
 	// 信托计划 转让
 	public static final String TYPE_TARGET_TRANSFER = "TARGET_TRANSFER";
 	// 信托计划 本息兑付
-	public static final String TYPE_TARGET_INCOME = "TARGET_INCOME";
+	public static final String TYPE_TARGET_REDEMPTION = "TARGET_REDEMPTION";
 
 	@Id
 	private String oid;

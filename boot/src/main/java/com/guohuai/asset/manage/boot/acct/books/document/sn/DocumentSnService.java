@@ -4,10 +4,10 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DocumentSnService {
@@ -17,7 +17,7 @@ public class DocumentSnService {
 
 	private DateFormat format = new SimpleDateFormat("yyyyMM");
 
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public int genSn(Date date) {
 		String oid = this.format.format(date);
 		DocumentSn sn = this.documentSnDao.findOne(oid);
