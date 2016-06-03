@@ -1,8 +1,11 @@
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -109,7 +112,7 @@ public class CashtoolPoolService {
 		
 		this.cashtoolLogservice.saveCashToolLog(cashTool, CashToolEventType.revenue, form.getOperator()); // 现金管理工具收益采集
 		
-		this.cashtoolRevenueDao.deleteByDailyProfitDate(form.getDailyProfitDate());
+		this.cashtoolRevenueDao.deleteByDailyProfitDate(cashtoolOid, form.getDailyProfitDate());
 		
 		cr = cashtoolRevenueDao.save(cr);
 		
@@ -118,4 +121,41 @@ public class CashtoolPoolService {
 		return cr;
 	}
 	
+	/**
+	 * 根据现金管理工具id和交易日期查询收益
+	 * @Title: findCashtoolRevenue 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param cashtoolOid	现金管理工具id
+	 * @param dailyProfitDate	交易日期
+	 * @return CashToolRevenue    返回类型
+	 */
+	public CashToolRevenue findCashtoolRevenue(String cashtoolOid, Date dailyProfitDate) {
+		return cashtoolRevenueDao.findCashtoolRevenue(cashtoolOid, dailyProfitDate);
+	}
+
+	/**
+	 * 根据现金管理工具id和交易日期查询收益
+	 * @Title: findCashtoolRevenue 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param cashtoolOids	现金管理工具id集合
+	 * @param dailyProfitDate	交易日期
+	 * @return Map<String,CashToolRevenue>    key:现金管理工具id	value:收益对象
+	 */
+	public Map<String, CashToolRevenue> findCashtoolRevenue(List<String> cashtoolOids, Date dailyProfitDate) {
+		Map<String, CashToolRevenue> map = null;// key:现金管理工具id value:收益对象
+		List<CashToolRevenue> list = cashtoolRevenueDao.findCashtoolRevenue(cashtoolOids, dailyProfitDate);
+		int size = null == list ? 0 : list.size();
+		if (size > 0) {
+			map = new HashMap<>();
+			for (CashToolRevenue cr : list) {
+				map.put(cr.getCashTool().getOid(), cr);
+			}
+		}
+		return map;
+	}
+
 }
