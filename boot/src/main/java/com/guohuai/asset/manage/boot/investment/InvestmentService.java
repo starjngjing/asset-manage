@@ -43,7 +43,9 @@ public class InvestmentService {
 	CCPWarrantorService cCPWarrantorService;
 	@Autowired
 	ProjectService projectService;
-	
+
+	// @Autowired
+	// WorkflowAssetService workflowAssetService;
 
 	/**
 	 * 获得投资标的列表
@@ -103,10 +105,10 @@ public class InvestmentService {
 		this.calculateRiskRate(entity);
 		/* 计算标的风险结束 */
 		// 创建工作流
-//		Map<String, Object> variables = new HashMap<>();
-//		variables.put("investment", entity);
-//		variables.put("groupId", WorkflowAssetService.GOURP_COMITEXAMINATION);
-//		workflowService.startWorkflow(form.getOperator(), "targetExamination", entity.getOid(), variables);
+		// Map<String, Object> vars = new HashMap<String, Object>();
+		// vars.put("invesment", entity);
+		// workflowAssetService.startWorkflow(form.getOperator(),
+		// "targetExamination", entity.getOid(), vars);
 		return entity;
 	}
 
@@ -246,7 +248,7 @@ public class InvestmentService {
 	 * @param operator
 	 * @param suggest
 	 */
-	public void precheck(String oid, String state, String operator, String suggest) {
+	public Investment precheck(String oid, String state, String operator, String suggest) {
 		Investment investment = this.getInvestmentDet(oid);
 		if (investment == null || !Investment.INVESTMENT_STATUS_pretrial.equals(investment.getState())) {
 			throw new RuntimeException();
@@ -256,6 +258,13 @@ public class InvestmentService {
 			investment.setRejectDesc(suggest);
 		}
 		this.updateInvestment(investment, operator);
+		// 工作流
+		// String flowState = "reject";
+		// if (Investment.INVESTMENT_STATUS_waitMeeting.equals(state))
+		// flowState = "pass";
+		// workflowAssetService.complete(operator, investment.getOid(),
+		// WorkflowConstant.NODEID_DOEXAMINATION, flowState);
+		return investment;
 	}
 
 	/**
@@ -270,6 +279,37 @@ public class InvestmentService {
 	 */
 	public List<Object> getInvestmentByName(String name) {
 		return this.investmentDao.getInvestmentByName(name);
+	}
+
+	/**
+	 * 提交预审
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
+	public Investment comitCheck(String oid, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
+				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
+			// 标的状态不是待预审或驳回不能提交预审
+			throw new RuntimeException();
+		}
+		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
+		this.updateInvestment(investment, operator);
+		// 工作流
+		// workflowAssetService.complete(operator, investment.getOid(),
+		// WorkflowConstant.NODEID_COMITEXAMINATION, "pass");
+		return investment;
+	}
+
+	public Investment invalid(String oid, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		investment.setState(Investment.INVESTMENT_STATUS_invalid);
+		this.updateInvestment(investment, operator);
+		// 工作流
+
+		return investment;
 	}
 
 }
