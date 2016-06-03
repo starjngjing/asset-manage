@@ -29,7 +29,7 @@ public interface CashtoolRevenueDao extends JpaRepository<CashToolRevenue, Strin
 	 * @param dailyProfitDate void    返回类型
 	 */
 	@Modifying
-	@Query("delete from CashToolRevenue where cashTool.oid=?1 and dailyProfitDate=?2")
+	@Query("delete from CashToolRevenue cr where cr.cashTool.oid=?1 and cr.dailyProfitDate=?2")
 	public void deleteByDailyProfitDate(String cashtoolOid, Date dailyProfitDate);
 
 	/**
@@ -42,7 +42,7 @@ public interface CashtoolRevenueDao extends JpaRepository<CashToolRevenue, Strin
 	 * @param dailyProfitDate
 	 * @return CashToolRevenue    返回类型
 	 */
-	@Query("from CashToolRevenue where cashTool.oid=?1 and dailyProfitDate=?2")
+	@Query("from CashToolRevenue cr where cr.cashTool.oid=?1 and cr.dailyProfitDate=?2")
 	public CashToolRevenue findCashtoolRevenue(String cashtoolOid, Date dailyProfitDate);
 
 	/**
@@ -55,6 +55,6 @@ public interface CashtoolRevenueDao extends JpaRepository<CashToolRevenue, Strin
 	 * @param dailyProfitDate
 	 * @return List<CashToolRevenue>    返回类型
 	 */
-	@Query("from CashToolRevenue where cashTool.oid in ?1 and dailyProfitDate=?2")
+	@Query("from CashToolRevenue cr where cr.cashTool.oid in ?1 and cr.dailyProfitDate=?2")
 	public List<CashToolRevenue> findCashtoolRevenue(List<String> cashtoolOids, Date dailyProfitDate);
 }
