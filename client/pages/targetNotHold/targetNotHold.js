@@ -155,7 +155,8 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data = formatTargetData(data); // 格式化标的数据
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级								
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') { // 被驳回
 									$("#rejectDesc").hide()
@@ -510,6 +511,10 @@ define([
 				return val
 			}
 
+			/**
+			 * 格式化投资标的信息
+			 * @param {Object} t
+			 */
 			function formatTargetData(t) {
 				if (t) {
 					var t2 = {};
@@ -523,6 +528,10 @@ define([
 				return t;
 			}
 
+			/**
+			 * 格式化底层项目信息
+			 * @param {Object} p
+			 */
 			function formatProjectData(p) {
 				if (p) {
 					var p2 = {};
