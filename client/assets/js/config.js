@@ -437,7 +437,21 @@ define(function() {
 	        {
 				id: "toApprove",
 				text: "待审批",			
-			}   
+			}],
+	        //标的期限单位
+	   lifeUnit:[
+	   		{
+				id: "day",
+				text: "日",			
+			},
+	        {
+				id: "month",
+				text: "月",			
+			},
+	        {
+				id: "year",
+				text: "年",			
+			}
 	   ],
 		/**
 		 * 图标所用到的主题颜色

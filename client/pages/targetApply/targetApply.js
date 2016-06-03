@@ -68,16 +68,7 @@ define([
 				}, {
 					field: 'life',
 					formatter: function(val, row) {
-						switch (row.lifeUnit) {
-							case "day":
-								return val + '天';
-							case "month":
-								return val + '月';
-							case "year":
-								return val + '年';
-							default:
-								val;
-						}
+						return val + util.enum.transform('lifeUnit',row.lifeUnit)
 					}
 				}, {
 					field: 'expIncome',
@@ -233,6 +224,12 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
+								data.raiseScope = data.raiseScope + '万';
+								data.life = data.life + util.enum.transform('lifeUnit',data.lifeUnit);
+								data.expAror = data.expAror + '%';
+								data.expIncome = data.expIncome + '%';
+								data.floorVolume = data.floorVolume + '元';
+								data.contractDays = data.contractDays + '天/年';
 								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') {
