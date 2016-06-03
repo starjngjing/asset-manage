@@ -181,6 +181,30 @@ define([
 			$('#editCashTool').on('click', function() {
 				editCashTool();
 			})
+			//新建 是否保本选项判断
+			$('#addIsGuarFund').change(function(){
+				if($(this).val() == 'Y'){
+					$('#addGuarPeriod').removeAttr("readonly")
+					$('#addGuarRatio').removeAttr("readonly")
+				}else{
+					$('#addGuarPeriod').val('');
+					$('#addGuarPeriod').attr("readonly","readonly")
+					$('#addGuarRatio').val('');
+					$('#addGuarRatio').attr("readonly","readonly")
+				}
+			})
+			//编辑 是否保本选项判断
+			$('#editIsGuarFund').change(function(){
+				if($(this).val() == 'Y'){
+					$('#editGuarPeriod').removeAttr("readonly")
+					$('#editGuarRatio').removeAttr("readonly")
+				}else{
+					$('#editGuarPeriod').val('');
+					$('#editGuarPeriod').attr("readonly","readonly")
+					$('#editGuarRatio').val('');
+					$('#editGuarRatio').attr("readonly","readonly")
+				}
+			})
 
 			function getQueryParams(val) {
 				var form = document.cashToolSearchForm

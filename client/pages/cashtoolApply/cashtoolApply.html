@@ -181,7 +181,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>是否保本</label>
-								<select name='isGuarFund' class="form-control input-sm">
+								<select id="addIsGuarFund" name='isGuarFund' class="form-control input-sm">
 										<option value="Y">是</option>
 										<option value="N">否</option>
             						</select>
@@ -191,7 +191,7 @@
 							<div class="form-group">
 								<label>保本周期</label>
 								<div class="input-group input-group-sm">
-									<input name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
+									<input id="addGuarPeriod" name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
 									<span class="input-group-addon">月</span>
 								</div>
 							</div>
@@ -202,7 +202,7 @@
 							<div class="form-group">
 								<label>保本比例</label>
 								<div class="input-group input-group-sm">
-									<input name="guarRatio" type="text" class="form-control" placeholder="保本比例">
+									<input id="addGuarRatio" name="guarRatio" type="text" class="form-control" placeholder="保本比例">
 									<span class="input-group-addon">%</span>
 								</div>
 							</div>
@@ -279,7 +279,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="saveCashTool" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="saveCashTool" type="button" class="btn btn-primary btn-submit addCashToolSubmit">保 存</button>
 			</div>
 		</div>
 	</div>
@@ -381,7 +381,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>是否保本</label>
-								<select name='isGuarFund' class="form-control input-sm">
+								<select id='editIsGuarFund' name='isGuarFund' class="form-control input-sm">
 										<option value="Y">是</option>
 										<option value="N">否</option>
             						</select>
@@ -391,7 +391,7 @@
 							<div class="form-group">
 								<label>保本周期</label>
 								<div class="input-group input-group-sm">
-									<input name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
+									<input id='editGuarPeriod' name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
 									<span class="input-group-addon">月</span>
 								</div>
 							</div>
@@ -400,7 +400,7 @@
 							<div class="form-group">
 								<label>保本比例</label>
 								<div class="input-group input-group-sm">
-									<input name="guarRatio" type="text" class="form-control" placeholder="保本比例">
+									<input id='editGuarRatio' name="guarRatio" type="text" class="form-control" placeholder="保本比例">
 									<span class="input-group-addon">%</span>
 								</div>
 							</div>
@@ -471,7 +471,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="editCashTool" type="button" class="btn btn-primary btn-submit">修 改</button>
+				<button id="editCashTool" type="button" class="btn btn-primary btn-submit editCashToolSubmit">修 改</button>
 			</div>
 		</div>
 	</div>
