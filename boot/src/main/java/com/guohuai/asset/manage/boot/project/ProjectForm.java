@@ -124,6 +124,9 @@ public class ProjectForm implements Cloneable, Serializable {
 	@Digits(integer = 4, fraction = 4, message = "抵押方式担保期限权重最大4位整数4位小数")
 	private BigDecimal mortgageModeExpireWeight;
 	
+	@NotNull(message = "是否有质押不能为空")
+	@Size(max = 32, message = "是否有质押最大32个字符！")
+	private String hypothecation;
 	/**
 	 * 质押方式
 	 */

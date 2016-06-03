@@ -203,6 +203,10 @@ public class Project extends UUID {
 	private BigDecimal mortgageModeExpireWeight;
 	
 	/**
+	 * 是否有质押
+	 */
+	private String hypothecation;
+	/**
 	 * 质押方式
 	 */
 	@Size(max = 32, message = "质押方式oid最大32个字符！")
