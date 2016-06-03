@@ -24,9 +24,9 @@ public interface CashtoolRevenueDao extends JpaRepository<CashToolRevenue, Strin
 	 * @Title: deleteByDailyProfitDate 
 	 * @author vania
 	 * @version 1.0
-	 * @see: TODO
+	 * @see: 
 	 * @param cashtoolOid
-	 * @param dailyProfitDate void    返回类型
+	 * @param dailyProfitDate 
 	 */
 	@Modifying
 	@Query("delete from CashToolRevenue cr where cr.cashTool.oid=?1 and cr.dailyProfitDate=?2")
