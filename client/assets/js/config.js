@@ -12,9 +12,9 @@ define(function() {
 		 * 
 		 */
 		api: {
-			login: this.host + '/operate/admin/login',			// 登录服务
-			logout: this.host + '/operate/admin/logout',		// 登出服务
-			userInfo: this.host + '/operate/admin/info',   // 登录用户信息服务
+			login: this.host + '/operate/admin/login', // 登录服务
+			logout: this.host + '/operate/admin/logout', // 登出服务
+			userInfo: this.host + '/operate/admin/info', // 登录用户信息服务
 			yup: 'http://api.guohuaigroup.com/yup', // 文件上传服务
 			dictList: this.host + '/ams/dict/list', // 枚举值获取接口
 			establish: this.host + "/ams" + "/boot/investmentPool/establish", // 标的成立
@@ -85,23 +85,23 @@ define(function() {
 			meetingSummaryDelete: this.host + '/ams/target/targetMeeting/summaryDetele', //删除会议纪要
 			meetingFinish: this.host + '/ams/target/targetMeeting/finish', //会议完成
 			targetNewMeeting: this.host + '/ams/target/targetMeeting/targetMeeting', //根据标的获取最新会议
-			targetCheckListAll : this.host + '/ams/target/targetManage/checkListAll', //标的全部检查项列表
-			targetCheckList: this.host + '/ams/target/targetManage/checkListNotConfrim',   //标的未确认检查项列表
-			targetCheckListConfrim: this.host + '/ams/target/targetManage/checkListConfrim',   //标的已确认检查项列表
-			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList',   //过会标的检查项确认
-		    channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
+			targetCheckListAll: this.host + '/ams/target/targetManage/checkListAll', //标的全部检查项列表
+			targetCheckList: this.host + '/ams/target/targetManage/checkListNotConfrim', //标的未确认检查项列表
+			targetCheckListConfrim: this.host + '/ams/target/targetManage/checkListConfrim', //标的已确认检查项列表
+			confirmCheckList: this.host + '/ams/target/targetManage/confirmCheckList', //过会标的检查项确认
+			channelQuery: this.host + '/ams/channel/query', //渠道-列表查询
 			addChannel: this.host + '/ams/channel/add', //渠道-新增
 			channelinfo: this.host + '/ams/channel/channelinfo', //渠道-获取详情
-			oneChannel: this.host + '/ams/channel/onechannel',  //渠道-随机获取一条渠道信息
+			oneChannel: this.host + '/ams/channel/onechannel', //渠道-随机获取一条渠道信息
 			editChannel: this.host + '/ams/channel/edit', //渠道-修改
 			delChannel: this.host + '/ams/channel/delete', //渠道-删除
 			setapply: this.host + '/ams/channel/setapply', //渠道-申请开启停用
 			remarksQuery: this.host + '/ams/channel/remarksquery', //渠道-意见列表
 			chanApproveQuery: this.host + '/ams/channelapprove/query', //渠道-渠道审批查询
 			delApply: this.host + '/ams/channelapprove/dealapply', //渠道-处理申请开启和停用
-		    voteTargetList: this.host + '/ams/target/targetVote/list',   //过会表决标的列表
-		    voteTarget: this.host + '/ams/target/targetVote/vote',   //过会标的表决
-			files:{
+			voteTargetList: this.host + '/ams/target/targetVote/list', //过会表决标的列表
+			voteTarget: this.host + '/ams/target/targetVote/vote', //过会标的表决
+			files: {
 				pkg: this.host + '/ams/file/pkg', //获得下载key
 				download: this.host + '/ams/file/dl?key=' //下载附件包 参数key
 			},
@@ -179,53 +179,53 @@ define(function() {
 				}
 			},
 			duration: {
-				assetPool: {	// 资产池
-					create: this.host + "/ams/duration/assetPool/createPool",		// 新建资产池
-					audit: this.host + "/ams/duration/assetPool/auditPool",			// 审核资产池
-					edit: this.host + '/ams/duration/assetPool/editPool',				// 修改资产池
-					getAll: this.host + "/ams/duration/assetPool/getAll",				// 获取全部资产池
-					getById: this.host + '/ams/duration/assetPool/getPoolByOid',		// 获取单条资产池
-					getNameList: this.host + '/ams/duration/assetPool/getAllNameList'		//获取资产池下拉菜单列表
+				assetPool: { // 资产池
+					create: this.host + "/ams/duration/assetPool/createPool", // 新建资产池
+					audit: this.host + "/ams/duration/assetPool/auditPool", // 审核资产池
+					edit: this.host + '/ams/duration/assetPool/editPool', // 修改资产池
+					getAll: this.host + "/ams/duration/assetPool/getAll", // 获取全部资产池
+					getById: this.host + '/ams/duration/assetPool/getPoolByOid', // 获取单条资产池
+					getNameList: this.host + '/ams/duration/assetPool/getAllNameList' //获取资产池下拉菜单列表
 				},
-				order: {	// 订单
-					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund',	// 货币基金申购
-					redeem: this.host + '/ams/duration/order/redeem',	// 现金类管理工具赎回
-					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust',	// 信托计划申购
-					getTargetList: this.host + '/ams/duration/product/getTargetList',	 // 获取标的列表
-					getTrustListForAppointment: this.host + '/ams/duration/product/getTrustListForAppointment',	// 获取 预约中信托（计划）列表
-					getTrustList: this.host + '/ams/duration/product/getTrustList',	// 获取 信托（计划）列表
-					getTrustOrderByOid: this.host + '/ams/duration/order/getTrustOrderByOid',	// 根据ID获取预约中信托计划
-					getTrustByOid: this.host + '/ams/duration/order/getTrustByOid',	// 根据ID获取已成立信托计划
-					auditForTrust: this.host + '/ams/duration/order/auditForTrust',	// 信托计划审核
-					appointmentForTrust: this.host + '/ams/duration/order/appointmentForTrust',	// 信托计划预约
-					orderConfirmForTrust: this.host + '/ams/duration/order/orderConfirmForTrust',	// 信托计划确认
-					applyForTransfer: this.host + '/ams/duration/order/applyForTransfer',	// 信托计划转让
-					applyForIncome: this.host + '/ams/duration/order/applyForIncome',	// 信托计划本息兑付
-					getFundListForAppointment: this.host + '/ams/duration/product/getFundListForAppointment',	// 获取 预约中现金类管理工具列表
-					getFundList: this.host + '/ams/duration/product/getFundList',	// 获取 现金类管理工具列表
-					getFundOrderByOid: this.host + '/ams/duration/order/getFundOrderByOid',	// 根据ID获取预约中现金类管理工具
-					getFundByOid: this.host + '/ams/duration/order/getFundByOid',	// 根据ID获取现金类管理工具
-					auditForFund: this.host + '/ams/duration/order/auditForFund',	// 信托计划审核
-					appointmentForFund: this.host + '/ams/duration/order/appointmentForFund',	// 信托计划预约
-					orderConfirmForFund: this.host + '/ams/duration/order/orderConfirmForFund',	// 信托计划确认
-					auditForIncome: this.host + '/ams/duration/order/auditForIncome',	// 信托计划本息兑付审核
-					orderConfirmForIncome: this.host + '/ams/duration/order/orderConfirmForIncome',	// 信托计划本息兑付确认
-					auditForTransfer: this.host + '/ams/duration/order/auditForTransfer',		// 信托计划转让审核
-					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer',		// 信托计划转让确认
-					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash',		// 编辑账户
-					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList',		// 出入金明细
-					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital'	// 出入金详情
+				order: { // 订单
+					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund', // 货币基金申购
+					redeem: this.host + '/ams/duration/order/redeem', // 现金类管理工具赎回
+					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust', // 信托计划申购
+					getTargetList: this.host + '/ams/duration/product/getTargetList', // 获取标的列表
+					getTrustListForAppointment: this.host + '/ams/duration/product/getTrustListForAppointment', // 获取 预约中信托（计划）列表
+					getTrustList: this.host + '/ams/duration/product/getTrustList', // 获取 信托（计划）列表
+					getTrustOrderByOid: this.host + '/ams/duration/order/getTrustOrderByOid', // 根据ID获取预约中信托计划
+					getTrustByOid: this.host + '/ams/duration/order/getTrustByOid', // 根据ID获取已成立信托计划
+					auditForTrust: this.host + '/ams/duration/order/auditForTrust', // 信托计划审核
+					appointmentForTrust: this.host + '/ams/duration/order/appointmentForTrust', // 信托计划预约
+					orderConfirmForTrust: this.host + '/ams/duration/order/orderConfirmForTrust', // 信托计划确认
+					applyForTransfer: this.host + '/ams/duration/order/applyForTransfer', // 信托计划转让
+					applyForIncome: this.host + '/ams/duration/order/applyForIncome', // 信托计划本息兑付
+					getFundListForAppointment: this.host + '/ams/duration/product/getFundListForAppointment', // 获取 预约中现金类管理工具列表
+					getFundList: this.host + '/ams/duration/product/getFundList', // 获取 现金类管理工具列表
+					getFundOrderByOid: this.host + '/ams/duration/order/getFundOrderByOid', // 根据ID获取预约中现金类管理工具
+					getFundByOid: this.host + '/ams/duration/order/getFundByOid', // 根据ID获取现金类管理工具
+					auditForFund: this.host + '/ams/duration/order/auditForFund', // 信托计划审核
+					appointmentForFund: this.host + '/ams/duration/order/appointmentForFund', // 信托计划预约
+					orderConfirmForFund: this.host + '/ams/duration/order/orderConfirmForFund', // 信托计划确认
+					auditForIncome: this.host + '/ams/duration/order/auditForIncome', // 信托计划本息兑付审核
+					orderConfirmForIncome: this.host + '/ams/duration/order/orderConfirmForIncome', // 信托计划本息兑付确认
+					auditForTransfer: this.host + '/ams/duration/order/auditForTransfer', // 信托计划转让审核
+					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer', // 信托计划转让确认
+					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash', // 编辑账户
+					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList', // 出入金明细
+					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital' // 出入金详情
 				}
 			},
 			role: {
-				list: this.host + '/operate/admin/ctrl/role/list',					// 角色列表
-				save: this.host + '/operate/admin/ctrl/role/save',					// 新建角色
-				update: this.host + '/operate/admin/ctrl/role/update',			// 修改角色
-				delete: this.host + '/operate/admin/ctrl/role/delete',			// 删除角色
-				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths',	// 获取角色权限
+				list: this.host + '/operate/admin/ctrl/role/list', // 角色列表
+				save: this.host + '/operate/admin/ctrl/role/save', // 新建角色
+				update: this.host + '/operate/admin/ctrl/role/update', // 修改角色
+				delete: this.host + '/operate/admin/ctrl/role/delete', // 删除角色
+				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths', // 获取角色权限
 			},
 			auth: {
-				list: this.host + '/operate/admin/ctrl/auth/list'					// 权限列表
+				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
 			}
 		},
 
@@ -280,33 +280,27 @@ define(function() {
 		/**
 		 * 标的生命周期
 		 */
-		targetLifeStates: [
-			{
-				id: "PREPARE",
-				text: "准备期",
-				children: []
-			},
-			{
-				id: "STAND_UP",
-				text: "已成立",
-				children: []
-			},
-			{
-				id: "STAND_FAIL",
-				text: "成立失败",
-				children: []
-			},
-			{
-				id: "CLOSE",
-				text: "已结束",
-				children: []
-			},
-			{
-				id: "OVER_TIME",
-				text: "已逾期",
-				children: []
-			},
-		],
+		targetLifeStates: [{
+			id: "PREPARE",
+			text: "准备期",
+			children: []
+		}, {
+			id: "STAND_UP",
+			text: "已成立",
+			children: []
+		}, {
+			id: "STAND_FAIL",
+			text: "成立失败",
+			children: []
+		}, {
+			id: "CLOSE",
+			text: "已结束",
+			children: []
+		}, {
+			id: "OVER_TIME",
+			text: "已逾期",
+			children: []
+		}, ],
 		/**
 		 * conventionStates 过会状态
 		 */
@@ -385,81 +379,70 @@ define(function() {
 			children: []
 		}],
 		//接入类型
-	    joinTypes:[
-	    	{
-				id: "ftp",
-				text: "FTP文件",			
-			},
-			{
-				id: "api",
-				text: "API接口",
-			}
-	    ],
-	    //渠道状态
-	    channelStatus:[
-	    	{
-				id: "on",
-				text: "已启用",			
-			},
-	        {
-				id: "off",
-				text: "已停用",			
-			}    
-	    ],
-	    //删除状态
-	    delStatus:[
-	    	{
-				id: "yes",
-				text: "已删除",			
-			},
-	        {
-				id: "no",
-				text: "正常",			
-			}
-	   ],
-	   //请求类型
-	   requestTypes:[
-	   		{
-				id: "on",
-				text: "开启",			
-			},
-	        {
-				id: "off",
-				text: "停用",			
-			}
-	   ],
-	   //审批结果
-	   approveStatus:[
-	   		{
-				id: "pass",
-				text: "通过",			
-			},
-	        {
-				id: "refused",
-				text: "驳回",			
-			},
-	        {
-				id: "toApprove",
-				text: "待审批",			
+		joinTypes: [{
+			id: "ftp",
+			text: "FTP文件",
+		}, {
+			id: "api",
+			text: "API接口",
+		}],
+		//渠道状态
+		channelStatus: [{
+			id: "on",
+			text: "已启用",
+		}, {
+			id: "off",
+			text: "已停用",
+		}],
+		//删除状态
+		delStatus: [{
+			id: "yes",
+			text: "已删除",
+		}, {
+			id: "no",
+			text: "正常",
+		}],
+		//请求类型
+		requestTypes: [{
+			id: "on",
+			text: "开启",
+		}, {
+			id: "off",
+			text: "停用",
+		}],
+		//审批结果
+		approveStatus: [{
+			id: "pass",
+			text: "通过",
+		}, {
+			id: "refused",
+			text: "驳回",
+		}, {
+			id: "toApprove",
+			text: "待审批",
+		}],
+		//标的期限单位
+		lifeUnit: [{
+			id: "day",
+			text: "日",
+		}, {
+			id: "month",
+			text: "月",
+		}, {
+			id: "year",
+			text: "年",
+		}],
+		//付息周期方式
+		accrualCycleType: [{
+				id: "NATURAL_YEAR",
+				text: "自然年",
+			}, {
+				id: "CONTRACT_YEAR",
+				text: "合同年",
 			}],
-	        //标的期限单位
-	   lifeUnit:[
-	   		{
-				id: "day",
-				text: "日",			
-			},
-	        {
-				id: "month",
-				text: "月",			
-			},
-	        {
-				id: "year",
-				text: "年",			
-			}
-	   ],
-		/**
-		 * 图标所用到的主题颜色
-		 */
+			/**
+			 * 图标所用到的主题颜色
+			 */
 		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
 	}
 })

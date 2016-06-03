@@ -86,8 +86,9 @@ public class InvestmentCheckBootController extends BaseController {
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> checkPass(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
-		investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator, null);
-		investmentLogService.saveInvestmentLog(oid, TargetEventType.checkpass, operator);
+		Investment investment = investmentService.precheck(oid, Investment.INVESTMENT_STATUS_waitMeeting, operator,
+				null);
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.checkpass, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
