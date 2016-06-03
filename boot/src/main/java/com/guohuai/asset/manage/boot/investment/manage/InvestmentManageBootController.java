@@ -142,23 +142,8 @@ public class InvestmentManageBootController extends BaseController {
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> examine(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
-		Investment investment = investmentService.getInvestmentDet(oid);
-		if (!Investment.INVESTMENT_STATUS_waitPretrial.equals(investment.getState())
-				&& !Investment.INVESTMENT_STATUS_reject.equals(investment.getState())) {
-			// 标的状态不是待预审或驳回不能提交预审
-			throw new RuntimeException();
-		}
-		investment.setState(Investment.INVESTMENT_STATUS_pretrial);
-		investmentService.updateInvestment(investment, operator);
+		Investment investment = investmentService.comitCheck(oid, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.check, operator);
-		// // 工作流
-		// Task task =
-		// workflowAssetService.getTaskByKeyAndNodeIdAndUserId(investment.getOid(),
-		// WorkflowAssetService.NODE_COMITEXAMINATION, operator);
-		// WorkflowAssetCondition condition = new WorkflowAssetCondition();
-		// condition.setFlowState(true);
-		// condition.setGroupId(WorkflowAssetService.GROUP_DOEXAMINATION);
-		// workflowAssetService.complete(operator, task.getId(), condition);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
@@ -171,9 +156,7 @@ public class InvestmentManageBootController extends BaseController {
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> invalid(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
-		Investment investment = investmentService.getInvestmentDet(oid);
-		investment.setState(Investment.INVESTMENT_STATUS_invalid);
-		investmentService.updateInvestment(investment, operator);
+		Investment investment = investmentService.invalid(oid, operator);
 		investmentLogService.saveInvestmentLog(investment, TargetEventType.invalid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}

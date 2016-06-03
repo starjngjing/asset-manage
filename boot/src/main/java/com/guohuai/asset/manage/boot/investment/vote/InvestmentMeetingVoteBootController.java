@@ -24,9 +24,8 @@ import com.guohuai.asset.manage.component.web.view.BaseResp;
  */
 @RestController
 @RequestMapping(value = "/ams/target/targetVote", produces = "application/json;charset=UTF-8")
-public class InvestmentMeetingVoteBootController extends BaseController{
-	
-	
+public class InvestmentMeetingVoteBootController extends BaseController {
+
 	@Autowired
 	private InvestmentMeetingVoteService investmentMeetingVoteService;
 
@@ -37,9 +36,9 @@ public class InvestmentMeetingVoteBootController extends BaseController{
 		MeetingInvestmentListResp resps = new MeetingInvestmentListResp(list);
 		return new ResponseEntity<MeetingInvestmentListResp>(resps, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "vote", method = { RequestMethod.POST, RequestMethod.GET })
-	public ResponseEntity<BaseResp> agree(MeetingVoteForm form){
+	public ResponseEntity<BaseResp> agree(MeetingVoteForm form) {
 		String operator = super.getLoginAdmin();
 		investmentMeetingVoteService.doMeetingVote(form, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
