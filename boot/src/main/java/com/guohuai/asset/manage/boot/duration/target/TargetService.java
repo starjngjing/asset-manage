@@ -183,6 +183,7 @@ public class TargetService {
 			form.setCollectStartDate(entity.getCollectStartDate());
 			form.setCollectEndDate(entity.getCollectEndDate());
 			form.setCollectIncomeRate(entity.getCollectIncomeRate());
+			form.setState(entity.getState());
 		}
 		
 		return form;

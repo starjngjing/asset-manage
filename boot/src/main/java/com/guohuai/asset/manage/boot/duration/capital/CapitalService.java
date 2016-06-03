@@ -100,6 +100,7 @@ public class CapitalService {
 			for (CapitalEntity entity : list.getContent()) {
 				form = new CapitalForm();
 				form.setSubject(entity.getSubject());
+				form.setCreateTime(entity.getCreateTime());
 				type = entity.getSubject().substring(0, 2);
 				if (null != entity.getCashtoolOrderOid()) {
 					form.setOrderOid(entity.getCashtoolOrderOid());
@@ -118,9 +119,9 @@ public class CapitalService {
 					form.setCapital(entity.getTransitCash());
 					form.setOperation("转让");
 				}
-				if ("申购".equals(type)) {
+				if ("申购".equals(type) || "资产".equals(type)) {
 					form.setStatus("未审核");
-				} else if ("审核".equals(type)) {
+				} else if ("审批".equals(type)) {
 					form.setStatus("资金处理中");
 				} else if ("预约".equals(type)) {
 					form.setStatus("资金处理中");
@@ -619,6 +620,7 @@ public class CapitalService {
 			}
 			// 在途资金
 			poolEntity.setTransitCash(poolEntity.getTransitCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
+			poolEntity.setFactProfit(poolEntity.getFactProfit().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("transfer".equals(operation)) {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);

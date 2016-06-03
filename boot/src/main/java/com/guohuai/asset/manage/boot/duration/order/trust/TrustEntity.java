@@ -36,6 +36,8 @@ public class TrustEntity implements Serializable {
 		this.transOutFee = init0;
 		this.transInAmount = init0;
 		this.transInFee = init0;
+		this.dailyProfit = init0;
+		this.totalProfit = init0;
 	}
 
 	@Id
@@ -75,4 +77,8 @@ public class TrustEntity implements Serializable {
 	private BigDecimal transInFee;
 	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
 	private String profitType;
+	// 每日收益
+	private BigDecimal dailyProfit;
+	// 累计收益
+	private BigDecimal totalProfit;
 }

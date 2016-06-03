@@ -381,6 +381,34 @@ define([
 									$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
 									//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
 									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
+									if(data.warrantor === 'yes') { // 担保人信息									
+										$("#warrantorDetail").show()
+									} else {
+										$("#warrantorDetail").hide()
+									}
+									if(data.pledge === 'yes') { // 抵押人信息									
+										$("#pledgeDetail").show()
+									} else {
+										$("#pledgeDetail").hide()
+									}
+									if(data.hypothecation === 'yes') { // 质押人信息									
+										$("#hypothecationDetail").show()
+									} else {
+										$("#hypothecationDetail").hide()
+									}
+									
+									/* 判断项目类型 */
+									if(data.projectType === 'PROJECTTYPE_01') { // 金融类项目									
+										$("#estateDetail").hide()
+										$("#financeDetai").show()
+									} else if(data.projectType === 'PROJECTTYPE_02') { // 地产类项目									
+										$("#estateDetail").show()
+										$("#financeDetai").hide()
+									} else {
+										$("#estateDetail").hide()
+										$("#financeDetai").hide()
+									}
+									
 									$('#projectDetailModal').modal('show');
 								}
 							});
@@ -518,6 +546,15 @@ define([
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
 				$('#projectForm').validator('validate'); // 手动校验一把
+				
+				$(document.projectForm.projectTypeName).val($(this).text()); // 设置项目类型名称
+			});
+			
+			
+			// 新增/修改底层项目-房地产项目属性下拉列表选项改变事件
+			$(document.projectForm.estateProp).change(function() { // 房地产项目属性
+				var ptt = $(this).val();				
+				$(document.projectForm.estatePropName).val($(this).text()); // 设置房地产项目属性名称
 			});
 
 			// 新增/修改底层项目-是否有担保人单选按钮改变事件

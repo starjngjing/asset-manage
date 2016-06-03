@@ -135,12 +135,16 @@ public class InvestmentPoolController extends BaseController {
 					Predicate p = cb.or(cb.isNull(exp), cb.le(exp, new BigDecimal(0))); //持有金额为空或者大于0: holdAmount is null or holdAmount < 0
 					predicate.add(p); 
 				} else if (op.equals("historyList")) { // 历史列表
-					Expression<String> exp = root.get("state").as(String.class);					
-					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_invalid }));
+					Expression<String> exp = root.get("state").as(String.class);	
+					Predicate pst = exp.in(new Object[] { Investment.INVESTMENT_STATUS_invalid });
+//					predicate.add(pst);
 					
-//					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
-//					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_FAIL })); //未成立
+					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);	
+					Predicate plst = exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_FAIL });// 未成立
+//					predicate.add(plst); 
 					
+					Predicate p = cb.or(pst, plst);
+					predicate.add(p);
 				} else{
 					throw AMPException.getException("未知的操作类型[" + op + "]"); 
 				}
@@ -258,7 +262,7 @@ public class InvestmentPoolController extends BaseController {
 			log.error("获取操作员失败, 原因: " + e.getMessage());
 		}
 		interestForm.setOperator(loginId);
-		TargetIncome interest = targetIncomeService.save(interestForm);
+		TargetIncome interest = investmentPoolService.targetIncome(interestForm);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

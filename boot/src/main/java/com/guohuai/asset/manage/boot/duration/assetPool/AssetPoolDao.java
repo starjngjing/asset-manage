@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AssetPoolDao extends JpaRepository<AssetPoolEntity, String>, JpaSpecificationExecutor<AssetPoolEntity> {
 
-	// 获取所有的资产池id和名称列表
-	@Query(value = "SELECT a.oid, a.name FROM T_GAM_ASSETPOOL a", nativeQuery = true)
+	// 获取所有已成立的资产池id和名称列表
+	@Query(value = "SELECT a.oid, a.name FROM T_GAM_ASSETPOOL a WHERE a.state ='成立'", nativeQuery = true)
 	public List<Object> findAllNameList();
 	
 	@Query("from AssetPoolEntity a where a.name like ?1")
@@ -17,4 +17,7 @@ public interface AssetPoolDao extends JpaRepository<AssetPoolEntity, String>, Jp
 	
 	@Query(value = "SELECT * FROM T_GAM_ASSETPOOL a WHERE a.state ='成立' LIMIT 1", nativeQuery = true)
 	public AssetPoolEntity getLimitOne();
+	
+	@Query("from AssetPoolEntity a where a.state ='成立'")
+	public List<AssetPoolEntity> getListByState();
 }

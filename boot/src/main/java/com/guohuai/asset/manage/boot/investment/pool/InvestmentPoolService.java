@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.investment.pool;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,6 +167,35 @@ public class InvestmentPoolService {
 		investmentLogService.saveInvestmentLog(it, TargetEventType.unEstablish, form.getOperator()); // 保存标的操作日志
 		return it;
 	}
+	
+	/**
+	 * 投资标的本息兑付
+	 * @Title: targetIncome 
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param interestForm
+	 * @return Interest    返回类型
+	 */
+	public TargetIncome targetIncome(TargetIncomeForm interestForm) {
+		String targetOid = interestForm.getTargetOid();
+		if (StringUtils.isBlank(targetOid))
+			throw AMPException.getException("投资标的id不能为空");
+
+		TargetIncome interest = new TargetIncome();
+		BeanUtils.copyProperties(interestForm, interest);
+
+		Investment investment = investmentService.getInvestment(targetOid);
+		interest.setInvestment(investment);
+
+		// 保存之前先删除标的某一期本兮兑付的数据
+		targetIncomeDao.deleteByTargetOidAndSeq(targetOid, interestForm.getSeq());
+
+		interest.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		interest.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.income, interestForm.getOperator()); // 保存标的操作日志
+		return targetIncomeDao.save(interest);
+	}
 
 	/**
 	 * 标的逾期
@@ -276,5 +306,33 @@ public class InvestmentPoolService {
 	 */
 	public List<TargetIncome> getTargetIncome(String targetOid) {
 		return targetIncomeDao.findByTargetOidOrderBySeq(targetOid);
+	}
+	
+	/**
+	 * 检查标的状态
+	 * @Title: checkTarget 
+	 * @author vania
+	 * @version 1.0
+	 * @see: TODO
+	 * @param it
+	 * @param op
+	 *  void    返回类型
+	 */
+	private void checkTarget(Investment it, String op) {
+		String state = it.getState();
+		String lifeState = it.getLifeState();
+		if (StringUtils.equals(op, Investment.INVESTMENT_LIFESTATUS_STAND_UP)) { // 标的成立
+			if (!StringUtils.equals(state, Investment.INVESTMENT_STATUS_collecting) && !StringUtils.equals(lifeState, Investment.INVESTMENT_LIFESTATUS_PREPARE)) {
+				throw AMPException.getException("投资标成立失败, 标的状态不合法");
+			}
+		} else if (StringUtils.equals(op, Investment.INVESTMENT_LIFESTATUS_STAND_FAIL)) { // 标的不成立
+			if (!StringUtils.equals(state, Investment.INVESTMENT_STATUS_collecting) && !StringUtils.equals(lifeState, Investment.INVESTMENT_LIFESTATUS_PREPARE)) {
+				throw AMPException.getException("投资标不成立失败, 标的状态不合法");
+			}
+		} else if (StringUtils.equals(op, Investment.INVESTMENT_LIFESTATUS_OVER_TIME)) { // 标的逾期
+			if (!StringUtils.equals(state, Investment.INVESTMENT_STATUS_collecting) && !StringUtils.equals(lifeState, Investment.INVESTMENT_LIFESTATUS_STAND_UP)) {
+				throw AMPException.getException("投资标逾期失败, 标的状态不合法");
+			}
+		}
 	}
 }

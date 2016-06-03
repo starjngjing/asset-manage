@@ -36,6 +36,8 @@ public class FundEntity implements Serializable {
 		this.redeemVolume = init0;
 		this.frozenCapital = init0;
 		this.onWayCapital = init0;
+		this.dailyProfit = init0;
+		this.totalProfit = init0;
 	}
 
 	@Id
@@ -59,6 +61,10 @@ public class FundEntity implements Serializable {
 	private BigDecimal frozenCapital;
 	// 在途资金
 	private BigDecimal onWayCapital;
+	// 每日收益
+	private BigDecimal dailyProfit;
+	// 累计收益
+	private BigDecimal totalProfit;
 	// 状态(0：生效 ;-1：未生效 )
 	private String state;
 }
