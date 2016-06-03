@@ -159,6 +159,7 @@ define([
 									$$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
 								});
 							util.form.validator.init($("#cashToolRevenueForm")); // 初始化表单验证
+							//$('#cashToolRevenueForm').validator('validate'); // 手动校验一把
 							$('#cashToolRevenueModal').modal('show');
 						}
 
