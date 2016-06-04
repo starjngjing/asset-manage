@@ -8,19 +8,13 @@
     <li><a href="javascript:void(0)" data-jump-to="AssetPool"><i class="fa fa-dashboard"></i> 资产池管理</a></li>
     <li class="active">资产池存续期管理</li>
   </ol>
+  <form id="searchForm" name="searchForm" method="post" style="position: absolute; top: 12px; left: 200px;">
+    <select name="assetPoolName" class="form-control input-sm"></select>
+  </form>
 </section>
 
 <!-- 主要内容 -->
 <section class="content">
-	<div class="row" style="margin-bottom: 20px;">
-		<form id="searchForm" name="searchForm" method="post">
-			<div class="col-lg-1">标的名称</div>
-  		<div class="col-lg-2">
-  		<select name="assetPoolName" class="form-control input-sm"></select>
-  	</div>
-		</form>
-	</div>
-	
   <div class="row">
     <div class="col-md-3">
       <div class="box box-primary">
@@ -102,12 +96,12 @@
         <!-- 预约中现金类管理工具数据表格 -->
         <table id="orderingToolTable" class="table table-bordered table-striped">
           <thead>
-          <tr>
-            <th></th>
-            <th>名称</th>
-            <th>类型</th>
-            <th>万份收益(元)</th>
-            <th>7日年化收益(元)</th>
+            <tr>
+              <th></th>
+              <th>名称</th>
+              <th>类型</th>
+              <th>万份收益(元)</th>
+              <th>7日年化收益(元)</th>
             <!--<th>风险等级</th>
             <th>分红方式</th>-->
             <!--<th>最新流通份额(万份)</th>-->
@@ -117,13 +111,13 @@
             <th>状态</th>
             <th>操作</th>
           </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="tab-pane" role="tabpanel" id="fundpanel2">
-        <!-- 现金类管理工具数据表格 -->
-        <table id="toolTable" class="table table-bordered table-striped">
-          <thead>
+        </thead>
+      </table>
+    </div>
+    <div class="tab-pane" role="tabpanel" id="fundpanel2">
+      <!-- 现金类管理工具数据表格 -->
+      <table id="toolTable" class="table table-bordered table-striped">
+        <thead>
           <tr>
             <th></th>
             <th>名称</th>
@@ -140,26 +134,26 @@
             <th>总收益</th>
             <th>操作</th>
           </tr>
-          </thead>
-        </table>
-      </div>
+        </thead>
+      </table>
     </div>
   </div>
+</div>
 
-  <div class="nav-tabs-custom">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
-        <a href="#trustpanel1" role="tab" data-toggle="tab">预约中信托计划</a>
-      </li>
-      <li role="presentation">
-        <a href="#trustpanel2" role="tab" data-toggle="tab">已成立信托计划</a>
-      </li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" role="tabpanel" id="trustpanel1">
-        <!-- 预约中信托计划数据表格 -->
-        <table id="orderingTrustTable" class="table table-bordered table-striped">
-          <thead>
+<div class="nav-tabs-custom">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#trustpanel1" role="tab" data-toggle="tab">预约中信托计划</a>
+    </li>
+    <li role="presentation">
+      <a href="#trustpanel2" role="tab" data-toggle="tab">已成立信托计划</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" role="tabpanel" id="trustpanel1">
+      <!-- 预约中信托计划数据表格 -->
+      <table id="orderingTrustTable" class="table table-bordered table-striped">
+        <thead>
           <tr>
             <th></th>
             <th>名称</th>
@@ -173,13 +167,13 @@
             <th>状态</th>
             <th>操作</th>
           </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="tab-pane" role="tabpanel" id="trustpanel2">
-        <!-- 信托计划数据表格 -->
-        <table id="trustTable" class="table table-bordered table-striped">
-          <thead>
+        </thead>
+      </table>
+    </div>
+    <div class="tab-pane" role="tabpanel" id="trustpanel2">
+      <!-- 信托计划数据表格 -->
+      <table id="trustTable" class="table table-bordered table-striped">
+        <thead>
           <tr>
             <th></th>
             <th>名称</th>
@@ -193,11 +187,11 @@
             <th>状态</th>
             <th>操作</th>
           </tr>
-          </thead>
-        </table>
-      </div>
+        </thead>
+      </table>
     </div>
   </div>
+</div>
 </section>
 
 <!-- 资产申购弹窗 -->
@@ -237,16 +231,16 @@
                 <div class="form-group">
                   <label>标的类型</label>
                   <input name="cashtoolType" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>每万份收益(元)</label>
                   <input name="netRevenue" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -255,16 +249,16 @@
                 <div class="form-group">
                   <label>7日年化收益(元)</label>
                   <input name="yearYield7" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>风险等级</label>
                   <input name="riskLevel" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -273,8 +267,8 @@
                 <div class="form-group">
                   <label>分红方式</label>
                   <input name="dividendType" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <!--<div class="col-md-6">
@@ -298,16 +292,16 @@
                 <div class="form-group">
                   <label>标的类型</label>
                   <input name="targetType" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>起购金额(万元)</label>
                   <input name="floorVolume" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <!--<div class="col-md-6">
@@ -324,16 +318,16 @@
                 <div class="form-group">
                   <label>预计年化收益(%)</label>
                   <input name="expAror" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>成立日</label>
                   <input name="setDate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -342,16 +336,16 @@
                 <div class="form-group">
                   <label>付息方式</label>
                   <input name="accrualType" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>首付息日</label>
                   <input name="arorFirstDate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -360,16 +354,16 @@
                 <div class="form-group">
                   <label>付息日</label>
                   <input name="accrualDate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>合同年天数</label>
                   <input name="contractDays" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -378,16 +372,16 @@
                 <div class="form-group">
                   <label>标的规模(万元)</label>
                   <input name="raiseScope" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>标的限期(天)</label>
                   <input name="life" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -414,16 +408,16 @@
                 <div class="form-group">
                   <label>主体评级</label>
                   <input name="subjectRating" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>募集起始日</label>
                   <input name="collectStartDate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -432,16 +426,16 @@
                 <div class="form-group">
                   <label>募集截止日</label>
                   <input name="collectEndDate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>募集期收益率(%)</label>
                   <input name="collectIncomeRate" type="text"
-                         class="form-control input-sm"
-                         readonly="readonly">
+                  class="form-control input-sm"
+                  readonly="readonly">
                 </div>
               </div>
             </div>
@@ -452,9 +446,9 @@
                 <label>投资日</label>
                 <div class="input-group input-group-sm">
                   <input name="investDate" type="text"
-                         class="form-control datepicker"
-                         placeholder="请选择时间"
-                         data-date-format="YYYY-MM-DD" required>
+                  class="form-control datepicker"
+                  placeholder="请选择时间"
+                  data-date-format="YYYY-MM-DD" required>
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
@@ -466,9 +460,9 @@
                 <label>申购额度</label>
                 <div class="input-group input-group-sm">
                   <input name="volume" type="text"
-                         class="form-control"
-                         placeholder="申购额度"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="申购额度"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -597,10 +591,10 @@
             <label>审核额度</label>
             <div class="input-group input-group-sm">
               <input name="auditVolume" type="text"
-                     class="form-control"
-                     placeholder="审核额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="审核额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -608,10 +602,10 @@
             <label>预约额度</label>
             <div class="input-group input-group-sm">
               <input name="reserveVolume" type="text"
-                     class="form-control"
-                     placeholder="预约额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="预约额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -619,10 +613,10 @@
             <label>确认额度</label>
             <div class="input-group input-group-sm">
               <input name="investVolume" type="text"
-                     class="form-control"
-                     placeholder="确认额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="确认额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -792,10 +786,10 @@
             <label>审核额度</label>
             <div class="input-group input-group-sm">
               <input name="auditVolume" type="text"
-                     class="form-control"
-                     placeholder="审核额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="审核额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -803,10 +797,10 @@
             <label>预约额度</label>
             <div class="input-group input-group-sm">
               <input name="reserveVolume" type="text"
-                     class="form-control"
-                     placeholder="预约额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="预约额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -814,10 +808,10 @@
             <label>确认额度</label>
             <div class="input-group input-group-sm">
               <input name="investVolume" type="text"
-                     class="form-control"
-                     placeholder="确认额度"
-                     data-validfloat="10.10" required
-                     disabled="disabled">
+              class="form-control"
+              placeholder="确认额度"
+              data-validfloat="10.10" required
+              disabled="disabled">
               <span class="input-group-addon">万</span>
             </div>
           </div>
@@ -857,16 +851,16 @@
               <div class="form-group">
                 <label>预期收益率(%)</label>
                 <input name="expIncomeRate" type="text"
-                       class="form-control"
-                       readonly="readonly">
+                class="form-control"
+                readonly="readonly">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>预期收益(元)</label>
                 <input name="expIncome" type="text"
-                       class="form-control"
-                       readonly="readonly">
+                class="form-control"
+                readonly="readonly">
               </div>
             </div>
           </div>
@@ -875,8 +869,8 @@
               <div class="form-group">
                 <label>本息兑付日</label>
                 <input name="incomeDate" type="text"
-                       class="form-control"
-                       readonly="readonly">
+                class="form-control"
+                readonly="readonly">
               </div>
             </div>
             <!--<div class="col-md-6">
@@ -897,9 +891,9 @@
                 <label>实际收益率</label>
                 <div class="input-group input-group-sm">
                   <input name="incomeRate" type="text"
-                         class="form-control"
-                         placeholder="实际收益率"
-                         data-validfloat="4.4" required>
+                  class="form-control"
+                  placeholder="实际收益率"
+                  data-validfloat="4.4" required>
                   <span class="input-group-addon">%</span>
                 </div>
               </div>
@@ -909,9 +903,9 @@
                 <label>实际收益</label>
                 <div class="input-group input-group-sm">
                   <input name="income" type="text"
-                         class="form-control"
-                         placeholder="实际收益"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="实际收益"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -931,8 +925,8 @@
                 <label>本金返还</label>
                 <div class="input-group input-group-sm">
                   <input id="capitalInput" name="capital" type="text"
-                         class="form-control"
-                         readonly="readonly">
+                  class="form-control"
+                  readonly="readonly">
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -1091,9 +1085,9 @@
                 <label>转让份额</label>
                 <div class="input-group input-group-sm">
                   <input name="tranVolume" type="text"
-                         class="form-control"
-                         placeholder="转让份额"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="转让份额"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -1103,9 +1097,9 @@
                 <label>转让金额</label>
                 <div class="input-group input-group-sm">
                   <input name="tranCash" type="text"
-                         class="form-control"
-                         placeholder="转让金额"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="转让金额"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -1115,9 +1109,9 @@
                 <label>转让日期</label>
                 <div class="input-group input-group-sm">
                   <input name="tranDate" type="text"
-                         class="form-control datepicker"
-                         placeholder="请选择时间"
-                         data-date-format="YYYY-MM-DD" required>
+                  class="form-control datepicker"
+                  placeholder="请选择时间"
+                  data-date-format="YYYY-MM-DD" required>
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
@@ -1157,15 +1151,15 @@
                 <!-- 出入金明细数据表格 -->
                 <table id="accountDetailTable" class="table table-bordered table-striped">
                   <thead>
-                  <tr>
-                    <th></th>
-                    <th>科目</th>
-                    <th>创建日期</th>
-                    <th>操作类型</th>
-                    <th>金额(万元)</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                  </tr>
+                    <tr>
+                      <th></th>
+                      <th>科目</th>
+                      <th>创建日期</th>
+                      <th>操作类型</th>
+                      <th>金额(万元)</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
                   </thead>
                 </table>
               </div>
@@ -1198,24 +1192,24 @@
           <div class="form-group">
             <label>标的名称</label>
             <input name="cashtoolName" type="text"
-                   class="form-control input-sm"
-                   readonly="readonly">
+            class="form-control input-sm"
+            readonly="readonly">
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>标的类型</label>
                 <input name="cashtoolType" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>每万份收益(元)</label>
                 <input name="netRevenue" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
           </div>
@@ -1224,8 +1218,8 @@
               <div class="form-group">
                 <label>7日年化收益(元)</label>
                 <input name="yearYield7" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
             <!--<div class="col-md-6">
@@ -1243,9 +1237,9 @@
                 <label>投资日</label>
                 <div class="input-group input-group-sm">
                   <input name="investDate" type="text"
-                         class="form-control datepicker"
-                         placeholder="请选择时间"
-                         data-date-format="YYYY-MM-DD" required>
+                  class="form-control datepicker"
+                  placeholder="请选择时间"
+                  data-date-format="YYYY-MM-DD" required>
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
@@ -1257,9 +1251,9 @@
                 <label>申购额度</label>
                 <div class="input-group input-group-sm">
                   <input name="volume" type="text"
-                         class="form-control"
-                         placeholder="申购额度"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="申购额度"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -1294,24 +1288,24 @@
           <div class="form-group">
             <label>标的名称</label>
             <input name="cashtoolName" type="text"
-                   class="form-control input-sm"
-                   readonly="readonly">
+            class="form-control input-sm"
+            readonly="readonly">
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>标的类型</label>
                 <input name="cashtoolType" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>每万份收益(元)</label>
                 <input name="netRevenue" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
           </div>
@@ -1320,16 +1314,16 @@
               <div class="form-group">
                 <label>7日年化收益(元)</label>
                 <input name="yearYield7" type="text"
-                       class="form-control input-sm"
-                       readonly="readonly">
+                class="form-control input-sm"
+                readonly="readonly">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>持有额度(万元)</label>
                 <input name="amount" type="text"
-                       class="form-control"
-                       readonly="readonly">
+                class="form-control"
+                readonly="readonly">
               </div>
             </div>
             <!--<div class="col-md-6">
@@ -1346,8 +1340,8 @@
               <div class="form-group">
                 <label>投资日</label>
                 <input name="investDate" type="text"
-                       class="form-control"
-                       readonly="readonly">
+                class="form-control"
+                readonly="readonly">
               </div>
             </div>
             <!--<div class="col-md-6">
@@ -1365,9 +1359,9 @@
                 <label>赎回发起日</label>
                 <div class="input-group input-group-sm">
                   <input name="redeemDate" type="text"
-                         class="form-control datepicker"
-                         placeholder="请选择时间"
-                         data-date-format="YYYY-MM-DD" required>
+                  class="form-control datepicker"
+                  placeholder="请选择时间"
+                  data-date-format="YYYY-MM-DD" required>
                   <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
@@ -1379,9 +1373,9 @@
                 <label>赎回额度</label>
                 <div class="input-group input-group-sm">
                   <input name="returnVolume" type="text"
-                         class="form-control"
-                         placeholder="申购额度"
-                         data-validfloat="10.10" required>
+                  class="form-control"
+                  placeholder="申购额度"
+                  data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -1430,30 +1424,30 @@
           <div class="form-group">
             <label>资产池名称</label>
             <input name="name" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入资产池名称"
-                   data-minlength="2"
-                   maxlength="50"
-                   data-error="资产池名称必须在2-50个字符以内" required>
+            class="form-control input-sm"
+            placeholder="请输入资产池名称"
+            data-minlength="2"
+            maxlength="50"
+            data-error="资产池名称必须在2-50个字符以内" required>
 
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
             <label>资产池规模(万元)</label>
             <input name="scale" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入资产池规模"
-                   data-validint="0-100000000" required>
+            class="form-control input-sm"
+            placeholder="请输入资产池规模"
+            data-validint="0-100000000" required>
 
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
             <label>投资范围</label>
             <select name="scopes" class="form-control input-sm origin-select"
-                    multiple="multiple"
-                    style="width: 100%;"
-                    data-enum-fetch="TARGETTYPE"
-                    required></select>
+            multiple="multiple"
+            style="width: 100%;"
+            data-enum-fetch="TARGETTYPE"
+            required></select>
 
             <div class="help-block with-errors text-red"></div>
           </div>
@@ -1461,9 +1455,9 @@
             <label>可用现金(万元)</label>
 
             <input name="cashPosition" type="text"
-                   class="form-control input-sm"
-                   placeholder="请输入可用现金"
-                   data-validfloat="10.10" required>
+            class="form-control input-sm"
+            placeholder="请输入可用现金"
+            data-validfloat="10.10" required>
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
@@ -1471,10 +1465,10 @@
 
             <div class="input-group input-group-sm">
               <input name="cashRate" type="text"
-                     class="form-control input-sm"
-                     placeholder="请输入现金比例"
-                     data-validfloat="3.4"
-                     data-validpercentage="true" required>
+              class="form-control input-sm"
+              placeholder="请输入现金比例"
+              data-validfloat="3.4"
+              data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
             </div>
             <div class="help-block with-errors text-red"></div>
@@ -1484,10 +1478,10 @@
 
             <div class="input-group input-group-sm">
               <input name="cashtoolRate" type="text"
-                     class="form-control input-sm"
-                     placeholder="请输入现金管理类工具比例"
-                     data-validfloat="3.4"
-                     data-validpercentage="true" required>
+              class="form-control input-sm"
+              placeholder="请输入现金管理类工具比例"
+              data-validfloat="3.4"
+              data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
             </div>
             <div class="help-block with-errors text-red"></div>
@@ -1497,10 +1491,10 @@
 
             <div class="input-group input-group-sm">
               <input name="targetRate" type="text"
-                     class="form-control input-sm"
-                     placeholder="请输入信托计划比例"
-                     data-validfloat="3.4"
-                     data-validpercentage="true" required>
+              class="form-control input-sm"
+              placeholder="请输入信托计划比例"
+              data-validfloat="3.4"
+              data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
             </div>
             <div class="help-block with-errors text-red"></div>

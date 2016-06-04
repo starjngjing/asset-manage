@@ -16,22 +16,23 @@ define([
 
 			// 资产池切换列表
 			http.post(config.api.duration.assetPool.getNameList, function(json) {
-					var assetPoolOptions = ''
-					var select = document.searchForm.assetPoolName
-					json.rows.forEach(function(item) {
-						assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
-					})
-					$(select).html(assetPoolOptions).val(pageState.pid)
+				var assetPoolOptions = ''
+				var select = document.searchForm.assetPoolName
+				json.rows.forEach(function(item) {
+					assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
 				})
-				// 改变资产池后刷新页面
+				$(select).html(assetPoolOptions)
+			})
+			// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
-				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = this.value
+				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
 				pageInit(pageState, http, config)
 				$('#orderingToolTable').bootstrapTable('refresh')
 				$('#toolTable').bootstrapTable('refresh')
 				$('#orderingTrustTable').bootstrapTable('refresh')
 				$('#trustTable').bootstrapTable('refresh')
 			})
+			pageInit(pageState, http, config)
 
 			// 资产申购类型radio change事件
 			$(document.buyAssetForm.buyType).on('ifChecked', function() {
@@ -1670,7 +1671,7 @@ function validpercentage($el) {
 	return !(percentage > 100)
 }
 
-function pageInit(pageState, http, config) {
+function pageInit (pageState, http, config) {
 	http.post(config.api.duration.assetPool.getById, {
 		data: {
 			oid: pageState.pid || ''
@@ -1678,7 +1679,7 @@ function pageInit(pageState, http, config) {
 		contentType: 'form'
 	}, function(json) {
 		var detail = json.result
-		pageState.pid = detail.oid
+		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
 			// 饼图生成
