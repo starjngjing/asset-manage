@@ -38,6 +38,18 @@ public class Document implements Serializable {
 	// 信托计划 本息兑付
 	public static final String TYPE_TARGET_REDEMPTION = "TARGET_REDEMPTION";
 
+	// 收益确认 银行存款
+	public static final String TYPE_INCOME_DEPOSIT = "DEPOSIT_INCOME";
+	// 收益确认 投资标的
+	public static final String TYPE_INCOME_TARGET = "TARGET_INCOME";
+	// 收益确认 现金管理工具
+	public static final String TYPE_INCOME_CASHTOOL = "CASHTOOL_INCOME";
+	// 收益确认 应收勾销
+	public static final String TYPE_INCOME_RECEIVE = "RECEIVE_INCOME";
+
+	// 收益分配
+	public static final String TYPE_ASSETPOOL_ALLOCATE = "ASSETPOOL_ALLOCATE";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
