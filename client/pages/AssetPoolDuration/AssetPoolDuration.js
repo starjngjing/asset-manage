@@ -1334,9 +1334,8 @@ define([
 			//			})
 
 			// 当选择本金兑付时，显示本金
-			$(document.trustIncomeForm.ifCapitalName).on('click', function() {
-				var flag = $('input[name=ifCapitalName]:checked').val()
-				if (flag == 'on') {
+			$(document.trustIncomeForm.ifCapitalName).on('change', function () {
+				if (this.value === 'yes') {
 					$('#capitalArea').show()
 				} else {
 					$('#capitalArea').hide()
