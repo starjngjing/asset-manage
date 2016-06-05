@@ -1,0 +1,168 @@
+package com.guohuai.asset.manage.boot.acct.books.document;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.guohuai.asset.manage.boot.acct.account.AccountService;
+import com.guohuai.asset.manage.boot.acct.books.AccountBook;
+import com.guohuai.asset.manage.boot.acct.books.AccountBookService;
+import com.guohuai.asset.manage.boot.acct.books.document.entry.DocumentEntry;
+import com.guohuai.asset.manage.boot.acct.books.document.entry.DocumentEntryService;
+import com.guohuai.asset.manage.boot.acct.books.document.sn.DocumentSnService;
+import com.guohuai.asset.manage.boot.acct.doc.template.DocTemplate;
+import com.guohuai.asset.manage.boot.acct.doc.template.DocTemplateService;
+import com.guohuai.asset.manage.boot.acct.doc.template.entry.DocTemplateEntry;
+import com.guohuai.asset.manage.boot.acct.doc.template.entry.DocTemplateEntryService;
+import com.guohuai.asset.manage.boot.acct.doc.word.DocWordService;
+import com.guohuai.asset.manage.component.util.StringUtil;
+
+/**
+ * 会计凭证 - 估值校准
+ * 
+ * @author Arthur
+ *
+ */
+@Service
+public class EstimateCorrectDocumentService {
+
+	@Autowired
+	private DocumentDao documentDao;
+	@Autowired
+	private DocWordService docWordService;
+	@Autowired
+	private DocumentSnService documentSnService;
+	@Autowired
+	private DocumentEntryService documentEntryService;
+	@Autowired
+	private DocTemplateService docTemplateService;
+	@Autowired
+	private DocTemplateEntryService docTemplateEntryService;
+	@Autowired
+	private AccountService accountService;
+	@Autowired
+	private AccountBookService accountBookService;
+
+	// 投资标的资产增值
+	@Transactional
+	public Document targetIncrement(String relative, String ticket, BigDecimal amount) {
+
+		DocTemplate template = this.docTemplateService.safeGet("0060_GZJZ_0001_TARGETZZ");
+		Map<String, DocTemplateEntry> maps = null;
+		if (null != template) {
+			maps = this.docTemplateEntryService.entryMap(template);
+		}
+		int seq = 1;
+		long timestamp = System.currentTimeMillis();
+		Date date = new Date(timestamp);
+		Timestamp now = new Timestamp(timestamp);
+
+		Document document = new Document();
+		document.setOid(StringUtil.uuid());
+		document.setDocword(null == template || null == template.getDocword() ? this.docWordService.get() : template.getDocword());
+		document.setType(Document.TYPE_ESTIMATE_CORRECT_TARGET);
+		document.setRelative(relative);
+		document.setTicket(ticket);
+		document.setAcctSn(this.documentSnService.genSn(date));
+		document.setAcctDate(date);
+		document.setInvoiceNum(0);
+		document.setDrAmount(BigDecimal.ZERO);
+		document.setCrAmount(BigDecimal.ZERO);
+		document.setCreateTime(now);
+		document.setUpdateTime(now);
+
+		AccountBook b_110101 = this.accountBookService.safeGet(relative, this.accountService.get("110101"));
+		AccountBook b_2201 = this.accountBookService.safeGet(relative, this.accountService.get("2201"));
+		AccountBook b_1201 = this.accountBookService.safeGet(relative, this.accountService.get("1201"));
+
+		BigDecimal wipe = b_1201.getBalance().compareTo(amount) > 0 ? amount : b_1201.getBalance();
+		BigDecimal incr = amount.subtract(wipe);
+
+		List<DocumentEntry> entries = new ArrayList<DocumentEntry>();
+
+		if (incr.compareTo(BigDecimal.ZERO) > 0) {
+			// 借 交易性金融资产 投资标的 110101
+			DocumentEntry e1_110101 = new DocumentEntry();
+			e1_110101.setOid(StringUtil.uuid());
+			e1_110101.setRelative(relative);
+			e1_110101.setTicket(ticket);
+			e1_110101.setDocument(document);
+			e1_110101.setBook(b_110101);
+			e1_110101.setDigest(null != maps && maps.containsKey("0060_0001_110101_01") ? maps.get("0060_0001_110101_01").getDigest() : "");
+			e1_110101.setDrAmount(incr);
+			e1_110101.setCrAmount(BigDecimal.ZERO);
+			e1_110101.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(incr));
+			b_110101 = this.accountBookService.drCredit(b_110101, incr);
+			seq++;
+			entries.add(e1_110101);
+
+			// 贷 未分配收益 2201
+			DocumentEntry e2_2201 = new DocumentEntry();
+			e2_2201.setOid(StringUtil.uuid());
+			e2_2201.setRelative(relative);
+			e2_2201.setTicket(ticket);
+			e2_2201.setDocument(document);
+			e2_2201.setBook(b_2201);
+			e2_2201.setDigest(null != maps && maps.containsKey("0060_0001_2201_02") ? maps.get("0060_0001_2201_02").getDigest() : "");
+			e2_2201.setDrAmount(BigDecimal.ZERO);
+			e2_2201.setCrAmount(incr);
+			e2_2201.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(incr));
+			b_2201 = this.accountBookService.drCredit(b_2201, incr);
+			seq++;
+			entries.add(e2_2201);
+		}
+
+		// 应收投资收益多头寸
+		if (wipe.compareTo(BigDecimal.ZERO) > 0) {
+			// 借 交易性金融资产 投资标的 110101
+			DocumentEntry e3_110101 = new DocumentEntry();
+			e3_110101.setOid(StringUtil.uuid());
+			e3_110101.setRelative(relative);
+			e3_110101.setTicket(ticket);
+			e3_110101.setDocument(document);
+			e3_110101.setBook(b_110101);
+			e3_110101.setDigest(null != maps && maps.containsKey("0060_0001_110101_03") ? maps.get("0060_0001_110101_03").getDigest() : "");
+			e3_110101.setDrAmount(wipe);
+			e3_110101.setCrAmount(BigDecimal.ZERO);
+			e3_110101.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(wipe));
+			b_110101 = this.accountBookService.drCredit(b_110101, wipe);
+			seq++;
+			entries.add(e3_110101);
+
+			// 贷 应收投资收益 1201
+			DocumentEntry e4_1201 = new DocumentEntry();
+			e4_1201.setOid(StringUtil.uuid());
+			e4_1201.setRelative(relative);
+			e4_1201.setTicket(ticket);
+			e4_1201.setDocument(document);
+			e4_1201.setBook(b_1201);
+			e4_1201.setDigest(null != maps && maps.containsKey("0060_0001_1201_04") ? maps.get("0060_0001_1201_04").getDigest() : "");
+			e4_1201.setDrAmount(BigDecimal.ZERO);
+			e4_1201.setCrAmount(wipe);
+			e4_1201.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(wipe));
+			b_1201 = this.accountBookService.crCredit(b_1201, wipe);
+			seq++;
+			entries.add(e4_1201);
+		}
+
+		document = this.documentDao.save(document);
+		for (DocumentEntry e : entries) {
+			this.documentEntryService.save(e);
+		}
+
+		return document;
+	}
+
+}

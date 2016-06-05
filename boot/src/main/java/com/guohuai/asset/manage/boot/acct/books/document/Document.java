@@ -62,7 +62,12 @@ public class Document implements Serializable {
 
 	// 备付金
 	public static final String TYPE_EXESS_RESERVE = "EXESS_RESERVE";
-	
+
+	// 股指校准 - 投资标的
+	public static final String TYPE_ESTIMATE_CORRECT_TARGET = "TARGET_ESTIMATE_CORRECT";
+	// 股指校准 - 现金管理工具
+	public static final String TYPE_ESTIMATE_CORRECT_CASHTOOL = "CASHTOOL_ESTIMATE_CORRECT";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)

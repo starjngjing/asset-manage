@@ -52,7 +52,7 @@ public class IncomeDocumentService {
 	private AccountService accountService;
 	@Autowired
 	private AccountBookService accountBookService;
-
+	
 	public enum IncomeType {
 		DEPOSIT, // 银行存款
 		TARGET, // 投资标的
