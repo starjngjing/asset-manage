@@ -52,7 +52,7 @@ public class ExessReserveDocumentService {
 	// 从外场调入备付金补充资产池流动性
 	@Transactional
 	public Document credit(String relative, String ticket, BigDecimal amount) {
-		DocTemplate template = docTemplateService.safeGet("0040_BFJM_0001_BFJDR");
+		DocTemplate template = this.docTemplateService.safeGet("0040_BFJM_0001_BFJDR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -119,7 +119,7 @@ public class ExessReserveDocumentService {
 
 	// 资产池流动性充裕偿还外场备付金
 	public Document repayment(String relative, String ticket, BigDecimal amount) {
-		DocTemplate template = docTemplateService.safeGet("0040_BFJM_0002_BFJCH");
+		DocTemplate template = this.docTemplateService.safeGet("0040_BFJM_0002_BFJCH");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);

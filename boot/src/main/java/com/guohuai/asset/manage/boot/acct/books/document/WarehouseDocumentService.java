@@ -55,7 +55,7 @@ public class WarehouseDocumentService {
 	 */
 	@Transactional
 	public Document cashtoolPurchase(String relative, String ticket, BigDecimal amount) {
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0001_HBJJSG");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0001_HBJJSG");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -126,7 +126,7 @@ public class WarehouseDocumentService {
 	@Transactional
 	public Document cashtoolRedemption(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0002_HBJJSH");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0002_HBJJSH");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -197,7 +197,7 @@ public class WarehouseDocumentService {
 	@Transactional
 	public Document targetPurchase(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0003_XTZCSG");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0003_XTZCSG");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -275,7 +275,7 @@ public class WarehouseDocumentService {
 	 */
 	public Document targetRedemption(String relative, String ticket, BigDecimal principal, BigDecimal returns, BigDecimal income, BigDecimal realized) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0004_XTZCBXDF");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0004_XTZCBXDF");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -602,7 +602,7 @@ public class WarehouseDocumentService {
 	@Transactional
 	public Document targetPremiumsTransOut(String relative, String ticket, BigDecimal principal, BigDecimal estimate, BigDecimal revenue) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0005_XTZCYJZR");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0005_XTZCYJZR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -764,7 +764,7 @@ public class WarehouseDocumentService {
 	@Transactional
 	public Document targetDiscountsTransOut(String relative, String ticket, BigDecimal principal, BigDecimal estimate, BigDecimal revenue) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0006_XTZCZJZR");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0006_XTZCZJZR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -920,7 +920,7 @@ public class WarehouseDocumentService {
 	 */
 	public Document targetTransIn(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0030_NBTC_0007_XTZCZR");
+		DocTemplate template = this.docTemplateService.safeGet("0030_NBTC_0007_XTZCZR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);

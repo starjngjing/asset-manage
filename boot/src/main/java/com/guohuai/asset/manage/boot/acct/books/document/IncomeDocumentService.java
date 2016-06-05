@@ -91,7 +91,7 @@ public class IncomeDocumentService {
 		if (b_1201.getBalance().compareTo(BigDecimal.ZERO) > 0) {
 			AccountBook b_2201 = this.accountBookService.safeGet(relative, this.accountService.get("2201"));
 
-			DocTemplate template = docTemplateService.safeGet("0050_SYQR_0004_YSTZSYGX");
+			DocTemplate template = this.docTemplateService.safeGet("0050_SYQR_0004_YSTZSYGX");
 			Map<String, DocTemplateEntry> maps = null;
 			if (null != template) {
 				maps = this.docTemplateEntryService.entryMap(template);
@@ -158,7 +158,7 @@ public class IncomeDocumentService {
 
 	@Transactional
 	private Document depositConfirm(String relative, String ticket, BigDecimal income) {
-		DocTemplate template = docTemplateService.safeGet("0050_SYQR_0003_YHCKLXQR");
+		DocTemplate template = this.docTemplateService.safeGet("0050_SYQR_0003_YHCKLXQR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -224,7 +224,7 @@ public class IncomeDocumentService {
 
 	@Transactional
 	private Document targetConfirm(String relative, String ticket, BigDecimal income) {
-		DocTemplate template = docTemplateService.safeGet("0050_SYQR_0001_XTZCSYQR");
+		DocTemplate template = this.docTemplateService.safeGet("0050_SYQR_0001_XTZCSYQR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -290,7 +290,7 @@ public class IncomeDocumentService {
 
 	@Transactional
 	private Document cashtoolConfirm(String relative, String ticket, BigDecimal income) {
-		DocTemplate template = docTemplateService.safeGet("0050_SYQR_0002_HBJJSYQR");
+		DocTemplate template = this.docTemplateService.safeGet("0050_SYQR_0002_HBJJSYQR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);

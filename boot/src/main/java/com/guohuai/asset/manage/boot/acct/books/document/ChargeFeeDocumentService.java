@@ -59,7 +59,7 @@ public class ChargeFeeDocumentService {
 	@Transactional
 	public Document accruedCharges(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0080_FYJT_0001_FJJT");
+		DocTemplate template = this.docTemplateService.safeGet("0080_FYJT_0001_FJJT");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -181,7 +181,7 @@ public class ChargeFeeDocumentService {
 	 */
 	@Transactional
 	public Document extractionCost(String relative, String ticket, BigDecimal amount) {
-		DocTemplate template = docTemplateService.safeGet("0090_FYTQ_0001_FYTQ");
+		DocTemplate template = this.docTemplateService.safeGet("0090_FYTQ_0001_FYTQ");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);

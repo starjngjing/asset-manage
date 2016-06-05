@@ -61,7 +61,7 @@ public class AllocateDocumentService {
 	@Transactional
 	public Document allocate(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0070_SYFP_0001_SYFPQR");
+		DocTemplate template = this.docTemplateService.safeGet("0070_SYFP_0001_SYFPQR");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);

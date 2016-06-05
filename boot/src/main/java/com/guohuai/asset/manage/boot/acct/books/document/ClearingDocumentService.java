@@ -53,7 +53,7 @@ public class ClearingDocumentService {
 	@Transactional
 	public Document receipt(String relative, String ticket, BigDecimal amount) {
 
-		DocTemplate template = docTemplateService.safeGet("0010_FEJS_0001_QSRK");
+		DocTemplate template = this.docTemplateService.safeGet("0010_FEJS_0001_QSRK");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
@@ -121,7 +121,7 @@ public class ClearingDocumentService {
 	// outlay 出款
 	@Transactional
 	public Document outlay(String relative, String ticket, BigDecimal amount) {
-		DocTemplate template = docTemplateService.safeGet("0010_FEJS_0002_QSCK");
+		DocTemplate template = this.docTemplateService.safeGet("0010_FEJS_0002_QSCK");
 		Map<String, DocTemplateEntry> maps = null;
 		if (null != template) {
 			maps = this.docTemplateEntryService.entryMap(template);
