@@ -163,10 +163,12 @@ define([
 			$('#cashToolApplyTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#cashToolSearchForm'), $('#cashToolApplyTable'))
+				// 初始化表单验证
+			util.form.validator.init($("#addCashToolForm"));
+			util.form.validator.init($("#editCashToolForm"));
 				// 新建标的按钮点击事件
 			$('#cashToolAdd').on('click', function() {
 					$('#addCashToolForm').resetForm();
-					util.form.validator.init($("#addCashToolForm")); // 初始化表单验证
 					$('#addCashToolModal').modal('show')
 				})
 				// 新建底层资产按钮点击事件
@@ -220,6 +222,7 @@ define([
 	}
 
 	function saveCashTool() {
+		if (!$('#addCashToolForm').validator('doSubmitCheck')) return
 		$('#addCashToolForm').ajaxSubmit({
 			url: config.api.cashtoolAdd,
 			//			contentType : 'application/json',
@@ -232,6 +235,7 @@ define([
 	}
 
 	function editCashTool() {
+		if (!$('#editCashToolForm').validator('doSubmitCheck')) return
 		$('#editCashToolForm').ajaxSubmit({
 			url: config.api.cashToolEdit,
 			success: function(result) {

@@ -106,6 +106,10 @@ function (http, config, util, $$) {
 								$('#detailModal').modal('show')
 							},
 							'click .item-update': function (e, val, row) {
+								var form = document.updateRoleForm
+								// 重置和初始化表单验证
+								$(form).validator('destroy')
+								util.form.validator.init($(form));
 								// 权限选择组件初始化
 								http.post(config.api.role.getRoleAuths, {
 									data: {
@@ -115,10 +119,8 @@ function (http, config, util, $$) {
 									},
 									contentType: 'form'
 								}, function (result) {
-									var form = document.updateRoleForm
 									form.oid.value = row.oid
 									form.name.value = row.name
-									$(form).validator('validate')
 									chosenAuths = result.rows
 									http.post(config.api.auth.list, function (auths) {
 										auths.rows.forEach(function (item) {
@@ -171,8 +173,6 @@ function (http, config, util, $$) {
 
 			// 初始化新建角色表单验证
 			util.form.validator.init($('#addRoleForm'))
-			// 初始化修改角色表单验证
-			util.form.validator.init($('#updateRoleForm'))
 
 			// 新建角色按钮点击事件
 			$('#addRole').on('click', function () {
@@ -194,6 +194,7 @@ function (http, config, util, $$) {
 			// 新建角色 - 确定按钮点击事件
 			$('#doAddRole').on('click', function () {
 				var form = document.addRoleForm
+				if (!$(form).validator('doSubmitCheck')) return
 				form.systemOid.value = 'GAH'
 				chosenAuths.forEach(function (item) {
 					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')
@@ -212,6 +213,7 @@ function (http, config, util, $$) {
 			// 修改角色 - 确定按钮点击事件
 			$('#doUpdateRole').on('click', function () {
 				var form = document.updateRoleForm
+				if (!$(form).validator('doSubmitCheck')) return
 				form.systemOid.value = 'GAH'
 				chosenAuths.forEach(function (item) {
 					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')

@@ -121,9 +121,12 @@ function (http, config, util, $$) {
 		        events:{
 		        	'click .detail': getChannelInfo,
 		        	'click .item-confirm':function(e, value, row){
+                  // 重置和初始化表单验证
+                  $("#approveForm").validator('destroy')
+                  util.form.validator.init($("#approveForm"));
+
 		        		  $('#approveForm').clearForm()
 					        .find('input[type=hidden]').val('')
-					        $('#approveForm').validator('validate')
 		        		  var txt = row.requestType == 'on'? '开启':'停用';
 									$("#content").html($(this).html() + row.requester + '的' + txt);
 									_this.channApproveInfo.apprOid = row.oid;
@@ -235,8 +238,6 @@ function (http, config, util, $$) {
 		  $$.searchInit($('#waitSearchForm'), $('#waitTable'));
 		  $$.searchInit($('#okSearchForm'), $('#okTable'));
 			
-			$('#approveForm').validator();
-			
 			//待审核查询
 			function getWaitQueryParams(val){
 				 var form = document.waitSearchForm
@@ -283,6 +284,7 @@ function (http, config, util, $$) {
 			
 			//审批操作按钮
 			$("#approveBut").on('click',function(){
+          if (!$('#approveForm').validator('doSubmitCheck')) return
 				  document.approveForm.apprOid.value = _this.channApproveInfo.apprOid;
 				  document.approveForm.apprResult.value = _this.channApproveInfo.apprResult;
 				  $('#approveForm').ajaxSubmit({

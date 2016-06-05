@@ -167,6 +167,10 @@ define([
 
 						},
 						'click .item-edit': function(e, value, row) {
+							// 重置和初始化表单验证
+							$("#editTargetForm").validator('destroy')
+							util.form.validator.init($("#editTargetForm"));
+
 							http.post(config.api.targetDetQuery, {
 								data: {
 									oid: row.oid
@@ -174,11 +178,9 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								$('#editTargetForm').clearForm(); // 先清理表单
-								util.form.validator.init($("#editTargetForm")); // 初始化表单验证
 								var data = result.investment;
 								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
-								$('#editTargetForm').validator('validate'); // 手动校验一把
 								$('#editTargetModal').modal('show');
 							})
 						},
@@ -416,8 +418,11 @@ define([
 
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
-							$('#projectForm').resetForm(); // 先清理表单
-							util.form.validator.init($("#projectForm")); // 初始化表单验证
+							util.form.reset($('#projectForm')); // 先清理表单
+							// 重置和初始化表单验证
+							$("#projectForm").validator('destroy')
+							util.form.validator.init($("#projectForm"));
+
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
 							// 给项目表单的 标的id属性赋值
@@ -440,7 +445,6 @@ define([
 
 									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
-									$('#projectForm').validator('validate'); // 手动校验一把
 									$('#projectModal').modal('show');
 								}
 							});
@@ -480,11 +484,12 @@ define([
 			// 搜索表单初始化
 			$$.searchInit($('#targetSearchForm'), $('#targetApplyTable'))
 
+			// 新建标的表单初始化
+			util.form.validator.init($("#addTargetForm")); // 初始化表单验证
+
 			// 新建标的按钮点击事件
 			$('#targetAdd').on('click', function() {
 				$('#addTargetForm').resetForm(); // 先清理表单
-				util.form.validator.init($("#addTargetForm")); // 初始化表单验证
-				$('#addTargetForm').validator('validate'); // 手动校验一把
 				$('#addTargetModal').modal('show')
 			})
 
@@ -506,6 +511,9 @@ define([
 				editTarget();
 			})
 
+			// 新建底层项目表单验证初始化
+			util.form.validator.init($("#projectForm"));
+
 			// 新建底层项目按钮点击事件
 			$('#projectAdd').on('click', function() {
 				if (!targetInfo) {
@@ -521,8 +529,6 @@ define([
 
 				// 给项目表单的 标的id属性赋值
 				$("#targetOid")[0].value = targetInfo.oid;
-				util.form.validator.init($("#projectForm")); // 初始化表单验证
-				$('#projectForm').validator('validate'); // 手动校验一把
 				$('#projectModal').modal('show');
 			})
 
@@ -546,7 +552,6 @@ define([
 				}
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
-				$('#projectForm').validator('validate'); // 手动校验一把
 				
 				$(document.projectForm.projectTypeName).val($(this).text()); // 设置项目类型名称
 			});
@@ -568,7 +573,6 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
-					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -582,7 +586,6 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
-					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -596,7 +599,6 @@ define([
 
 					$('#projectForm').validator('destroy'); // 先销毁验证规则
 					util.form.validator.init($('#projectForm')); // 然后添加验证规则
-					$('#projectForm').validator('validate'); // 手动校验一把
 				});
 			})
 
@@ -946,6 +948,7 @@ define([
 	}
 
 	function saveTarget() {
+		if (!$('#addTargetForm').validator('doSubmitCheck')) return
 		$('#addTargetForm').ajaxSubmit({
 			url: config.api.targetAdd,
 			success: function(result) {
@@ -957,6 +960,7 @@ define([
 	}
 
 	function editTarget() {
+		if (!$('#editTargetForm').validator('doSubmitCheck')) return
 		$('#editTargetForm').ajaxSubmit({
 			url: config.api.targetEdit,
 			success: function(result) {
@@ -968,6 +972,7 @@ define([
 	}
 
 	function saveProject() {
+		if (!$('#projectForm').validator('doSubmitCheck')) return
 		$('#projectForm').ajaxSubmit({
 			type: "post", //提交方式  
 			//dataType:"json", //数据类型'xml', 'script', or 'json'  

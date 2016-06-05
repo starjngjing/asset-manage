@@ -215,6 +215,10 @@ define([
 							})
 						},
 						'click .item-update': function(e, value, row) {
+							// 重置和初始化表单验证
+							$("#updateProductForm").validator('destroy')
+							util.form.validator.init($("#updateProductForm"));
+
 							http.post(config.api.productDetail, {
 								data: {
 									oid: row.oid
@@ -227,7 +231,6 @@ define([
 									$(document.updateProductForm.fullName).attr("data-fetch-id",data.oid)
 									$(document.updateProductForm.code).attr("data-fetch-id",data.oid)
 									$$.formAutoFix($('#updateProductForm'), data); // 自动填充表单
-									$('#updateProductForm').validator('validate')
 									
 									if ('PRODUCTTYPE_01'==data.typeOid) {
 										if('MANUALINPUT'==data.raiseStartDateType) {
@@ -348,8 +351,8 @@ define([
     	$('#productDesignTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
+    	// 添加产品表单验证初始化
     	util.form.validator.init($('#addProductForm'))
-    	util.form.validator.init($('#updateProductForm'))
     	
     	// 数据表格配置
 		var channelsTableConfig = {
@@ -535,8 +538,6 @@ define([
 			ul.next('input').val($(this).attr('value'))
 		})
 
-			util.form.validator.init($('#addProductForm'))
-
     	// 新建产品按钮点击事件
     	$('#productAdd').on('click', function () {
 			http.post(config.api.duration.assetPool.getNameList, function (result) {
@@ -615,11 +616,12 @@ define([
 			
 		// 新建产品“保存”按钮点击事件
     	$('#addProductSubmit').on('click', function () {
+    		if (!$('#addProductForm').validator('doSubmitCheck')) return
     		var typeOid = $("#addProductTypeSelect  option:selected").val();
-			document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
-			if(document.addProductForm.expArorSec.value=="") {
-				document.addProductForm.expArorSec.value = document.addProductForm.expAror.value
-			}
+				document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
+				if(document.addProductForm.expArorSec.value=="") {
+					document.addProductForm.expArorSec.value = document.addProductForm.expAror.value
+				}
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#addProductForm').ajaxSubmit({
       			url: config.api.savePeriodic,
@@ -687,6 +689,7 @@ define([
 		$('#updateProductUploadTable').bootstrapTable(updateProductUploadTableConfig)
 		// 编辑产品“保存”按钮点击事件
     	$('#updateProductSubmit').on('click', function () {
+    		if (!$('#updateProductForm').validator('doSubmitCheck')) return
     		var typeOid = $("#typeOid").val();
 				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {

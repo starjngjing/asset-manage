@@ -116,6 +116,7 @@ define([
 				} else {
 					url = config.api.duration.order.purchaseForTrust
 				}
+				if (!$(form).validator('doSubmitCheck')) return
 				$(form).ajaxSubmit({
 					url: url,
 					success: function() {
@@ -630,6 +631,7 @@ define([
 							url = config.api.duration.order.orderConfirmForFund
 							break
 					}
+					if (!$(form).validator('doSubmitCheck')) return
 					$(form).ajaxSubmit({
 						url: url,
 						success: function() {
@@ -672,6 +674,7 @@ define([
 			// 现金类管理工具 - 申购弹窗 - 提交审核按钮点击事件
 			$('#doPurchase').on('click', function() {
 				var form = document.purchaseForm
+				if (!$(form).validator('doSubmitCheck')) return
 				$(form).ajaxSubmit({
 					url: config.api.duration.order.purchaseForFund,
 					success: function() {
@@ -686,6 +689,7 @@ define([
 			// 现金类管理工具 - 赎回弹窗 - 提交审核按钮点击事件
 			$('#doRedeem').on('click', function() {
 				var form = document.redeemForm
+				if (!$(form).validator('doSubmitCheck')) return
 				$(form).ajaxSubmit({
 					url: config.api.duration.order.redeem,
 					success: function() {
@@ -1402,6 +1406,7 @@ define([
 							}
 							break
 					}
+					if (!$(form).validator('doSubmitCheck')) return
 					$(form).ajaxSubmit({
 						url: url,
 						success: function() {
@@ -1467,6 +1472,7 @@ define([
 
 			// 信托计划 - 转让按钮点击事件
 			$('#doTrustTransfer').on('click', function() {
+				if (!$('#trustTransferForm').validator('doSubmitCheck')) return
 				$('#trustTransferForm').ajaxSubmit({
 					url: config.api.duration.order.applyForTransfer,
 					success: function() {
@@ -1479,6 +1485,7 @@ define([
 
 			// 信托计划 - 本息兑付按钮点击事件
 			$('#doTrustIncome').on('click', function() {
+				if (!$('#trustIncomeForm').validator('doSubmitCheck')) return
 				$('#trustIncomeForm').ajaxSubmit({
 					url: config.api.duration.order.applyForIncome,
 					success: function() {
@@ -1520,6 +1527,7 @@ define([
 				})
 				// 编辑资产池 - 确定按钮点击事件
 			$('#doUpdateAssetPool').on('click', function() {
+				if (!$('#updateAssetPoolForm').validator('doSubmitCheck')) return
 				$('#updateAssetPoolForm').ajaxSubmit({
 					url: config.api.duration.order.editPoolForCash,
 					success: function() {

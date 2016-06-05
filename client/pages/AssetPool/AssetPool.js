@@ -182,6 +182,7 @@ define([
       })
       // 新增资产池 - 确定按钮点击事件
       $('#doAddAssetPool').on('click', function () {
+        if (!$('#addAssetPoolForm').validator('doSubmitCheck')) return
         $('#addAssetPoolForm').ajaxSubmit({
           url: config.api.duration.assetPool.create,
           success: function () {
@@ -193,6 +194,7 @@ define([
       })
       // 编辑资产池 - 确定按钮点击事件
       $('#doUpdateAssetPool').on('click', function () {
+        if (!$('#updateAssetPoolForm').validator('doSubmitCheck')) return
         $('#updateAssetPoolForm').ajaxSubmit({
           url: config.api.duration.assetPool.edit,
           success: function () {

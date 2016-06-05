@@ -425,23 +425,17 @@ define([
 			$('#targetConventionTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#searchForm'), $('#targetConventionTable'))
+			// 新建会议表单验证初始化
+			util.form.validator.init($("#addTargetConventionForm"))
 				// 新建会议按钮点击事件
 			$('#targetConventionAdd').on('click', function() {
 				$('#addTargetConventionForm').clearForm() // 先清理表单
-				util.form.validator.init($("#addTargetConventionForm")) // 初始化表单验证
 				$('#addTargetConventionModal').modal('show')
 			})
 			
 
 			$("#addMeeting").on('click', function() {
-				if($('#participant').val() == null){
-					alert('参会人不能为空');
-					return
-				}
-				if($('#target').val() == null){
-					alert('相关标的不能为空');
-					return
-				}
+				if (!$('#addTargetConventionForm').validator('doSubmitCheck')) return
 				$('#addTargetConventionForm').ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  

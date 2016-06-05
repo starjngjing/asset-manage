@@ -256,13 +256,14 @@
     if (this.isIncomplete() || this.hasErrors()) e.preventDefault()
   }
 
+  Validator.prototype.doSubmitCheck = function (e) {
+    this.validate()
+    return !(this.isIncomplete() || this.hasErrors())
+  }
+
   Validator.prototype.toggleSubmit = function () {
     if (!this.options.disable) return
-    if (this.isIncomplete() || this.hasErrors()) {
-      this.$btn.attr('disabled', true)
-    } else {
-      this.$btn.attr('disabled', false)
-    }
+    this.$btn.toggleClass('disabled', this.isIncomplete() || this.hasErrors())
   }
 
   Validator.prototype.defer = function ($el, callback) {
@@ -298,7 +299,7 @@
         .html(originalContent)
     })
 
-    $('.' + this.$element.attr('id').substr(0, this.$element.attr('id').length - 4) + 'Submit').attr('disabled', false)
+    $('.' + this.$element.attr('id').substr(0, this.$element.attr('id').length - 4) + 'Submit').removeClass('disabled')
 
     this.$element.find('.has-error, .has-danger').removeClass('has-error has-danger')
 
@@ -310,15 +311,20 @@
 
 
   function Plugin(option) {
-    return this.each(function () {
-      var $this   = $(this)
-      var options = $.extend({}, Validator.DEFAULTS, $this.data(), typeof option == 'object' && option)
-      var data    = $this.data('bs.validator')
+    if (option === 'doSubmitCheck') {
+      var data    = $(this).data('bs.validator')
+      return data[option]()
+    } else {
+      return this.each(function () {
+        var $this   = $(this)
+        var options = $.extend({}, Validator.DEFAULTS, $this.data(), typeof option == 'object' && option)
+        var data    = $this.data('bs.validator')
 
-      if (!data && option == 'destroy') return
-      if (!data) $this.data('bs.validator', (data = new Validator(this, options)))
-      if (typeof option == 'string') data[option]()
-    })
+        if (!data && option == 'destroy') return
+        if (!data) $this.data('bs.validator', (data = new Validator(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }  
   }
 
   var old = $.fn.validator

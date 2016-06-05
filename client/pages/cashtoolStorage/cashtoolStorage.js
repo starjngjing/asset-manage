@@ -141,6 +141,10 @@ define([
 
 							$('#revenueTable').bootstrapTable('refresh');
 
+							// 重置和初始化表单验证
+							$("#cashToolRevenueForm").validator('destroy')
+							util.form.validator.init($("#cashToolRevenueForm"));
+
 							http.post(config.api.cashtoolDetQuery, {
 									data: {
 										oid: row.oid
@@ -158,8 +162,6 @@ define([
 									$$.detailAutoFix($('#cashToolDetail'), data); // 自动填充详情
 									$$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
 								});
-							util.form.validator.init($("#cashToolRevenueForm")); // 初始化表单验证
-							//$('#cashToolRevenueForm').validator('validate'); // 手动校验一把
 							$('#cashToolRevenueModal').modal('show');
 						}
 
@@ -228,6 +230,7 @@ define([
 
 			// 收益采集 按钮点击事件
 			$("#cashToolRevenueSubmit").click(function() {
+				if (!$('#cashToolRevenueForm').validator('doSubmitCheck')) return
 				$("#cashToolRevenueForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  

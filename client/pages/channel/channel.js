@@ -195,7 +195,11 @@ function (http, config, util, $$) {
 						      })              	                	
               },
               'click .edit': function (e, value, row) {
-              	_this.channelInfo.oid = row.oid;              
+              	_this.channelInfo.oid = row.oid;
+                // 重置和初始化表单验证
+                $("#editChannelForm").validator('destroy')
+                util.form.validator.init($("#editChannelForm"));
+
 								http.post(config.api.channelinfo, {
                   data: {
                     oid: row.oid
@@ -204,7 +208,6 @@ function (http, config, util, $$) {
                 }, function (result) {
                 	$('#editChanelName').attr('readonly',true);                  
                   $$.formAutoFix($('#editChannelForm'), result); // 自动填充详情
-                  $('#editChannelForm').validator('validate')
                 })
 								$('#editChannelModal').modal('show')								
               },
@@ -240,9 +243,6 @@ function (http, config, util, $$) {
 		  $$.searchInit($('#searchForm'), $('#channelTable'));
 		 
 		  util.form.validator.init($('#addChannelForm'))
-		  util.form.validator.init($('#editChannelForm'))
-			$('#addChannelForm').validator('validate')
-			$('#editChannelForm').validator('validate')
 
 		  function getQueryParams (val) {
         // 参数 val 是bootstrap-table默认的与服务器交互的数据，包含分页、排序数据
@@ -263,12 +263,12 @@ function (http, config, util, $$) {
 			$("#addChannel").on("click",function(){				
 				util.form.reset($('#addChannelForm'));       
         _this.channelInfo.oid='';
-				$(document.addChannelForm).validator('validate');
 				$('#addChannelModal').modal('show');				
 			});
 			
 			//新增渠道
 			$("#addChannelSubmit").on("click",function(){			
+        if (!$('#addChannelForm').validator('doSubmitCheck')) return
 				$('#addChannelForm').ajaxSubmit({
           url: config.api.addChannel,
           success: function (res) {
@@ -284,6 +284,7 @@ function (http, config, util, $$) {
 			
 			//修改渠道
 			$("#editChannelSubmit").on("click",function(){
+        if (!$('#editChannelForm').validator('doSubmitCheck')) return
 				document.editChannelForm.oid.value = _this.channelInfo.oid
 				$('#editChannelForm').ajaxSubmit({
           url: config.api.editChannel,
