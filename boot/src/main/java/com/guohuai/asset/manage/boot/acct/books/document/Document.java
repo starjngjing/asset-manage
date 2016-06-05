@@ -55,6 +55,11 @@ public class Document implements Serializable {
 	// 费金提取
 	public static final String TYPE_EXTRACTION_COST = "EXTRACTION_COST";
 
+	// 清算
+	public static final String TYPE_CLEARING = "CLEARING";
+	// 结算
+	public static final String TYPE_SETTLEMENT = "SETTLEMENT";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
