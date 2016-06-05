@@ -23,6 +23,12 @@ import com.guohuai.asset.manage.boot.acct.doc.template.entry.DocTemplateEntrySer
 import com.guohuai.asset.manage.boot.acct.doc.word.DocWordService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
+/**
+ * 会计凭证 - 清算业务
+ * 
+ * @author Arthur
+ *
+ */
 @Service
 public class ClearingDocumentService {
 
