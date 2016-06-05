@@ -60,6 +60,9 @@ public class Document implements Serializable {
 	// 结算
 	public static final String TYPE_SETTLEMENT = "SETTLEMENT";
 
+	// 备付金
+	public static final String TYPE_EXESS_RESERVE = "EXESS_RESERVE";
+	
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
