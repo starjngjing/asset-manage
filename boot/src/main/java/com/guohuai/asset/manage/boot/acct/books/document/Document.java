@@ -50,6 +50,11 @@ public class Document implements Serializable {
 	// 收益分配
 	public static final String TYPE_ASSETPOOL_ALLOCATE = "ASSETPOOL_ALLOCATE";
 
+	// 费金计提
+	public static final String TYPE_ACCRUED_CHARGES = "ACCRUED_CHARGES";
+	// 费金提取
+	public static final String TYPE_EXTRACTION_COST = "EXTRACTION_COST";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
