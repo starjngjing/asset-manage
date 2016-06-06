@@ -155,7 +155,8 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data = formatTargetData(data); // 格式化标的数据
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级								
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') { // 被驳回
 									$("#rejectDesc").hide()
@@ -227,6 +228,9 @@ define([
 							targetInfo = row;
 							// 初始化数据表格                       
 							$('#incomeTable').bootstrapTable('refresh');
+							// 重置和初始化表单验证
+							$("#targetIncomeForm").validator('destroy')
+							util.form.validator.init($("#targetIncomeForm"));
 
 							http.post(config.api.targetDetQuery, {
 									data: {
@@ -245,7 +249,6 @@ define([
 									$$.detailAutoFix($('#targetDetailIncome'), formatTargetData(data)); // 自动填充详情1
 									$$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
 								});
-							util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
 							$('#targetIncomeModal').modal('show');
 						},
 						'click .item-overdue': function(e, value, row) { // 逾期
@@ -273,6 +276,11 @@ define([
 						});
 						*/
 							/*  需要弹窗的 */
+
+							// 重置和初始化表单验证
+							$("#overdueForm").validator('destroy')
+							util.form.validator.init($("#overdueForm"));
+
 							http.post(config.api.targetDetQuery, {
 									data: {
 										oid: row.oid
@@ -288,8 +296,8 @@ define([
 									}
 									$$.detailAutoFix($('#targetDetailOverdue'), formatTargetData(data)); // 自动填充详情
 									//                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
+									$(document.overdueForm.oid).val(data.oid); // 设置投资标的oid
 								});
-							util.form.validator.init($("#overdueForm")); // 初始化表单验证
 							$('#overdueModal').modal('show');
 
 						},
@@ -391,6 +399,7 @@ define([
 
 			// 成立 按钮点击事件
 			$("#establishSubmit").click(function() {
+				if (!$('#establishForm').validator('doSubmitCheck')) return
 				$("#establishForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -406,6 +415,7 @@ define([
 
 			// 不成立 按钮点击事件
 			$("#unEstablishSubmit").click(function() {
+				if (!$('#unEstablishForm').validator('doSubmitCheck')) return
 				$("#unEstablishForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -421,6 +431,7 @@ define([
 
 			// 逾期 按钮点击事件     暂时没用到
 			$("#overdueSubmit").click(function() {
+				if (!$('#overdueForm').validator('doSubmitCheck')) return
 				$("#overdueForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -436,6 +447,7 @@ define([
 
 			// 本息兑付 按钮点击事件
 			$("#targetIncomeSubmit").click(function() {
+				if (!$('#targetIncomeForm').validator('doSubmitCheck')) return
 				$("#targetIncomeForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -450,6 +462,10 @@ define([
 			});
 
 			function initEstablish(row) {
+
+				// 重置和初始化表单验证
+				$("#establishForm").validator('destroy')
+				util.form.validator.init($("#establishForm"));
 
 				// 初始化   付息日 
 				for (var i = 1; i <= 30; i++) {
@@ -474,11 +490,14 @@ define([
 						$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
 						$$.formAutoFix($('#establishForm'), data); // 自动填充表单
 					});
-				util.form.validator.init($("#establishForm")); // 初始化表单验证
 				$('#establishModal').modal('show');
 			}
 
 			function initUnEstablish(row) {
+
+				// 重置和初始化表单验证
+				$("#unEstablishForm").validator('destroy')
+				util.form.validator.init($("#unEstablishForm"));
 
 				http.post(config.api.targetDetQuery, {
 						data: {
@@ -496,7 +515,6 @@ define([
 						$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
 						$$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
 					});
-				util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
 				$('#unEstablishModal').modal('show');
 			}
 
@@ -510,6 +528,10 @@ define([
 				return val
 			}
 
+			/**
+			 * 格式化投资标的信息
+			 * @param {Object} t
+			 */
 			function formatTargetData(t) {
 				if (t) {
 					var t2 = {};
@@ -523,6 +545,10 @@ define([
 				return t;
 			}
 
+			/**
+			 * 格式化底层项目信息
+			 * @param {Object} p
+			 */
 			function formatProjectData(p) {
 				if (p) {
 					var p2 = {};

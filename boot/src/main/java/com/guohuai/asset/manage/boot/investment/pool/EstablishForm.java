@@ -50,6 +50,18 @@ public class EstablishForm implements Serializable {
 
 //	@NotNull(message = "投资标的付息周期方式不能为空")
 //	private String accrualCycleType;
+
+	/**
+	 * 付息周期方式
+	 */
+	@NotNull(message = "付息周期方式不能为空")
+	private String accrualCycleType;
+	
+	/**
+	 * 合同年天数
+	 */
+	@NotNull(message = "合同年天数不能为空")
+	private Integer contractDays;
 	
 	/**
 	 * 付息日
