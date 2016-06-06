@@ -309,6 +309,36 @@ public class InvestmentPoolService {
 	}
 	
 	/**
+	 * 增加持仓金额
+	 * @Title: IncHoldAmount 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid	投资标的id
+	 * @param holdAmount	大于0为增加,小于0则为减少
+	 * @return Investment    返回类型
+	 */
+	public Investment IncHoldAmount(String oid, BigDecimal holdAmount) {
+		int res = investmentDao.IncHoldAmount(oid, holdAmount);
+		return res > 0 ? investmentDao.findOne(oid) : null;
+	}
+	
+	/**
+	 * 增加申请金额
+	 * @Title: IncApplyAmount 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid	投资标的id
+	 * @param applyAmount	大于0为增加,小于0则为减少
+	 * @return Investment    返回类型
+	 */
+	public Investment IncApplyAmount(String oid, BigDecimal applyAmount) {
+		int res = investmentDao.IncApplyAmount(oid, applyAmount);
+		return res > 0 ? investmentDao.findOne(oid) : null;
+	}
+	
+	/**
 	 * 检查标的状态
 	 * @Title: checkTarget 
 	 * @author vania
