@@ -108,7 +108,7 @@ public class InvestmentManageForm implements Serializable {
 	/**
 	 * 评级时间
 	 */
-	private Timestamp ratingTime;
+	private Date ratingTime;
 	/**
 	 * 内部评级
 	 */

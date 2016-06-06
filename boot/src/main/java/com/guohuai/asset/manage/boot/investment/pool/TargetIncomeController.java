@@ -73,7 +73,7 @@ public class TargetIncomeController extends BaseController {
 				@Spec(params = "seq", path = "seq", spec = Equal.class) 
 			}) Specification<TargetIncome> spec,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "50") int rows, @RequestParam(defaultValue = "desc") String sortDirection,
-			@RequestParam(defaultValue = "updateTime") String sortField) {
+			@RequestParam(defaultValue = "seq") String sortField) {
 
 		if (page < 1) {
 			page = 1;
