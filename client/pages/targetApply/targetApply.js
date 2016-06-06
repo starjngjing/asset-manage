@@ -71,16 +71,11 @@ define([
 						return val + util.enum.transform('lifeUnit',row.lifeUnit)
 					}
 				}, {
-					field: 'expIncome',
-					formatter: function(val) {
-						if (val)
-							return val.toFixed(2) + "%";
-					}
-				}, {
 					field: 'expAror',
 					formatter: function(val, row) {
 						if (val)
-							return val.toFixed(2) + "%";
+							var percentage = val*100.0
+							return percentage.toFixed(2) + "%";
 					}
 				}, {
 					field: 'state',
@@ -124,47 +119,30 @@ define([
 							class: 'item-invalid',
 							isRender: row.state != 'invalid' && row.state != 'metting'
 						}, {
-							text: '检查项',
+							text: '确认',
 							type: 'button',
-							class: 'item-checklist',
-							isRender: row.state == 'collecting'
+							class: 'item-enter',
+							isRender: row.state == 'meetingPass'
 						}];
 						return util.table.formatter.generateButton(buttons);
 					},
 					events: {
-						'click .item-checklist': function(e, value, row) {
-							http.post(config.api.targetCheckList, {
-									data: {
-										oid: row.oid
-									},
-									contentType: 'form'
-								},
-								function(obj) {
-									var data = obj.rows;
-									checkConditionsSource = data;
-									$('#checkConditionsTable').bootstrapTable('load', checkConditionsSource)
-									if (data == '') {
-										//隐藏确认检查项
-										$('#cofrimCheckListDiv').hide()
-										$('#cofrimCheckListBtnDiv').hide()
-									} else {
-										//显示确认检查项
-										$('#cofrimCheckListDiv').show()
-										$('#cofrimCheckListBtnDiv').show()
-									}
-									$('#checkConditionsModal ').modal('show')
-								});
-							http.post(config.api.targetCheckListConfrim, {
-									data: {
-										oid: row.oid
-									},
-									contentType: 'form'
-								},
-								function(obj) {
-									var data = obj.rows;
-									$('#checkListConfrimTable').bootstrapTable('load', data)
-								});
-
+						'click .item-enter': function(e, value, row){
+							$("#confirmTitle").html("确定确认投资标的？")
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.targetEnter, {
+										data: {
+											oid: row.oid
+										},
+										contentType: 'form',
+									}, function(result) {
+										$('#targetApplyTable').bootstrapTable('refresh')
+									})
+								}
+							})
 						},
 						'click .item-edit': function(e, value, row) {
 							// 重置和初始化表单验证
@@ -229,7 +207,6 @@ define([
 								data.raiseScope = data.raiseScope + '万';
 								data.life = data.life + util.enum.transform('lifeUnit',data.lifeUnit);
 								data.expAror = data.expAror + '%';
-								data.expIncome = data.expIncome + '%';
 								data.floorVolume = data.floorVolume + '元';
 								data.contractDays = data.contractDays + '天/年';
 								data.collectDate = data.collectStartDate + " 至 " + data.collectEndDate

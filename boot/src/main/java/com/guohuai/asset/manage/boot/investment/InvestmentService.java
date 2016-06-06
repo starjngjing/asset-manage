@@ -224,6 +224,16 @@ public class InvestmentService {
 				BigDecimal yuan = form.getRaiseScope().multiply(new BigDecimal(10000));
 				entity.setRaiseScope(yuan);
 			}
+			// 起购金额 万转元
+			if (form.getFloorVolume() != null) {
+				BigDecimal yuan = form.getFloorVolume().multiply(new BigDecimal(10000));
+				entity.setFloorVolume(yuan);
+			}
+			//预计年化收益 百分比转小数
+			if(form.getExpAror() != null){
+				BigDecimal decimal = form.getExpAror().divide(new BigDecimal(100));
+				entity.setExpAror(decimal);
+			}
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -303,12 +313,35 @@ public class InvestmentService {
 		return investment;
 	}
 
+	/**
+	 * 标的作废
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
 	public Investment invalid(String oid, String operator) {
 		Investment investment = this.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
 		this.updateInvestment(investment, operator);
 		// 工作流
 
+		return investment;
+	}
+	
+	/**
+	 * 标的确认
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
+	public Investment enter(String oid, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		if(!Investment.INVESTMENT_STATUS_meetingpass.equals(investment.getState()))
+			throw new RuntimeException();
+		investment.setState(Investment.INVESTMENT_STATUS_collecting);
+		this.updateInvestment(investment, operator);
 		return investment;
 	}
 

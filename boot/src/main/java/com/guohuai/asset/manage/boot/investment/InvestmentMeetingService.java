@@ -297,12 +297,12 @@ public class InvestmentMeetingService {
 		}
 		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
 		for (MeetingInvestmentDetResp req : list) {
-			String flowState = "reject";
+//			String flowState = "reject";
 			TargetEventType logType = null;
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
-				flowState = "pass";
-				investment.setState(Investment.INVESTMENT_STATUS_collecting);
+//				flowState = "pass";
+				investment.setState(Investment.INVESTMENT_STATUS_meetingpass);
 				investment.setLifeState(investment.INVESTMENT_LIFESTATUS_PREPARE);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项

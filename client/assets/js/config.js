@@ -37,6 +37,7 @@ define(function() {
 			targetEdit: this.host + '/ams/target/targetManage/edit', //新建标的
 			targetExamine: this.host + '/ams/target/targetManage/examine', //标的提交预审
 			targetInvalid: this.host + '/ams/target/targetManage/invalid', //标的作废
+			targetEnter: this.host + '/ams/target/targetManage/enter', //标的确认
 			targetCheckListQuery: this.host + '/ams/target/targetCheck/list', //预审标的列表查询
 			targetCheckPass: this.host + '/ams/target/targetCheck/checkpass', //标的预审通过
 			targetCheckReject: this.host + '/ams/target/targetCheck/checkreject', //标的预审驳回
@@ -274,7 +275,7 @@ define(function() {
 			children: []
 		}, {
 			id: "meetingPass",
-			text: "待准入",
+			text: "过会完成",
 			children: []
 		}],
 		/**
@@ -327,7 +328,7 @@ define(function() {
 			id: "invalid",
 			text: "作废",
 			children: []
-		}, {// 目前本状态无效,统一使用invalid
+		}, { // 目前本状态无效,统一使用invalid
 			id: "delete",
 			text: "已删除",
 			children: []
@@ -434,15 +435,44 @@ define(function() {
 		}],
 		//付息周期方式
 		accrualCycleType: [{
-				id: "NATURAL_YEAR",
-				text: "自然年",
-			}, {
-				id: "CONTRACT_YEAR",
-				text: "合同年",
-			}],
-			/**
-			 * 图标所用到的主题颜色
-			 */
+			id: "NATURAL_YEAR",
+			text: "自然年",
+		}, {
+			id: "CONTRACT_YEAR",
+			text: "合同年",
+		}],
+		//主体评级
+		subjectRating: [{
+			id: "AAA",
+			text: "AAA",
+		},{
+			id: "AA+",
+			text: "AA+",
+		},{
+			id: "AA",
+			text: "AA",
+		},{
+			id: "AA-",
+			text: "AA-",
+		},{
+			id: "A+",
+			text: "A+",
+		},{
+			id: "A-",
+			text: "A-",
+		},{
+			id: "BBB+",
+			text: "BBB+",
+		},{
+			id: "BBB",
+			text: "BBB",
+		},{
+			id: "BBB-",
+			text: "BBB-",
+		}],
+		/**
+		 * 图标所用到的主题颜色
+		 */
 		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
 	}
 })
