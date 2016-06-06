@@ -120,12 +120,12 @@ define([
 							text: '成立',
 							type: 'button',
 							class: 'item-establish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '不成立',
 							type: 'button',
 							class: 'item-unEstablish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '本息兑付',
 							type: 'button',
@@ -375,6 +375,7 @@ define([
 				columns: [{
 					//编号
 					// field: 'oid',
+					visible: false,
 					width: 60,
 					formatter: function(val, row, index) {
 						return index + 1
@@ -498,7 +499,9 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+						
 						$$.formAutoFix($('#establishForm'), data); // 自动填充表单
 					});
 				$('#establishModal').modal('show');
@@ -523,7 +526,8 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailUnEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
 						$$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
 					});
 				$('#unEstablishModal').modal('show');
@@ -549,12 +553,19 @@ define([
 					$.extend(t2, t); //合并对象，修改第一个对象
 					t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
 					t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
-
-					console.log(t2)
+					
+					t2.raiseScope = t2.raiseScope + '万';
+					t2.life = t2.life + util.enum.transform('lifeUnit',t2.lifeUnit);
+					t2.floorVolume = t2.floorVolume + '元';
+					t2.contractDays = t2.contractDays + '天/年';
+					t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
+					t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
+		
 					return t2;
 				}
 				return t;
 			}
+
 
 			/**
 			 * 格式化底层项目信息
