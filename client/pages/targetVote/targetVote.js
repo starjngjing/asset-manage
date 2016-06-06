@@ -76,6 +76,9 @@ define([
 								})
 							},
 						'click .item-vote': function(e, value, row) {
+							$('#fileSpan').html('');
+							$('#fileInput').val('');
+							$('#fileA').attr('href','#');
 							$('#meetingOid').val(row.meetingOid);
 							$('#targetOid').val(row.oid);
 							//删除会议报告表

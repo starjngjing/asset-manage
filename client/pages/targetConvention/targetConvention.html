@@ -199,6 +199,10 @@
 									<button id="targetConventionSummaryUpload" class="btn btn-default btn-sm">
                     <i class="fa fa-upload"></i> 上传纪要
                   </button>
+                  					<button id="targetConventionSummaryBatchDownload" class="btn btn-default btn-sm">
+                    <i class="fa fa-download"></i> 批量下载
+                  </button>
+                  <input type="hidden" id="batchFkey" value="" />
 								</div>
 							</div>
 							<!-- Grid内容体 -->
@@ -207,6 +211,7 @@
 								<table id="targetConventionSummaryTable" class="table table-bordered table-striped">
 									<thead>
 										<tr>
+											<th>纪要名称</th>
 											<th>上传人员</th>
 											<th>上传时间</th>
 											<th>操作</th>
@@ -359,7 +364,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
-				<button id="doAddCheckConditions" type="button" class="btn btn-primary btn-sm">提 交</button>
+				<button id="doAddCheckConditions" type="button" class="btn btn-primary btn-sm">确 认</button>
 			</div>
 		</div>
 	</div>
@@ -387,7 +392,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取 消</button>
-				<button id="doAddRejectComment" type="button" class="btn btn-primary btn-sm">提 交</button>
+				<button id="doAddRejectComment" type="button" class="btn btn-primary btn-sm">确 认</button>
 			</div>
 		</div>
 	</div>
