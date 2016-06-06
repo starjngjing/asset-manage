@@ -319,10 +319,10 @@ public class InvestmentPoolService {
 	 * @author vania
 	 * @version 1.0
 	 * @see:
-	 * @return List<Object> 返回类型
+	 * @return List<Investment> 返回类型
 	 */
-	public List<Object> getNotEstablishTarget() {
-		return investmentDao.getInvestmentByLifeState(Investment.INVESTMENT_LIFESTATUS_PREPARE);
+	public List<Investment> getNotEstablishTarget() {
+		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_PREPARE);
 	}
 	
 	/**
@@ -331,10 +331,10 @@ public class InvestmentPoolService {
 	 * @author vania
 	 * @version 1.0
 	 * @see:
-	 * @return List<Object> 返回类型
+	 * @return List<Investment> 返回类型
 	 */
-	public List<Object> getEstablishTarget() {
-		return investmentDao.getInvestmentByLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP);
+	public List<Investment> getEstablishTarget() {
+		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP);
 	}
 
 	/**
