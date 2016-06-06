@@ -29,6 +29,9 @@ public class ScopeService {
 	 */
 	@Transactional
 	public ScopeEntity save(AssetPoolEntity assetPool, String assetTypeOid) {
+		// 删除原先的范围数据
+		scopeDao.deleteByPid(assetPool.getOid());
+		
 		ScopeEntity entity = new ScopeEntity();
 		entity.setOid(StringUtil.uuid());
 		entity.setAssetPool(assetPool);

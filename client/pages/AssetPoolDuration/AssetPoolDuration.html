@@ -5,7 +5,7 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="javascript:void(0)"><i class="fa fa-home"></i> 运营管理</a></li>
-    <li><a href="javascript:void(0)" data-jump-to="AssetPool"><i class="fa fa-dashboard"></i> 资产池管理</a></li>
+    <li><a href="javascript:void(0)" data-jump-to="AssetPool"><i class="fa fa-dashboard"></i> 资产池列表</a></li>
     <li class="active">资产池存续期管理</li>
   </ol>
   <form id="searchForm" name="searchForm" method="post" style="position: absolute; top: 12px; left: 200px;">
@@ -100,8 +100,8 @@
               <th></th>
               <th>名称</th>
               <th>类型</th>
-              <th>万份收益(元)</th>
-              <th>7日年化收益(元)</th>
+              <th>万份收益</th>
+              <th>7日年化收益(%)</th>
             <!--<th>风险等级</th>
             <th>分红方式</th>-->
             <!--<th>最新流通份额(万份)</th>-->
@@ -122,8 +122,8 @@
             <th></th>
             <th>名称</th>
             <th>类型</th>
-            <th>万份收益(元)</th>
-            <th>7日年化收益(元)</th>
+            <th>万份收益</th>
+            <th>7日年化收益(%)</th>
             <!--<th>风险等级</th>
             <th>分红方式</th>-->
             <!--<th>最新流通份额(万份)</th>-->
@@ -237,7 +237,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>每万份收益(元)</label>
+                  <label>每万份收益</label>
                   <input name="netRevenue" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
@@ -247,7 +247,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>7日年化收益(元)</label>
+                  <label>7日年化收益(%)</label>
                   <input name="yearYield7" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
@@ -462,9 +462,11 @@
                   <input name="volume" type="text"
                   class="form-control"
                   placeholder="申购额度"
-                  data-validfloat="10.10" required>
+                  data-validfloat="10.10"
+                  data-validpurchaseamount="true" required>
                   <span class="input-group-addon">万</span>
                 </div>
+            		<div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>
@@ -1211,7 +1213,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>每万份收益(元)</label>
+                <label>每万份收益</label>
                 <input name="netRevenue" type="text"
                 class="form-control input-sm"
                 readonly="readonly">
@@ -1221,7 +1223,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>7日年化收益(元)</label>
+                <label>7日年化收益(%)</label>
                 <input name="yearYield7" type="text"
                 class="form-control input-sm"
                 readonly="readonly">
@@ -1307,7 +1309,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>每万份收益(元)</label>
+                <label>每万份收益</label>
                 <input name="netRevenue" type="text"
                 class="form-control input-sm"
                 readonly="readonly">
@@ -1317,7 +1319,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>7日年化收益(元)</label>
+                <label>7日年化收益(%)</label>
                 <input name="yearYield7" type="text"
                 class="form-control input-sm"
                 readonly="readonly">
@@ -1380,9 +1382,11 @@
                   <input name="returnVolume" type="text"
                   class="form-control"
                   placeholder="申购额度"
+                  data-validredeemamount="true"
                   data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
+            		<div class="help-block with-errors text-red"></div>
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ public interface TrustTransDao extends JpaRepository<TrustTransEntity, String>, 
 
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
 	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_TRANS b ON a.oid = b.targetOid"
-	  		+ " WHERE a.assetPoolOid = ?1 and b.state < 2", nativeQuery = true)
+	  		+ " WHERE a.assetPoolOid = ?1 and b.state <> '31'", nativeQuery = true)
 	public List<TrustTransEntity> findTransByPidForAppointment(String pid);
 	
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"

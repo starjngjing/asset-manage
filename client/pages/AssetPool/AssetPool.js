@@ -71,7 +71,7 @@ define([
                   break
                 case 1:
                   className = 'text-green'
-                  str = '成立'
+                  str = '存续期'
                   break
                 case -1:
                   className = 'text-red'
@@ -120,6 +120,10 @@ define([
                     scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
                   })
                   json.result.scopeStr = scopeStr
+                  json.result.scale = json.result.scale + '\t万元'
+                  json.result.cashRate = json.result.cashRate + '\t%'
+                  json.result.cashtoolRate = json.result.cashtoolRate + '\t%'
+                  json.result.targetRate = json.result.targetRate + '\t%'
                   $$.detailAutoFix($('#auditAssetPoolModal'), json.result)
                   $('#auditAssetPoolModal').modal('show')
                 })

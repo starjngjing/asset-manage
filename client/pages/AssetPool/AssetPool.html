@@ -1,11 +1,11 @@
 <!-- 页面头部 -->
 <section class="content-header">
   <h1>
-    资产池管理
+    资产池列表
   </h1>
   <ol class="breadcrumb">
     <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 运营管理</a></li>
-    <li class="active">资产池管理</li>
+    <li class="active">资产池列表</li>
   </ol>
 </section>
 
@@ -33,9 +33,9 @@
             <tr>
               <th>资产池名称</th>
               <th>规模(万元)</th>
-              <th>现金比例（%）</th>
+              <th>银行存款比例（%）</th>
               <th>现金管理比例（%）</th>
-              <th>信托计划比例（%）</th>
+              <th>投资标的比例（%）</th>
               <th>可用现金(万元)</th>
               <th>冻结资金(万元)</th>
               <th>在途资金(万元)</th>
@@ -86,7 +86,7 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>投资范围(万元)</label>
+            <label>投资范围</label>
             <select name="scopes" class="form-control input-sm origin-select"
                     multiple="multiple"
                     style="width: 100%;"
@@ -96,12 +96,12 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>现金比例</label>
+            <label>银行存款比例</label>
 
             <div class="input-group input-group-sm">
               <input name="cashRate" type="text"
                      class="form-control input-sm"
-                     placeholder="请输入现金比例"
+                     placeholder="请输入银行存款比例"
                      data-validfloat="3.4"
                      data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
@@ -122,12 +122,12 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>信托计划比例</label>
+            <label>投资标的比例</label>
 
             <div class="input-group input-group-sm">
               <input name="targetRate" type="text"
                      class="form-control input-sm"
-                     placeholder="请输入信托计划比例"
+                     placeholder="请输入投资标的比例"
                      data-validfloat="3.4"
                      data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
@@ -182,7 +182,7 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>投资范围(万元)</label>
+            <label>投资范围</label>
             <select name="scopes" class="form-control input-sm origin-select"
                     multiple="multiple"
                     style="width: 100%;"
@@ -191,7 +191,7 @@
 
             <div class="help-block with-errors text-red"></div>
           </div>
-          <div class="form-group">
+          <!--<div class="form-group">
             <label>可用现金</label>
 
             <input name="cashPosition" type="text"
@@ -199,14 +199,14 @@
                    placeholder="请输入可用现金"
                    data-validfloat="10.10" required>
             <div class="help-block with-errors text-red"></div>
-          </div>
+          </div>-->
           <div class="form-group">
-            <label>现金比例</label>
+            <label>银行存款比例</label>
 
             <div class="input-group input-group-sm">
               <input name="cashRate" type="text"
                      class="form-control input-sm"
-                     placeholder="请输入现金比例"
+                     placeholder="请输入银行存款比例"
                      data-validfloat="3.4"
                      data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
@@ -227,12 +227,12 @@
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
-            <label>信托计划比例</label>
+            <label>投资标的比例</label>
 
             <div class="input-group input-group-sm">
               <input name="targetRate" type="text"
                      class="form-control input-sm"
-                     placeholder="请输入信托计划比例"
+                     placeholder="请输入投资标的比例"
                      data-validfloat="3.4"
                      data-validpercentage="true" required>
               <span class="input-group-addon">%</span>
@@ -283,7 +283,7 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>现金比例:</dt>
+          <dt>银行存款比例:</dt>
           <dd>
             <div data-detail-fetch="cashRate"></div>
           </dd>
@@ -295,7 +295,7 @@
           </dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>信托计划比例:</dt>
+          <dt>投资标的比例:</dt>
           <dd>
             <div data-detail-fetch="targetRate"></div>
           </dd>
