@@ -132,8 +132,8 @@ define([
 							text: '本息兑付',
 							type: 'button',
 							class: 'item-targetIncome',
-							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
-							//              	    	isRender: true,
+//							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
+							isRender: false,
 						}, {
 							text: '结束',
 							type: 'button',
@@ -143,7 +143,8 @@ define([
 							text: '逾期',
 							type: 'button',
 							class: 'item-overdue',
-							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行逾期
+//							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行逾期
+							isRender: false,
 						}, {
 							text: '移除出库',
 							type: 'button',
