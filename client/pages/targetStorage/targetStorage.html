@@ -55,7 +55,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>已持有份额</label>
+									<label>持仓金额</label>
 									<select name="holdAmount" class="form-control input-sm">
 										<option value="" selected>不限</option>
 										<option value="-1000000">小于100万</option>
@@ -103,11 +103,12 @@
               <th>编号</th>
               <th>名称</th>
               <th>标的类型</th>
-              <th>收益率</th>
+              <th>预期年化收益率</th>
               <th>标的规模</th>
               <th>期限</th>
               <th>状态</th>
-              <th>已持有份额</th>
+              <th>持仓金额</th>
+              <th>申请中份额</th>
               <th>风险等级</th>
               <th>操作</th>
             </tr>
@@ -301,7 +302,30 @@
 		            <div class="help-block with-errors text-red"></div>
 			        </div>
 		        </div>
-          	
+          	<div class="col-sm-6">
+							<div class="form-group">
+								<label>付息周期方式</label>
+								<select name='accrualCycleType' class="form-control input-sm" data-enum-fetch="accrualCycleType" required data-error="付息周期方式不能为空">
+                </select>
+                <div class="help-block with-errors text-red"></div>
+							</div>
+						</div>
+          </div>
+          
+          <div class="row">
+          	<div class="col-sm-6">
+							<div class="form-group">
+								<label>合同年天数</label>
+								<div class="row">
+									<div class="col-sm-4">
+										<input name="contractDays" type="radio" value="365" class="icheck" checked> 365/年
+									</div>
+									<div class="col-sm-4">
+										<input name="contractDays" type="radio" value="360" class="icheck"> 360/年
+									</div>
+								</div>
+							</div>
+						</div>
           </div>
           
           <input name="oid" type="hidden" data-detail-fetch="oid">

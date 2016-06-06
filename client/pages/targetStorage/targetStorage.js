@@ -50,7 +50,7 @@ define([
 					formatter: function(val) {
 						return util.enum.transform('TARGETTYPE', val);
 					}
-				}, { // 收益率
+				}, { // 预期年化收益率
 					field: 'expAror',
 					formatter: function(val) {
 						if (val)
@@ -87,6 +87,11 @@ define([
 
 				}, { // 已持有份额
 					field: 'holdAmount',
+					formatter: function(val) {
+						return val;
+					}
+				}, { // 申请中份额
+					field: 'applyAmount',
 					formatter: function(val) {
 						return val;
 					}
@@ -196,6 +201,8 @@ define([
 							alert('敬请期待!!!');
 						},
 						'click .item-establish': function(e, value, row) { // 标的成立
+							initEstablish(row);
+							/* 如果已持有份额小于0则弹警告窗
 							if (row.holdAmount <= 0) {
 								$("#confirmTitle").html("标的无持有份额,确定要成立？");
 								$$.confirm({
@@ -208,8 +215,12 @@ define([
 							} else {
 								initEstablish(row);
 							}
+							*/
 						},
 						'click .item-unEstablish': function(e, value, row) { // 标的不成立
+							initUnEstablish(row);
+							/*
+							如果已持有份额大于0则弹警告窗
 							if (row.holdAmount > 0) {
 								$("#confirmTitle").html("标的已持有份额,确定不成立？");
 								$$.confirm({
@@ -222,7 +233,7 @@ define([
 							} else {
 								initUnEstablish(row);
 							}
-
+							*/
 						},
 						'click .item-targetIncome': function(e, value, row) { // 标的本息兑付
 							targetInfo = row;
