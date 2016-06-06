@@ -31,12 +31,16 @@ import com.guohuai.asset.manage.boot.enums.TargetEventType;
 import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentDetResp;
 import com.guohuai.asset.manage.boot.investment.InvestmentListResp;
+import com.guohuai.asset.manage.boot.investment.InvestmentMeeting;
+import com.guohuai.asset.manage.boot.investment.InvestmentMeetingAssetService;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
+import com.guohuai.asset.manage.boot.investment.InvestmentMeetingVoteService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
-import com.guohuai.asset.manage.boot.product.Product;
-import com.guohuai.asset.manage.component.util.StringUtil;
+import com.guohuai.asset.manage.boot.investment.meeting.VoteDetResp;
+import com.guohuai.asset.manage.boot.project.Project;
+import com.guohuai.asset.manage.boot.project.ProjectService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 
@@ -61,6 +65,12 @@ public class InvestmentManageBootController extends BaseController {
 	private InvestmentLogService investmentLogService;
 	@Autowired
 	private InvestmentMeetingCheckService investmentMeetingCheckService;
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private InvestmentMeetingAssetService investmentMeetingAssetService;
+	@Autowired
+	private InvestmentMeetingVoteService investmentMeetingVoteService;
 
 	/**
 	 * 投资标的列表
@@ -232,7 +242,7 @@ public class InvestmentManageBootController extends BaseController {
 		investmentMeetingCheckService.confirmCheckList(form, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 标的确认
 	 * 
@@ -240,10 +250,30 @@ public class InvestmentManageBootController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "enter", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> investmentEntity(@RequestParam(required = true) String oid){
+	public @ResponseBody ResponseEntity<BaseResp> investmentEntity(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		investmentService.enter(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+
+	/**
+	 * 投资标的全属性详情
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "full", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<InvestmentFullDetResp> fullDet(@RequestParam(required = true) String oid) {
+		Investment investment = investmentService.getInvestment(oid);
+		if (null == investment)
+			throw new RuntimeException();
+		List<Project> projects = projectService.findByTargetId(oid);
+		InvestmentMeeting meeting = investmentMeetingAssetService.getNewMeetingByInvestment(oid);
+		List<VoteDetResp> votes = null;
+		if (null != meeting)
+			votes = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meeting.getOid(), oid);
+		return new ResponseEntity<InvestmentFullDetResp>(
+				new InvestmentFullDetResp(investment, projects, meeting, votes), HttpStatus.OK);
 	}
 
 }

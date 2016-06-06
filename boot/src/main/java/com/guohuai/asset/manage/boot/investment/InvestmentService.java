@@ -344,5 +344,5 @@ public class InvestmentService {
 		this.updateInvestment(investment, operator);
 		return investment;
 	}
-
+	
 }
