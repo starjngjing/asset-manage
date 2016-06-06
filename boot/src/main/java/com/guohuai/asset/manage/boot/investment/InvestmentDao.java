@@ -25,7 +25,7 @@ public interface InvestmentDao extends JpaRepository<Investment, String>, JpaSpe
 	/**
 	 * 根据生命状态查询投资标的
 	 * 
-	 * @Title: getInvestmentByLifeState
+	 * @Title: findByLifeState
 	 * @author vania
 	 * @version 1.0
 	 * @see:
