@@ -501,7 +501,7 @@ define([
 						}
 						$$.detailAutoFix($('#targetDetailEstablish'), formatTargetData(data)); // 自动填充详情
 						//$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
-						
+
 						$$.formAutoFix($('#establishForm'), data); // 自动填充表单
 					});
 				$('#establishModal').modal('show');
@@ -553,19 +553,18 @@ define([
 					$.extend(t2, t); //合并对象，修改第一个对象
 					t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
 					t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
-					
+
 					t2.raiseScope = t2.raiseScope + '万';
-					t2.life = t2.life + util.enum.transform('lifeUnit',t2.lifeUnit);
+					t2.life = t2.life + util.enum.transform('lifeUnit', t2.lifeUnit);
 					t2.floorVolume = t2.floorVolume + '元';
 					t2.contractDays = t2.contractDays + '天/年';
 					t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
 					t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
-		
+
 					return t2;
 				}
 				return t;
 			}
-
 
 			/**
 			 * 格式化底层项目信息

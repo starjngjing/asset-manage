@@ -500,7 +500,7 @@ define([
 				
 				$$.detailAutoFix($('#targetDetail'), formatTargetData(targetInfo)); // 自动填充详情
 
-				$('#projectForm').resetForm(); // 先清理表单
+				$('#projectForm').clearForm(); // 先清理表单
 
 				//初始化:担保方式下拉列表,抵押方式下拉列表,质押方式下拉列表	 
 				initSel();
