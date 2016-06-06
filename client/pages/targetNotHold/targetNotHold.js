@@ -296,6 +296,7 @@ define([
 									}
 									$$.detailAutoFix($('#targetDetailOverdue'), formatTargetData(data)); // 自动填充详情
 									//                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
+									$(document.overdueForm.oid).val(data.oid); // 设置投资标的oid
 								});
 							$('#overdueModal').modal('show');
 
