@@ -106,16 +106,19 @@ public class ProjectService {
 		prj = this.calculateProjectRiskFactor(modeList, expireList, investment, prj);
 		/* 计算项目风险系数结束 */
 		
-		/* 重新计算标的的风险系数 */
-		BigDecimal riskRate = this.getMaxRiskFactor(targetOid);
-		investment.setRiskRate(riskRate);
-		investmentDao.save(investment);
-		/* 重新计算标的的风险系数 */
-		
 		prj.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		prj.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 
-		return this.projectDao.save(prj);
+		Project p = this.projectDao.save(prj);
+		
+		/* 重新计算标的的风险系数 */
+		BigDecimal riskRate = this.getMaxRiskFactor(targetOid);
+		log.info("标的下底层项目最大的[风险系数]为: " + riskRate);
+		investment.setRiskRate(riskRate);
+		investmentDao.save(investment);
+		
+		/* 重新计算标的的风险系数 */
+		return p;
 	}
 
 	
@@ -234,7 +237,11 @@ public class ProjectService {
 		BigDecimal mortgageRato = mortgageModeWeight.multiply(mortgageModeExpireWeight); // 抵押系数
 		BigDecimal hypothecation = hypothecationModeWeight.multiply(hypothecationModeExpireWeight); // 质押系数
 
+		log.info("项目的[担保系数]为: " + guaranteeRato);
+		log.info("项目的[抵押系数]为: " + mortgageRato);
+		log.info("项目的[质押系数]为: " + hypothecation);
 		double maxRato = NumberUtils.max(new double[] { guaranteeRato.doubleValue(), mortgageRato.doubleValue(), hypothecation.doubleValue() });// 取最大值
+		log.info("项目的[最大系数]为: " + maxRato);
 
 		BigDecimal collectScoreWeight = investment.getCollectScoreWeight(); // 标的[信用等级系数]
 		log.info("标的的[信用等级系数]为: " + collectScoreWeight);
