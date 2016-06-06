@@ -39,6 +39,10 @@ import com.guohuai.asset.manage.boot.investment.InvestmentMeetingVoteService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
 import com.guohuai.asset.manage.boot.investment.meeting.VoteDetResp;
+import com.guohuai.asset.manage.boot.investment.pool.TargetIncome;
+import com.guohuai.asset.manage.boot.investment.pool.TargetIncomeService;
+import com.guohuai.asset.manage.boot.investment.pool.TargetOverdue;
+import com.guohuai.asset.manage.boot.investment.pool.TargetOverdueService;
 import com.guohuai.asset.manage.boot.project.Project;
 import com.guohuai.asset.manage.boot.project.ProjectService;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -71,6 +75,10 @@ public class InvestmentManageBootController extends BaseController {
 	private InvestmentMeetingAssetService investmentMeetingAssetService;
 	@Autowired
 	private InvestmentMeetingVoteService investmentMeetingVoteService;
+	@Autowired
+	private TargetIncomeService targetIncomeService;
+	@Autowired
+	TargetOverdueService targetOverdueService;
 
 	/**
 	 * 投资标的列表
@@ -272,8 +280,10 @@ public class InvestmentManageBootController extends BaseController {
 		List<VoteDetResp> votes = null;
 		if (null != meeting)
 			votes = investmentMeetingVoteService.getVoteDetByMeetingAndInvestment(meeting.getOid(), oid);
+		List<TargetIncome> incomes = targetIncomeService.findByTargetOidOrderBySeq(oid);
+		TargetOverdue overdue = targetOverdueService.findByTargetOid(oid);
 		return new ResponseEntity<InvestmentFullDetResp>(
-				new InvestmentFullDetResp(investment, projects, meeting, votes), HttpStatus.OK);
+				new InvestmentFullDetResp(investment, projects, meeting, votes, incomes, overdue), HttpStatus.OK);
 	}
 
 }

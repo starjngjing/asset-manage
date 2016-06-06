@@ -18,4 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class TargetOverdueService {
 	@Autowired
 	TargetOverdueDao targetOverdueDao;
+
+	/**
+	 * 根据投资标的id查询逾期信息
+	 * @Title: findByTargetOid 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param targetOid
+	 * @return TargetOverdue    返回类型
+	 */
+	public TargetOverdue findByTargetOid(String targetOid) {
+		return targetOverdueDao.findByTargetOid(targetOid);
+	}
 }
