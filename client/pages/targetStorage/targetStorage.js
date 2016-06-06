@@ -86,11 +86,13 @@ define([
 					}
 
 				}, { // 已持有份额
+					visible: true,
 					field: 'holdAmount',
 					formatter: function(val) {
 						return val;
 					}
 				}, { // 申请中份额
+					visible: true,
 					field: 'applyAmount',
 					formatter: function(val) {
 						return val;

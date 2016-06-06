@@ -50,7 +50,7 @@ define([
 					formatter: function(val) {
 						return util.enum.transform('TARGETTYPE', val);
 					}
-				}, { // 收益率
+				}, { // 预期年化收益率
 					field: 'expAror',
 					formatter: function(val) {
 						if (val)
@@ -86,7 +86,14 @@ define([
 					}
 
 				}, { // 已持有份额
+					visible: true,
 					field: 'holdAmount',
+					formatter: function(val) {
+						return val;
+					}
+				}, { // 申请中份额
+					visible: true,
+					field: 'applyAmount',
 					formatter: function(val) {
 						return val;
 					}
@@ -115,12 +122,12 @@ define([
 							text: '成立',
 							type: 'button',
 							class: 'item-establish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '不成立',
 							type: 'button',
 							class: 'item-unEstablish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '本息兑付',
 							type: 'button',
@@ -196,6 +203,8 @@ define([
 							alert('敬请期待!!!');
 						},
 						'click .item-establish': function(e, value, row) { // 标的成立
+							initEstablish(row);
+							/* 如果已持有份额小于0则弹警告窗
 							if (row.holdAmount <= 0) {
 								$("#confirmTitle").html("标的无持有份额,确定要成立？");
 								$$.confirm({
@@ -208,8 +217,12 @@ define([
 							} else {
 								initEstablish(row);
 							}
+							*/
 						},
 						'click .item-unEstablish': function(e, value, row) { // 标的不成立
+							initUnEstablish(row);
+							/*
+							如果已持有份额大于0则弹警告窗
 							if (row.holdAmount > 0) {
 								$("#confirmTitle").html("标的已持有份额,确定不成立？");
 								$$.confirm({
@@ -222,7 +235,7 @@ define([
 							} else {
 								initUnEstablish(row);
 							}
-
+							*/
 						},
 						'click .item-targetIncome': function(e, value, row) { // 标的本息兑付
 							targetInfo = row;
@@ -364,6 +377,7 @@ define([
 				columns: [{
 					//编号
 					// field: 'oid',
+					visible: false,
 					width: 60,
 					formatter: function(val, row, index) {
 						return index + 1
@@ -487,7 +501,9 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+
 						$$.formAutoFix($('#establishForm'), data); // 自动填充表单
 					});
 				$('#establishModal').modal('show');
@@ -512,7 +528,8 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailUnEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
 						$$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
 					});
 				$('#unEstablishModal').modal('show');
@@ -539,7 +556,13 @@ define([
 					t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
 					t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
 
-					console.log(t2)
+					t2.raiseScope = t2.raiseScope + '万';
+					t2.life = t2.life + util.enum.transform('lifeUnit', t2.lifeUnit);
+					t2.floorVolume = t2.floorVolume + '元';
+					t2.contractDays = t2.contractDays + '天/年';
+					t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
+					t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
+
 					return t2;
 				}
 				return t;

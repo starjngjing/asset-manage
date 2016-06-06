@@ -137,17 +137,17 @@ public class InvestmentService {
 				for (RiskIndicateCollectResp rc : list) {
 					sum += rc.getCollectScore();
 				}
-				log.info("投资标的的风险总分: " + sum);
+				log.debug("投资标的的风险总分: " + sum);
 				entity.setCollectScore(sum);
 				CCPWarrantor cCPWarrantor = cCPWarrantorService.getByScoreBetween(sum); // 根据标的风险总分获取[标的信用等级系数]
 				if (null != cCPWarrantor) {
 					weight = cCPWarrantor.getWeight();
-					log.info("投资标的id=" + entity.getOid() + "的信用等级对象为: " + JSON.toJSONString(cCPWarrantor));
+					log.debug("投资标的id=" + entity.getOid() + "的信用等级对象为: " + JSON.toJSONString(cCPWarrantor));
 				} else {
 					log.warn("找不到风险总分:" + sum + "对应的信用等级系数区间");
 				}
 			}
-			log.info("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
+			log.debug("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
 			entity.setCollectScoreWeight(weight);
 
 			// 根据[标的信用等级系数]计算本标的下所有项目的[项目系数]
@@ -156,7 +156,7 @@ public class InvestmentService {
 			// 取max(各个项目的[项目系数])作为标的的[风险系数]
 			// riskRate = projectService.getMaxRiskFactor(entity.getOid());
 			entity.setRiskRate(riskRate);
-			log.info("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
+			log.debug("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
 		}
 		/* 计算标的风险结束 */
 		return entity;

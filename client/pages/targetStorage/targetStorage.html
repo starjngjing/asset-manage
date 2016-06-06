@@ -68,6 +68,19 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
+									<label>申请中份额</label>
+									<select name="applyAmount" class="form-control input-sm">
+										<option value="" selected>不限</option>
+										<option value="-1000000">小于100万</option>
+										<option value=":1000000-10000000">100万 - 1000万</option>
+										<option value=":1000000-100000000">1000万 - 1亿</option>
+										<option value=":100000000-1000000000">1亿 - 10亿</option>
+										<option value=":1000000000-">大于10亿</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
 									<label>标的期限</label>
 									<select name="life" class="form-control input-sm">
 										<option value="" selected>不限</option>

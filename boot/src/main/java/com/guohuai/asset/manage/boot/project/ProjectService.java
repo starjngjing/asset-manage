@@ -88,9 +88,9 @@ public class ProjectService {
 			throw AMPException.getException("投资标的id不能为空");
 		String oid = projectForm.getOid(); // 项目id
 		if (StringUtils.isBlank(oid))
-			log.info("投资标的id=[" + targetOid + "]新增底层项目");
+			log.debug("投资标的id=[" + targetOid + "]新增底层项目");
 		else
-			log.info("投资标的id=[" + targetOid + "]修改底层项目");
+			log.debug("投资标的id=[" + targetOid + "]修改底层项目");
 
 		Project prj = new Project();
 		BeanUtils.copyProperties(projectForm, prj);	
@@ -113,7 +113,7 @@ public class ProjectService {
 		
 		/* 重新计算标的的风险系数 */
 		BigDecimal riskRate = this.getMaxRiskFactor(targetOid);
-		log.info("标的下底层项目最大的[风险系数]为: " + riskRate);
+		log.debug("标的下底层项目最大的[风险系数]为: " + riskRate);
 		investment.setRiskRate(riskRate);
 		investmentDao.save(investment);
 		
@@ -153,7 +153,7 @@ public class ProjectService {
 		List<Project> list = this.findByTargetId(targetOid);
 		int size = null == list ? 0 : list.size();
 		if (0 == size) {
-			log.info("标的id=" + targetOid + "下暂无底层项目");
+			log.debug("标的id=" + targetOid + "下暂无底层项目");
 			return max;
 		}
 		List<CCPWarrantyMode> modeList = cCPWarrantyModeDao.findAll(); // 查询担保方式权数配置
@@ -237,20 +237,20 @@ public class ProjectService {
 		BigDecimal mortgageRato = mortgageModeWeight.multiply(mortgageModeExpireWeight); // 抵押系数
 		BigDecimal hypothecation = hypothecationModeWeight.multiply(hypothecationModeExpireWeight); // 质押系数
 
-		log.info("项目的[担保系数]为: " + guaranteeRato);
-		log.info("项目的[抵押系数]为: " + mortgageRato);
-		log.info("项目的[质押系数]为: " + hypothecation);
+		log.debug("项目的[担保系数]为: " + guaranteeRato);
+		log.debug("项目的[抵押系数]为: " + mortgageRato);
+		log.debug("项目的[质押系数]为: " + hypothecation);
 		double maxRato = NumberUtils.max(new double[] { guaranteeRato.doubleValue(), mortgageRato.doubleValue(), hypothecation.doubleValue() });// 取最大值
-		log.info("项目的[最大系数]为: " + maxRato);
+		log.debug("项目的[最大系数]为: " + maxRato);
 
 		BigDecimal collectScoreWeight = investment.getCollectScoreWeight(); // 标的[信用等级系数]
-		log.info("标的的[信用等级系数]为: " + collectScoreWeight);
+		log.debug("标的的[信用等级系数]为: " + collectScoreWeight);
 		BigDecimal riskFactor = null;
 		if (null != collectScoreWeight) {
 			riskFactor = collectScoreWeight.multiply(new BigDecimal(maxRato)); // 计算出项目的风险系数
 			prj.setRiskFactor(riskFactor);
 		}
-		log.info("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor);
+		log.debug("计算出项目: [" + prj.getProjectName() + "]的最终的风险系数为: " + riskFactor);
 		return prj;
 	}
 

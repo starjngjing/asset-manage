@@ -158,6 +158,9 @@ public class InvestmentPoolController extends BaseController {
 		
 		String holdAmount = request.getParameter("holdAmount");
 		spec = this.buildSpec(spec, "holdAmount", holdAmount);		
+		
+		String applyAmount = request.getParameter("applyAmount");
+		spec = this.buildSpec(spec, "applyAmount", applyAmount);		
 
 		String life = request.getParameter("life");
 		spec = this.buildSpec(spec, "life", life);		
