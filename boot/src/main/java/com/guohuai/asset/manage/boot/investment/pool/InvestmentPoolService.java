@@ -312,6 +312,30 @@ public class InvestmentPoolService {
 		};
 		return investmentDao.findAll(spec);
 	}
+	
+	/**
+	 * 查询尚未成立的标的
+	 * @Title: getNotEstablishTarget
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @return List<Object> 返回类型
+	 */
+	public List<Object> getNotEstablishTarget() {
+		return investmentDao.getInvestmentByLifeState(Investment.INVESTMENT_LIFESTATUS_PREPARE);
+	}
+	
+	/**
+	 * 查询已经成立的标的
+	 * @Title: getEstablishTarget
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @return List<Object> 返回类型
+	 */
+	public List<Object> getEstablishTarget() {
+		return investmentDao.getInvestmentByLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP);
+	}
 
 	/**
 	 * 根据标的id查询所有的本息兑付数据

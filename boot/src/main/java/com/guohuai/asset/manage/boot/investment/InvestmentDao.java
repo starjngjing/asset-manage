@@ -21,6 +21,19 @@ public interface InvestmentDao extends JpaRepository<Investment, String>, JpaSpe
 	 */
 	@Query("select ct.oid, ct.name from Investment ct where ct.name like ?1")
 	public List<Object> getInvestmentByName(String name);
+	
+	/**
+	 * 根据生命状态查询投资标的
+	 * 
+	 * @Title: getInvestmentByLifeState
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @param name
+	 * @return List<Object> 返回类型
+	 */
+	@Query("select ct.oid, ct.name from Investment ct where ct.lifeState = ?1")
+	public List<Object> getInvestmentByLifeState(String lifeState);
 
 	/**
 	 * 增加持仓金额
