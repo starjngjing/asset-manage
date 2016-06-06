@@ -48,7 +48,7 @@ define([
 			})
 
 			// 资产申购表单初始化
-			util.form.validator.init($('#buyAssetForm'))
+//			util.form.validator.init($('#buyAssetForm'))
 
 			// 资产申购按钮点击事件
 			$('#buyAsset').on('click', function() {
@@ -83,6 +83,8 @@ define([
 
 			// 缓存标的名称数组值
 			var targetNames = null
+			// 缓存可用现金
+			var freeCash = 0
 
 			// 资产申购标的名称下拉菜单change事件
 			$('#fundTargetName').on('change', function() {
@@ -102,7 +104,9 @@ define([
 					source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
 					source[0].accrualType = util.enum.transform('ACCRUALTYPE', source[0].accrualType)
 					source[0].raiseScope = parseFloat(source[0].raiseScope) / 10000
-					source[0].floorVolume = source[0].floorVolume / 10000
+					if (source[0].floorVolume) {
+						source[0].floorVolume = source[0].floorVolume / 10000
+					}
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
@@ -207,7 +211,9 @@ define([
 									if (json.result.life) {
 										json.result.life = json.result.life + "\t天"
 									}
-									json.result.floorVolume = json.result.floorVolume + "\t万元"
+									if (json.result.floorVolume) {
+										json.result.floorVolume = json.result.floorVolume + "\t万元"
+									}
 									if (json.result.holdAmount) {
 										json.result.holdAmount = json.result.holdAmount + "\t万元"
 									}
@@ -289,34 +295,54 @@ define([
 							field: 'state',
 							formatter: function(val) {
 								switch (val) {
-									case '-2':
-										return '<span class="text-red">未通过</span>'
-									case '-1':
+//									case '-2':
+//										return '<span class="text-red">未通过</span>'
+//									case '-1':
+//										return '<span class="text-aqua">待审核</span>'
+//									case '0':
+//										return '<span class="text-blue">待预约</span>'
+//									case '1':
+//										return '<span class="text-yellow">待确认</span>'
+//									case '2':
+//										return '<span class="text-green">成立</span>'
+									case '00':
 										return '<span class="text-aqua">待审核</span>'
-									case '0':
-										return '<span class="text-blue">待预约</span>'
-									case '1':
-										return '<span class="text-yellow">待确认</span>'
-									case '2':
-										return '<span class="text-green">成立</span>'
+									case '10':
+										return '<span class="text-red">审核未通过</span>'
+									case '11':
+										return '<span class="text-blue">审核通过待预约</span>'
+									case '20':
+										return '<span class="text-red">预约未通过</span>'
+									case '21':
+										return '<span class="text-yellow">预约通过待确认</span>'
+									case '30':
+										return '<span class="text-red">确认未通过</span>'
 								}
 							}
 						}, {
 							width: 180,
 							align: 'center',
-							formatter: function() {
+							formatter: function(val, row) {
 								var buttons = [{
 									text: '审核',
 									type: 'button',
-									class: 'item-audit'
+									class: 'item-audit',
+                					isRender: parseInt(row.state) === 0
 								}, {
 									text: '预约',
 									type: 'button',
-									class: 'item-ordering'
+									class: 'item-ordering',
+                					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11
 								}, {
 									text: '确认',
 									type: 'button',
-									class: 'item-accpet'
+									class: 'item-accpet',
+                					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21
+								}, {
+									text: '删除',
+									type: 'button',
+									class: 'item-delete',
+                					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
 								}]
 								return util.table.formatter.generateButton(buttons)
 							},
@@ -363,8 +389,13 @@ define([
 										modal.find('.labelForAccept').css({
 											display: 'none'
 										})
-										result.netRevenue = result.netRevenue + '\t元'
-										result.yearYield7 = result.yearYield7 + '\t元'
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+										if (result.yearYield7) {
+											result.yearYield7 = result.yearYield7 + '\t%'
+										}
+										result.volume = result.volume + '\t万元'
 										result.returnVolume = result.returnVolume + '\t万元'
 										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
 										$$.detailAutoFix(modal, result)
@@ -414,8 +445,13 @@ define([
 											display: 'none'
 										})
 										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-										result.netRevenue = result.netRevenue + '\t元'
-										result.yearYield7 = result.yearYield7 + '\t元'
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+										if (result.yearYield7) {
+											result.yearYield7 = result.yearYield7 + '\t%'
+										}
+										result.volume = result.volume + '\t万元'
 										result.returnVolume = result.returnVolume + '\t万元'
 										if (result.auditVolume) {
 											result.auditVolume = result.auditVolume + '\t万元'
@@ -467,8 +503,13 @@ define([
 											display: 'block'
 										})
 										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-										result.netRevenue = result.netRevenue + '\t元'
-										result.yearYield7 = result.yearYield7 + '\t元'
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+										if (result.yearYield7) {
+											result.yearYield7 = result.yearYield7 + '\t%'
+										}
+										result.volume = result.volume + '\t万元'
 										result.returnVolume = result.returnVolume + '\t万元'
 										if (result.auditVolume) {
 											result.auditVolume = result.auditVolume + '\t万元'
@@ -613,7 +654,7 @@ define([
 			// 现金类管理工具 - 申购表格验证初始化
 			util.form.validator.init($('#purchaseForm'))
 				// 现金类管理工具 - 赎回表格验证初始化
-			util.form.validator.init($('#redeemForm'))
+//			util.form.validator.init($('#redeemForm'))
 
 			// 现金类管理工具审核/预约/确认 - 通过按钮点击事件
 			$('#doFundCheck').on('click', function() {
@@ -648,7 +689,7 @@ define([
 				var form = document.fundCheckForm
 				form.state.value = '-1'
 				var url = ''
-				switch (form.opType) {
+				switch (form.opType.value) {
 					case 'audit':
 						url = config.api.duration.order.auditForFund
 						break
@@ -760,16 +801,28 @@ define([
 						field: 'state',
 						formatter: function(val) {
 							switch (val) {
-								case '-2':
-									return '<span class="text-red">未通过</span>'
-								case '-1':
+//								case '-2':
+//									return '<span class="text-red">未通过</span>'
+//								case '-1':
+//									return '<span class="text-aqua">待审核</span>'
+//								case '0':
+//									return '<span class="text-blue">待预约</span>'
+//								case '1':
+//									return '<span class="text-yellow">待确认</span>'
+//								case '2':
+//									return '<span class="text-green">成立</span>'
+								case '00':
 									return '<span class="text-aqua">待审核</span>'
-								case '0':
-									return '<span class="text-blue">待预约</span>'
-								case '1':
-									return '<span class="text-yellow">待确认</span>'
-								case '2':
-									return '<span class="text-green">成立</span>'
+								case '10':
+									return '<span class="text-red">审核未通过</span>'
+								case '11':
+									return '<span class="text-blue">审核通过待预约</span>'
+								case '20':
+									return '<span class="text-red">预约未通过</span>'
+								case '21':
+									return '<span class="text-yellow">预约通过待确认</span>'
+								case '30':
+									return '<span class="text-red">确认未通过</span>'
 							}
 						}
 					}, {
@@ -780,37 +833,37 @@ define([
 								text: '审核',
 								type: 'button',
 								class: 'item-audit',
-								isRender: row.type === '申购'
+								isRender: row.type === '申购' && (parseInt(row.state) === 0)
 							}, {
 								text: '预约',
 								type: 'button',
 								class: 'item-ordering',
-								isRender: row.type === '申购'
+								isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
 							}, {
 								text: '确认',
 								type: 'button',
 								class: 'item-accpet',
-								isRender: row.type === '申购'
+								isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
 							}, {
 								text: '本息兑付审核',
 								type: 'button',
 								class: 'item-income-audit',
-								isRender: row.type === '本息兑付'
+								isRender: row.type === '本息兑付' && (parseInt(row.state) === 0)
 							}, {
 								text: '本息兑付确认',
 								type: 'button',
 								class: 'item-income-accpet',
-								isRender: row.type === '本息兑付'
+								isRender: row.type === '本息兑付' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
 							}, {
 								text: '转让审核',
 								type: 'button',
 								class: 'item-transfer-audit',
-								isRender: row.type === '转让'
+								isRender: row.type === '转让' && (parseInt(row.state) === 0)
 							}, {
 								text: '转让确认',
 								type: 'button',
 								class: 'item-transfer-accpet',
-								isRender: row.type === '转让'
+								isRender: row.type === '转让' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
 							}]
 							return util.table.formatter.generateButton(buttons)
 						},
@@ -1356,6 +1409,26 @@ define([
 				}
 			})
 
+			// 申购金额验证
+			$('#buyAssetForm').validator({
+				custom: {
+					validpurchaseamount: validpurchaseamount
+				},
+				errors: {
+					validpurchaseamount: '申购金额不能为0，且不可超过可用现金'
+				}
+			})
+
+			// 赎回金额验证
+			$('#redeemForm').validator({
+				custom: {
+					validredeemamount: validredeemamount
+				},
+				errors: {
+					validredeemamount: '赎回份额不能为0，且不可超过持有额度'
+				}
+			})
+
 			// 本金不可超过申购时的金额
 			$('#addAssetPoolForm').validator({
 				custom: {
@@ -1686,6 +1759,7 @@ function pageInit (pageState, http, config) {
 		contentType: 'form'
 	}, function(json) {
 		var detail = json.result
+		freeCash = detail.cashPosition
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
@@ -1700,4 +1774,18 @@ function pageInit (pageState, http, config) {
 
 function validCapital($el) {
 	
+}
+
+// 申购额度验证
+function validpurchaseamount($el) {
+	var amount = $el.val()
+	return parseFloat(amount) > 0 && parseFloat(amount) <= freeCash
+}
+
+// 赎回额度验证
+function validredeemamount($el) {
+    var form = $el.closest('form')
+    var holdAmount = form.find('input[name=amount]')
+	var amount = $el.val()
+	return parseFloat(amount) > 0 && parseFloat(amount) <= parseFloat(holdAmount.val())
 }
