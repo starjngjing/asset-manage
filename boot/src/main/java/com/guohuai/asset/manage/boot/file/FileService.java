@@ -148,7 +148,7 @@ public class FileService extends Packer<File> {
 	@Transactional
 	public void delete(File file, String operator) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		file.setState(File.STATE_Valid);
+		file.setState(File.STATE_Invalid);
 		file.setOperator(operator);
 		file.setUpdateTime(now);
 		this.fileDao.save(file);

@@ -279,6 +279,34 @@ define(function() {
 			children: []
 		}],
 		/**
+		 * targetStates 标的状态
+		 */
+		targetStatesCondition: [{
+			id: "waitPretrial",
+			text: "未审核",
+			children: []
+		}, {
+			id: "pretrial",
+			text: "预审中",
+			children: []
+		}, {
+			id: "waitMeeting",
+			text: "未过会",
+			children: []
+		}, {
+			id: "metting",
+			text: "过会中",
+			children: []
+		}, {
+			id: "meetingPass",
+			text: "过会完成",
+			children: []
+		}, {
+			id: "reject",
+			text: "驳回",
+			children: []
+		}],
+		/**
 		 * 标的生命周期
 		 */
 		targetLifeStates: [{
@@ -331,6 +359,23 @@ define(function() {
 		}, { // 目前本状态无效,统一使用invalid
 			id: "delete",
 			text: "已删除",
+			children: []
+		}],
+		cashtoolStatesView: [{
+			id: "waitPretrial",
+			text: "未审核",
+			children: []
+		}, {
+			id: "pretrial",
+			text: "审核中",
+			children: []
+		}, {
+			id: "collecting",
+			text: "募集期",
+			children: []
+		}, {
+			id: "reject",
+			text: "驳回",
 			children: []
 		}],
 		/*

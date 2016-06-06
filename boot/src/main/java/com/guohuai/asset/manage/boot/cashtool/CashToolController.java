@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,14 @@ public class CashToolController extends BaseController {
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
 		}
+		Specification<CashTool> stateSpec = new Specification<CashTool>() {
+			@Override
+			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.notEqual(root.get("state"), CashTool.CASHTOOL_STATE_invalid),
+						cb.notEqual(root.get("state"), CashTool.CASHTOOL_STATE_collecting));
+			}
+		};
+		spec = Specifications.where(spec).and(stateSpec);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		Page<CashTool> entitys = cashToolService.getCashToolList(spec, pageable);
 		CashToolListResp resps = new CashToolListResp(entitys);
@@ -93,7 +102,7 @@ public class CashToolController extends BaseController {
 
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid CashToolManageForm form) {
-		 String operator = super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		CashTool cashTool = cashToolService.createInvestment(form);
 		cashTool.setState(CashTool.CASHTOOL_STATE_waitPretrial);
 		cashTool.setOperator(operator);
