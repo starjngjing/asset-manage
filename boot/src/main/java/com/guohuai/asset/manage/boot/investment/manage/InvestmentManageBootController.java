@@ -2,6 +2,10 @@ package com.guohuai.asset.manage.boot.investment.manage;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -13,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +35,8 @@ import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheck;
 import com.guohuai.asset.manage.boot.investment.InvestmentMeetingCheckService;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.log.InvestmentLogService;
+import com.guohuai.asset.manage.boot.product.Product;
+import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 
@@ -79,6 +86,14 @@ public class InvestmentManageBootController extends BaseController {
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
 		}
+		Specification<Investment> stateSpec = new Specification<Investment>() {
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.notEqual(root.get("state"), Investment.INVESTMENT_STATUS_collecting),
+						cb.notEqual(root.get("state"), Investment.INVESTMENT_STATUS_invalid));
+			}
+		};
+		spec = Specifications.where(spec).and(stateSpec);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		Page<Investment> entitys = investmentService.getInvestmentList(spec, pageable);
 		InvestmentListResp resps = new InvestmentListResp(entitys);
@@ -211,10 +226,23 @@ public class InvestmentManageBootController extends BaseController {
 	@RequestMapping(value = "confirmCheckList", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> confirmCheckList(
 			@RequestParam(required = true) String checkConditions) {
-		String operatpr = super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		List<InvestmentCheckListConfirmForm> form = JSONArray.parseArray(checkConditions,
 				InvestmentCheckListConfirmForm.class);
-		investmentMeetingCheckService.confirmCheckList(form, operatpr);
+		investmentMeetingCheckService.confirmCheckList(form, operator);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+	
+	/**
+	 * 标的确认
+	 * 
+	 * @param oid
+	 * @return
+	 */
+	@RequestMapping(value = "enter", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<BaseResp> investmentEntity(@RequestParam(required = true) String oid){
+		String operator = super.getLoginAdmin();
+		investmentService.enter(oid, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
