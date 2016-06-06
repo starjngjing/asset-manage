@@ -135,6 +135,11 @@ define([
 							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
 							//              	    	isRender: true,
 						}, {
+							text: '结束',
+							type: 'button',
+							class: 'item-close',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'STAND_UP',
+						}, {
 							text: '逾期',
 							type: 'button',
 							class: 'item-overdue',
@@ -143,7 +148,7 @@ define([
 							text: '移除出库',
 							type: 'button',
 							class: 'item-remove',
-							isRender: row.state !== 'invalid' && row.state !== 'metting'
+							isRender: row.state !== 'invalid' && row.state !== 'metting' && row.lifeState !== 'STAND_FAIL' && row.lifeState !== 'CLOSE',
 						}, {
 							text: '财务数据',
 							type: 'button',
@@ -263,6 +268,25 @@ define([
 									$$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
 								});
 							$('#targetIncomeModal').modal('show');
+						},
+						'click .item-close': function(e, value, row) { // 结束
+							$("#confirmTitle").html("确定资产已结束？");
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.targetClose, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form'
+										},
+										function(obj) {
+											$('#dataTable').bootstrapTable('refresh');
+										});
+								}
+							});
+
 						},
 						'click .item-overdue': function(e, value, row) { // 逾期
 							/**

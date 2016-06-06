@@ -227,6 +227,25 @@ public class InvestmentPoolService {
 	}
 	
 	/**
+	 * 结束标的
+	 * @Title: close 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid
+	 * @param operator 
+	 * void    返回类型
+	 */
+	public void close(String oid, String operator) {
+		Investment it = investmentService.getInvestment(oid);
+		it.setOperator(operator);
+		it.setUpdateTime(DateUtil.getSqlCurrentDate());
+		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_CLOSE); // 重置为逾期
+		this.investmentDao.save(it); // 修改标的库
+		investmentLogService.saveInvestmentLog(it, TargetEventType.close, operator); // 保存标的操作日志
+	}
+	
+	/**
 	 * 查询指定募集截止日以前的所有投资标的
 	 * @Title: getRecruitment 
 	 * @author vania

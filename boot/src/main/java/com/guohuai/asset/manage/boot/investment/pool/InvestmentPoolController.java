@@ -140,7 +140,7 @@ public class InvestmentPoolController extends BaseController {
 //					predicate.add(pst);
 					
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);	
-					Predicate plst = exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_FAIL });// 未成立
+					Predicate plst = exp_lifeState.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_STAND_FAIL, Investment.INVESTMENT_LIFESTATUS_CLOSE });// 未成立,已结束
 //					predicate.add(plst); 
 					
 					Predicate p = cb.or(pst, plst);
@@ -292,6 +292,28 @@ public class InvestmentPoolController extends BaseController {
 		}
 		form.setOperator(loginId);
 		this.investmentPoolService.overdue(form);
+		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
+	}
+	
+	/**
+	 * 结束标的
+	 * @Title: close 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid
+	 * @return ResponseEntity<BaseResp>    返回类型
+	 */
+	@RequestMapping("close")
+	@ApiOperation(value = "标的逾期")
+	public @ResponseBody ResponseEntity<BaseResp> close(@RequestParam() String oid) {
+		String loginId = null;
+		try {
+			loginId = super.getLoginAdmin();
+		} catch (Exception e) {
+			log.error("获取操作员失败, 原因: " + e.getMessage());
+		}
+		this.investmentPoolService.close(oid, loginId);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 

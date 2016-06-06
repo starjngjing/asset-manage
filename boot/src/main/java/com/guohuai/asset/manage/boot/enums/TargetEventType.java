@@ -72,7 +72,7 @@ public enum TargetEventType {
 	/**
 	 * 完成
 	 */
-	finish("13", "完成"),
+	close("13", "完成"),
 	;
 	private String code;
 	private String desc;
