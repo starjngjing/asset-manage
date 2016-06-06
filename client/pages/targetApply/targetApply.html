@@ -1134,9 +1134,25 @@
 					</div>
 					<div class="col-sm-4">
 						<dl class="dl-horizontal">
-							<dt>预计收益:</dt>
+							<dt>预计年化收益:</dt>
 							<dd>
-								<div data-detail-fetch="expIncome"></div>
+								<div data-detail-fetch="expAror"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-4">
+						<dl class="dl-horizontal">
+							<dt>募集起始日:</dt>
+							<dd>
+								<div data-detail-fetch="collectStartDate"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-4">
+						<dl class="dl-horizontal">
+							<dt>募集截止日:</dt>
+							<dd>
+								<div data-detail-fetch="collectEndDate"></div>
 							</dd>
 						</dl>
 					</div>
@@ -1194,7 +1210,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>资金方所在地</label>
-										<textarea name="funderAddr" type="text" class="form-control input-sm" maxlength="128" placeholder="资金方所在地"></textarea>
+										<input name="funderAddr" type="text" class="form-control input-sm" maxlength="128" placeholder="资金方所在地" />
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -1212,13 +1228,13 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>外部项目增信措施</label>
-										<input name="trustMeasures" type="text" class="form-control input-sm" placeholder="外部项目增信措施" maxlength="32">
+										<textarea name="trustMeasures" type="text" class="form-control input-sm" placeholder="外部项目增信措施" maxlength="32"></textarea>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>其他外部项目增信措施</label>
-										<input name="trustMeasuresName" type="text" class="form-control input-sm" placeholder="其他外部项目增信措施" maxlength="32">
+										<textarea name="trustMeasuresName" type="text" class="form-control input-sm" placeholder="其他外部项目增信措施" maxlength="32"></textarea>
 									</div>
 								</div>
 							</div>
@@ -1282,7 +1298,7 @@
 								<div class="col-sm-12">
 									<div class="form-group">
 										<label>担保人所在地</label>
-										<textarea name="warrantorAddr" rows="3" class="form-control input-sm" placeholder="担保人所在地"></textarea>
+										<input name="warrantorAddr" rows="3" class="form-control input-sm" placeholder="担保人所在地"></input>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -1317,7 +1333,7 @@
 								</div>
 								<div class="col-sm-12">
 									<div class="form-group">
-										<label>担保期限权数</label>
+										<label>担保期限</label>
 										<div class="input-group input-group-sm">
 											<select name="guaranteeModeExpireOid" class="form-control input-sm" placeholder="保证方式" required data-error="担保期限权数不能为空">
 										<option value="">请选择</option>
@@ -1377,7 +1393,7 @@
 								<div class="col-sm-12">
 									<div class="form-group">
 										<label>抵押物名称坐落</label>
-										<textarea name="pledgeName" rows="3" class="form-control input-sm" placeholder="担保人所在地" maxlength="1024"></textarea>
+										<textarea name="pledgeName" rows="3" class="form-control input-sm" placeholder="抵押物名称坐落" maxlength="1024"></textarea>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -1436,9 +1452,9 @@
 								</div>
 								<div class="col-sm-12">
 									<div class="form-group">
-										<label>抵押担保期限权数</label>
+										<label>抵押担保期限</label>
 										<div class="input-group input-group-sm">
-											<select name="mortgageModeExpireOid" class="form-control input-sm" placeholder="抵押担保期限权数" required data-error="抵押担保期限权数不能为空">
+											<select name="mortgageModeExpireOid" class="form-control input-sm" placeholder="抵押担保期限" required data-error="抵押担保期限权数不能为空">
 										<option value="">请选择</option>
 									</select>
 										</div>
@@ -1486,9 +1502,9 @@
 								</div>
 								<div class="col-sm-12">
 									<div class="form-group">
-										<label>质押担保期限权数</label>
+										<label>质押担保期限</label>
 										<div class="input-group input-group-sm">
-											<select name="hypothecationModeExpireOid" class="form-control input-sm" placeholder="保证方式" required data-error="抵押担保期限权数不能为空">
+											<select name="hypothecationModeExpireOid" class="form-control input-sm" placeholder="质押担保期限" required data-error="抵押担保期限权数不能为空">
 										<option value="">请选择</option>
 									</select>
 										</div>

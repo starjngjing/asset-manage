@@ -520,7 +520,8 @@ define([
 					alert('请选择投资标的');
 					return false;
 				}
-				$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+				
+				$$.detailAutoFix($('#targetDetail'), formatTargetData(targetInfo)); // 自动填充详情
 
 				$('#projectForm').resetForm(); // 先清理表单
 
@@ -1068,6 +1069,23 @@ define([
 				});
 			}
 		})
+	}
+	
+	/**
+	 * 格式化投资标的信息
+	 * @param {Object} t
+	 */
+	function formatTargetData(t) {
+		if (t) {
+			var t2 = {};
+			$.extend(t2, t); //合并对象，修改第一个对象
+			t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
+			t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
+
+			console.log(t2)
+			return t2;
+		}
+		return t;
 	}
 
 })
