@@ -125,6 +125,11 @@ public class Investment extends UUID implements Serializable {
 	 * 持有份额
 	 */
 	private BigDecimal holdAmount;
+	
+	/**
+	 * 申请份额
+	 */
+	private BigDecimal applyAmount;
 
 	/**
 	 * 收益说明
