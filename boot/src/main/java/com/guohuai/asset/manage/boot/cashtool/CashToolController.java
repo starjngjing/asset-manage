@@ -113,7 +113,7 @@ public class CashToolController extends BaseController {
 	}
 
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> examine(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		if (!CashTool.CASHTOOL_STATE_waitPretrial.equals(entity.getState())
@@ -153,7 +153,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> invalid(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		entity.setState(CashTool.CASHTOOL_STATE_invalid);
@@ -192,7 +192,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkPass(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> checkPass(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_collecting, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
@@ -205,7 +205,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid, String suggest) {
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(@RequestParam(required = true) String oid, String suggest) {
 		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_reject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);

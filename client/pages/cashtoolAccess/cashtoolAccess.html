@@ -17,7 +17,7 @@
 			<div id="targetAccessGrid" class="box box-primary">
 				<!-- Grid头部 -->
 				<div class="box-header">
-					<h3 class="box-title">会前审查列表</h3>
+					<h3 class="box-title">审查列表</h3>
 				</div>
 				<!-- Grid内容体 -->
 				<div class="box-body">
@@ -54,9 +54,12 @@
         </button>
 				<h4 class="modal-title">现金管理工具审核</h4>
 			</div>
-			<form id="accessFrom" name="accessFrom" method="post">
+			<div class="modal-body">
+				<form id="accessFrom" name="accessFrom" method="post">
+					<textarea name="suggest" rows="3" class="form-control input-sm" placeholder="请输入审查意见"></textarea>
 					<input id="coid" name="oid" type="hidden" value="" />
 				</form>
+			</div>
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
@@ -368,7 +371,7 @@
 			</div>
 		</div>
 	</div>
-	</form>
+</form>
 
 <!-- 操作confirm窗 使用 $$.confirm 初始化 -->
 <div id="doConfirm" class="popover func-delete-popover">
