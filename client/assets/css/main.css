@@ -177,7 +177,6 @@ form .dropdown-menu{
 }
 
 .yupForm input[type=file]{
-  width: 80px;
   height: 34px;
   position: absolute;
   top: 0;
@@ -187,7 +186,6 @@ form .dropdown-menu{
 }
 
 .yupForm input[type=file].sm{
-  width: 70px;
   height: 30px;
 }
 

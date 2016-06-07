@@ -131,12 +131,9 @@ define([
      *              每次选择附件后立即上传附件到 /yup接口，并返回附件信息
      * @param options json object对象
      *     -- options.container：组件容器 jquery对象
-     *     -- options.fromTitle：左侧列表title string
-     *     -- options.toTitle：右侧列表title string
-     *     -- options.fromArray：左侧列表数据源 数组
-     *     -- options.toArray：右侧列表title 数组
-     *     -- options.field：用于显示的字段名称 string
-     *     -- options.formatter：formatter Function
+     *     -- options.size：上传附件按钮尺寸，string，支持 默认为空 和 'sm' 两种尺寸
+     *     -- options.btnName：按钮文字 string
+     *     -- options.success：附件上传成功后执行的回调函数
      *
      */
     uploader: function (options) {
@@ -147,7 +144,7 @@ define([
 
       var form = $('<form method="post" class="yupForm" enctype="multipart/form-data"></form>')
       var btn = $('<button class="btn btn-default ' + (size ? 'btn-' + size : '') + '">'+btnName+'</button>')
-      var input = $('<input name="yupUpload" class="' + size + '" type="file"/>')
+      var input = $('<input name="yupUpload" class="' + size + '" style="width: ' + (size ? btnName.length * 12 + 22 : btnName.length * 14 + 26) + 'px" type="file"/>')
 
       form.append(btn).append(input).appendTo(container)
 
