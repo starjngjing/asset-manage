@@ -25,6 +25,17 @@ public class CapitalEntity implements Serializable {
 	
 	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
+	/**
+	 * 订单状态
+	 */
+	public static final String APPLY00 			= "00";	// 申请待审核
+	public static final String AUDIT10 			= "10";	// 审核未通过
+	public static final String AUDIT11 			= "11";	// 审核通过待预约
+	public static final String APPOINTMENT20 	= "20";	// 预约未通过
+	public static final String APPOINTMENT21 	= "21";	// 预约通过待确认
+	public static final String CONFIRM30 		= "30";	// 确认未通过
+	public static final String CONFIRM31 		= "31";	// 确认通过
+	
 	public CapitalEntity() {
 		this.freezeCash = init0;
 		this.unfreezeCash = init0;
@@ -63,6 +74,8 @@ public class CapitalEntity implements Serializable {
 	private BigDecimal outputCash;
 	// 操作人
 	private String operator;
+	// 状态
+	private String state;
 	// CreateTime
 	private Timestamp createTime;
 	// UpdateTime

@@ -289,7 +289,19 @@ public class OrderController {
 			TrustForm form = orderService.getTrustOrderByOid(oid, "转让");
 			r.with("result", form);
 		}
-		
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 逻辑删除订单
+	 * @param oid
+	 * 		订单oid
+	 */
+	@RequestMapping(value = "/updateOrder", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> updateOrder(String oid, String operation) {
+		Response r = new Response();
+		orderService.updateOrder(oid, operation);
+		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }

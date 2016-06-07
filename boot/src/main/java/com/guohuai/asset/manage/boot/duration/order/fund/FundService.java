@@ -133,4 +133,14 @@ public class FundService {
 		
 		return list;
 	}
+	
+	/**
+	 * 逻辑删除订单
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public void updateOrder(String oid) {
+		fundOrderDao.updateOrder(oid);
+	}
 }

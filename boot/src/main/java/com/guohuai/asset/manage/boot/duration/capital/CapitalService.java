@@ -2,7 +2,9 @@ package com.guohuai.asset.manage.boot.duration.capital;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -31,6 +33,17 @@ public class CapitalService {
 	private static final String AUDIT 		= "audit";
 	private static final String APPOINTMENT = "appointment";
 	private static final String CONFIRM 	= "confirm";
+	
+	private static final Map<String, String> stateMap = new HashMap<>();
+	static {
+		stateMap.put("00", "申请待审核");
+		stateMap.put("10", "审核未通过");
+		stateMap.put("11", "审核通过待预约");
+		stateMap.put("20", "预约未通过");
+		stateMap.put("21", "预约通过待确认");
+		stateMap.put("30", "确认未通过");
+		stateMap.put("31", "确认通过");
+	}
 	
 	@Autowired
 	private CapitalDao capitalDao;
@@ -99,12 +112,12 @@ public class CapitalService {
 		Page<CapitalEntity> list = capitalDao.findByOid(pid, pageable);
 		if (null != list.getContent() && !list.getContent().isEmpty()) {
 			CapitalForm form = null;
-			String type = null;
+//			String type = null;
 			for (CapitalEntity entity : list.getContent()) {
 				form = new CapitalForm();
 				form.setSubject(entity.getSubject());
 				form.setCreateTime(entity.getCreateTime());
-				type = entity.getSubject().substring(0, 2);
+//				type = entity.getSubject().substring(0, 2);
 				if (null != entity.getCashtoolOrderOid()) {
 					form.setOrderOid(entity.getCashtoolOrderOid());
 					form.setCapital(entity.getFreezeCash());
@@ -122,15 +135,16 @@ public class CapitalService {
 					form.setCapital(entity.getTransitCash());
 					form.setOperation("转让");
 				}
-				if ("申购".equals(type) || "资产".equals(type)) {
-					form.setStatus("未审核");
-				} else if ("审批".equals(type)) {
-					form.setStatus("资金处理中");
-				} else if ("预约".equals(type)) {
-					form.setStatus("资金处理中");
-				} else if ("确认".equals(type)) {
-					form.setStatus("完成");
-				}
+//				if ("申购".equals(type) || "资产".equals(type)) {
+//					form.setStatus("未审核");
+//				} else if ("审批".equals(type)) {
+//					form.setStatus("资金处理中");
+//				} else if ("预约".equals(type)) {
+//					form.setStatus("资金处理中");
+//				} else if ("确认".equals(type)) {
+//					form.setStatus("完成");
+//				}
+				form.setStatus(stateMap.get(entity.getState()));
 				
 				formList.add(form);
 			}
@@ -301,6 +315,7 @@ public class CapitalService {
 			String operation,
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity) {
+		entity.setState(CapitalEntity.APPLY00);
 		if ("purchase".equals(operation)) {
 			entity.setFreezeCash(capital);
 			entity.setSubject("申购" + target);
@@ -365,6 +380,10 @@ public class CapitalService {
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity,
 			String state) {
+		if (FundAuditEntity.SUCCESSED.equals(state))
+			entity.setState(CapitalEntity.AUDIT11);
+		else
+			entity.setState(CapitalEntity.AUDIT10);
 		if ("purchase".equals(operation)) {
 			if (target.equals(OrderService.FUND)) {
 				entity.setCashtoolOrderOid(sn);
@@ -464,6 +483,10 @@ public class CapitalService {
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity,
 			String state) {
+		if (FundAuditEntity.SUCCESSED.equals(state))
+			entity.setState(CapitalEntity.APPOINTMENT21);
+		else
+			entity.setState(CapitalEntity.APPOINTMENT20);
 		if ("purchase".equals(operation)) {
 			if (target.equals(OrderService.FUND)) {
 				entity.setCashtoolOrderOid(sn);
@@ -563,6 +586,10 @@ public class CapitalService {
 			AssetPoolEntity poolEntity,
 			CapitalEntity entity,
 			String state) {
+		if (FundAuditEntity.SUCCESSED.equals(state))
+			entity.setState(CapitalEntity.CONFIRM31);
+		else
+			entity.setState(CapitalEntity.CONFIRM30);
 		BigDecimal rate = BigDecimal.ZERO;
 		if (null != capital)
 			rate = capital.divide(poolEntity.getScale()).multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);

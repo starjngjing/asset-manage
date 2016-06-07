@@ -200,6 +200,10 @@ public class OrderService {
 			if ("redeem".equals(order.getOptType())) {
 				fundEntity.setAmount(fundEntity.getAmount()
 						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setRedeemVolume(fundEntity.getRedeemVolume()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setOnWayCapital(fundEntity.getOnWayCapital()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 			fundService.save(fundEntity);
 		}
@@ -256,6 +260,10 @@ public class OrderService {
 			if ("redeem".equals(order.getOptType())) {
 				fundEntity.setAmount(fundEntity.getAmount()
 						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setRedeemVolume(fundEntity.getRedeemVolume()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setOnWayCapital(fundEntity.getOnWayCapital()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 			fundService.save(fundEntity);
 		}
@@ -280,10 +288,10 @@ public class OrderService {
 		// 资金变动记录
 		if ("redeem".equals(order.getOptType())) {
 			capitalService.capitalFlow(order.getFundEntity().getAssetPoolOid(), order.getFundEntity().getCashTool().getOid(), 
-					order.getOid(), FUND, form.getReserveVolume(), order.getReturnVolume(), REDEEM, APPOINTMENT, uid, form.getState());
+					order.getOid(), FUND, form.getReserveVolume(), order.getAuditVolume(), REDEEM, APPOINTMENT, uid, form.getState());
 		} else {
 			capitalService.capitalFlow(order.getFundEntity().getAssetPoolOid(), order.getFundEntity().getCashTool().getOid(), 
-					order.getOid(), FUND, form.getReserveVolume(), order.getVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
+					order.getOid(), FUND, form.getReserveVolume(), order.getAuditVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
 		}
 	}
 	
@@ -317,6 +325,10 @@ public class OrderService {
 			if ("redeem".equals(order.getOptType())) {
 				fundEntity.setAmount(fundEntity.getAmount()
 						.add(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setRedeemVolume(fundEntity.getRedeemVolume()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				fundEntity.setOnWayCapital(fundEntity.getOnWayCapital()
+						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 		}
 		fundEntity.setPurchaseVolume(BigDecimal.ZERO);
@@ -345,10 +357,10 @@ public class OrderService {
 		// 资金变动记录
 		if ("redeem".equals(order.getOptType())) {
 			capitalService.capitalFlow(order.getFundEntity().getAssetPoolOid(), order.getFundEntity().getCashTool().getOid(), 
-					order.getOid(), FUND, form.getInvestVolume(), order.getReturnVolume(), REDEEM, CONFIRM, uid, form.getState());
+					order.getOid(), FUND, form.getInvestVolume(), order.getReserveVolume(), REDEEM, CONFIRM, uid, form.getState());
 		} else {
 			capitalService.capitalFlow(order.getFundEntity().getAssetPoolOid(), order.getFundEntity().getCashTool().getOid(), 
-					order.getOid(), FUND, form.getInvestVolume(), order.getVolume(), PURCHASE, CONFIRM, uid, form.getState());
+					order.getOid(), FUND, form.getInvestVolume(), order.getReserveVolume(), PURCHASE, CONFIRM, uid, form.getState());
 		}
 	}
 	
@@ -470,7 +482,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
-				order.getOid(), TRUST, form.getReserveVolume(), order.getApplyVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
+				order.getOid(), TRUST, form.getReserveVolume(), order.getAuditVolume(), PURCHASE, APPOINTMENT, uid, form.getState());
 	}
 	
 	/**
@@ -524,7 +536,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
-				order.getOid(), TRUST, form.getInvestVolume(), order.getApplyVolume(), PURCHASE, CONFIRM, uid, form.getState());
+				order.getOid(), TRUST, form.getInvestVolume(), order.getReserveVolume(), PURCHASE, CONFIRM, uid, form.getState());
 	}
 	
 	/**
@@ -778,7 +790,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(order.getTrustEntity().getAssetPoolOid(), order.getTrustEntity().getTarget().getOid(), 
-				order.getOid(), TRUST, form.getInvestVolume(), order.getTranVolume(), TRANSFER, CONFIRM, uid, form.getState());
+				order.getOid(), TRUST, form.getInvestVolume(), order.getAuditVolume(), TRANSFER, CONFIRM, uid, form.getState());
 	}
 	
 	/**
@@ -1392,5 +1404,19 @@ public class OrderService {
 		}*/
 		
 		return formList;
+	}
+	
+	/**
+	 * 逻辑删除订单
+	 * @param oid
+	 * @param operation
+	 */
+	@Transactional
+	public void updateOrder(String oid, String operation) {
+		if ("现金管理工具".equals(operation)) {
+			fundService.updateOrder(oid);
+		} else {
+			trustService.updateOrder(oid, operation);
+		}
 	}
 }

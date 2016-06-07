@@ -187,7 +187,8 @@ define(function() {
 					edit: this.host + '/ams/duration/assetPool/editPool', // 修改资产池
 					getAll: this.host + "/ams/duration/assetPool/getAll", // 获取全部资产池
 					getById: this.host + '/ams/duration/assetPool/getPoolByOid', // 获取单条资产池
-					getNameList: this.host + '/ams/duration/assetPool/getAllNameList' //获取资产池下拉菜单列表
+					getNameList: this.host + '/ams/duration/assetPool/getAllNameList', //获取资产池下拉菜单列表
+					delete: this.host + '/ams/duration/assetPool/updateAssetPool'	// 删除资产池
 				},
 				order: { // 订单
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund', // 货币基金申购
@@ -216,7 +217,8 @@ define(function() {
 					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer', // 信托计划转让确认
 					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash', // 编辑账户
 					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList', // 出入金明细
-					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital' // 出入金详情
+					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital', // 出入金详情
+					delete: this.host + '/ams/duration/order/updateOrder'
 				}
 			},
 			role: {

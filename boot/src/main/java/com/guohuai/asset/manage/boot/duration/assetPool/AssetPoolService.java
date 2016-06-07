@@ -104,6 +104,9 @@ public class AssetPoolService {
 		AssetPoolForm form = null;
 		if (null != entityList.getContent() && entityList.getContent().size() > 0) {
 			for (AssetPoolEntity entity : entityList.getContent()) {
+				if ("已失效".equals(entity.getState())) {
+					continue;
+				}
 				form = new AssetPoolForm();
 				try {
 					BeanUtils.copyProperties(form, entity);
@@ -265,6 +268,15 @@ public class AssetPoolService {
 		}
 		
 		assetPoolDao.save(entity);
+	}
+	
+	/**
+	 * 逻辑删除资产池
+	 * @param pid
+	 */
+	@Transactional
+	public void updateAssetPool(String pid) {
+		assetPoolDao.updateAssetPool(pid);
 	}
 
 	/**

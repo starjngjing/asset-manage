@@ -40,11 +40,11 @@
                     <i class="fa fa-shopping-cart"></i> 资产申购
                   </button>
                 </div>
-                <div class="col-lg-6 col-md-12 col-xs-6">
+                <!--<div class="col-lg-6 col-md-12 col-xs-6">
                   <button id="updateAccount" class="btn btn-default btn-block btn-sm">
                     <i class="fa fa-pencil"></i> 编辑账户
                   </button>
-                </div>
+                </div>-->
               </div>
             </div>
           </div>
@@ -633,6 +633,89 @@
   </div>
 </div>
 
+<!-- 现金管理工具订单详情 -->
+<div id="fundOrderDetailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">订单详情</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>标的名称:</dt>
+          <dd>
+            <div data-detail-fetch="cashtoolName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的类型:</dt>
+          <dd>
+            <div data-detail-fetch="cashtoolTypeStr"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>每万份收益:</dt>
+          <dd>
+            <div data-detail-fetch="netRevenue"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>7日年化收益:</dt>
+          <dd>
+            <div data-detail-fetch="yearYield7"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>风险等级:</dt>
+          <dd>
+            <div data-detail-fetch="riskLevel"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>分红方式:</dt>
+          <dd>
+            <div data-detail-fetch="dividendType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>投资日:</dt>
+          <dd>
+            <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl id="orderPurchaseArea" class="dl-horizontal" style="display: none;">
+          <dt>申请额度:</dt>
+          <dd>
+            <div data-detail-fetch="volume"></div>
+          </dd>
+        </dl>
+        <dl id="orderRedeemArea" class="dl-horizontal" style="display: none;">
+          <dt>赎回额度:</dt>
+          <dd>
+            <div data-detail-fetch="returnVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForOrdering" style="display: none;">
+          <dt>审核额度:</dt>
+          <dd>
+            <div data-detail-fetch="auditVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept" style="display: none;">
+          <dt>预约额度:</dt>
+          <dd>
+            <div data-detail-fetch="reserveVolume"></div>
+          </dd>
+        </dl>
+    </div>
+  </div>
+</div>
+
 <!-- 信托计划审核/预约/确认弹窗 -->
 <div id="trustCheckModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -642,7 +725,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">信托计划审核</h4>
+        <h4 class="modal-title" id="trustTitleName">信托计划审核</h4>
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
@@ -820,9 +903,142 @@
         </form>
       </div>
       <!-- 模态窗底部 -->
-      <div class="modal-footer">
+      <div class="modal-footer" id="trustDoCheck">
         <button id="doTrustUnCheck" type="button" class="btn btn-warning">不通过</button>
         <button id="doTrustCheck" type="button" class="btn btn-primary btn-submit trustCheckSubmit">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 信托计划订单详情 -->
+<div id="trustOrderDetailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="trustTitleName">订单详情</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>标的名称:</dt>
+          <dd>
+            <div data-detail-fetch="targetName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的类型:</dt>
+          <dd>
+            <div data-detail-fetch="targetTypeStr"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>预计年化收益率:</dt>
+          <dd>
+            <div data-detail-fetch="expAror"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>成立日:</dt>
+          <dd>
+            <div data-detail-fetch="setDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>投资日:</dt>
+          <dd>
+            <div data-detail-fetch="investDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>付息方式:</dt>
+          <dd>
+            <div data-detail-fetch="accrualType"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>首付息日:</dt>
+          <dd>
+            <div data-detail-fetch="arorFirstDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>付息日:</dt>
+          <dd>
+            <div data-detail-fetch="accrualDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>合同年天数:</dt>
+          <dd>
+            <div data-detail-fetch="contractDays"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的规模:</dt>
+          <dd>
+            <div data-detail-fetch="raiseScope"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>标的限期:</dt>
+          <dd>
+            <div data-detail-fetch="life"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>起购金额:</dt>
+          <dd>
+            <div data-detail-fetch="floorVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>主体评级:</dt>
+          <dd>
+            <div data-detail-fetch="subjectRating"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集起始日:</dt>
+          <dd>
+            <div data-detail-fetch="collectStartDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集截止日:</dt>
+          <dd>
+            <div data-detail-fetch="collectEndDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>募集期收益率:</dt>
+          <dd>
+            <div data-detail-fetch="collectIncomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>申请额度:</dt>
+          <dd>
+            <div data-detail-fetch="volume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForOrdering" style="display: none;">
+          <dt>审核额度:</dt>
+          <dd>
+            <div data-detail-fetch="auditVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal labelForAccept" style="display: none;">
+          <dt>预约额度:</dt>
+          <dd>
+            <div data-detail-fetch="reserveVolume"></div>
+          </dd>
+        </dl>
       </div>
     </div>
   </div>
@@ -1776,4 +1992,20 @@
       </div>
     </div>
   </div>
+</div>
+<!--确认提示框-->
+<div id="confirmModal" class="popover func-delete-popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">提示</h3>
+  <div class="popover-content">
+    <p>确定删除此条数据？</p>
+    <div class="popover-btn clearfix">
+      <div class="unit">
+        <button class="btn btn-block btn-primary accept" data-dismiss="modal">确 定</button>
+      </div>
+      <div class="unit">
+        <button class="btn btn-block btn-default cancel" data-dismiss="modal">取 消</button>
+      </div>
+    </div>
+	</div>
 </div>
