@@ -166,9 +166,9 @@ define([
         selects.each(function (index, item) {
           $(item).change()
         })
-        ichecks.each(function (index, item) {
+        ichecks.iCheck('update').each(function (index, item) {
           if (item.checked) {
-            $(item).iCheck('check')
+            $(item).trigger('ifChecked')
           }
         })
         select2s.each(function (index, item) {
