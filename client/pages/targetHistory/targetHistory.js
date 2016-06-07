@@ -50,7 +50,7 @@ define([
 					formatter: function(val) {
 						return util.enum.transform('TARGETTYPE', val);
 					}
-				}, { // 收益率
+				}, { // 预期年化收益率
 					field: 'expAror',
 					formatter: function(val) {
 						if (val)
@@ -86,7 +86,14 @@ define([
 					}
 
 				}, { // 已持有份额
+					visible: true,
 					field: 'holdAmount',
+					formatter: function(val) {
+						return val;
+					}
+				}, { // 申请中份额
+					visible: true,
+					field: 'applyAmount',
 					formatter: function(val) {
 						return val;
 					}
@@ -115,18 +122,23 @@ define([
 							text: '成立',
 							type: 'button',
 							class: 'item-establish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '不成立',
 							type: 'button',
 							class: 'item-unEstablish',
-							isRender: row.state === 'collecting' && row.lifeState === 'PREPARE',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'PREPARE',
 						}, {
 							text: '本息兑付',
 							type: 'button',
 							class: 'item-targetIncome',
 							isRender: row.state !== 'invalid' && row.lifeState === 'STAND_UP', // 只有已经成立后的标的才能进行本息兑付
 							//              	    	isRender: true,
+						}, {
+							text: '结束',
+							type: 'button',
+							class: 'item-close',
+							isRender: (row.state === 'collecting' || row.state === 'meetingPass') && row.lifeState === 'STAND_UP',
 						}, {
 							text: '逾期',
 							type: 'button',
@@ -136,7 +148,7 @@ define([
 							text: '移除出库',
 							type: 'button',
 							class: 'item-remove',
-							isRender: row.state !== 'invalid' && row.state !== 'metting'
+							isRender: row.state !== 'invalid' && row.state !== 'metting' && row.lifeState !== 'STAND_FAIL' && row.lifeState !== 'CLOSE',
 						}, {
 							text: '财务数据',
 							type: 'button',
@@ -155,7 +167,8 @@ define([
 								contentType: 'form'
 							}, function(result) {
 								var data = result.investment;
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data = formatTargetData(data); // 格式化标的数据
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级								
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') { // 被驳回
 									$("#rejectDesc").hide()
@@ -195,6 +208,8 @@ define([
 							alert('敬请期待!!!');
 						},
 						'click .item-establish': function(e, value, row) { // 标的成立
+							initEstablish(row);
+							/* 如果已持有份额小于0则弹警告窗
 							if (row.holdAmount <= 0) {
 								$("#confirmTitle").html("标的无持有份额,确定要成立？");
 								$$.confirm({
@@ -207,8 +222,12 @@ define([
 							} else {
 								initEstablish(row);
 							}
+							*/
 						},
 						'click .item-unEstablish': function(e, value, row) { // 标的不成立
+							initUnEstablish(row);
+							/*
+							如果已持有份额大于0则弹警告窗
 							if (row.holdAmount > 0) {
 								$("#confirmTitle").html("标的已持有份额,确定不成立？");
 								$$.confirm({
@@ -221,12 +240,15 @@ define([
 							} else {
 								initUnEstablish(row);
 							}
-
+							*/
 						},
 						'click .item-targetIncome': function(e, value, row) { // 标的本息兑付
 							targetInfo = row;
 							// 初始化数据表格                       
 							$('#incomeTable').bootstrapTable('refresh');
+							// 重置和初始化表单验证
+							$("#targetIncomeForm").validator('destroy')
+							util.form.validator.init($("#targetIncomeForm"));
 
 							http.post(config.api.targetDetQuery, {
 									data: {
@@ -245,8 +267,26 @@ define([
 									$$.detailAutoFix($('#targetDetailIncome'), formatTargetData(data)); // 自动填充详情1
 									$$.formAutoFix($('#targetIncomeForm'), data); // 自动填充表单
 								});
-							util.form.validator.init($("#targetIncomeForm")); // 初始化表单验证
 							$('#targetIncomeModal').modal('show');
+						},
+						'click .item-close': function(e, value, row) { // 结束
+							$("#confirmTitle").html("确定资产已结束？");
+							$$.confirm({
+								container: $('#doConfirm'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.targetClose, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form'
+										},
+										function(obj) {
+											$('#dataTable').bootstrapTable('refresh');
+										});
+								}
+							});
+
 						},
 						'click .item-overdue': function(e, value, row) { // 逾期
 							/**
@@ -273,6 +313,11 @@ define([
 						});
 						*/
 							/*  需要弹窗的 */
+
+							// 重置和初始化表单验证
+							$("#overdueForm").validator('destroy')
+							util.form.validator.init($("#overdueForm"));
+
 							http.post(config.api.targetDetQuery, {
 									data: {
 										oid: row.oid
@@ -288,8 +333,8 @@ define([
 									}
 									$$.detailAutoFix($('#targetDetailOverdue'), formatTargetData(data)); // 自动填充详情
 									//                		  $$.formAutoFix($('#overdueForm'), data); // 自动填充表单
+									$(document.overdueForm.oid).val(data.oid); // 设置投资标的oid
 								});
-							util.form.validator.init($("#overdueForm")); // 初始化表单验证
 							$('#overdueModal').modal('show');
 
 						},
@@ -356,6 +401,7 @@ define([
 				columns: [{
 					//编号
 					// field: 'oid',
+					visible: false,
 					width: 60,
 					formatter: function(val, row, index) {
 						return index + 1
@@ -391,6 +437,7 @@ define([
 
 			// 成立 按钮点击事件
 			$("#establishSubmit").click(function() {
+				if (!$('#establishForm').validator('doSubmitCheck')) return
 				$("#establishForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -406,6 +453,7 @@ define([
 
 			// 不成立 按钮点击事件
 			$("#unEstablishSubmit").click(function() {
+				if (!$('#unEstablishForm').validator('doSubmitCheck')) return
 				$("#unEstablishForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -421,6 +469,7 @@ define([
 
 			// 逾期 按钮点击事件     暂时没用到
 			$("#overdueSubmit").click(function() {
+				if (!$('#overdueForm').validator('doSubmitCheck')) return
 				$("#overdueForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -436,6 +485,7 @@ define([
 
 			// 本息兑付 按钮点击事件
 			$("#targetIncomeSubmit").click(function() {
+				if (!$('#targetIncomeForm').validator('doSubmitCheck')) return
 				$("#targetIncomeForm").ajaxSubmit({
 					type: "post", //提交方式  
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
@@ -450,6 +500,10 @@ define([
 			});
 
 			function initEstablish(row) {
+
+				// 重置和初始化表单验证
+				$("#establishForm").validator('destroy')
+				util.form.validator.init($("#establishForm"));
 
 				// 初始化   付息日 
 				for (var i = 1; i <= 30; i++) {
@@ -471,14 +525,19 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#establishForm'), data); // 自动填充详情
+
 						$$.formAutoFix($('#establishForm'), data); // 自动填充表单
 					});
-				util.form.validator.init($("#establishForm")); // 初始化表单验证
 				$('#establishModal').modal('show');
 			}
 
 			function initUnEstablish(row) {
+
+				// 重置和初始化表单验证
+				$("#unEstablishForm").validator('destroy')
+				util.form.validator.init($("#unEstablishForm"));
 
 				http.post(config.api.targetDetQuery, {
 						data: {
@@ -493,10 +552,10 @@ define([
 								timeOut: 10000
 							});
 						}
-						$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
+						$$.detailAutoFix($('#targetDetailUnEstablish'), formatTargetData(data)); // 自动填充详情
+						//$$.detailAutoFix($('#unEstablishForm'), data); // 自动填充详情
 						$$.formAutoFix($('#unEstablishForm'), data); // 自动填充表单
 					});
-				util.form.validator.init($("#unEstablishForm")); // 初始化表单验证
 				$('#unEstablishModal').modal('show');
 			}
 
@@ -510,6 +569,10 @@ define([
 				return val
 			}
 
+			/**
+			 * 格式化投资标的信息
+			 * @param {Object} t
+			 */
 			function formatTargetData(t) {
 				if (t) {
 					var t2 = {};
@@ -517,12 +580,22 @@ define([
 					t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
 					t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
 
-					console.log(t2)
+					t2.raiseScope = t2.raiseScope + '万';
+					t2.life = t2.life + util.enum.transform('lifeUnit', t2.lifeUnit);
+					t2.floorVolume = t2.floorVolume + '元';
+					t2.contractDays = t2.contractDays + '天/年';
+					t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
+					t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
+
 					return t2;
 				}
 				return t;
 			}
 
+			/**
+			 * 格式化底层项目信息
+			 * @param {Object} p
+			 */
 			function formatProjectData(p) {
 				if (p) {
 					var p2 = {};

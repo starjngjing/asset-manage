@@ -207,6 +207,8 @@ public class InvestmentMeetingVoteService {
 		temp.setVoteTime(DateUtil.getSqlCurrentDate());
 		temp.setState(voteStatus);
 		this.saveOrUpdateMeetingVote(temp);
+		// 工作流
+//		workflowAssetService.complete(operator, asset.getOid(), WorkflowConstant.NODEID_DOMEETING, "pass");
 	}
 
 }

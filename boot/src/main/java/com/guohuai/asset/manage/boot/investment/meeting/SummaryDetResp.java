@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class SummaryDetResp {
 
-	private String meetingOid;
+	private String oid;
+	private String name;
 	private String fkey;
+	private String furl;
+	private String state;
 	private String operator;
 	private Timestamp updateTime;
 }

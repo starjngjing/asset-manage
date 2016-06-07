@@ -187,16 +187,21 @@ public class InvestmentMeetingService {
 		if (null == meeting.getFkey()) {
 			return resps;
 		}
-		List<File> files = fileService.list(meeting.getFkey());
+		List<File> files = fileService.list(meeting.getFkey(),1);
 		if (null == files || 0 == files.size())
 			return resps;
-		SummaryDetResp resp = new SummaryDetResp();
-		resp.setMeetingOid(meeting.getOid());
-		resp.setFkey(files.get(0).getFkey());
-		resp.setUpdateTime(files.get(0).getUpdateTime());
-		AdminObj adminObj = adminSdk.getAdmin(files.get(0).getOperator());
-		resp.setOperator(adminObj.getName());
-		resps.add(resp);
+		for (File file : files) {
+			SummaryDetResp resp = new SummaryDetResp();
+			resp.setOid(file.getOid());
+			resp.setName(file.getName());
+			resp.setFkey(file.getFkey());
+			resp.setFurl(file.getFurl());
+			AdminObj adminObj = adminSdk.getAdmin(file.getOperator());
+			if(null != adminObj)
+				resp.setOperator(adminObj.getName());
+			resp.setUpdateTime(file.getUpdateTime());
+			resps.add(resp);
+		}
 		return resps;
 	}
 
@@ -235,15 +240,7 @@ public class InvestmentMeetingService {
 	 * @param operator
 	 */
 	public void deleteSummary(String oid, String operator) {
-		InvestmentMeeting meeting = this.getMeetingDet(oid);
-		if (null == meeting) {
-			throw new RuntimeException();
-		}
-		if (null != meeting.getFkey()) {
-			fileService.batchDelete(meeting.getFkey(), operator);
-			meeting.setFkey(null);
-			this.updateMeeting(meeting, operator);
-		}
+		fileService.delete(oid, operator);
 	}
 
 	/**
@@ -297,12 +294,12 @@ public class InvestmentMeetingService {
 		}
 		List<MeetingInvestmentDetResp> list = JSONArray.parseArray(form.getTargets(), MeetingInvestmentDetResp.class);
 		for (MeetingInvestmentDetResp req : list) {
-			String flowState = "reject";
+//			String flowState = "reject";
 			TargetEventType logType = null;
 			Investment investment = investmentService.getInvestment(req.getOid());
 			if (InvestmentMeetingVote.VOTE_STATUS_approve.equals(req.getVoteStatus())) {
-				flowState = "pass";
-				investment.setState(Investment.INVESTMENT_STATUS_collecting);
+//				flowState = "pass";
+				investment.setState(Investment.INVESTMENT_STATUS_meetingpass);
 				investment.setLifeState(investment.INVESTMENT_LIFESTATUS_PREPARE);
 				String[] checkList = req.getCheckConditions();
 				// 添加检查项

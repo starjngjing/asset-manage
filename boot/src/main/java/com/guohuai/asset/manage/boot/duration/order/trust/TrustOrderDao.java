@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TrustOrderDao extends JpaRepository<TrustOrderEntity, String>, JpaSpecificationExecutor<TrustOrderEntity> {
 
-	@Query("from TrustOrderEntity a where a.assetPoolOid = ?1 and a.state < 2")
+	@Query("from TrustOrderEntity a where a.assetPoolOid = ?1 and a.state <> '31'")
 	public List<TrustOrderEntity> findPurchaseByPidForAppointment(String pid);
 	
 	@Query("from TrustOrderEntity a where a.assetPoolOid = ?1 and a.state = 2")

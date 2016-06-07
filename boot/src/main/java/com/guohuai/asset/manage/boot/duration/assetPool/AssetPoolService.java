@@ -215,7 +215,6 @@ public class AssetPoolService {
 		entity.setCashRate(form.getCashRate());
 		entity.setCashtoolRate(form.getCashtoolRate());
 		entity.setTargetRate(form.getTargetRate());
-		entity.setCashPosition(form.getCashPosition());
 		entity.setState("未审核");
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
@@ -322,6 +321,8 @@ public class AssetPoolService {
 	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool) {
 		// 确认收益
 		BigDecimal confirmProfit = BigDecimal.ZERO;
+		// 实现收益
+		BigDecimal factProfit = BigDecimal.ZERO;
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		
@@ -334,6 +335,7 @@ public class AssetPoolService {
 						.divide(new BigDecimal(10000)))
 						.setScale(4, BigDecimal.ROUND_HALF_UP);
 				confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+				factProfit = factProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				entity.setAmount(entity.getAmount().add(dayProfit)
 						.setScale(4, BigDecimal.ROUND_HALF_UP));
 				entity.setDailyProfit(dayProfit);
@@ -376,6 +378,7 @@ public class AssetPoolService {
 		}
 		
 		assetPool.setConfirmProfit(confirmProfit);
+		assetPool.setFactProfit(factProfit);
 		assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		
 		return assetPool;

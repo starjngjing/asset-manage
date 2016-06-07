@@ -143,9 +143,10 @@ define([
       var container = options.container
       var size = options.size || ''
       var success = options.success || null
+      var btnName = options.btnName || '上传附件'
 
       var form = $('<form method="post" class="yupForm" enctype="multipart/form-data"></form>')
-      var btn = $('<button class="btn btn-default ' + (size ? 'btn-' + size : '') + '">上传附件</button>')
+      var btn = $('<button class="btn btn-default ' + (size ? 'btn-' + size : '') + '">'+btnName+'</button>')
       var input = $('<input name="yupUpload" class="' + size + '" type="file"/>')
 
       form.append(btn).append(input).appendTo(container)

@@ -51,7 +51,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>基金状态</label>
-									<select name="state" class="form-control input-sm" data-enum-fetch="cashtoolStates" data-enum-text="全部">
+									<select name="state" class="form-control input-sm" data-enum-fetch="cashtoolStatesView" data-enum-text="全部">
                   					</select>
 								</div>
 							</div>
@@ -117,8 +117,8 @@
                 				</select>
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资对象</label>
@@ -134,14 +134,11 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>业绩比较基准</label>
-								<div class="input-group input-group-sm">
-									<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
-									<span class="input-group-addon">%</span>
-								</div>
+								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>是否QDII</label>
@@ -153,7 +150,7 @@
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>是否isFoF</label>
+								<label>是否FoF</label>
 								<select name='isFof' class="form-control input-sm">
 									<option value="Y">是</option>
 									<option value="N">否</option>
@@ -169,8 +166,8 @@
             						</select>
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>流通份额</label>
@@ -196,8 +193,8 @@
 								</div>
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>保本比例</label>
@@ -219,8 +216,8 @@
 								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码">
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金管理人名称</label>
@@ -239,8 +236,8 @@
 								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称">
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资领域</label>
@@ -259,12 +256,13 @@
 								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理">
 							</div>
 						</div>
-						</div>
-						<div class="row">
+					</div>
+					<div class="row">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>风险等级</label>
-								<input name="riskLevel" type="text" class="form-control input-sm" placeholder="风险等级">
+								<select name='riskLevel' class="form-control input-sm" data-enum-fetch="subjectRating">
+                				</select>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -284,7 +282,6 @@
 		</div>
 	</div>
 </div>
-
 
 <!-- 编辑现金管理类工具弹窗 -->
 <div id="editCashToolModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
@@ -338,10 +335,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>业绩比较基准</label>
-								<div class="input-group input-group-sm">
-									<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
-									<span class="input-group-addon">%</span>
-								</div>
+								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -355,7 +349,7 @@
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>是否isFoF</label>
+								<label>是否FoF</label>
 								<select name='isFof' class="form-control input-sm">
 									<option value="Y">是</option>
 									<option value="N">否</option>
@@ -374,7 +368,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>流通份额</label>
-								<input name="circulationShares" type="text" class="form-control input-sm" placeholder="流通份额"  data-validint="1-99999999" data-error="流通份额必须为正整数">
+								<input name="circulationShares" type="text" class="form-control input-sm" placeholder="流通份额" data-validint="1-99999999" data-error="流通份额必须为正整数">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -456,7 +450,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>风险等级</label>
-								<input name="riskLevel" type="text" class="form-control input-sm" placeholder="风险等级">
+								<select name='riskLevel' class="form-control input-sm" data-enum-fetch="subjectRating">
+                				</select>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -511,7 +506,7 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>类型</dt>
+								<dt>基金类型</dt>
 								<dd>
 									<div data-detail-fetch="etfLof" data-enum-transform="CASHTOOLTYPE"></div>
 								</dd>
@@ -535,6 +530,14 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
+								<dt>业绩比较基准</dt>
+								<dd>
+									<div data-detail-fetch="perfBenchmark"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
 								<dt>是否QDII</dt>
 								<dd>
 									<div data-detail-fetch="isQdii" data-enum-transform="booleanSelect"></div>
@@ -543,7 +546,7 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>是否isFof</dt>
+								<dt>是否FoF</dt>
 								<dd>
 									<div data-detail-fetch="isFof" data-enum-transform="booleanSelect"></div>
 								</dd>
@@ -599,38 +602,6 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>上市状态</dt>
-								<dd>
-									<div data-detail-fetch="listStatusCd"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>成立日期</dt>
-								<dd>
-									<div data-detail-fetch="establishDate"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>上市日期</dt>
-								<dd>
-									<div data-detail-fetch="listDate"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>终止上市日期</dt>
-								<dd>
-									<div data-detail-fetch="delistDate"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
 								<dt>基金管理人编码</dt>
 								<dd>
 									<div data-detail-fetch="managementCompany"></div>
@@ -663,57 +634,9 @@
 						</div>
 						<div class="col-sm-6">
 							<dl class="dl-horizontal">
-								<dt>业绩比较基准</dt>
-								<dd>
-									<div data-detail-fetch="perfBenchmark"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>最新流通份额</dt>
-								<dd>
-									<div data-detail-fetch="circulationShares"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>交易简称</dt>
-								<dd>
-									<div data-detail-fetch="tradeAbbrName"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
 								<dt>基金经理人</dt>
 								<dd>
 									<div data-detail-fetch="managerName"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>万份收益日</dt>
-								<dd>
-									<div data-detail-fetch="dailyProfitDate"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>万份收益</dt>
-								<dd>
-									<div data-detail-fetch="dailyProfit"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>7日年化收益率</dt>
-								<dd>
-									<div data-detail-fetch="weeklyYield"></div>
 								</dd>
 							</dl>
 						</div>
@@ -730,30 +653,6 @@
 								<dt>分红方式</dt>
 								<dd>
 									<div data-detail-fetch="dividendType"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>资产净值</dt>
-								<dd>
-									<div data-detail-fetch="netAsset"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>基金管理费</dt>
-								<dd>
-									<div data-detail-fetch="charge"></div>
-								</dd>
-							</dl>
-						</div>
-						<div class="col-sm-6">
-							<dl class="dl-horizontal">
-								<dt>基金托管费</dt>
-								<dd>
-									<div data-detail-fetch="custody"></div>
 								</dd>
 							</dl>
 						</div>
@@ -778,7 +677,7 @@
 			</div>
 		</div>
 	</div>
-	</form>
+</form>
 
 <!-- 操作confirm窗 使用 $$.confirm 初始化 -->
 <div id="doConfirm" class="popover func-delete-popover">

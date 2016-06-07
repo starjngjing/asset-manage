@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,14 @@ public class CashToolController extends BaseController {
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
 		}
+		Specification<CashTool> stateSpec = new Specification<CashTool>() {
+			@Override
+			public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.notEqual(root.get("state"), CashTool.CASHTOOL_STATE_invalid),
+						cb.notEqual(root.get("state"), CashTool.CASHTOOL_STATE_collecting));
+			}
+		};
+		spec = Specifications.where(spec).and(stateSpec);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		Page<CashTool> entitys = cashToolService.getCashToolList(spec, pageable);
 		CashToolListResp resps = new CashToolListResp(entitys);
@@ -93,7 +102,7 @@ public class CashToolController extends BaseController {
 
 	@RequestMapping(value = "add", method = { RequestMethod.POST, RequestMethod.GET })
 	public @ResponseBody ResponseEntity<BaseResp> add(@Valid CashToolManageForm form) {
-		 String operator = super.getLoginAdmin();
+		String operator = super.getLoginAdmin();
 		CashTool cashTool = cashToolService.createInvestment(form);
 		cashTool.setState(CashTool.CASHTOOL_STATE_waitPretrial);
 		cashTool.setOperator(operator);
@@ -104,7 +113,7 @@ public class CashToolController extends BaseController {
 	}
 
 	@RequestMapping(value = "examine", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> examine(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> examine(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		if (!CashTool.CASHTOOL_STATE_waitPretrial.equals(entity.getState())
@@ -144,7 +153,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "invalid", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> invalid(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> invalid(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		CashTool entity = cashToolService.findByOid(oid);
 		entity.setState(CashTool.CASHTOOL_STATE_invalid);
@@ -183,7 +192,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkpass", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkPass(String oid) {
+	public @ResponseBody ResponseEntity<BaseResp> checkPass(@RequestParam(required = true) String oid) {
 		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_collecting, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
@@ -196,7 +205,7 @@ public class CashToolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "checkreject", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody ResponseEntity<BaseResp> checkReject(String oid, String suggest) {
+	public @ResponseBody ResponseEntity<BaseResp> checkReject(@RequestParam(required = true) String oid, String suggest) {
 		String operator = super.getLoginAdmin();
 		cashToolService.check(oid, CashTool.CASHTOOL_STATE_reject, operator);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);

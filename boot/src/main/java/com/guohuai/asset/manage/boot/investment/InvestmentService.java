@@ -137,17 +137,17 @@ public class InvestmentService {
 				for (RiskIndicateCollectResp rc : list) {
 					sum += rc.getCollectScore();
 				}
-				log.info("投资标的的风险总分: " + sum);
+				log.debug("投资标的的风险总分: " + sum);
 				entity.setCollectScore(sum);
 				CCPWarrantor cCPWarrantor = cCPWarrantorService.getByScoreBetween(sum); // 根据标的风险总分获取[标的信用等级系数]
 				if (null != cCPWarrantor) {
 					weight = cCPWarrantor.getWeight();
-					log.info("投资标的id=" + entity.getOid() + "的信用等级对象为: " + JSON.toJSONString(cCPWarrantor));
+					log.debug("投资标的id=" + entity.getOid() + "的信用等级对象为: " + JSON.toJSONString(cCPWarrantor));
 				} else {
 					log.warn("找不到风险总分:" + sum + "对应的信用等级系数区间");
 				}
 			}
-			log.info("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
+			log.debug("投资标的id=" + entity.getOid() + "的信用等级系数为: " + weight);
 			entity.setCollectScoreWeight(weight);
 
 			// 根据[标的信用等级系数]计算本标的下所有项目的[项目系数]
@@ -156,7 +156,7 @@ public class InvestmentService {
 			// 取max(各个项目的[项目系数])作为标的的[风险系数]
 			// riskRate = projectService.getMaxRiskFactor(entity.getOid());
 			entity.setRiskRate(riskRate);
-			log.info("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
+			log.debug("投资标的id=" + entity.getOid() + "的风险系数为: " + riskRate);
 		}
 		/* 计算标的风险结束 */
 		return entity;
@@ -223,6 +223,16 @@ public class InvestmentService {
 			if (form.getRaiseScope() != null) {
 				BigDecimal yuan = form.getRaiseScope().multiply(new BigDecimal(10000));
 				entity.setRaiseScope(yuan);
+			}
+			// 起购金额 万转元
+			if (form.getFloorVolume() != null) {
+				BigDecimal yuan = form.getFloorVolume().multiply(new BigDecimal(10000));
+				entity.setFloorVolume(yuan);
+			}
+			//预计年化收益 百分比转小数
+			if(form.getExpAror() != null){
+				BigDecimal decimal = form.getExpAror().divide(new BigDecimal(100));
+				entity.setExpAror(decimal);
 			}
 			return entity;
 		} catch (Exception e) {
@@ -303,6 +313,13 @@ public class InvestmentService {
 		return investment;
 	}
 
+	/**
+	 * 标的作废
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
 	public Investment invalid(String oid, String operator) {
 		Investment investment = this.getInvestmentDet(oid);
 		investment.setState(Investment.INVESTMENT_STATUS_invalid);
@@ -311,5 +328,21 @@ public class InvestmentService {
 
 		return investment;
 	}
-
+	
+	/**
+	 * 标的确认
+	 * 
+	 * @param oid
+	 * @param operator
+	 * @return
+	 */
+	public Investment enter(String oid, String operator) {
+		Investment investment = this.getInvestmentDet(oid);
+		if(!Investment.INVESTMENT_STATUS_meetingpass.equals(investment.getState()))
+			throw new RuntimeException();
+		investment.setState(Investment.INVESTMENT_STATUS_collecting);
+		this.updateInvestment(investment, operator);
+		return investment;
+	}
+	
 }

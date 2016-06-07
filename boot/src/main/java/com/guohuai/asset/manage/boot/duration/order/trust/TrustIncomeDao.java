@@ -10,7 +10,7 @@ public interface TrustIncomeDao extends JpaRepository<TrustIncomeEntity, String>
 
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"
 	  		+ " LEFT JOIN T_GAM_ASSETPOOL_TARGET_INCOME b ON a.oid = b.targetOid"
-	  		+ " WHERE a.assetPoolOid = ?1 and b.state < 2", nativeQuery = true)
+	  		+ " WHERE a.assetPoolOid = ?1 and b.state <> '31'", nativeQuery = true)
 	public List<TrustIncomeEntity> findIncomeByPidForAppointment(String pid);
 	
 	@Query(value = "SELECT b.* FROM T_GAM_ASSETPOOL_TARGET a"

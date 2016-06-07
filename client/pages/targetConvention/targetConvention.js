@@ -107,9 +107,8 @@ define([
 										detailView: true,
 										onExpandRow: function(index, row, $detail) {
 											var table = $('<table><thead><tr>' +
-												'<th>角色名称</th>' +
-												'<th>表决意见</th>' +
 												'<th>表决人</th>' +
+												'<th>表决意见</th>' +
 												'<th>表决时间</th>' +
 												'<th>附件</th>' +
 												'</tr></thead></table>')
@@ -126,7 +125,7 @@ define([
 													})
 												},
 												columns: [{
-													field: 'role',
+													field: 'name',
 													align: 'center'
 												}, {
 													field: 'voteStatus',
@@ -134,9 +133,6 @@ define([
 													formatter: function(val) {
 														return util.enum.transform('voteStates', val);
 													}
-												}, {
-													field: 'name',
-													align: 'center'
 												}, {
 													field: 'time',
 													align: 'center'
@@ -264,6 +260,13 @@ define([
 												contentType: 'form'
 											}, function(rlt) {
 												origin.success(rlt)
+												$('#batchFkey').val('');
+												if(rlt.rows.length > 0){
+													$('#batchFkey').val(rlt.rows[0].fkey);
+													$('#targetConventionSummaryBatchDownload').show()
+												} else {
+													$('#targetConventionSummaryBatchDownload').hide()
+												}
 											})
 										},
 										pageNumber: 1,
@@ -271,6 +274,8 @@ define([
 										pagination: false,
 										sidePagination: 'server',
 										columns: [{
+											field: 'name'
+										},{
 											field: 'operator'
 										}, {
 											field: 'updateTime'
@@ -292,22 +297,12 @@ define([
 											},
 											events: {
 												'click .item-download': function(e, value, row) {
-													var key = {};
-													key.fkey = row.fkey;
-													var json = {
-														fkeys: []
-													};
-													json.fkeys.push(key);
-													http.post(config.api.files.pkg, {
-														data: JSON.stringify(json)
-													}, function(result) {
-														location.href = config.api.files.download + result.key
-													})
+													location.href = 'http://api.guohuaigroup.com' + row.furl
 												},
 												'click .item-delete': function(e, value, row) {
 													http.post(config.api.meetingSummaryDelete, {
 														data: {
-															oid: row.meetingOid
+															oid: row.oid
 														},
 														contentType: 'form'
 													}, function(result) {
@@ -355,9 +350,8 @@ define([
 											detailView: true,
 											onExpandRow: function(index, row, $detail) {
 												var table = $('<table><thead><tr>' +
-													'<th>角色名称</th>' +
-													'<th>表决意见</th>' +
 													'<th>表决人</th>' +
+													'<th>表决意见</th>' +
 													'<th>表决时间</th>' +
 													'<th>附件</th>' +
 													'</tr></thead></table>')
@@ -374,7 +368,7 @@ define([
 														})
 													},
 													columns: [{
-														field: 'role',
+														field: 'name',
 														align: 'center'
 													}, {
 														field: 'voteStatus',
@@ -382,9 +376,6 @@ define([
 														formatter: function(val) {
 															return util.enum.transform('voteStates', val);
 														}
-													}, {
-														field: 'name',
-														align: 'center'
 													}, {
 														field: 'time',
 														align: 'center'
@@ -425,14 +416,13 @@ define([
 			$('#targetConventionTable').bootstrapTable(tableConfig)
 				// 搜索表单初始化
 			$$.searchInit($('#searchForm'), $('#targetConventionTable'))
-			// 新建会议表单验证初始化
+				// 新建会议表单验证初始化
 			util.form.validator.init($("#addTargetConventionForm"))
 				// 新建会议按钮点击事件
 			$('#targetConventionAdd').on('click', function() {
 				$('#addTargetConventionForm').clearForm() // 先清理表单
 				$('#addTargetConventionModal').modal('show')
 			})
-			
 
 			$("#addMeeting").on('click', function() {
 				if (!$('#addTargetConventionForm').validator('doSubmitCheck')) return
@@ -441,7 +431,7 @@ define([
 					//dataType:"json", //数据类型'xml', 'script', or 'json'  
 					url: config.api.meetingAdd,
 					success: function(result) {
-						if(result.errorCode != 0){
+						if (result.errorCode != 0) {
 							alert(result.errorMessage);
 							return
 						}
@@ -514,6 +504,25 @@ define([
 			$('#targetConventionSummaryUpload').on('click', function() {
 					$('#uploadTargetConventionSummaryModal').modal('show')
 				})
+				//批量下载过会纪要
+			$('#targetConventionSummaryBatchDownload').on('click', function() {
+					var fkey = $('#batchFkey').val();
+					if (fkey == '') {
+						alert('无过会纪要');
+						return;
+					}
+					var key = {};
+					key.fkey = fkey;
+					var json = {
+						fkeys: []
+					};
+					json.fkeys.push(key);
+					http.post(config.api.files.pkg, {
+						data: JSON.stringify(json)
+					}, function(result) {
+						location.href = config.api.files.download + result.key
+					})
+				})
 				// 上传纪要附件表格数据源
 			var uploadTargetConventionSummaryFiles = []
 				// 初始化上传附件插件，在success里将上传成功附件插入到表格中
@@ -559,7 +568,7 @@ define([
 			$('#uploadTargetConventionSummaryTable').bootstrapTable(uploadTargetConventionSummaryTableConfig)
 				// 上传纪要“上传”按钮点击事件
 			$('#doUploadTargetConventionSummary').on('click', function() {
-				if(uploadTargetConventionSummaryFiles.length <= 0){
+				if (uploadTargetConventionSummaryFiles.length <= 0) {
 					alert('请上传会议纪要附件');
 					return;
 				}
@@ -650,7 +659,6 @@ define([
 				$('#finishTargetConventionTable').bootstrapTable('load', $('#finishTargetConventionTable').bootstrapTable('getData'))
 				$('#rejectCommentModal').modal('hide')
 			})
-			
 
 			// 会议确认“确认”按钮点击事件
 			$('#doFinishTargetConvention').on('click', function() {

@@ -227,6 +227,25 @@ public class InvestmentPoolService {
 	}
 	
 	/**
+	 * 结束标的
+	 * @Title: close 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid
+	 * @param operator 
+	 * void    返回类型
+	 */
+	public void close(String oid, String operator) {
+		Investment it = investmentService.getInvestment(oid);
+		it.setOperator(operator);
+		it.setUpdateTime(DateUtil.getSqlCurrentDate());
+		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_CLOSE); // 重置为逾期
+		this.investmentDao.save(it); // 修改标的库
+		investmentLogService.saveInvestmentLog(it, TargetEventType.close, operator); // 保存标的操作日志
+	}
+	
+	/**
 	 * 查询指定募集截止日以前的所有投资标的
 	 * @Title: getRecruitment 
 	 * @author vania
@@ -293,6 +312,30 @@ public class InvestmentPoolService {
 		};
 		return investmentDao.findAll(spec);
 	}
+	
+	/**
+	 * 查询尚未成立的标的
+	 * @Title: getNotEstablishTarget
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @return List<Investment> 返回类型
+	 */
+	public List<Investment> getNotEstablishTarget() {
+		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_PREPARE);
+	}
+	
+	/**
+	 * 查询已经成立的标的
+	 * @Title: getEstablishTarget
+	 * @author vania
+	 * @version 1.0
+	 * @see:
+	 * @return List<Investment> 返回类型
+	 */
+	public List<Investment> getEstablishTarget() {
+		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP);
+	}
 
 	/**
 	 * 根据标的id查询所有的本息兑付数据
@@ -306,6 +349,36 @@ public class InvestmentPoolService {
 	 */
 	public List<TargetIncome> getTargetIncome(String targetOid) {
 		return targetIncomeDao.findByTargetOidOrderBySeq(targetOid);
+	}
+	
+	/**
+	 * 增加持仓金额
+	 * @Title: IncHoldAmount 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid	投资标的id
+	 * @param holdAmount	大于0为增加,小于0则为减少
+	 * @return Investment    返回类型
+	 */
+	public Investment IncHoldAmount(String oid, BigDecimal holdAmount) {
+		int res = investmentDao.IncHoldAmount(oid, holdAmount);
+		return res > 0 ? investmentDao.findOne(oid) : null;
+	}
+	
+	/**
+	 * 增加申请金额
+	 * @Title: IncApplyAmount 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param oid	投资标的id
+	 * @param applyAmount	大于0为增加,小于0则为减少
+	 * @return Investment    返回类型
+	 */
+	public Investment IncApplyAmount(String oid, BigDecimal applyAmount) {
+		int res = investmentDao.IncApplyAmount(oid, applyAmount);
+		return res > 0 ? investmentDao.findOne(oid) : null;
 	}
 	
 	/**
