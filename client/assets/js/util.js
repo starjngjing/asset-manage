@@ -113,10 +113,9 @@ define([
               case 'buttonGroup':
                 if (item.isRender === undefined || item.isRender) {
                   format += '<div class="btn-group">' +
-                  '<button class="btn btn-default btn-xs">更多</button>' +
+                  '<button class="btn btn-default btn-xs ' + item.class + '">' + item.text + '</button>' +
                   '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                   '<span class="caret"></span>' +
-                  '<span class="sr-only">Toggle Dropdown</span>' +
                   '</button>' +
                   '<ul class="dropdown-menu dropdown-menu-right" role="menu">'
                   item.sub.forEach(function (sub) {
