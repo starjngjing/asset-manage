@@ -39,11 +39,21 @@ define([
 				if (this.value === 'fund') {
 					$('#buyAssetShowFund').show()
 					$('#buyAssetShowTrust').hide()
+					$('#buyAssetShowTrans').hide()
 					$('#profitType').hide()
-				} else {
+					$('#transVolumeDiv').hide()
+				} else if (this.value === 'trust') {
 					$('#buyAssetShowFund').hide()
 					$('#buyAssetShowTrust').show()
+					$('#buyAssetShowTrans').hide()
 					$('#profitType').show()
+					$('#transVolumeDiv').hide()
+				} else {
+					$('#buyAssetShowFund').hide()
+					$('#buyAssetShowTrust').hide()
+					$('#buyAssetShowTrans').show()
+					$('#profitType').show()
+					$('#transVolumeDiv').show()
 				}
 			})
 
@@ -1097,7 +1107,7 @@ define([
 								form.type.value = row.type
 								form.opType.value = 'audit'
 								form.assetPoolOid.value = pageState.pid
-								var formGroups = $(form).find('.form-group')
+								var formGroups = $(form).find('.row')
 								formGroups.each(function(index, item) {
 									if (!index) {
 										$(item).css({

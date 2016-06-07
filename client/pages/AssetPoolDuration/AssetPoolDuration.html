@@ -218,6 +218,9 @@
               <div class="col-sm-4">
                 <input name="buyType" type="radio" value="trust" class="icheck"> 信托计划
               </div>
+              <div class="col-sm-4">
+                <input name="buyType" type="radio" value="trans" class="icheck"> 待转入信托计划
+              </div>
             </div>
           </div>
           <div id="buyAssetShowFund">
@@ -440,6 +443,139 @@
               </div>
             </div>
           </div>
+          <div id="buyAssetShowTrans" style="display: none;">
+            <div class="form-group">
+              <label>标的名称</label>
+              <select id="transTransName" name="targetOid" class="form-control input-sm"></select>
+              <input name="targetName" type="hidden"/>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>标的类型</label>
+                  <input name="targetType" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>起购金额(万元)</label>
+                  <input name="floorVolume" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>预计年化收益(%)</label>
+                  <input name="expAror" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>成立日</label>
+                  <input name="setDate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>付息方式</label>
+                  <input name="accrualType" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>首付息日</label>
+                  <input name="arorFirstDate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>付息日</label>
+                  <input name="accrualDate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>合同年天数</label>
+                  <input name="contractDays" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>标的规模(万元)</label>
+                  <input name="raiseScope" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>标的限期(天)</label>
+                  <input name="life" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>主体评级</label>
+                  <input name="subjectRating" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>募集起始日</label>
+                  <input name="collectStartDate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>募集截止日</label>
+                  <input name="collectEndDate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>募集期收益率(%)</label>
+                  <input name="collectIncomeRate" type="text"
+                  class="form-control input-sm"
+                  readonly="readonly">
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
@@ -457,11 +593,25 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>申购额度</label>
+                <label>申购金额</label>
                 <div class="input-group input-group-sm">
                   <input name="volume" type="text"
                   class="form-control"
-                  placeholder="申购额度"
+                  placeholder="申购金额"
+                  data-validfloat="10.10"
+                  data-validpurchaseamount="true" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+            <div id="transVolumeDiv" class="col-md-6" style="display: none;">
+              <div class="form-group">
+                <label>申购份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="volume" type="text"
+                  class="form-control"
+                  placeholder="申购份额"
                   data-validfloat="10.10"
                   data-validpurchaseamount="true" required>
                   <span class="input-group-addon">万</span>
@@ -868,39 +1018,90 @@
           <input name="assetPoolOid" type="hidden"/>
           <input name="type" type="hidden"/>
           <input name="state" type="hidden"/>
-          <div class="form-group" style="display: none;">
-            <label>审核额度</label>
-            <div class="input-group input-group-sm">
-              <input name="auditVolume" type="text"
-              class="form-control"
-              placeholder="审核额度"
-              data-validfloat="10.10" required
-              disabled="disabled">
-              <span class="input-group-addon">万</span>
-            </div>
-          </div>
-          <div class="form-group" style="display: none;">
-            <label>预约额度</label>
-            <div class="input-group input-group-sm">
-              <input name="reserveVolume" type="text"
-              class="form-control"
-              placeholder="预约额度"
-              data-validfloat="10.10" required
-              disabled="disabled">
-              <span class="input-group-addon">万</span>
-            </div>
-          </div>
-          <div class="form-group" style="display: none;">
-            <label>确认额度</label>
-            <div class="input-group input-group-sm">
-              <input name="investVolume" type="text"
-              class="form-control"
-              placeholder="确认额度"
-              data-validfloat="10.10" required
-              disabled="disabled">
-              <span class="input-group-addon">万</span>
-            </div>
-          </div>
+          <div class="row" style="display: none;">
+            <div class="col-sm-6">
+		          <div class="form-group">
+		            <label>审核金额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="auditCash" type="text"
+		              class="form-control"
+		              placeholder="审核金额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="col-sm-6">
+		        	<div class="form-group">
+		            <label>审核份额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="auditVolume" type="text"
+		              class="form-control"
+		              placeholder="审核份额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+          <div class="row" style="display: none;">
+            <div class="col-sm-6">
+		          <div class="form-group">
+		            <label>预约金额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="reserveCash" type="text"
+		              class="form-control"
+		              placeholder="预约金额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>预约份额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="reserveVolume" type="text"
+		              class="form-control"
+		              placeholder="预约份额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+          <div class="row" style="display: none;">
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>确认金额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="investCash" type="text"
+		              class="form-control"
+		              placeholder="确认金额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>确认份额</label>
+		            <div class="input-group input-group-sm">
+		              <input name="investVolume" type="text"
+		              class="form-control"
+		              placeholder="确认份额"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
         </form>
       </div>
       <!-- 模态窗底部 -->
