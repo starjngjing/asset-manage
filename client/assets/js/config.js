@@ -231,6 +231,7 @@ define(function() {
 			user: {
 				search: this.host + '/operate/admin/search',	// 用户查找
 				roles: this.host + '/operate/admin/role/roles',	//当前用户角色
+				create: this.host + '/operate/admin/create',	// 添加用户
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
