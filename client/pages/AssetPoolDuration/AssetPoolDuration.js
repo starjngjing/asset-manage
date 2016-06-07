@@ -71,14 +71,19 @@ define([
 					targetNames = json
 					var fundTargetNameOptions = ''
 					var trustTargetNameOptions = ''
+					var transTargetNameOptions = ''
 					json.fund.forEach(function(item) {
 						fundTargetNameOptions += '<option value="' + item.cashtoolOid + '">' + item.cashtoolName + '</option>'
 					})
 					json.trust.forEach(function(item) {
 						trustTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
 					})
+					json.trust.forEach(function(item) {
+						transTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
+					})
 					$('#fundTargetName').html(fundTargetNameOptions).trigger('change')
 					$('#trustTargetName').html(trustTargetNameOptions).trigger('change')
+					$('#transTargetName').html(transTargetNameOptions).trigger('change')
 				})
 				http.post(config.api.duration.assetPool.getNameList, function(json) {
 					var assetPoolOptions = ''
