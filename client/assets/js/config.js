@@ -224,6 +224,9 @@ define(function() {
 				delete: this.host + '/operate/admin/ctrl/role/delete', // 删除角色
 				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths', // 获取角色权限
 			},
+			user: {
+				search: this.host + '/operate/admin/search',	// 用户查找
+			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
 			}
