@@ -137,6 +137,19 @@ public class AssetPoolController extends BaseController {
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+	
+	/**
+	 * 逻辑删除资产池
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/updateAssetPool", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> updateAssetPool(String pid) {
+		assetPoolService.updateAssetPool(pid);
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 
 	/**
 	 * 获取所有资产池的名称列表，包含id
@@ -151,7 +164,7 @@ public class AssetPoolController extends BaseController {
 	}
 
 	/**
-	 * 获取所有资产池的名称列表，包含id
+	 * 计算资产池每日收益
 	 * @return
 	 */
 	@RequestMapping(value = "/calcPoolProfit", method = { RequestMethod.POST })

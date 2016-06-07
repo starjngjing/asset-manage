@@ -237,4 +237,20 @@ public class TrustService {
 		
 		return list;
 	}
+	
+	/**
+	 * 逻辑删除订单
+	 * @param oid
+	 * @return
+	 */
+	@Transactional
+	public void updateOrder(String oid, String operation) {
+		if ("申购".equals(operation)) {
+			trustPurchaseDao.updateOrder(oid);
+		} else if ("本息兑付".equals(operation)) {
+			trustIncomeDao.updateOrder(oid);
+		} else {
+			trustTransDao.updateOrder(oid);
+		}
+	}
 }

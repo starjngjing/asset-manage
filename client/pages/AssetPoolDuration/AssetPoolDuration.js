@@ -169,17 +169,23 @@ define([
 					formatter: function(val, row, index) {
 						return index + 1
 					}
-				}, {
+				}, 
+				{
 					field: 'subject'
-				}, {
+				}, 
+				{
 					field: 'createTime'
-				}, {
+				}, 
+				{
 					field: 'operation'
-				}, {
+				}, 
+				{
 					field: 'capital'
-				}, {
+				}, 
+				{
 					field: 'status'
-				}, {
+				}, 
+				{
 					width: 100,
 					align: 'center',
 					formatter: function() {
@@ -231,70 +237,77 @@ define([
 
 			// 预约中现金类管理工具分页信息
 			var orderingToolPageOptions = {
-					page: 1,
-					rows: 10,
-					pid: pageState.pid
-				}
-				// 预约中现金类管理工具表格配置
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			// 预约中现金类管理工具表格配置
 			var orderingToolTableConfig = {
-					ajax: function(origin) {
-						http.post(config.api.duration.order.getFundListForAppointment, {
-							data: orderingToolPageOptions,
-							contentType: 'form'
-						}, function(rlt) {
-							origin.success(rlt)
-						})
-					},
-					pageNumber: orderingToolPageOptions.page,
-					pageSize: orderingToolPageOptions.rows,
-					pagination: true,
-					sidePagination: 'server',
-					pageList: [10, 20, 30, 50, 100],
-					queryParams: function(val) {
-						orderingToolPageOptions.rows = val.limit
-						orderingToolPageOptions.page = parseInt(val.offset / val.limit) + 1
-						return val
-					},
-					columns: [{
-							width: 60,
-							align: 'center',
-							formatter: function(val, row, index) {
-								return index + 1
-							}
-						}, {
-							field: 'cashtoolName'
-						}, {
-							field: 'cashtoolType',
-							formatter: function(val) {
-								return util.enum.transform('CASHTOOLTYPE', val)
-							}
-						}, {
-							field: 'netRevenue'
-						}, {
-							field: 'yearYield7'
-						},
-						//        {
-						//          field: 'riskLevel'
-						//        },
-						//        {
-						//          field: 'dividendType'
-						//        },
-						//        {
-						//          field: 'circulationShares'
-						//        },
-						{
-							field: 'investDate'
-						}, {
-							field: 'volume'
-						}, {
-							field: 'optType',
-							formatter: function(val) {
-								return val === 'purchase' ? '申购' : '赎回'
-							}
-						}, {
-							field: 'state',
-							formatter: function(val) {
-								switch (val) {
+				ajax: function(origin) {
+					http.post(config.api.duration.order.getFundListForAppointment, {
+						data: orderingToolPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: orderingToolPageOptions.page,
+				pageSize: orderingToolPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					orderingToolPageOptions.rows = val.limit
+					orderingToolPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'cashtoolName'
+				}, 
+				{
+					field: 'cashtoolType',
+					formatter: function(val) {
+						return util.enum.transform('CASHTOOLTYPE', val)
+					}
+				}, 
+				{
+					field: 'netRevenue'
+				}, 
+				{
+					field: 'yearYield7'
+				},
+				//        {
+				//          field: 'riskLevel'
+				//        },
+				//        {
+				//          field: 'dividendType'
+				//        },
+				//        {
+				//          field: 'circulationShares'
+				//        },
+				{
+					field: 'investDate'
+				}, 
+				{
+					field: 'volume'
+				}, 
+				{
+					field: 'optType',
+					formatter: function(val) {
+						return val === 'purchase' ? '申购' : '赎回'
+					}
+				}, 
+				{
+					field: 'state',
+					formatter: function(val) {
+						switch (val) {
 //									case '-2':
 //										return '<span class="text-red">未通过</span>'
 //									case '-1':
@@ -305,386 +318,457 @@ define([
 //										return '<span class="text-yellow">待确认</span>'
 //									case '2':
 //										return '<span class="text-green">成立</span>'
-									case '00':
-										return '<span class="text-aqua">待审核</span>'
-									case '10':
-										return '<span class="text-red">审核未通过</span>'
-									case '11':
-										return '<span class="text-blue">审核通过待预约</span>'
-									case '20':
-										return '<span class="text-red">预约未通过</span>'
-									case '21':
-										return '<span class="text-yellow">预约通过待确认</span>'
-									case '30':
-										return '<span class="text-red">确认未通过</span>'
-								}
-							}
-						}, {
-							width: 180,
-							align: 'center',
-							formatter: function(val, row) {
-								var buttons = [{
-									text: '审核',
-									type: 'button',
-									class: 'item-audit',
-                					isRender: parseInt(row.state) === 0
-								}, {
-									text: '预约',
-									type: 'button',
-									class: 'item-ordering',
-                					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11
-								}, {
-									text: '确认',
-									type: 'button',
-									class: 'item-accpet',
-                					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21
-								}, {
-									text: '删除',
-									type: 'button',
-									class: 'item-delete',
-                					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
-								}]
-								return util.table.formatter.generateButton(buttons)
-							},
-							events: {
-								'click .item-audit': function(e, val, row) {
-									var modal = $('#fundCheckModal')
-									if (row.optType === 'purchase') {
-										$('#purchaseArea').show()
-										$('#redeemArea').hide()
-									} else {
-										$('#purchaseArea').hide()
-										$('#redeemArea').show()
-									}
-									http.post(config.api.duration.order.getFundOrderByOid, {
-										data: {
-											oid: row.oid,
-											type: row.type
-										},
-										contentType: 'form'
-									}, function(json) {
-										var result = json.result
-										var form = document.fundCheckForm
-										form.oid.value = result.oid
-										form.cashtoolOid.value = result.cashtoolOid
-										form.opType.value = 'audit'
-										form.assetPoolOid.value = pageState.pid
-										var formGroups = $(form).find('.form-group')
-										formGroups.each(function(index, item) {
-											if (!index) {
-												$(item).css({
-													display: 'block'
-												}).find('input').attr('disabled', false)
-											} else {
-												$(item).css({
-													display: 'none'
-												}).find('input').attr('disabled', 'disabled')
-											}
-										})
-										$(form).validator('destroy')
-										util.form.validator.init($(form))
-										modal.find('.labelForOrdering').css({
-											display: 'none'
-										})
-										modal.find('.labelForAccept').css({
-											display: 'none'
-										})
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
-										if (result.yearYield7) {
-											result.yearYield7 = result.yearYield7 + '\t%'
-										}
-										result.volume = result.volume + '\t万元'
-										result.returnVolume = result.returnVolume + '\t万元'
-										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-										$$.detailAutoFix(modal, result)
-									})
-									modal.modal('show')
-								},
-								'click .item-ordering': function(e, val, row) {
-									var modal = $('#fundCheckModal')
-									if (row.optType === 'purchase') {
-										$('#purchaseArea').show()
-										$('#redeemArea').hide()
-									} else {
-										$('#purchaseArea').hide()
-										$('#redeemArea').show()
-									}
-									http.post(config.api.duration.order.getFundOrderByOid, {
-										data: {
-											oid: row.oid,
-											type: row.type
-										},
-										contentType: 'form'
-									}, function(json) {
-										var result = json.result
-										var form = document.fundCheckForm
-										form.oid.value = result.oid
-										form.cashtoolOid.value = result.cashtoolOid
-										form.opType.value = 'ordering'
-										form.assetPoolOid.value = pageState.pid
-										var formGroups = $(form).find('.form-group')
-										formGroups.each(function(index, item) {
-											if (index === 1) {
-												$(item).css({
-													display: 'block'
-												}).find('input').attr('disabled', false)
-											} else {
-												$(item).css({
-													display: 'none'
-												}).find('input').attr('disabled', 'disabled')
-											}
-										})
-										$(form).validator('destroy')
-										util.form.validator.init($(form))
-										modal.find('.labelForOrdering').css({
-											display: 'block'
-										})
-										modal.find('.labelForAccept').css({
-											display: 'none'
-										})
-										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
-										if (result.yearYield7) {
-											result.yearYield7 = result.yearYield7 + '\t%'
-										}
-										result.volume = result.volume + '\t万元'
-										result.returnVolume = result.returnVolume + '\t万元'
-										if (result.auditVolume) {
-											result.auditVolume = result.auditVolume + '\t万元'
-										}
-										$$.detailAutoFix(modal, result)
-									})
-									modal.modal('show')
-								},
-								'click .item-accpet': function(e, val, row) {
-									var modal = $('#fundCheckModal')
-									if (row.optType === 'purchase') {
-										$('#purchaseArea').show()
-										$('#redeemArea').hide()
-									} else {
-										$('#purchaseArea').hide()
-										$('#redeemArea').show()
-									}
-									http.post(config.api.duration.order.getFundOrderByOid, {
-										data: {
-											oid: row.oid,
-											type: row.type
-										},
-										contentType: 'form'
-									}, function(json) {
-										var result = json.result
-										var form = document.fundCheckForm
-										form.oid.value = result.oid
-										form.cashtoolOid.value = result.cashtoolOid
-										form.opType.value = 'accept'
-										form.assetPoolOid.value = pageState.pid
-										var formGroups = $(form).find('.form-group')
-										formGroups.each(function(index, item) {
-											if (index === 2) {
-												$(item).css({
-													display: 'block'
-												}).find('input').attr('disabled', false)
-											} else {
-												$(item).css({
-													display: 'none'
-												}).find('input').attr('disabled', 'disabled')
-											}
-										})
-										$(form).validator('destroy')
-										util.form.validator.init($(form))
-										modal.find('.labelForOrdering').css({
-											display: 'block'
-										})
-										modal.find('.labelForAccept').css({
-											display: 'block'
-										})
-										result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
-										if (result.yearYield7) {
-											result.yearYield7 = result.yearYield7 + '\t%'
-										}
-										result.volume = result.volume + '\t万元'
-										result.returnVolume = result.returnVolume + '\t万元'
-										if (result.auditVolume) {
-											result.auditVolume = result.auditVolume + '\t万元'
-										}
-										if (result.reserveVolume) {
-											result.reserveVolume = result.reserveVolume + '\t万元'
-										}
-										$$.detailAutoFix(modal, result)
-									})
-									modal.modal('show')
-								}
-							}
+							case '00':
+								return '<span class="text-aqua">待审核</span>'
+							case '10':
+								return '<span class="text-red">审核未通过</span>'
+							case '11':
+								return '<span class="text-blue">审核通过待预约</span>'
+							case '20':
+								return '<span class="text-red">预约未通过</span>'
+							case '21':
+								return '<span class="text-yellow">预约通过待确认</span>'
+							case '30':
+								return '<span class="text-red">确认未通过</span>'
 						}
-					]
-				}
-				// 预约中现金类管理工具表格初始化
+					}
+				}, 
+				{
+					width: 180,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '审核',
+							type: 'button',
+							class: 'item-audit',
+        					isRender: parseInt(row.state) === 0
+						}, 
+						{
+							text: '预约',
+							type: 'button',
+							class: 'item-ordering',
+        					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11
+						}, 
+						{
+							text: '确认',
+							type: 'button',
+							class: 'item-accpet',
+        					isRender: parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21
+						}, 
+						{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-detail',
+        					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
+						}, 
+						{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+        					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-audit': function(e, val, row) {
+							var modal = $('#fundCheckModal')
+							if (row.optType === 'purchase') {
+								$('#purchaseArea').show()
+								$('#redeemArea').hide()
+							} else {
+								$('#purchaseArea').hide()
+								$('#redeemArea').show()
+							}
+							http.post(config.api.duration.order.getFundOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.fundCheckForm
+								form.oid.value = result.oid
+								form.cashtoolOid.value = result.cashtoolOid
+								form.opType.value = 'audit'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (!index) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+								if (result.yearYield7) {
+									result.yearYield7 = result.yearYield7 + '\t%'
+								}
+								result.volume = result.volume + '\t万元'
+								result.returnVolume = result.returnVolume + '\t万元'
+								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-ordering': function(e, val, row) {
+							var modal = $('#fundCheckModal')
+							if (row.optType === 'purchase') {
+								$('#purchaseArea').show()
+								$('#redeemArea').hide()
+							} else {
+								$('#purchaseArea').hide()
+								$('#redeemArea').show()
+							}
+							http.post(config.api.duration.order.getFundOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.fundCheckForm
+								form.oid.value = result.oid
+								form.cashtoolOid.value = result.cashtoolOid
+								form.opType.value = 'ordering'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 1) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+								if (result.yearYield7) {
+									result.yearYield7 = result.yearYield7 + '\t%'
+								}
+								result.volume = result.volume + '\t万元'
+								result.returnVolume = result.returnVolume + '\t万元'
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-accpet': function(e, val, row) {
+							var modal = $('#fundCheckModal')
+							if (row.optType === 'purchase') {
+								$('#purchaseArea').show()
+								$('#redeemArea').hide()
+							} else {
+								$('#purchaseArea').hide()
+								$('#redeemArea').show()
+							}
+							http.post(config.api.duration.order.getFundOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.fundCheckForm
+								form.oid.value = result.oid
+								form.cashtoolOid.value = result.cashtoolOid
+								form.opType.value = 'accept'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 2) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+//										if (result.netRevenue) {
+//											result.netRevenue = result.netRevenue + '\t元'
+//										}
+								if (result.yearYield7) {
+									result.yearYield7 = result.yearYield7 + '\t%'
+								}
+								result.volume = result.volume + '\t万元'
+								result.returnVolume = result.returnVolume + '\t万元'
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								if (result.reserveVolume) {
+									result.reserveVolume = result.reserveVolume + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-detail': function(e, val, row) {
+							var modal = $('#fundOrderDetailModal')
+							if (row.optType === 'purchase') {
+								$('#orderPurchaseArea').show()
+								$('#orderRedeemArea').hide()
+							} else {
+								$('#orderPurchaseArea').hide()
+								$('#orderRedeemArea').show()
+							}
+							http.post(config.api.duration.order.getFundOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+								if (result.yearYield7) {
+									result.yearYield7 = result.yearYield7 + '\t%'
+								}
+								result.volume = result.volume + '\t万元'
+								result.returnVolume = result.returnVolume + '\t万元'
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								if (result.reserveVolume) {
+									result.reserveVolume = result.reserveVolume + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-delete': function(e, val, row) {
+							$$.confirm({
+								container: $('#confirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.order.delete, {
+										data: {
+											oid: row.oid,
+											operation: '现金管理工具'
+										},
+										contentType: 'form'
+									}, function () {
+										$('#orderingToolTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						}
+					}
+				}]
+			}
+			// 预约中现金类管理工具表格初始化
 			$('#orderingToolTable').bootstrapTable(orderingToolTableConfig)
 
 			// 现金类管理工具分页信息
 			var toolPageOptions = {
-					page: 1,
-					rows: 10,
-					pid: pageState.pid
-				}
-				// 现金类管理工具表格配置
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			// 现金类管理工具表格配置
 			var toolTableConfig = {
-					ajax: function(origin) {
-						http.post(config.api.duration.order.getFundList, {
-							data: toolPageOptions,
-							contentType: 'form'
-						}, function(rlt) {
-							origin.success(rlt)
-						})
+				ajax: function(origin) {
+					http.post(config.api.duration.order.getFundList, {
+						data: toolPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: toolPageOptions.page,
+				pageSize: toolPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					toolPageOptions.rows = val.limit
+					toolPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				onLoadSuccess: function() {},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'cashtoolName'
+				}, 
+				{
+					field: 'cashtoolType',
+					formatter: function(val) {
+						return util.enum.transform('CASHTOOLTYPE', val)
+					}
+				}, 
+				{
+					field: 'netRevenue'
+				}, 
+				{
+					field: 'yearYield7'
+				},
+				//        {
+				//          field: 'riskLevel'
+				//        },
+				//        {
+				//          field: 'dividendType'
+				//        },
+				//        {
+				//          field: 'circulationShares'
+				//        },
+				{
+					field: 'amount'
+				}, 
+				{
+					field: 'redeemVolume'
+				},
+				//        {
+				//          field: 'state',
+				//          formatter: function (val) {
+				//            switch (val) {
+				//              case '-1':
+				//                return '<span class="text-aqua">未通过</span>'
+				//              case '0':
+				//                return '<span class="text-blue">成立</span>'
+				//            }
+				//          }
+				//        },
+				{
+					field: 'dailyProfit'
+				}, 
+				{
+					field: 'totalProfit'
+				}, 
+				{
+					width: 120,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '申购',
+							type: 'button',
+							class: 'item-purchase'
+						}, {
+							text: '赎回',
+							type: 'button',
+							class: 'item-redeem'
+						}]
+						return util.table.formatter.generateButton(buttons)
 					},
-					pageNumber: toolPageOptions.page,
-					pageSize: toolPageOptions.rows,
-					pagination: true,
-					sidePagination: 'server',
-					pageList: [10, 20, 30, 50, 100],
-					queryParams: function(val) {
-						toolPageOptions.rows = val.limit
-						toolPageOptions.page = parseInt(val.offset / val.limit) + 1
-						return val
-					},
-					onLoadSuccess: function() {},
-					columns: [{
-							width: 60,
-							align: 'center',
-							formatter: function(val, row, index) {
-								return index + 1
-							}
-						}, {
-							field: 'cashtoolName'
-						}, {
-							field: 'cashtoolType',
-							formatter: function(val) {
-								return util.enum.transform('CASHTOOLTYPE', val)
-							}
-						}, {
-							field: 'netRevenue'
-						}, {
-							field: 'yearYield7'
-						},
-						//        {
-						//          field: 'riskLevel'
-						//        },
-						//        {
-						//          field: 'dividendType'
-						//        },
-						//        {
-						//          field: 'circulationShares'
-						//        },
-						{
-							field: 'amount'
-						}, {
-							field: 'redeemVolume'
-						},
-						//        {
-						//          field: 'state',
-						//          formatter: function (val) {
-						//            switch (val) {
-						//              case '-1':
-						//                return '<span class="text-aqua">未通过</span>'
-						//              case '0':
-						//                return '<span class="text-blue">成立</span>'
-						//            }
-						//          }
-						//        },
-						{
-							field: 'dailyProfit'
-						}, {
-							field: 'totalProfit'
-						}, {
-							width: 120,
-							align: 'center',
-							formatter: function() {
-								var buttons = [{
-									text: '申购',
-									type: 'button',
-									class: 'item-purchase'
-								}, {
-									text: '赎回',
-									type: 'button',
-									class: 'item-redeem'
-								}]
-								return util.table.formatter.generateButton(buttons)
-							},
-							events: {
-								'click .item-purchase': function(e, val, row) {
-									http.post(config.api.duration.order.getFundByOid, {
-										data: {
-											oid: row.oid,
-											type: row.type
-										},
-										contentType: 'form'
-									}, function(json) {
-										json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
-										$$.formAutoFix($('#purchaseForm'), json.result)
-									})
-									$('#purchaseModal').modal('show')
+					events: {
+						'click .item-purchase': function(e, val, row) {
+							http.post(config.api.duration.order.getFundByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
 								},
-								'click .item-redeem': function(e, val, row) {
-									http.post(config.api.duration.order.getFundByOid, {
-										data: {
-											oid: row.oid,
-											type: row.type
-										},
-										contentType: 'form'
-									}, function(json) {
-										json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
-										$$.formAutoFix($('#redeemForm'), json.result)
-									})
-									$('#redeemModal').modal('show')
-								}
-							}
+								contentType: 'form'
+							}, function(json) {
+								json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
+								$$.formAutoFix($('#purchaseForm'), json.result)
+							})
+							$('#purchaseModal').modal('show')
+						},
+						'click .item-redeem': function(e, val, row) {
+							http.post(config.api.duration.order.getFundByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
+								$$.formAutoFix($('#redeemForm'), json.result)
+							})
+							$('#redeemModal').modal('show')
 						}
-					]
-				}
-				// 现金类管理工具表格初始化
+					}
+				}]
+			}
+			// 现金类管理工具表格初始化
 			$('#toolTable').bootstrapTable(toolTableConfig)
 
 			// 现金类管理工具 - 申购表格验证初始化
 			util.form.validator.init($('#purchaseForm'))
-				// 现金类管理工具 - 赎回表格验证初始化
+			// 现金类管理工具 - 赎回表格验证初始化
 //			util.form.validator.init($('#redeemForm'))
 
 			// 现金类管理工具审核/预约/确认 - 通过按钮点击事件
 			$('#doFundCheck').on('click', function() {
-					var form = document.fundCheckForm
-					form.state.value = '0'
-					var url = ''
-					switch (form.opType.value) {
-						case 'audit':
-							url = config.api.duration.order.auditForFund
-							break
-						case 'ordering':
-							url = config.api.duration.order.appointmentForFund
-							break
-						default:
-							url = config.api.duration.order.orderConfirmForFund
-							break
+				var form = document.fundCheckForm
+				form.state.value = '0'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForFund
+						break
+					case 'ordering':
+						url = config.api.duration.order.appointmentForFund
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForFund
+						break
+				}
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingToolTable').bootstrapTable('refresh')
+						$('#toolTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#fundCheckModal').modal('hide')
 					}
-					if (!$(form).validator('doSubmitCheck')) return
-					$(form).ajaxSubmit({
-						url: url,
-						success: function() {
-							util.form.reset($(form))
-							$('#orderingToolTable').bootstrapTable('refresh')
-							$('#toolTable').bootstrapTable('refresh')
-							pageInit(pageState, http, config)
-							$('#fundCheckModal').modal('hide')
-						}
-					})
 				})
-				// 现金类管理工具审核/预约/确认 - 不通过按钮点击事件
+			})
+			// 现金类管理工具审核/预约/确认 - 不通过按钮点击事件
 			$('#doFundUnCheck').on('click', function() {
 				var form = document.fundCheckForm
 				form.state.value = '-1'
@@ -744,63 +828,72 @@ define([
 
 			// 预约中信托计划分页信息
 			var orderingTrustPageOptions = {
-					page: 1,
-					rows: 10,
-					pid: pageState.pid
-				}
-				// 预约中信托计划表格配置
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			// 预约中信托计划表格配置
 			var orderingTrustTableConfig = {
-					ajax: function(origin) {
-						http.post(config.api.duration.order.getTrustListForAppointment, {
-							data: orderingTrustPageOptions,
-							contentType: 'form'
-						}, function(rlt) {
-							origin.success(rlt)
-						})
-					},
-					pageNumber: orderingTrustPageOptions.page,
-					pageSize: orderingTrustPageOptions.rows,
-					pagination: true,
-					sidePagination: 'server',
-					pageList: [10, 20, 30, 50, 100],
-					queryParams: function(val) {
-						orderingTrustPageOptions.rows = val.limit
-						orderingTrustPageOptions.page = parseInt(val.offset / val.limit) + 1
-						return val
-					},
-					onLoadSuccess: function() {},
-					columns: [{
-						width: 60,
-						align: 'center',
-						formatter: function(val, row, index) {
-							return index + 1
-						}
-					}, {
-						field: 'targetName'
-					}, {
-						field: 'expAror'
-					}, {
-						field: 'setDate'
-					}, {
-						field: 'accrualType',
-						formatter: function(val) {
-							return util.enum.transform('ACCRUALTYPE', val)
-						}
-					}, {
-						field: 'raiseScope',
-						formatter: function(val) {
-							return parseInt(val) / 10000
-						}
-					}, {
-						field: 'volume'
-					}, {
-						field: 'subjectRating'
-					}, {
-						field: 'type'
-					}, {
-						field: 'state',
-						formatter: function(val) {
-							switch (val) {
+				ajax: function(origin) {
+					http.post(config.api.duration.order.getTrustListForAppointment, {
+						data: orderingTrustPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: orderingTrustPageOptions.page,
+				pageSize: orderingTrustPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					orderingTrustPageOptions.rows = val.limit
+					orderingTrustPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				onLoadSuccess: function() {},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'targetName'
+				}, 
+				{
+					field: 'expAror'
+				}, 
+				{
+					field: 'setDate'
+				}, 
+				{
+					field: 'accrualType',
+					formatter: function(val) {
+						return util.enum.transform('ACCRUALTYPE', val)
+					}
+				}, 
+				{
+					field: 'raiseScope',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
+				}, 
+				{
+					field: 'volume'
+				}, 
+				{
+					field: 'subjectRating'
+				}, 
+				{
+					field: 'type'
+				}, 
+				{
+					field: 'state',
+					formatter: function(val) {
+						switch (val) {
 //								case '-2':
 //									return '<span class="text-red">未通过</span>'
 //								case '-1':
@@ -811,410 +904,504 @@ define([
 //									return '<span class="text-yellow">待确认</span>'
 //								case '2':
 //									return '<span class="text-green">成立</span>'
-								case '00':
-									return '<span class="text-aqua">待审核</span>'
-								case '10':
-									return '<span class="text-red">审核未通过</span>'
-								case '11':
-									return '<span class="text-blue">审核通过待预约</span>'
-								case '20':
-									return '<span class="text-red">预约未通过</span>'
-								case '21':
-									return '<span class="text-yellow">预约通过待确认</span>'
-								case '30':
-									return '<span class="text-red">确认未通过</span>'
-							}
+							case '00':
+								return '<span class="text-aqua">待审核</span>'
+							case '10':
+								return '<span class="text-red">审核未通过</span>'
+							case '11':
+								return '<span class="text-blue">审核通过待预约</span>'
+							case '20':
+								return '<span class="text-red">预约未通过</span>'
+							case '21':
+								return '<span class="text-yellow">预约通过待确认</span>'
+							case '30':
+								return '<span class="text-red">确认未通过</span>'
 						}
-					}, {
-						width: 256,
-						align: 'center',
-						formatter: function(val, row) {
-							var buttons = [{
-								text: '审核',
-								type: 'button',
-								class: 'item-audit',
-								isRender: row.type === '申购' && (parseInt(row.state) === 0)
-							}, {
-								text: '预约',
-								type: 'button',
-								class: 'item-ordering',
-								isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
-							}, {
-								text: '确认',
-								type: 'button',
-								class: 'item-accpet',
-								isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
-							}, {
-								text: '本息兑付审核',
-								type: 'button',
-								class: 'item-income-audit',
-								isRender: row.type === '本息兑付' && (parseInt(row.state) === 0)
-							}, {
-								text: '本息兑付确认',
-								type: 'button',
-								class: 'item-income-accpet',
-								isRender: row.type === '本息兑付' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
-							}, {
-								text: '转让审核',
-								type: 'button',
-								class: 'item-transfer-audit',
-								isRender: row.type === '转让' && (parseInt(row.state) === 0)
-							}, {
-								text: '转让确认',
-								type: 'button',
-								class: 'item-transfer-accpet',
-								isRender: row.type === '转让' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
-							}]
-							return util.table.formatter.generateButton(buttons)
+					}
+				}, 
+				{
+					width: 256,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '审核',
+							type: 'button',
+							class: 'item-audit',
+							isRender: row.type === '申购' && (parseInt(row.state) === 0)
+						}, 
+						{
+							text: '预约',
+							type: 'button',
+							class: 'item-ordering',
+							isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
+						}, 
+						{
+							text: '确认',
+							type: 'button',
+							class: 'item-accpet',
+							isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+						}, 
+						{
+							text: '本息兑付审核',
+							type: 'button',
+							class: 'item-income-audit',
+							isRender: row.type === '本息兑付' && (parseInt(row.state) === 0)
 						},
-						events: {
-							'click .item-audit': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'audit'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (!index) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'none'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'none'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+						{
+							text: '本息兑付确认',
+							type: 'button',
+							class: 'item-income-accpet',
+							isRender: row.type === '本息兑付' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+						}, 
+						{
+							text: '转让审核',
+							type: 'button',
+							class: 'item-transfer-audit',
+							isRender: row.type === '转让' && (parseInt(row.state) === 0)
+						}, 
+						{
+							text: '转让确认',
+							type: 'button',
+							class: 'item-transfer-accpet',
+							isRender: row.type === '转让' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+						}, 
+						{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-detail',
+        					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
+						}, 
+						{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+        					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-audit': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'audit'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (!index) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-income-audit': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'audit'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (!index) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'none'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'none'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-income-audit': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'audit'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (!index) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-transfer-audit': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'audit'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (!index) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'none'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'none'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-transfer-audit': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'audit'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (!index) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-ordering': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'ordering'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (index === 1) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'block'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'none'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-ordering': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'ordering'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 1) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-accpet': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'accept'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (index === 2) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'block'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'block'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-accpet': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'accept'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 2) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-income-accpet': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'accept'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (index === 2) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'block'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'block'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								if (result.reserveVolume) {
+									result.reserveVolume = result.reserveVolume + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-income-accpet': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'accept'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 2) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							},
-							'click .item-transfer-accpet': function(e, val, row) {
-								var modal = $('#trustCheckModal')
-								http.post(config.api.duration.order.getTrustOrderByOid, {
-									data: {
-										oid: row.oid,
-										type: row.type
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustCheckForm
-									form.oid.value = result.oid
-									form.type.value = row.type
-									form.opType.value = 'accept'
-									form.assetPoolOid.value = pageState.pid
-									var formGroups = $(form).find('.form-group')
-									formGroups.each(function(index, item) {
-										if (index === 2) {
-											$(item).css({
-												display: 'block'
-											}).find('input').attr('disabled', false)
-										} else {
-											$(item).css({
-												display: 'none'
-											}).find('input').attr('disabled', 'disabled')
-										}
-									})
-									$(form).validator('destroy')
-									util.form.validator.init($(form))
-									modal.find('.labelForOrdering').css({
-										display: 'block'
-									})
-									modal.find('.labelForAccept').css({
-										display: 'block'
-									})
-									result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									result.volume = result.volume + '\t万元'
-									result.expAror = result.expAror + '\t%'
-									if (result.life) {
-										result.life = result.life + '\t天'
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-transfer-accpet': function(e, val, row) {
+							var modal = $('#trustCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'accept'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.form-group')
+								formGroups.each(function(index, item) {
+									if (index === 2) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
 									}
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									$$.detailAutoFix(modal, result)
 								})
-								modal.modal('show')
-							}
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-detail': function(e, val, row) {
+							var modal = $('#trustOrderDetailModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								result.volume = result.volume + '\t万元'
+								result.expAror = result.expAror + '\t%'
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万元'
+								}
+								if (result.reserveVolume) {
+									result.reserveVolume = result.reserveVolume + '\t万元'
+								}
+								result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-delete': function(e, val, row) {
+							currentPool = row
+							$$.confirm({
+								container: $('#confirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.assetPool.delete, {
+										data: {
+											oid: row.oid,
+											operation: row.type
+										},
+										contentType: 'form'
+									}, function () {
+										$('#orderingTrustTable').bootstrapTable('refresh')
+									})
+								}
+							})
 						}
-					}]
-				}
-				// 预约中信托计划表格初始化
+					}
+				}]
+			}
+			// 预约中信托计划表格初始化
 			$('#orderingTrustTable').bootstrapTable(orderingTrustTableConfig)
 
 			// 信托计划审核表单初始化
@@ -1222,147 +1409,157 @@ define([
 
 			// 缓存本息兑付期数信息
 			var seqs = []
-				// 信托计划分页信息
+			// 信托计划分页信息
 			var trustPageOptions = {
-					page: 1,
-					rows: 10,
-					pid: pageState.pid
-				}
-				// 信托计划表格配置
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			// 信托计划表格配置
 			var trustTableConfig = {
-					ajax: function(origin) {
-						http.post(config.api.duration.order.getTrustList, {
-							data: trustPageOptions,
-							contentType: 'form'
-						}, function(rlt) {
-							origin.success(rlt)
-						})
+				ajax: function(origin) {
+					http.post(config.api.duration.order.getTrustList, {
+						data: trustPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: trustPageOptions.page,
+				pageSize: trustPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					trustPageOptions.rows = val.limit
+					trustPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				onLoadSuccess: function() {},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'targetName'
+				}, 
+				{
+					field: 'expAror'
+				}, 
+				{
+					field: 'setDate'
+				}, 
+				{
+					field: 'accrualType',
+					formatter: function(val) {
+						return util.enum.transform('ACCRUALTYPE', val)
+					}
+				}, 
+				{
+					field: 'raiseScope',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
+				}, 
+				{
+					field: 'holdAmount'
+				}, 
+				{
+					field: 'volume'
+				}, 
+				{
+					field: 'subjectRating'
+				}, 
+				{
+					field: 'state',
+					formatter: function(val) {
+						switch (val) {
+							case 'PREPARE':
+								return '<span class="text-aqua">初始化</span>'
+							case 'STAND_UP':
+								return '<span class="text-blue">成立</span>'
+							case 'STAND_FAIL':
+								return '<span class="text-blue">成立失败 </span>'
+							case 'CLOSE':
+								return '<span class="text-blue">结束</span>'
+							case 'OVER_TIME':
+								return '<span class="text-blue">逾期 </span>'
+						}
+						//            switch (val) {
+						//              case '-1':
+						//                return '<span class="text-aqua">未通过</span>'
+						//              case '0':
+						//                return '<span class="text-blue">成立</span>'
+						//            }
+					}
+				}, 
+				{
+					width: 160,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '本息兑付',
+							type: 'button',
+							class: 'item-income',
+							// 只有已成立的标的才可以进行本息兑付
+							isRender: row.state === 'STAND_UP'
+						}, {
+							text: '转让',
+							type: 'button',
+							class: 'item-transfer'
+						}]
+						return util.table.formatter.generateButton(buttons)
 					},
-					pageNumber: trustPageOptions.page,
-					pageSize: trustPageOptions.rows,
-					pagination: true,
-					sidePagination: 'server',
-					pageList: [10, 20, 30, 50, 100],
-					queryParams: function(val) {
-						trustPageOptions.rows = val.limit
-						trustPageOptions.page = parseInt(val.offset / val.limit) + 1
-						return val
-					},
-					onLoadSuccess: function() {},
-					columns: [{
-						width: 60,
-						align: 'center',
-						formatter: function(val, row, index) {
-							return index + 1
-						}
-					}, {
-						field: 'targetName'
-					}, {
-						field: 'expAror'
-					}, {
-						field: 'setDate'
-					}, {
-						field: 'accrualType',
-						formatter: function(val) {
-							return util.enum.transform('ACCRUALTYPE', val)
-						}
-					}, {
-						field: 'raiseScope',
-						formatter: function(val) {
-							return parseInt(val) / 10000
-						}
-					}, {
-						field: 'holdAmount'
-					}, {
-						field: 'volume'
-					}, {
-						field: 'subjectRating'
-					}, {
-						field: 'state',
-						formatter: function(val) {
-							switch (val) {
-								case 'PREPARE':
-									return '<span class="text-aqua">初始化</span>'
-								case 'STAND_UP':
-									return '<span class="text-blue">成立</span>'
-								case 'STAND_FAIL':
-									return '<span class="text-blue">成立失败 </span>'
-								case 'CLOSE':
-									return '<span class="text-blue">结束</span>'
-								case 'OVER_TIME':
-									return '<span class="text-blue">逾期 </span>'
-							}
-							//            switch (val) {
-							//              case '-1':
-							//                return '<span class="text-aqua">未通过</span>'
-							//              case '0':
-							//                return '<span class="text-blue">成立</span>'
-							//            }
-						}
-					}, {
-						width: 160,
-						align: 'center',
-						formatter: function(val, row) {
-							var buttons = [{
-								text: '本息兑付',
-								type: 'button',
-								class: 'item-income',
-								// 只有已成立的标的才可以进行本息兑付
-								isRender: row.state === 'STAND_UP'
-							}, {
-								text: '转让',
-								type: 'button',
-								class: 'item-transfer'
-							}]
-							return util.table.formatter.generateButton(buttons)
+					events: {
+						'click .item-income': function(e, val, row) {
+							http.post(config.api.duration.order.getTrustByOid, {
+								data: {
+									oid: row.oid,
+									type: 'income'
+								},
+								contentType: 'form'
+							}, function(json) {
+								seqs = json.result.incomeFormList
+								var form = document.trustIncomeForm
+								var seq = $(form.seq).empty()
+								form.oid.value = json.result.oid
+								form.assetPoolOid.value = json.result.assetPoolOid
+									//                seqs.forEach(function (item) {
+									//                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
+									//                })
+									//									seq.change()
+									//									form.capital.value = json.result.capital
+							})
+							$('#trustIncomeModal').modal('show')
 						},
-						events: {
-							'click .item-income': function(e, val, row) {
-								http.post(config.api.duration.order.getTrustByOid, {
-									data: {
-										oid: row.oid,
-										type: 'income'
-									},
-									contentType: 'form'
-								}, function(json) {
-									seqs = json.result.incomeFormList
-									var form = document.trustIncomeForm
-									var seq = $(form.seq).empty()
-									form.oid.value = json.result.oid
-									form.assetPoolOid.value = json.result.assetPoolOid
-										//                seqs.forEach(function (item) {
-										//                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-										//                })
-										//									seq.change()
-										//									form.capital.value = json.result.capital
-								})
-								$('#trustIncomeModal').modal('show')
-							},
-							'click .item-transfer': function(e, val, row) {
-								http.post(config.api.duration.order.getTrustByOid, {
-									data: {
-										oid: row.oid,
-										type: 'transfer'
-									},
-									contentType: 'form'
-								}, function(json) {
-									var result = json.result
-									var form = document.trustTransferForm
-									form.oid.value = result.oid
-									form.assetPoolOid.value = pageState.pid
-									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
-									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = result.raiseScope + '万元'
-									result.holdAmount = result.holdAmount + '万元'
-									result.volume = result.volume + '万元'
-									$$.detailAutoFix($('#trustTransferModal'), result)
-								})
-								$('#trustTransferModal').modal('show')
-							}
+						'click .item-transfer': function(e, val, row) {
+							http.post(config.api.duration.order.getTrustByOid, {
+								data: {
+									oid: row.oid,
+									type: 'transfer'
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustTransferForm
+								form.oid.value = result.oid
+								form.assetPoolOid.value = pageState.pid
+								result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = result.raiseScope + '万元'
+								result.holdAmount = result.holdAmount + '万元'
+								result.volume = result.volume + '万元'
+								$$.detailAutoFix($('#trustTransferModal'), result)
+							})
+							$('#trustTransferModal').modal('show')
 						}
-					}]
-				}
-				// 信托计划表格初始化
+					}
+				}]
+			}
+			// 信托计划表格初始化
 			$('#trustTable').bootstrapTable(trustTableConfig)
 
 			// 信托计划本息兑付表单初始化
@@ -1441,57 +1638,57 @@ define([
 
 			// 信托计划审核/预约/确认 - 通过按钮点击事件
 			$('#doTrustCheck').on('click', function() {
-					var form = document.trustCheckForm
-					form.state.value = '0'
-					var url = ''
-					switch (form.type.value) {
-						case '申购':
-							switch (form.opType.value) {
-								case 'audit':
-									url = config.api.duration.order.auditForTrust
-									break
-								case 'ordering':
-									url = config.api.duration.order.appointmentForTrust
-									break
-								default:
-									url = config.api.duration.order.orderConfirmForTrust
-									break
-							}
-							break
-						case '本息兑付':
-							switch (form.opType.value) {
-								case 'audit':
-									url = config.api.duration.order.auditForIncome
-									break
-								default:
-									url = config.api.duration.order.orderConfirmForIncome
-									break
-							}
-							break
-						default:
-							switch (form.opType.value) {
-								case 'audit':
-									url = config.api.duration.order.auditForTransfer
-									break
-								default:
-									url = config.api.duration.order.orderConfirmForTransfer
-									break
-							}
-							break
-					}
-					if (!$(form).validator('doSubmitCheck')) return
-					$(form).ajaxSubmit({
-						url: url,
-						success: function() {
-							util.form.reset($(form))
-							$('#orderingTrustTable').bootstrapTable('refresh')
-							$('#trustTable').bootstrapTable('refresh')
-							pageInit(pageState, http, config)
-							$('#trustCheckModal').modal('hide')
+				var form = document.trustCheckForm
+				form.state.value = '0'
+				var url = ''
+				switch (form.type.value) {
+					case '申购':
+						switch (form.opType.value) {
+							case 'audit':
+								url = config.api.duration.order.auditForTrust
+								break
+							case 'ordering':
+								url = config.api.duration.order.appointmentForTrust
+								break
+							default:
+								url = config.api.duration.order.orderConfirmForTrust
+								break
 						}
-					})
+						break
+					case '本息兑付':
+						switch (form.opType.value) {
+							case 'audit':
+								url = config.api.duration.order.auditForIncome
+								break
+							default:
+								url = config.api.duration.order.orderConfirmForIncome
+								break
+						}
+						break
+					default:
+						switch (form.opType.value) {
+							case 'audit':
+								url = config.api.duration.order.auditForTransfer
+								break
+							default:
+								url = config.api.duration.order.orderConfirmForTransfer
+								break
+						}
+						break
+				}
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#trustCheckModal').modal('hide')
+					}
 				})
-				// 信托计划审核/预约/确认 - 不通过按钮点击事件
+			})
+			// 信托计划审核/预约/确认 - 不通过按钮点击事件
 			$('#doTrustUnCheck').on('click', function() {
 				var form = document.trustCheckForm
 				form.state.value = '-1'
@@ -1571,7 +1768,7 @@ define([
 
 			// 修改资产池投资范围select2初始化
 			$(document.updateAssetPoolForm.scopes).select2()
-				// 修改资产池表单验证初始化
+			// 修改资产池表单验证初始化
 			$('#updateAssetPoolForm').validator({
 				custom: {
 					validfloat: util.form.validator.validfloat,
@@ -1587,18 +1784,18 @@ define([
 
 			// 编辑账户按钮点击事件
 			$('#updateAccount').on('click', function() {
-					http.post(config.api.duration.assetPool.getById, {
-						data: {
-							oid: pageState.pid
-						},
-						contentType: 'form'
-					}, function(json) {
-						$$.formAutoFix($('#updateAssetPoolForm'), json.result)
-						$(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
-						$('#updateAssetPoolModal').modal('show')
-					})
+				http.post(config.api.duration.assetPool.getById, {
+					data: {
+						oid: pageState.pid
+					},
+					contentType: 'form'
+				}, function(json) {
+					$$.formAutoFix($('#updateAssetPoolForm'), json.result)
+					$(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
+					$('#updateAssetPoolModal').modal('show')
 				})
-				// 编辑资产池 - 确定按钮点击事件
+			})
+			// 编辑资产池 - 确定按钮点击事件
 			$('#doUpdateAssetPool').on('click', function() {
 				if (!$('#updateAssetPoolForm').validator('doSubmitCheck')) return
 				$('#updateAssetPoolForm').ajaxSubmit({
@@ -1652,7 +1849,8 @@ function getBarOptions(config, source) {
 				}
 			},
 			data: [source.cashPosition]
-		}, {
+		}, 
+		{
 			name: '冻结资金',
 			type: 'bar',
 			label: {
@@ -1665,7 +1863,8 @@ function getBarOptions(config, source) {
 				}
 			},
 			data: [source.freezeCash]
-		}, {
+		}, 
+		{
 			name: '在途资金',
 			type: 'bar',
 			showAllSymbol: true,
