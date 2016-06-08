@@ -48,10 +48,14 @@ public class TrustTransEntity implements Serializable {
 //	private String targetType;
 	// 转让份额
 	private BigDecimal tranVolume;
-	// 审核额度
+	// 审核份度
 	private BigDecimal auditVolume;
-	// 确认额度
+	// 确认份度
 	private BigDecimal investVolume;
+	// 审核金额
+	private BigDecimal auditCash;
+	// 确认金额
+	private BigDecimal investCash;
 	// 转让日期
 	private Date tranDate; 
 	// 转让溢价

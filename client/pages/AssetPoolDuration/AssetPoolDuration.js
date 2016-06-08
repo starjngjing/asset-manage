@@ -125,6 +125,20 @@ define([
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
+			$('#transTargetName').on('change', function() {
+				var source = targetNames.trans.filter(function(item) {
+					return item.t_targetOid === this.value
+				}.bind(this))
+				if (source[0]) {
+					source[0].t_targetType = util.enum.transform('TARGETTYPE', source[0].t_targetType)
+					source[0].t_accrualType = util.enum.transform('ACCRUALTYPE', source[0].t_accrualType)
+					source[0].t_raiseScope = parseFloat(source[0].t_raiseScope) / 10000
+					if (source[0].t_floorVolume) {
+						source[0].t_floorVolume = source[0].t_floorVolume / 10000
+					}
+					$$.formAutoFix($('#buyAssetForm'), source[0])
+				}
+			})
 
 			// 资产申购 - 提交审核按钮点击事件
 			$('#doBuyAsset').on('click', function() {
@@ -132,8 +146,10 @@ define([
 				var url = ''
 				if (form.buyType.value === 'fund') {
 					url = config.api.duration.order.purchaseForFund
-				} else {
+				} else if (form.buyType.value === 'trust') {
 					url = config.api.duration.order.purchaseForTrust
+				} else {
+					url = config.api.duration.order.purchaseForTrans
 				}
 				if (!$(form).validator('doSubmitCheck')) return
 				$(form).ajaxSubmit({
