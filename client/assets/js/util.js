@@ -41,9 +41,9 @@ define([
     	 * @param {Object} val
     	 */
 		convertRiskLevel:function(val){
-			// -,0.4)低风险
-			// [0.4,0.6)中风险
-			// [0.6,+)高风险
+			// 'LOW' || 'L'  低风险
+			// 'MID' || 'M'  中风险
+			// 'HIGH' || 'H' 高风险
 			var str = '';
 			var className = '';
 			if(!val){
