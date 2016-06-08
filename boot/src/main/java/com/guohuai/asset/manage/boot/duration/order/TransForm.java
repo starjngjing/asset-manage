@@ -10,64 +10,52 @@ import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeForm;
 import lombok.Data;
 
 /**
- * 存续期--信托（计划）表单对象
+ * 存续期--信托（计划）转让表单对象
  * @author star.zhu
  * 2016年5月17日
  */
 @Data
-public class TrustForm implements Serializable {
+public class TransForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String oid;
 	// 关联投资标的
-	private String targetOid;
+	private String t_targetOid;
 	// 关联资产池
-	private String assetPoolOid;
+	private String t_assetPoolOid;
 	// 标的名称
-	private String targetName;
+	private String t_targetName;
 	// 类型
-	private String targetType;
+	private String t_targetType;
 	// 成立日
-	private Date setDate;
-	// 拟成立日
-	private Date expSetDate;
+	private Date t_setDate;
 	// 投资日
-	private Date investDate; 
+	private Date t_investDate; 
 	// 起息日
-	private Date incomeDate; 
+	private Date t_incomeDate; 
 	// 申购额度
 	private BigDecimal volume;
 	// 收益率
-	private BigDecimal incomeRate;
-	// 预计年化收益	
-	private BigDecimal expAror;	
+	private BigDecimal yield;
 	// 预计年化收益区间	
 	private String expArorSec;	
-	// 付息方式	
-	private String accrualType;	
 	// 首付息日	
-	private Date arorFirstDate;	
+	private Date t_arorFirstDate;
+	// 付息方式	
+	private String t_accrualType;		
 	// 付息日	
-	private Integer accrualDate;	
+	private Integer t_accrualDate;	
 	// 合同年天数	
-	private Integer contractDays;	
+	private Integer t_contractDays;	
 	// 标的规模	
-	private BigDecimal raiseScope;	
+	private BigDecimal t_raiseScope;	
 	// 标的限期	
-	private Integer life;	
+	private Integer t_life;	
 	// 起购金额	
-	private BigDecimal floorVolume;	
-	// 持有份额	
-	private BigDecimal holdAmount;	
+	private BigDecimal t_floorVolume;	
 	// 主题评级	
-	private String subjectRating;	
-	// 募集起始日	
-	private Date collectStartDate;	
-	// 募集截止日	
-	private Date collectEndDate;	
-	// 募集期收益	
-	private BigDecimal collectIncomeRate;
+	private String t_subjectRating;	
 	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
 	private String profitType;
 	// 申请人
@@ -78,15 +66,11 @@ public class TrustForm implements Serializable {
 	private String reserver; 
 	// 确认人
 	private String confirmer; 
-	// 审核金额
-	private BigDecimal auditCash;
-	// 审核份额
+	// 审核额度
 	private BigDecimal auditVolume;
 	// 预约额度
 	private BigDecimal reserveVolume;
-	// 确认金额
-	private BigDecimal investCash;
-	// 确认份额
+	// 确认额度
 	private BigDecimal investVolume;
 	// 状态（审核/预约/确认 的结果 成功/失败）
 	private String state;	

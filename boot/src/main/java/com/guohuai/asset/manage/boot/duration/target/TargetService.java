@@ -14,6 +14,7 @@ import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.CashToolService;
 import com.guohuai.asset.manage.boot.cashtool.pool.CashtoolPoolService;
 import com.guohuai.asset.manage.boot.duration.order.FundForm;
+import com.guohuai.asset.manage.boot.duration.order.TransForm;
 import com.guohuai.asset.manage.boot.duration.order.TrustForm;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustEntity;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeForm;
@@ -77,7 +78,7 @@ public class TargetService {
 	@Transactional
 	public List<TrustForm> getTrustListByScopes(String[] scopes) {
 		List<TrustForm> formList = Lists.newArrayList();
-		List<Investment> list = investmentPoolService.getCollecting(scopes);
+		List<Investment> list = investmentPoolService.getNotEstablishTarget(scopes);
 		if (!list.isEmpty()) {
 			TrustForm form = null;
 			for (Investment inv : list) {
@@ -102,6 +103,41 @@ public class TargetService {
 				form.setLife(inv.getLife());
 				form.setState(inv.getState());
 				
+				formList.add(form);
+			}
+		}
+		
+		return formList;
+	}
+	
+	/**
+	 * 获取可转入的信托标的
+	 * @param projectTypes
+	 * @return
+	 */
+	@Transactional
+	public List<TransForm> getTransListByScopes(String[] scopes) {
+		List<TransForm> formList = Lists.newArrayList();
+		List<Investment> list = investmentPoolService.getEstablishTarget(scopes);
+		if (!list.isEmpty()) {
+			TransForm form = null;
+			for (Investment inv : list) {
+				form = new TransForm();
+				form.setT_targetOid(inv.getOid());
+				form.setT_targetName(inv.getName());
+				form.setT_targetType(inv.getType());
+				form.setYield(inv.getExpAror());
+				form.setT_accrualType(inv.getAccrualType());
+				form.setT_arorFirstDate(inv.getArorFirstDate());
+				form.setT_accrualDate(inv.getAccrualDate());
+				form.setT_contractDays(inv.getContractDays());
+				form.setT_subjectRating(inv.getSubjectRating());
+				form.setT_floorVolume(inv.getFloorVolume());
+				form.setIncome(inv.getExpIncome());
+				form.setT_setDate(inv.getSetDate());
+				form.setT_raiseScope(inv.getRaiseScope());
+				form.setT_life(inv.getLife());
+				form.setState(inv.getState());
 				
 				formList.add(form);
 			}
