@@ -549,7 +549,3 @@ define(function() {
 		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
 	}
 })
-		 */
-		colors: ['#3c8dbc', '#dd4b39', '#f39c12', '#00a65a', '#00c0ef']
-	}
-})
