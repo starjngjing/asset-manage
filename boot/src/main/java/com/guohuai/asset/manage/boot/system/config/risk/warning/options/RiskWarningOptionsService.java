@@ -54,7 +54,7 @@ public class RiskWarningOptionsService {
 			for (RiskWarningOptionsForm.Option option : options) {
 				RiskWarningOptions.RiskWarningOptionsBuilder builder = RiskWarningOptions.builder();
 
-				builder.warning(warning).seq(seq);
+				builder.warning(warning).seq(seq).wlevel(option.getWlevel());
 				builder.param0(option.getParam0()).param1(option.getParam1()).param2(option.getParam2()).param3(option.getParam3());
 				RiskWarningOptions ro = builder.build();
 				ro = this.riskWarningOptionsDao.save(ro);
@@ -69,26 +69,20 @@ public class RiskWarningOptionsService {
 	@Transactional
 	public void batchDelete(String warningOid) {
 		this.riskWarningOptionsDao.deleteByWarning(warningOid);
+		this.riskWarningService.delete(warningOid);
 	}
 
 	@Transactional
 	public RiskWarningOptionsForm preUpdate(String warningOid) {
-		RiskWarning waring = this.riskWarningService.get(warningOid);
-		List<RiskWarningOptions> list = this.riskWarningOptionsDao.search(waring);
+		RiskWarning warning = this.riskWarningService.get(warningOid);
+		List<RiskWarningOptions> list = this.riskWarningOptionsDao.search(warning);
 
 		if (null == list || list.size() == 0) {
 			throw new AMPException(String.format("No data found for waring '%s'", warningOid));
 		}
 
-		RiskWarningOptionsForm form = new RiskWarningOptionsForm();
-		form.setOptions(new ArrayList<RiskWarningOptionsForm.Option>());
-
-		for (RiskWarningOptions o : list) {
-			RiskWarningOptionsForm.Option option = new RiskWarningOptionsForm.Option();
-			BeanUtils.copyProperties(o, option);
-			form.getOptions().add(option);
-		}
-
+		RiskWarningOptionsForm form = new RiskWarningOptionsForm(list);
+		
 		return form;
 	}
 
