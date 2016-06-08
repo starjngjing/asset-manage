@@ -315,26 +315,72 @@ public class InvestmentPoolService {
 	
 	/**
 	 * 查询尚未成立的标的
-	 * @Title: getNotEstablishTarget
+	 * @Title: getNotEstablishTarget 
 	 * @author vania
 	 * @version 1.0
-	 * @see:
-	 * @return List<Investment> 返回类型
+	 * @see: 
+	 * @param projectTypes	标的类型数组
+	 * @return List<Investment>    返回类型
 	 */
-	public List<Investment> getNotEstablishTarget() {
-		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_PREPARE);
+	public List<Investment> getNotEstablishTarget(final String[] projectTypes) {
+
+		Specification<Investment> spec = new Specification<Investment>() {
+			
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {	
+				List<Predicate> predicate = new ArrayList<>();
+				if (null != projectTypes && projectTypes.length > 0) {
+					Expression<String> expType = root.get("type").as(String.class); // 标的类型
+					predicate.add(expType.in(projectTypes));// type =  PREPARE
+				}
+				
+				Expression<String> exp = root.get("lifeState").as(String.class); // 标的生命周期					
+				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE}));//lifeState = PREPARE
+				
+//				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日
+//				Predicate p = cb.lessThanOrEqualTo(expHa, collectEndDate); //募集截止日 <= 指定日期	
+//				predicate.add(p);		
+				
+				Predicate[] pre = new Predicate[predicate.size()];
+				return query.where(predicate.toArray(pre)).getRestriction();
+			}
+		};
+		return investmentDao.findAll(spec);
 	}
 	
 	/**
 	 * 查询已经成立的标的
-	 * @Title: getEstablishTarget
+	 * @Title: getEstablishTarget 
 	 * @author vania
 	 * @version 1.0
-	 * @see:
-	 * @return List<Investment> 返回类型
+	 * @see: 
+	 * @param projectTypes	标的类型数组
+	 * @return List<Investment>    返回类型
 	 */
-	public List<Investment> getEstablishTarget() {
-		return investmentDao.findByLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP);
+	public List<Investment> getEstablishTarget(final String[] projectTypes) {
+
+		Specification<Investment> spec = new Specification<Investment>() {
+			
+			@Override
+			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {	
+				List<Predicate> predicate = new ArrayList<>();
+				if (null != projectTypes && projectTypes.length > 0) {
+					Expression<String> expType = root.get("type").as(String.class); // 标的类型
+					predicate.add(expType.in(projectTypes));// type =  PREPARE
+				}
+				
+				Expression<String> exp = root.get("lifeState").as(String.class); // 标的生命周期					
+				predicate.add(exp.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_STAND_UP}));//lifeState = STAND_UP
+				
+//				Expression<Date> expHa = root.get("collectEndDate").as(Date.class); // 募集截止日
+//				Predicate p = cb.lessThanOrEqualTo(expHa, collectEndDate); //募集截止日 <= 指定日期	
+//				predicate.add(p);		
+				
+				Predicate[] pre = new Predicate[predicate.size()];
+				return query.where(predicate.toArray(pre)).getRestriction();
+			}
+		};
+		return investmentDao.findAll(spec);
 	}
 
 	/**

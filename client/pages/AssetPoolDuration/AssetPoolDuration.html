@@ -446,14 +446,14 @@
           <div id="buyAssetShowTrans" style="display: none;">
             <div class="form-group">
               <label>标的名称</label>
-              <select id="transTargetName" name="targetOid" class="form-control input-sm"></select>
-              <input name="targetName" type="hidden"/>
+              <select id="transTargetName" name="t_targetOid" class="form-control input-sm"></select>
+              <input name="t_targetName" type="hidden"/>
             </div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>标的类型</label>
-                  <input name="targetType" type="text"
+                  <input name="t_targetType" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -461,7 +461,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>起购金额(万元)</label>
-                  <input name="floorVolume" type="text"
+                  <input name="t_floorVolume" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -470,8 +470,8 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>预计年化收益(%)</label>
-                  <input name="expAror" type="text"
+                  <label>年化收益率(%)</label>
+                  <input name="yield" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -479,7 +479,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>成立日</label>
-                  <input name="setDate" type="text"
+                  <input name="t_setDate" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -489,7 +489,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>付息方式</label>
-                  <input name="accrualType" type="text"
+                  <input name="t_accrualType" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -497,7 +497,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>首付息日</label>
-                  <input name="arorFirstDate" type="text"
+                  <input name="t_arorFirstDate" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -507,7 +507,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>付息日</label>
-                  <input name="accrualDate" type="text"
+                  <input name="t_accrualDate" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -515,7 +515,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>合同年天数</label>
-                  <input name="contractDays" type="text"
+                  <input name="t_contractDays" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -525,7 +525,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>标的规模(万元)</label>
-                  <input name="raiseScope" type="text"
+                  <input name="t_raiseScope" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -533,7 +533,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>标的限期(天)</label>
-                  <input name="life" type="text"
+                  <input name="t_life" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -543,15 +543,15 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>主体评级</label>
-                  <input name="subjectRating" type="text"
+                  <input name="t_subjectRating" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>募集起始日</label>
-                  <input name="collectStartDate" type="text"
+                  <label>可转入份额(万)</label>
+                  <input name="transVolume" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>
@@ -560,16 +560,8 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>募集截止日</label>
-                  <input name="collectEndDate" type="text"
-                  class="form-control input-sm"
-                  readonly="readonly">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>募集期收益率(%)</label>
-                  <input name="collectIncomeRate" type="text"
+                  <label>出让金额</label>
+                  <input name="transCash" type="text"
                   class="form-control input-sm"
                   readonly="readonly">
                 </div>

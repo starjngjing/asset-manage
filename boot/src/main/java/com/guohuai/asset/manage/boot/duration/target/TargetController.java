@@ -21,6 +21,7 @@ import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
 import com.guohuai.asset.manage.boot.duration.order.FundForm;
 import com.guohuai.asset.manage.boot.duration.order.OrderService;
+import com.guohuai.asset.manage.boot.duration.order.TransForm;
 import com.guohuai.asset.manage.boot.duration.order.TrustForm;
 import com.guohuai.asset.manage.component.web.view.Response;
 
@@ -67,9 +68,11 @@ public class TargetController {
 		String[] scopes = scopeService.getScopes(pid);
 		List<FundForm> fundList = targetService.getFundListByScopes(null);
 		List<TrustForm> trustList = targetService.getTrustListByScopes(scopes);
+		List<TransForm> transList = targetService.getTransListByScopes(scopes);
 		Response r = new Response();
 		r.with("fund", fundList);
 		r.with("trust", trustList);
+		r.with("trans", transList);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 

@@ -56,6 +56,10 @@ public class TrustIncomeEntity implements Serializable {
 	private BigDecimal auditIncome;
 	// 确认收益
 	private BigDecimal investIncome;
+	// 审核本金
+	private BigDecimal auditCapital;
+	// 确认本金
+	private BigDecimal investCapital;
 	// 本金返还
 	private BigDecimal capital;
 	// 收益支付日
