@@ -190,6 +190,14 @@ define([
 											break
 									}
 									
+									var productDetailInvestFiles = []
+									if(data.investFiles!=null && data.investFiles.length>0) {
+										for(var i=0;i<data.investFiles.length;i++){
+											productDetailInvestFiles.push(data.investFiles[i])
+										}
+									}
+									$('#productDetailInvestFileTable').bootstrapTable('load', productDetailInvestFiles)
+									
 									var productDetailFiles = []
 									if(data.files!=null && data.files.length>0) {
 										for(var i=0;i<data.files.length;i++){
@@ -257,6 +265,40 @@ define([
     	$('#productAuditTable').bootstrapTable(tableConfig)
     	// 搜索表单初始化
     	$$.searchInit($('#searchForm'), $('#productAuditTable'))
+    	
+    	// 详情附件表格配置
+    	var productDetailInvestFileTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					field: 'operator',
+				},
+				{
+					field: 'createTime',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.furl
+						}
+					}
+				}
+			]
+		}
+    	// 详情投资协议书表格初始化
+		$('#productDetailInvestFileTable').bootstrapTable(productDetailInvestFileTableConfig)
     	
     	// 详情附件表格配置
     	var productDetailFileTableConfig = {

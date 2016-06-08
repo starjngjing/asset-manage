@@ -72,6 +72,21 @@ public class ProductChannelService {
 	}
 	
 	@Transactional
+	public PageResp<ChooseChannelResp> queryChannels(Specification<Channel> spec, Sort sort) {		
+		PageResp<ChooseChannelResp> pagesRep = new PageResp<ChooseChannelResp>();
+		List<Channel> channels = this.channelDao.findAll(spec, sort);
+		List<ChooseChannelResp> list = new ArrayList<ChooseChannelResp>();
+		for (Channel channel : channels) {
+			ChooseChannelResp rep = new ChooseChannelResp(channel);
+			rep.setSelectStatus(false);
+			list.add(rep);
+		}
+		pagesRep.setTotal(channels.size());
+		pagesRep.setRows(list);
+		return pagesRep;
+	}
+	
+	@Transactional
 	public List<ProductChannel> queryProductChannels(String productOid) {		
 		
 		Specification<ProductChannel> spec = new Specification<ProductChannel>() {
@@ -110,8 +125,10 @@ public class ProductChannelService {
 		BaseResp response = new BaseResp();
 		
 		Product product = productService.getProductById(productOid);
-		
-		List<Channel> channels = this.channelDao.findByOidIn(channelOids);
+		List<Channel> channels = null;
+		if(channelOids!=null && channelOids.size()>0) {
+			channels = this.channelDao.findByOidIn(channelOids);
+		}
 		
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		
@@ -129,23 +146,26 @@ public class ProductChannelService {
 			}
 		}
 		List<ProductChannel> newProductChannels =  new ArrayList<ProductChannel>();
-		for(Channel channel : channels) {
-			if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApproveStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
-				if(!exiChannelOids.contains(channel.getOid())) {
-					ProductChannel.ProductChannelBuilder productChannelBuilder = ProductChannel.builder().oid(StringUtil.uuid());
-					{
-						productChannelBuilder.product(product).channel(channel).marketState(ProductChannel.MARKET_STATE_Noshelf);
+		if(channels!=null) {
+			for(Channel channel : channels) {
+				if(Channel.CHANNEL_STATUS_ON.equals(channel.getChannelStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
+					if(!exiChannelOids.contains(channel.getOid())) {
+						ProductChannel.ProductChannelBuilder productChannelBuilder = ProductChannel.builder().oid(StringUtil.uuid());
+						{
+							productChannelBuilder.product(product).channel(channel).marketState(ProductChannel.MARKET_STATE_Noshelf);
+						}
+						{
+							productChannelBuilder.operator(operator).createTime(now).updateTime(now);
+						}
+						
+						newProductChannels.add(productChannelBuilder.build());
 					}
-					{
-						productChannelBuilder.operator(operator).createTime(now).updateTime(now);
-					}
-					
-					newProductChannels.add(productChannelBuilder.build());
+				} else {
+					throw AMPException.getException(90016);
 				}
-			} else {
-				throw AMPException.getException(90016);
 			}
 		}
+		
 		if(delProductChannels.size()>0) {
 			for(ProductChannel pc : delProductChannels) {
 				this.productChannelDao.delete(pc);
@@ -190,7 +210,7 @@ public class ProductChannelService {
 		if(!Product.STATE_Admitpass.equals(product.getState())){
 			throw AMPException.getException(90017);
 		}
-		if(Channel.CHANNEL_APPROVESTATUS_PASS.equals(channel.getApproveStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
+		if(Channel.CHANNEL_STATUS_ON.equals(channel.getChannelStatus()) && Channel.CHANNEL_DELESTATUS_NO.equals(channel.getDeleteStatus())) {
 			if(!ProductChannel.MARKET_STATE_Noshelf.equals(productChannel.getMarketState())
 					|| !ProductChannel.MARKET_STATE_Offshelf.equals(productChannel.getMarketState())) {
 				throw AMPException.getException(90017);

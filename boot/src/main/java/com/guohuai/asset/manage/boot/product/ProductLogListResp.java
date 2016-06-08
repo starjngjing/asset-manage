@@ -5,7 +5,7 @@ import java.util.List;
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
-
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,8 +35,8 @@ public class ProductLogListResp extends BaseResp {
 		this.raisePeriod = p.getRaisePeriodDays();//募集期:()个自然日
 		this.interestsFirstDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
 		this.durationPeriod = p.getDurationPeriodDays();//存续期:()个自然日
-		this.expAror = p.getExpAror().toPlainString();//预期年化收益率
-		this.expArorSec = p.getExpArorSec().toPlainString();//预期年化收益率区间
+		this.expAror = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpAror()));//预期年化收益率
+		this.expArorSec = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpArorSec()));//预期年化收益率区间
 		this.raisedTotalNumber = p.getRaisedTotalNumber();//募集总份额
 		this.netUnitShare = p.getNetUnitShare().toPlainString();//单位份额净值
 		this.investMin = p.getInvestMin();//单笔投资最低份额
@@ -81,13 +81,13 @@ public class ProductLogListResp extends BaseResp {
 	private Integer durationPeriod;//存续期:()个自然日
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private Long raisedTotalNumber;//募集总份额
+	private BigDecimal raisedTotalNumber;//募集总份额
 	private String netUnitShare;//单位份额净值
-	private Integer investMin;//单笔投资最低份额
-	private Long investMax;//单笔投资最高份额
-	private Integer investAdditional;//单笔投资追加份额
-	private Integer netMaxRredeemDay;//单日净赎回上限
-	private Integer minRredeem;//单笔净赎回下限
+	private BigDecimal investMin;//单笔投资最低份额
+	private BigDecimal investMax;//单笔投资最高份额
+	private BigDecimal investAdditional;//单笔投资追加份额
+	private BigDecimal netMaxRredeemDay;//单日净赎回上限
+	private BigDecimal minRredeem;//单笔净赎回下限
 	private String accrualCycleOid;//收益结转周期
 	private String accrualCycleName;//收益结转周期
 	private Integer purchaseConfirmDate;//申购确认日:()个

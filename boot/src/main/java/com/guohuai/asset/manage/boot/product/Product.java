@@ -129,6 +129,10 @@ public class Product implements Serializable {
 	 */
 	private String reveal;
 	/**
+	 * 增信备注
+	 */
+	private String revealComment;
+	/**
 	 * 币种
 	 */
 	private String currency;
@@ -195,11 +199,6 @@ public class Product implements Serializable {
 	 */
 	private BigDecimal expAror = new BigDecimal(0);
 
-	// /**
-	// * 申购上限
-	// */
-	// private long purchaseLimit;
-
 	/**
 	 * 预期年化收益率区间
 	 */
@@ -208,7 +207,7 @@ public class Product implements Serializable {
 	/**
 	 * 募集总份额
 	 */
-	private Long raisedTotalNumber = 0l;
+	private BigDecimal raisedTotalNumber = new BigDecimal(0);
 	/**
 	 * 单位份额净值
 	 */
@@ -216,23 +215,23 @@ public class Product implements Serializable {
 	/**
 	 * 单笔投资最低份额
 	 */
-	private Integer investMin = 0;
+	private BigDecimal investMin = new BigDecimal(0);
 	/**
 	 * 单笔投资追加份额
 	 */
-	private Integer investAdditional = 0;
+	private BigDecimal investAdditional = new BigDecimal(0);
 	/**
 	 * 投资最高份额
 	 */
-	private Long investMax = 0l;
+	private BigDecimal investMax = new BigDecimal(0);
 	/**
 	 * 单笔净赎回下限
 	 */
-	private Integer minRredeem = 0;
+	private BigDecimal minRredeem = new BigDecimal(0);
 	/**
 	 * 单日净赎回上限
 	 */
-	private Integer netMaxRredeemDay = 0;
+	private BigDecimal netMaxRredeemDay = new BigDecimal(0);
 	/**
 	 * 还本付息日
 	 */
@@ -289,6 +288,10 @@ public class Product implements Serializable {
 	 * 附加文件
 	 */
 	private String fileKeys;
+	/**
+	 * 投资协议书
+	 */
+	private String investFileKey;
 	/**
 	 * 产品状态
 	 */
@@ -353,11 +356,11 @@ public class Product implements Serializable {
 	/**
 	 * 当前份额
 	 */
-	private BigDecimal currentMoney = new BigDecimal(0);
+	private BigDecimal currentVolume = new BigDecimal(0);
 	/**
 	 * 已募份额
 	 */
-	private Integer collectedVolume = 0;
+	private BigDecimal collectedVolume = new BigDecimal(0);
 	/**
 	 * 已投次数
 	 */
@@ -365,7 +368,7 @@ public class Product implements Serializable {
 	/**
 	 * 锁定已募份额
 	 */
-	private Integer lockCollectedVolume = 0;
+	private BigDecimal lockCollectedVolume = new BigDecimal(0);
 
 	/**
 	 * 还本付息日期
