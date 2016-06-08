@@ -116,6 +116,8 @@ define([
 			var targetNames = null
 			// 缓存可用现金
 			var freeCash = 0
+			// 缓存持有份额
+			var holdAmount = 0;
 
 			// 资产申购标的名称下拉菜单change事件
 			$('#fundTargetName').on('change', function() {
@@ -1123,7 +1125,7 @@ define([
 							modal.modal('show')
 						},
 						'click .item-income-audit': function(e, val, row) {
-							var modal = $('#trustCheckModal')
+							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
 									oid: row.oid,
@@ -1132,7 +1134,7 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								var form = document.trustCheckForm
+								var form = document.trustIncomeCheckForm
 								form.oid.value = result.oid
 								form.type.value = row.type
 								form.opType.value = 'audit'
@@ -1157,23 +1159,11 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
 								if (result.applyVolume) {
 									result.applyVolume = result.applyVolume + '\t万份'
 								}
 								if (result.applyCash) {
 									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
 								}
 								if (result.floorVolume) {
 									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
@@ -1707,19 +1697,20 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
-								var result = json.result.incomeFormList
-								console.log(result)
-								seqs = json.result.incomeFormList
+								var result = json.result.incomeForm
+								seqs = json.result.incomeForm
 								var form = document.trustIncomeForm
 								var seq = $(form.seq).empty()
+								seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
-				                seqs.forEach(function (item) {
-				                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-				                })
-								seq.change()
-								form.capital.value = json.result.capital
-								$$.detailAutoFix($('#trustIncomeModal'), result)
+								
+//				                seqs.forEach(function (item) {
+//				                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
+//				                })
+//								seq.change()
+//								form.capital.value = result.capital
+								$$.formAutoFix($('#trustIncomeForm'), result)
 							})
 							$('#trustIncomeModal').modal('show')
 						},
@@ -1740,6 +1731,7 @@ define([
 								result.raiseScope = result.raiseScope + '万元'
 								result.holdAmount = result.holdAmount + '万份'
 								result.volume = result.volume + '万元'
+								holdAmount = json.result.holdAmount
 								$$.detailAutoFix($('#trustTransferModal'), result)
 							})
 							$('#trustTransferModal').modal('show')
@@ -1776,7 +1768,7 @@ define([
 			//			})
 
 			// 当选择本金兑付时，显示本金
-			$(document.trustIncomeForm.ifCapitalName).on('change', function () {
+			$(document.trustIncomeForm.capitalFlag).on('change', function () {
 				if (this.value === 'yes') {
 					$('#capitalArea').show()
 				} else {
@@ -1811,6 +1803,16 @@ define([
 				},
 				errors: {
 					validredeemamount: '赎回份额不能为0，且不可超过持有额度'
+				}
+			})
+
+			// 转让金额验证
+			$('#trustTransferForm').validator({
+				custom: {
+					validtransamount: validtransamount
+				},
+				errors: {
+					validtransamount: '转让份额不能为0，且不可超过持有额度'
 				}
 			})
 
@@ -2175,4 +2177,11 @@ function validredeemamount($el) {
     var holdAmount = form.find('input[name=amount]')
 	var amount = $el.val()
 	return parseFloat(amount) > 0 && parseFloat(amount) <= parseFloat(holdAmount.val())
+}
+
+// 转让额度验证
+function validtransamount($el) {
+	console.log(111)
+	var tranVolume = $el.val()
+	return parseFloat(tranvolume) > 0 && parseFloat(tranvolume) <= parseFloat(holdAmount)
 }

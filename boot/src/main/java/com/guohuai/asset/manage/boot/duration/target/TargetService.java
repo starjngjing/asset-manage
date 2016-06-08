@@ -253,9 +253,11 @@ public class TargetService {
 	 * @param targetOid
 	 * @param entity
 	 * 				持仓对象
+	 * @param no
+	 * 				期数
 	 * @return
 	 */
-	public List<TrustIncomeForm> getIncomeData(Investment target, TrustEntity entity) {
+	public TrustIncomeForm getIncomeData(Investment target, TrustEntity entity, int no) {
 		List<TrustIncomeForm> formList = Lists.newArrayList();
 		List<TargetIncome> list = investmentPoolService.getTargetIncome(target.getOid());
 		// 日利息 算法：利息=本金×收益率%÷365天(有时是360天)
@@ -338,6 +340,7 @@ public class TargetService {
 				form.setIncomeRate(form.getExpIncomeRate());
 				sdate = DateUtil.addMonth(sdate, addNum);
 				form.setSeq(seq);
+				seq ++;
 				
 				formList.add(form);
 			} while (DateUtil.compare_date(target.getIncomeEndDate(), sdate) >= 0);
@@ -354,6 +357,6 @@ public class TargetService {
 			}
 		}
 		
-		return formList;
+		return formList.size() > no ? formList.get(no) : new TrustIncomeForm();
 	}
 }

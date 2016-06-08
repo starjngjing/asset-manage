@@ -3,7 +3,6 @@ package com.guohuai.asset.manage.boot.duration.order;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.List;
 
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustIncomeForm;
 
@@ -115,5 +114,6 @@ public class TrustForm implements Serializable {
 	private String type;
 	
 	// 本息兑付数据
-	private List<TrustIncomeForm> incomeFormList;
+	private TrustIncomeForm incomeForm;
+//	private List<TrustIncomeForm> incomeFormList;
 }

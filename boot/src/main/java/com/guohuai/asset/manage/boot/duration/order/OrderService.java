@@ -686,7 +686,7 @@ public class OrderService {
 		TrustIncomeEntity order = new TrustIncomeEntity();
 		BigDecimal capital = BigDecimal.ZERO;
 		// 是否兑付本金
-		if (null != form.getCapital()) {
+		if ("yes".equals(form.getCapitalFlag())) {
 			order.setCapital(form.getCapital());
 			capital = form.getCapital();
 		} else {
@@ -1217,8 +1217,12 @@ public class OrderService {
 				
 				// 本息兑付
 				if ("income".equals(type) && Investment.INVESTMENT_LIFESTATUS_STAND_UP.equals(target.getLifeState())) {
-					List<TrustIncomeForm> list = targetService.getIncomeData(target, entity);
-					form.setIncomeFormList(list);
+					int seq = trustService.getSeqByIncome(entity.getOid());
+					seq ++;
+//					List<TrustIncomeForm> list = targetService.getIncomeData(target, entity);
+//					form.setIncomeFormList(list);
+					TrustIncomeForm from = targetService.getIncomeData(target, entity, seq);
+					form.setIncomeForm(from);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1274,16 +1278,20 @@ public class OrderService {
 					form.setExpAror(target.getExpAror());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setSetDate(target.getSetDate());
-					form.setArorFirstDate(target.getArorFirstDate());
-					form.setAccrualDate(target.getAccrualDate());
-					form.setContractDays(target.getContractDays());
-					form.setLife(target.getLife());
-					form.setFloorVolume(target.getFloorVolume());
-					form.setAccrualType(target.getAccrualType());
+//					form.setArorFirstDate(target.getArorFirstDate());
+//					form.setAccrualDate(target.getAccrualDate());
+//					form.setContractDays(target.getContractDays());
+//					form.setLife(target.getLife());
+//					form.setFloorVolume(target.getFloorVolume());
+//					form.setAccrualType(target.getAccrualType());
 					form.setSubjectRating(target.getSubjectRating());
-					form.setCollectEndDate(target.getCollectEndDate());
-					form.setCollectStartDate(target.getCollectStartDate());
-					form.setCollectIncomeRate(target.getCollectIncomeRate());
+//					form.setCollectEndDate(target.getCollectEndDate());
+//					form.setCollectStartDate(target.getCollectStartDate());
+//					form.setCollectIncomeRate(target.getCollectIncomeRate());
+//					TrustIncomeForm income = new TrustIncomeForm();
+//					income.setCapital(entity.getCapital());
+//					income.setIncome(entity.getIncome());
+//					income.setExpIncome(entity.get);
 					form.setApplyVolume(entity.getCapital());
 					form.setApplyCash(entity.getIncome());
 					form.setAuditVolume(entity.getAuditIncome());
