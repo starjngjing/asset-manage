@@ -60,6 +60,7 @@ define(function() {
 			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
 			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
 			productChooseChannelList: this.host + "/ams/product/channel/choose/list", //产品选择渠道列表
+			productChooseChannels: this.host + "/ams/product/channel/channels", //产品选择渠道列表
 			saveProductChannel: this.host + "/ams/product/channel/save/list", //保存产品已经选择渠道列表
 			productChannelList: this.host + "/ams/product/channel/list", //该渠道的产品列表
 			productChannelUpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
