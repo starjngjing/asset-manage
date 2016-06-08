@@ -30,11 +30,11 @@ public class TrustEntity implements Serializable {
 	public static final String INVESTEND = "-1";
 	
 	public TrustEntity() {
-		this.confirmAmount = init0;
-		this.investAmount = init0;
-		this.transOutAmount = init0;
+		this.confirmVolume = init0;
+		this.investVolume = init0;
+		this.transOutVolume = init0;
 		this.transOutFee = init0;
-		this.transInAmount = init0;
+		this.transInVolume = init0;
 		this.transInFee = init0;
 		this.dailyProfit = init0;
 		this.totalProfit = init0;
@@ -46,7 +46,6 @@ public class TrustEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	private Investment target;
-//	private String targetOid;
 	// 关联订单
 	private String orderOid;
 	// 关联产品
@@ -57,22 +56,22 @@ public class TrustEntity implements Serializable {
 	private String purchase;
 	// 投资日
 	private Date investDate; 
-	// 起息日
-//	private Date incomeDate; 
 	// 状态(申请中;审核成功;审核失败;预约中;预约失败;投资成功;已转出;投资结束)
 	private String state;
 	// 申请份额
-	private BigDecimal applyAmount;
+	private BigDecimal applyVolume;
+	// 申请金额
+	private BigDecimal applyCash;
 	// 批准份额
-	private BigDecimal confirmAmount;
+	private BigDecimal confirmVolume;
 	// 投资(持有)份额
-	private BigDecimal investAmount;
+	private BigDecimal investVolume;
 	// 转出份额
-	private BigDecimal transOutAmount;
+	private BigDecimal transOutVolume;
 	// 转出费用
 	private BigDecimal transOutFee;
 	// 转入份额
-	private BigDecimal transInAmount;
+	private BigDecimal transInVolume;
 	// 转入费用
 	private BigDecimal transInFee;
 	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）

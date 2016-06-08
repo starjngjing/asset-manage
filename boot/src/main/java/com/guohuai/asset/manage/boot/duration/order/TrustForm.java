@@ -36,8 +36,6 @@ public class TrustForm implements Serializable {
 	private Date investDate; 
 	// 起息日
 	private Date incomeDate; 
-	// 申购额度
-	private BigDecimal volume;
 	// 收益率
 	private BigDecimal incomeRate;
 	// 预计年化收益	
@@ -78,11 +76,17 @@ public class TrustForm implements Serializable {
 	private String reserver; 
 	// 确认人
 	private String confirmer; 
+	// 申购金额
+	private BigDecimal applyCash;
+	// 申购份额
+	private BigDecimal applyVolume;
 	// 审核金额
 	private BigDecimal auditCash;
 	// 审核份额
 	private BigDecimal auditVolume;
-	// 预约额度
+	// 预约金额
+	private BigDecimal reserveCash;
+	// 预约份额
 	private BigDecimal reserveVolume;
 	// 确认金额
 	private BigDecimal investCash;

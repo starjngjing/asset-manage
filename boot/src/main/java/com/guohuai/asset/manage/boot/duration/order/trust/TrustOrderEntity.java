@@ -43,17 +43,10 @@ public class TrustOrderEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "targetOid", referencedColumnName = "oid")
 	private Investment target;
-//	private String targetOid;
-	// 标的名称
-//	private String targetName;
-	// 类型
-//	private String targetType;
 	// 关联资产池
 	private String assetPoolOid;
 	// 投资日
 	private Date investDate; 
-	// 起息日
-//	private Date incomeDate; 
 	// 申购额度
 	private BigDecimal applyVolume;
 	// 审核额度
@@ -62,10 +55,14 @@ public class TrustOrderEntity implements Serializable {
 	private BigDecimal reserveVolume;
 	// 确认额度
 	private BigDecimal investVolume;
-	// 收益率
-//	private BigDecimal incomeRate;
-	// 主题评级	
-//	private String subjectRating;	
+	// 申购额度
+	private BigDecimal applyCash;
+	// 审核额度
+	private BigDecimal auditCash;
+	// 预约额度
+	private BigDecimal reserveCash;
+	// 确认额度
+	private BigDecimal investCash;
 	// 收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
 	private String profitType;
 	// 申请人

@@ -364,7 +364,7 @@ public class AssetPoolService {
 				if ("STAND_UP".equals(entity.getTarget().getLifeState())) {
 					// 判断收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
 					if ("amortized_cost".equals(entity.getProfitType())) {
-						dayProfit = entity.getInvestAmount()
+						dayProfit = entity.getInvestVolume()
 								.multiply(entity.getTarget().getExpAror())
 								.divide(new BigDecimal(entity.getTarget().getContractDays()))
 								.setScale(4, BigDecimal.ROUND_HALF_UP);
@@ -376,7 +376,7 @@ public class AssetPoolService {
 				} else {
 					// 判断是否在募集期
 					if (!DateUtil.compare_current(entity.getTarget().getCollectEndDate())) {
-						dayProfit = entity.getInvestAmount()
+						dayProfit = entity.getInvestVolume()
 								.multiply(entity.getTarget().getCollectIncomeRate())
 								.divide(new BigDecimal(entity.getTarget().getContractDays()))
 								.setScale(4, BigDecimal.ROUND_HALF_UP);

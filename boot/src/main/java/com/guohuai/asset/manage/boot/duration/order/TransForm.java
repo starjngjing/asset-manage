@@ -30,12 +30,12 @@ public class TransForm implements Serializable {
 	private String t_targetType;
 	// 成立日
 	private Date t_setDate;
-	// 投资日
-	private Date t_investDate; 
 	// 起息日
 	private Date t_incomeDate; 
-	// 申购额度
-	private BigDecimal volume;
+	// 申购金额
+	private BigDecimal t_amount;
+	// 申购份额
+	private BigDecimal t_volume;
 	// 收益率
 	private BigDecimal yield;
 	// 预计年化收益区间	
@@ -66,11 +66,19 @@ public class TransForm implements Serializable {
 	private String reserver; 
 	// 确认人
 	private String confirmer; 
-	// 审核额度
+	// 投资日
+	private Date investDate; 
+	// 审核金额
+	private BigDecimal auditCash;
+	// 预约金额
+	private BigDecimal reserveCash;
+	// 确认金额
+	private BigDecimal investCash;
+	// 审核份额
 	private BigDecimal auditVolume;
-	// 预约额度
+	// 预约份额
 	private BigDecimal reserveVolume;
-	// 确认额度
+	// 确认份额
 	private BigDecimal investVolume;
 	// 状态（审核/预约/确认 的结果 成功/失败）
 	private String state;	

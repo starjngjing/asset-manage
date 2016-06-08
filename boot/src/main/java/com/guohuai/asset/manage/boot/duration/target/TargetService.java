@@ -262,7 +262,7 @@ public class TargetService {
 		BigDecimal day_yield = new BigDecimal(0);
 		TrustIncomeForm form = null;
 		if (target.getContractDays() != 0)
-			day_yield = entity.getInvestAmount()
+			day_yield = entity.getInvestVolume()
 					.multiply(entity.getTarget().getExpAror().divide(TrustIncomeForm.NUM100))
 					.divide(new BigDecimal(target.getContractDays()), 4, BigDecimal.ROUND_HALF_UP);
 		
@@ -273,7 +273,7 @@ public class TargetService {
 			// 付息日
 			form.setIncomeDate(new java.sql.Date(DateUtil.addDay(target.getExpSetDate(), target.getLifed()).getTime()));
 			// 本金
-			form.setCapital(entity.getInvestAmount());
+			form.setCapital(entity.getInvestVolume());
 			// 预期利益	算法：日利息*实际存续天数
 			form.setExpIncome(new BigDecimal(target.getLifed()).multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
 			form.setExpIncomeRate(target.getExpAror());
@@ -315,7 +315,7 @@ public class TargetService {
 			do {
 				int seq = 1;
 				form = new TrustIncomeForm();
-				form.setCapital(entity.getInvestAmount());
+				form.setCapital(entity.getInvestVolume());
 				form.setIncomeDate(sdate);
 				// 判断剩余结算天数是否满足当天月，如果不满足，则以剩余结算天数进行收益结算
 				curr_month_days = DateUtil.getDaysOfMonth(new java.util.Date(target.getIncomeStartDate().getTime()));
