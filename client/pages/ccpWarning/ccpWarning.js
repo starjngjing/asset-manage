@@ -1,5 +1,5 @@
 /**
- * 信用等级评分模型
+ * 风险等级评分模型
  */
 define([
 	'http',
@@ -19,7 +19,7 @@ define([
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述"></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">等级</div><input name="score" type="text" class="form-control" placeholder="等级"></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -42,7 +42,7 @@ define([
 					x0.appendTo(row);
 					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-7"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm"></div></div><div class="col-xs-5"><select name="param3" class="form-control input-sm"><option value="]">]</option><option value=")">)</option></select></div></div></div></div>');
 					x1.appendTo(row);
-					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">等级</div><input name="score" type="text" class="form-control" placeholder="等级"></div></div></div>');
+					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
 					x2.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -63,7 +63,7 @@ define([
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述"></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">等级</div><input name="score" type="text" class="form-control" placeholder="等级"></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -87,7 +87,7 @@ define([
 
 			$('#dataTable').bootstrapTable({
 				ajax: function(origin) {
-					http.post(config.api.system.config.ccr.options.showview, {
+					http.post(config.api.system.config.ccr.warning.options.showview, {
 						data: queryParams,
 						contentType: 'form'
 					}, function(rlt) {
@@ -109,14 +109,19 @@ define([
 						return row.showIndicate ? val : '';
 					}
 				}, {
+					field: 'waringTitle',
+					formatter: function(val, row, index) {
+						return row.showWarning ? val : '';
+					}
+				}, {
 					field: 'optionsTitle',
 					formatter: function(val, row, index) {
 						return row.showOptions ? '<i>' + val + '</i>' : '';
 					}
 				}, {
-					field: 'optionsScore',
+					field: 'optionsWlevel',
 					formatter: function(val, row, index) {
-						return row.showOptions ? '<i>' + val + '</i>' : '';
+						return row.showOptions ? '<i>' + util.table.convertRiskLevel(val) + '</i>' : '';
 					}
 				}, {
 					align: 'center',
@@ -196,7 +201,7 @@ define([
 			$('#eventAdd').on('click', function() {
 				http.post(config.api.system.config.ccr.indicate.options, {
 						data: {
-							type: 'SCORE'
+							type: 'WARNING'
 						},
 						contentType: 'form'
 					},
@@ -320,10 +325,10 @@ define([
 				// TODO 这里要调下, 标的模块要设置标的的oid
 				var relative = "xxxxxxxxxxxxxxxx";
 				// TODO 这里要设置数据采集类型
-				var type = "SCORE";
+				var type = "WARNING";
 				http.post(config.api.system.config.ccr.options.preCollect, {
 						data: {
-							type: 'SCORE'
+							type: 'WARNING'
 						},
 						contentType: 'form'
 					},

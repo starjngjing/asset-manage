@@ -47,6 +47,7 @@
 							<tr>
 								<th>指标分类</th>
 								<th>指标项名称</th>
+								<th>指标描述</th>
 								<th>指标项值</th>
 								<th>风险等级</th>
 								<th>操作</th>
@@ -59,6 +60,7 @@
 	</div>
 </section>
 
+<!-- 新建 -->
 <div id="addModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -90,8 +92,10 @@
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>默认等级</label>
-								<input name="dftScore" type="text" class="form-control input-sm" placeholder="默认等级">
+								<label>指标项描述</label>
+								<input type="hidden" name="warningOid" />
+								<input name="warningTitle" class="form-control input-sm" placeholder="请输入"  maxlength="128" required data-error="指标项描述不能为空"/>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>
@@ -142,8 +146,10 @@
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label>默认等级</label>
-								<input name="dftScore" type="text" class="form-control input-sm" placeholder="默认等级">
+								<label>指标项描述</label>
+								<input type="hidden" name="warningOid" />
+								<input name="warningTitle" class="form-control input-sm" placeholder="请输入"  maxlength="128" required data-error="指标项描述不能为空"/>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>
@@ -178,6 +184,7 @@
 	</div>
 </div>
 
+<!--数据采集-->
 <div id="collectModal" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">

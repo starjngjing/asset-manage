@@ -6,8 +6,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
 import com.guohuai.asset.manage.boot.system.config.risk.warning.RiskWarning;
 import com.guohuai.asset.manage.component.persist.UUID;
+import com.guohuai.asset.manage.component.util.StringUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,4 +44,42 @@ public class RiskWarningOptions extends UUID {
 	private String param2;
 	private String param3;
 	private Integer seq;
+	
+
+	public String showTitle() {
+		RiskIndicate indicate = this.warning.getIndicate();
+		if (null == this.warning)
+			return null;
+//		if (this.dft.equals("YES")) {
+//			return "N/A";
+//		}
+		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_Number)) {
+			return this.numberTitle();
+		}
+		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_NumRange)) {
+			return this.numrangeTitle();
+		}
+		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_Text)) {
+			return this.textTitle();
+		}
+		return null;
+	}
+
+	private String numberTitle() {
+		return this.param0;
+	}
+
+	private String numrangeTitle() {
+		Object[] param = new Object[4];
+		param[0] = this.param0;
+		param[1] = StringUtil.isEmpty(this.param1) ? "∞" : this.param1;
+		param[2] = StringUtil.isEmpty(this.param2) ? "∞" : this.param2;
+		param[3] = this.param3;
+		return String.format("%s %s, %s %s", param);
+	}
+
+	private String textTitle() {
+		return this.param0;
+	}
+
 }

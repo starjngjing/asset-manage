@@ -40,25 +40,25 @@ define([
 					$('#buyAssetShowFund').show()
 					$('#buyAssetShowTrust').hide()
 					$('#buyAssetShowTrans').hide()
-					$('#profitType').hide()
-					$('#transVolumeDiv').hide()
+					$('#profitType').hide().find(':input').attr('disabled', 'disabled')
+					$('#transVolumeDiv').hide().find(':input').attr('disabled', 'disabled')
 				} else if (this.value === 'trust') {
 					$('#buyAssetShowFund').hide()
 					$('#buyAssetShowTrust').show()
 					$('#buyAssetShowTrans').hide()
-					$('#profitType').show()
-					$('#transVolumeDiv').show()
+					$('#profitType').show().find(':input').attr('disabled', false)
+					$('#transVolumeDiv').show().find(':input').attr('disabled', false)
 				} else {
 					$('#buyAssetShowFund').hide()
 					$('#buyAssetShowTrust').hide()
 					$('#buyAssetShowTrans').show()
-					$('#profitType').show()
-					$('#transVolumeDiv').show()
+					$('#profitType').show().find(':input').attr('disabled', false)
+					$('#transVolumeDiv').show().find(':input').attr('disabled', false)
 				}
+				// 资产申购表单验证重置
+				$('#buyAssetForm').validator('destroy')
+				util.form.validator.init($('#buyAssetForm'))
 			})
-
-			// 资产申购表单初始化
-//			util.form.validator.init($('#buyAssetForm'))
 
 			// 资产申购按钮点击事件
 			$('#buyAsset').on('click', function() {
