@@ -271,11 +271,11 @@ public class TargetService {
 		if ("ACCRUALTYPE_05".equals(pay_mode)) {
 			form = new TrustIncomeForm();
 			// 付息日
-			form.setIncomeDate(new java.sql.Date(DateUtil.addDay(target.getExpSetDate(), target.getLifed()).getTime()));
+			form.setIncomeDate(new java.sql.Date(DateUtil.addDay(target.getExpSetDate(), target.getLife()).getTime()));
 			// 本金
 			form.setCapital(entity.getInvestVolume());
 			// 预期利益	算法：日利息*实际存续天数
-			form.setExpIncome(new BigDecimal(target.getLifed()).multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
+			form.setExpIncome(new BigDecimal(target.getLife()).multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
 			form.setExpIncomeRate(target.getExpAror());
 			// 实际值
 			form.setIncome(form.getExpIncome());
@@ -308,7 +308,7 @@ public class TargetService {
 				sdate = target.getArorFirstDate();
 			}
 			// 剩余结算天数
-			int pay_days = target.getLifed();
+			int pay_days = target.getLife();
 			// 当天月天数
 			int curr_month_days = 0;
 			
@@ -328,16 +328,15 @@ public class TargetService {
 							.multiply(day_yield).setScale(4, BigDecimal.ROUND_HALF_UP));
 				}
 				// 收益基准日=收益截止日+1
-				if (DateUtil.compare_date(target.getIncomeEndDate(), sdate) == 0)
+				if (DateUtil.compare_date(target.getIncomeEndDate(), sdate) <= 0) {
+					sdate = new Date(target.getIncomeEndDate().getTime());
 					sdate = DateUtil.addDay(sdate, 1);
+				}
 				
 				form.setExpIncomeRate(target.getExpAror());
 				form.setIncome(form.getExpIncome());
 				form.setIncomeRate(form.getExpIncomeRate());
 				sdate = DateUtil.addMonth(sdate, addNum);
-				if (DateUtil.compare_date(target.getIncomeEndDate(), sdate) < 0) {
-					sdate = new Date(target.getIncomeEndDate().getTime());
-				}
 				form.setSeq(seq);
 				
 				formList.add(form);

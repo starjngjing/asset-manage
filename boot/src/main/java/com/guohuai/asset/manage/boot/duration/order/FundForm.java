@@ -31,7 +31,7 @@ public class FundForm implements Serializable {
 	// 起息日
 	private Date incomeDate; 
 	// 申购额度
-	private BigDecimal volume;
+	private BigDecimal applyCash;
 	// 是否全部赎回（是：yes；否：no）
 	private String allFlag;
 	// 发起赎回日

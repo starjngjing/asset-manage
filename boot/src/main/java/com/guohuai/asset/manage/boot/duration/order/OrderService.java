@@ -115,8 +115,8 @@ public class OrderService {
 		} else {
 			entity = fundService.getFundByOid(form.getOid());
 		}
-		entity.setPurchaseVolume(form.getVolume());
-		entity.setFrozenCapital(form.getVolume());
+		entity.setPurchaseVolume(form.getApplyCash());
+		entity.setFrozenCapital(form.getApplyCash());
 		
 		fundService.save(entity);
 		
@@ -125,18 +125,18 @@ public class OrderService {
 		order.setFundEntity(entity);
 		order.setState(APPLY00);
 		order.setInvestDate(form.getInvestDate());
-		order.setVolume(form.getVolume());
+		order.setVolume(form.getApplyCash());
 		order.setOptType("purchase");
 		order.setAsker(uid);
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
 		
 		fundService.save(order);
 		
-		investService.IncApplyAmount(form.getCashtoolOid(), form.getVolume());
+		investService.IncApplyAmount(form.getCashtoolOid(), form.getApplyCash());
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
-				order.getOid(), FUND, form.getVolume(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
+				order.getOid(), FUND, form.getApplyCash(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
 	}
 	
 	/**
@@ -520,12 +520,12 @@ public class OrderService {
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
 				order.getOid(), TRUST, form.getInvestCash(), account, PURCHASE, CONFIRM, uid, form.getState());
 	}
-/*	
-	*//**
+	
+	/**
 	 * 信托（计划）转入申购
 	 * @param from
 	 * @param uid
-	 *//*
+	 */
 	@Transactional
 	public void purchaseForTrans(TransForm form, String uid) {
 		TrustOrderEntity order = new TrustOrderEntity();
@@ -533,10 +533,10 @@ public class OrderService {
 		order.setOid(StringUtil.uuid());
 		Investment target = targetService.getInvestmentByOid(form.getT_targetOid());
 		order.setTarget(target);
-		order.setAssetPoolOid(form.getT_assetPoolOid());
-		order.setInvestDate(form.getT_investDate());
-		order.setApplyVolume(form.getT_volume());
-		order.setApplyCash(form.getT_amount());
+		order.setAssetPoolOid(form.getAssetPoolOid());
+		order.setInvestDate(form.getInvestDate());
+		order.setApplyVolume(form.getApplyVolume());
+		order.setApplyCash(form.getApplyCash());
 		order.setProfitType(form.getProfitType());
 		order.setState(APPLY00);
 		order.setAsker(uid);
@@ -545,11 +545,11 @@ public class OrderService {
 		trustService.save(order);
 		
 		// 资金变动记录
-		capitalService.capitalFlow(form.getT_assetPoolOid(), form.getT_targetOid(), 
-				order.getOid(), TRUST, form.getT_amount(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
+		capitalService.capitalFlow(form.getAssetPoolOid(), form.getT_targetOid(), 
+				order.getOid(), TRUST, form.getApplyCash(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
 	}
 	
-	*//**
+	/**
 	 * 信托（计划）转入申购审核
 	 * @param oid
 	 * 			标的oid
@@ -673,7 +673,7 @@ public class OrderService {
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
 				order.getOid(), TRUST, form.getInvestCash(), volume, PURCHASE, CONFIRM, uid, form.getState());
 	}
-*/	
+	*/
 	/**
 	 * 信托（计划）本息兑付订单
 	 * @param form
@@ -1058,6 +1058,7 @@ public class OrderService {
 				form.setCirculationShares(cashTool.getCirculationShares());
 				form.setRiskLevel(cashTool.getRiskLevel());
 				form.setDividendType(cashTool.getDividendType());
+				form.setApplyCash(entity.getVolume());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1107,10 +1108,10 @@ public class OrderService {
 					form.setRiskLevel(cashTool.getRiskLevel());
 					form.setDividendType(cashTool.getDividendType());
 					if ("purchase".equals(entity.getOptType())) {
-						form.setVolume(entity.getVolume());
+						form.setApplyCash(entity.getVolume());
 						form.setInvestDate(entity.getInvestDate());
 					} else {
-						form.setVolume(entity.getReturnVolume());
+						form.setApplyCash(entity.getReturnVolume());
 						form.setInvestDate(entity.getRedeemDate());
 					}
 				} catch (Exception e) {
@@ -1257,7 +1258,6 @@ public class OrderService {
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
-					form.setApplyVolume(entity.getApplyVolume());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -1284,9 +1284,12 @@ public class OrderService {
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
-					form.setApplyVolume(entity.getIncome());
+					form.setApplyVolume(entity.getCapital());
+					form.setApplyCash(entity.getIncome());
 					form.setAuditVolume(entity.getAuditIncome());
+					form.setAuditCash(entity.getAuditCapital());
 					form.setInvestVolume(entity.getInvestIncome());
+					form.setInvestCash(entity.getInvestCapital());
 					form.setInvestDate(entity.getTrustEntity().getInvestDate());
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -1315,6 +1318,7 @@ public class OrderService {
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
 					form.setApplyVolume(entity.getTranVolume());
+					form.setApplyCash(entity.getTranCash());
 					form.setInvestDate(entity.getTrustEntity().getInvestDate());
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -1361,7 +1365,6 @@ public class OrderService {
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
-					form.setApplyVolume(entity.getApplyVolume());
 					form.setType("申购");
 
 					formList.add(form);
@@ -1392,7 +1395,8 @@ public class OrderService {
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
 					form.setInvestDate(entity.getIncomeDate());
-					form.setApplyVolume(entity.getIncome());
+					form.setApplyVolume(entity.getCapital());
+					form.setApplyCash(entity.getIncome());
 					form.setType("本息兑付");
 					
 					formList.add(form);
@@ -1424,6 +1428,7 @@ public class OrderService {
 					form.setAccrualType(target.getAccrualType());
 					form.setInvestDate(entity.getTranDate());
 					form.setApplyVolume(entity.getTranVolume());
+					form.setApplyCash(entity.getTranCash());
 					form.setType("转让");
 					
 					formList.add(form);

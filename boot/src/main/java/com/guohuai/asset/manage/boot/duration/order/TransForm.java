@@ -23,7 +23,7 @@ public class TransForm implements Serializable {
 	// 关联投资标的
 	private String t_targetOid;
 	// 关联资产池
-	private String t_assetPoolOid;
+	private String assetPoolOid;
 	// 标的名称
 	private String t_targetName;
 	// 类型
@@ -33,9 +33,9 @@ public class TransForm implements Serializable {
 	// 起息日
 	private Date t_incomeDate; 
 	// 申购金额
-	private BigDecimal t_amount;
+	private BigDecimal applyCash;
 	// 申购份额
-	private BigDecimal t_volume;
+	private BigDecimal applyVolume;
 	// 收益率
 	private BigDecimal yield;
 	// 预计年化收益区间	

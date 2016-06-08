@@ -139,6 +139,19 @@ public class OrderController {
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
+
+	/**
+	 * 信托（计划）转入申购
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/purchaseForTrans", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> purchaseForTrans(TransForm form) {
+		orderService.purchaseForTrans(form, "STAR");
+		Response r = new Response();
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
 	
 	/**
 	 * 信托（计划）本息兑付

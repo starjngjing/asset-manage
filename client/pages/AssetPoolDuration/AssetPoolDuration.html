@@ -162,6 +162,7 @@
 	            <th>付息方式</th>
 	            <th>标的规模(万元)</th>
 	            <th>预约份额(万份)</th>
+	            <th>预约金额(万元)</th>
 	            <th>主题评级</th>
 	            <th>类型</th>
 	            <th>状态</th>
@@ -686,7 +687,7 @@
         <dl id="purchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申请额度:</dt>
           <dd>
-            <div data-detail-fetch="volume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl id="redeemArea" class="dl-horizontal" style="display: none;">
@@ -815,7 +816,7 @@
         <dl id="orderPurchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申请金额:</dt>
           <dd>
-            <div data-detail-fetch="applyVolume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl id="orderRedeemArea" class="dl-horizontal" style="display: none;">
@@ -1018,6 +1019,24 @@
 		          <dt>预约金额:</dt>
 		          <dd>
 		            <div data-detail-fetch="reserveCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
+        <div class="row labelForAccept" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>确认份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCash"></div>
 		          </dd>
 		        </dl>
 	        </div>
@@ -1233,24 +1252,60 @@
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
-          <dt>申请额度:</dt>
-          <dd>
-            <div data-detail-fetch="volume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForOrdering" style="display: none;">
-          <dt>审核额度:</dt>
-          <dd>
-            <div data-detail-fetch="auditVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>预约额度:</dt>
-          <dd>
-            <div data-detail-fetch="reserveVolume"></div>
-          </dd>
-        </dl>
+        <div class="row">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForOrdering" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForAccept" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>预约份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>预约金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2009,16 +2064,16 @@
             <div data-detail-fetch="investDate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>当前持有额度:</dt>
           <dd>
             <div data-detail-fetch="amount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>申购额度:</dt>
           <dd>
-            <div data-detail-fetch="volume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal">
@@ -2147,12 +2202,12 @@
             <div data-detail-fetch="floorVolume"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>持有份额:</dt>
           <dd>
             <div data-detail-fetch="holdAmount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>主体评级:</dt>
           <dd>
@@ -2177,30 +2232,78 @@
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
-          <dt>申购额度:</dt>
-          <dd>
-            <div data-detail-fetch="volume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForOrdering" style="display: none;">
-          <dt>审核额度:</dt>
-          <dd>
-            <div data-detail-fetch="auditVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>预约额度:</dt>
-          <dd>
-            <div data-detail-fetch="reserveVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>确认额度:</dt>
-          <dd>
-            <div data-detail-fetch="investVolume"></div>
-          </dd>
-        </dl>
+        <div class="row">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForAudit" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForOrdering">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>预约份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>预约金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
+        <div class="row labelForAccept">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>确认份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
       </div>
     </div>
   </div>
