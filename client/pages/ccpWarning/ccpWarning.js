@@ -19,7 +19,7 @@ define([
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述"></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -42,7 +42,7 @@ define([
 					x0.appendTo(row);
 					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-7"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm"></div></div><div class="col-xs-5"><select name="param3" class="form-control input-sm"><option value="]">]</option><option value=")">)</option></select></div></div></div></div>');
 					x1.appendTo(row);
-					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
+					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select></div></div></div>');
 					x2.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -63,7 +63,7 @@ define([
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述"></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级"></select></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="level" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -140,14 +140,14 @@ define([
 							isRender: true
 						};
 
-						return row.showIndicate ? util.table.formatter.generateButton([updateButton, deleteButton]) : '';
+						return row.showWarning ? util.table.formatter.generateButton([updateButton, deleteButton]) : '';
 
 					},
 					events: {
 						'click .item-update': function(e, value, row) {
-							http.post(config.api.system.config.ccr.options.preUpdate, {
+							http.post(config.api.system.config.ccr.warning.options.preUpdate, {
 								data: {
-									indicateOid: row.indicateOid
+									warningOid: row.warningOid
 								},
 								contentType: 'form'
 							}, function(val) {
@@ -181,9 +181,9 @@ define([
 								container: $('#deleteModal'),
 								trigger: this,
 								accept: function() {
-									http.post(config.api.system.config.ccr.options.batchDelete, {
+									http.post(config.api.system.config.ccr.warning.options.batchDelete, {
 										data: {
-											indicateOid: row.indicateOid
+											warningOid: row.warningOid
 										},
 										contentType: 'form'
 									}, function(result) {
@@ -260,7 +260,7 @@ define([
 				});
 
 
-				http.post(config.api.system.config.ccr.options.save, {
+				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
 				}, function(result) {
 					$('#addForm').resetForm();
@@ -468,6 +468,13 @@ define([
 				});
 
 			});
+			
+			/**
+			 * 初始化风险等级option
+			 */
+			function initLevelOption(){
+				return '<option value="">无</option><option value="LOW">低</option><option value="MID">中</option><option value="HIGH">高</option>';
+			}
 
 		}
 	}

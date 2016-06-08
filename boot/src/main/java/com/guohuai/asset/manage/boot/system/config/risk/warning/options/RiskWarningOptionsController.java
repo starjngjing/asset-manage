@@ -11,6 +11,8 @@ package com.guohuai.asset.manage.boot.system.config.risk.warning.options;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,23 +38,23 @@ public class RiskWarningOptionsController extends BaseController {
 
 
 	@RequestMapping(value = "/save", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<List<RiskWarningOptionsResp>> save(@RequestBody RiskWarningOptionsForm form) {
+	public @ResponseBody ResponseEntity<List<RiskWarningOptionsResp>> save(@Valid @RequestBody RiskWarningOptionsForm form) {
 		super.checkLogin();
 		List<RiskWarningOptionsResp> list = this.riskWarningOptionsService.save(form);
 		return new ResponseEntity<List<RiskWarningOptionsResp>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/batchDelete", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<BaseResp> batchDelete(@RequestParam String indicateOid) {
+	public @ResponseBody ResponseEntity<BaseResp> batchDelete(@RequestParam String warningOid) {
 		super.checkLogin();
-		this.riskWarningOptionsService.batchDelete(indicateOid);
+		this.riskWarningOptionsService.batchDelete(warningOid);
 		return new ResponseEntity<BaseResp>(new BaseResp(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/preUpdate", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<RiskWarningOptionsForm> preUpdate(@RequestParam String indicateOid) {
+	public @ResponseBody ResponseEntity<RiskWarningOptionsForm> preUpdate(@RequestParam String warningOid) {
 		super.checkLogin();
-		RiskWarningOptionsForm form = this.riskWarningOptionsService.preUpdate(indicateOid);
+		RiskWarningOptionsForm form = this.riskWarningOptionsService.preUpdate(warningOid);
 		return new ResponseEntity<RiskWarningOptionsForm>(form, HttpStatus.OK);
 	}
 
