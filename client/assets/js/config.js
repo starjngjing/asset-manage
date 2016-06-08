@@ -170,6 +170,25 @@ define(function() {
 								preUpdate: this.host + "/ams/system/ccr/indicate/collect/preUpdate"
 							}
 						},
+						warning: { // 风险配置
+							search: this.host + "/ams/system/ccr/warning/search",
+							save: this.host + "/ams/system/ccr/warning/save",
+							enable: this.host + "/ams/system/ccr/warning/enable",
+							disable: this.host + "/ams/system/ccr/warning/disable",
+							delete: this.host + "/ams/system/ccr/warning/delete",
+							options: this.host + "/ams/system/ccr/warning/options",
+							collect: {
+								save: this.host + "/ams/system/ccr/warning/collect/save",
+								preUpdate: this.host + "/ams/system/ccr/warning/collect/preUpdate"
+							},
+							options: {
+								save: this.host + "/ams/system/ccr/warning/options/save",
+								showview: this.host + "/ams/system/ccr/warning/options/showview",
+								batchDelete: this.host + "/ams/system/ccr/warning/options/batchDelete",
+								preUpdate: this.host + "/ams/system/ccr/warning/options/preUpdate",
+								preCollect: this.host + "/ams/system/ccr/warning/options/preCollect",
+							}
+						},
 						options: {
 							save: this.host + "/ams/system/ccr/options/save",
 							showview: this.host + "/ams/system/ccr/options/showview",
