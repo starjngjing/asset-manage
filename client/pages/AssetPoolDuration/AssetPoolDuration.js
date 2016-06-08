@@ -74,12 +74,28 @@ define([
 					var transTargetNameOptions = ''
 					json.fund.forEach(function(item) {
 						fundTargetNameOptions += '<option value="' + item.cashtoolOid + '">' + item.cashtoolName + '</option>'
+						// 转义
+						item.cashtoolType = util.enum.transform('CASHTOOLTYPE', item.cashtoolType)
 					})
 					json.trust.forEach(function(item) {
 						trustTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
+						// 转义
+						item.targetType = util.enum.transform('TARGETTYPE', item.targetType)
+						item.accrualType = util.enum.transform('ACCRUALTYPE', item.accrualType)
+						item.raiseScope = parseFloat(item.raiseScope) / 10000
+						if (item.floorVolume) {
+							item.floorVolume = item.floorVolume / 10000
+						}
 					})
 					json.trans.forEach(function(item) {
 						transTargetNameOptions += '<option value="' + item.t_targetOid + '">' + item.t_targetName + '</option>'
+						// 转义
+						item.t_targetType = util.enum.transform('TARGETTYPE', item.t_targetType)
+						item.t_accrualType = util.enum.transform('ACCRUALTYPE', item.t_accrualType)
+						item.t_raiseScope = parseFloat(item.t_raiseScope) / 10000
+						if (item.t_floorVolume) {
+							item.t_floorVolume = item.t_floorVolume / 10000
+						}
 					})
 					$('#fundTargetName').html(fundTargetNameOptions).trigger('change')
 					$('#trustTargetName').html(trustTargetNameOptions).trigger('change')
@@ -107,7 +123,6 @@ define([
 					return item.cashtoolOid === this.value
 				}.bind(this))
 				if (source[0]) {
-					source[0].cashtoolType = util.enum.transform('CASHTOOLTYPE', source[0].cashtoolType)
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
@@ -116,12 +131,6 @@ define([
 					return item.targetOid === this.value
 				}.bind(this))
 				if (source[0]) {
-					source[0].targetType = util.enum.transform('TARGETTYPE', source[0].targetType)
-					source[0].accrualType = util.enum.transform('ACCRUALTYPE', source[0].accrualType)
-					source[0].raiseScope = parseFloat(source[0].raiseScope) / 10000
-					if (source[0].floorVolume) {
-						source[0].floorVolume = source[0].floorVolume / 10000
-					}
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
@@ -130,12 +139,6 @@ define([
 					return item.t_targetOid === this.value
 				}.bind(this))
 				if (source[0]) {
-					source[0].t_targetType = util.enum.transform('TARGETTYPE', source[0].t_targetType)
-					source[0].t_accrualType = util.enum.transform('ACCRUALTYPE', source[0].t_accrualType)
-					source[0].t_raiseScope = parseFloat(source[0].t_raiseScope) / 10000
-					if (source[0].t_floorVolume) {
-						source[0].t_floorVolume = source[0].t_floorVolume / 10000
-					}
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
