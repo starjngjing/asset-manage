@@ -31,10 +31,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @EqualsAndHashCode(callSuper = false)
 public class RiskWarning extends UUID {
-
 	private static final long serialVersionUID = 7662154042189089717L;
+
+	public static final String STATE_Enable = "ENABLE";
+	public static final String STATE_Disable = "DISABLE";
+	public static final String STATE_Delete = "DELETE";
+
+	public static final String DATA_TYPE_Number = "NUMBER";
+	public static final String DATA_TYPE_NumRange = "NUMRANGE";
+	public static final String DATA_TYPE_Text = "TEXT";
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "indicateOid", referencedColumnName = "oid")
 	private RiskIndicate indicate;
 	private String title;
+	private String state;
+	private String dataType;
+	private String dataUnit;
 }
