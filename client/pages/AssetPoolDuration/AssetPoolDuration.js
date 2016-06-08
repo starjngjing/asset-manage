@@ -78,8 +78,8 @@ define([
 					json.trust.forEach(function(item) {
 						trustTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
 					})
-					json.trust.forEach(function(item) {
-						transTargetNameOptions += '<option value="' + item.targetOid + '">' + item.targetName + '</option>'
+					json.trans.forEach(function(item) {
+						transTargetNameOptions += '<option value="' + item.t_targetOid + '">' + item.t_targetName + '</option>'
 					})
 					$('#fundTargetName').html(fundTargetNameOptions).trigger('change')
 					$('#trustTargetName').html(trustTargetNameOptions).trigger('change')
