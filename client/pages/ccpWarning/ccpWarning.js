@@ -326,7 +326,7 @@ define([
 				var relative = "xxxxxxxxxxxxxxxx";
 				// TODO 这里要设置数据采集类型
 				var type = "WARNING";
-				http.post(config.api.system.config.ccr.warning.options.preCollect, {
+				http.post(config.api.system.config.ccr.options.preCollect, {
 						data: {
 							type: 'WARNING'
 						},
