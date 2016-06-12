@@ -46,7 +46,7 @@ define([
 			// 'HIGH' || 'H' 高风险
 			var str = '';
 			var className = '';
-			if(!val){
+			if(!val || val === 'NONE'){
 				str = '无'
 				className = 'bg-green'
 			}else if (val === 'LOW' || val === 'L') {
