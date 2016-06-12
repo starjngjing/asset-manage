@@ -35,6 +35,7 @@ public class RiskWarningOptionsForm {
 	@NotBlank
 	private String indicateOid;
 	private String indicateTitle;
+	private String indicateDataType;
 	
 	private String warningOid;
 	@NotNull
@@ -70,7 +71,7 @@ public class RiskWarningOptionsForm {
 
 		this.indicateOid = indicate.getOid();
 		this.indicateTitle = indicate.getTitle();
-//		this.indicateDataType = indicate.getDataType();
+		this.indicateDataType = indicate.getDataType();
 //		this.indicateDataUnit = indicate.getDataUnit();
 
 		this.warningOid = warning.getOid();
