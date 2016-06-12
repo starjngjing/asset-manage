@@ -105,6 +105,7 @@ define([
 					}
 				}, {
 					field: 'indicateTitle',
+					width: 500,
 					formatter: function(val, row, index) {
 						return row.showIndicate ? val : '';
 					}

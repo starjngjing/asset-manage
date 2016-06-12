@@ -47,7 +47,8 @@ define([
 				}, {
 					field: 'cateTitle'
 				}, {
-					field: 'indicateTitle'
+					field: 'indicateTitle',
+					width: 500,
 				}, {
 					field: 'indicateDataType',
 					formatter: function(val, row, index) {
