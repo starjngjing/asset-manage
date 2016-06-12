@@ -187,6 +187,10 @@ define(function() {
 								batchDelete: this.host + "/ams/system/ccr/warning/options/batchDelete",
 								preUpdate: this.host + "/ams/system/ccr/warning/options/preUpdate",
 								preCollect: this.host + "/ams/system/ccr/warning/options/preCollect",
+							},
+							collect:{ //风险预警
+								list: this.host + "/ams/system/ccr/warning/collect/list", //风险预警列表
+								detail: this.host + "/ams/system/ccr/warning/collect/detail", //风险预警详情
 							}
 						},
 						options: {
