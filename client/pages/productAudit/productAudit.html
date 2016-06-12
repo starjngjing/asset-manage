@@ -126,13 +126,53 @@
 					</div>
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
+							<dt>资产池配置:</dt>
+							<dd>
+								<div data-detail-fetch="assetPoolName"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
 							<dt>预期年化收益:</dt>
 							<dd>
 								<div data-detail-fetch="expectedRate"></div>
 							</dd>
 						</dl>
 					</div>
-				</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>币种:</dt>
+							<dd>
+								<div data-detail-fetch="currencyStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>收益计算基础:</dt>
+							<dd>
+								<div data-detail-fetch="incomeCalcBasisStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>托管费率:</dt>
+							<dd>
+								<div data-detail-fetch="manageRateStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>固定管理费率:</dt>
+							<dd>
+								<div data-detail-fetch="fixedManageRateStr"></div>
+							</dd>
+						</dl>
+					</div>
+        </div>
         <!-- 封闭式产品显示/隐藏层 -->
         <div id="detailProductType01Area">
           <p class="form-header">封闭式产品信息</p>
@@ -179,6 +219,14 @@
             </div>
             <div class="col-sm-6">
               <dl class="dl-horizontal">
+              	<dt>已售总份额:</dt>
+                <dd>
+                  <div data-detail-fetch="collectedVolume"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
                 <dt>到期最晚还本付息日:</dt>
                 <dd>
                   <div data-detail-fetch="accrualDateStr"></div>
@@ -191,6 +239,22 @@
         <div id="detailProductType02Area">
           <p class="form-header">开放式产品信息</p>
           <div class="row">
+            <div class="col-sm-6">
+            	<dl class="dl-horizontal">
+                <dt>目前持有份额总数:</dt>
+                <dd>
+                  <div data-detail-fetch="currentVolume"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>已售总份额:</dt>
+                <dd>
+                  <div data-detail-fetch="collectedVolume"></div>
+                </dd>
+              </dl>
+            </div>
             <div class="col-sm-6">
 							<dl class="dl-horizontal">
 								<dt>成立时间:</dt>
@@ -282,6 +346,14 @@
 							</dd>
 						</dl>
 					</div>
+					<!--<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>申购上限:</dt>
+							<dd>
+								<div data-detail-fetch="purchaseLimitStr"></div>
+							</dd>
+						</dl>
+					</div>-->
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>笔投资追加份额:</dt>
@@ -298,7 +370,18 @@
 							</dd>
 						</dl>
 					</div>
-					<div class="col-sm-6">
+		    </div>
+        <p class="form-header">其他信息</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>已选渠道:</dt>
+              <dd>
+                <div data-detail-fetch="channelNames"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>额外增信:</dt>
 							<dd>
@@ -306,9 +389,14 @@
 							</dd>
 						</dl>
 					</div>
-		    </div>
-        <p class="form-header">其他信息</p>
-        <div class="row">
+					<div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>增信备注:</dt>
+              <dd>
+                <div data-detail-fetch="revealComment"></div>
+              </dd>
+            </dl>
+          </div>
           <div class="col-sm-6">
             <dl class="dl-horizontal">
               <dt>产品说明:</dt>
@@ -330,6 +418,23 @@
               <dt>风险等级:</dt>
               <dd>
                 <div data-detail-fetch="riskLevelStr"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-10">
+            <dl class="dl-horizontal">
+              <dt>投资协议书:</dt>
+              <dd>
+                <table id="productDetailInvestFileTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>投资协议书</th>
+                    <th>上传人</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table>
               </dd>
             </dl>
           </div>

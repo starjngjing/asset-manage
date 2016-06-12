@@ -39,7 +39,7 @@ public class ProductChannelController extends BaseController {
 	private ProductChannelService productChannelService;
 	
 	/**
-	 * 产品选择渠道列表
+	 * 产品添加渠道
 	 * @param request
 	 * @param productOid
 	 * @return
@@ -52,12 +52,34 @@ public class ProductChannelController extends BaseController {
 		Specification<Channel> spec = new Specification<Channel>() {
 			@Override
 			public Predicate toPredicate(Root<Channel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("deleteStatus").as(String.class), Channel.CHANNEL_DELESTATUS_NO), cb.equal(root.get("approveStatus").as(String.class), Channel.CHANNEL_APPROVESTATUS_PASS));
+				return cb.and(cb.equal(root.get("deleteStatus").as(String.class), Channel.CHANNEL_DELESTATUS_NO), cb.equal(root.get("channelStatus").as(String.class), Channel.CHANNEL_STATUS_ON));
 			}
 		};
 		spec = Specifications.where(spec);
 		
 		PageResp<ChooseChannelResp> rep = this.productChannelService.chooseChannelQuery(productOid, spec, new Sort(new Order(sortDirection, "updateTime")));
+		return new ResponseEntity<PageResp<ChooseChannelResp>>(rep, HttpStatus.OK);
+	}
+	
+	/**
+	 * 产品选择渠道列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/channels", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public ResponseEntity<PageResp<ChooseChannelResp>> chooseList(HttpServletRequest request) {
+		
+		Direction sortDirection = Direction.DESC;
+		Specification<Channel> spec = new Specification<Channel>() {
+			@Override
+			public Predicate toPredicate(Root<Channel> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("deleteStatus").as(String.class), Channel.CHANNEL_DELESTATUS_NO), cb.equal(root.get("channelStatus").as(String.class), Channel.CHANNEL_STATUS_ON));
+			}
+		};
+		spec = Specifications.where(spec);
+		
+		PageResp<ChooseChannelResp> rep = this.productChannelService.queryChannels(spec, new Sort(new Order(sortDirection, "updateTime")));
 		return new ResponseEntity<PageResp<ChooseChannelResp>>(rep, HttpStatus.OK);
 	}
 	

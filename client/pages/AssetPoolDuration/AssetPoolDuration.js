@@ -116,6 +116,8 @@ define([
 			var targetNames = null
 			// 缓存可用现金
 			var freeCash = 0
+			// 缓存持有份额
+			var holdAmount = 0;
 
 			// 资产申购标的名称下拉菜单change事件
 			$('#fundTargetName').on('change', function() {
@@ -241,24 +243,68 @@ define([
 							}, function(json) {
 								if (row.operation === '现金管理工具申赎') {
 									json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
+									if (json.result.applyCash) {
+										json.result.applyCash = json.result.applyCash + '\t万元'
+									}
+									if (json.result.returnVolume) {
+										json.result.returnVolume = json.result.returnVolume + '\t万元'
+									}
+									if (json.result.auditVolume) {
+										json.result.auditVolume = json.result.auditVolume + '\t万元'
+									}
+									if (json.result.reserveVolume) {
+										json.result.reserveVolume = json.result.reserveVolume + '\t万元'
+									}
+									if (json.result.investVolume) {
+										json.result.investVolume = json.result.investVolume + '\t万元'
+									}
 									$$.detailAutoFix($('#fundDetailModal'), json.result)
 									$('#fundDetailModal').modal('show')
 								} else {
-									json.result.targetType = util.enum.transform('TARGETTYPE', json.result.targetType)
-									json.result.accrualType = util.enum.transform('ACCRUALTYPE', json.result.accrualType)
-									json.result.expAror = json.result.expAror + "\t%"
-									json.result.raiseScope = parseFloat(json.result.raiseScope) / 10000 + "\t万元"
-									if (json.result.life) {
-										json.result.life = json.result.life + "\t天"
+									var result = json.result
+									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
+									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
+//									if (json.result.holdAmount) {
+//										json.result.holdAmount = json.result.holdAmount + "\t万元"
+//									}
+//									modal.find('.labelForOrdering').css({
+//										display: 'block'
+//									})
+//									modal.find('.labelForAccept').css({
+//										display: 'block'
+//									})
+									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+									if (result.expAror) {
+										result.expAror = result.expAror + '\t%'
 									}
-									if (json.result.floorVolume) {
-										json.result.floorVolume = json.result.floorVolume + "\t万元"
+									if (result.collectIncomeRate) {
+										result.collectIncomeRate = result.collectIncomeRate + '\t%'
 									}
-									if (json.result.holdAmount) {
-										json.result.holdAmount = json.result.holdAmount + "\t万元"
+									if (result.applyVolume) {
+										result.applyVolume = result.applyVolume + '\t万份'
 									}
-									json.result.collectIncomeRate = json.result.collectIncomeRate + "\t%"
-									json.result.volume = json.result.volume + "\t万元"
+									if (result.applyCash) {
+										result.applyCash = result.applyCash + '\t万元'
+									}
+									if (result.life) {
+										result.life = result.life + '\t天'
+									}
+									if (result.floorVolume) {
+										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+									}
+									if (result.auditVolume) {
+										result.auditVolume = result.auditVolume + '\t万份'
+									}
+									if (result.auditCash) {
+										result.auditCash = result.auditCash + '\t万元'
+									}
+									if (result.reserveVolume) {
+										result.reserveVolume = result.reserveVolume + '\t万份'
+									}
+									if (result.reserveCash) {
+										result.reserveCash = result.reserveCash + '\t万元'
+									}
 									$$.detailAutoFix($('#trustDetailModal'), json.result)
 									$('#trustDetailModal').modal('show')
 								}
@@ -330,7 +376,7 @@ define([
 					field: 'investDate'
 				}, 
 				{
-					field: 'volume'
+					field: 'applyCash'
 				}, 
 				{
 					field: 'optType',
@@ -452,7 +498,7 @@ define([
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
-								result.volume = result.volume + '\t万元'
+								result.applyCash = result.applyCash + '\t万元'
 								result.returnVolume = result.returnVolume + '\t万元'
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
 								$$.detailAutoFix(modal, result)
@@ -508,7 +554,7 @@ define([
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
-								result.volume = result.volume + '\t万元'
+								result.applyCash = result.applyCash + '\t万元'
 								result.returnVolume = result.returnVolume + '\t万元'
 								if (result.auditVolume) {
 									result.auditVolume = result.auditVolume + '\t万元'
@@ -566,7 +612,7 @@ define([
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
-								result.volume = result.volume + '\t万元'
+								result.applyCash = result.applyCash + '\t万元'
 								result.returnVolume = result.returnVolume + '\t万元'
 								if (result.auditVolume) {
 									result.auditVolume = result.auditVolume + '\t万元'
@@ -605,7 +651,7 @@ define([
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
-								result.volume = result.volume + '\t万元'
+								result.applyCash = result.applyCash + '\t万元'
 								result.returnVolume = result.returnVolume + '\t万元'
 								if (result.auditVolume) {
 									result.auditVolume = result.auditVolume + '\t万元'
@@ -919,6 +965,9 @@ define([
 					field: 'applyVolume'
 				}, 
 				{
+					field: 'applyCash'
+				}, 
+				{
 					field: 'subjectRating'
 				}, 
 				{
@@ -1076,7 +1125,7 @@ define([
 							modal.modal('show')
 						},
 						'click .item-income-audit': function(e, val, row) {
-							var modal = $('#trustCheckModal')
+							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
 									oid: row.oid,
@@ -1085,7 +1134,7 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								var form = document.trustCheckForm
+								var form = document.trustIncomeCheckForm
 								form.oid.value = result.oid
 								form.type.value = row.type
 								form.opType.value = 'audit'
@@ -1110,23 +1159,11 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
 								if (result.applyVolume) {
 									result.applyVolume = result.applyVolume + '\t万份'
 								}
 								if (result.applyCash) {
 									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
 								}
 								if (result.floorVolume) {
 									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
@@ -1606,7 +1643,7 @@ define([
 					field: 'holdAmount'
 				}, 
 				{
-					field: 'volume'
+					field: 'tranVolume'
 				}, 
 				{
 					field: 'subjectRating'
@@ -1660,16 +1697,20 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
-								seqs = json.result.incomeFormList
+								var result = json.result.incomeForm
+								seqs = json.result.incomeForm
 								var form = document.trustIncomeForm
 								var seq = $(form.seq).empty()
+								seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
-									//                seqs.forEach(function (item) {
-									//                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-									//                })
-									//									seq.change()
-									//									form.capital.value = json.result.capital
+								
+//				                seqs.forEach(function (item) {
+//				                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
+//				                })
+//								seq.change()
+//								form.capital.value = result.capital
+								$$.formAutoFix($('#trustIncomeForm'), result)
 							})
 							$('#trustIncomeModal').modal('show')
 						},
@@ -1688,8 +1729,9 @@ define([
 								result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
 								result.raiseScope = result.raiseScope + '万元'
-								result.holdAmount = result.holdAmount + '万元'
+								result.holdAmount = result.holdAmount + '万份'
 								result.volume = result.volume + '万元'
+								holdAmount = json.result.holdAmount
 								$$.detailAutoFix($('#trustTransferModal'), result)
 							})
 							$('#trustTransferModal').modal('show')
@@ -1726,7 +1768,7 @@ define([
 			//			})
 
 			// 当选择本金兑付时，显示本金
-			$(document.trustIncomeForm.ifCapitalName).on('change', function () {
+			$(document.trustIncomeForm.capitalFlag).on('change', function () {
 				if (this.value === 'yes') {
 					$('#capitalArea').show()
 				} else {
@@ -1761,6 +1803,16 @@ define([
 				},
 				errors: {
 					validredeemamount: '赎回份额不能为0，且不可超过持有额度'
+				}
+			})
+
+			// 转让金额验证
+			$('#trustTransferForm').validator({
+				custom: {
+					validtransamount: validtransamount
+				},
+				errors: {
+					validtransamount: '转让份额不能为0，且不可超过持有额度'
 				}
 			})
 
@@ -2125,4 +2177,11 @@ function validredeemamount($el) {
     var holdAmount = form.find('input[name=amount]')
 	var amount = $el.val()
 	return parseFloat(amount) > 0 && parseFloat(amount) <= parseFloat(holdAmount.val())
+}
+
+// 转让额度验证
+function validtransamount($el) {
+	console.log(111)
+	var tranVolume = $el.val()
+	return parseFloat(tranvolume) > 0 && parseFloat(tranvolume) <= parseFloat(holdAmount)
 }

@@ -25,9 +25,9 @@
             <button id="productAudit" class="btn btn-default btn-sm">
               <i class="fa fa-check"></i> 提交审核
             </button>
-            <button id="productAssetPool" class="btn btn-default btn-sm">
+            <!--<button id="productAssetPool" class="btn btn-default btn-sm">
               <i class="fa fa-check-square-o"></i> 选择资产池
-            </button>
+            </button>-->
           </div>
         </div>
         <!-- Grid内容体 -->
@@ -171,7 +171,7 @@
                   <input name="expAror" type="text"
                          class="form-control"
                          placeholder="从" required="required" 
-                         data-validfloat="4.4" data-error="预期年化收益只能为前四位后四位小数">
+                         data-validfloat="4.2" data-error="预期年化收益只能为前四位后两位小数">
                   <span class="input-group-addon">%</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -184,8 +184,8 @@
                   <input name="expArorSec" type="text"
                          class="form-control"
                          placeholder="到" 
-                         data-validfloat="4.4" 
-                         data-error="预期年化收益只能为前四位后四位小数">
+                         data-validfloat="4.2" 
+                         data-error="预期年化收益只能为前四位后两位小数">
                   <span class="input-group-addon">%</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -193,13 +193,13 @@
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label>额外增信</label>
+                <label>收益计算基础</label>
                 <div class="row form-style">
                   <div class="col-sm-4">
-                    <input name="reveal" type="radio" value="YES" class="icheck" checked> 有
+                    <input name="incomeCalcBasis" type="radio" value="365" class="icheck" checked> 365天
                   </div>
                   <div class="col-sm-4">
-                    <input name="reveal" type="radio" value="NO" class="icheck"> 无
+                    <input name="incomeCalcBasis" type="radio" value="360" class="icheck" > 360天
                   </div>
                 </div>
               </div>
@@ -209,13 +209,13 @@
                 <label>币种</label>
                 <select name="currency" class="form-control input-sm">
                   <option selected="selected" value="CNY">人民币</option>
-                  <option value="USD">美元</option>
+                 <!-- <option value="USD">美元</option>
                   <option value="EUR">欧元</option>
                   <option value="JPY">日元</option>
                   <option value="GBP">英镑</option>
                   <option value="HKD">港币</option>
                   <option value="SGD">新元</option>
-                  <option value="AUD">澳元</option>
+                  <option value="AUD">澳元</option>-->
                 </select>
               </div>
             </div>
@@ -223,27 +223,13 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
-                <label>收益计算基础</label>
-                <div class="input-group input-group-sm">
-                  <input name="incomeCalcBasis" type="text"
-                         class="form-control" 
-                         placeholder="收益计算基础" 
-                         data-validint="0-366"
-                         data-error="收益计算基础不能大于366">
-                  <span class="input-group-addon">天</span>
-                </div>
-                <div class="help-block with-errors text-red"></div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
                 <label>托管费率</label>
                 <div class="input-group input-group-sm">
                   <input name="manageRate" type="text"
                          class="form-control"
                          placeholder="托管费率" 
-                         data-validfloat="4.4" 
-                         data-error="托管费率只能为前四位后四位小数">
+                         data-validfloat="4.2" 
+                         data-error="托管费率只能为前四位后两位小数">
                   <span class="input-group-addon">%每年</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -256,8 +242,8 @@
                   <input name="fixedManageRate" type="text"
                          class="form-control"
                          placeholder="固定管理费率"
-                         data-validfloat="4.4" 
-                         data-error="固定管理费率只能为前四位后四位小数">
+                         data-validfloat="4.2" 
+                         data-error="固定管理费率只能为前四位后两位小数">
                   <span class="input-group-addon">%每年</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -423,8 +409,8 @@
                     <span class="input-group-addon">一旦申购将冻结此金额</span>
                     <input name="lockPeriod" type="text"
                            class="form-control"
-                           data-validint="0-244"
-                           data-error="应该小于244">
+                           data-validint="1-244"
+                           data-error="应该大于0小于244">
                     <span class="input-group-addon">个自然日</span>
                   </div>
                   <div class="help-block with-errors text-red"></div>
@@ -582,8 +568,6 @@
                 <div class="help-block with-errors text-red"></div>
               </div>
             </div>
-            
-            
           </div>
           <div class="row">
             <div class="col-sm-4">
@@ -602,6 +586,29 @@
             </div>
           </div>
           <p class="form-header">其他信息</p>
+          
+          <div class="form-group">
+            <label>选择渠道</label>
+            <select name="channels" 
+            	class="form-control input-sm origin-select"
+                    multiple="multiple"
+                    style="width: 100%;">
+            </select>
+          </div>
+          <div class="form-group">
+          	<label>额外增信</label>
+          	<div class="row form-style">
+          		<div class="col-sm-2">
+                <input name="reveal" type="radio" value="YES" class="icheck" checked> 有
+              </div>
+              <div class="col-sm-2">
+                <input name="reveal" type="radio" value="NO" class="icheck"> 无
+              </div>
+            </div>
+            <textarea id="addRevealComment" name="revealComment" rows="3"
+                      class="form-control input-sm"
+                      placeholder="增信备注"></textarea>
+          </div>
           <div class="form-group">
             <label>产品说明</label>
               <textarea name="instruction" rows="3"
@@ -624,8 +631,18 @@
               <option value="R5">R5(激进型)</option>
             </select>
           </div>
-          <input name="files" type="hidden"/>
+          <input name="investFile" type="hidden" />
+					<input name="files" type="hidden"/>
         </form>
+        <div class="form-group" id="investUploader"></div>
+        <table id="addInvestUploadTable" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>投资协议书</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+        </table>
         <div class="form-group" id="addProductUploader"></div>
         <table id="addProductUploadTable" class="table table-bordered table-striped">
           <thead>
@@ -639,7 +656,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="addProductSubmit" type="button" class="btn btn-primary btn-submit addProductSubmit">保 存</button>
+        <button id="addProductSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
@@ -670,7 +687,7 @@
                        class="form-control input-sm"
                        placeholder="产品编码" 
                        required="required" 
-                       data-error="产品编码已存在" 
+                       data-remote-error="产品编码已存在" 
                        data-remote="/ams/product/validateCode" 
                        data-fetch-id="">
                 <div class="help-block with-errors text-red"></div>
@@ -683,7 +700,7 @@
                        class="form-control input-sm"
                        placeholder="产品简称" 
                        required="required" 
-                       data-error="产品简称已存在" 
+                       data-remote-error="产品简称已存在" 
                        data-remote="/ams/product/validateName" 
                        data-fetch-id="">
                 <div class="help-block with-errors text-red"></div>
@@ -696,7 +713,7 @@
                        class="form-control input-sm"
                        placeholder="产品全称" 
                        required="required" 
-                       data-error="产品全称已存在" 
+                       data-remote-error="产品全称已存在" 
                        data-remote="/ams/product/validateFullName" 
                        data-fetch-id="">
                 <div class="help-block with-errors text-red"></div>
@@ -716,7 +733,10 @@
                 <label>产品管理人</label>
                 <input name="administrator" type="text"
                        class="form-control input-sm"
-                       placeholder="产品管理人">
+                       placeholder="产品管理人" 
+                       required="required" 
+                       data-error="产品管理人必填">
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
@@ -735,9 +755,11 @@
                 <div class="input-group input-group-sm">
                   <input name="expAror" type="text"
                          class="form-control"
-                         placeholder="从">
+                         placeholder="从"required="required" 
+                         data-validfloat="4.2" data-error="预期年化收益只能为前四位后2位小数">
                   <span class="input-group-addon">%</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-2">
@@ -746,20 +768,23 @@
                 <div class="input-group input-group-sm range">
                   <input name="expArorSec" type="text"
                          class="form-control"
-                         placeholder="到">
+                         placeholder="到"
+                         data-validfloat="4.2" 
+                         data-error="预期年化收益只能为前四位后四位小数">
                   <span class="input-group-addon">%</span>
                 </div>
+                <div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group">
-                <label>额外增信</label>
+                <label>收益计算基础</label>
                 <div class="row form-style">
                   <div class="col-sm-4">
-                    <input name="reveal" type="radio" value="YES" class="icheck" checked> 有
+                    <input name="incomeCalcBasis" type="radio" value="365" class="icheck" checked> 365天
                   </div>
                   <div class="col-sm-4">
-                    <input name="reveal" type="radio" value="NO" class="icheck"> 无
+                    <input name="incomeCalcBasis" type="radio" value="360" class="icheck" > 360天
                   </div>
                 </div>
               </div>
@@ -769,13 +794,13 @@
                 <label>币种</label>
                 <select name="currency" class="form-control input-sm">
                   <option selected="selected" value="CNY">人民币</option>
-                  <option value="USD">美元</option>
+                  <!--<option value="USD">美元</option>
                   <option value="EUR">欧元</option>
                   <option value="JPY">日元</option>
                   <option value="GBP">英镑</option>
                   <option value="HKD">港币</option>
                   <option value="SGD">新元</option>
-                  <option value="AUD">澳元</option>
+                  <option value="AUD">澳元</option>-->
                 </select>
               </div>
             </div>
@@ -783,27 +808,13 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group">
-                <label>收益计算基础</label>
-                <div class="input-group input-group-sm">
-                  <input name="incomeCalcBasis" type="text"
-                         class="form-control"
-                         placeholder="收益计算基础"
-                         data-validint="0-366"
-                         data-error="收益计算基础不能大于366">
-                  <span class="input-group-addon">天</span>
-                </div>
-                <div class="help-block with-errors text-red"></div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
                 <label>托管费率</label>
                 <div class="input-group input-group-sm">
                   <input name="manageRate" type="text"
                          class="form-control"
                          placeholder="托管费率"
-                         data-validfloat="4.4" 
-                         data-error="托管费率只能为前四位后四位小数">
+                         data-validfloat="4.2" 
+                         data-error="托管费率只能为前四位后两位小数">
                   <span class="input-group-addon">%每年</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -816,8 +827,8 @@
                   <input name="fixedManageRate" type="text"
                          class="form-control"
                          placeholder="固定管理费率"
-                         data-validfloat="4.4" 
-                         data-error="固定管理费率只能为前四位后四位小数">
+                         data-validfloat="4.2" 
+                         data-error="固定管理费率只能为前四位后两位小数">
                   <span class="input-group-addon">%每年</span>
                 </div>
                 <div class="help-block with-errors text-red"></div>
@@ -1160,6 +1171,28 @@
           </div>
           <p class="form-header">其他信息</p>
           <div class="form-group">
+            <label>选择渠道</label>
+            <select name="channels" 
+            	class="form-control input-sm origin-select"
+                    multiple="multiple"
+                    style="width: 100%;">
+            </select>
+          </div>
+          <div class="form-group">
+          	<label>额外增信</label>
+          	<div class="row form-style">
+          		<div class="col-sm-2">
+                <input name="reveal" type="radio" value="YES" class="icheck" checked> 有
+              </div>
+              <div class="col-sm-2">
+                <input name="reveal" type="radio" value="NO" class="icheck"> 无
+              </div>
+            </div>
+            <textarea id="updateRevealComment" name="revealComment" rows="3"
+                      class="form-control input-sm"
+                      placeholder="增信备注"></textarea>
+          </div>
+          <div class="form-group">
             <label>产品说明</label>
               <textarea name="instruction" rows="3"
                         class="form-control input-sm"
@@ -1181,8 +1214,18 @@
               <option value="R5">R5(激进型)</option>
             </select>
           </div>
+          <input name="investFile" type="hidden" />
           <input name="files" type="hidden"/>
         </form>
+        <div class="form-group" id="updateInvestUploader"></div>
+        <table id="updateInvestUploadTable" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>投资协议书</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+        </table>
         <div class="form-group" id="updateProductUploader"></div>
         <table id="updateProductUploadTable" class="table table-bordered table-striped">
           <thead>
@@ -1196,7 +1239,7 @@
       <!-- 模态窗底部 -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="updateProductSubmit" type="button" class="btn btn-primary btn-submit updateProductSubmit">保 存</button>
+        <button id="updateProductSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
       </div>
     </div>
   </div>
@@ -1300,14 +1343,6 @@
 					</div>
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
-							<dt>额外增信:</dt>
-							<dd>
-								<div data-detail-fetch="revealStr"></div>
-							</dd>
-						</dl>
-					</div>
-					<div class="col-sm-6">
-						<dl class="dl-horizontal">
 							<dt>币种:</dt>
 							<dd>
 								<div data-detail-fetch="currencyStr"></div>
@@ -1385,6 +1420,14 @@
             </div>
             <div class="col-sm-6">
               <dl class="dl-horizontal">
+              	<dt>已售总份额:</dt>
+                <dd>
+                  <div data-detail-fetch="collectedVolume"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
                 <dt>到期最晚还本付息日:</dt>
                 <dd>
                   <div data-detail-fetch="accrualDateStr"></div>
@@ -1397,6 +1440,22 @@
         <div id="detailProductType02Area">
           <p class="form-header">开放式产品信息</p>
           <div class="row">
+            <div class="col-sm-6">
+            	<dl class="dl-horizontal">
+                <dt>目前持有份额总数:</dt>
+                <dd>
+                  <div data-detail-fetch="currentVolume"></div>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-sm-6">
+              <dl class="dl-horizontal">
+                <dt>已售总份额:</dt>
+                <dd>
+                  <div data-detail-fetch="collectedVolume"></div>
+                </dd>
+              </dl>
+            </div>
             <div class="col-sm-6">
 							<dl class="dl-horizontal">
 								<dt>成立时间:</dt>
@@ -1517,6 +1576,30 @@
         <div class="row">
           <div class="col-sm-6">
             <dl class="dl-horizontal">
+              <dt>已选渠道:</dt>
+              <dd>
+                <div data-detail-fetch="channelNames"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>额外增信:</dt>
+							<dd>
+								<div data-detail-fetch="revealStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+            <dl class="dl-horizontal">
+              <dt>增信备注:</dt>
+              <dd>
+                <div data-detail-fetch="revealComment"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-6">
+            <dl class="dl-horizontal">
               <dt>产品说明:</dt>
               <dd>
                 <div data-detail-fetch="instruction"></div>
@@ -1536,6 +1619,23 @@
               <dt>风险等级:</dt>
               <dd>
                 <div data-detail-fetch="riskLevelStr"></div>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm-10">
+            <dl class="dl-horizontal">
+              <dt>投资协议书:</dt>
+              <dd>
+                <table id="productDetailInvestFileTable" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>投资协议书</th>
+                    <th>上传人</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                </table>
               </dd>
             </dl>
           </div>

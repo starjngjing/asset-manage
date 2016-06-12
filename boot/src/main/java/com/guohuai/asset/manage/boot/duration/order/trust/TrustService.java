@@ -253,4 +253,19 @@ public class TrustService {
 			trustTransDao.updateOrder(oid);
 		}
 	}
+	
+	/**
+	 * 获取本息兑付的期数
+	 * @param pid
+	 * @param oid
+	 * @return
+	 */
+	public int getSeqByIncome(String oid) {
+		List<TrustIncomeEntity> list = trustIncomeDao.findSeqByPidAndOidForIncome(oid);
+		if (null != list && list.size() > 0) {
+			return list.size();
+		}
+		
+		return 0;
+	}
 }

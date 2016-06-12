@@ -5,7 +5,7 @@ import java.util.List;
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
-
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,8 +37,8 @@ public class ProductResp extends BaseResp {
 		this.raisePeriod = p.getRaisePeriodDays();//募集期:()个自然日
 		this.interestsFirstDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
 		this.durationPeriod = p.getDurationPeriodDays();//存续期:()个自然日
-		this.expAror = p.getExpAror().toPlainString();//预期年化收益率
-		this.expArorSec = p.getExpArorSec().toPlainString();//预期年化收益率区间
+		this.expAror = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpAror()));//预期年化收益率
+		this.expArorSec = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpArorSec()));//预期年化收益率区间
 		this.raisedTotalNumber = p.getRaisedTotalNumber();//募集总份额
 		this.netUnitShare = p.getNetUnitShare().toPlainString();//单位份额净值
 		this.investMin = p.getInvestMin();//单笔投资最低份额
@@ -59,8 +59,8 @@ public class ProductResp extends BaseResp {
 		this.riskLevel = p.getRiskLevel();//风险等级
 		this.fileKeys = p.getFileKeys();//附加文件
 		this.status = p.getState();//产品状态
-		this.createTime = DateUtil.formatDate(p.getCreateTime().getTime());//创建时间
-		this.updateTime = DateUtil.formatDate(p.getUpdateTime().getTime());//更新时间
+		this.createTime = DateUtil.formatDatetime(p.getCreateTime().getTime());//创建时间
+		this.updateTime = DateUtil.formatDatetime(p.getUpdateTime().getTime());//更新时间
 		this.operator = p.getOperator();//操作员
 		this.auditState = p.getAuditState();//审核状态
 		this.setupDate = p.getSetupDate()!=null?DateUtil.formatDate(p.getSetupDate().getTime()):"";//产品成立时间（存续期开始时间）
@@ -83,13 +83,13 @@ public class ProductResp extends BaseResp {
 	private Integer durationPeriod;//存续期:()个自然日
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private Long raisedTotalNumber;//募集总份额
+	private BigDecimal raisedTotalNumber;//募集总份额
 	private String netUnitShare;//单位份额净值
-	private Integer investMin;//单笔投资最低份额
-	private Long investMax;//单笔投资最高份额
-	private Integer investAdditional;//单笔投资追加份额
-	private Integer netMaxRredeemDay;//单日净赎回上限
-	private Integer minRredeem;//单笔净赎回下限
+	private BigDecimal investMin;//单笔投资最低份额
+	private BigDecimal investMax;//单笔投资最高份额
+	private BigDecimal investAdditional;//单笔投资追加份额
+	private BigDecimal netMaxRredeemDay;//单日净赎回上限
+	private BigDecimal minRredeem;//单笔净赎回下限
 	private String accrualCycleOid;//收益结转周期
 	private String accrualCycleName;//收益结转周期
 	private Integer purchaseConfirmDate;//申购确认日:()个
@@ -114,7 +114,8 @@ public class ProductResp extends BaseResp {
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String isOpenPurchase;//开放申购期
 	private String isOpenRemeed;//开放赎回期
-	private Integer channelNum;//取到数
+	private Integer channelNum;//渠道数
 	private List<FileResp> files;
+	private String marketState;//产品是否有渠道已经上下架了状态
 
 }

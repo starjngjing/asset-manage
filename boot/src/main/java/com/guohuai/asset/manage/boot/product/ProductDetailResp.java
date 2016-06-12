@@ -2,10 +2,12 @@ package com.guohuai.asset.manage.boot.product;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import com.guohuai.asset.manage.boot.file.FileResp;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,10 +33,11 @@ public class ProductDetailResp extends BaseResp {
 		}
 		
 		this.reveal = p.getReveal();//额外增信
+		this.revealComment = p.getRevealComment();//增信备注
 		this.currency = p.getCurrency();//币种
 		this.incomeCalcBasis = p.getIncomeCalcBasis();//收益计算基础
-		this.manageRate = p.getManageRate().toPlainString();//托管费率
-		this.fixedManageRate = p.getFixedManageRate().toPlainString();//固定管理费率
+		this.manageRate = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getManageRate()));//托管费率
+		this.fixedManageRate = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getFixedManageRate()));//固定管理费率
 		if(p.getAssetPool()!=null) {
 			this.assetPoolOid =  p.getAssetPool().getOid();
 			this.assetPoolName = p.getAssetPool().getName();
@@ -45,13 +48,13 @@ public class ProductDetailResp extends BaseResp {
 		this.interestsFirstDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
 		this.interestsDate = p.getInterestsFirstDays();//起息日:募集满额后()个自然日
 		this.durationPeriod = p.getDurationPeriodDays();//存续期:()个自然日
-		this.expAror = p.getExpAror().toPlainString();//预期年化收益率
-		this.expArorSec = p.getExpArorSec().toPlainString();//预期年化收益率区间
+		this.expAror = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpAror()));//预期年化收益率
+		this.expArorSec = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpArorSec()));//预期年化收益率区间
 		if(p.getExpAror()!=null) {
 			if(p.getExpArorSec()!=null && p.getExpAror().doubleValue()!=p.getExpArorSec().doubleValue()) {
-				this.expectedRate = p.getExpAror().toPlainString()+"%~"+p.getExpArorSec().toPlainString()+"%";
+				this.expectedRate = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpAror()))+"%~"+ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpArorSec()))+"%";
 			} else {
-				this.expectedRate = p.getExpAror().toPlainString()+"%";
+				this.expectedRate = ProductDecimalFormat.format(ProductDecimalFormat.multiply(p.getExpAror()))+"%";
 			}
 		}
 		this.raisedTotalNumber = p.getRaisedTotalNumber();//募集总份额
@@ -84,14 +87,14 @@ public class ProductDetailResp extends BaseResp {
 		this.riskLevel = p.getRiskLevel();//风险等级
 		this.fileKeys = p.getFileKeys();//附加文件
 		this.status = p.getState();//产品状态
-		this.createTime = DateUtil.formatDate(p.getCreateTime().getTime());//创建时间
-		this.updateTime = DateUtil.formatDate(p.getUpdateTime().getTime());//更新时间
+		this.createTime = DateUtil.formatDatetime(p.getCreateTime().getTime());//创建时间
+		this.updateTime = DateUtil.formatDatetime(p.getUpdateTime().getTime());//更新时间
 		this.operator = p.getOperator();//操作员
 		this.auditState = p.getAuditState();//审核状态
 		this.isOpenPurchase = p.getIsOpenPurchase();//开放申购期
 		this.isOpenRemeed = p.getIsOpenRemeed();//开放赎回期
 		this.publisher = p.getPublisher();//发行人
-		this.currentMoney = p.getCurrentMoney();//当前份额
+		this.currentVolume = p.getCurrentVolume();//当前份额
 		this.collectedVolume = p.getCollectedVolume();//已募份额
 		this.purchaseNum = p.getPurchaseNum();//已投次数
 		this.lockCollectedVolume = p.getLockCollectedVolume();//锁定已募份额
@@ -107,8 +110,9 @@ public class ProductDetailResp extends BaseResp {
 		this.revealStr = (StringUtil.isEmpty(p.getReveal())==true?"":ProductEnum.enums.get(p.getReveal()));//额外增信
 		this.currencyStr = (StringUtil.isEmpty(p.getCurrency())==true?"":ProductEnum.enums.get(p.getCurrency()));
 		this.incomeCalcBasisStr = (StringUtil.isEmpty(p.getIncomeCalcBasis())==true?"":p.getIncomeCalcBasis()+"(天)");//收益计算基础
-		this.manageRateStr = p.getManageRate().toPlainString()+"%每年";//托管费率
-		this.fixedManageRateStr = p.getFixedManageRate().toPlainString()+"%每年";//固定管理费率
+		this.manageRateStr = StringUtil.isEmpty(this.manageRate)?"":this.manageRate+"%每年";//托管费率
+		this.fixedManageRateStr = StringUtil.isEmpty(this.fixedManageRate)?"":this.fixedManageRate+"%每年";//固定管理费率
+		
 		if("FIRSTRACKTIME".equals(p.getRaiseStartDateType()) && "".equals(this.raiseStartDate)) {
 			this.raiseStartDateStr = "与首次上架时间同时";
 		} else {
@@ -122,8 +126,9 @@ public class ProductDetailResp extends BaseResp {
 		} else {
 			this.interestsDateStr = p.getInterestsFirstDays()!=null?"成立后第"+p.getInterestsFirstDays()+"个自然日":"";//起息日:募集满额后()个自然日
 		}
+		
 		this.durationPeriodStr = p.getDurationPeriodDays()!=null?p.getDurationPeriodDays()+"个自然日":"";//存续期:()个自然日
-		this.raisedTotalNumberStr = p.getRaisedTotalNumber()!=null?p.getRaisedTotalNumber()+"份":"";//募集总份额
+		this.raisedTotalNumberStr = p.getRaisedTotalNumber()!=null?ProductDecimalFormat.format(p.getRaisedTotalNumber(), "0.####")+"份":"";//募集总份额
 		this.accrualDateStr = p.getAccrualRepayDays()!=null?"存续期结束后第"+p.getAccrualRepayDays()+"个自然日":"";
 		this.lockPeriodStr = p.getLockPeriodDays()!=null?"一旦申购，将冻结此金额"+p.getLockPeriodDays()+"个自然日":"";
 		this.purchaseConfirmDateStr = p.getPurchaseConfirmDays()!=null?
@@ -132,12 +137,12 @@ public class ProductDetailResp extends BaseResp {
 		this.redeemConfirmDateStr = p.getRedeemConfirmDays()!=null?
 				("赎回订单确认日"+p.getRedeemConfirmDays()+"个"     +( (StringUtil.isEmpty(p.getRedeemConfirmDaysType())==true?"":ProductEnum.enums.get(p.getRedeemConfirmDaysType())) )+     "内"):"";
 		
-		this.netMaxRredeemDayStr = p.getNetMaxRredeemDay()!=null?p.getNetMaxRredeemDay()+"份":"";
-		this.minRredeemStr = p.getMinRredeem()!=null?p.getMinRredeem()+"份":"";
+		this.netMaxRredeemDayStr = p.getNetMaxRredeemDay()!=null?ProductDecimalFormat.format(p.getNetMaxRredeemDay(), "0.####")+"份":"";
+		this.minRredeemStr = p.getMinRredeem()!=null?ProductDecimalFormat.format(p.getMinRredeem(), "0.####")+"份":"";
 		this.redeemTimingTaskTimeStr = !"".equals(this.redeemTimingTaskTime)?"每"   +(StringUtil.isEmpty(p.getRedeemTimingTaskDaysType())==true?"":ProductEnum.enums.get(p.getRedeemTimingTaskDaysType()))+   ""+this.redeemTimingTaskTime+"发起代付指令":"";
-		this.investMinStr = p.getInvestMin()!=null?p.getInvestMin()+"份":"";
-		this.investMaxStr = p.getInvestMax()!=null?p.getInvestMax()+"份":"";
-		this.investAdditionalStr = p.getInvestAdditional()!=null?p.getInvestAdditional()+"份":"";
+		this.investMinStr = p.getInvestMin()!=null?ProductDecimalFormat.format(p.getInvestMin(), "0.####")+"份":"";
+		this.investMaxStr = p.getInvestMax()!=null?ProductDecimalFormat.format(p.getInvestMax(), "0.####")+"份":"";
+		this.investAdditionalStr = p.getInvestAdditional()!=null?ProductDecimalFormat.format(p.getInvestAdditional(), "0.####")+"份":"";
 		this.netUnitShareStr = !"".equals(this.netUnitShare)?this.netUnitShare+"元":"";
 		if("DAY".equals(this.payModeOid)) {
 			this.payModeNameStr = this.payModeName;
@@ -161,6 +166,7 @@ public class ProductDetailResp extends BaseResp {
 	private String typeOid;//产品类型
 	private String typeName;//产品类型
 	private String reveal;//额外增信
+	private String revealComment;//增信备注
 	private String currency;//币种
 	private String incomeCalcBasis;//收益计算基础
 	private String manageRate;//托管费率
@@ -175,7 +181,7 @@ public class ProductDetailResp extends BaseResp {
 	private String expectedRate;//预期年化收益率
 	private String expAror;//预期年化收益率
 	private String expArorSec;//预期年化收益率区间
-	private Long raisedTotalNumber;//募集总份额
+	private BigDecimal raisedTotalNumber;//募集总份额
 	private Integer accrualDate;//还本付息日 存续期结束后第()个自然日
 	private String setupDate;//产品成立时间（存续期开始时间）
 	private String setupDateType;//产品成立时间类型
@@ -189,13 +195,13 @@ public class ProductDetailResp extends BaseResp {
 	private String purchaseConfirmDateType;//申购确认日类型:自然日或交易日
 	private Integer redeemConfirmDate;//赎回确认日:()个
 	private String redeemConfirmDateType;//赎回确认日类型:自然日或交易日
-	private Integer netMaxRredeemDay;//单日净赎回上限
-	private Integer minRredeem;//单笔净赎回下限
+	private BigDecimal netMaxRredeemDay;//单日净赎回上限
+	private BigDecimal minRredeem;//单笔净赎回下限
 	private String redeemTimingTaskDateType;//赎回定时任务类型:自然日或交易日
 	private String redeemTimingTaskTime;//赎回定时任务时间 填写每日定时调支付接口做批量赎回操作的时间点
-	private Integer investMin;//单笔投资最低份额
-	private Long investMax;//单笔投资最高份额
-	private Integer investAdditional;//单笔投资追加份额
+	private BigDecimal investMin;//单笔投资最低份额
+	private BigDecimal investMax;//单笔投资最高份额
+	private BigDecimal investAdditional;//单笔投资追加份额
 	private String netUnitShare;//单位份额净值
 	private String investComment;//投资标的
 	private String instruction;//产品说明
@@ -208,14 +214,17 @@ public class ProductDetailResp extends BaseResp {
 	private String auditState;//审核状态
 	private String isOpenPurchase;//开放申购期
 	private String isOpenRemeed;//开放赎回期
-	private List<FileResp> files;
+	private List<FileResp> files;//附件
+	private List<FileResp> investFiles;//投资协议书
+	private String channelNames;//渠道名称
+	private List<String> channelOids;
 	
 	private Integer redeemTimingTaskDate;//赎回定时任务天数	 默认每日
 	private String publisher;//发行人
-	private BigDecimal currentMoney;//当前份额
-	private Integer collectedVolume;//已募份额
+	private BigDecimal currentVolume;//当前份额
+	private BigDecimal collectedVolume;//已募份额
 	private Integer purchaseNum;//已投次数
-	private Integer lockCollectedVolume;//锁定已募份额
+	private BigDecimal lockCollectedVolume;//锁定已募份额
 	
 	private String raiseEndDate;//募集结束时间
 	private String raiseFailDate;//募集宣告失败时间

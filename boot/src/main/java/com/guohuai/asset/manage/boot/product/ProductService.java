@@ -83,14 +83,14 @@ public class ProductService {
 			pb.assetPool(assetPool);
 		}
 		{
-			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
+			pb.reveal(form.getReveal()).revealComment(form.getRevealComment()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getManageRate())) {
-				pb.manageRate(new BigDecimal(form.getManageRate()));
+				pb.manageRate(ProductDecimalFormat.divide(new BigDecimal(form.getManageRate())));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				pb.fixedManageRate(new BigDecimal(form.getFixedManageRate()));
+				pb.fixedManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getFixedManageRate())));
 			}
 		}
 		{
@@ -130,29 +130,29 @@ public class ProductService {
 		}
 		{
 			// 年化收益
-			pb.expAror(new BigDecimal(form.getExpAror()));
+			pb.expAror(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			if (StringUtil.isEmpty(form.getExpArorSec()) || new BigDecimal(form.getExpArorSec()).equals(BigDecimal.ZERO)) {
-				pb.expArorSec(new BigDecimal(form.getExpAror()));
+				pb.expArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			} else {
-				pb.expArorSec(new BigDecimal(form.getExpArorSec()));
+				pb.expArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpArorSec())));
 			}
 		}
 		{
 			if(!StringUtil.isEmpty(form.getRaisedTotalNumber())) {
-				pb.raisedTotalNumber(Long.valueOf(form.getRaisedTotalNumber()));
+				pb.raisedTotalNumber(new BigDecimal(form.getRaisedTotalNumber()));
 			}
 			if(!StringUtil.isEmpty(form.getInvestMin())) {
-				pb.investMin(Integer.valueOf(form.getInvestMin()));
+				pb.investMin(new BigDecimal(form.getInvestMin()));
 			}
 			
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
-				pb.investMax(Long.valueOf(form.getInvestMax()));
+				pb.investMax(new BigDecimal(form.getInvestMax()));
 			}
 //			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
 //				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
 //			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
-				pb.investAdditional(Integer.valueOf(form.getInvestAdditional()));
+				pb.investAdditional(new BigDecimal(form.getInvestAdditional()));
 			}
 			if(!StringUtil.isEmpty(form.getNetUnitShare())) {
 				pb.netUnitShare(new BigDecimal(form.getNetUnitShare()));
@@ -162,12 +162,16 @@ public class ProductService {
 			}
 		}
 		{
+			pb.isOpenPurchase(Product.YES).isOpenRemeed(Product.NO);
+		}
+		{
 			pb.investComment(form.getInvestComment()).instruction(form.getInstruction()).riskLevel(form.getRiskLevel()).stems(Product.STEMS_Userdefine).auditState(Product.AUDIT_STATE_Nocommit);
 		}
 		{
 			// 其他字段 初始化默认值s
 			pb.operator(operator).publisher(operator).updateTime(now).createTime(now);
 		}
+		// 附件文件
 		List<SaveFileForm> fileForms = null;
 		String fkey = StringUtil.uuid();
 		{
@@ -178,12 +182,34 @@ public class ProductService {
 				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
 			}
 		}
+		//投资协议书
+		List<SaveFileForm> investFileForm = null;
+		String investFileKey = StringUtil.uuid();
+		{
+			if (StringUtil.isEmpty(form.getInvestFile())) {
+				pb.investFileKey(StringUtil.EMPTY);
+			} else {
+				pb.investFileKey(investFileKey);
+				investFileForm = JSON.parseArray(form.getInvestFile(), SaveFileForm.class);
+			}
+		}
+		
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
 			
-		// 文件
+		// 附件文件
 		this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+		//投资协议书
+		this.fileService.save(investFileForm, investFileKey, File.CATE_User, operator);
+		
+		if(form.getChannels()!=null && form.getChannels().length>0) {
+			List<String> channelOids = new ArrayList<String>();
+			for(String channelOid : form.getChannels()) {
+				channelOids.add(channelOid);
+			}
+			this.productChannelService.saveApplyChannel(operator, p.getOid(), channelOids);
+		}
 		
 		return response;
 	}
@@ -216,14 +242,14 @@ public class ProductService {
 			pb.assetPool(assetPool);
 		}
 		{
-			pb.reveal(form.getReveal()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
+			pb.reveal(form.getReveal()).revealComment(form.getRevealComment()).currency(form.getCurrency()).incomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getManageRate())) {
-				pb.manageRate(new BigDecimal(form.getManageRate()));
+				pb.manageRate(ProductDecimalFormat.divide(new BigDecimal(form.getManageRate())));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				pb.fixedManageRate(new BigDecimal(form.getFixedManageRate()));
+				pb.fixedManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getFixedManageRate())));
 			}
 		}
 		{
@@ -256,39 +282,39 @@ public class ProductService {
 		}
 		{
 			// 年化收益
-			pb.expAror(new BigDecimal(form.getExpAror()));
+			pb.expAror(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			if (StringUtil.isEmpty(form.getExpArorSec()) || new BigDecimal(form.getExpArorSec()).equals(BigDecimal.ZERO)) {
-				pb.expArorSec(new BigDecimal(form.getExpAror()));
+				pb.expArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			} else {
-				pb.expArorSec(new BigDecimal(form.getExpArorSec()));
+				pb.expArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpArorSec())));
 			}
 		}
 		{
 			if(!StringUtil.isEmpty(form.getInvestMin())) {
-				pb.investMin(Integer.valueOf(form.getInvestMin()));
+				pb.investMin(new BigDecimal(form.getInvestMin()));
 			}
 			
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
-				pb.investMax(Long.valueOf(form.getInvestMax()));
+				pb.investMax(new BigDecimal(form.getInvestMax()));
 			}
 //			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
 //				pb.purchaseLimit(Long.valueOf(form.getPurchaseLimit()));
 //			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
-				pb.investAdditional(Integer.valueOf(form.getInvestAdditional()));
+				pb.investAdditional(new BigDecimal(form.getInvestAdditional()));
 			}
 			if(!StringUtil.isEmpty(form.getNetUnitShare())) {
 				pb.netUnitShare(new BigDecimal(form.getNetUnitShare()));
 			}
 			if(!StringUtil.isEmpty(form.getNetMaxRredeemDay())) {
-				pb.netMaxRredeemDay(Integer.valueOf(form.getNetMaxRredeemDay()));
+				pb.netMaxRredeemDay(new BigDecimal(form.getNetMaxRredeemDay()));
 			}
 			if(!StringUtil.isEmpty(form.getMinRredeem())) {
-				pb.minRredeem(Integer.valueOf(form.getMinRredeem()));
+				pb.minRredeem(new BigDecimal(form.getMinRredeem()));
 			}
 		}
 		{
-			pb.isOpenPurchase(Product.NO).isOpenRemeed(Product.NO);
+			pb.isOpenPurchase(Product.YES).isOpenRemeed(Product.YES);
 		}
 		{
 			pb.investComment(form.getInvestComment()).instruction(form.getInstruction()).riskLevel(form.getRiskLevel()).stems(Product.STEMS_Userdefine).auditState(Product.AUDIT_STATE_Nocommit);
@@ -297,7 +323,7 @@ public class ProductService {
 			// 其他字段 初始化默认值s
 			pb.operator(operator).publisher(operator).updateTime(now).createTime(now);
 		}
-		
+		// 附件文件
 		List<SaveFileForm> fileForms = null;
 		String fkey = StringUtil.uuid();
 		{
@@ -309,12 +335,33 @@ public class ProductService {
 			}
 		}
 		
+		//投资协议书
+		List<SaveFileForm> investFileForm = null;
+		String investFileKey = StringUtil.uuid();
+		{
+			if (StringUtil.isEmpty(form.getInvestFile())) {
+				pb.investFileKey(StringUtil.EMPTY);
+			} else {
+				pb.investFileKey(investFileKey);
+				investFileForm = JSON.parseArray(form.getInvestFile(), SaveFileForm.class);
+			}
+		}
+		
 		Product p = pb.build();
 		p = this.productDao.save(p);
 			
-		// 文件
+		// 附件文件
 		this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+		//投资协议书
+		this.fileService.save(investFileForm, investFileKey, File.CATE_User, operator);
 		
+		if(form.getChannels()!=null && form.getChannels().length>0) {
+			List<String> channelOids = new ArrayList<String>();
+			for(String channelOid : form.getChannels()) {
+				channelOids.add(channelOid);
+			}
+			this.productChannelService.saveApplyChannel(operator, p.getOid(), channelOids);
+		}
 		
 		return response;
 	}
@@ -339,16 +386,16 @@ public class ProductService {
 	public Product delete(String oid, String operator) {
 		Product product = this.getProductById(oid);
 		
-//		//面向渠道的属性，同一产品在不同渠道可以为不同状态，同一产品，只要有一个渠道销售状态为“渠道X待上架”，该产品已录入详情字段就不可修改。
-//		List<ProductChannel> pcs = this.productChannelDao.findProductChannelByProductOid(product.getOid());
-//		if(pcs!=null && pcs.size()>0) {
-//			for(ProductChannel pc : pcs) {
-//				if(ProductChannel.MARKET_STATE_Shelfing.equals(pc.getMarketState()) 
-//						|| ProductChannel.MARKET_STATE_Onshelf.equals(pc.getMarketState())) {
-//					throw AMPException.getException(30012);
-//				}
-//			}
-//		}
+		//面向渠道的属性，同一产品在不同渠道可以为不同状态，同一产品，只要有一个渠道销售状态为“渠道X待上架”，该产品已录入详情字段就不可修改。
+		List<ProductChannel> pcs = this.productChannelService.queryProductChannels(oid);
+		if(pcs!=null && pcs.size()>0) {
+			for(ProductChannel pc : pcs) {
+				if(ProductChannel.MARKET_STATE_Shelfing.equals(pc.getMarketState()) 
+						|| ProductChannel.MARKET_STATE_Onshelf.equals(pc.getMarketState())) {
+					throw AMPException.getException(90007);
+				}
+			}
+		}
 		
 		{
 			product.setIsDeleted(Product.YES);
@@ -396,24 +443,25 @@ public class ProductService {
 			product.setAdministrator(form.getAdministrator());
 			product.setState(Product.STATE_Update);
 			product.setReveal(form.getReveal());
+			product.setRevealComment(form.getRevealComment());
 			product.setCurrency(form.getCurrency());
 			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
 		}
 		{
 			if (!StringUtil.isEmpty(form.getManageRate())) {
-				product.setManageRate(new BigDecimal(form.getManageRate()));
+				product.setManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getManageRate())));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				product.setFixedManageRate(new BigDecimal(form.getFixedManageRate()));
+				product.setFixedManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getFixedManageRate())));
 			}
 		}
 		{
 			// 年化收益
-			product.setExpAror(new BigDecimal(form.getExpAror()));
+			product.setExpAror(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			if (StringUtil.isEmpty(form.getExpArorSec()) || new BigDecimal(form.getExpArorSec()).equals(BigDecimal.ZERO)) {
-				product.setExpArorSec(new BigDecimal(form.getExpAror()));
+				product.setExpArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			} else {
-				product.setExpArorSec(new BigDecimal(form.getExpArorSec()));
+				product.setExpArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpArorSec())));
 			}
 		}
 		{
@@ -452,20 +500,20 @@ public class ProductService {
 		}
 		{
 			if(!StringUtil.isEmpty(form.getRaisedTotalNumber())) {
-				product.setRaisedTotalNumber(Long.valueOf(form.getRaisedTotalNumber()));
+				product.setRaisedTotalNumber(new BigDecimal(form.getRaisedTotalNumber()));
 			}
 			if(!StringUtil.isEmpty(form.getInvestMin())) {
-				product.setInvestMin(Integer.valueOf(form.getInvestMin()));
+				product.setInvestMin(new BigDecimal(form.getInvestMin()));
 			}
 			
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
-				product.setInvestMax(Long.valueOf(form.getInvestMax()));
+				product.setInvestMax(new BigDecimal(form.getInvestMax()));
 			}
 //			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
 //				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
 //			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
-				product.setInvestAdditional(Integer.valueOf(form.getInvestAdditional()));
+				product.setInvestAdditional(new BigDecimal(form.getInvestAdditional()));
 			}
 			if(!StringUtil.isEmpty(form.getNetUnitShare())) {
 				product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
@@ -478,38 +526,63 @@ public class ProductService {
 			product.setInvestComment(form.getInvestComment());
 			product.setInstruction(form.getInstruction());
 			product.setRiskLevel(form.getRiskLevel());
-		}
-		String fkey = null;
-		{
-			if (StringUtil.isEmpty(product.getFileKeys())) {
-				fkey = StringUtil.uuid();
-				product.setFileKeys(fkey);
-			} else {
-				fkey = product.getFileKeys();
-			}
-		}
-		
-		List<SaveFileForm> fileForms = null;
-		{
-			if (!StringUtil.isEmpty(form.getFiles())) {
-				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
-			}
-		}
-		
-		
-		product.setFileKeys(fkey);
-		{
 			// 其它：修改时间、操作人
 			product.setOperator(operator);
 			product.setUpdateTime(now);
 		}
+		
+		//附件文件
+		List<SaveFileForm> fileForms = null;
+		if (!StringUtil.isEmpty(form.getFiles())) {
+			fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
+		}
+		String fkey = null;
+		if (StringUtil.isEmpty(product.getFileKeys())) {
+			fkey = StringUtil.uuid();
+			if(fileForms!=null && fileForms.size()>0) {
+				product.setFileKeys(fkey);
+			}
+		} else {
+			fkey = product.getFileKeys();
+			if(fileForms==null || fileForms.size()==0) {
+				product.setFileKeys(StringUtil.EMPTY);
+			}
+		}
+		
+		//投资协议书
+		List<SaveFileForm> investFileForm = null;
+		if (!StringUtil.isEmpty(form.getInvestFile())) {
+			investFileForm = JSON.parseArray(form.getInvestFile(), SaveFileForm.class);
+		}
+		String investFileKey = null;
+		if (StringUtil.isEmpty(product.getInvestFileKey())) {
+			investFileKey = StringUtil.uuid();
+			if(investFileForm!=null && investFileForm.size()>0) {
+				product.setInvestFileKey(investFileKey);
+			}
+		} else {
+			investFileKey = product.getInvestFileKey();
+			if(investFileForm==null || investFileForm.size()==0) {
+				product.setInvestFileKey(StringUtil.EMPTY);
+			}
+		}
+		
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
-
 		{
-			// 文件
+			// 附件文件
 			this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+			//投资协议书
+			this.fileService.save(investFileForm, investFileKey, File.CATE_User, operator);
 		}
+		
+		List<String> channelOids = new ArrayList<String>();
+		if(form.getChannels()!=null && form.getChannels().length>0) {
+			for(String channelOid : form.getChannels()) {
+				channelOids.add(channelOid);
+			}
+		}
+		this.productChannelService.saveApplyChannel(operator, product.getOid(), channelOids);
 		
 		return response;
 	}
@@ -547,6 +620,7 @@ public class ProductService {
 			product.setAdministrator(form.getAdministrator());
 			product.setState(Product.STATE_Update);
 			product.setReveal(form.getReveal());
+			product.setRevealComment(form.getRevealComment());
 			product.setCurrency(form.getCurrency());
 			product.setIncomeCalcBasis(form.getIncomeCalcBasis());
 		}	
@@ -562,19 +636,19 @@ public class ProductService {
 		}
 		{
 			if (!StringUtil.isEmpty(form.getManageRate())) {
-				product.setManageRate(new BigDecimal(form.getManageRate()));
+				product.setManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getManageRate())));
 			}
 			if (!StringUtil.isEmpty(form.getFixedManageRate())) {
-				product.setFixedManageRate(new BigDecimal(form.getFixedManageRate()));
+				product.setFixedManageRate(ProductDecimalFormat.divide(new BigDecimal(form.getFixedManageRate())));
 			}
 		}
 		{
 			// 年化收益
-			product.setExpAror(new BigDecimal(form.getExpAror()));
+			product.setExpAror(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			if (StringUtil.isEmpty(form.getExpArorSec()) || new BigDecimal(form.getExpArorSec()).equals(BigDecimal.ZERO)) {
-				product.setExpArorSec(new BigDecimal(form.getExpAror()));
+				product.setExpArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpAror())));
 			} else {
-				product.setExpArorSec(new BigDecimal(form.getExpArorSec()));
+				product.setExpArorSec(ProductDecimalFormat.divide(new BigDecimal(form.getExpArorSec())));
 			}
 		}
 		{
@@ -605,63 +679,89 @@ public class ProductService {
 		}
 		{
 			if(!StringUtil.isEmpty(form.getInvestMin())) {
-				product.setInvestMin(Integer.valueOf(form.getInvestMin()));
+				product.setInvestMin(new BigDecimal(form.getInvestMin()));
 			}
 			if(!StringUtil.isEmpty(form.getInvestMax())) {
-				product.setInvestMax(Long.valueOf(form.getInvestMax()));
+				product.setInvestMax(new BigDecimal(form.getInvestMax()));
 			}
 //			if(!StringUtil.isEmpty(form.getPurchaseLimit())) {
 //				product.setPurchaseLimit(Long.valueOf(form.getPurchaseLimit()));
 //			}
 			if(!StringUtil.isEmpty(form.getInvestAdditional())) {
-				product.setInvestAdditional(Integer.valueOf(form.getInvestAdditional()));
+				product.setInvestAdditional(new BigDecimal(form.getInvestAdditional()));
 			}
 			if(!StringUtil.isEmpty(form.getNetUnitShare())) {
 				product.setNetUnitShare(new BigDecimal(form.getNetUnitShare()));
 			}
 			if(!StringUtil.isEmpty(form.getNetMaxRredeemDay())) {
-				product.setNetMaxRredeemDay(Integer.valueOf(form.getNetMaxRredeemDay()));
+				product.setNetMaxRredeemDay(new BigDecimal(form.getNetMaxRredeemDay()));
 			}
 			if(!StringUtil.isEmpty(form.getMinRredeem())) {
-				product.setMinRredeem(Integer.valueOf(form.getMinRredeem()));
+				product.setMinRredeem(new BigDecimal(form.getMinRredeem()));
 			}
 		}
 		{
 			product.setInvestComment(form.getInvestComment());
 			product.setInstruction(form.getInstruction());
 			product.setRiskLevel(form.getRiskLevel());
-		}
-		{
 			// 其它：修改时间、操作人
 			product.setOperator(operator);
 			product.setUpdateTime(now);
 		}
 		
-		String fkey = null;
-		{
-			if (StringUtil.isEmpty(product.getFileKeys())) {
-				fkey = StringUtil.uuid();
-				product.setFileKeys(fkey);
-			} else {
-				fkey = product.getFileKeys();
-			}
-		}
 		
+		//附件文件
 		List<SaveFileForm> fileForms = null;
-		{
-			if (!StringUtil.isEmpty(form.getFiles())) {
-				fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
+		if (!StringUtil.isEmpty(form.getFiles())) {
+			fileForms = JSON.parseArray(form.getFiles(), SaveFileForm.class);
+		}
+		String fkey = null;
+		if (StringUtil.isEmpty(product.getFileKeys())) {
+			fkey = StringUtil.uuid();
+			if(fileForms!=null && fileForms.size()>0) {
+				product.setFileKeys(fkey);
+			}
+		} else {
+			fkey = product.getFileKeys();
+			if(fileForms==null || fileForms.size()==0) {
+				product.setFileKeys(StringUtil.EMPTY);
 			}
 		}
-		
-		product.setFileKeys(fkey);
+		//投资协议书
+		List<SaveFileForm> investFileForm = null;
+		if (!StringUtil.isEmpty(form.getInvestFile())) {
+			investFileForm = JSON.parseArray(form.getInvestFile(), SaveFileForm.class);
+		}
+		String investFileKey = null;
+		if (StringUtil.isEmpty(product.getInvestFileKey())) {
+			investFileKey = StringUtil.uuid();
+			if(investFileForm!=null && investFileForm.size()>0) {
+				product.setInvestFileKey(investFileKey);
+			}
+		} else {
+			investFileKey = product.getInvestFileKey();
+			if(investFileForm==null || investFileForm.size()==0) {
+				product.setInvestFileKey(StringUtil.EMPTY);
+			}
+		}
+				
 		// 更新产品
 		product = this.productDao.saveAndFlush(product);
 
 		{
-			// 文件
+			// 附件文件
 			this.fileService.save(fileForms, fkey, File.CATE_User, operator);
+			//投资协议书
+			this.fileService.save(investFileForm, investFileKey, File.CATE_User, operator);
 		}
+		
+		List<String> channelOids = new ArrayList<String>();
+		if(form.getChannels()!=null && form.getChannels().length>0) {
+			for(String channelOid : form.getChannels()) {
+				channelOids.add(channelOid);
+			}
+		}
+		this.productChannelService.saveApplyChannel(operator, product.getOid(), channelOids);
 		
 		return response;
 	}
@@ -678,16 +778,22 @@ public class ProductService {
 
 		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
 		
+		FileResp fr = null;
+		AdminObj adminObj = null;
 		if (!StringUtil.isEmpty(product.getFileKeys())) {
 			List<File> files = this.fileService.list(product.getFileKeys(), File.STATE_Valid);
 			if (files.size() > 0) {
 				pr.setFiles(new ArrayList<FileResp>());
 				
-				FileResp fr = null;
+				
 				for (File file : files) {
 					fr = new FileResp(file);
 					if(adminObjMap.get(file.getOperator())==null) {
-						adminObjMap.put(file.getOperator(),adminSdk.getAdmin(file.getOperator()));
+						try {
+							adminObj = adminSdk.getAdmin(file.getOperator());
+							adminObjMap.put(file.getOperator(),adminObj);
+						} catch (Exception e) {
+						}
 					}
 					if(adminObjMap.get(file.getOperator())!=null) {
 						fr.setOperator(adminObjMap.get(file.getOperator()).getName());
@@ -695,6 +801,40 @@ public class ProductService {
 					pr.getFiles().add(fr);
 				}
 			}
+		}
+		
+		if (!StringUtil.isEmpty(product.getInvestFileKey())) {
+			List<File> files = this.fileService.list(product.getInvestFileKey(), File.STATE_Valid);
+			if (files.size() > 0) {
+				pr.setInvestFiles(new ArrayList<FileResp>());
+				
+				for (File file : files) {
+					fr = new FileResp(file);
+					if(adminObjMap.get(file.getOperator())==null) {
+						try {
+							adminObj = adminSdk.getAdmin(file.getOperator());
+							adminObjMap.put(file.getOperator(),adminObj);
+						} catch (Exception e) {
+						}
+					}
+					if(adminObjMap.get(file.getOperator())!=null) {
+						fr.setOperator(adminObjMap.get(file.getOperator()).getName());
+					}
+					pr.getInvestFiles().add(fr);
+				}
+			}
+		}
+		
+		List<ProductChannel> pcs = productChannelService.queryProductChannels(oid);
+		if(pcs!=null && pcs.size()>0) {
+			StringBuilder channelNames = new StringBuilder();
+			List<String> channelOids =  new ArrayList<String>();
+			for(ProductChannel pc : pcs) {
+				channelNames.append(pc.getChannel().getChannelName()).append(",");
+				channelOids.add(pc.getChannel().getOid());
+			}
+			pr.setChannelNames(channelNames.substring(0, channelNames.length()-1));
+			pr.setChannelOids(channelOids);
 		}
 
 		return pr;
@@ -711,12 +851,18 @@ public class ProductService {
 		PageResp<ProductResp> pagesRep = new PageResp<ProductResp>();
 		if (cas != null && cas.getContent() != null && cas.getTotalElements() > 0) {
 			List<ProductResp> rows = new ArrayList<ProductResp>();
-			Map<String,Integer> channelNum = this.getChannelsNum(cas.getContent());
+			Map<String,List<ProductChannel>> channelNum = this.getProductChannels(cas.getContent());
 			
 			for (Product p : cas) {
 				ProductResp queryRep = new ProductResp(p);
 				if(channelNum.get(p.getOid())!=null) {
-					queryRep.setChannelNum(channelNum.get(p.getOid()));
+					queryRep.setChannelNum(channelNum.get(p.getOid()).size());
+					for(ProductChannel pc : channelNum.get(p.getOid())) {
+						queryRep.setMarketState(pc.getMarketState());
+						if(ProductChannel.MARKET_STATE_Onshelf.equals(pc.getMarketState())) {
+							break;
+						}
+					}
 				}
 				
 				rows.add(queryRep);
@@ -728,19 +874,19 @@ public class ProductService {
 	}
 	
 	
-	private Map<String,Integer> getChannelsNum (List<Product> ps){
+	private Map<String,List<ProductChannel>> getProductChannels (List<Product> ps){
 		List<String> productOids =  new ArrayList<String>();
 		for (Product p : ps) {
 			productOids.add(p.getOid());
 		}
-		Map<String,Integer> channelNum = new HashMap<String,Integer>();
+		Map<String,List<ProductChannel>> channelNum = new HashMap<String,List<ProductChannel>>();
 		List<ProductChannel> pcs = productChannelService.queryProductChannels(productOids);
 		if(pcs!=null && pcs.size()>0) {
 			for(ProductChannel pc : pcs) {
 				if(channelNum.get(pc.getProduct().getOid())==null) {
-					channelNum.put(pc.getProduct().getOid(),0);
+					channelNum.put(pc.getProduct().getOid(),new ArrayList<ProductChannel>());
 				}
-				channelNum.put(pc.getProduct().getOid(),channelNum.get(pc.getProduct().getOid())+1);
+				channelNum.get(pc.getProduct().getOid()).add(pc);
 			}
 		}
 		return channelNum;
@@ -756,21 +902,27 @@ public class ProductService {
 		PageResp<ProductLogListResp> pagesRep = new PageResp<ProductLogListResp>();
 		if (cas != null && cas.getContent() != null && cas.getTotalElements() > 0) {
 			List<ProductLogListResp> rows = new ArrayList<ProductLogListResp>();
-			Map<String,Integer> channelNum = this.getChannelsNum(cas.getContent());
+			Map<String,List<ProductChannel>> channelNum = this.getProductChannels(cas.getContent());
 			
 			Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
 			
 			for (Product p : cas) {
 				ProductLogListResp queryRep = new ProductLogListResp(p);
 				if(channelNum.get(p.getOid())!=null) {
-					queryRep.setChannelNum(channelNum.get(p.getOid()));
+					queryRep.setChannelNum(channelNum.get(p.getOid()).size());
 				}
 				//申请人和申请时间
 				ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Auditing, ProductLog.AUDIT_STATE_Commited);
 					
 				if(pl!=null) {
 					if(adminObjMap.get(pl.getAuditor())==null) {
-						adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+						AdminObj adminObj = null;
+						try{
+							adminObj = adminSdk.getAdmin(pl.getAuditor());
+							adminObjMap.put(pl.getAuditor(),adminObj);
+						} catch (Exception e) {
+						}
+						
 					}
 					if(adminObjMap.get(pl.getAuditor())!=null) {
 						queryRep.setApplicant(adminObjMap.get(pl.getAuditor()).getName());
@@ -798,13 +950,18 @@ public class ProductService {
 		
 		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
 			
+		AdminObj adminObj = null;
 		for (ProductLogListResp p : rows) {
 			ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Auditing, ProductLog.AUDIT_STATE_Approval);
 			
 			if(pl!=null) {
 				//审核人 审核时间
 				if(adminObjMap.get(pl.getAuditor())==null) {
-					adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+					try {
+						adminObj = adminSdk.getAdmin(pl.getAuditor());
+						adminObjMap.put(pl.getAuditor(),adminObj);
+					} catch (Exception e) {
+					}
 				}
 				if(adminObjMap.get(pl.getAuditor())!=null) {
 					p.setAuditor(adminObjMap.get(pl.getAuditor()).getName());
@@ -826,13 +983,17 @@ public class ProductService {
 		List<ProductLogListResp> rows = pagesRep.getRows();
 		
 		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
-		
+		AdminObj adminObj = null;
 		for (ProductLogListResp p : rows) {
 			ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Reviewing, ProductLog.AUDIT_STATE_Approval);
 			if(pl!=null) {
 				//复核人复核时间
 				if(adminObjMap.get(pl.getAuditor())==null) {
-					adminObjMap.put(pl.getAuditor(),adminSdk.getAdmin(pl.getAuditor()));
+					try {
+						adminObj = adminSdk.getAdmin(pl.getAuditor());
+						adminObjMap.put(pl.getAuditor(),adminObj);
+					} catch (Exception e) {
+					}
 				}
 				if(adminObjMap.get(pl.getAuditor())!=null) {
 					p.setReviewer(adminObjMap.get(pl.getAuditor()).getName());

@@ -162,6 +162,7 @@
 	            <th>付息方式</th>
 	            <th>标的规模(万元)</th>
 	            <th>预约份额(万份)</th>
+	            <th>预约金额(万元)</th>
 	            <th>主题评级</th>
 	            <th>类型</th>
 	            <th>状态</th>
@@ -686,7 +687,7 @@
         <dl id="purchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申请额度:</dt>
           <dd>
-            <div data-detail-fetch="volume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl id="redeemArea" class="dl-horizontal" style="display: none;">
@@ -815,7 +816,7 @@
         <dl id="orderPurchaseArea" class="dl-horizontal" style="display: none;">
           <dt>申请金额:</dt>
           <dd>
-            <div data-detail-fetch="applyVolume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl id="orderRedeemArea" class="dl-horizontal" style="display: none;">
@@ -1022,6 +1023,24 @@
 		        </dl>
 	        </div>
         </div>
+        <div class="row labelForAccept" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>确认份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
         <form id="trustCheckForm" name="trustCheckForm" method="post">
           <input name="oid" type="hidden"/>
           <input name="opType" type="hidden"/>
@@ -1123,6 +1142,169 @@
   </div>
 </div>
 
+<!-- 本息兑付审核/预约/确认弹窗 -->
+<div id="trustIncomeCheckModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="trustTitleName">本息兑付审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>期数:</dt>
+          <dd>
+            <div data-detail-fetch="seq"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>预期收益率:</dt>
+          <dd>
+            <div data-detail-fetch="expIncomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>预期收益:</dt>
+          <dd>
+            <div data-detail-fetch="expIncome"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>实际收益率:</dt>
+          <dd>
+            <div data-detail-fetch="incomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>实际收益:</dt>
+          <dd>
+            <div data-detail-fetch="income"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>本金:</dt>
+          <dd>
+            <div data-detail-fetch="capital"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>本息兑付日:</dt>
+          <dd>
+            <div data-detail-fetch="incomeDate"></div>
+          </dd>
+        </dl>
+        <div class="row labelForOrdering" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核收益率:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核收益:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForAccept" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>确认收益率:</dt>
+		          <dd>
+		            <div data-detail-fetch="investVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认收益:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
+        <form id="trustIncomeCheckForm" name="trustIncomeCheckForm" method="post">
+          <input name="oid" type="hidden"/>
+          <input name="opType" type="hidden"/>
+          <input name="assetPoolOid" type="hidden"/>
+          <input name="type" type="hidden"/>
+          <input name="state" type="hidden"/>
+          <div class="row" style="display: none;">
+            <div class="col-sm-6">
+		          <div class="form-group">
+		            <label>审核收益率</label>
+		            <div class="input-group input-group-sm">
+		              <input name="auditVolume" type="text"
+		              class="form-control"
+		              placeholder="审核收益率"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="col-sm-6">
+		        	<div class="form-group">
+		            <label>审核收益</label>
+		            <div class="input-group input-group-sm">
+		              <input name="auditCash" type="text"
+		              class="form-control"
+		              placeholder="审核收益"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+          <div class="row" style="display: none;">
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>确认收益率</label>
+		            <div class="input-group input-group-sm">
+		              <input name="investVolume" type="text"
+		              class="form-control"
+		              placeholder="确认收益率"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>确认收益</label>
+		            <div class="input-group input-group-sm">
+		              <input name="investCash" type="text"
+		              class="form-control"
+		              placeholder="确认收益"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer" id="trustDoCheck">
+        <button id="doTrustUnCheck" type="button" class="btn btn-warning">不通过</button>
+        <button id="doTrustCheck" type="button" class="btn btn-primary btn-submit trustCheckSubmit">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- 信托计划订单详情 -->
 <div id="trustOrderDetailModal" class="modal fade" tabindex="-1" role="dialog">
@@ -1233,24 +1415,60 @@
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
-          <dt>申请额度:</dt>
-          <dd>
-            <div data-detail-fetch="volume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForOrdering" style="display: none;">
-          <dt>审核额度:</dt>
-          <dd>
-            <div data-detail-fetch="auditVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>预约额度:</dt>
-          <dd>
-            <div data-detail-fetch="reserveVolume"></div>
-          </dd>
-        </dl>
+        <div class="row">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForOrdering" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForAccept" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>预约份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>预约金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1346,10 +1564,10 @@
             <div class="form-style">
               <div class="row">
                 <div class="col-md-2 col-xs-3">
-                  <input type="radio" name="ifCapitalName" value="no" checked/> 否
+                  <input type="radio" name="capitalFlag" value="no" checked/> 否
                 </div>
                 <div class="col-md-2 col-xs-3">
-                  <input type="radio" name="ifCapitalName" value="yes"/> 是
+                  <input type="radio" name="capitalFlag" value="yes"/> 是
                 </div>
               </div>
             </div>
@@ -1522,9 +1740,11 @@
                   <input name="tranVolume" type="text"
                   class="form-control"
                   placeholder="转让份额"
+                  data-validtransamount="true"
                   data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
+            		<div class="help-block with-errors text-red"></div>
               </div>
             </div>
             <div class="col-sm-6">
@@ -2009,16 +2229,16 @@
             <div data-detail-fetch="investDate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>当前持有额度:</dt>
           <dd>
             <div data-detail-fetch="amount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>申购额度:</dt>
           <dd>
-            <div data-detail-fetch="volume"></div>
+            <div data-detail-fetch="applyCash"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal">
@@ -2147,12 +2367,12 @@
             <div data-detail-fetch="floorVolume"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>持有份额:</dt>
           <dd>
             <div data-detail-fetch="holdAmount"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>主体评级:</dt>
           <dd>
@@ -2177,30 +2397,78 @@
             <div data-detail-fetch="collectIncomeRate"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
-          <dt>申购额度:</dt>
-          <dd>
-            <div data-detail-fetch="volume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForOrdering" style="display: none;">
-          <dt>审核额度:</dt>
-          <dd>
-            <div data-detail-fetch="auditVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>预约额度:</dt>
-          <dd>
-            <div data-detail-fetch="reserveVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal labelForAccept" style="display: none;">
-          <dt>确认额度:</dt>
-          <dd>
-            <div data-detail-fetch="investVolume"></div>
-          </dd>
-        </dl>
+        <div class="row">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>申请金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="applyCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForAudit" style="display: none;">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCash"></div>
+		          </dd>
+		        </dl>
+        	</div>
+        </div>
+        <div class="row labelForOrdering">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>预约份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>预约金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="reserveCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
+        <div class="row labelForAccept">
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>确认份额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investVolume"></div>
+		          </dd>
+		        </dl>
+        	</div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认金额:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCash"></div>
+		          </dd>
+		        </dl>
+	        </div>
+        </div>
       </div>
     </div>
   </div>

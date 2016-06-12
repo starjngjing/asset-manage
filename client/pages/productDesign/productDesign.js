@@ -166,14 +166,14 @@ define([
 		          	      		text: '作废',
 		           	      		type: 'button',
 		           	      		class: 'item-invalid',
-		           	      		isRender: true
-		           	    	},
-		           	    	{
-		           	    		text: '选择渠道',
-		           	    		type: 'button',
-		           	    		class: 'item-channel',
-		           	    		isRender: true
-		           	    	}
+		           	      		isRender: row.arketState != 'ONSHELF'
+		           	    	}//,
+//		           	    	{
+//		           	    		text: '选择渠道',
+//		           	    		type: 'button',
+//		           	    		class: 'item-channel',
+//		           	    		isRender: true
+//		           	    	}
 		           	    ];
 		           	  	return util.table.formatter.generateButton(buttons);
 		           	},
@@ -198,6 +198,14 @@ define([
 											$('#detailProductType01Area').hide()
 											break
 									}
+									
+									var productDetailInvestFiles = []
+									if(data.investFiles!=null && data.investFiles.length>0) {
+										for(var i=0;i<data.investFiles.length;i++){
+											productDetailInvestFiles.push(data.investFiles[i])
+										}
+									}
+									$('#productDetailInvestFileTable').bootstrapTable('load', productDetailInvestFiles)
 									
 									var productDetailFiles = []
 									if(data.files!=null && data.files.length>0) {
@@ -269,6 +277,30 @@ define([
 										})
 										select.value = data.assetPoolOid
 									})
+									
+									$(document.updateProductForm.channels).select2()
+									
+									// 渠道选择
+									http.post(
+										config.api.productChooseChannels, 
+										function(result) {
+											var select = document.updateProductForm.channels
+											$(select).empty()
+											result.rows.forEach(function (item, index) {
+												$(select).append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.channelName + '</option>')
+											})
+											$(select).val(data.channelOids).trigger('change')
+
+										}
+									)
+									
+									updateInvestUploadFiles = []
+									if(data.investFiles!=null && data.investFiles.length>0) {
+										for(var i=0;i<data.investFiles.length;i++){
+											updateInvestUploadFiles.push(data.investFiles[i])
+										}
+									}
+									$('#updateInvestUploadTable').bootstrapTable('load', updateInvestUploadFiles)
 									
 									updateProductUploadFiles = []
 									if(data.files!=null && data.files.length>0) {
@@ -354,6 +386,27 @@ define([
     	// 添加产品表单验证初始化
     	util.form.validator.init($('#addProductForm'))
     	
+    	// 额外增信radio change事件
+		$(document.addProductForm.reveal).on('ifChecked', function() {
+			if (this.value === 'YES') {
+				$('#addRevealComment').show()
+			} else {
+				$('#addRevealComment').hide()
+			}
+		})		
+		
+		// 额外增信radio change事件
+		$(document.updateProductForm.reveal).on('ifChecked', function() {
+			if (this.value === 'YES') {
+				$('#updateRevealComment').show()
+			} else {
+				$('#updateRevealComment').hide()
+			}
+		})
+		
+		// 新增/修改产品渠道select2初始化
+		$(document.addProductForm.channels).select2()
+    	
     	// 数据表格配置
 		var channelsTableConfig = {
 			columns: [
@@ -428,6 +481,41 @@ define([
 		// 数据表格初始化
     	$('#productChooseChannelTable').bootstrapTable(channelsTableConfig)
     	
+    	
+    	// 详情附件表格配置
+    	var productDetailInvestFileTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					field: 'operator',
+				},
+				{
+					field: 'createTime',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.furl
+						}
+					}
+				}
+			]
+		}
+    	// 详情投资协议书表格初始化
+		$('#productDetailInvestFileTable').bootstrapTable(productDetailInvestFileTableConfig)
+		
     	// 详情附件表格配置
     	var productDetailFileTableConfig = {
 			columns: [
@@ -548,9 +636,26 @@ define([
 				})
 			})
 			
+			// 渠道选择
+			http.post(
+				config.api.productChooseChannels, 
+				function(result) {
+					var select = document.addProductForm.channels
+					$(select).empty()
+					result.rows.forEach(function (item, index) {
+						$(select).append('<option value="' + item.oid + '" ' + (!index ? 'checked' : '') + '>' + item.channelName + '</option>')
+					})
+				}
+			)
+			
+			
 			// 新建产品上传附件表格数据源
 			addProductUploadFiles = []
 			$('#addProductUploadTable').bootstrapTable('load', addProductUploadFiles)
+			
+			// 新建产品上传投资协议书表格数据源
+			addInvestUploadFiles = []
+			$('#addInvestUploadTable').bootstrapTable('load', addInvestUploadFiles)
 		
 			util.form.reset($('#addProductForm'))
 			$('#addProductModal').modal('show')	
@@ -613,35 +718,139 @@ define([
 		}
 		// 新建产品附件表格初始化
 		$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
+		
+		/////////
+		// 新建产品上传投资协议书附件表格数据源
+		var addInvestUploadFiles = []
+		// 新建产品初始化上传附件插件，在success里将上传成功附件插入到表格中
+		$$.uploader({
+			container: $('#investUploader'),
+			btnName : '上传投资协议书',
+			success: function(file) {
+				file.furl = file.url
+				addInvestUploadFiles = []
+				addInvestUploadFiles.push(file)
+				$('#addInvestUploadTable').bootstrapTable('load', addInvestUploadFiles)
+			}
+		})
+		// 新建产品附件表格配置
+		var addInvestUploadTableConfig = {
+			columns: [
+				{
+					field: 'name',
+				},
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '下载',
+							type: 'button',
+							class: 'item-download'
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-download': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.url
+						},
+						'click .item-delete': function(e, value, row) {
+							var index = addInvestUploadFiles.indexOf(row)
+							addInvestUploadFiles.splice(index, 1)
+							$('#addInvestUploadTable').bootstrapTable('load', addInvestUploadFiles)
+						}
+					}
+				}
+			]
+		}
+		// 新建产品附件表格初始化
+		$('#addInvestUploadTable').bootstrapTable(addInvestUploadTableConfig)
+		
+		///////////////////////
 			
 		// 新建产品“保存”按钮点击事件
     	$('#addProductSubmit').on('click', function () {
     		if (!$('#addProductForm').validator('doSubmitCheck')) return
     		var typeOid = $("#addProductTypeSelect  option:selected").val();
-				document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
-				if(document.addProductForm.expArorSec.value=="") {
-					document.addProductForm.expArorSec.value = document.addProductForm.expAror.value
-				}
+			document.addProductForm.files.value = JSON.stringify(addProductUploadFiles)
+			document.addProductForm.investFile.value = JSON.stringify(addInvestUploadFiles)
+			
+			if(document.addProductForm.expArorSec.value=="") {
+				document.addProductForm.expArorSec.value = document.addProductForm.expAror.value
+			}
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#addProductForm').ajaxSubmit({
-      			url: config.api.savePeriodic,
-      			success: function (addResult) {
-      				util.form.reset($('#addProductForm'))
-        			$('#addProductModal').modal('hide')
-        			$('#productDesignTable').bootstrapTable('refresh')
-      			}
-    		})
+      				url: config.api.savePeriodic,
+      				success: function (addResult) {
+      					util.form.reset($('#addProductForm'))
+        				$('#addProductModal').modal('hide')
+        				$('#productDesignTable').bootstrapTable('refresh')
+      				}
+    			})
     		} else {
     			$('#addProductForm').ajaxSubmit({
-      			url: config.api.saveCurrent,
-      			success: function (addResult) {
-      				util.form.reset($('#addProductForm'))
-        			$('#addProductModal').modal('hide')
-        			$('#productDesignTable').bootstrapTable('refresh')
-      			}
+      				url: config.api.saveCurrent,
+      				success: function (addResult) {
+      					util.form.reset($('#addProductForm'))
+        				$('#addProductModal').modal('hide')
+        				$('#productDesignTable').bootstrapTable('refresh')
+      				}
     			})
     		}
   		})
+    	
+    	
+		// 编辑产品上传投资协议表格数据源
+		var updateInvestUploadFiles = []
+		// 编辑产品初始化上传投资协议插件，在success里将上传成功投资协议插入到表格中
+		$$.uploader({
+			container: $('#updateInvestUploader'),
+			success: function(file) {
+				file.furl = file.url
+				updateInvestUploadFiles = []
+				updateInvestUploadFiles.push(file)
+				$('#updateInvestUploadTable').bootstrapTable('load', updateInvestUploadFiles)
+			}
+		})
+		// 编辑产品投资协议表格配置
+		var updateInvestUploadTableConfig = {
+			columns: [{
+				field: 'name',
+			}, {
+				width: 100,
+				align: 'center',
+				formatter: function() {
+					var buttons = [{
+						text: '下载',
+						type: 'button',
+						class: 'item-download'
+					}, {
+						text: '删除',
+						type: 'button',
+						class: 'item-delete'
+					}]
+					return util.table.formatter.generateButton(buttons)
+				},
+				events: {
+					'click .item-download': function(e, value, row) {
+						location.href = 'http://api.guohuaigroup.com' + row.url
+					},
+					'click .item-delete': function(e, value, row) {
+						var index = updateInvestUploadFiles.indexOf(row)
+						updateInvestUploadFiles.splice(index, 1)
+						$('#updateInvestUploadTable').bootstrapTable('load', updateInvestUploadFiles)
+					}
+				}
+			}]
+		}
+		// 编辑产品投资协议表格初始化
+		$('#updateInvestUploadTable').bootstrapTable(updateInvestUploadTableConfig)
+		
+		
 
 		// 编辑产品上传附件表格数据源
 		var updateProductUploadFiles = []
@@ -691,7 +900,8 @@ define([
     	$('#updateProductSubmit').on('click', function () {
     		if (!$('#updateProductForm').validator('doSubmitCheck')) return
     		var typeOid = $("#typeOid").val();
-				document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
+			document.updateProductForm.files.value = JSON.stringify(updateProductUploadFiles)
+			document.updateProductForm.investFile.value = JSON.stringify(updateInvestUploadFiles)
     		if(typeOid=="PRODUCTTYPE_01") {
     			$('#updateProductForm').ajaxSubmit({
       			url: config.api.updatePeriodic,

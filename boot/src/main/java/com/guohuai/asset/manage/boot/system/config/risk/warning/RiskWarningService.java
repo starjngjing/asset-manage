@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateOption;
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateService;
 import com.guohuai.asset.manage.boot.system.config.risk.warning.options.RiskWarningOptions;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
@@ -18,10 +20,16 @@ import com.guohuai.asset.manage.component.exception.AMPException;
 public class RiskWarningService {
 	@Autowired
 	private RiskWarningDao riskWarningDao;
+	@Autowired
+	private RiskIndicateService  riskIndicateService;
 	
 	@Transactional
 	public RiskWarning save(RiskWarningForm form) {
-		return null;
+		RiskWarning warning = new RiskWarning();
+		warning.setOid(form.getOid());
+		warning.setIndicate(riskIndicateService.get(form.getIndicateOid()));
+		warning.setTitle(form.getTitle());
+		return riskWarningDao.save(warning);
 	}
 	
 	@Transactional
@@ -60,4 +68,39 @@ public class RiskWarningService {
 		return result;
 	}
 
+/*
+	@Transactional
+	public List<RiskWarningResp> options(String type) {
+
+		List<RiskWarning> list = this.riskWarningDao.search(type, new String[] { RiskIndicate.STATE_Enable });
+
+		List<RiskWarningResp> options = new ArrayList<RiskIndicateOption>();
+		Map<String, RiskIndicateOption> map = new HashMap<String, RiskIndicateOption>();
+
+		if (null != list && list.size() > 0) {
+			for (RiskIndicate i : list) {
+				if (!map.containsKey(i.getCate().getOid())) {
+					RiskIndicateOption rio = new RiskIndicateOption();
+					rio.setOid(i.getCate().getOid());
+					rio.setTitle(i.getCate().getTitle());
+					options.add(rio);
+					map.put(i.getCate().getOid(), rio);
+				}
+
+				RiskIndicateOption rio = map.get(i.getCate().getOid());
+
+				RiskIndicateOption.Option roo = new RiskIndicateOption.Option();
+				roo.setOid(i.getOid());
+				roo.setTitle(i.getTitle());
+				roo.setDataType(i.getDataType());
+				roo.setDataUnit(i.getDataUnit());
+
+				rio.getOptions().add(roo);
+
+			}
+		}
+
+		return options;
+	}
+	*/
 }

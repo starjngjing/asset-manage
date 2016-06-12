@@ -60,6 +60,7 @@ define(function() {
 			productAdmitReject: this.host + "/ams/product/admit/reject", //产品准入不通过
 			productAdmitApprove: this.host + "/ams/product/admit/approve", //产品准入通过
 			productChooseChannelList: this.host + "/ams/product/channel/choose/list", //产品选择渠道列表
+			productChooseChannels: this.host + "/ams/product/channel/channels", //产品选择渠道列表
 			saveProductChannel: this.host + "/ams/product/channel/save/list", //保存产品已经选择渠道列表
 			productChannelList: this.host + "/ams/product/channel/list", //该渠道的产品列表
 			productChannelUpshelf: this.host + "/ams/product/channel/upshelf", //上架产品
@@ -217,6 +218,7 @@ define(function() {
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund', // 货币基金申购
 					redeem: this.host + '/ams/duration/order/redeem', // 现金类管理工具赎回
 					purchaseForTrust: this.host + '/ams/duration/order/purchaseForTrust', // 信托计划申购
+					purchaseForTrans: this.host + '/ams/duration/order/purchaseForTrans', // 信托计划转入申购
 					getTargetList: this.host + '/ams/duration/product/getTargetList', // 获取标的列表
 					getTrustListForAppointment: this.host + '/ams/duration/product/getTrustListForAppointment', // 获取 预约中信托（计划）列表
 					getTrustList: this.host + '/ams/duration/product/getTrustList', // 获取 信托（计划）列表
