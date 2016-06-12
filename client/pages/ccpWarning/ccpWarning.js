@@ -473,7 +473,7 @@ define([
 			 * 初始化风险等级option
 			 */
 			function initLevelOption(){
-				return '<option value="">无</option><option value="LOW">低</option><option value="MID">中</option><option value="HIGH">高</option>';
+				return '<option value="NONE">无</option><option value="LOW">低</option><option value="MID">中</option><option value="HIGH">高</option>';
 			}
 
 		}
