@@ -121,8 +121,9 @@ define([
 					}
 				}, {
 					field: 'optionsWlevel',
+					align: 'center',
 					formatter: function(val, row, index) {
-						return row.showOptions ? '<i>' + util.table.convertRiskLevel(val) + '</i>' : '';
+						return row.showOptions ? util.table.convertRiskLevel(val) : '';
 					}
 				}, {
 					align: 'center',
