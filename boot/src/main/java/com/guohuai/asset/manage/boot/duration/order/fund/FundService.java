@@ -37,6 +37,11 @@ public class FundService {
 		fundDao.save(entity);
 	}
 	
+	@Transactional
+	public void save(List<FundEntity> list) {
+		fundDao.save(list);
+	}
+	
 	/**
 	 * 录入审核订单
 	 * @param entity

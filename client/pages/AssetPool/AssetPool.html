@@ -28,18 +28,18 @@
         <!-- Grid内容体 -->
         <div class="box-body">
         	<!-- 搜索项表单 -->
-					<form id="assetPoolSearchForm" name="assetPoolSearchForm" method="post" class="search-body">
+					<form id="searchForm" name="searchForm" method="post" class="search-body">
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>资产池名称</label>
-									<input name="searchName" type="text" class="form-control input-sm" placeholder="搜索资产池名称">
+									<input name="name" type="text" class="form-control input-sm" placeholder="搜索资产池名称">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>资产池状态</label>
-									<select name="assetPoolStatus" class="form-control input-sm" data-enum-fetch="assetPoolStatesCondition" data-enum-text="全部">
+									<select name="state" class="form-control input-sm" data-enum-fetch="ASSETPOOLSTATE" data-enum-text="全部">
                     <option value="" selected>全部</option>
                   </select>
 								</div>

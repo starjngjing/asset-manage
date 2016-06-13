@@ -313,9 +313,9 @@ public class TargetService {
 			int pay_days = target.getLife();
 			// 当天月天数
 			int curr_month_days = 0;
-			
+
+			int seq = 1;
 			do {
-				int seq = 1;
 				form = new TrustIncomeForm();
 				form.setCapital(entity.getInvestVolume());
 				form.setIncomeDate(sdate);

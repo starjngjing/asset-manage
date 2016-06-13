@@ -1161,7 +1161,7 @@
             <div data-detail-fetch="seq"></div>
           </dd>
         </dl>
-        <dl class="dl-horizontal">
+        <!--<dl class="dl-horizontal">
           <dt>预期收益率:</dt>
           <dd>
             <div data-detail-fetch="expIncomeRate"></div>
@@ -1172,7 +1172,7 @@
           <dd>
             <div data-detail-fetch="expIncome"></div>
           </dd>
-        </dl>
+        </dl>-->
         <dl class="dl-horizontal">
           <dt>实际收益率:</dt>
           <dd>
@@ -1214,6 +1214,14 @@
 		          </dd>
 		        </dl>
         	</div>
+        	<div class="col-sm-6">
+        		<dl class="dl-horizontal">
+		          <dt>审核本金:</dt>
+		          <dd>
+		            <div data-detail-fetch="auditCapital"></div>
+		          </dd>
+		        </dl>
+        	</div>
         </div>
         <div class="row labelForAccept" style="display: none;">
         	<div class="col-sm-6">
@@ -1232,9 +1240,18 @@
 		          </dd>
 		        </dl>
 	        </div>
+	        <div class="col-sm-6">
+	        	<dl class="dl-horizontal">
+		          <dt>确认本金:</dt>
+		          <dd>
+		            <div data-detail-fetch="investCapital"></div>
+		          </dd>
+		        </dl>
+	        </div>
         </div>
         <form id="trustIncomeCheckForm" name="trustIncomeCheckForm" method="post">
           <input name="oid" type="hidden"/>
+          <input name="seq" type="hidden"/>
           <input name="opType" type="hidden"/>
           <input name="assetPoolOid" type="hidden"/>
           <input name="type" type="hidden"/>
@@ -1249,7 +1266,7 @@
 		              placeholder="审核收益率"
 		              data-validfloat="10.10" required
 		              disabled="disabled">
-		              <span class="input-group-addon">万</span>
+		              <span class="input-group-addon">%</span>
 		            </div>
 		          </div>
 		        </div>
@@ -1260,6 +1277,19 @@
 		              <input name="auditCash" type="text"
 		              class="form-control"
 		              placeholder="审核收益"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="col-sm-6">
+		        	<div class="form-group">
+		            <label>审核本金</label>
+		            <div class="input-group input-group-sm">
+		              <input name="auditCapital" type="text"
+		              class="form-control"
+		              placeholder="审核本金"
 		              data-validfloat="10.10" required
 		              disabled="disabled">
 		              <span class="input-group-addon">万</span>
@@ -1277,7 +1307,7 @@
 		              placeholder="确认收益率"
 		              data-validfloat="10.10" required
 		              disabled="disabled">
-		              <span class="input-group-addon">万</span>
+		              <span class="input-group-addon">%</span>
 		            </div>
 		          </div>
 		        </div>
@@ -1294,13 +1324,26 @@
 		            </div>
 		          </div>
 		        </div>
+		      	<div class="col-sm-6">
+		          <div class="form-group">
+		            <label>确认本金</label>
+		            <div class="input-group input-group-sm">
+		              <input name="investCapital" type="text"
+		              class="form-control"
+		              placeholder="确认本金"
+		              data-validfloat="10.10" required
+		              disabled="disabled">
+		              <span class="input-group-addon">万</span>
+		            </div>
+		          </div>
+		        </div>
 		      </div>
         </form>
       </div>
       <!-- 模态窗底部 -->
       <div class="modal-footer" id="trustDoCheck">
-        <button id="doTrustUnCheck" type="button" class="btn btn-warning">不通过</button>
-        <button id="doTrustCheck" type="button" class="btn btn-primary btn-submit trustCheckSubmit">通 过</button>
+        <button id="doIncomeUnCheck" type="button" class="btn btn-warning">不通过</button>
+        <button id="doIncomeCheck" type="button" class="btn btn-primary btn-submit trustCheckSubmit">通 过</button>
       </div>
     </div>
   </div>
@@ -1490,9 +1533,33 @@
         <form id="trustIncomeForm" name="trustIncomeForm" method="post">
           <input name="oid" type="hidden"/>
           <input name="assetPoolOid" type="hidden"/>
-          <div class="form-group">
+          <!--<div class="form-group">
             <label>期数</label>
             <select name="seq" class="form-control" disabled="disabled"></select>
+          </div>-->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>期数</label>
+                <input name="seq" type="text"
+                class="form-control"
+                readonly="readonly">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>本息兑付日</label>
+                <div class="input-group input-group-sm">
+                  <input name="incomeDate" type="text"
+                  class="form-control datepicker"
+                  placeholder="请选择时间"
+                  data-date-format="YYYY-MM-DD" required>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -1512,7 +1579,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <!--<div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>本息兑付日</label>
@@ -1521,7 +1588,7 @@
                 readonly="readonly">
               </div>
             </div>
-            <!--<div class="col-md-6">
+            <div class="col-md-6">
               <div id="capitalArea" class="form-group" style="display: none;">
                 <label>本金返还</label>
                 <div class="input-group input-group-sm">
@@ -1531,14 +1598,14 @@
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
-            </div>-->
-          </div>
+            </div>
+          </div>-->
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>实际收益率</label>
                 <div class="input-group input-group-sm">
-                  <input name="incomeRate" type="text"
+                  <input name="incomeRate" id="incomeRate" type="text"
                   class="form-control"
                   placeholder="实际收益率"
                   data-validfloat="4.4" required>
@@ -1550,7 +1617,7 @@
               <div class="form-group">
                 <label>实际收益</label>
                 <div class="input-group input-group-sm">
-                  <input name="income" type="text"
+                  <input name="income" id="income" type="text"
                   class="form-control"
                   placeholder="实际收益"
                   data-validfloat="10.10" required>
@@ -1562,12 +1629,12 @@
           <div class="form-group">
             <label>进行本金兑付</label>
             <div class="form-style">
-              <div class="row">
+              <div class="row" id="incomeRadio">
                 <div class="col-md-2 col-xs-3">
-                  <input type="radio" name="capitalFlag" value="no" checked/> 否
+                  <input type="radio" name="capitalFlag" value="0" checked/> 否
                 </div>
                 <div class="col-md-2 col-xs-3">
-                  <input type="radio" name="capitalFlag" value="yes"/> 是
+                  <input type="radio" name="capitalFlag" value="1"/> 是
                 </div>
               </div>
             </div>

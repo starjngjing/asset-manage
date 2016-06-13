@@ -1101,7 +1101,6 @@ define([
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
 								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								console.log(result.expAror)
 								if (result.expAror) {
 									result.expAror = result.expAror + '\t%'
 								}
@@ -1136,6 +1135,7 @@ define([
 								var result = json.result
 								var form = document.trustIncomeCheckForm
 								form.oid.value = result.oid
+								form.seq.value = result.seq
 								form.type.value = row.type
 								form.opType.value = 'audit'
 								form.assetPoolOid.value = pageState.pid
@@ -1159,15 +1159,24 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
+								if (result.seq) {
+									result.seq = result.seq + '\t期'
 								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
+								if (result.incomeRate) {
+									result.incomeRate = result.incomeRate + '\t%'
 								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								if (result.income) {
+									result.income = result.income + '\t万元'
 								}
+								if (result.capital) {
+									result.capital = result.capital + '\t万元'
+								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1371,7 +1380,7 @@ define([
 							modal.modal('show')
 						},
 						'click .item-income-accpet': function(e, val, row) {
-							var modal = $('#trustCheckModal')
+							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
 									oid: row.oid,
@@ -1380,14 +1389,15 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								var form = document.trustCheckForm
+								var form = document.trustIncomeCheckForm
 								form.oid.value = result.oid
+								form.seq.value = result.seq
 								form.type.value = row.type
 								form.opType.value = 'accept'
 								form.assetPoolOid.value = pageState.pid
 								var formGroups = $(form).find('.row')
 								formGroups.each(function(index, item) {
-									if (index === 2) {
+									if (index === 1) {
 										$(item).css({
 											display: 'block'
 										}).find('input').attr('disabled', false)
@@ -1403,34 +1413,34 @@ define([
 									display: 'block'
 								})
 								modal.find('.labelForAccept').css({
-									display: 'block'
+									display: 'none'
 								})
-								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
-								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
+								if (result.seq) {
+									result.seq = result.seq + '\t期'
 								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								if (result.incomeRate) {
+									result.incomeRate = result.incomeRate + '\t%'
 								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
+								if (result.income) {
+									result.income = result.income + '\t万元'
 								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
+								if (result.capital) {
+									result.capital = result.capital + '\t万元'
 								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t%'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
 								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
+									result.auditVolume = result.auditVolume + '\t%'
 								}
 								if (result.auditCash) {
 									result.auditCash = result.auditCash + '\t万元'
+								}
+								if (result.auditCapital) {
+									result.auditCapital = result.auditCapital + '\t万元'
 								}
 								$$.detailAutoFix(modal, result)
 							})
@@ -1561,7 +1571,7 @@ define([
 								container: $('#confirmModal'),
 								trigger: this,
 								accept: function () {
-									http.post(config.api.duration.assetPool.delete, {
+									http.post(config.api.duration.order.delete, {
 										data: {
 											oid: row.oid,
 											operation: row.type
@@ -1698,10 +1708,19 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result.incomeForm
-								seqs = json.result.incomeForm
+//								seqs = json.result.incomeForm
 								var form = document.trustIncomeForm
-								var seq = $(form.seq).empty()
-								seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
+//								var seq = $(form.seq).empty()
+//								if (json.result.incomeForm.seq === 0) {
+//									seq.append('<option value="' + result.seq + '">无可兑付信息</option>')
+//									
+//								    $('#incomeRate').attr("readonly","readonly")
+//								    $('#income').attr("readonly","readonly")
+//								    $('#incomeRadio').attr("disabled","true")
+//								} else {
+//									seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
+//								}
+								
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
 								
@@ -1878,6 +1897,7 @@ define([
 					}
 				})
 			})
+			
 			// 信托计划审核/预约/确认 - 不通过按钮点击事件
 			$('#doTrustUnCheck').on('click', function() {
 				var form = document.trustCheckForm
@@ -1926,6 +1946,57 @@ define([
 						$('#trustTable').bootstrapTable('refresh')
 						pageInit(pageState, http, config)
 						$('#trustCheckModal').modal('hide')
+					}
+				})
+			})
+
+			// 本息兑付审核/预约/确认 - 通过按钮点击事件
+			$('#doIncomeCheck').on('click', function() {
+				var form = document.trustIncomeCheckForm
+				form.state.value = '0'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForIncome
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForIncome
+						break
+				}
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#trustIncomeCheckModal').modal('hide')
+					}
+				})
+			})
+			
+			// 本息兑付审核/预约/确认 - 不通过按钮点击事件
+			$('#doIncomeUnCheck').on('click', function() {
+				var form = document.trustIncomeCheckForm
+				form.state.value = '-1'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForIncome
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForIncome
+						break
+				}
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#trustIncomeCheckModal').modal('hide')
 					}
 				})
 			})

@@ -81,6 +81,8 @@ public class TrustForm implements Serializable {
 	private BigDecimal applyVolume;
 	// 审核金额
 	private BigDecimal auditCash;
+	// 审核本金
+	private BigDecimal auditCapital;
 	// 审核份额
 	private BigDecimal auditVolume;
 	// 预约金额
@@ -89,6 +91,8 @@ public class TrustForm implements Serializable {
 	private BigDecimal reserveVolume;
 	// 确认金额
 	private BigDecimal investCash;
+	// 确认本金
+	private BigDecimal investCapital;
 	// 确认份额
 	private BigDecimal investVolume;
 	// 状态（审核/预约/确认 的结果 成功/失败）

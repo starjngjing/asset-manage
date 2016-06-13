@@ -41,6 +41,11 @@ public class TrustService {
 		trustDao.save(entity);
 	}
 	
+	@Transactional
+	public void save(List<TrustEntity> list) {
+		trustDao.save(list);
+	}
+	
 	/**
 	 * 录入本息兑付订单
 	 * @param entity

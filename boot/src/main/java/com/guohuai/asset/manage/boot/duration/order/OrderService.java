@@ -316,7 +316,6 @@ public class OrderService {
 			} else {
 				investService.IncHoldAmount(fundEntity.getCashTool().getOid(), form.getInvestVolume().negate());
 			}
-			
 		} else {
 			order.setState(CONFIRM30);
 			if ("redeem".equals(order.getOptType())) {
@@ -326,6 +325,9 @@ public class OrderService {
 						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 				fundEntity.setOnWayCapital(fundEntity.getOnWayCapital()
 						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				if (fundEntity.getAmount().compareTo(BigDecimal.ZERO) < 1) {
+					fundEntity.setState(FundEntity.INVESTEND);
+				}
 			}
 		}
 		fundEntity.setPurchaseVolume(BigDecimal.ZERO);
@@ -686,18 +688,18 @@ public class OrderService {
 		TrustIncomeEntity order = new TrustIncomeEntity();
 		BigDecimal capital = BigDecimal.ZERO;
 		// 是否兑付本金
-		if ("yes".equals(form.getCapitalFlag())) {
+		if (1 == form.getCapitalFlag()) {
 			order.setCapital(form.getCapital());
 			capital = form.getCapital();
 		} else {
 			order.setCapital(BigDecimal.ZERO);
-			capital = form.getIncome();
 		}
 		order.setOid(StringUtil.uuid());
 		order.setTrustEntity(trustEntity);
 		order.setSeq(form.getSeq());
 		order.setState(APPLY00);
 		order.setIncome(form.getIncome());
+		order.setIncomeRate(form.getIncomeRate());
 		order.setIncomeDate(form.getIncomeDate());
 		order.setAsker(uid);
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
@@ -705,6 +707,7 @@ public class OrderService {
 		trustService.save(order);
 		
 		// 资金变动记录
+		capital = capital.add(form.getIncome()).setScale(4, BigDecimal.ROUND_HALF_UP);
 		capitalService.capitalFlow(trustEntity.getAssetPoolOid(), trustEntity.getTarget().getOid(), 
 				order.getOid(), TRUST, capital, BigDecimal.ZERO, INCOME, APPLY, uid, null);
 	}
@@ -719,19 +722,20 @@ public class OrderService {
 	public void auditForIncome(TrustForm form, String uid) {
 		// 录入申购订单的审核信息
 		TrustIncomeEntity order = trustService.getTrustIncomeOrderByOid(form.getOid());
-		order.setAuditIncome(form.getAuditVolume());
-		order.setAuditCapital(form.getAuditCash());
+		order.setAuditIncome(form.getAuditCash());
+		order.setAuditCapital(form.getAuditCapital());
+		order.setAuditIncomeRate(form.getAuditVolume());
 		TrustEntity trustEntity = trustService.getTrustByOid(order.getTrustEntity().getOid());
 		BigDecimal capital = BigDecimal.ZERO;
 		BigDecimal account = BigDecimal.ZERO;
 		// 是否兑付本金
 		if (!BigDecimal.ZERO.equals(order.getCapital())) {
-			capital = form.getAuditCash();
+			capital = form.getAuditCapital();
 			account = order.getCapital();
 		} else {
-			order.setCapital(BigDecimal.ZERO);
-			capital = form.getAuditVolume();
-			account = order.getIncome();
+//			order.setCapital(BigDecimal.ZERO);
+//			capital = form.getAuditVolume();
+//			account = order.getIncome();
 		}
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(AUDIT11);
@@ -754,6 +758,8 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
+		capital = capital.add(form.getAuditCash()).setScale(4, BigDecimal.ROUND_HALF_UP);
+		account = account.add(order.getIncome()).setScale(4, BigDecimal.ROUND_HALF_UP);
 		capitalService.capitalFlow(order.getTrustEntity().getAssetPoolOid(), order.getTrustEntity().getTarget().getOid(), 
 				order.getOid(), TRUST, capital, account, INCOME, AUDIT, uid, form.getState());
 	}
@@ -768,19 +774,20 @@ public class OrderService {
 	public void orderConfirmForIncome(TrustForm form, String uid) {
 		// 录入申购订单的确认信息
 		TrustIncomeEntity order = trustService.getTrustIncomeOrderByOid(form.getOid());
-		order.setInvestIncome(form.getInvestVolume());
-		order.setInvestCapital(form.getInvestCash());
+		order.setInvestIncome(form.getInvestCash());
+		order.setInvestCapital(form.getInvestCapital());
+		order.setInvestIncomeRate(form.getInvestVolume());
 		TrustEntity trustEntity = trustService.getTrustByOid(order.getTrustEntity().getOid());
 		BigDecimal capital = BigDecimal.ZERO;
 		BigDecimal account = BigDecimal.ZERO;
 		// 是否兑付本金
 		if (!BigDecimal.ZERO.equals(order.getCapital())) {
-			capital = form.getInvestCash();
-			account = order.getAuditCapital();
+			capital = form.getInvestCapital();
+			account = order.getAuditCapital() == null ? order.getCapital() : order.getAuditCapital();
 		} else {
-			order.setCapital(BigDecimal.ZERO);
-			capital = form.getInvestVolume();
-			account = order.getAuditIncome();
+//			order.setCapital(BigDecimal.ZERO);
+//			capital = form.getInvestVolume();
+//			account = order.getAuditIncome();
 		}
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(CONFIRM31);
@@ -813,9 +820,11 @@ public class OrderService {
 		trustService.save(entity);
 		
 		// 资金变动记录
-		BigDecimal volume = account == null ? order.getIncome() : account;
+		BigDecimal volume = order.getAuditIncome() == null ? order.getIncome() : order.getAuditIncome();
+		capital = capital.add(form.getInvestCash()).setScale(4, BigDecimal.ROUND_HALF_UP);
+		account = account.add(volume).setScale(4, BigDecimal.ROUND_HALF_UP);
 		capitalService.capitalFlow(order.getTrustEntity().getAssetPoolOid(), order.getTrustEntity().getTarget().getOid(), 
-				order.getOid(), TRUST, capital, volume, INCOME, CONFIRM, uid, form.getState());
+				order.getOid(), TRUST, capital, account, INCOME, CONFIRM, uid, form.getState());
 	}
 	
 	/**
@@ -1218,7 +1227,6 @@ public class OrderService {
 				// 本息兑付
 				if ("income".equals(type) && Investment.INVESTMENT_LIFESTATUS_STAND_UP.equals(target.getLifeState())) {
 					int seq = trustService.getSeqByIncome(entity.getOid());
-					seq ++;
 //					List<TrustIncomeForm> list = targetService.getIncomeData(target, entity);
 //					form.setIncomeFormList(list);
 					TrustIncomeForm from = targetService.getIncomeData(target, entity, seq);

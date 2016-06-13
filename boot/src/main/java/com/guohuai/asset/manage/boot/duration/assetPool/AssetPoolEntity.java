@@ -3,6 +3,8 @@ package com.guohuai.asset.manage.boot.duration.assetPool;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -72,4 +74,12 @@ public class AssetPoolEntity implements Serializable {
 	private Timestamp createTime;
 	// 更新日期
 	private Timestamp updateTime;
+	
+	public static final Map<String, String> PoolState = new HashMap<>();
+	static {
+		PoolState.put("ASSETPOOLSTATE_01", "未审核");
+		PoolState.put("ASSETPOOLSTATE_02", "存续期");
+		PoolState.put("ASSETPOOLSTATE_03", "未通过");
+		PoolState.put("ASSETPOOLSTATE_04", "已失效");
+	}
 }

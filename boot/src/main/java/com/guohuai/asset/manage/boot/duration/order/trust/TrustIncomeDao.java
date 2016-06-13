@@ -23,6 +23,6 @@ public interface TrustIncomeDao extends JpaRepository<TrustIncomeEntity, String>
 	@Modifying
 	public void updateOrder(String oid);
 	
-	@Query("from TrustIncomeEntity a where a.trustEntity.oid = ?1")
+	@Query("from TrustIncomeEntity a where a.trustEntity.oid = ?1 and a.state <> '-1'")
 	public List<TrustIncomeEntity> findSeqByPidAndOidForIncome(String oid);
 }

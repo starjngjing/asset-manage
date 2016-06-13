@@ -49,9 +49,13 @@ public class TrustIncomeEntity implements Serializable {
 	// 兑付期数
 	private int seq;
 	// 实际收益率
-//	private BigDecimal incomeRate; 
+	private BigDecimal incomeRate; 
 	// 实际收益
 	private BigDecimal income; 
+	// 审核收益率
+	private BigDecimal auditIncomeRate;
+	// 确认收益率
+	private BigDecimal investIncomeRate;
 	// 审核收益
 	private BigDecimal auditIncome;
 	// 确认收益

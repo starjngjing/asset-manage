@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,7 +17,18 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService;
+import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.Income;
+import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.IncomeType;
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
+import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalc;
+import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalcService;
+import com.guohuai.asset.manage.boot.duration.capital.calc.error.ErrorCalc;
+import com.guohuai.asset.manage.boot.duration.capital.calc.error.ErrorCalcService;
+import com.guohuai.asset.manage.boot.duration.capital.calc.fund.FundCalc;
+import com.guohuai.asset.manage.boot.duration.capital.calc.fund.FundCalcService;
+import com.guohuai.asset.manage.boot.duration.capital.calc.trust.TrustCalc;
+import com.guohuai.asset.manage.boot.duration.capital.calc.trust.TrustCalcService;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundService;
 import com.guohuai.asset.manage.boot.duration.order.trust.TrustEntity;
@@ -42,6 +54,18 @@ public class AssetPoolService {
 	@Autowired
 	private TrustService trustService;
 	
+	@Autowired
+	private FundCalcService fundCalcService;
+	@Autowired
+	private TrustCalcService trustCalcService;
+	@Autowired
+	private AssetPoolCalcService poolCalcService;
+	@Autowired
+	private ErrorCalcService errorCalcService;
+	
+	@Autowired
+	private IncomeDocumentService incomeService;
+	
 	/**
 	 * 新建资产池
 	 * @param form
@@ -61,7 +85,7 @@ public class AssetPoolService {
 			entity.setTransitCash(BigDecimal.ZERO);
 			entity.setConfirmProfit(BigDecimal.ZERO);
 			entity.setFactProfit(BigDecimal.ZERO);
-			entity.setState("未审核");
+			entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01"));
 			entity.setCreater(uid);
 			entity.setCreateTime(DateUtil.getSqlCurrentDate());
 			
@@ -87,9 +111,9 @@ public class AssetPoolService {
 	public void auditPool(String operation, String oid, String uid) {
 		AssetPoolEntity entity = assetPoolDao.findOne(oid);
 		if ("yes".equals(operation)) {
-			entity.setState("成立");
+			entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02"));
 		} else {
-			entity.setState("未通过");
+			entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_03"));
 		}
 	}
 
@@ -104,13 +128,16 @@ public class AssetPoolService {
 		AssetPoolForm form = null;
 		if (null != entityList.getContent() && entityList.getContent().size() > 0) {
 			for (AssetPoolEntity entity : entityList.getContent()) {
-				if ("已失效".equals(entity.getState())) {
+				if (AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_04").equals(entity.getState())) {
 					continue;
 				}
 				form = new AssetPoolForm();
 				try {
 					BeanUtils.copyProperties(form, entity);
-					form.setState(entity.getState().equals("未审核") ?  "0" : entity.getState().equals("成立") ? "1" : "-1");
+					form.setState(entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01")) 
+							?  "0" 
+									: entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02")) 
+									? "1" : "-1");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -218,7 +245,7 @@ public class AssetPoolService {
 		entity.setCashRate(form.getCashRate());
 		entity.setCashtoolRate(form.getCashtoolRate());
 		entity.setTargetRate(form.getTargetRate());
-		entity.setState("未审核");
+		entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01"));
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -257,7 +284,7 @@ public class AssetPoolService {
 		entity.setCashFactRate(cashRate);
 		entity.setCashtoolFactRate(cashtoolRate);
 		entity.setTargetFactRate(targetRate);
-		entity.setState("成立");
+		entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02"));
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -315,84 +342,296 @@ public class AssetPoolService {
 		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
 		List<AssetPoolEntity> saveList = Lists.newArrayList();
 		if (null != poolList && !poolList.isEmpty()) {
+			// 日期
+			Date sqlDate = new Date(System.currentTimeMillis());
 			for (AssetPoolEntity entity : poolList) {
-				saveList.add(this.calcPoolProfit(entity));
+				saveList.add(this.calcPoolProfit(entity, sqlDate, AssetPoolCalc.EventType.SCHEDULE.toString()));
 			}
 			
 			assetPoolDao.save(saveList);
 		}
-		
 	}
 	
 	/**
 	 * 计算资产池当日的确认收益
 	 * @param assetPool
+	 * @param fundCalcList
+	 * @param trustCalcList
+	 * @param poolCalcList
 	 * @return
 	 */
 	@Transactional
-	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool) {
-		// 确认收益
-		BigDecimal confirmProfit = BigDecimal.ZERO;
-		// 实现收益
-		BigDecimal factProfit = BigDecimal.ZERO;
+	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool, Date baseDate, String type) {
+		// 总收益
+		BigDecimal totalProfit = BigDecimal.ZERO;
+		// 会计分录
+		List<Income> incomeList = Lists.newArrayList();
+		// 记录有问题的标的数据oid
+		List<ErrorCalc> errorList = Lists.newArrayList();
+		// 存档错误数据
+		ErrorCalc errorCalc = null;
+		// 错误信息
+		JSONObject jsonObj = null;
+		// 参与计算的现金管理工具列表
+		List<FundEntity> fcList = Lists.newArrayList();
+		// 参与计算的募集期信托标的列表
+		List<TrustEntity> mjq_tcList = Lists.newArrayList();
+		// 参与计算的存续期信托标的列表
+		List<TrustEntity> cxq_tcList = Lists.newArrayList();
+		// 计算结果
+		// 现金管理工具每日定时收益数据
+		List<FundCalc> fundCalcList = Lists.newArrayList();
+		// 信托标的每日定时收益数据
+		List<TrustCalc> trustCalcList = Lists.newArrayList();
+		
+		try {
+			// 持仓的现金管理工具
+			List<FundEntity> fundList = fundService.findFundListByPid(assetPool.getOid());
+			if (null != fundList && !fundList.isEmpty()) {
+				for (FundEntity entity : fundList) {
+					if (null == entity.getCashTool().getDailyProfit()) {
+						errorCalc = new ErrorCalc();
+						jsonObj = new JSONObject();
+						errorCalc.setOid(StringUtil.uuid());
+						errorCalc.setFund(entity);
+						errorCalc.setAssetPool(assetPool);
+						jsonObj.put("DaylyProfit", "收益率为空");
+						errorCalc.setMessage(jsonObj);
+						errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+						errorList.add(errorCalc);
+					} else {
+						fcList.add(entity);
+					}
+				}
+			}
+			
+			// 持仓的货基标的
+			List<TrustEntity> trustList = trustService.findTargetListByPid(assetPool.getOid());
+			if (null != trustList && !trustList.isEmpty()) {
+				for (TrustEntity entity : trustList) {
+					// 判断是否成立
+					if ("STAND_UP".equals(entity.getTarget().getLifeState())) {
+						// 判断收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
+						if ("amortized_cost".equals(entity.getProfitType())) {
+							if (null == entity.getTarget().getExpAror()
+									|| null == entity.getTarget().getContractDays()) {
+								errorCalc = new ErrorCalc();
+								jsonObj = new JSONObject();
+								errorCalc.setOid(StringUtil.uuid());
+								errorCalc.setTrust(entity);
+								errorCalc.setAssetPool(assetPool);
+								if (null == entity.getTarget().getExpAror())
+									jsonObj.put("ExpAror", "收益率为空");
+								if (null == entity.getTarget().getContractDays())
+									jsonObj.put("ContractDays", "合同年天数为空");
+								errorCalc.setMessage(jsonObj);
+								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+								errorList.add(errorCalc);
+							} else {
+								cxq_tcList.add(entity);
+							}
+						}
+					} else {
+						// 判断是否在募集期
+						if (!DateUtil.compare_current(entity.getTarget().getCollectEndDate())) {
+							if (null == entity.getTarget().getCollectIncomeRate()
+									|| null == entity.getTarget().getContractDays()) {
+								errorCalc = new ErrorCalc();
+								jsonObj = new JSONObject();
+								errorCalc.setOid(StringUtil.uuid());
+								errorCalc.setTrust(entity);
+								errorCalc.setAssetPool(assetPool);
+								if (null == entity.getTarget().getCollectIncomeRate())
+									jsonObj.put("CollectIncomeRate", "募集期收益率为空");
+								if (null == entity.getTarget().getContractDays())
+									jsonObj.put("ContractDays", "合同年天数为空");
+								errorCalc.setMessage(jsonObj);
+								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+								errorList.add(errorCalc);
+							} else {
+								mjq_tcList.add(entity);
+							}
+						}
+					}
+				}
+			}
+			
+			if (type.equals(AssetPoolCalc.EventType.SCHEDULE.toString())) {
+				if (errorList.size() > 0) {
+					throw new RuntimeException("=================定时任务未执行，待数据补录==============="); 
+				}
+			} else if (type.equals(AssetPoolCalc.EventType.USER_CALC.toString())) {
+				AssetPoolCalc calc = new AssetPoolCalc();
+				calc.setOid(StringUtil.uuid());
+				calc.setAssetPool(assetPool);
+				
+				this.calcFundProfit(calc, baseDate, totalProfit, fcList, fundCalcList, incomeList);
+				this.calcTrustProfitForCollect(calc, baseDate, totalProfit, mjq_tcList, trustCalcList, incomeList);
+				this.calcTrustProfitForDuration(calc, baseDate, totalProfit, cxq_tcList, trustCalcList, incomeList);
+				
+				calc.setCapital(assetPool.getScale().add(totalProfit).setScale(4, BigDecimal.ROUND_HALF_UP));
+				calc.setProfit(totalProfit);
+				calc.setBaseDate(baseDate);
+				calc.setEventType(AssetPoolCalc.EventType.USER_CALC);
+				calc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+				
+				poolCalcService.saveOne(calc);
+				fundCalcService.save(fundCalcList);
+				trustCalcService.save(trustCalcList);
+				
+				assetPool.setConfirmProfit(totalProfit);
+				assetPool.setFactProfit(totalProfit);
+				assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+			}
+			
+			incomeService.incomeConfirm(assetPool.getOid(), incomeList);
+			
+			return assetPool;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new AssetPoolEntity();
+	}
+	
+	/**
+	 * 计算现金管理工具每日收益
+	 * @param assetPoolCalc
+	 * @param baseDate
+	 * @param totalProfit
+	 * @param fundList
+	 * @param fundCalcList
+	 * @param incomeList
+	 */
+	public void calcFundProfit(AssetPoolCalc assetPoolCalc, Date baseDate,
+			BigDecimal totalProfit,
+			List<FundEntity> fundList,
+			List<FundCalc> fundCalcList, 
+			List<Income> incomeList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
-		
-		// 持仓的现金管理工具
-		List<FundEntity> fundList = fundService.findFundListByPid(assetPool.getOid());
 		if (null != fundList && !fundList.isEmpty()) {
 			for (FundEntity entity : fundList) {
 				dayProfit = entity.getAmount().multiply(
 						entity.getCashTool().getDailyProfit()
 						.divide(new BigDecimal(10000)))
 						.setScale(4, BigDecimal.ROUND_HALF_UP);
-				confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
-				factProfit = factProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				entity.setAmount(entity.getAmount().add(dayProfit)
 						.setScale(4, BigDecimal.ROUND_HALF_UP));
 				entity.setDailyProfit(dayProfit);
 				entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
 						.setScale(4, BigDecimal.ROUND_HALF_UP));
+
+				FundCalc calc = new FundCalc();
+				calc.setOid(StringUtil.uuid());
+				calc.setCashTool(entity.getCashTool());
+				calc.setAssetPoolCalc(assetPoolCalc);
+				calc.setCapital(entity.getAmount());
+				calc.setInterest(calc.getInterest().add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP));
+				calc.setYield(entity.getCashTool().getDailyProfit());
+				calc.setIncome(dayProfit);
+				calc.setBaseDate(baseDate);
+				calc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+				fundCalcList.add(calc);
+				
+				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+				
+				Income income = new Income(calc.getOid(), dayProfit, IncomeType.CASHTOOL);
+				incomeList.add(income);
 			}
+			fundService.save(fundList);
 		}
-		
-		// 持仓的货基标的
-		List<TrustEntity> trustList = trustService.findTargetListByPid(assetPool.getOid());
+	}
+	
+	/**
+	 * 计算募集期的信托标的每日收益
+	 * @param assetPoolCalc
+	 * @param baseDate
+	 * @param totalProfit
+	 * @param trustList
+	 * @param trustCalcList
+	 * @param incomeList
+	 */
+	public void calcTrustProfitForCollect(AssetPoolCalc assetPoolCalc, Date baseDate,
+			BigDecimal totalProfit, 
+			List<TrustEntity> trustList, 
+			List<TrustCalc> trustCalcList,
+			List<Income> incomeList) {
+		// 当日收益
+		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != trustList && !trustList.isEmpty()) {
 			for (TrustEntity entity : trustList) {
-				// 判断是否成立
-				if ("STAND_UP".equals(entity.getTarget().getLifeState())) {
-					// 判断收益方式（amortized_cost：摊余成本法；book_value：账面价值法）
-					if ("amortized_cost".equals(entity.getProfitType())) {
-						dayProfit = entity.getInvestVolume()
-								.multiply(entity.getTarget().getExpAror())
-								.divide(new BigDecimal(entity.getTarget().getContractDays()))
-								.setScale(4, BigDecimal.ROUND_HALF_UP);
-						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
-						entity.setDailyProfit(dayProfit);
-						entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
-								.setScale(4, BigDecimal.ROUND_HALF_UP));
-					}
-				} else {
-					// 判断是否在募集期
-					if (!DateUtil.compare_current(entity.getTarget().getCollectEndDate())) {
-						dayProfit = entity.getInvestVolume()
-								.multiply(entity.getTarget().getCollectIncomeRate())
-								.divide(new BigDecimal(entity.getTarget().getContractDays()))
-								.setScale(4, BigDecimal.ROUND_HALF_UP);
-						confirmProfit = confirmProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
-						entity.setDailyProfit(dayProfit);
-						entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
-								.setScale(4, BigDecimal.ROUND_HALF_UP));
-					}
-				}
+				dayProfit = entity.getInvestVolume()
+						.multiply(entity.getTarget().getCollectIncomeRate())
+						.divide(new BigDecimal(entity.getTarget().getContractDays()), 4, BigDecimal.ROUND_HALF_UP)
+						.setScale(4, BigDecimal.ROUND_HALF_UP);
+				entity.setDailyProfit(dayProfit);
+				entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
+						.setScale(4, BigDecimal.ROUND_HALF_UP));
+				
+				TrustCalc calc = new TrustCalc();
+				calc.setOid(StringUtil.uuid());
+				calc.setTarget(entity.getTarget());
+				calc.setAssetPool(assetPoolCalc);
+				calc.setCapital(entity.getInvestVolume());
+				calc.setYield(entity.getTarget().getCollectIncomeRate());
+				calc.setProfit(dayProfit);
+				calc.setBaseDate(baseDate);
+				calc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+				trustCalcList.add(calc);
+				
+				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+				
+				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+				incomeList.add(income);
 			}
+			trustService.save(trustList);
 		}
-		
-		assetPool.setConfirmProfit(confirmProfit);
-		assetPool.setFactProfit(factProfit);
-		assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-		
-		return assetPool;
+	}
+	
+	/**
+	 * 计算存续期的信托标的给每日收益
+	 * @param assetPoolCalc
+	 * @param baseDate
+	 * @param totalProfit
+	 * @param trustList
+	 * @param trustCalcList
+	 * @param incomeList
+	 */
+	public void calcTrustProfitForDuration(AssetPoolCalc assetPoolCalc, Date baseDate, 
+			BigDecimal totalProfit,
+			List<TrustEntity> trustList, 
+			List<TrustCalc> trustCalcList,
+			List<Income> incomeList) {
+		// 当日收益
+		BigDecimal dayProfit = BigDecimal.ZERO;
+		if (null != trustList && !trustList.isEmpty()) {
+			for (TrustEntity entity : trustList) {
+				dayProfit = entity.getInvestVolume()
+						.multiply(entity.getTarget().getExpAror())
+						.divide(new BigDecimal(entity.getTarget().getContractDays()), 4, BigDecimal.ROUND_HALF_UP)
+						.setScale(4, BigDecimal.ROUND_HALF_UP);
+				entity.setDailyProfit(dayProfit);
+				entity.setTotalProfit(entity.getTotalProfit().add(dayProfit)
+						.setScale(4, BigDecimal.ROUND_HALF_UP));
+				
+				TrustCalc calc = new TrustCalc();
+				calc.setOid(StringUtil.uuid());
+				calc.setTarget(entity.getTarget());
+				calc.setAssetPool(assetPoolCalc);
+				calc.setCapital(entity.getInvestVolume());
+				calc.setYield(entity.getTarget().getExpAror());
+				calc.setProfit(dayProfit);
+				calc.setBaseDate(baseDate);
+				calc.setCreateTime(new Timestamp(System.currentTimeMillis()));
+				trustCalcList.add(calc);
+				
+				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
+				
+				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+				incomeList.add(income);
+			}
+			trustService.save(trustList);
+		}
 	}
 }

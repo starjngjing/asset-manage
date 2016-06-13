@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalForm;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.component.web.BaseController;
@@ -76,7 +77,8 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAll(@RequestParam String name,
+	public @ResponseBody ResponseEntity<Response> getAll(@RequestParam(required = false) String name,
+			@RequestParam(required = false) String state,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int rows,
 			@RequestParam(required = false, defaultValue = "createTime") String sortField,
@@ -88,7 +90,15 @@ public class AssetPoolController extends BaseController {
 		Specification<AssetPoolEntity> spec = new Specification<AssetPoolEntity>() {
 			@Override
 			public Predicate toPredicate(Root<AssetPoolEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.like(root.get("name").as(String.class), "%" + name + "%");
+				List<Predicate> list = Lists.newArrayList();
+				if (null != name && !"".equals(name)) {
+					list.add(cb.like(root.get("name").as(String.class), "%" + name + "%"));
+				}
+				if (null != state && !"".equals(state)) {
+					list.add(cb.equal(root.get("state").as(String.class), AssetPoolEntity.PoolState.get(state)));
+				}
+				Predicate[] p = new Predicate[list.size()];
+				return cb.and(list.toArray(p));
 			}
 		};
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
