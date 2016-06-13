@@ -21,10 +21,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * 预警指标配置表
- * <p>Title: RiskWarningOptions.java</p>    
- * <p>Description: 描述 </p>   
- * @author vania      
- * @version 1.0    
+ * <p>
+ * Title: RiskWarningOptions.java
+ * </p>
+ * <p>
+ * Description: 描述
+ * </p>
+ * 
+ * @author vania
+ * @version 1.0
  * @created 2016年6月7日 下午4:31:53
  */
 @Entity
@@ -46,16 +51,15 @@ public class RiskWarningOptions extends UUID {
 	private String param2;
 	private String param3;
 	private Integer seq;
-	
 
 	public String showTitle() {
 		RiskIndicate indicate = this.warning.getIndicate();
 		String dataUnit = indicate.getDataUnit();
 		if (null == this.warning)
 			return null;
-//		if (this.dft.equals("YES")) {
-//			return "N/A";
-//		}
+		// if (this.dft.equals("YES")) {
+		// return "N/A";
+		// }
 		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_Number)) {
 			return formatTitle(this.param0, dataUnit);
 		}
@@ -76,7 +80,7 @@ public class RiskWarningOptions extends UUID {
 	private static String formatTitle(String title, String dataUnit) {
 		if (StringUtils.isBlank(title) || title.equals("∞"))
 			return title;
-		return title + dataUnit == null ? "" : dataUnit.trim();
+		return title + (dataUnit == null ? "" : dataUnit.trim());
 	}
 
 }
