@@ -137,7 +137,7 @@ public class RiskWarningOptionsService {
 		return view;
 	}
 */
-	@SuppressWarnings("rawtypes")
+	
 	@Transactional
 	public List<RiskWarningOptionsView> showview(String type, String keyword) {
 
@@ -146,9 +146,9 @@ public class RiskWarningOptionsService {
 		List<RiskWarningOptions> options = this.riskWarningOptionsDao.search(type, String.format("%%%s%%", keyword));
 
 		if (null != options && options.size() > 0) {
-			Map<String, String> cmap = new HashMap();
-			Map<String, String> imap = new HashMap();
-			Map<String, String> wmap = new HashMap();
+			Map<String, String> cmap = new HashMap<String, String>();
+			Map<String, String> imap = new HashMap<String, String>();
+			Map<String, String> wmap = new HashMap<String, String>();
 //			Map<String, Map<String, Map<String, List<RiskWarningOptionsView>>>> cmap = new HashMap<String, Map<String, Map<String, List<RiskWarningOptionsView>>>>();
 			for (RiskWarningOptions o : options) {
 				RiskWarning warning = o.getWarning();
@@ -186,6 +186,8 @@ public class RiskWarningOptionsService {
 				
 				v.setIndicateOid(indicateOid);
 				v.setIndicateTitle(indicate.getTitle());
+				v.setIndicateDataType(indicate.getDataType());
+				v.setIndicateDataUnit(indicate.getDataUnit());
 				v.setShowIndicate(showIndicate);
 				
 				v.setWarningOid(warningOid);

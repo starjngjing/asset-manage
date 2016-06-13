@@ -13,11 +13,11 @@ define([
 			// js逻辑写在这里
 
 			var createOptions = {
-				"NUMBER": function() {
+				"NUMBER": function(dataUnit) {
 					var form = $('<form type="NUMBER"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
-					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述"></div></div>');
+					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述">' + initDataUnit(dataUnit) + '</div></div>');
 					x0.appendTo(row);
 					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select></div></div></div>');
 					x1.appendTo(row);
@@ -34,13 +34,13 @@ define([
 
 					return form;
 				},
-				"NUMRANGE": function() {
+				"NUMRANGE": function(dataUnit) {
 					var form = $('<form type="NUMRANGE"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
-					var x0 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-5"><select name="param0" class="form-control input-sm"><option value="[">[</option><option value="(">(</option></select></div><div class="col-xs-7"><input name="param1" type="text" class="form-control input-sm"></div></div></div></div>');
+					var x0 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-5"><select name="param0" class="form-control input-sm"><option value="[">[</option><option value="(">(</option></select></div><div class="col-xs-7"><div class="input-group range"><input name="param1" type="text" class="form-control input-sm">' + initDataUnit(dataUnit) + '</div></div></div></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-7"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm"></div></div><div class="col-xs-5"><select name="param3" class="form-control input-sm"><option value="]">]</option><option value=")">)</option></select></div></div></div></div>');
+					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-7"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm">' + initDataUnit(dataUnit) + '</div></div><div class="col-xs-5"><select name="param3" class="form-control input-sm"><option value="]">]</option><option value=")">)</option></select></div></div></div></div>');
 					x1.appendTo(row);
 					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select></div></div></div>');
 					x2.appendTo(row);
@@ -57,7 +57,7 @@ define([
 
 					return form;
 				},
-				"TEXT": function() {
+				"TEXT": function(dataUnit) {
 					var form = $('<form type="TEXT"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
@@ -99,27 +99,32 @@ define([
 					queryParams.keyword = form.keyword.value.trim();
 				},
 				columns: [{
+					// 指标分类
 					field: 'cateTitle',
 					formatter: function(val, row, index) {
 						return row.showCate ? '<b>' + val + '</b>' : '';
 					}
 				}, {
+					// 指标项名称
 					field: 'indicateTitle',
 					width: 500,
 					formatter: function(val, row, index) {
 						return row.showIndicate ? val : '';
 					}
 				}, {
+					// 指标描述
 					field: 'waringTitle',
 					formatter: function(val, row, index) {
 						return row.showWarning ? val : '';
 					}
 				}, {
+					// 指标项值
 					field: 'optionsTitle',
 					formatter: function(val, row, index) {
 						return row.showOptions ? '<i>' + val + '</i>' : '';
 					}
 				}, {
+					// 风险等级
 					field: 'optionsWlevel',
 					align: 'center',
 					formatter: function(val, row, index) {
@@ -166,7 +171,7 @@ define([
 									var type = val.indicateDataType;
 									if (createOptions[type]) {
 										$.each(val.options, function(i, item) {
-											var option = createOptions[type]();
+											var option = createOptions[type](val.indicateDataUnit);
 											if (option) {
 												$('#updateFormOptions').append(option);
 											}
@@ -226,6 +231,7 @@ define([
 							$('#addFormOptions').empty();
 							var option = options[form.indicateOid.value];
 							$(form.indicateDataType).val(option.dataType);
+							$(form.indicateDataUnit).val(option.dataUnit);
 						});
 
 						$(form.cateOid).off().on('change', function() {
@@ -304,8 +310,9 @@ define([
 
 			$('#addFormAddOption').on('click', function() {
 				var type = document.addForm.indicateDataType.value;
+				var unit = document.addForm.indicateDataUnit.value;
 				if (createOptions[type]) {
-					var option = createOptions[type]();
+					var option = createOptions[type](unit);
 					if (option) {
 						$('#addFormOptions').append(option);
 					}
@@ -314,8 +321,9 @@ define([
 
 			$('#updateFormAddOption').on('click', function() {
 				var type = document.updateForm.indicateDataType.value;
+				var unit = document.updateForm.indicateDataUnit.value;
 				if (createOptions[type]) {
-					var option = createOptions[type]();
+					var option = createOptions[type](unit);
 					if (option) {
 						$('#updateFormOptions').append(option);
 					}
@@ -476,6 +484,13 @@ define([
 			 */
 			function initLevelOption(){
 				return '<option value="NONE">无</option><option value="LOW">低</option><option value="MID">中</option><option value="HIGH">高</option>';
+			}
+			
+			/**
+			 * 初始化单位
+			 */
+			function initDataUnit(dataUnit){
+				return dataUnit ? '<span class="input-group-addon">' + dataUnit.toString().trim() + '</span>' : '';
 			}
 
 		}

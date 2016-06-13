@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
 import com.guohuai.asset.manage.boot.system.config.risk.warning.RiskWarning;
 import com.guohuai.asset.manage.component.persist.UUID;
@@ -48,38 +50,33 @@ public class RiskWarningOptions extends UUID {
 
 	public String showTitle() {
 		RiskIndicate indicate = this.warning.getIndicate();
+		String dataUnit = indicate.getDataUnit();
 		if (null == this.warning)
 			return null;
 //		if (this.dft.equals("YES")) {
 //			return "N/A";
 //		}
 		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_Number)) {
-			return this.numberTitle();
+			return formatTitle(this.param0, dataUnit);
 		}
 		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_NumRange)) {
-			return this.numrangeTitle();
+			Object[] param = new Object[4];
+			param[0] = this.param0;
+			param[1] = formatTitle(StringUtil.isEmpty(this.param1) ? "∞" : this.param1, dataUnit);
+			param[2] = formatTitle(StringUtil.isEmpty(this.param2) ? "∞" : this.param2, dataUnit);
+			param[3] = this.param3;
+			return String.format("%s %s, %s %s", param);
 		}
 		if (indicate.getDataType().equals(RiskIndicate.DATA_TYPE_Text)) {
-			return this.textTitle();
+			return this.param0;
 		}
 		return null;
 	}
 
-	private String numberTitle() {
-		return this.param0;
-	}
-
-	private String numrangeTitle() {
-		Object[] param = new Object[4];
-		param[0] = this.param0;
-		param[1] = StringUtil.isEmpty(this.param1) ? "∞" : this.param1;
-		param[2] = StringUtil.isEmpty(this.param2) ? "∞" : this.param2;
-		param[3] = this.param3;
-		return String.format("%s %s, %s %s", param);
-	}
-
-	private String textTitle() {
-		return this.param0;
+	private static String formatTitle(String title, String dataUnit) {
+		if (StringUtils.isBlank(title) || title.equals("∞"))
+			return title;
+		return title + dataUnit == null ? "" : dataUnit.trim();
 	}
 
 }

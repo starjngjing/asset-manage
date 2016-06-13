@@ -11,6 +11,8 @@ public class RiskWarningOptionsView {
 
 	private String indicateOid;
 	private String indicateTitle;
+	private String indicateDataType;
+	private String indicateDataUnit;
 	private boolean showIndicate;
 	
 

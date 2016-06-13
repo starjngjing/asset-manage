@@ -10,16 +10,24 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.system.config.risk.cate.RiskCate;
+import com.guohuai.asset.manage.boot.system.config.risk.cate.RiskCateDao;
+import com.guohuai.asset.manage.boot.system.config.risk.cate.RiskCateService;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
-import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateOption;
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateDao;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateService;
-import com.guohuai.asset.manage.boot.system.config.risk.warning.options.RiskWarningOptions;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 @Service
 public class RiskWarningService {
 	@Autowired
 	private RiskWarningDao riskWarningDao;
+	@Autowired
+	private RiskIndicateDao riskIndicateDao;
+	@Autowired
+	private RiskCateDao riskCateDao;
+	@Autowired
+	private RiskCateService riskCateService;
 	@Autowired
 	private RiskIndicateService  riskIndicateService;
 	
@@ -68,39 +76,62 @@ public class RiskWarningService {
 		return result;
 	}
 
-/*
+
 	@Transactional
-	public List<RiskWarningResp> options(String type) {
+	public List<RiskWarningOption> options(String type) {
+		List<RiskWarningOption> options = new ArrayList<RiskWarningOption>();
+		int wsize = 0;
 
 		List<RiskWarning> list = this.riskWarningDao.search(type, new String[] { RiskIndicate.STATE_Enable });
+		wsize = null == list ? 0 : list.size();
+		if (wsize > 0) {
+			Map<String, RiskWarningOption> cmap = new HashMap<String, RiskWarningOption>();
+			for (RiskWarning i : list) {
+				String woid = i.getOid();
+				RiskIndicate indicate = i.getIndicate();
+				String ioid = indicate.getOid();
+				RiskCate cate = indicate.getCate();
+				String coid = cate.getOid();
 
-		List<RiskWarningResp> options = new ArrayList<RiskIndicateOption>();
-		Map<String, RiskIndicateOption> map = new HashMap<String, RiskIndicateOption>();
-
-		if (null != list && list.size() > 0) {
-			for (RiskIndicate i : list) {
-				if (!map.containsKey(i.getCate().getOid())) {
-					RiskIndicateOption rio = new RiskIndicateOption();
-					rio.setOid(i.getCate().getOid());
-					rio.setTitle(i.getCate().getTitle());
-					options.add(rio);
-					map.put(i.getCate().getOid(), rio);
+				RiskWarningOption wo = cmap.get(coid);
+				if (null == wo) {
+					wo = new RiskWarningOption();
+					wo.setOid(coid);
+					wo.setTitle(cate.getTitle());
+					cmap.put(coid, wo);
 				}
 
-				RiskIndicateOption rio = map.get(i.getCate().getOid());
+				List<RiskWarningOption.Indicate> ilist = wo.getOptions();
+				if (null == ilist)
+					ilist = new ArrayList<>();
+				RiskWarningOption.Indicate ind = wo.get(ioid);
+				if (null == ind) { // 不存在
+					ind = new RiskWarningOption.Indicate();
+					ilist.add(ind);
+					
+					ind.setOid(ioid);
+					ind.setTitle(indicate.getTitle());
+					ind.setDataType(indicate.getDataType());
+					ind.setDataUnit(indicate.getDataUnit());
+				}
 
-				RiskIndicateOption.Option roo = new RiskIndicateOption.Option();
-				roo.setOid(i.getOid());
-				roo.setTitle(i.getTitle());
-				roo.setDataType(i.getDataType());
-				roo.setDataUnit(i.getDataUnit());
-
-				rio.getOptions().add(roo);
-
+				List<RiskWarningOption.Indicate.Option> wlist = ind.getOptions();
+				if (wlist == null) {
+					wlist = new ArrayList<>();
+				}
+				RiskWarningOption.Indicate.Option op = ind.get(woid);
+				if (null == op) { // 不存在
+					op = new RiskWarningOption.Indicate.Option();
+					wlist.add(op);
+				}
+				op.setOid(woid);
+				op.setTitle(i.getTitle());
 			}
-		}
+			for (RiskWarningOption rw : cmap.values()) {
+				options.add(rw);
+			}
 
+		}
 		return options;
 	}
-	*/
 }
