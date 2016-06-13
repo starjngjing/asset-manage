@@ -79,14 +79,16 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>指标分类</label>
-								<select name="cateOid" class="form-control input-sm">
+								<select name="cateOid" class="form-control input-sm" required data-error="指标分类不能为空">
 								</select>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>指标项名称</label>
-								<select name="indicateOid" class="form-control input-sm"></select>
+								<select name="indicateOid" class="form-control input-sm" required data-error="指标项名称不能为空"></select>
+								<div class="help-block with-errors text-red"></div>
 								<input type="hidden" name="indicateDataType" />
 								<input type="hidden" name="indicateDataUnit" />
 							</div>
@@ -109,7 +111,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="saveButton" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="saveButton" type="button" class="btn btn-primary btn-submit addSubmit">保 存</button>
 			</div>
 		</div>
 	</div>
@@ -165,7 +167,7 @@
 			<!-- 模态窗底部 -->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-				<button id="updateButton" type="button" class="btn btn-primary btn-submit">保 存</button>
+				<button id="updateButton" type="button" class="btn btn-primary btn-submit updateSubmit">保 存</button>
 			</div>
 		</div>
 	</div>
