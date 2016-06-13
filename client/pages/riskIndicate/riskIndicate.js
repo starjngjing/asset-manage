@@ -172,8 +172,20 @@ define([
 									}
 
 								});
-
+								
 								$(cateType).val(row.cateType).change();
+								
+								$(form.indicateDataType).off().on('change', function() {
+									var v = $(this).val();
+									if('NUMBER' === v || 'NUMRANGE' === v) {
+										$(form.indicateDataUnit).removeAttr('disabled');
+										$('#updateDataUnitDiv').fadeIn();
+									} else {
+										$(form.indicateDataUnit).attr('disabled', 'disabled');
+										$('#updateDataUnitDiv').fadeOut();
+									}									
+								});
+								$(form.indicateDataType).val(indicateDataType).change();
 
 								$$.formAutoFix($('#updateForm'), row);
 
@@ -292,6 +304,17 @@ define([
 
 					$(cateType).change();
 
+					$(form.indicateDataType).off().on('change', function() {
+						var v = $(this).val();
+						if('NUMBER' === v || 'NUMRANGE' === v) {
+							$(form.indicateDataUnit).removeAttr('disabled');
+							$('#addDataUnitDiv').fadeIn();
+						} else {
+							$(form.indicateDataUnit).attr('disabled', 'disabled');
+							$('#addDataUnitDiv').fadeOut();
+						}									
+					});
+					$(form.indicateDataType).change();
 				});
 			});
 
