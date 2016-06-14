@@ -254,7 +254,7 @@ define([
 					res.push($(frm).validator('doSubmitCheck')); // 校验指标项配置form
 				}
 				for (var i = 0; i < res.length; i++) {
-					if(!res[i])return;
+					if(!res[i])return false;
 				}
 				
 				var json = {
@@ -294,7 +294,7 @@ define([
 					res.push($(frm).validator('doSubmitCheck')); // 校验指标项配置form
 				}
 				for (var i = 0; i < res.length; i++) {
-					if(!res[i])return;
+					if(!res[i])return false;
 				}
 				
 				var json = {
