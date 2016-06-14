@@ -189,9 +189,17 @@ define(function() {
 								preUpdate: this.host + "/ams/system/ccr/warning/options/preUpdate",
 								preCollect: this.host + "/ams/system/ccr/warning/options/preCollect",
 							},
-							collect:{ //风险预警
+							collect: { //风险预警
 								list: this.host + "/ams/system/ccr/warning/collect/list", //风险预警列表
 								detail: this.host + "/ams/system/ccr/warning/collect/detail", //风险预警详情
+								collectOption: this.host + "/ams/system/ccr/warning/collect/collectOption", //风险采集配置项
+								add: this.host + "/ams/system/ccr/warning/collect/add", //风险采集
+							},
+							handle: { //风险处置
+								list: this.host + "/ams/system/ccr/warning/collect/handle/list", //风险处置列表
+								handle: this.host + "/ams/system/ccr/warning/collect/handle/handle", //风险处置
+								hisListAll: this.host + "/ams/system/ccr/warning/collect/handle/hisListAll", //风险处置历史全列表
+								hisList: this.host + "/ams/system/ccr/warning/collect/handle/hisList", //风险处置历史列表
 							}
 						},
 						options: {
@@ -212,7 +220,7 @@ define(function() {
 					getAll: this.host + "/ams/duration/assetPool/getAll", // 获取全部资产池
 					getById: this.host + '/ams/duration/assetPool/getPoolByOid', // 获取单条资产池
 					getNameList: this.host + '/ams/duration/assetPool/getAllNameList', //获取资产池下拉菜单列表
-					delete: this.host + '/ams/duration/assetPool/updateAssetPool'	// 删除资产池
+					delete: this.host + '/ams/duration/assetPool/updateAssetPool' // 删除资产池
 				},
 				order: { // 订单
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund', // 货币基金申购
@@ -254,9 +262,9 @@ define(function() {
 				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths', // 获取角色权限
 			},
 			user: {
-				search: this.host + '/operate/admin/search',	// 用户查找
-				roles: this.host + '/operate/admin/role/roles',	//当前用户角色
-				create: this.host + '/operate/admin/create',	// 添加用户
+				search: this.host + '/operate/admin/search', // 用户查找
+				roles: this.host + '/operate/admin/role/roles', //当前用户角色
+				create: this.host + '/operate/admin/create', // 添加用户
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
@@ -523,30 +531,43 @@ define(function() {
 		subjectRating: [{
 			id: "AAA",
 			text: "AAA",
-		},{
+		}, {
 			id: "AA+",
 			text: "AA+",
-		},{
+		}, {
 			id: "AA",
 			text: "AA",
-		},{
+		}, {
 			id: "AA-",
 			text: "AA-",
-		},{
+		}, {
 			id: "A+",
 			text: "A+",
-		},{
+		}, {
 			id: "A-",
 			text: "A-",
-		},{
+		}, {
 			id: "BBB+",
 			text: "BBB+",
-		},{
+		}, {
 			id: "BBB",
 			text: "BBB",
-		},{
+		}, {
 			id: "BBB-",
 			text: "BBB-",
+		}],
+		/**
+		 * 风险处置
+		 */
+		warningHandleType: [{
+			id: "KEEP",
+			text: "保留风险等级",
+		}, {
+			id: "CLEAR",
+			text: "风险已处置",
+		}, {
+			id: "DOWN",
+			text: "风险降级",
 		}],
 		/**
 		 * 图标所用到的主题颜色
