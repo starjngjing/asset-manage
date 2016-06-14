@@ -97,11 +97,12 @@ function (http, config, util, $$) {
 					{
 						width: 100,
 						align: 'center',
-						formatter: function () {
+						formatter: function (val, row, index) {
 							var buttons = [{
 								text: '详情',
 								type: 'buttonGroup',
 								class: 'item-detail',
+								isCloseBottom: index >= pageOptions.rows - 2,
 								sub: [{
 									text: '修改',
 									class: 'item-update'

@@ -87,7 +87,7 @@ define([
                 break
               case 'buttonGroup':
                 if (item.isRender === undefined || item.isRender) {
-                  format += '<div class="btn-group">' +
+                  format += '<div class="btn-group ' + (item.isCloseBottom ? 'dropup' : '') + '">' +
                   '<button class="btn btn-default btn-xs ' + item.class + '">' + item.text + '</button>' +
                   '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                   '<span class="caret"></span>' +
@@ -379,18 +379,18 @@ define([
 		  return x + builder
     },
     /**
-	 * 生成随机字符串
-	 * @param {Object} len 多少位
-	 */
-	getRandomString: function(len) {
-		len = len || 32;
-		var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1  
-		var maxPos = $chars.length;
-		var pwd = '';
-		for (i = 0; i < len; i++) {
-			pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-		}
-		return pwd;
-	}
+  	 * 生成随机字符串
+  	 * @param {Object} len 多少位
+  	 */
+  	getRandomString: function(len) {
+  		len = len || 32;
+  		var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1  
+  		var maxPos = $chars.length;
+  		var pwd = '';
+  		for (i = 0; i < len; i++) {
+  			pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+  		}
+  		return pwd;
+  	}
   }
 })
