@@ -77,6 +77,7 @@ define([
       var toArray = options.toArray || []
       var field = options.field || 'text'
       var formatter = options.formatter || null
+      var sort = !!options.sort
 
       var fromList = $('<div class="col-sm-6"><div class="box" style="border: 1px solid #d2d6de;"></div></div>')
       var toList = $('<div class="col-sm-6"><div class="box" style="border: 1px solid #d2d6de;"></div></div>')
@@ -107,10 +108,12 @@ define([
         var li = $('<li></li>')
         var indexer = $('<span class="handle">' + (index + 1) + '</span>')
         var innerHTML = !!formatter ? formatter(source[field]) : source[field]
-        var arrow = $('<i class="fa pull-right switcher-arrow ' + (sign ? 'fa-arrow-circle-o-left text-red' : 'fa-arrow-circle-o-right text-green') + '"></i>')
-        li.html(innerHTML).prepend(indexer).append(arrow)
+        var switchBtn = $('<i class="fa pull-right switcher-arrow ' + (sign ? 'fa-arrow-circle-o-left text-red' : 'fa-arrow-circle-o-right text-green') + '"></i>')
+        var upBtn = $('<i class="fa pull-right switcher-arrow fa-arrow-circle-o-up text-yellow"></i>')
+        var downBtn = $('<i class="fa pull-right switcher-arrow fa-arrow-circle-o-down text-yellow"></i>')
+        li.html(innerHTML).prepend(indexer).append(switchBtn)
 
-        arrow.on('click', function () {
+        switchBtn.on('click', function () {
           var currentIndex = fromArr.indexOf(source)
           fromArr.splice(currentIndex, 1)
           toArr.push(source)
@@ -121,6 +124,36 @@ define([
           })
           toList.find('ul').append(generateCell(toList, fromList, toArr, fromArr, field, formatter, source, index, !sign))
         })
+
+        if (sort) {
+          li.append(downBtn).append(upBtn)
+          upBtn.on('click', function () {
+            var currentIndex = fromArr.indexOf(source)
+            if (currentIndex) {
+              fromArr.splice(currentIndex, 1)
+              fromArr.splice(currentIndex - 1, 0, source)
+
+              fromList.find('li:eq(' + currentIndex + ')').remove()
+              fromList.find('li:eq(' + (currentIndex - 1) + ')').before(generateCell(fromList, toList, fromArr, toArr, field, formatter, source, index, sign))
+              fromList.find('.handle').each(function (index, item) {
+                $(item).html(index + 1)
+              })
+            }
+          })
+          downBtn.on('click', function () {
+            var currentIndex = fromArr.indexOf(source)
+            if (currentIndex !== fromArr.length - 1) {
+              fromArr.splice(currentIndex, 1)
+              fromArr.splice(currentIndex + 1, 0, source)
+
+              fromList.find('li:eq(' + currentIndex + ')').remove()
+              fromList.find('li:eq(' + currentIndex + ')').after(generateCell(fromList, toList, fromArr, toArr, field, formatter, source, index, sign))
+              fromList.find('.handle').each(function (index, item) {
+                $(item).html(index + 1)
+              })
+            }
+          })
+        }
 
         return li
       }
