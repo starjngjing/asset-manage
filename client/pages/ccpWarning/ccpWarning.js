@@ -258,7 +258,14 @@ define([
 			});
 
 			$('#saveButton').on('click', function() {
-				if (!$('#addForm').validator('doSubmitCheck')) return
+				var f = $('#addForm').validator('doSubmitCheck');
+				var x = $('#addFormOptions').children();
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					f = $(frm).validator('doSubmitCheck');
+				}
+				if(!f)return;
+				
 				var json = {
 					options: []
 				};
@@ -266,13 +273,7 @@ define([
 					json[v.name] = v.value;
 				});
 
-
-				var x = $('#addFormOptions').children();
-				for (var i = 0; i < x.length; i++) {
-					var frm = x[i];
-					if (!$(frm).validator('doSubmitCheck')) return
-				}
-				$.each(x, function(i, v) {
+				$.each(x, function(i, v) { // 遍历指标项配置
 					var ov = {};
 					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
@@ -292,7 +293,14 @@ define([
 			});
 
 			$('#updateButton').on('click', function() {
-				if (!$('#updateForm').validator('doSubmitCheck')) return
+				var f = $('#updateForm').validator('doSubmitCheck');
+				var x = $('#updateFormOptions').children();
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					f = $(frm).validator('doSubmitCheck');
+				}
+				if(!f)return;
+				
 				var json = {
 					options: []
 				};
@@ -300,13 +308,8 @@ define([
 					json[v.name] = v.value;
 				});
 
-
-				var x = $('#updateFormOptions').children();
-				for (var i = 0; i < x.length; i++) {
-					var frm = x[i];
-					if (!$(frm).validator('doSubmitCheck')) return
-				}
-				$.each(x, function(i, v) {
+				
+				$.each(x, function(i, v) { // 遍历指标项配置
 					var ov = {};
 					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
