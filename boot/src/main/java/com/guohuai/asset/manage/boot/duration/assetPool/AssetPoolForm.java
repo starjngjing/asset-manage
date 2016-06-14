@@ -44,6 +44,10 @@ public class AssetPoolForm implements Serializable {
 	private BigDecimal confirmProfit;
 	// 实现收益
 	private BigDecimal factProfit;
+	// 每日定时任务状态(未计算，已计算，部分计算，当日不计算)
+	private String scheduleState;
+	// 当日收益分配状态(未分配，已分配)
+	private String incomeState;
 	// 状态
 	private String state;
 	// 创建者

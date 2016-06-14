@@ -66,6 +66,18 @@ define([
 					field: 'transitCash'
 				}, 
 				{ 
+					// 当日收益计算状态
+					field: 'scheduleState'
+				}, 
+				{ 
+					// 当日收益分配状态
+					field: 'incomeState'
+				}, 
+				{ 
+					// 收益基准日
+					field: 'baseDate'
+				}, 
+				{ 
 					// 状态
 					field: 'state',
 					formatter: function(val) {
@@ -89,7 +101,7 @@ define([
 					}
 				}, 
 				{
-					width: 120,
+					width: 150,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
@@ -108,6 +120,12 @@ define([
 							text: '编辑',
 							type: 'button',
 							class: 'item-update',
+							isRender: parseInt(row.state) !== 1
+						},  
+						{
+							text: '详情',
+							type: 'button',
+							class: 'item-show',
 							isRender: parseInt(row.state) !== 1
 						}, 
 						{
@@ -139,6 +157,7 @@ define([
 								json.result.cashRate = json.result.cashRate + '\t%'
 								json.result.cashtoolRate = json.result.cashtoolRate + '\t%'
 								json.result.targetRate = json.result.targetRate + '\t%'
+								$('#modal-footer').show()
 								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
 								$('#auditAssetPoolModal').modal('show')
 							})
@@ -154,6 +173,28 @@ define([
 								$$.formAutoFix($('#updateAssetPoolForm'), json.result)
 								$(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
 								$('#updateAssetPoolModal').modal('show')
+							})
+						},
+						'click .item-show': function(e, val, row) {
+							currentPool = row
+							http.post(config.api.duration.assetPool.getById, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(json) {
+								var scopeStr = ''
+								json.result.scopes.forEach(function(item) {
+									scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
+								})
+								json.result.scopeStr = scopeStr
+								json.result.scale = json.result.scale + '\t万元'
+								json.result.cashRate = json.result.cashRate + '\t%'
+								json.result.cashtoolRate = json.result.cashtoolRate + '\t%'
+								json.result.targetRate = json.result.targetRate + '\t%'
+								$('#modal-footer').hide()
+								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
+								$('#auditAssetPoolModal').modal('show')
 							})
 						},
 						'click .item-delete': function(e, val, row) {

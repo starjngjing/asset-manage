@@ -25,6 +25,20 @@ public class AssetPoolEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
+	/**
+	 * 每日定时任务状态(未计算，已计算，部分计算，当日不计算)
+	 */
+	public static final String schedule_wjs 	= "未计算";
+	public static final String schedule_yjs 	= "已计算";
+	public static final String schedule_bfjs 	= "部分计算";
+	public static final String schedule_drbjs 	= "当日不计算";
+	
+	/**
+	 * 当日收益分配状态(未分配，已分配)
+	 */
+	public static final String income_wfp 	= "未分配";
+	public static final String income_yfp 	= "已分配";
+	
 	public AssetPoolEntity() {
 		this.scale = init0;
 		this.cashRate = init0;
@@ -35,6 +49,8 @@ public class AssetPoolEntity implements Serializable {
 		this.transitCash = init0;
 		this.confirmProfit = init0;
 		this.factProfit = init0;
+		this.scheduleState = "未计算";
+		this.incomeState = "未分配";
 	}
 
 	@Id
@@ -64,8 +80,12 @@ public class AssetPoolEntity implements Serializable {
 	private BigDecimal confirmProfit;
 	// 实现收益
 	private BigDecimal factProfit;
-	// 状态
+	// 成立状态(未审核,存续期,未通过,已失效)
 	private String state;
+	// 每日定时任务状态(未计算，已计算，部分计算，当日不计算)
+	private String scheduleState;
+	// 当日收益分配状态(未分配，已分配)
+	private String incomeState;
 	// 创建者
 	private String creater;
 	// 操作员

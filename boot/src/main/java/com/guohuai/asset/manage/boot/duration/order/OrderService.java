@@ -314,6 +314,12 @@ public class OrderService {
 				
 				investService.IncHoldAmount(fundEntity.getCashTool().getOid(), form.getInvestVolume());
 			} else {
+				fundEntity.setAmount(fundEntity.getAmount()
+						.add(order.getReturnVolume())
+						.subtract(order.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
+				if (fundEntity.getAmount().compareTo(BigDecimal.ZERO) < 1) {
+					fundEntity.setState(FundEntity.INVESTEND);
+				}
 				investService.IncHoldAmount(fundEntity.getCashTool().getOid(), form.getInvestVolume().negate());
 			}
 		} else {
@@ -325,9 +331,6 @@ public class OrderService {
 						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 				fundEntity.setOnWayCapital(fundEntity.getOnWayCapital()
 						.subtract(order.getReturnVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-				if (fundEntity.getAmount().compareTo(BigDecimal.ZERO) < 1) {
-					fundEntity.setState(FundEntity.INVESTEND);
-				}
 			}
 		}
 		fundEntity.setPurchaseVolume(BigDecimal.ZERO);
@@ -382,7 +385,7 @@ public class OrderService {
 		order.setTarget(target);
 		order.setAssetPoolOid(form.getAssetPoolOid());
 		order.setInvestDate(form.getInvestDate());
-		order.setApplyVolume(form.getApplyVolume());
+//		order.setApplyVolume(form.getApplyVolume());
 		order.setApplyCash(form.getApplyCash());
 		order.setProfitType(form.getProfitType());
 		order.setState(APPLY00);
@@ -406,7 +409,7 @@ public class OrderService {
 	public void auditForTrust(TrustForm form, String uid) {
 		// 录入申购订单的审核信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-		order.setAuditVolume(form.getAuditVolume());
+//		order.setAuditVolume(form.getAuditVolume());
 		order.setAuditCash(form.getAuditCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(AUDIT11);
@@ -442,7 +445,7 @@ public class OrderService {
 	public void appointmentForTrust(TrustForm form, String uid) {
 		// 录入申购订单的资金预约信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-		order.setReserveVolume(form.getReserveVolume());
+//		order.setReserveVolume(form.getReserveVolume());
 		order.setReserveCash(form.getReserveCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(APPOINTMENT21);
@@ -479,7 +482,7 @@ public class OrderService {
 	public void orderConfirmForTrust(TrustForm form, String uid) {
 		// 录入申购订单的确认信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-		order.setInvestVolume(form.getInvestVolume());
+//		order.setInvestVolume(form.getInvestVolume());
 		order.setInvestCash(form.getInvestCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(CONFIRM31);
@@ -491,10 +494,10 @@ public class OrderService {
 			trustEntity.setAssetPoolOid(order.getAssetPoolOid());
 			trustEntity.setPurchase(PURCHASE);
 			trustEntity.setState(TrustEntity.INVESTING);
-			trustEntity.setApplyVolume(order.getApplyVolume());
+//			trustEntity.setApplyVolume(order.getApplyVolume());
 			trustEntity.setApplyCash(order.getInvestCash());
 			trustEntity.setConfirmVolume(order.getInvestVolume());
-			trustEntity.setInvestVolume(form.getInvestVolume());
+			trustEntity.setInvestVolume(order.getInvestCash());
 			trustEntity.setInvestDate(order.getInvestDate());
 			trustEntity.setProfitType(order.getProfitType());
 			
@@ -1270,6 +1273,7 @@ public class OrderService {
 					form.setCollectEndDate(target.getCollectEndDate());
 					form.setCollectStartDate(target.getCollectStartDate());
 					form.setCollectIncomeRate(target.getCollectIncomeRate());
+					form.setProfitType("amortized_cost".equals(entity.getProfitType()) ? "摊余成本法" : "账面价值法");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

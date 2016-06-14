@@ -107,7 +107,7 @@ public class CapitalService {
 	 * @return
 	 */
 	@Transactional
-	public List<CapitalForm> getCapitalListByPid(String pid, Pageable pageable) {
+	public Object[] getCapitalListByPid(String pid, Pageable pageable) {
 		List<CapitalForm> formList = Lists.newArrayList();
 		Page<CapitalEntity> list = capitalDao.findByOid(pid, pageable);
 		if (null != list.getContent() && !list.getContent().isEmpty()) {
@@ -150,7 +150,11 @@ public class CapitalService {
 			}
 		}
 		
-		return formList;
+		Object[] obj = new Object[2];
+		obj[0] = list.getTotalElements();
+		obj[1] = formList;
+		
+		return obj;
 	}
 	
 	/**
@@ -317,7 +321,7 @@ public class CapitalService {
 			CapitalEntity entity) {
 		entity.setState(CapitalEntity.APPLY00);
 		if ("purchase".equals(operation)) {
-			entity.setFreezeCash(capital);
+			entity.setUnfreezeCash(capital);
 			entity.setSubject("申购" + target);
 			if (target.equals(OrderService.FUND))
 				entity.setCashtoolOrderOid(sn);
@@ -329,6 +333,7 @@ public class CapitalService {
 			poolEntity.setFreezeCash(poolEntity.getFreezeCash().add(capital).setScale(4, BigDecimal.ROUND_HALF_UP));
 		} else if ("redeem".equals(operation)) {
 			entity.setTransitCash(capital);
+			entity.setUnfreezeCash(capital);
 			entity.setSubject("赎回" + target);
 			entity.setCashtoolOrderOid(sn);
 			// 在途资金
@@ -424,6 +429,7 @@ public class CapitalService {
 			entity.setTargetIncomeOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("审批本息兑付订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
@@ -438,6 +444,7 @@ public class CapitalService {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("审批资产转让订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
@@ -527,6 +534,7 @@ public class CapitalService {
 			entity.setTargetIncomeOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("预约本息兑付订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
@@ -541,6 +549,7 @@ public class CapitalService {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("预约资产转让订单");
 			if (FundAuditEntity.FAIL.equals(state)) {
 				// 在途资金
@@ -646,6 +655,7 @@ public class CapitalService {
 			entity.setTargetIncomeOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("确认本息兑付订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
 				// 可用现金
@@ -658,6 +668,7 @@ public class CapitalService {
 			entity.setTargetTransOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
+			entity.setTransitCash(capital);
 			entity.setSubject("确认资产转让订单");
 			if (FundAuditEntity.SUCCESSED.equals(state)) {
 				poolEntity.setCashFactRate(poolEntity.getCashFactRate()
