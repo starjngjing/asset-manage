@@ -66,6 +66,7 @@ define([
      *     -- options.toArray：右侧列表title 数组
      *     -- options.field：用于显示的字段名称 string
      *     -- options.formatter：formatter Function
+     *     -- options.sort：是否开启手动排序 Boolean
      *
      * FIXME 逻辑写得不清晰，仅可用，需要完善
      */
