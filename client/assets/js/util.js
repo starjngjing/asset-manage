@@ -61,6 +61,31 @@ define([
 			}
 			return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
 		},
+		/**
+    	 * 格式化风险等级
+    	 * @param {Object} val
+    	 */
+		convertRiskLevelStrs:function(val,strs){
+			// 'LOW' || 'L'  低风险
+			// 'MID' || 'M'  中风险
+			// 'HIGH' || 'H' 高风险
+			var str = '';
+			var className = '';
+			if(!val || val === 'NONE'){
+				str = '无'
+				className = 'bg-green'
+			}else if (val === 'LOW' || val === 'L') {
+				str = strs
+				className = 'bg-blue'
+			} else if (val === 'MID' || val === 'M') {
+				str = strs
+				className = 'bg-yellow'
+			} else {
+				str = strs
+				className = 'bg-red'
+			}
+			return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
+		},
       /**
        * 常用 formatter
        */
