@@ -1,0 +1,218 @@
+/**
+ * 风险处置管理
+ */
+define([
+	'http',
+	'config',
+	'util',
+	'extension'
+], function(http, config, util, $$) {
+	return {
+		name: 'targetHandle',
+		init: function() {
+
+			$("#a1").click(function() {
+				$('#riskWarningHandleTable').bootstrapTable('refresh')
+			})
+			$("#a2").click(function() {
+				$('#riskWarningHandleHisTable').bootstrapTable('refresh')
+			})
+
+			$$.uploader({
+				container: $('#reportUploader'),
+				success: function(file) {
+					$('#reportFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
+					$('#reportFile').find('span').html(file.name)
+					document.riskHandleForm.report.value = file.url
+				}
+			})
+
+			$$.uploader({
+				container: $('#meetingUploader'),
+				success: function(file) {
+					$('#meetingFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
+					$('#meetingFile').find('span').html(file.name)
+					document.riskHandleForm.meeting.value = file.url
+				}
+			})
+
+			riskHandleSubmit
+			//风险处置按钮
+			$('#riskHandleSubmit').on('click', function() {
+				$('#riskHandleForm').ajaxSubmit({
+					url: config.api.system.config.ccr.warning.handle.handle,
+					success: function(result) {
+						$('#targetDetailModal').modal('hide');
+						$('#riskWarningHandleTable').bootstrapTable('refresh');
+					}
+				})
+			})
+
+			//分页配置
+			var pageOptions = {
+					number: 1,
+					size: 10,
+				}
+				// 数据表格配置
+			var tableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.system.config.ccr.warning.handle.list, {
+						data: {
+							page: pageOptions.number,
+							rows: pageOptions.size,
+						},
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pageOptions.number,
+				pageSize: pageOptions.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				columns: [{
+					field: 'relativeName'
+				}, {
+					field: 'riskType'
+				}, {
+					field: 'riskName'
+				}, {
+					field: 'riskDet'
+				}, {
+					field: 'handleLevel',
+					align: 'center',
+					formatter: function(val) {
+						if (!val)
+							return '未处置'
+						return '已处置';
+					}
+				}, {
+					field: 'wlevel',
+					align: 'center',
+					formatter: function(val, row) {
+						return util.table.convertRiskLevelStrs(val, row.riskData + row.riskUnit);
+					}
+				}, {
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '风险处置',
+							type: 'button',
+							class: 'item-handle',
+							isRender: true
+						}];
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-handle': function(e, value, row) {
+							http.post(config.api.targetDetQuery, {
+								data: {
+									oid: row.relative
+								},
+								contentType: 'form'
+							}, function(result) {
+								util.form.reset($('#riskCollectForm')); // 先清理表单
+								var data = result.investment;
+								data.raiseScope = data.raiseScope + '万';
+								data.life = data.life + util.enum.transform('lifeUnit', data.lifeUnit);
+								data.expAror = data.expAror + '%';
+								data.floorVolume = data.floorVolume + '元';
+								data.contractDays = data.contractDays + '天/年';
+								data.collectDate = data.collectStartDate + " 至 " + data.collectEndDate
+								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+								$('#oid').val(row.oid)
+								$('#targetDetailModal').modal('show');
+							})
+						}
+					}
+				}]
+			}
+			$('#riskWarningHandleTable').bootstrapTable(tableConfig)
+
+			//分页配置
+			var pageOptions2 = {
+					number: 1,
+					size: 10,
+				}
+				// 数据表格配置
+			var tableConfig2 = {
+				ajax: function(origin) {
+					http.post(config.api.system.config.ccr.warning.handle.hisListAll, {
+						data: {
+							page: pageOptions2.number,
+							rows: pageOptions2.size,
+						},
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pageOptions2.number,
+				pageSize: pageOptions2.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				columns: [{
+					field: 'relativeName'
+				}, {
+					field: 'riskType'
+				}, {
+					field: 'riskName'
+				}, {
+					field: 'riskDet'
+				}, {
+					field: 'handle',
+					align: 'center',
+					formatter: function(val) {
+						return util.enum.transform('warningHandleType', val);
+					}
+
+				}, {
+					field: 'createTime',
+					align: 'center'
+				}, {
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '预警报告',
+							type: 'button',
+							class: 'item-report',
+							isRender: row.report != null
+						}, {
+							text: '过会纪要',
+							type: 'button',
+							class: 'item-meeting',
+							isRender: row.meeting != null
+						}, {
+							text: '处置备忘录',
+							type: 'button',
+							class: 'item-summary',
+							isRender: true
+						}];
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-summary': function(e, value, row) {
+							if (row.summary == "") {
+								$('#summary').html('无')
+							} else {
+								$('#summary').html(row.summary)
+							}
+							$('#summaryDetailModal').modal('show');
+						},
+						'click .item-report': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.report
+						},
+						'click .item-meeting': function(e, value, row) {
+							location.href = 'http://api.guohuaigroup.com' + row.meeting
+						}
+					}
+				}]
+			}
+			$('#riskWarningHandleHisTable').bootstrapTable(tableConfig2)
+		}
+	}
+
+})
