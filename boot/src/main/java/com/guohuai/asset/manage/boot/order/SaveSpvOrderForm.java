@@ -1,0 +1,25 @@
+package com.guohuai.asset.manage.boot.order;
+
+import java.io.Serializable;
+import org.hibernate.validator.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SaveSpvOrderForm implements Serializable {
+
+	private static final long serialVersionUID = 786085874709658377L;
+	
+	@NotBlank
+	private String assetPoolOid;//资产池
+	@NotBlank
+	private String orderType;//订单类型
+	@NotBlank
+	private String orderAmount;//订单金额
+	@NotBlank
+	private String orderDate;//申购日期
+
+}

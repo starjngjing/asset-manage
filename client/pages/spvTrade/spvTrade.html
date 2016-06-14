@@ -14,10 +14,15 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<!-- 主体Grid -->
-			<div id="productAuditGrid" class="box box-primary">
+			<div id="spvOrderGrid" class="box box-primary">
 				<!-- Grid头部 -->
 				<div class="box-header">
-					<h3 class="box-title">持有人名册列表</h3>
+					<h3 class="box-title">SPV订单列表</h3>
+					<div class="box-tools">
+                        <button id="orderAdd" class="btn btn-default btn-sm">
+                            <i class="fa fa-plus"></i> 新建订单
+                        </button>
+                    </div>
 				</div>
 				<!-- Grid内容体 -->
 				<div class="box-body">
@@ -26,30 +31,49 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>关键字</label>
-									<input name="keyword" type="text" class="form-control input-sm" placeholder="搜索关键字">
+									<label>产品名称</label>
+									<input name="productName" type="text" class="form-control input-sm" placeholder="搜索产品名称">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>订单状态</label>
+									<select name="orderStatus" class="form-control input-sm">
+										<option value="" selected="selected">全部</option>
+										<option value="SUBMIT">未确认</option>
+										<option value="CONFIRM">确认</option>
+										<option value="DISABLE">失效</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>订单类型</label>
+									<select name="orderType" class="form-control input-sm">
+										<option value="" selected="selected">全部</option>
+										<option value="INVEST">申购订单</option>
+										<option value="REDEEM">赎回订单</option>
+									</select>
 								</div>
 							</div>
 						</div>
 					</form>
 
 					<!-- 主体数据表格 -->
-					<table id="dataTable" class="table table-bordered table-striped">
+					<table id="spvOrderTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>编号</th>
-								<th>名称</th>
-								<th>类型</th>
-								<th>管理人</th>
-								<th>状态</th>
-								<th>期限</th>
-								<th>预期年化收益</th>
-								<th>总份额</th>
-								<th>单位份额净值</th>
-								<th>渠道数量</th>
-								<th>资产池</th>
-								<th>申请人</th>
+								<th>订单号</th>
+								<th>订单类型</th>
+								<th>订单金额(元)</th>
+								<th>订单日期</th>
+								<th>订单状态</th>
+								<th>资产池名称</th>
+								<th>产品名称</th>
+								<th>订单创建人</th>
 								<th>申请时间</th>
+								<th>订单审核人</th>
+								<th>审核时间</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -59,3 +83,99 @@
 		</div>
 	</div>
 </section>
+
+<!-- 新建订单弹窗 -->
+<div id="addOrderModal" class="modal fade bs-example-modal-mi" tabindex="-1" role="dialog">
+  	<div class="modal-dialog modal-mi" role="document">
+  	  	<div class="modal-content">
+      	<!-- 模态窗头部 -->
+      	<div class="modal-header">
+          	<button type="button" class="close" data-dismiss="modal">
+          	  	<span aria-hidden="true">&times;</span>
+          	</button>
+          	<h4 class="modal-title">新建订单</h4>
+        </div>
+      	<!-- 模态窗内容体 -->
+      	<div class="modal-body">
+          	    <!-- 新增事件表单 -->
+          	    <form id="addOrderForm" name="addOrderForm" method="post">
+          	  	    <p class="form-header">订单概况</p>
+          	  	    <div class="row">
+                  	  	<div class="col-sm-8">
+                  	  	  	<div class="form-group">
+                      	  	  	<label>资产池配置</label>
+                      	  	  	<select id="assetPoolOid" name="assetPoolOid" class="form-control input-sm">
+                  	      	  	</select>
+              	  	  	    </div>
+                  	  	</div>
+                  	</div>
+                  	<div class="row">
+                  	  	<div class="col-sm-8">
+                        	<div class="form-group">
+                        		<label>订单类型</label>
+                        		<select id="orderType" name="orderType" class="form-control input-sm">
+                    			    <option value="INVEST" selected="selected">申购</option>
+                    		    	<option value="PART_REDEEM">部分赎回</option>
+                    	    		<option value="FULL_REDEEM">全部赎回</option>
+                        		</select>
+                        	</div>
+                        </div>
+                    </div>
+                  	<div class="row">    
+                        <div class="col-sm-8">
+              	  	  	  	<div class="form-group">
+                  	  	  	  	<label>订单金额</label>
+                  	  	  	  	<div class="input-group input-group-sm">
+                  	  	  	  	  	<input id="orderAmount" name="orderAmount" 
+                  	  	  	  	  		type="text"
+                          	  	  	  	class="form-control"  
+                          	  	  	  	required="required" 
+                          	  	  	  	data-validfloat="12.2" 
+                          	  	  	  	data-error="订单金额只能为前12位后2位小数">
+                  	  	  	  	  	<span class="input-group-addon">元</span>
+                  	  	  	  	</div>
+                  	  	  	  	<div class="help-block with-errors text-red"></div>
+              	  	  	  	</div>
+              	  	  	</div>
+              	  	</div>
+                  	<div class="row">  	
+              	  	  	<div class="col-sm-8">
+                  	  	  	<div class="form-group">
+                  	  	  	<label>申购日期</label>
+                  	  	  	<input name="orderDate" 
+                  	  	  		type="text"
+                          	  	class="form-control input-sm datepicker"
+                          	  	placeholder="请填写时间" 
+                          	  	required="required"
+                          	  	data-date-format="YYYY-MM-DD">
+                  	  	  	</div>
+                	  	</div>
+                    </div>
+                </form>
+            </div>
+            <!-- 模态窗底部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button id="addOrderSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+<div id="doConfirm" class="popover func-delete-popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">提示</h3>
+  <div class="popover-content">
+	  <p id="confirmTitle"></p>
+	  <p id="confirmTitle1"></p>
+	  <div class="popover-btn clearfix">
+	    <div class="unit">
+	      <button class="btn btn-block btn-primary accept">确 定</button>
+	    </div>
+	    <div class="unit">
+	      <button class="btn btn-block btn-default cancel">取 消</button>
+	    </div>
+	  </div>
+	</div>
+</div>

@@ -166,7 +166,7 @@ define([
 		          	      		text: '作废',
 		           	      		type: 'button',
 		           	      		class: 'item-invalid',
-		           	      		isRender: row.arketState != 'ONSHELF'
+		           	      		isRender: row.marketState != 'ONSHELF'
 		           	    	}//,
 //		           	    	{
 //		           	    		text: '选择渠道',
@@ -659,7 +659,6 @@ define([
 		
 			util.form.reset($('#addProductForm'))
 			$('#addProductModal').modal('show')	
-			$('#addProductModal').modal('show')
     	})    	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {
@@ -719,7 +718,6 @@ define([
 		// 新建产品附件表格初始化
 		$('#addProductUploadTable').bootstrapTable(addProductUploadTableConfig)
 		
-		/////////
 		// 新建产品上传投资协议书附件表格数据源
 		var addInvestUploadFiles = []
 		// 新建产品初始化上传附件插件，在success里将上传成功附件插入到表格中
@@ -770,8 +768,6 @@ define([
 		// 新建产品附件表格初始化
 		$('#addInvestUploadTable').bootstrapTable(addInvestUploadTableConfig)
 		
-		///////////////////////
-			
 		// 新建产品“保存”按钮点击事件
     	$('#addProductSubmit').on('click', function () {
     		if (!$('#addProductForm').validator('doSubmitCheck')) return
@@ -809,6 +805,7 @@ define([
 		// 编辑产品初始化上传投资协议插件，在success里将上传成功投资协议插入到表格中
 		$$.uploader({
 			container: $('#updateInvestUploader'),
+			btnName : '上传投资协议书',
 			success: function(file) {
 				file.furl = file.url
 				updateInvestUploadFiles = []
