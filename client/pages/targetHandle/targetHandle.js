@@ -23,7 +23,10 @@ define([
 				success: function(file) {
 					$('#reportFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
 					$('#reportFile').find('span').html(file.name)
+					console.log(file)
 					document.riskHandleForm.report.value = file.url
+					document.riskHandleForm.reportSize.value = file.size
+					document.riskHandleForm.reportName.value = file.name
 				}
 			})
 
@@ -33,6 +36,8 @@ define([
 					$('#meetingFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
 					$('#meetingFile').find('span').html(file.name)
 					document.riskHandleForm.meeting.value = file.url
+					document.riskHandleForm.meetingSize.value = file.size
+					document.riskHandleForm.meetingName.value = file.name
 				}
 			})
 
