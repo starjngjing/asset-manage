@@ -272,7 +272,9 @@ table.treetable tr.expanded span.indenter a:before {
 
 /* todo-list */
 .todo-list .switcher-arrow{
+  width: 20px;
   font-size: 18px;
+  text-align: center;
   cursor: pointer;
 }
 
