@@ -34,7 +34,7 @@ public class InvestmentMeetingCheckService {
 
 	@Autowired
 	private FileService fileService;
-	
+
 	@Autowired
 	private AdminSdk adminsSdk;
 
@@ -84,20 +84,21 @@ public class InvestmentMeetingCheckService {
 			throw new RuntimeException();
 		}
 		List<InvestmentMeetingCheck> lists = null;
-		if(null == state){
+		if (null == state) {
 			lists = investmentMeetingCheckDao.findByInvestment(investment);
-		}else {
+		} else {
 			lists = investmentMeetingCheckDao.findByInvestmentAndState(investment, state);
 		}
 		for (InvestmentMeetingCheck entity : lists) {
 			InvestmentCheckDetResp det = new InvestmentCheckDetResp(entity);
-			if(entity.getChecker() != null){
+			if (entity.getChecker() != null) {
 				AdminObj admin = adminsSdk.getAdmin(entity.getChecker());
 				det.setChecker(admin.getName());
 			}
 			if (!StringUtils.isEmpty(entity.getCheckFile())) {
-				List<File> files = fileService.list(entity.getCheckFile());
-				det.setFile(files.get(0).getFurl());
+				List<File> files = fileService.list(entity.getCheckFile(), 1);
+				if (files != null && files.size() > 0)
+					det.setFile(files.get(0).getFurl());
 			}
 			res.add(det);
 		}
@@ -125,8 +126,8 @@ public class InvestmentMeetingCheckService {
 				List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
 				SaveFileForm fileform = new SaveFileForm();
 				fileform.setFurl(form.getFile());
-				fileform.setName("checklist" + form.getText());
-				fileform.setSize(1);
+				fileform.setName(form.getFileName());
+				fileform.setSize(form.getFileSize());
 				fileForms.add(fileform);
 				fileService.save(fileForms, fkey, File.CATE_User, operator);
 				check.setCheckFile(fkey);

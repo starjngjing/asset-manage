@@ -60,9 +60,9 @@ public class RiskWarningHandleService {
 		return res;
 	}
 
-	public List<RiskWarningHandleHisDetResp> hisList(Specification<RiskWarningHandle> spec,Pageable pageable) {
+	public List<RiskWarningHandleHisDetResp> hisList(Specification<RiskWarningHandle> spec, Pageable pageable) {
 		List<RiskWarningHandleHisDetResp> res = new ArrayList<RiskWarningHandleHisDetResp>();
-		Page<RiskWarningHandle> pageData = riskWarningHandleDao.findAll(spec,pageable);
+		Page<RiskWarningHandle> pageData = riskWarningHandleDao.findAll(spec, pageable);
 		for (RiskWarningHandle entity : pageData) {
 			RiskWarningHandleHisDetResp temp = new RiskWarningHandleHisDetResp();
 			temp.setOid(entity.getOid());
@@ -74,12 +74,12 @@ public class RiskWarningHandleService {
 			temp.setCreateTime(entity.getCreateTime());
 			temp.setSummary(entity.getSummary());
 			if (!StringUtils.isEmpty(entity.getReport())) {
-				List<File> files = fileService.list(entity.getReport());
+				List<File> files = fileService.list(entity.getReport(), 1);
 				if (files != null && files.size() > 0)
 					temp.setReport(files.get(0).getFurl());
 			}
 			if (!StringUtils.isEmpty(entity.getMeeting())) {
-				List<File> files = fileService.list(entity.getMeeting());
+				List<File> files = fileService.list(entity.getMeeting(), 1);
 				if (files != null && files.size() > 0)
 					temp.setMeeting(files.get(0).getFurl());
 			}
@@ -114,8 +114,8 @@ public class RiskWarningHandleService {
 			List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
 			SaveFileForm fileform = new SaveFileForm();
 			fileform.setFurl(form.getReport());
-			fileform.setName("riskHandle_report" + collect.getRelative());
-			fileform.setSize(1);
+			fileform.setName(form.getReportName());
+			fileform.setSize(form.getReportSize());
 			fileForms.add(fileform);
 			fileService.save(fileForms, reportFkey, File.CATE_User, operator);
 		}
@@ -125,8 +125,8 @@ public class RiskWarningHandleService {
 			List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
 			SaveFileForm fileform = new SaveFileForm();
 			fileform.setFurl(form.getMeeting());
-			fileform.setName("riskHandle_meeting" + collect.getRelative());
-			fileform.setSize(1);
+			fileform.setName(form.getMeetingName());
+			fileform.setSize(form.getMeetingSize());
 			fileForms.add(fileform);
 			fileService.save(fileForms, meetingFkey, File.CATE_User, operator);
 		}

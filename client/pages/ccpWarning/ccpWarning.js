@@ -14,12 +14,13 @@ define([
 
 			var createOptions = {
 				"NUMBER": function(dataUnit) {
-					var form = $('<form type="NUMBER"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="NUMBER" id="' + rd + 'NumberForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
-					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述" required>' + initDataUnit(dataUnit) + '<div class="help-block with-errors text-red"></div></div></div>');
+					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述" required maxlength="64">' + initDataUnit(dataUnit) + '<div class="help-block with-errors text-red"></div></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级" required>' + initLevelOption() + '</select><div class="help-block with-errors text-red"></div></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级" required>' + initLevelOption() + '</select></div><div class="help-block with-errors text-red"></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -31,18 +32,20 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				},
 				"NUMRANGE": function(dataUnit) {
-					var form = $('<form type="NUMRANGE"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="NUMRANGE" id="' + rd + 'NumrangeForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
-					var x0 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-5"><select name="param0" class="form-control input-sm"><option value="[">[</option><option value="(">(</option></select></div><div class="col-xs-7"><div class="input-group range"><input name="param1" type="text" class="form-control input-sm" required>' + initDataUnit(dataUnit) + '<div class="help-block with-errors text-red"></div></div></div></div></div></div>');
+					var x0 = $('<div class="col-sm-4 col-xs-6"><div class="row"><div class="col-xs-5"><div class="form-group"><select name="param0" class="form-control input-sm" required><option value="[">[</option><option value="(">(</option></select><div class="help-block with-errors text-red"></div></div></div><div class="col-xs-7"><div class="form-group"><div class="input-group range"><input name="param1" type="text" class="form-control input-sm" maxlength="60" required>' + initDataUnit(dataUnit) + '</div><div class="help-block with-errors text-red"></div></div></div></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="form-group"><div class="row"><div class="col-xs-7"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm">' + initDataUnit(dataUnit) + '</div></div><div class="col-xs-5"><select name="param3" class="form-control input-sm"><option value="]">]</option><option value=")">)</option></select><div class="help-block with-errors text-red"></div></div></div></div></div>');
+					var x1 = $('<div class="col-sm-4 col-xs-6"><div class="row"><div class="col-xs-7"><div class="form-group"><div class="input-group range"><input name="param2" type="text" class="form-control input-sm" maxlength="64">' + initDataUnit(dataUnit) + '</div><div class="help-block with-errors text-red"></div></div></div><div class="col-xs-5"><div class="form-group"><select name="param3" class="form-control input-sm" required><option value="]">]</option><option value=")">)</option></select><div class="help-block with-errors text-red"></div></div></div></div></div>');
 					x1.appendTo(row);
-					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select><div class="help-block with-errors text-red"></div></div></div></div>');
+					var x2 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级" required>' + initLevelOption() + '</select></div><div class="help-block with-errors text-red"></div></div></div>');
 					x2.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -54,16 +57,18 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				},
 				"TEXT": function(dataUnit) {
-					var form = $('<form type="TEXT"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="TEXT" id="' + rd + 'TextForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述" required><div class="help-block with-errors text-red"></div></div></div>');
 					x0.appendTo(row);
-					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级">' + initLevelOption() + '</select><div class="help-block with-errors text-red"></div></div></div></div>');
+					var x1 = $('<div class="col-sm-3 col-xs-6"><div class="form-group"><div class="input-group input-group-sm"><div class="input-group-addon">风险等级</div><select name="wlevel" class="form-control" placeholder="风险等级" required>' + initLevelOption() + '</select></div><div class="help-block with-errors text-red"></div></div></div>');
 					x1.appendTo(row);
 
 					var a0 = $('<div class="col-sm-1 col-xs-6"></div>');
@@ -75,7 +80,8 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				}
 			};
@@ -161,9 +167,7 @@ define([
 
 								var form = document.updateForm;
 
-								$('#updateForm').resetForm();
-								$('#updateForm').validator('destroy');
-								util.form.validator.init($('#updateForm'));
+								$('#updateForm').resetForm();								
 								$('#updateFormOptions').empty();
 								$('#updateModal').modal('show');
 
@@ -181,7 +185,8 @@ define([
 										});
 									}
 								}
-
+								$('#updateForm').validator('destroy');
+								util.form.validator.init($('#updateForm'));
 							});
 						},
 						'click .item-delete': function(e, value, row) {
@@ -219,9 +224,7 @@ define([
 						var options = {};
 						var form = document.addForm;
 
-						$('#addForm').resetForm();
-						$('#addForm').validator('destroy');
-						util.form.validator.init($('#addForm'));
+						$('#addForm').resetForm();						
 						$('#addFormOptions').empty();
 						$('#addModal').modal('show');
 
@@ -249,11 +252,20 @@ define([
 
 						$(form.cateOid).change();
 
+						$('#addForm').validator('destroy');
+						util.form.validator.init($('#addForm'));
 					});
 			});
 
 			$('#saveButton').on('click', function() {
-				if (!$('#addForm').validator('doSubmitCheck')) return
+				var f = $('#addForm').validator('doSubmitCheck');
+				var x = $('#addFormOptions').children();
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					f = $(frm).validator('doSubmitCheck');
+				}
+				if(!f)return;
+				
 				var json = {
 					options: []
 				};
@@ -261,16 +273,13 @@ define([
 					json[v.name] = v.value;
 				});
 
-
-				var x = $('#addFormOptions').children();
-				$.each(x, function(i, v) {
+				$.each(x, function(i, v) { // 遍历指标项配置
 					var ov = {};
 					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
 				});
-
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
@@ -284,7 +293,14 @@ define([
 			});
 
 			$('#updateButton').on('click', function() {
-				if (!$('#updateForm').validator('doSubmitCheck')) return
+				var f = $('#updateForm').validator('doSubmitCheck');
+				var x = $('#updateFormOptions').children();
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					f = $(frm).validator('doSubmitCheck');
+				}
+				if(!f)return;
+				
 				var json = {
 					options: []
 				};
@@ -292,16 +308,15 @@ define([
 					json[v.name] = v.value;
 				});
 
-
-				var x = $('#updateFormOptions').children();
-				$.each(x, function(i, v) {
+				
+				$.each(x, function(i, v) { // 遍历指标项配置
 					var ov = {};
 					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
 				});
-
+				
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
@@ -320,8 +335,10 @@ define([
 					var option = createOptions[type](unit);
 					if (option) {
 						$('#addFormOptions').append(option);
+						$('#addForm').validator('destroy');
+						util.form.validator.init($('#addForm'));
 					}
-				}
+				}				
 			});
 
 			$('#updateFormAddOption').on('click', function() {

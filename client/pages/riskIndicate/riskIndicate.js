@@ -185,10 +185,12 @@ define([
 										$('#updateDataUnitDiv').fadeOut();
 									}									
 								});
-								$(form.indicateDataType).val(indicateDataType).change();
+								$(form.indicateDataType).val(row.indicateDataType).change();
 
 								$$.formAutoFix($('#updateForm'), row);
-
+								
+								$('#updateForm').validator('destroy');
+								util.form.validator.init($('#updateForm'));
 							});
 
 						},
@@ -315,10 +317,13 @@ define([
 						}									
 					});
 					$(form.indicateDataType).change();
+					$('#addForm').validator('destroy');
+					util.form.validator.init($('#addForm'));
 				});
 			});
 
 			$('#saveButton').on('click', function() {
+				if (!$('#addForm').validator('doSubmitCheck')) return
 				$('#addForm').ajaxSubmit({
 					url: config.api.system.config.ccr.indicate.save,
 					success: function(result) {
@@ -330,6 +335,7 @@ define([
 			});
 
 			$('#updateButton').on('click', function() {
+				if (!$('#updateForm').validator('doSubmitCheck')) return
 				$('#updateForm').ajaxSubmit({
 					url: config.api.system.config.ccr.indicate.save,
 					success: function(result) {
