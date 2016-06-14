@@ -86,7 +86,7 @@ define([
 					align: 'center',
 					field: 'riskRate',
 					formatter: function(val) {
-						return util.table.convertRisk(val);
+						return util.table.formatter.convertRisk(val);
 					}
 				}, {
 					width: 400,
@@ -210,7 +210,7 @@ define([
 								data.floorVolume = data.floorVolume + '元';
 								data.contractDays = data.contractDays + '天/年';
 								data.collectDate = data.collectStartDate + " 至 " + data.collectEndDate
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								if (data.state != 'reject') {
 									$("#rejectDesc").hide()
@@ -1069,7 +1069,7 @@ define([
 			t2.floorVolume = t2.floorVolume + '元';
 			t2.contractDays = t2.contractDays + '天/年';
 			t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
-			t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
+			t2.riskRate = util.table.formatter.convertRisk(t2.riskRate); // 格式化风险等级
 
 			return t2;
 		}

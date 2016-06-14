@@ -96,7 +96,7 @@ define([
 					field: 'wlevel',
 					align: 'center',
 					formatter: function(val, row) {
-						return util.table.convertRiskLevelStrs(val, row.riskData + row.riskUnit);
+						return util.table.formatter.convertRiskLevelStrs(val, row.riskData + row.riskUnit);
 					}
 				}, {
 					align: 'center',
@@ -125,7 +125,7 @@ define([
 								data.floorVolume = data.floorVolume + '元';
 								data.contractDays = data.contractDays + '天/年';
 								data.collectDate = data.collectStartDate + " 至 " + data.collectEndDate
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								$('#oid').val(row.oid)
 								$('#targetDetailModal').modal('show');

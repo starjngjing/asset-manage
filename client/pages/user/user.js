@@ -120,53 +120,34 @@ function (http, config, util, $$) {
 									},
 									contentType: 'form'
 								}, function (result) {
-									row.auths = result.rows.map(function (item) {
-										return '<p>' + item.name + '</p>'
+									row.roles = result.rows.map(function (item) {
+										return '<span style="margin-right: 10px;">' + item.name + '</span>'
 									}).join('')
+									row.validTime = row.validTime || '永久性'
 									$$.detailAutoFix($('#detailModal'), row)
 								})
 								$('#detailModal').modal('show')
 							},
 							'click .item-update': function (e, val, row) {
-								var form = document.updateRoleForm
+								var form = document.updateUserForm
 								// 重置和初始化表单验证
 								$(form).validator('destroy')
 								util.form.validator.init($(form));
-								// 权限选择组件初始化
-								http.post(config.api.role.getRoleAuths, {
+
+								$$.formAutoFix($(form), row)
+								// 角色select2赋值
+								http.post(config.api.user.roles, {
 									data: {
-										roleOid: row.oid,
-										stats: false,
-										system: 'GAH'
+										adminOid: row.oid
 									},
 									contentType: 'form'
 								}, function (result) {
-									form.oid.value = row.oid
-									form.name.value = row.name
-									chosenAuths = result.rows
-									http.post(config.api.auth.list, function (auths) {
-										auths.rows.forEach(function (item) {
-											if (chosenAuths.indexOf(item) >= 0) {
-												console.log('asd')
-											}
-										})
-										var fromArray = auths.rows.filter(function (item) {
-											var hasArr = chosenAuths.filter(function (chosen) {
-												return chosen.oid === item.oid
-											})
-											return !hasArr.length
-										})
-										$$.switcher({
-											container: $('#updateRoleAuths'),
-											fromTitle: '可选权限',
-											toTitle: '已选权限',
-											fromArray: fromArray,
-											toArray: chosenAuths,
-											field: 'name'
-										})
-									})
+									$(form.roles).val(result.rows.map(function (item) {
+										return item.oid
+									})).trigger('change')
 								})
-								$('#updateRoleModal').modal('show')
+								
+								$('#updateUserModal').modal('show')
 							},
 							'click .item-delete': function (e, val, row) {
 								$$.confirm({
@@ -198,12 +179,12 @@ function (http, config, util, $$) {
 				var form = $('#addUserForm')
 				var nextCol = $(this).parent().parent().next('.col-sm-6')
 				if (this.value) {
-					nextCol.find('input[name=validDate]').attr('disabled', false)
+					nextCol.find('input[name=validTime]').attr('disabled', false)
 					form.validator('destroy')
 					util.form.validator.init(form)
 					nextCol.show()
 				} else {
-					nextCol.find('input[name=validDate]').attr('disabled', 'disabled')
+					nextCol.find('input[name=validTime]').attr('disabled', 'disabled')
 					form.validator('destroy')
 					util.form.validator.init(form)
 					nextCol.hide()
@@ -219,14 +200,9 @@ function (http, config, util, $$) {
 			$('#doAddUser').on('click', function () {
 				var form = document.addUserForm
 				if (!$(form).validator('doSubmitCheck')) return
-				form.systemOid.value = 'GAH'
-				chosenAuths.forEach(function (item) {
-					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')
-				})
 				$(form).ajaxSubmit({
-					url: config.api.user.save,
+					url: config.api.user.create,
 					success: function () {
-						$(form).find('input[name=auths]').remove()
 						util.form.reset($(form))
 						$('#userTable').bootstrapTable('refresh')
 						$('#addUserModal').modal('hide')

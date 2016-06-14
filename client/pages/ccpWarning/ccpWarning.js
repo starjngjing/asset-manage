@@ -134,7 +134,7 @@ define([
 					field: 'optionsWlevel',
 					align: 'center',
 					formatter: function(val, row, index) {
-						return row.showOptions ? util.table.convertRiskLevel(val) : '';
+						return row.showOptions ? util.table.formatter.convertRiskLevel(val) : '';
 					}
 				}, {
 					align: 'center',

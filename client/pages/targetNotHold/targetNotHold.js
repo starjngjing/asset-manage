@@ -101,7 +101,7 @@ define([
 					align: 'center',
 					field: 'riskRate',
 					formatter: function(val) {
-						return util.table.convertRisk(val);
+						return util.table.formatter.convertRisk(val);
 					}
 				}, {
 					//              field: 'operator',
@@ -585,7 +585,7 @@ define([
 					t2.floorVolume = t2.floorVolume + '元';
 					t2.contractDays = t2.contractDays + '天/年';
 					t2.collectDate = t2.collectStartDate + " 至 " + t2.collectEndDate
-					t2.riskRate = util.table.convertRisk(t2.riskRate); // 格式化风险等级
+					t2.riskRate = util.table.formatter.convertRisk(t2.riskRate); // 格式化风险等级
 
 					return t2;
 				}

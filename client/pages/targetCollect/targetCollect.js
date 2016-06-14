@@ -71,7 +71,7 @@ define([
 				if (dataType == 'NUMRANGE') {
 					$('#riskWaringDataSelect').hide()
 					$('#riskWaringDataInput').show()
-					$("#riskLevel").html(util.table.convertRiskLevel("NONE"))
+					$("#riskLevel").html(util.table.formatter.convertRiskLevel("NONE"))
 					$("#wLevel").val("NONE")
 					$('#riskWaringDataInput').val('');
 				} else {
@@ -102,7 +102,7 @@ define([
 				var selectOid = $('#riskWaringDataSelect').val()
 				collectOption.optinList.forEach(function(item) {
 					if (item.oid == selectOid) {
-						$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+						$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 						$("#wLevel").val(item.wlevel)
 					}
 				})
@@ -110,7 +110,7 @@ define([
 			}
 			//计算区间分控等级
 			function calInputRiskLevel() {
-				$("#riskLevel").html(util.table.convertRiskLevel("NONE"))
+				$("#riskLevel").html(util.table.formatter.convertRiskLevel("NONE"))
 				$("#wLevel").val("NONE")
 				var inputVal = $('#riskWaringDataInput').val()
 				var riskWarningOid = $(riskWaringSelect).val()
@@ -123,13 +123,13 @@ define([
 						if (max == '∞') {
 							if (f1 == "]") {
 								if (parseFloat(inputVal) >= parseFloat(min)) {
-									$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
 									$("#wLevel").val(item.wlevel)
 								}
 							} else {
 								if (parseFloat(inputVal) > parseFloat(min)) {
-									$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
 									$("#wLevel").val(item.wlevel)
 								}
@@ -137,13 +137,13 @@ define([
 						} else if (min == '∞') {
 							if (f0 == "[") {
 								if (parseFloat(inputVal) <= parseFloat(max)) {
-									$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
 									$("#wLevel").val(item.wlevel)
 								}
 							} else {
 								if (parseFloat(inputVal) < parseFloat(max)) {
-									$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
 									$("#wLevel").val(item.wlevel)
 								}
@@ -152,13 +152,13 @@ define([
 							if (f0 == "[") {
 								if (f1 == "]") {
 									if (parseFloat(inputVal) >= parseFloat(min) && parseFloat(inputVal) <= parseFloat(max)) {
-										$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+										$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 										$("#optionOid").val(item.oid)
 										$("#wLevel").val(item.wlevel)
 									}
 								} else {
 									if (parseFloat(inputVal) >= parseFloat(min) && parseFloat(inputVal) < parseFloat(max)) {
-										$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+										$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 										$("#optionOid").val(item.oid)
 										$("#wLevel").val(item.wlevel)
 									}
@@ -166,13 +166,13 @@ define([
 							} else {
 								if (f1 == "]") {
 									if (parseFloat(inputVal) >= parseFloat(min) && parseFloat(inputVal) <= parseFloat(max)) {
-										$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+										$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 										$("#optionOid").val(item.oid)
 										$("#wLevel").val(item.wlevel)
 									}
 								} else {
 									if (parseFloat(inputVal) >= parseFloat(min) && parseFloat(inputVal) < parseFloat(max)) {
-										$("#riskLevel").html(util.table.convertRiskLevel(item.wlevel))
+										$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 										$("#optionOid").val(item.oid)
 										$("#wLevel").val(item.wlevel)
 									}
@@ -257,7 +257,7 @@ define([
 							field: 'riskLevel',
 							align: 'center',
 							formatter: function(val) {
-								return util.table.convertRiskLevel(val);
+								return util.table.formatter.convertRiskLevel(val);
 							}
 						}, {
 							field: 'handleLevel',
@@ -284,7 +284,7 @@ define([
 				}, {
 					field: 'level',
 					formatter: function(val) {
-						return util.table.convertRiskLevel(val);
+						return util.table.formatter.convertRiskLevel(val);
 					}
 				}, {
 					align: 'center',
@@ -403,7 +403,7 @@ define([
 								data.floorVolume = data.floorVolume + '元';
 								data.contractDays = data.contractDays + '天/年';
 								data.collectDate = data.collectStartDate + " 至 " + data.collectEndDate
-								data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+								data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
 								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 								$('#targetOid').val(data.oid)
 								$('#targetDetailModal').modal('show');

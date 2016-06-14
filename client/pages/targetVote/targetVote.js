@@ -69,7 +69,7 @@ define([
 									contentType: 'form'
 								}, function(result) {
 									var data = result.investment;
-									data.riskRate = util.table.convertRisk(data.riskRate); // 格式化风险等级
+									data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
 									$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
 //									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
 									$('#targetDetailModal').modal('show');
