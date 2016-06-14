@@ -203,6 +203,8 @@ define([
 					$('#voteFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
 					$('#voteFile').find('span').html(file.name)
 					document.voteForm.file.value = file.url
+					document.voteForm.fileName.value = file.name
+					document.voteForm.fileSize.value = file.size
 				}
 			})
 

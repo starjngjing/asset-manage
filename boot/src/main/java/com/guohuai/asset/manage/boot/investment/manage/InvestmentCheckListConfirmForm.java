@@ -15,5 +15,7 @@ public class InvestmentCheckListConfirmForm {
 	private String state;
 	private String remark;
 	private String file;
+	private String fileName;
+	private long fileSize;
 	private Boolean checked;
 }

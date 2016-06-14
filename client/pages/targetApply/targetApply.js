@@ -893,6 +893,8 @@ define([
 						$('#checkFile').show().find('a').attr('href', 'http://api.guohuaigroup.com' + file.url)
 						$('#checkFile').find('span').html(file.name)
 						document.fileAndRemarkForm.file.value = file.url
+						document.fileAndRemarkForm.fileName.value = file.name
+						document.fileAndRemarkForm.fileSize.value = file.size
 					}
 				})
 				// 附件与备注确定按钮点击事件

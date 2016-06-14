@@ -132,8 +132,9 @@ public class InvestmentMeetingVoteService {
 				resp.setVoteStatus(vote.getState());
 				resp.setTime(vote.getVoteTime());
 				if (!StringUtils.isEmpty(vote.getFile())) {
-					List<File> files = fileService.list(vote.getFile());
-					resp.setFile(files.get(0).getFurl());
+					List<File> files = fileService.list(vote.getFile(), 1);
+					if (files != null && files.size() > 0)
+						resp.setFile(files.get(0).getFurl());
 				}
 			} else {
 				resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
@@ -192,14 +193,21 @@ public class InvestmentMeetingVoteService {
 			String fkey = null;
 			if (null != hisVote && null != hisVote.getFile()) {
 				fkey = hisVote.getFile();
+				List<File> files = fileService.list(fkey, 1);
+				if (files != null && files.size() > 0) {
+					// 删除历史附件
+					for (File hisFile : files) {
+						fileService.delete(hisFile, operator);
+					}
+				}
 			} else {
 				fkey = StringUtil.uuid();
 			}
 			List<SaveFileForm> fileForms = new ArrayList<SaveFileForm>();
 			SaveFileForm fileform = new SaveFileForm();
 			fileform.setFurl(form.getFile());
-			fileform.setName("vote" + asset.getName());
-			fileform.setSize(1);
+			fileform.setName(form.getFileName());
+			fileform.setSize(form.getFileSize());
 			fileForms.add(fileform);
 			fileService.save(fileForms, fkey, File.CATE_User, operator);
 			temp.setFile(fkey);
@@ -208,7 +216,8 @@ public class InvestmentMeetingVoteService {
 		temp.setState(voteStatus);
 		this.saveOrUpdateMeetingVote(temp);
 		// 工作流
-//		workflowAssetService.complete(operator, asset.getOid(), WorkflowConstant.NODEID_DOMEETING, "pass");
+		// workflowAssetService.complete(operator, asset.getOid(),
+		// WorkflowConstant.NODEID_DOMEETING, "pass");
 	}
 
 }

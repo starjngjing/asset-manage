@@ -16,4 +16,6 @@ public class MeetingVoteForm {
 	private String voteState; // 表决状态
 	private String suggest; // 表决意见
 	private String file; // 附件
+	private String fileName;
+	private long fileSize;
 }
