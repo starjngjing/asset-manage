@@ -272,12 +272,14 @@ define([
 				for (var i = 0; i < x.length; i++) {
 					var frm = x[i];
 					if (!$(frm).validator('doSubmitCheck')) return
+				}
+				$.each(x, function(i, v) {
 					var ov = {};
-					$.each($(frm).serializeArray(), function(i, v) {
+					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
-				}
+				});
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
@@ -304,13 +306,15 @@ define([
 				for (var i = 0; i < x.length; i++) {
 					var frm = x[i];
 					if (!$(frm).validator('doSubmitCheck')) return
+				}
+				$.each(x, function(i, v) {
 					var ov = {};
-					$.each($(frm).serializeArray(), function(i, v) {
+					$.each($(v).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
-				}
-
+				});
+				
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
