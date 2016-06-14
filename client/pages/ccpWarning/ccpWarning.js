@@ -162,8 +162,8 @@ define([
 								var form = document.updateForm;
 
 								$('#updateForm').resetForm();
-								$(form).validator('destroy');
-								util.form.validator.init($(form));
+								$('#updateForm').validator('destroy');
+								util.form.validator.init($('#updateForm'));
 								$('#updateFormOptions').empty();
 								$('#updateModal').modal('show');
 
@@ -220,8 +220,8 @@ define([
 						var form = document.addForm;
 
 						$('#addForm').resetForm();
-						$(form).validator('destroy');
-						util.form.validator.init($(form));
+						$('#addForm').validator('destroy');
+						util.form.validator.init($('#addForm'));
 						$('#addFormOptions').empty();
 						$('#addModal').modal('show');
 
