@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 @RestController
 @RequestMapping(value = "/ams/system/ccr/indicate", produces = "application/json;charset=utf-8")
@@ -62,4 +63,22 @@ public class RiskIndicateController extends BaseController {
 		return new ResponseEntity<List<RiskIndicateOption>>(list, HttpStatus.OK);
 	}
 
+	/**
+	 * title是否唯一
+	 * @Title: validateTitle 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param indicateTitle
+	 * @param id
+	 * @return ResponseEntity<BaseResp>    返回类型
+	 */
+	@RequestMapping(value = "/validateTitle", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateTitle(@RequestParam String indicateTitle, @RequestParam(required = false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.riskIndicateService.validateSingle("title", indicateTitle, id);
+		return new ResponseEntity<BaseResp>(pr, single > 0 ? HttpStatus.CONFLICT : HttpStatus.OK);
+	}
+	
 }

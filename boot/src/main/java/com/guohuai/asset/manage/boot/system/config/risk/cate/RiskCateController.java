@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.BaseResp;
 
 @RestController
 @RequestMapping(value = "/ams/system/ccr/cate", produces = "application/json;charset=utf-8")
@@ -34,6 +35,25 @@ public class RiskCateController extends BaseController {
 			return new ResponseEntity<Object>(list, HttpStatus.OK);
 		}
 
+	}
+	
+
+	/**
+	 * title是否唯一
+	 * @Title: validateTitle 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param cateTitle
+	 * @param id
+	 * @return ResponseEntity<BaseResp>    返回类型
+	 */
+	@RequestMapping(value = "/validateTitle", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateTitle(@RequestParam String cateTitle, @RequestParam(required = false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.riskCateService.validateSingle("title", cateTitle, id);
+		return new ResponseEntity<BaseResp>(pr, single > 0 ? HttpStatus.CONFLICT : HttpStatus.OK);
 	}
 
 }

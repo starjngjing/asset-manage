@@ -5,9 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.system.config.risk.cate.RiskCate;
@@ -133,6 +139,25 @@ public class RiskIndicateService {
 		}
 
 		return options;
+	}
+	
+
+	@Transactional
+	public long validateSingle(String attrName, String value, String oid) {
+
+		Specification<RiskIndicate> spec = new Specification<RiskIndicate>() {
+			@Override
+			public Predicate toPredicate(Root<RiskIndicate> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (StringUtil.isEmpty(oid)) {
+					return cb.equal(root.get(attrName).as(String.class), value);
+				} else {
+					return cb.and(cb.equal(root.get(attrName).as(String.class), value), cb.notEqual(root.get("oid").as(String.class), oid));
+				}
+			}
+		};
+		spec = Specifications.where(spec);
+
+		return this.riskIndicateDao.count(spec);
 	}
 
 }

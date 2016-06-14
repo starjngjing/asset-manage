@@ -68,5 +68,23 @@ public class RiskWarningController extends BaseController {
 		return new ResponseEntity<List<RiskWarningOptions>>(list, HttpStatus.OK);
 	}
 */
+	
+	/**
+	 * title是否唯一
+	 * @Title: validateTitle 
+	 * @author vania
+	 * @version 1.0
+	 * @see: 
+	 * @param warningTitle
+	 * @param id
+	 * @return ResponseEntity<BaseResp>    返回类型
+	 */
+	@RequestMapping(value = "/validateTitle", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<BaseResp> validateTitle(@RequestParam String warningTitle, @RequestParam(required = false) String id) {
+		BaseResp pr = new BaseResp();
+		long single = this.riskWarningService.validateSingle("title", warningTitle, id);
+		return new ResponseEntity<BaseResp>(pr, single > 0 ? HttpStatus.CONFLICT : HttpStatus.OK);
+	}
 
 }

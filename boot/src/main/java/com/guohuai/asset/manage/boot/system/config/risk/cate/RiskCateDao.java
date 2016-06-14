@@ -3,9 +3,12 @@ package com.guohuai.asset.manage.boot.system.config.risk.cate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-public interface RiskCateDao extends JpaRepository<RiskCate, String> {
+import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
+
+public interface RiskCateDao extends JpaRepository<RiskCate, String>,JpaSpecificationExecutor<RiskCate> {
 
 	@Query("from RiskCate c where c.type = ?1 order by c.title asc")
 	public List<RiskCate> search(String type);

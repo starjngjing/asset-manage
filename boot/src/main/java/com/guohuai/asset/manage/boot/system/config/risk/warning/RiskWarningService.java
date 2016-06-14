@@ -5,9 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.system.config.risk.cate.RiskCate;
@@ -17,6 +23,7 @@ import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicate;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateDao;
 import com.guohuai.asset.manage.boot.system.config.risk.indicate.RiskIndicateService;
 import com.guohuai.asset.manage.component.exception.AMPException;
+import com.guohuai.asset.manage.component.util.StringUtil;
 
 @Service
 public class RiskWarningService {
@@ -133,5 +140,24 @@ public class RiskWarningService {
 
 		}
 		return options;
+	}
+	
+
+	@Transactional
+	public long validateSingle(String attrName, String value, String oid) {
+
+		Specification<RiskWarning> spec = new Specification<RiskWarning>() {
+			@Override
+			public Predicate toPredicate(Root<RiskWarning> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (StringUtil.isEmpty(oid)) {
+					return cb.equal(root.get(attrName).as(String.class), value);
+				} else {
+					return cb.and(cb.equal(root.get(attrName).as(String.class), value), cb.notEqual(root.get("oid").as(String.class), oid));
+				}
+			}
+		};
+		spec = Specifications.where(spec);
+
+		return this.riskWarningDao.count(spec);
 	}
 }
