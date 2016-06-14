@@ -155,10 +155,8 @@ define([
 							}, function(val) {
 
 								var form = document.updateForm;
-
 								$('#updateForm').resetForm();
-								$('#updateForm').validator('destroy');
-								util.form.validator.init($('#updateForm'));
+								
 								$('#updateFormOptions').empty();
 								$('#updateModal').modal('show');
 
@@ -176,7 +174,8 @@ define([
 										});
 									}
 								}
-
+								$('#updateForm').validator('destroy');
+								util.form.validator.init($('#updateForm'));
 							});
 						},
 						'click .item-delete': function(e, value, row) {
@@ -241,7 +240,8 @@ define([
 						});
 
 						$(form.cateOid).change();
-
+						$('#addForm').validator('destroy');
+						util.form.validator.init($('#addForm'));
 					});
 			});
 

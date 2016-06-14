@@ -396,9 +396,6 @@ define([
 						},
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
 							util.form.reset($('#projectForm')); // 先清理表单
-							// 重置和初始化表单验证
-							$("#projectForm").validator('destroy')
-							util.form.validator.init($("#projectForm"));
 
 							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
 
@@ -422,9 +419,13 @@ define([
 
 									//$$.formAutoFix($('#projectForm'), row); // 自动填充表单-取表格里的内容
 									$$.formAutoFix($('#projectForm'), data); // 自动填充表单-取后台返回的内容
+									// 重置和初始化表单验证
+									$("#projectForm").validator('destroy')
+									util.form.validator.init($("#projectForm"));
 									$('#projectModal').modal('show');
 								}
 							});
+							
 						},
 						'click .item-project-delete': function(e, value, row) { // 删除底层项目
 							$("#confirmTitle").html("确定删除底层项目？")
