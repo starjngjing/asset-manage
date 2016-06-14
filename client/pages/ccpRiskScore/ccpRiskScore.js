@@ -246,13 +246,16 @@ define([
 			});
 
 			$('#saveButton').on('click', function() {
-				var f = $('#addForm').validator('doSubmitCheck');
-				var x = $('#addFormOptions').children();
+				var res = [];// 各个form校验结果
+				res.push($('#addForm').validator('doSubmitCheck')); // 校验主form
+				var x = $('#addFormOptions').children(); // 指标项配置
 				for (var i = 0; i < x.length; i++) {
 					var frm = x[i];
-					f = $(frm).validator('doSubmitCheck');
+					res.push($(frm).validator('doSubmitCheck')); // 校验指标项配置form
 				}
-				if(!f)return;
+				for (var i = 0; i < res.length; i++) {
+					if(!res[i])return false;
+				}
 				
 				var json = {
 					options: []
@@ -283,13 +286,16 @@ define([
 			});
 
 			$('#updateButton').on('click', function() {
-				var f = $('#updateForm').validator('doSubmitCheck');
-				var x = $('#updateFormOptions').children();
+				var res = [];// 各个form校验结果
+				res.push($('#updateForm').validator('doSubmitCheck')); // 校验主form
+				var x = $('#updateFormOptions').children(); // 指标项配置
 				for (var i = 0; i < x.length; i++) {
 					var frm = x[i];
-					f = $(frm).validator('doSubmitCheck');
+					res.push($(frm).validator('doSubmitCheck')); // 校验指标项配置form
 				}
-				if(!f)return;
+				for (var i = 0; i < res.length; i++) {
+					if(!res[i])return false;
+				}
 				
 				var json = {
 					options: []
