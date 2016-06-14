@@ -14,7 +14,8 @@ define([
 
 			var createOptions = {
 				"NUMBER": function(dataUnit) {
-					var form = $('<form type="NUMBER"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="NUMBER" id="' + rd + 'NumberForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述" required maxlength="64">' + initDataUnit(dataUnit) + '<div class="help-block with-errors text-red"></div></div></div>');
@@ -31,11 +32,13 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				},
 				"NUMRANGE": function(dataUnit) {
-					var form = $('<form type="NUMRANGE"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="NUMRANGE" id="' + rd + 'NumrangeForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-4 col-xs-6"><div class="row"><div class="col-xs-5"><div class="form-group"><select name="param0" class="form-control input-sm" required><option value="[">[</option><option value="(">(</option></select><div class="help-block with-errors text-red"></div></div></div><div class="col-xs-7"><div class="form-group"><div class="input-group range"><input name="param1" type="text" class="form-control input-sm" maxlength="60" required>' + initDataUnit(dataUnit) + '</div><div class="help-block with-errors text-red"></div></div></div></div></div>');
@@ -54,11 +57,13 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				},
 				"TEXT": function(dataUnit) {
-					var form = $('<form type="TEXT"></form');
+					var rd = util.getRandomString(5);
+					var form = $('<form type="TEXT" id="' + rd + 'TextForm"></form');
 					var row = $('<div class="row"></div>');
 					row.appendTo(form);
 					var x0 = $('<div class="col-sm-8 col-xs-12"><div class="form-group"><input name="param0" type="text" class="form-control input-sm" placeholder="指标项描述" required><div class="help-block with-errors text-red"></div></div></div>');
@@ -75,7 +80,8 @@ define([
 					dbtn.on('click', function() {
 						form.remove();
 					});
-
+					$(form).validator('destroy');
+					util.form.validator.init($(form));
 					return form;
 				}
 			};
@@ -263,14 +269,15 @@ define([
 
 
 				var x = $('#addFormOptions').children();
-				$.each(x, function(i, v) {
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					if (!$(frm).validator('doSubmitCheck')) return
 					var ov = {};
-					$.each($(v).serializeArray(), function(i, v) {
+					$.each($(frm).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
-				});
-
+				}
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
 					data: JSON.stringify(json)
@@ -294,13 +301,15 @@ define([
 
 
 				var x = $('#updateFormOptions').children();
-				$.each(x, function(i, v) {
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					if (!$(frm).validator('doSubmitCheck')) return
 					var ov = {};
-					$.each($(v).serializeArray(), function(i, v) {
+					$.each($(frm).serializeArray(), function(i, v) {
 						ov[v.name] = v.value;
 					});
 					json.options.push(ov);
-				});
+				}
 
 
 				http.post(config.api.system.config.ccr.warning.options.save, {
@@ -320,8 +329,10 @@ define([
 					var option = createOptions[type](unit);
 					if (option) {
 						$('#addFormOptions').append(option);
+						$('#addForm').validator('destroy');
+						util.form.validator.init($('#addForm'));
 					}
-				}
+				}				
 			});
 
 			$('#updateFormAddOption').on('click', function() {

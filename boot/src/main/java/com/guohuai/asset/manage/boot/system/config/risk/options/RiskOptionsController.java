@@ -2,6 +2,8 @@ package com.guohuai.asset.manage.boot.system.config.risk.options;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class RiskOptionsController extends BaseController {
 	private RiskOptionsService riskOptionsService;
 
 	@RequestMapping(value = "/save", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<List<RiskOptionsResp>> save(@RequestBody RiskOptionsForm form) {
+	public @ResponseBody ResponseEntity<List<RiskOptionsResp>> save(@Valid @RequestBody RiskOptionsForm form) {
 		super.checkLogin();
 		List<RiskOptionsResp> list = this.riskOptionsService.save(form);
 		return new ResponseEntity<List<RiskOptionsResp>>(list, HttpStatus.OK);

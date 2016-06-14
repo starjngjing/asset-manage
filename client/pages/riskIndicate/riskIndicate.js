@@ -185,7 +185,7 @@ define([
 										$('#updateDataUnitDiv').fadeOut();
 									}									
 								});
-								$(form.indicateDataType).val(indicateDataType).change();
+								$(form.indicateDataType).val(row.indicateDataType).change();
 
 								$$.formAutoFix($('#updateForm'), row);
 

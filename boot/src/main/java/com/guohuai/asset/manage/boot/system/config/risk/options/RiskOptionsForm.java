@@ -12,7 +12,9 @@ import lombok.Data;
 
 @Data
 public class RiskOptionsForm {
-
+	@NotNull
+	@NotEmpty
+	@NotBlank
 	private String cateOid;
 	private String cateTitle;
 
