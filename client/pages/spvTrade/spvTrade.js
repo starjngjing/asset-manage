@@ -179,7 +179,21 @@ define([
     		// 搜索表单初始化
     		$$.searchInit($('#searchForm'), $('#spvOrderTable'))
     		// 添加产品表单验证初始化
-    		util.form.validator.init($('#addOrderForm'))
+    		$('#addOrderForm').validator({
+    			custom: {
+            validfloat: util.form.validator.validfloat,
+            validredeem: validredeem
+          },
+          errors: {
+            validfloat: '数据格式不正确',
+            validredeem: '订单金额不能大于xxx额度'
+          }
+    		})
+    		// 自定义验证条件
+    		function validredeem ($el) {
+    			var orderType = document.addOrderForm.orderType
+    			return orderType.value === 'INVEST' || (Number($el.val()) <= reemAmount)
+    		}
     		
     		
     		// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
