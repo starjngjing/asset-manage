@@ -169,7 +169,6 @@ public class InvestmentService {
 	 * @param operator
 	 * @return
 	 */
-	@Deprecated
 	public Investment updateInvestment(Investment entity, String operator) {
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
 		entity.setOperator(operator);
