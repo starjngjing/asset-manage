@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "T_GAM_CALCULATE_TARGET")
+@Table(name = "T_GAM_ASSETPOOL_TARGET_INCOME_DETAIL")
 public class TrustCalc implements Serializable {
 
 	private static final long serialVersionUID = 1L;

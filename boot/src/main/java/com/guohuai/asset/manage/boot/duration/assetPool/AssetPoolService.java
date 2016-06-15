@@ -382,33 +382,29 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public void userPoolProfit(String type) {
-		// 所有资产池列表
-		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
+	public void userPoolProfit(String oid, String type) {
+		// 资产池
+		AssetPoolEntity entity = assetPoolDao.findOne(oid);
 		List<AssetPoolEntity> saveList = Lists.newArrayList();
-		if (null != poolList && !poolList.isEmpty()) {
-			// 日期
-			Date sqlDate = new Date(System.currentTimeMillis());
-			// 统计一共有多少个标的数据
-			int jobCount = 0;
-			// 统计一共执行了多少个标的数据
-			int successCount = 0;
-			ScheduleLog log = new ScheduleLog();
-			log.setOid(StringUtil.uuid());
-			log.setBaseDate(sqlDate);
-			log.setStartTime(new Timestamp(System.currentTimeMillis()));
-			
-			for (AssetPoolEntity entity : poolList) {
-				saveList.add(this.calcPoolProfit(entity, sqlDate, type,
-						jobCount, successCount));
-			}
-			assetPoolDao.save(saveList);
-			
-			log.setJobCount(jobCount);
-			log.setSuccessCount(successCount);
-			log.setEndTime(new Timestamp(System.currentTimeMillis()));
-			logService.save(log);
-		}
+		// 日期
+		Date sqlDate = new Date(System.currentTimeMillis());
+		// 统计一共有多少个标的数据
+		int jobCount = 0;
+		// 统计一共执行了多少个标的数据
+		int successCount = 0;
+		ScheduleLog log = new ScheduleLog();
+		log.setOid(StringUtil.uuid());
+		log.setBaseDate(sqlDate);
+		log.setStartTime(new Timestamp(System.currentTimeMillis()));
+		
+		saveList.add(this.calcPoolProfit(entity, sqlDate, type,
+				jobCount, successCount));
+		assetPoolDao.save(saveList);
+		
+		log.setJobCount(jobCount);
+		log.setSuccessCount(successCount);
+		log.setEndTime(new Timestamp(System.currentTimeMillis()));
+		logService.save(log);
 	}
 	
 	/**
@@ -524,7 +520,7 @@ public class AssetPoolService {
 			if (type.equals(AssetPoolCalc.EventType.SCHEDULE.toString())) {
 				if (errorList.size() > 0) {
 					assetPool.setScheduleState(AssetPoolEntity.schedule_wjs);
-					throw new RuntimeException("=================定时任务未执行，待数据补录==============="); 
+//					throw new RuntimeException("=================定时任务未执行，待数据补录==============="); 
 				}
 			} else if (type.equals(AssetPoolCalc.EventType.USER_CALC.toString())) {
 				AssetPoolCalc calc = new AssetPoolCalc();
@@ -542,8 +538,10 @@ public class AssetPoolService {
 				calc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 				
 				poolCalcService.saveOne(calc);
-				fundCalcService.save(fundCalcList);
-				trustCalcService.save(trustCalcList);
+				if (fundCalcList.size() > 0)
+					fundCalcService.save(fundCalcList);
+				if (trustCalcList.size() > 0)
+					trustCalcService.save(trustCalcList);
 				
 				successCount = fundCalcList.size() + trustCalcList.size();
 				
@@ -552,23 +550,22 @@ public class AssetPoolService {
 				assetPool.setScheduleState(AssetPoolEntity.schedule_bfjs);
 				assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 			} else {
-				if (errorList.size() > 0) {
-					AssetPoolCalc calc = new AssetPoolCalc();
-					calc.setOid(StringUtil.uuid());
-					calc.setAssetPool(assetPool);
-					calc.setBaseDate(baseDate);
-					calc.setEventType(AssetPoolCalc.EventType.USER_NONE);
-					assetPool.setScheduleState(AssetPoolEntity.schedule_drbjs);
-					assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-					poolCalcService.saveOne(calc);
-					
-					successCount = 1;
-					
-					throw new RuntimeException("=================定时任务默认录入一条初始化数据==============="); 
-				}
+				AssetPoolCalc calc = new AssetPoolCalc();
+				calc.setOid(StringUtil.uuid());
+				calc.setAssetPool(assetPool);
+				calc.setBaseDate(baseDate);
+				calc.setEventType(AssetPoolCalc.EventType.USER_NONE);
+				assetPool.setScheduleState(AssetPoolEntity.schedule_drbjs);
+				assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+				poolCalcService.saveOne(calc);
+				
+				successCount = 1;
+				
+//				throw new RuntimeException("=================定时任务默认录入一条初始化数据==============="); 
 			}
 			
-			incomeService.incomeConfirm(assetPool.getOid(), incomeList);
+			if (incomeList.size() > 0)
+				incomeService.incomeConfirm(assetPool.getOid(), incomeList);
 			
 			return assetPool;
 		} catch (Exception e) {

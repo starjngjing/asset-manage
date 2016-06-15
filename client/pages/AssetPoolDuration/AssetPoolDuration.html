@@ -1667,7 +1667,7 @@
 		              <input name="auditCapital" type="text"
 		              class="form-control"
 		              placeholder="审核本金"
-		              data-validfloat="10.10" required
+		              data-validfloat="10.10"
 		              disabled="disabled">
 		              <span class="input-group-addon">万</span>
 		            </div>
@@ -1708,7 +1708,7 @@
 		              <input name="investCapital" type="text"
 		              class="form-control"
 		              placeholder="确认本金"
-		              data-validfloat="10.10" required
+		              data-validfloat="10.10"
 		              disabled="disabled">
 		              <span class="input-group-addon">万</span>
 		            </div>
@@ -1864,90 +1864,6 @@
   </div>
 </div>
 
-<!-- 本息兑付订单详情 -->
-<div id="trustIncomeOrderDetailModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <!-- 模态窗头部 -->
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title" id="trustTitleName">本息兑付详情</h4>
-      </div>
-      <!-- 模态窗内容体 -->
-      <div class="modal-body">
-        <dl class="dl-horizontal">
-          <dt>期数:</dt>
-          <dd>
-            <div data-detail-fetch="seq"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>实际收益率:</dt>
-          <dd>
-            <div data-detail-fetch="incomeRate"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>实际收益:</dt>
-          <dd>
-            <div data-detail-fetch="income"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>本金:</dt>
-          <dd>
-            <div data-detail-fetch="capital"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>本息兑付日:</dt>
-          <dd>
-            <div data-detail-fetch="incomeDate"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>审核收益率:</dt>
-          <dd>
-            <div data-detail-fetch="auditVolume"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>审核收益:</dt>
-          <dd>
-            <div data-detail-fetch="auditCash"></div>
-          </dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>审核本金:</dt>
-          <dd>
-            <div data-detail-fetch="auditCapital"></div>
-          </dd>
-        </dl>
-				<dl class="dl-horizontal">
-          <dt>确认收益率:</dt>
-          <dd>
-            <div data-detail-fetch="investVolume"></div>
-          </dd>
-        </dl>
-	    	<dl class="dl-horizontal">
-          <dt>确认收益:</dt>
-          <dd>
-            <div data-detail-fetch="investCash"></div>
-          </dd>
-        </dl>
-	    	<dl class="dl-horizontal">
-	          <dt>确认本金:</dt>
-	          <dd>
-	            <div data-detail-fetch="investCapital"></div>
-	          </dd>
-        </dl>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- 信托计划本息兑付弹窗 -->
 <div id="trustIncomeModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -2058,7 +1974,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>进行本金兑付</label>
+            <label>本金返还</label>
             <div class="form-style">
               <div class="row" id="incomeRadio">
                 <div class="col-md-2 col-xs-3">
@@ -2070,14 +1986,13 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" id="capitalArea" style="display: none;">
             <div class="col-md-6">
-              <div id="capitalArea" class="form-group" style="display: none;">
+              <div class="form-group">
                 <label>本金返还</label>
                 <div class="input-group input-group-sm">
                   <input id="capitalInput" name="capital" type="text"
-                  class="form-control"
-                  readonly="readonly">
+                  class="form-control">
                   <span class="input-group-addon">万</span>
                 </div>
               </div>
@@ -2980,6 +2895,90 @@
             </dl>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 本息兑付订单详情 -->
+<div id="trustIncomeOrderDetailModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="trustTitleName">本息兑付详情</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>期数:</dt>
+          <dd>
+            <div data-detail-fetch="seq"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>实际收益率:</dt>
+          <dd>
+            <div data-detail-fetch="incomeRate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>实际收益:</dt>
+          <dd>
+            <div data-detail-fetch="income"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>本金:</dt>
+          <dd>
+            <div data-detail-fetch="capital"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>本息兑付日:</dt>
+          <dd>
+            <div data-detail-fetch="incomeDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>审核收益率:</dt>
+          <dd>
+            <div data-detail-fetch="auditVolume"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>审核收益:</dt>
+          <dd>
+            <div data-detail-fetch="auditCash"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>审核本金:</dt>
+          <dd>
+            <div data-detail-fetch="auditCapital"></div>
+          </dd>
+        </dl>
+				<dl class="dl-horizontal">
+          <dt>确认收益率:</dt>
+          <dd>
+            <div data-detail-fetch="investVolume"></div>
+          </dd>
+        </dl>
+	    	<dl class="dl-horizontal">
+          <dt>确认收益:</dt>
+          <dd>
+            <div data-detail-fetch="investCash"></div>
+          </dd>
+        </dl>
+	    	<dl class="dl-horizontal">
+	          <dt>确认本金:</dt>
+	          <dd>
+	            <div data-detail-fetch="investCapital"></div>
+	          </dd>
+        </dl>
       </div>
     </div>
   </div>

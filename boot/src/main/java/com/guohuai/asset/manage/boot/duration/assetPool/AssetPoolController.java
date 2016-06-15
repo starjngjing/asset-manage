@@ -214,9 +214,9 @@ public class AssetPoolController extends BaseController {
 	 * @param type
 	 * @return
 	 */
-	@RequestMapping(value = "/userPoolProfit", method = { RequestMethod.GET })
-	public @ResponseBody ResponseEntity<Response> calcCapital(@RequestParam String type) {
-		assetPoolService.userPoolProfit(type);
+	@RequestMapping(value = "/userPoolProfit", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> calcCapital(@RequestParam String oid, @RequestParam String type) {
+		assetPoolService.userPoolProfit(oid, type);
 		Response r = new Response();
 		r.with("result", "SUCCESS");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
