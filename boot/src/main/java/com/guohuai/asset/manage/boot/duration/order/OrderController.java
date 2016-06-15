@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guohuai.asset.manage.boot.duration.capital.CapitalEntity;
 import com.guohuai.asset.manage.component.web.view.Response;
 
 /**
@@ -289,17 +290,12 @@ public class OrderController {
 	@RequestMapping(value = "/getTargetOrderByOidForCapital", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getTargetOrderByOidForCapital(String oid, String operation) {
 		Response r = new Response();
-		if ("现金管理工具申赎".equals(operation)) {
+		if (CapitalEntity.PURCHASE.equals(operation)
+				|| CapitalEntity.REDEEM.equals(operation)) {
 			FundForm form = orderService.getFundOrderByOid(oid);
 			r.with("result", form);
-		} else if ("信托标的申购".equals(operation)) {
-			TrustForm form = orderService.getTrustOrderByOid(oid, "申购");
-			r.with("result", form);
-		} else if ("本息兑付".equals(operation)) {
-			TrustForm form = orderService.getTrustOrderByOid(oid, "本息兑付");
-			r.with("result", form);
 		} else {
-			TrustForm form = orderService.getTrustOrderByOid(oid, "转让");
+			TrustForm form = orderService.getTrustOrderByOid(oid, operation);
 			r.with("result", form);
 		}
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -314,6 +310,30 @@ public class OrderController {
 	public @ResponseBody ResponseEntity<Response> updateOrder(String oid, String operation) {
 		Response r = new Response();
 		orderService.updateOrder(oid, operation);
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 纠偏现金管理工具的持有额度
+	 * @param form
+	 */
+	@RequestMapping(value = "/updateFund", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> updateFund(FundForm form) {
+		Response r = new Response();
+		orderService.updateFund(form);
+		r.with("result", "SUCCESSED!");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 纠偏投资标的的持有额度
+	 * @param form
+	 */
+	@RequestMapping(value = "/updateTrust", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> updateTrust(TrustForm form) {
+		Response r = new Response();
+		orderService.updateTrust(form);
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}

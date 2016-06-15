@@ -20,7 +20,7 @@ public class CapitalForm {
 	private String subject;
 	// 创建日期
 	private Timestamp createTime;
-	// 操作类型（现金管理工具申购，现金管理工赎回，信托标的申购，本息兑付，转让）
+	// 操作类型（现金管理工具申购，现金管理工赎回，信托标的申购，本息兑付，转入，转出）
 	private String operation;
 	// 金额
 	private BigDecimal capital;

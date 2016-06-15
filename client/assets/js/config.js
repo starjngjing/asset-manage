@@ -217,10 +217,14 @@ define(function() {
 					create: this.host + "/ams/duration/assetPool/createPool", // 新建资产池
 					audit: this.host + "/ams/duration/assetPool/auditPool", // 审核资产池
 					edit: this.host + '/ams/duration/assetPool/editPool', // 修改资产池
+					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash', // 编辑账户
+					updateDeviationValue: this.host + '/ams/duration/assetPool/updateDeviationValue', // 编辑偏离损益
+					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList', // 出入金明细
 					getAll: this.host + "/ams/duration/assetPool/getAll", // 获取全部资产池
 					getById: this.host + '/ams/duration/assetPool/getPoolByOid', // 获取单条资产池
 					getNameList: this.host + '/ams/duration/assetPool/getAllNameList', //获取资产池下拉菜单列表
-					delete: this.host + '/ams/duration/assetPool/updateAssetPool' // 删除资产池
+					delete: this.host + '/ams/duration/assetPool/updateAssetPool', // 删除资产池
+					userPoolProfit: this.host + '/ams/duration/assetPool/userPoolProfit', // 计算每日收益
 				},
 				order: { // 订单
 					purchaseForFund: this.host + '/ams/duration/order/purchaseForFund', // 货币基金申购
@@ -248,10 +252,10 @@ define(function() {
 					orderConfirmForIncome: this.host + '/ams/duration/order/orderConfirmForIncome', // 信托计划本息兑付确认
 					auditForTransfer: this.host + '/ams/duration/order/auditForTransfer', // 信托计划转让审核
 					orderConfirmForTransfer: this.host + '/ams/duration/order/orderConfirmForTransfer', // 信托计划转让确认
-					editPoolForCash: this.host + '/ams/duration/assetPool/editPoolForCash', // 编辑账户
-					getAllCapitalList: this.host + '/ams/duration/assetPool/getAllCapitalList', // 出入金明细
 					getTargetOrderByOidForCapital: this.host + '/ams/duration/order/getTargetOrderByOidForCapital', // 出入金详情
-					delete: this.host + '/ams/duration/order/updateOrder'
+					delete: this.host + '/ams/duration/order/updateOrder',
+					updateFund: this.host + '/ams/duration/order/updateFund', // 纠偏持有额度
+					updateTrust: this.host + '/ams/duration/order/updateTrust', // 纠偏持有额度
 				}
 			},
 			role: {

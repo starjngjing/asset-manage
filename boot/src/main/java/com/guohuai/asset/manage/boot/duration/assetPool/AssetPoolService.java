@@ -79,16 +79,14 @@ public class AssetPoolService {
 	public void createPool(AssetPoolForm form, String uid) {
 		AssetPoolEntity entity = new AssetPoolEntity();
 		try {
-			BeanUtils.copyProperties(entity, form);
 			entity.setOid(StringUtil.uuid());
+			entity.setName(form.getName());
+			entity.setScale(form.getScale());
 			entity.setCashPosition(form.getScale());
+			entity.setCashRate(form.getCashRate());
+			entity.setCashtoolRate(form.getCashtoolRate());
+			entity.setTargetRate(form.getTargetRate());
 			entity.setCashFactRate(new BigDecimal(100));
-			entity.setCashtoolFactRate(BigDecimal.ZERO);
-			entity.setTargetFactRate(BigDecimal.ZERO);
-			entity.setFreezeCash(BigDecimal.ZERO);
-			entity.setTransitCash(BigDecimal.ZERO);
-			entity.setConfirmProfit(BigDecimal.ZERO);
-			entity.setFactProfit(BigDecimal.ZERO);
 			entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01"));
 			entity.setCreater(uid);
 			entity.setCreateTime(DateUtil.getSqlCurrentDate());
@@ -228,6 +226,7 @@ public class AssetPoolService {
 	 * @param pid
 	 * @return
 	 */
+	@Transactional
 	public String getPid(String pid) {
 		if (null == pid || "".equals(pid)) {
 			pid = assetPoolDao.getLimitOne().getOid();
@@ -273,12 +272,12 @@ public class AssetPoolService {
 		// 当前规模
 		BigDecimal nscale = scale.subtract(entity.getCashPosition())
 				.add(form.getCashPosition()).setScale(4, BigDecimal.ROUND_HALF_UP);
-		BigDecimal cashRate = form.getCashPosition().divide(nscale)
+		BigDecimal cashRate = form.getCashPosition().divide(nscale, 4, BigDecimal.ROUND_HALF_UP)
 				.multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
 		BigDecimal cashtoolRate = entity.getCashtoolFactRate().multiply(scale)
-				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
+				.divide(nscale, 4, BigDecimal.ROUND_HALF_UP).setScale(4, BigDecimal.ROUND_HALF_UP);
 		BigDecimal targetRate = entity.getTargetFactRate().multiply(scale)
-				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
+				.divide(nscale, 4, BigDecimal.ROUND_HALF_UP).setScale(4, BigDecimal.ROUND_HALF_UP);
 		entity.setScale(nscale);
 		entity.setCashPosition(form.getCashPosition());
 		entity.setCashFactRate(cashRate);
@@ -588,6 +587,7 @@ public class AssetPoolService {
 	 * @param fundCalcList
 	 * @param incomeList
 	 */
+	@Transactional
 	public void calcFundProfit(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit,
 			List<FundEntity> fundList,
@@ -637,6 +637,7 @@ public class AssetPoolService {
 	 * @param trustCalcList
 	 * @param incomeList
 	 */
+	@Transactional
 	public void calcTrustProfitForCollect(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit, 
 			List<TrustEntity> trustList, 
@@ -683,6 +684,7 @@ public class AssetPoolService {
 	 * @param trustCalcList
 	 * @param incomeList
 	 */
+	@Transactional
 	public void calcTrustProfitForDuration(AssetPoolCalc assetPoolCalc, Date baseDate, 
 			BigDecimal totalProfit,
 			List<TrustEntity> trustList, 
@@ -718,5 +720,48 @@ public class AssetPoolService {
 			}
 			trustService.save(trustList);
 		}
+	}
+	
+	/**
+	 * 更新资产池的偏离损益
+	 * @param form
+	 */
+	@Transactional
+	public void updateDeviationValue(AssetPoolForm form) {
+		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
+		entity.setDeviationValue(form.getDeviationValue());
+		BigDecimal nscale = entity.getScale().add(
+				form.getDeviationValue().subtract(entity.getDeviationValue())
+				.setScale(4, BigDecimal.ROUND_HALF_UP));
+
+		this.calcAssetPoolRate(entity, nscale, BigDecimal.ZERO, BigDecimal.ZERO);
+	}
+	
+	/**
+	 * 重计算资产池的投资占比
+	 * @param entity
+	 * @param nscale
+	 * 				当前资产池估值
+	 * @param fvalue
+	 * 				现金管理工具纠偏的差额
+	 * @param tvalue
+	 * 				投资标的纠偏的差额
+	 */
+	public void calcAssetPoolRate(AssetPoolEntity entity, BigDecimal nscale, BigDecimal fvalue, BigDecimal tvalue) {
+		// 原规模
+		BigDecimal scale = entity.getScale();
+		BigDecimal cashRate = entity.getCashPosition().divide(nscale, 4, BigDecimal.ROUND_HALF_UP)
+				.multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal cashtoolRate = (entity.getCashtoolFactRate().multiply(scale).add(fvalue))
+				.divide(nscale, 4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal targetRate = (entity.getTargetFactRate().multiply(scale).add(tvalue))
+				.divide(nscale, 4, BigDecimal.ROUND_HALF_UP);
+		entity.setScale(nscale);
+		entity.setCashFactRate(cashRate);
+		entity.setCashtoolFactRate(cashtoolRate);
+		entity.setTargetFactRate(targetRate);
+		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
+		
+		assetPoolDao.save(entity);
 	}
 }

@@ -36,6 +36,17 @@ public class CapitalEntity implements Serializable {
 	public static final String CONFIRM30 		= "30";	// 确认未通过
 	public static final String CONFIRM31 		= "31";	// 确认通过
 	
+	/**
+	 * 操作类型（现金管理工具申购，现金管理工赎回，投资标的申购，本息兑付，投资标的转入，投资标的转出）
+	 */
+	public static final String PURCHASE = "现金管理工具申购";	
+	public static final String REDEEM 	= "现金管理工赎回";	
+	public static final String APPLY 	= "投资标的申购";	
+	public static final String INCOME 	= "本息兑付";	
+	public static final String TRANS 	= "投资标的转入";	
+	public static final String TRANSFER = "投资标的转出";	
+	
+	
 	public CapitalEntity() {
 		this.freezeCash = init0;
 		this.unfreezeCash = init0;
@@ -72,6 +83,8 @@ public class CapitalEntity implements Serializable {
 	private BigDecimal inputCash;
 	// 资金变动出金
 	private BigDecimal outputCash;
+	// 操作类型（现金管理工具申购，现金管理工赎回，投资标的申购，本息兑付，投资标的转入，投资标的转出）
+	private String operation;
 	// 操作人
 	private String operator;
 	// 状态

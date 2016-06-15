@@ -209,9 +209,26 @@ public class AssetPoolController extends BaseController {
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 	
+	/**
+	 * 手动触发每日收益计算
+	 * @param type
+	 * @return
+	 */
 	@RequestMapping(value = "/userPoolProfit", method = { RequestMethod.GET })
 	public @ResponseBody ResponseEntity<Response> calcCapital(@RequestParam String type) {
 		assetPoolService.userPoolProfit(type);
+		Response r = new Response();
+		r.with("result", "SUCCESS");
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 更新资产池的偏离损益
+	 * @param form
+	 */
+	@RequestMapping(value = "/updateDeviationValue", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> updateDeviationValue(AssetPoolForm form) {
+		assetPoolService.updateDeviationValue(form);
 		Response r = new Response();
 		r.with("result", "SUCCESS");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

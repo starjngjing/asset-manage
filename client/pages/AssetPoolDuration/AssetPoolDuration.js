@@ -163,6 +163,7 @@ define([
 						util.form.reset($(form))
 						$('#orderingToolTable').bootstrapTable('refresh')
 						$('#orderingTrustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
 						$('#buyAssetModal').modal('hide')
 					}
 				})
@@ -182,7 +183,7 @@ define([
 			}
 			var accountDetailTableConfig = {
 				ajax: function(origin) {
-					http.post(config.api.duration.order.getAllCapitalList, {
+					http.post(config.api.duration.assetPool.getAllCapitalList, {
 						data: accountDetailPageOptions,
 						contentType: 'form'
 					}, function(rlt) {
@@ -241,7 +242,8 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
-								if (row.operation === '现金管理工具申赎') {
+								// 操作类型（现金管理工具申购，现金管理工赎回，投资标的申购，本息兑付，投资标的转入，投资标的转出）
+								if (row.operation === '现金管理工具申购' || row.operation === '现金管理工赎回') {
 									json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
 									if (json.result.applyCash) {
 										json.result.applyCash = json.result.applyCash + '\t万元'
@@ -258,22 +260,20 @@ define([
 									if (json.result.investVolume) {
 										json.result.investVolume = json.result.investVolume + '\t万元'
 									}
+									if (row.operation === '现金管理工具申购') {
+										$('#applyVolume').show()
+										$('#redeemVolume').hide()
+									} else {
+										$('#applyVolume').hide()
+										$('#redeemVolume').show()
+									}
 									$$.detailAutoFix($('#fundDetailModal'), json.result)
 									$('#fundDetailModal').modal('show')
-								} else {
+								} else if (row.operation === '投资标的申购') {
 									var result = json.result
 									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
 									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
 									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
-//									if (json.result.holdAmount) {
-//										json.result.holdAmount = json.result.holdAmount + "\t万元"
-//									}
-//									modal.find('.labelForOrdering').css({
-//										display: 'block'
-//									})
-//									modal.find('.labelForAccept').css({
-//										display: 'block'
-//									})
 									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
 									if (result.expAror) {
 										result.expAror = result.expAror + '\t%'
@@ -313,6 +313,81 @@ define([
 									}
 									$$.detailAutoFix($('#trustDetailModal'), json.result)
 									$('#trustDetailModal').modal('show')
+								} else if (row.operation === '本息兑付') {
+									var result = json.result
+									if (result.seq) {
+										result.seq = result.seq + '\t期'
+									}
+									if (result.incomeRate) {
+										result.incomeRate = result.incomeRate + '\t%'
+									}
+									if (result.income) {
+										result.income = result.income + '\t万元'
+									}
+									if (result.capital) {
+										result.capital = result.capital + '\t万元'
+									}
+									if (result.auditVolume) {
+										result.auditVolume = result.auditVolume + '\t%'
+									}
+									if (result.auditCash) {
+										result.auditCash = result.auditCash + '\t万元'
+									}
+									if (result.auditCapital) {
+										result.auditCapital = result.auditCapital + '\t万元'
+									}
+									if (result.investVolume) {
+										result.investVolume = result.investVolume + '\t%'
+									}
+									if (result.investCash) {
+										result.investCash = result.investCash + '\t万元'
+									}
+									if (result.investCapital) {
+										result.investCapital = result.investCapital + '\t万元'
+									}
+									$$.detailAutoFix($('#trustIncomeOrderDetailModal'), json.result)
+									$('#trustIncomeOrderDetailModal').modal('show')
+								} else if (row.operation === '投资标的转入' || row.operation === '投资标的转出') {
+									var result = json.result
+									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
+									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
+									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+									if (result.expAror) {
+										result.expAror = result.expAror + '\t%'
+									}
+									if (result.applyVolume) {
+										result.applyVolume = result.applyVolume + '\t万份'
+									}
+									if (result.applyCash) {
+										result.applyCash = result.applyCash + '\t万元'
+									}
+									if (result.life) {
+										result.life = result.life + '\t天'
+									}
+									if (result.floorVolume) {
+										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+									}
+									if (result.auditVolume) {
+										result.auditVolume = result.auditVolume + '\t万份'
+									}
+									if (result.auditCash) {
+										result.auditCash = result.auditCash + '\t万元'
+									}
+									if (result.reserveVolume) {
+										result.reserveVolume = result.reserveVolume + '\t万份'
+									}
+									if (result.reserveCash) {
+										result.reserveCash = result.reserveCash + '\t万元'
+									}
+									if (result.investVolume) {
+										result.investVolume = result.investVolume + '\t万份'
+									}
+									if (result.investCash) {
+										result.investCash = result.investCash + '\t万元'
+									}
+									$$.detailAutoFix($('#trustTransOrderDetailModal'), json.result)
+									$('#trustTransOrderDetailModal').modal('show')
 								}
 							})
 						}
@@ -774,7 +849,7 @@ define([
 					field: 'totalProfit'
 				}, 
 				{
-					width: 120,
+					width: 150,
 					align: 'center',
 					formatter: function() {
 						var buttons = [{
@@ -785,11 +860,11 @@ define([
 							text: '赎回',
 							type: 'button',
 							class: 'item-redeem'
-						}/*, {
+						}, {
 							text: '纠偏',
 							type: 'button',
 							class: 'item-update'
-						}*/]
+						}]
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
@@ -827,10 +902,11 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
-								json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
-								$$.formAutoFix($('#redeemForm'), json.result)
+								json.result.amount = json.result.amount + '\t万元'
+								document.updateFundVolumeForm.oid.value = json.result.oid
+								$$.detailAutoFix($('#updateFundVolumeModal'), json.result)
+								$('#updateFundVolumeModal').modal('show')
 							})
-							$('#redeemModal').modal('show')
 						}
 					}
 				}]
@@ -1035,23 +1111,41 @@ define([
 					width: 256,
 					align: 'center',
 					formatter: function(val, row) {
+						// 操作类型（现金管理工具申购，现金管理工赎回，投资标的申购，本息兑付，投资标的转入，投资标的转出）
 						var buttons = [{
 							text: '审核',
 							type: 'button',
 							class: 'item-audit',
-							isRender: row.type === '申购' && (parseInt(row.state) === 0)
+							isRender: row.type === '投资标的申购' && (parseInt(row.state) === 0)
 						}, 
 						{
 							text: '预约',
 							type: 'button',
 							class: 'item-ordering',
-							isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
+							isRender: row.type === '投资标的申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
 						}, 
 						{
 							text: '确认',
 							type: 'button',
 							class: 'item-accpet',
-							isRender: row.type === '申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+							isRender: row.type === '投资标的申购' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+						}, {
+							text: '审核',
+							type: 'button',
+							class: 'item-trans-audit',
+							isRender: row.type === '投资标的转入' && (parseInt(row.state) === 0)
+						}, 
+						{
+							text: '预约',
+							type: 'button',
+							class: 'item-trans-ordering',
+							isRender: row.type === '投资标的转入' && (parseInt(row.state) === 0 || parseInt(row.state) === 11)
+						}, 
+						{
+							text: '确认',
+							type: 'button',
+							class: 'item-trans-accpet',
+							isRender: row.type === '投资标的转入' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
 						}, 
 						{
 							text: '本息兑付审核',
@@ -1069,19 +1163,31 @@ define([
 							text: '转让审核',
 							type: 'button',
 							class: 'item-transfer-audit',
-							isRender: row.type === '转让' && (parseInt(row.state) === 0)
+							isRender: row.type === '投资标的转出' && (parseInt(row.state) === 0)
 						}, 
 						{
 							text: '转让确认',
 							type: 'button',
 							class: 'item-transfer-accpet',
-							isRender: row.type === '转让' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
+							isRender: row.type === '投资标的转出' && (parseInt(row.state) === 0 || parseInt(row.state) === 11 || parseInt(row.state) === 21)
 						}, 
 						{
 							text: '查看详情',
 							type: 'button',
 							class: 'item-detail',
-        					isRender: parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30
+        					isRender: row.type === '投资标的申购' && (parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30)
+						},  
+						{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-trans-detail',
+        					isRender: (row.type === '投资标的转入' || row.type === '投资标的转出') && (parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30)
+						}, 
+						{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-income-detail',
+        					isRender: row.type === '本息兑付' && (parseInt(row.state) === 10 || parseInt(row.state) === 20 || parseInt(row.state) === 30)
 						}, 
 						{
 							text: '删除',
@@ -1093,6 +1199,7 @@ define([
 					},
 					events: {
 						'click .item-audit': function(e, val, row) {
+							console.log(row.type)
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
@@ -1135,6 +1242,67 @@ define([
 								}
 								if (result.collectIncomeRate) {
 									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								}
+								if (result.applyVolume) {
+									result.applyVolume = result.applyVolume + '\t万份'
+								}
+								if (result.applyCash) {
+									result.applyCash = result.applyCash + '\t万元'
+								}
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-trans-audit': function(e, val, row) {
+							console.log(row.type)
+							var modal = $('#trustTransCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustTransCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'audit'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.row')
+								formGroups.each(function(index, item) {
+									if (!index) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForAudit').css({
+									display: 'none'
+								})
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								if (result.expAror) {
+									result.expAror = result.expAror + '\t%'
 								}
 								if (result.applyVolume) {
 									result.applyVolume = result.applyVolume + '\t万份'
@@ -1339,6 +1507,72 @@ define([
 							})
 							modal.modal('show')
 						},
+						'click .item-trans-ordering': function(e, val, row) {
+							var modal = $('#trustTransCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustTransCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'ordering'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.row')
+								formGroups.each(function(index, item) {
+									if (index === 1) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForAudit').css({
+									display: 'block'
+								})
+								modal.find('.labelForOrdering').css({
+									display: 'none'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								if (result.expAror) {
+									result.expAror = result.expAror + '\t%'
+								}
+								if (result.applyVolume) {
+									result.applyVolume = result.applyVolume + '\t万份'
+								}
+								if (result.applyCash) {
+									result.applyCash = result.applyCash + '\t万元'
+								}
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万份'
+								}
+								if (result.auditCash) {
+									result.auditCash = result.auditCash + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
 						'click .item-accpet': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1385,6 +1619,78 @@ define([
 								}
 								if (result.collectIncomeRate) {
 									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+								}
+								if (result.applyVolume) {
+									result.applyVolume = result.applyVolume + '\t万份'
+								}
+								if (result.applyCash) {
+									result.applyCash = result.applyCash + '\t万元'
+								}
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t万份'
+								}
+								if (result.auditCash) {
+									result.auditCash = result.auditCash + '\t万元'
+								}
+								if (result.reserveVolume) {
+									result.reserveVolume = result.reserveVolume + '\t万份'
+								}
+								if (result.reserveCash) {
+									result.reserveCash = result.reserveCash + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-trans-accpet': function(e, val, row) {
+							var modal = $('#trustTransCheckModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								var form = document.trustTransCheckForm
+								form.oid.value = result.oid
+								form.type.value = row.type
+								form.opType.value = 'accept'
+								form.assetPoolOid.value = pageState.pid
+								var formGroups = $(form).find('.row')
+								formGroups.each(function(index, item) {
+									if (index === 2) {
+										$(item).css({
+											display: 'block'
+										}).find('input').attr('disabled', false)
+									} else {
+										$(item).css({
+											display: 'none'
+										}).find('input').attr('disabled', 'disabled')
+									}
+								})
+								$(form).validator('destroy')
+								util.form.validator.init($(form))
+								modal.find('.labelForAudit').css({
+									display: 'block'
+								})
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'none'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								if (result.expAror) {
+									result.expAror = result.expAror + '\t%'
 								}
 								if (result.applyVolume) {
 									result.applyVolume = result.applyVolume + '\t万份'
@@ -1572,6 +1878,47 @@ define([
 								if (result.collectIncomeRate) {
 									result.collectIncomeRate = result.collectIncomeRate + '\t%'
 								}
+								if (result.applyCash) {
+									result.applyCash = result.applyCash + '\t万元'
+								}
+								if (result.life) {
+									result.life = result.life + '\t天'
+								}
+								if (result.floorVolume) {
+									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+								}
+								if (result.auditCash) {
+									result.auditCash = result.auditCash + '\t万元'
+								}
+								if (result.reserveCash) {
+									result.reserveCash = result.reserveCash + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-trans-detail': function(e, val, row) {
+							var modal = $('#trustTransOrderDetailModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+								if (result.expAror) {
+									result.expAror = result.expAror + '\t%'
+								}
 								if (result.applyVolume) {
 									result.applyVolume = result.applyVolume + '\t万份'
 								}
@@ -1595,6 +1942,62 @@ define([
 								}
 								if (result.reserveCash) {
 									result.reserveCash = result.reserveCash + '\t万元'
+								}
+								if (result.investVolume) {
+									result.investVolume = result.investVolume + '\t万份'
+								}
+								if (result.investCash) {
+									result.investCash = result.investCash + '\t万元'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},
+						'click .item-income-detail': function(e, val, row) {
+							var modal = $('#trustIncomeOrderDetailModal')
+							http.post(config.api.duration.order.getTrustOrderByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								modal.find('.labelForOrdering').css({
+									display: 'block'
+								})
+								modal.find('.labelForAccept').css({
+									display: 'block'
+								})
+								if (result.seq) {
+									result.seq = result.seq + '\t期'
+								}
+								if (result.incomeRate) {
+									result.incomeRate = result.incomeRate + '\t%'
+								}
+								if (result.income) {
+									result.income = result.income + '\t万元'
+								}
+								if (result.capital) {
+									result.capital = result.capital + '\t万元'
+								}
+								if (result.auditVolume) {
+									result.auditVolume = result.auditVolume + '\t%'
+								}
+								if (result.auditCash) {
+									result.auditCash = result.auditCash + '\t万元'
+								}
+								if (result.auditCapital) {
+									result.auditCapital = result.auditCapital + '\t万元'
+								}
+								if (result.investVolume) {
+									result.investVolume = result.investVolume + '\t万份'
+								}
+								if (result.investCash) {
+									result.investCash = result.investCash + '\t万元'
+								}
+								if (result.investCapital) {
+									result.investCapital = result.investCapital + '\t万元'
 								}
 								$$.detailAutoFix(modal, result)
 							})
@@ -1723,7 +2126,7 @@ define([
 					}
 				}, 
 				{
-					width: 160,
+					width: 180,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
@@ -1736,6 +2139,10 @@ define([
 							text: '转让',
 							type: 'button',
 							class: 'item-transfer'
+						}, {
+							text: '纠偏',
+							type: 'button',
+							class: 'item-update'
 						}]
 						return util.table.formatter.generateButton(buttons)
 					},
@@ -1795,6 +2202,20 @@ define([
 								$$.detailAutoFix($('#trustTransferModal'), result)
 							})
 							$('#trustTransferModal').modal('show')
+						},
+						'click .item-update': function(e, val, row) {
+							http.post(config.api.duration.order.getTrustByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								json.result.holdAmount = json.result.holdAmount + '\t万元'
+								document.updateTrustVolumeForm.oid.value = json.result.oid
+								$$.detailAutoFix($('#updateTrustVolumeModal'), json.result)
+								$('#updateTrustVolumeModal').modal('show')
+							})
 						}
 					}
 				}]
@@ -1991,6 +2412,63 @@ define([
 				})
 			})
 
+			// 信托计划转入审核/预约/确认 - 通过按钮点击事件
+			$('#doTrustTransCheck').on('click', function() {
+				var form = document.trustTransCheckForm
+				form.state.value = '0'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForTrust
+						break
+					case 'ordering':
+						url = config.api.duration.order.appointmentForTrust
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForTrust
+						break
+				}
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#trustTransCheckModal').modal('hide')
+					}
+				})
+			})
+			
+			// 信托计划转入审核/预约/确认 - 不通过按钮点击事件
+			$('#doTrustTransUnCheck').on('click', function() {
+				var form = document.trustTransCheckForm
+				form.state.value = '-1'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForTrust
+						break
+					case 'ordering':
+						url = config.api.duration.order.appointmentForTrust
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForTrust
+						break
+				}
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#trustTransCheckModal').modal('hide')
+					}
+				})
+			})
+
 			// 本息兑付审核/预约/确认 - 通过按钮点击事件
 			$('#doIncomeCheck').on('click', function() {
 				var form = document.trustIncomeCheckForm
@@ -2148,6 +2626,48 @@ define([
 					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
 				}
 			})
+			
+			// 修改资产池偏离损益表单验证初始化
+			$('#updateAssetPoolProfitForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
+			
+			// 纠偏现金管理工具表单验证初始化
+			$('#updateFundVolumeForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
+			
+			// 纠偏信托标的表单验证初始化
+			$('#updateTrustVolumeForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
 
 			// 编辑账户按钮点击事件
 			$('#updateAccount').on('click', function() {
@@ -2167,10 +2687,64 @@ define([
 			$('#doUpdateAssetPoolCash').on('click', function() {
 				if (!$('#updateAssetPoolCashForm').validator('doSubmitCheck')) return
 				$('#updateAssetPoolCashForm').ajaxSubmit({
-					url: config.api.duration.order.editPoolForCash,
+					url: config.api.duration.assetPool.editPoolForCash,
 					success: function() {
 						pageInit(pageState, http, config)
 						$('#updateAssetPoolCashModal').modal('hide')
+					}
+				})
+			})
+			
+			// 编辑偏离损益按钮点击事件
+			$('#updateProfit').on('click', function() {
+				http.post(config.api.duration.assetPool.getById, {
+					data: {
+						oid: pageState.pid
+					},
+					contentType: 'form'
+				}, function(json) {
+					json.result.deviationValue = json.result.deviationValue + '\t万元'
+					document.updateAssetPoolProfitForm.oid.value = json.result.oid
+					$$.detailAutoFix($('#updateAssetPoolProfitModal'), json.result)
+					$('#updateAssetPoolProfitModal').modal('show')
+				})
+			})
+			// 编辑资产池偏离损益 - 确定按钮点击事件
+			$('#doUpdateAssetPoolProfit').on('click', function() {
+				if (!$('#updateAssetPoolProfitForm').validator('doSubmitCheck')) return
+				$('#updateAssetPoolProfitForm').ajaxSubmit({
+					url: config.api.duration.assetPool.updateDeviationValue,
+					success: function() {
+						pageInit(pageState, http, config)
+						$('#updateAssetPoolProfitModal').modal('hide')
+					}
+				})
+			})
+			
+			// 修改现金管理工具偏离损益 - 确定按钮点击事件
+			$('#doUpdateFundVolume').on('click', function() {
+				if (!$('#updateFundVolumeForm').validator('doSubmitCheck')) return
+				$('#updateFundVolumeForm').ajaxSubmit({
+					url: config.api.duration.order.updateFund,
+					success: function() {
+						$('#orderingToolTable').bootstrapTable('refresh')
+						$('#toolTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#updateFundVolumeModal').modal('hide')
+					}
+				})
+			})
+			
+			// 编辑资产池偏离损益 - 确定按钮点击事件
+			$('#doUpdateTrustVolume').on('click', function() {
+				if (!$('#updateTrustVolumeForm').validator('doSubmitCheck')) return
+				$('#updateTrustVolumeForm').ajaxSubmit({
+					url: config.api.duration.order.updateTrust,
+					success: function() {
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#updateTrustVolumeModal').modal('hide')
 					}
 				})
 			})
@@ -2330,6 +2904,7 @@ function pageInit (pageState, http, config) {
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
+		$('#detailPoolProfit').html(detail.deviationValue)
 			// 饼图生成
 		var pieChart = echarts.init(document.getElementById('pieChart'))
 		pieChart.setOption(getPieOptions(config, detail))

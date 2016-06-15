@@ -13,11 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.guohuai.asset.manage.boot.acct.books.document.WarehouseDocumentService;
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.cashtool.pool.CashToolRevenue;
 import com.guohuai.asset.manage.boot.cashtool.pool.CashtoolPoolService;
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalEntity;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundAuditEntity;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
@@ -57,6 +58,7 @@ public class OrderService {
 	private static final String REDEEM 		= "redeem";
 	private static final String INCOME 		= "income";
 	private static final String TRANSFER	= "transfer";
+	private static final String TRANS		= "trans";
 	
 	private static final String APPLY 		= "apply";
 	private static final String AUDIT 		= "audit";
@@ -89,8 +91,8 @@ public class OrderService {
 	private CashtoolPoolService cashtoolPoolService;
 	@Autowired
 	private InvestmentPoolService investService;
-	@Autowired
-	private WarehouseDocumentService documentService;
+//	@Autowired
+//	private WarehouseDocumentService documentService;
 
 	/**
 	 * 货币基金（现金管理工具）申购
@@ -409,7 +411,7 @@ public class OrderService {
 	public void auditForTrust(TrustForm form, String uid) {
 		// 录入申购订单的审核信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-//		order.setAuditVolume(form.getAuditVolume());
+		order.setAuditVolume(form.getAuditVolume());
 		order.setAuditCash(form.getAuditCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(AUDIT11);
@@ -445,7 +447,7 @@ public class OrderService {
 	public void appointmentForTrust(TrustForm form, String uid) {
 		// 录入申购订单的资金预约信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-//		order.setReserveVolume(form.getReserveVolume());
+		order.setReserveVolume(form.getReserveVolume());
 		order.setReserveCash(form.getReserveCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(APPOINTMENT21);
@@ -482,7 +484,7 @@ public class OrderService {
 	public void orderConfirmForTrust(TrustForm form, String uid) {
 		// 录入申购订单的确认信息
 		TrustOrderEntity order = trustService.getTrustOrderByOid(form.getOid());
-//		order.setInvestVolume(form.getInvestVolume());
+		order.setInvestVolume(form.getInvestVolume());
 		order.setInvestCash(form.getInvestCash());
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(CONFIRM31);
@@ -551,7 +553,7 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getT_targetOid(), 
-				order.getOid(), TRUST, form.getApplyCash(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
+				order.getOid(), TRUST, form.getApplyCash(), BigDecimal.ZERO, TRANS, APPLY, uid, null);
 	}
 	
 	/**
@@ -732,7 +734,7 @@ public class OrderService {
 		BigDecimal capital = BigDecimal.ZERO;
 		BigDecimal account = BigDecimal.ZERO;
 		// 是否兑付本金
-		if (!BigDecimal.ZERO.equals(order.getCapital())) {
+		if (BigDecimal.ZERO.compareTo(order.getCapital()) < 0) {
 			capital = form.getAuditCapital();
 			account = order.getCapital();
 		} else {
@@ -742,8 +744,10 @@ public class OrderService {
 		}
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState()))
 			order.setState(AUDIT11);
-		else
+		else {
 			order.setState(AUDIT10);
+			form.setAuditCash(BigDecimal.ZERO);
+		}
 		order.setAuditor(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
 		
@@ -784,7 +788,7 @@ public class OrderService {
 		BigDecimal capital = BigDecimal.ZERO;
 		BigDecimal account = BigDecimal.ZERO;
 		// 是否兑付本金
-		if (!BigDecimal.ZERO.equals(order.getCapital())) {
+		if (BigDecimal.ZERO.compareTo(order.getCapital()) < 0) {
 			capital = form.getInvestCapital();
 			account = order.getAuditCapital() == null ? order.getCapital() : order.getAuditCapital();
 		} else {
@@ -795,17 +799,18 @@ public class OrderService {
 		if (TrustAuditEntity.SUCCESSED.equals(form.getState())) {
 			order.setState(CONFIRM31);
 			
-			if (!BigDecimal.ZERO.equals(order.getCapital())) {
+			if (BigDecimal.ZERO.compareTo(order.getCapital()) < 0) {
 				trustEntity.setInvestVolume(BigDecimal.ZERO);
 				trustEntity.setState(TrustEntity.INVESTEND);
 			}
 			trustEntity.setTotalProfit(form.getInvestVolume());
 			trustService.save(trustEntity);
 			
-			documentService.targetRedemption(order.getTrustEntity().getAssetPoolOid(), order.getOid(), 
-					trustEntity.getInvestVolume(), order.getCapital(), order.getInvestIncome(), order.getIncome());
+//			documentService.targetRedemption(order.getTrustEntity().getAssetPoolOid(), order.getOid(), 
+//					trustEntity.getInvestVolume(), order.getCapital(), order.getInvestIncome(), order.getIncome());
 		} else {
 			order.setState(CONFIRM30);
+			form.setInvestCash(BigDecimal.ZERO);
 		}
 		order.setConfirmer(uid);
 		order.setUpdateTime(DateUtil.getSqlCurrentDate());
@@ -935,10 +940,10 @@ public class OrderService {
 			if (order.getInvestVolume().compareTo(order.getInvestCash()) > 0) {
 				
 			} else {
-				documentService.targetPremiumsTransOut(trustEntity.getAssetPoolOid(), order.getOid(), 
-						order.getInvestVolume(), 
-						order.getInvestVolume().add(trustEntity.getTotalProfit()).setScale(4, BigDecimal.ROUND_HALF_UP), 
-						order.getInvestCash());
+//				documentService.targetPremiumsTransOut(trustEntity.getAssetPoolOid(), order.getOid(), 
+//						order.getInvestVolume(), 
+//						order.getInvestVolume().add(trustEntity.getTotalProfit()).setScale(4, BigDecimal.ROUND_HALF_UP), 
+//						order.getInvestCash());
 			}
 		} else {
 			order.setState(CONFIRM30);
@@ -1251,7 +1256,7 @@ public class OrderService {
 	@Transactional
 	public TrustForm getTrustOrderByOid(String oid, String type) {
 		TrustForm form = new TrustForm();
-		if ("申购".equals(type)) {
+		if (CapitalEntity.APPLY.equals(type) || CapitalEntity.TRANS.equals(type)) {
 			TrustOrderEntity entity = trustService.getTrustOrderByOid(oid);
 			if (null != entity) {
 				try {
@@ -1278,7 +1283,7 @@ public class OrderService {
 					e.printStackTrace();
 				}
 			}
-		} else if ("本息兑付".equals(type)) {
+		} else if (CapitalEntity.INCOME.equals(type)) {
 			TrustIncomeEntity entity = trustService.getTrustIncomeOrderByOid(oid);
 			if (null != entity) {
 				try {
@@ -1385,7 +1390,10 @@ public class OrderService {
 					form.setSubjectRating(target.getSubjectRating());
 					form.setRaiseScope(target.getRaiseScope());
 					form.setAccrualType(target.getAccrualType());
-					form.setType("申购");
+					if (Investment.INVESTMENT_LIFESTATUS_STAND_UP.equals(target.getLifeState()))
+						form.setType(CapitalEntity.TRANS);
+					else
+						form.setType(CapitalEntity.APPLY);
 
 					formList.add(form);
 				}
@@ -1417,7 +1425,7 @@ public class OrderService {
 					form.setInvestDate(entity.getIncomeDate());
 					form.setApplyVolume(entity.getCapital());
 					form.setApplyCash(entity.getIncome());
-					form.setType("本息兑付");
+					form.setType(CapitalEntity.INCOME);
 					
 					formList.add(form);
 				}
@@ -1449,7 +1457,7 @@ public class OrderService {
 					form.setInvestDate(entity.getTranDate());
 					form.setApplyVolume(entity.getTranVolume());
 					form.setApplyCash(entity.getTranCash());
-					form.setType("转让");
+					form.setType(CapitalEntity.TRANSFER);
 					
 					formList.add(form);
 				}
@@ -1524,5 +1532,41 @@ public class OrderService {
 		} else {
 			trustService.updateOrder(oid, operation);
 		}
+	}
+	
+	/**
+	 * 纠偏现金管理工具的持有额度
+	 * @param form
+	 */
+	@Transactional
+	public void updateFund(FundForm form) {
+		FundEntity entity = fundService.getFundByOid(form.getOid());
+		
+		// 更新资产池估值
+		AssetPoolEntity pool = assetPoolService.getByOid(entity.getAssetPoolOid());
+		BigDecimal value = form.getAmount().subtract(entity.getAmount()).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nscale = pool.getScale().add(value).setScale(4, BigDecimal.ROUND_HALF_UP);
+		assetPoolService.calcAssetPoolRate(pool, nscale, value, BigDecimal.ZERO);
+		
+		entity.setAmount(form.getAmount());
+		fundService.save(entity);
+	}
+	
+	/**
+	 * 纠偏投资标的的持有额度
+	 * @param form
+	 */
+	@Transactional
+	public void updateTrust(TrustForm form) {
+		TrustEntity entity = trustService.getTrustByOid(form.getOid());
+		
+		// 更新资产池估值
+		AssetPoolEntity pool = assetPoolService.getByOid(entity.getAssetPoolOid());
+		BigDecimal value = form.getInvestVolume().subtract(entity.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nscale = pool.getScale().add(value).setScale(4, BigDecimal.ROUND_HALF_UP);
+		assetPoolService.calcAssetPoolRate(pool, nscale, BigDecimal.ZERO, value);
+		
+		entity.setInvestVolume(form.getHoldAmount());
+		trustService.save(entity);
 	}
 }
