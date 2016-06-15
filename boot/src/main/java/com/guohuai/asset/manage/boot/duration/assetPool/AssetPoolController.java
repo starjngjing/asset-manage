@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.guohuai.asset.manage.boot.duration.capital.CapitalForm;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.Response;
@@ -96,16 +95,18 @@ public class AssetPoolController extends BaseController {
 				}
 				if (null != state && !"".equals(state)) {
 					list.add(cb.equal(root.get("state").as(String.class), AssetPoolEntity.PoolState.get(state)));
+				} else {
+					list.add(cb.notEqual(root.get("state").as(String.class), AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_04")));
 				}
 				Predicate[] p = new Predicate[list.size()];
 				return cb.and(list.toArray(p));
 			}
 		};
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
-		List<AssetPoolForm> list = assetPoolService.getAllList(spec, pageable);
+		Object[] obj = assetPoolService.getAllList(spec, pageable);
 		Response r = new Response();
-		r.with("rows", list);
-		r.with("total", list.size());
+		r.with("rows", obj[1]);
+		r.with("total", obj[0]);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 
@@ -201,16 +202,16 @@ public class AssetPoolController extends BaseController {
 		}
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		pid = assetPoolService.getPid(pid);
-		List<CapitalForm> list = capitalService.getCapitalListByPid(pid, pageable);
+		Object[] obj = capitalService.getCapitalListByPid(pid, pageable);
 		Response r = new Response();
-		r.with("rows", list);
-		r.with("total", list.size());
+		r.with("rows", obj[1]);
+		r.with("total", obj[0]);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/calcCapital", method = { RequestMethod.GET })
-	public @ResponseBody ResponseEntity<Response> calcCapital() {
-		assetPoolService.calcPoolProfit();
+	@RequestMapping(value = "/userPoolProfit", method = { RequestMethod.GET })
+	public @ResponseBody ResponseEntity<Response> calcCapital(@RequestParam String type) {
+		assetPoolService.userPoolProfit(type);
 		Response r = new Response();
 		r.with("result", "SUCCESS");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

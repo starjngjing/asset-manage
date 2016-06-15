@@ -22,6 +22,7 @@ define([
 					assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
 				})
 				$(select).html(assetPoolOptions)
+				pageInit(pageState, http, config)
 			})
 			// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
@@ -32,7 +33,6 @@ define([
 				$('#orderingTrustTable').bootstrapTable('refresh')
 				$('#trustTable').bootstrapTable('refresh')
 			})
-			pageInit(pageState, http, config)
 
 			// 资产申购类型radio change事件
 			$(document.buyAssetForm.buyType).on('ifChecked', function() {
@@ -47,7 +47,7 @@ define([
 					$('#buyAssetShowTrust').show()
 					$('#buyAssetShowTrans').hide()
 					$('#profitType').show().find(':input').attr('disabled', false)
-					$('#transVolumeDiv').show().find(':input').attr('disabled', false)
+					$('#transVolumeDiv').hide().find(':input').attr('disabled', true)
 				} else {
 					$('#buyAssetShowFund').hide()
 					$('#buyAssetShowTrust').hide()
@@ -304,6 +304,12 @@ define([
 									}
 									if (result.reserveCash) {
 										result.reserveCash = result.reserveCash + '\t万元'
+									}
+									if (result.investVolume) {
+										result.investVolume = result.investVolume + '\t万份'
+									}
+									if (result.investCash) {
+										result.investCash = result.investCash + '\t万元'
 									}
 									$$.detailAutoFix($('#trustDetailModal'), json.result)
 									$('#trustDetailModal').modal('show')
@@ -779,7 +785,11 @@ define([
 							text: '赎回',
 							type: 'button',
 							class: 'item-redeem'
-						}]
+						}/*, {
+							text: '纠偏',
+							type: 'button',
+							class: 'item-update'
+						}*/]
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
@@ -797,6 +807,19 @@ define([
 							$('#purchaseModal').modal('show')
 						},
 						'click .item-redeem': function(e, val, row) {
+							http.post(config.api.duration.order.getFundByOid, {
+								data: {
+									oid: row.oid,
+									type: row.type
+								},
+								contentType: 'form'
+							}, function(json) {
+								json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
+								$$.formAutoFix($('#redeemForm'), json.result)
+							})
+							$('#redeemModal').modal('show')
+						},
+						'click .item-update': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
 									oid: row.oid,
@@ -974,6 +997,12 @@ define([
 					field: 'type'
 				}, 
 				{
+					field: 'profitType',
+					formatter: function(val) {
+						return 'amortized_cost' === val ? '摊余成本法' : '账面价值法'
+					}
+				}, 
+				{
 					field: 'state',
 					formatter: function(val) {
 						switch (val) {
@@ -1078,7 +1107,7 @@ define([
 								form.type.value = row.type
 								form.opType.value = 'audit'
 								form.assetPoolOid.value = pageState.pid
-								var formGroups = $(form).find('.row')
+								var formGroups = $(form).find('.form-group')
 								formGroups.each(function(index, item) {
 									if (!index) {
 										$(item).css({
@@ -1182,7 +1211,7 @@ define([
 							modal.modal('show')
 						},
 						'click .item-transfer-audit': function(e, val, row) {
-							var modal = $('#trustCheckModal')
+							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
 									oid: row.oid,
@@ -1191,7 +1220,7 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								var form = document.trustCheckForm
+								var form = document.transCheckForm
 								form.oid.value = result.oid
 								form.type.value = row.type
 								form.opType.value = 'audit'
@@ -1210,7 +1239,7 @@ define([
 								})
 								$(form).validator('destroy')
 								util.form.validator.init($(form))
-								modal.find('.labelForOrdering').css({
+								modal.find('.labelForAudit').css({
 									display: 'none'
 								})
 								modal.find('.labelForAccept').css({
@@ -1256,7 +1285,7 @@ define([
 								form.type.value = row.type
 								form.opType.value = 'ordering'
 								form.assetPoolOid.value = pageState.pid
-								var formGroups = $(form).find('.row')
+								var formGroups = $(form).find('.form-group')
 								formGroups.each(function(index, item) {
 									if (index === 1) {
 										$(item).css({
@@ -1270,8 +1299,11 @@ define([
 								})
 								$(form).validator('destroy')
 								util.form.validator.init($(form))
-								modal.find('.labelForOrdering').css({
+								modal.find('.labelForAudit').css({
 									display: 'block'
+								})
+								modal.find('.labelForOrdering').css({
+									display: 'none'
 								})
 								modal.find('.labelForAccept').css({
 									display: 'none'
@@ -1322,7 +1354,7 @@ define([
 								form.type.value = row.type
 								form.opType.value = 'accept'
 								form.assetPoolOid.value = pageState.pid
-								var formGroups = $(form).find('.row')
+								var formGroups = $(form).find('.form-group')
 								formGroups.each(function(index, item) {
 									if (index === 2) {
 										$(item).css({
@@ -1336,11 +1368,14 @@ define([
 								})
 								$(form).validator('destroy')
 								util.form.validator.init($(form))
+								modal.find('.labelForAudit').css({
+									display: 'block'
+								})
 								modal.find('.labelForOrdering').css({
 									display: 'block'
 								})
 								modal.find('.labelForAccept').css({
-									display: 'block'
+									display: 'none'
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
@@ -1447,7 +1482,7 @@ define([
 							modal.modal('show')
 						},
 						'click .item-transfer-accpet': function(e, val, row) {
-							var modal = $('#trustCheckModal')
+							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
 									oid: row.oid,
@@ -1456,14 +1491,14 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								var form = document.trustCheckForm
+								var form = document.transCheckForm
 								form.oid.value = result.oid
 								form.type.value = row.type
 								form.opType.value = 'accept'
 								form.assetPoolOid.value = pageState.pid
 								var formGroups = $(form).find('.row')
 								formGroups.each(function(index, item) {
-									if (index === 2) {
+									if (index === 1) {
 										$(item).css({
 											display: 'block'
 										}).find('input').attr('disabled', false)
@@ -1475,11 +1510,11 @@ define([
 								})
 								$(form).validator('destroy')
 								util.form.validator.init($(form))
-								modal.find('.labelForOrdering').css({
+								modal.find('.labelForAudit').css({
 									display: 'block'
 								})
 								modal.find('.labelForAccept').css({
-									display: 'block'
+									display: 'none'
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
@@ -1657,6 +1692,12 @@ define([
 				}, 
 				{
 					field: 'subjectRating'
+				}, 
+				{
+					field: 'profitType',
+					formatter: function(val) {
+						return 'amortized_cost' === val ? '摊余成本法' : '账面价值法'
+					}
 				}, 
 				{
 					field: 'state',
@@ -2001,6 +2042,57 @@ define([
 				})
 			})
 
+			// 转让审核/预约/确认 - 通过按钮点击事件
+			$('#doTransCheck').on('click', function() {
+				var form = document.transCheckForm
+				form.state.value = '0'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForTransfer
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForTransfer
+						break
+				}
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#transCheckModal').modal('hide')
+					}
+				})
+			})
+			
+			// 转让审核/预约/确认 - 不通过按钮点击事件
+			$('#doTransUnCheck').on('click', function() {
+				var form = document.transCheckForm
+				form.state.value = '-1'
+				var url = ''
+				switch (form.opType.value) {
+					case 'audit':
+						url = config.api.duration.order.auditForTransfer
+						break
+					default:
+						url = config.api.duration.order.orderConfirmForTransfer
+						break
+				}
+				$(form).ajaxSubmit({
+					url: url,
+					success: function() {
+						util.form.reset($(form))
+						$('#orderingTrustTable').bootstrapTable('refresh')
+						$('#trustTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
+						$('#transCheckModal').modal('hide')
+					}
+				})
+			})
+
 			// 信托计划 - 转让按钮点击事件
 			$('#doTrustTransfer').on('click', function() {
 				if (!$('#trustTransferForm').validator('doSubmitCheck')) return
@@ -2042,6 +2134,20 @@ define([
 					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
 				}
 			})
+			
+			// 修改资产池现金表单验证初始化
+			$('#updateAssetPoolCashForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
 
 			// 编辑账户按钮点击事件
 			$('#updateAccount').on('click', function() {
@@ -2051,19 +2157,20 @@ define([
 					},
 					contentType: 'form'
 				}, function(json) {
-					$$.formAutoFix($('#updateAssetPoolForm'), json.result)
-					$(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
-					$('#updateAssetPoolModal').modal('show')
+					json.result.cashPosition = json.result.cashPosition + '\t万元'
+					document.updateAssetPoolCashForm.oid.value = json.result.oid
+					$$.detailAutoFix($('#updateAssetPoolCashModal'), json.result)
+					$('#updateAssetPoolCashModal').modal('show')
 				})
 			})
-			// 编辑资产池 - 确定按钮点击事件
-			$('#doUpdateAssetPool').on('click', function() {
-				if (!$('#updateAssetPoolForm').validator('doSubmitCheck')) return
-				$('#updateAssetPoolForm').ajaxSubmit({
+			// 编辑资产池现金 - 确定按钮点击事件
+			$('#doUpdateAssetPoolCash').on('click', function() {
+				if (!$('#updateAssetPoolCashForm').validator('doSubmitCheck')) return
+				$('#updateAssetPoolCashForm').ajaxSubmit({
 					url: config.api.duration.order.editPoolForCash,
 					success: function() {
 						pageInit(pageState, http, config)
-						$('#updateAssetPoolModal').modal('hide')
+						$('#updateAssetPoolCashModal').modal('hide')
 					}
 				})
 			})
@@ -2252,7 +2359,6 @@ function validredeemamount($el) {
 
 // 转让额度验证
 function validtransamount($el) {
-	console.log(111)
 	var tranVolume = $el.val()
 	return parseFloat(tranvolume) > 0 && parseFloat(tranvolume) <= parseFloat(holdAmount)
 }

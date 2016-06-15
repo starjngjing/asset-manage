@@ -23,6 +23,8 @@ import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.I
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalc;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalcService;
+import com.guohuai.asset.manage.boot.duration.capital.calc.ScheduleLog;
+import com.guohuai.asset.manage.boot.duration.capital.calc.ScheduleLogService;
 import com.guohuai.asset.manage.boot.duration.capital.calc.error.ErrorCalc;
 import com.guohuai.asset.manage.boot.duration.capital.calc.error.ErrorCalcService;
 import com.guohuai.asset.manage.boot.duration.capital.calc.fund.FundCalc;
@@ -62,6 +64,8 @@ public class AssetPoolService {
 	private AssetPoolCalcService poolCalcService;
 	@Autowired
 	private ErrorCalcService errorCalcService;
+	@Autowired
+	private ScheduleLogService logService;
 	
 	@Autowired
 	private IncomeDocumentService incomeService;
@@ -122,15 +126,12 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public List<AssetPoolForm> getAllList(Specification<AssetPoolEntity> spec, Pageable pageable) {
+	public Object[] getAllList(Specification<AssetPoolEntity> spec, Pageable pageable) {
 		List<AssetPoolForm> formList = Lists.newArrayList();
 		Page<AssetPoolEntity> entityList = assetPoolDao.findAll(spec, pageable);
 		AssetPoolForm form = null;
 		if (null != entityList.getContent() && entityList.getContent().size() > 0) {
 			for (AssetPoolEntity entity : entityList.getContent()) {
-				if (AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_04").equals(entity.getState())) {
-					continue;
-				}
 				form = new AssetPoolForm();
 				try {
 					BeanUtils.copyProperties(form, entity);
@@ -144,8 +145,11 @@ public class AssetPoolService {
 				formList.add(form);
 			}
 		}
+		Object[] obj = new Object[2];
+		obj[0] = entityList.getTotalElements();
+		obj[1] = formList;
 		
-		return formList;
+		return obj;
 	}
 	
 	/**
@@ -267,32 +271,21 @@ public class AssetPoolService {
 		// 原规模
 		BigDecimal scale = entity.getScale();
 		// 当前规模
-		BigDecimal nscale = entity.getScale().subtract(entity.getCashPosition()
-				.add(form.getCashPosition())).setScale(4, BigDecimal.ROUND_HALF_UP);
+		BigDecimal nscale = scale.subtract(entity.getCashPosition())
+				.add(form.getCashPosition()).setScale(4, BigDecimal.ROUND_HALF_UP);
 		BigDecimal cashRate = form.getCashPosition().divide(nscale)
 				.multiply(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
 		BigDecimal cashtoolRate = entity.getCashtoolFactRate().multiply(scale)
 				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
 		BigDecimal targetRate = entity.getTargetFactRate().multiply(scale)
 				.divide(nscale).setScale(4, BigDecimal.ROUND_HALF_UP);
-		entity.setName(form.getName());
-		entity.setScale(form.getScale());
-		entity.setCashRate(form.getCashRate());
-		entity.setCashtoolRate(form.getCashtoolRate());
-		entity.setTargetRate(form.getTargetRate());
+		entity.setScale(nscale);
 		entity.setCashPosition(form.getCashPosition());
 		entity.setCashFactRate(cashRate);
 		entity.setCashtoolFactRate(cashtoolRate);
 		entity.setTargetFactRate(targetRate);
-		entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02"));
 		entity.setOperator(uid);
 		entity.setUpdateTime(DateUtil.getSqlCurrentDate());
-		
-		assetPoolDao.save(entity);
-		
-		for (String s : form.getScopes()) {
-			scopeService.save(entity, s);
-		}
 		
 		assetPoolDao.save(entity);
 	}
@@ -330,12 +323,31 @@ public class AssetPoolService {
 		
 		return formList;
 	}
+	
+	/**
+	 * 定时初始化资产池的每日收益计算和收益分配的状态
+	 * @return
+	 */
+	@Scheduled(cron = "0 0 0 * * ?")
+	@Transactional
+	public void updateState() {
+		// 所有资产池列表
+		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
+		if (null != poolList && !poolList.isEmpty()) {
+			for (AssetPoolEntity entity : poolList) {
+				entity.setScheduleState(AssetPoolEntity.schedule_wjs);
+				entity.setIncomeState(AssetPoolEntity.income_wfp);
+				entity.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+			}
+			assetPoolDao.save(poolList);
+		}
+	}
 
 	/**
 	 * 计算资产池当日的确认收益
 	 * @return
 	 */
-	@Scheduled(cron = "0 30 0 * * ?")
+	@Scheduled(cron = "0 0/30 9 * * ?")
 	@Transactional
 	public void calcPoolProfit() {
 		// 所有资产池列表
@@ -344,11 +356,59 @@ public class AssetPoolService {
 		if (null != poolList && !poolList.isEmpty()) {
 			// 日期
 			Date sqlDate = new Date(System.currentTimeMillis());
-			for (AssetPoolEntity entity : poolList) {
-				saveList.add(this.calcPoolProfit(entity, sqlDate, AssetPoolCalc.EventType.SCHEDULE.toString()));
-			}
+			// 统计一共有多少个标的数据
+			int jobCount = 0;
+			// 统计一共执行了多少个标的数据
+			int successCount = 0;
+			ScheduleLog log = new ScheduleLog();
+			log.setOid(StringUtil.uuid());
+			log.setBaseDate(sqlDate);
+			log.setStartTime(new Timestamp(System.currentTimeMillis()));
 			
+			for (AssetPoolEntity entity : poolList) {
+				saveList.add(this.calcPoolProfit(entity, sqlDate, AssetPoolCalc.EventType.SCHEDULE.toString(),
+						jobCount, successCount));
+			}
 			assetPoolDao.save(saveList);
+			
+			log.setJobCount(jobCount);
+			log.setSuccessCount(successCount);
+			log.setEndTime(new Timestamp(System.currentTimeMillis()));
+			logService.save(log);
+		}
+	}
+
+	/**
+	 * 计算资产池当日的确认收益--手动触发
+	 * @return
+	 */
+	@Transactional
+	public void userPoolProfit(String type) {
+		// 所有资产池列表
+		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
+		List<AssetPoolEntity> saveList = Lists.newArrayList();
+		if (null != poolList && !poolList.isEmpty()) {
+			// 日期
+			Date sqlDate = new Date(System.currentTimeMillis());
+			// 统计一共有多少个标的数据
+			int jobCount = 0;
+			// 统计一共执行了多少个标的数据
+			int successCount = 0;
+			ScheduleLog log = new ScheduleLog();
+			log.setOid(StringUtil.uuid());
+			log.setBaseDate(sqlDate);
+			log.setStartTime(new Timestamp(System.currentTimeMillis()));
+			
+			for (AssetPoolEntity entity : poolList) {
+				saveList.add(this.calcPoolProfit(entity, sqlDate, type,
+						jobCount, successCount));
+			}
+			assetPoolDao.save(saveList);
+			
+			log.setJobCount(jobCount);
+			log.setSuccessCount(successCount);
+			log.setEndTime(new Timestamp(System.currentTimeMillis()));
+			logService.save(log);
 		}
 	}
 	
@@ -361,7 +421,8 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool, Date baseDate, String type) {
+	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool, Date baseDate, 
+			String type, int jobCount, int successCount) {
 		// 总收益
 		BigDecimal totalProfit = BigDecimal.ZERO;
 		// 会计分录
@@ -388,6 +449,7 @@ public class AssetPoolService {
 			// 持仓的现金管理工具
 			List<FundEntity> fundList = fundService.findFundListByPid(assetPool.getOid());
 			if (null != fundList && !fundList.isEmpty()) {
+				jobCount += fundList.size();
 				for (FundEntity entity : fundList) {
 					if (null == entity.getCashTool().getDailyProfit()) {
 						errorCalc = new ErrorCalc();
@@ -408,6 +470,7 @@ public class AssetPoolService {
 			// 持仓的货基标的
 			List<TrustEntity> trustList = trustService.findTargetListByPid(assetPool.getOid());
 			if (null != trustList && !trustList.isEmpty()) {
+				jobCount += trustList.size();
 				for (TrustEntity entity : trustList) {
 					// 判断是否成立
 					if ("STAND_UP".equals(entity.getTarget().getLifeState())) {
@@ -455,9 +518,13 @@ public class AssetPoolService {
 					}
 				}
 			}
+			if (errorList.size() > 0) {
+				errorCalcService.save(errorList);
+			}
 			
 			if (type.equals(AssetPoolCalc.EventType.SCHEDULE.toString())) {
 				if (errorList.size() > 0) {
+					assetPool.setScheduleState(AssetPoolEntity.schedule_wjs);
 					throw new RuntimeException("=================定时任务未执行，待数据补录==============="); 
 				}
 			} else if (type.equals(AssetPoolCalc.EventType.USER_CALC.toString())) {
@@ -479,9 +546,27 @@ public class AssetPoolService {
 				fundCalcService.save(fundCalcList);
 				trustCalcService.save(trustCalcList);
 				
+				successCount = fundCalcList.size() + trustCalcList.size();
+				
 				assetPool.setConfirmProfit(totalProfit);
 				assetPool.setFactProfit(totalProfit);
+				assetPool.setScheduleState(AssetPoolEntity.schedule_bfjs);
 				assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+			} else {
+				if (errorList.size() > 0) {
+					AssetPoolCalc calc = new AssetPoolCalc();
+					calc.setOid(StringUtil.uuid());
+					calc.setAssetPool(assetPool);
+					calc.setBaseDate(baseDate);
+					calc.setEventType(AssetPoolCalc.EventType.USER_NONE);
+					assetPool.setScheduleState(AssetPoolEntity.schedule_drbjs);
+					assetPool.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+					poolCalcService.saveOne(calc);
+					
+					successCount = 1;
+					
+					throw new RuntimeException("=================定时任务默认录入一条初始化数据==============="); 
+				}
 			}
 			
 			incomeService.incomeConfirm(assetPool.getOid(), incomeList);
