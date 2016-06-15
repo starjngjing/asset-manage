@@ -335,6 +335,8 @@ define([
 			});
 
 			$('#addFormAddOption').on('click', function() {
+				var x = $('#addFormOptions').children(); // 指标项配置
+				if(x.length>=4){alert('真的不能再多了！！！');return false;}
 				var type = document.addForm.indicateDataType.value;
 				var unit = document.addForm.indicateDataUnit.value;
 				if (createOptions[type]) {
@@ -348,6 +350,8 @@ define([
 			});
 
 			$('#updateFormAddOption').on('click', function() {
+				var x = $('#updateFormOptions').children(); // 指标项配置
+				if(x.length>=4){alert('真的不能再多了！！！');return false;}
 				var type = document.updateForm.indicateDataType.value;
 				var unit = document.updateForm.indicateDataUnit.value;
 				if (createOptions[type]) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,7 +30,7 @@ public class RiskWarningOptionsForm {
 	@NotBlank
 	private String cateOid;
 	private String cateTitle;
-	
+
 	@NotNull
 	@NotEmpty
 	@NotBlank
@@ -37,13 +38,14 @@ public class RiskWarningOptionsForm {
 	private String indicateTitle;
 	private String indicateDataType;
 	private String indicateDataUnit;
-	
+
 	private String warningOid;
 	@NotNull
 	@NotEmpty
 	@NotBlank
 	private String warningTitle;
 	@NotNull
+	@Size(max = 10)
 	private List<Option> options;
 
 	@Data
@@ -59,14 +61,14 @@ public class RiskWarningOptionsForm {
 
 	}
 
-	public RiskWarningOptionsForm(List<RiskWarningOptions> list){
+	public RiskWarningOptionsForm(List<RiskWarningOptions> list) {
 		int size = null == list ? 0 : list.size();
 		if (size == 0)
-			return ;
+			return;
 		RiskWarning warning = list.get(0).getWarning();
 		RiskIndicate indicate = warning.getIndicate();
 		RiskCate cate = indicate.getCate();
-		
+
 		this.cateOid = cate.getOid();
 		this.cateTitle = cate.getTitle();
 
@@ -77,9 +79,9 @@ public class RiskWarningOptionsForm {
 
 		this.warningOid = warning.getOid();
 		this.warningTitle = warning.getTitle();
-		
-//		this.oid = options.getOid();
-		
+
+		// this.oid = options.getOid();
+
 		List<Option> options = new ArrayList<>(size);
 		for (RiskWarningOptions riskWarningOptions : list) {
 			Option op = new Option();

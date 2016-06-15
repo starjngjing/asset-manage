@@ -162,6 +162,7 @@ define([
 											height: 'toggle',
 											opacity: 'toggle'
 										}, "slow");
+										$("#updateFormCateTitle").show().find(':input').attr('disabled', false);
 									}
 
 									if (form.cateOid.value != '' && $('#updateFormCateTitle').css('display') == 'block') {
@@ -169,8 +170,10 @@ define([
 											height: 'toggle',
 											opacity: 'toggle'
 										}, "slow");
+										$("#updateFormCateTitle").show().find(':input').attr('disabled', 'disabled');
 									}
-
+									$('#addForm').validator('destroy'); // 先销毁验证规则
+									util.form.validator.init($('#addForm')); // 然后添加验证规则
 								});
 								
 								$(cateType).val(row.cateType).change();
@@ -293,6 +296,7 @@ define([
 								height: 'toggle',
 								opacity: 'toggle'
 							}, "slow");
+							$("#addFormCateTitle").show().find(':input').attr('disabled', false);
 						}
 
 						if (form.cateOid.value != '' && $('#addFormCateTitle').css('display') == 'block') {
@@ -300,8 +304,10 @@ define([
 								height: 'toggle',
 								opacity: 'toggle'
 							}, "slow");
+							$("#addFormCateTitle").show().find(':input').attr('disabled', 'disabled');
 						}
-
+						$('#addForm').validator('destroy'); // 先销毁验证规则
+						util.form.validator.init($('#addForm')); // 然后添加验证规则
 					});
 
 					$(cateType).change();

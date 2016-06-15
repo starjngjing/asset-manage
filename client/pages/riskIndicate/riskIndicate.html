@@ -96,7 +96,8 @@
 					</div>
 					<div id="addFormCateTitle" class="form-group" style="display: none;">
 						<label>指标分类名称</label>
-						<input name="cateTitle" type="text" class="form-control input-sm" placeholder="指标分类名称">
+						<input name="cateTitle" type="text" class="form-control input-sm" placeholder="指标分类名称" data-remote-error="指标分类已经存在" data-remote="/ams/system/ccr/cate/validateTitle">
+						<div class="help-block with-errors text-red"></div>
 					</div>
 					<div class="form-group">
 						<label>指标项名称</label>
