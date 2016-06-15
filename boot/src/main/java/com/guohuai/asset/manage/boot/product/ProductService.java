@@ -34,6 +34,9 @@ import com.guohuai.asset.manage.boot.file.FileService;
 import com.guohuai.asset.manage.boot.file.SaveFileForm;
 import com.guohuai.asset.manage.boot.product.productChannel.ProductChannel;
 import com.guohuai.asset.manage.boot.product.productChannel.ProductChannelService;
+import com.guohuai.asset.manage.boot.product.reward.ProductIncomeReward;
+import com.guohuai.asset.manage.boot.product.reward.ProductIncomeRewardService;
+import com.guohuai.asset.manage.boot.product.reward.ProductRewardResp;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -61,6 +64,8 @@ public class ProductService {
 	private AdminSdk adminSdk;
 	@Autowired
 	private AssetPoolDao assetPoolDao;
+	@Autowired
+	private ProductIncomeRewardService productRewardService;
 
 	@Transactional
 	public BaseResp savePeriodic(SavePeriodicProductForm form, String operator) throws ParseException {
@@ -835,6 +840,16 @@ public class ProductService {
 			}
 			pr.setChannelNames(channelNames.substring(0, channelNames.length()-1));
 			pr.setChannelOids(channelOids);
+		}
+		
+		List<ProductIncomeReward> pirs = productRewardService.productRewardList(oid);
+		if(pirs!=null && pirs.size()>0) {
+			List<ProductRewardResp> rewards = new ArrayList<ProductRewardResp>();
+			for (ProductIncomeReward pir : pirs) {
+				ProductRewardResp pirRep = new ProductRewardResp(pir);
+				rewards.add(pirRep);
+			}
+			pr.setRewards(rewards);
 		}
 
 		return pr;

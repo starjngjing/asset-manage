@@ -217,6 +217,14 @@ define([
 									}
 									$('#productDetailFileTable').bootstrapTable('load', productDetailFiles)
 									
+									var productRewards = []
+									if(data.rewards!=null && data.rewards.length>0) {
+										for(var i=0;i<data.rewards.length;i++){
+											productRewards.push(data.rewards[i])
+										}
+									}
+									$('#productRewardTable').bootstrapTable('load', productRewards)
+									
 									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
 								} else {
@@ -344,6 +352,30 @@ define([
 		}
     	// 详情附件表格初始化
 		$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
+		
+		// 产品详情设置奖励收益表格配置
+		var productRewardTableConfig = {
+			columns: [
+				{
+					field: 'startDate',
+					align: 'center',
+					formatter: function (val, row, index) {
+						if(row.endDate!=null && row.endDate!="") {
+					        return row.startDate+"天"+"-"+row.endDate+"天";
+						} else {
+							return "大于等于"+row.startDate+"天";
+						}
+						
+					}
+				},
+				{
+					field: 'ratio',
+					align: 'center'
+				},
+			]
+		}
+		// 设置奖励收益表格初始化
+		$('#productRewardTable').bootstrapTable(productRewardTableConfig)
     	
     	// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     	function getQueryParams (val) {

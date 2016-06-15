@@ -167,13 +167,19 @@ define([
 		           	      		type: 'button',
 		           	      		class: 'item-invalid',
 		           	      		isRender: row.marketState != 'ONSHELF'
-		           	    	}//,
+		           	    	},
 //		           	    	{
 //		           	    		text: '选择渠道',
 //		           	    		type: 'button',
 //		           	    		class: 'item-channel',
 //		           	    		isRender: true
-//		           	    	}
+//		           	    	},
+		           	    	{
+		          	      		text: '奖励收益设置',
+		           	      		type: 'button',
+		           	      		class: 'item-reward',
+		           	      		isRender: true
+		           	    	}
 		           	    ];
 		           	  	return util.table.formatter.generateButton(buttons);
 		           	},
@@ -214,6 +220,14 @@ define([
 										}
 									}
 									$('#productDetailFileTable').bootstrapTable('load', productDetailFiles)
+									
+									var productRewards = []
+									if(data.rewards!=null && data.rewards.length>0) {
+										for(var i=0;i<data.rewards.length;i++){
+											productRewards.push(data.rewards[i])
+										}
+									}
+									$('#productRewardTable').bootstrapTable('load', productRewards)
 									
 									$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
 									$('#productDetailModal').modal('show');
@@ -334,10 +348,31 @@ define([
 								}
 							})
 						},
-						'click .item-channel': function(e, value, row) {
+//						'click .item-channel': function(e, value, row) {
+//							selectProductOid = row.oid
+//							http.post(
+//  							config.api.productChooseChannelList, 
+//  							{
+// 		   							data: {
+//  									productOid:row.oid
+//  								},
+//  								contentType: 'form'
+//  							},
+//  							function(result) {
+//									if (result.errorCode == 0) {
+//										var data = result.rows;
+//										$('#productChooseChannelTable').bootstrapTable('load', data)
+//										$('#channelModal').modal('show');
+//									} else {
+//										alert(查询失败);
+//									}
+//								}
+//  						)
+//						},
+						'click .item-reward': function(e, value, row) {
 							selectProductOid = row.oid
 							http.post(
-    							config.api.productChooseChannelList, 
+    							config.api.productRewardList, 
     							{
  		   							data: {
     									productOid:row.oid
@@ -347,8 +382,24 @@ define([
     							function(result) {
 									if (result.errorCode == 0) {
 										var data = result.rows;
-										$('#productChooseChannelTable').bootstrapTable('load', data)
-										$('#channelModal').modal('show');
+										
+										result.rows.forEach(function (item, index) {
+											productRewards.push(item)
+										})
+										if($("#productRewardName").children().length>0) {
+											$("#productRewardName").children().remove()
+										}
+										
+										var toh4 = generateHeader(row.name)
+										
+										function generateHeader (title) {
+    										return $('<h4 class=" modal-title">' + title + '--奖励收益列表' + '</h4>')
+										}
+										
+										$("#productRewardName").append(toh4)
+
+										$('#addProductRewardTable').bootstrapTable('load', data)
+										$('#productRewardModal').modal('show');
 									} else {
 										alert(查询失败);
 									}
@@ -360,9 +411,20 @@ define([
 			],
 			// 单选按钮选中一项时
 			onCheck: function (row) {
-				if (checkItems.indexOf(row) < 0){
+				var indexOf = -1
+				if(checkItems.length>0) {
+					checkItems.forEach(function (item, index) {
+						if(item.oid == row.oid) {
+							indexOf = index
+						}
+					})
+				}
+				if (indexOf < 0){
 					checkItems.push(row)
 				}
+//				if (checkItems.indexOf(row) < 0){
+//					checkItems.push(row)
+//				}
 			},
 			// 单选按钮取消一项时
 			onUncheck: function (row) {
@@ -385,6 +447,10 @@ define([
     	$$.searchInit($('#searchForm'), $('#productDesignTable'))
     	// 添加产品表单验证初始化
     	util.form.validator.init($('#addProductForm'))
+    	
+    	//奖励收益设置表单验证初始化
+    	util.form.validator.init($('#addProductRewardForm'))
+    	util.form.validator.init($('#saveProductRewardForm'))
     	
     	// 额外增信radio change事件
 		$(document.addProductForm.reveal).on('ifChecked', function() {
@@ -549,6 +615,31 @@ define([
 		}
     	// 详情附件表格初始化
 		$('#productDetailFileTable').bootstrapTable(productDetailFileTableConfig)
+		
+		
+		// 产品详情设置奖励收益表格配置
+		var productRewardTableConfig = {
+			columns: [
+				{
+					field: 'startDate',
+					align: 'center',
+					formatter: function (val, row, index) {
+						if(row.endDate!=null && row.endDate!="") {
+					        return row.startDate+"天"+"-"+row.endDate+"天";
+						} else {
+							return "大于等于"+row.startDate+"天";
+						}
+						
+					}
+				},
+				{
+					field: 'ratio',
+					align: 'center'
+				},
+			]
+		}
+		// 设置奖励收益表格初始化
+		$('#productRewardTable').bootstrapTable(productRewardTableConfig)
 
 		// 产品类型下拉菜单关联区域显隐
 		// input disabled 设置为 disabled的时候将不做验证
@@ -996,6 +1087,92 @@ define([
 			)
 				
 		})
+		
+		
+		// 设置奖励收益表格数据源
+		var productRewards = []
+
+		// 设置奖励收益表格配置
+		var addProductRewardTableConfig = {
+			columns: [
+				{
+					field: 'startDate',
+					align: 'center',
+					formatter: function (val, row, index) {
+						if(row.endDate!=null && row.endDate!="") {
+					        return row.startDate+"天"+"-"+row.endDate+"天";
+						} else {
+							return "大于等于"+row.startDate+"天";
+						}
+						
+					}
+				},
+				{
+					field: 'ratio',
+					align: 'center'
+				}, 
+				{
+					width: 100,
+					align: 'center',
+					formatter: function() {
+						var buttons = [{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-delete': function(e, value, row) {
+							var index = productRewards.indexOf(row)
+							productRewards.splice(index, 1)
+							$('#addProductRewardTable').bootstrapTable('load', productRewards)
+						}
+					}
+				}
+			]
+		}
+		// 设置奖励收益表格初始化
+		$('#addProductRewardTable').bootstrapTable(addProductRewardTableConfig)
+		
+        // 设置奖励收益“确定”按钮点击事件
+    	$('#addProductRewardSubmit').on('click', function () {
+    		if (!$('#addProductRewardForm').validator('doSubmitCheck')) return
+    		var object = new Object();
+    		object.oid = '';
+    		object.startDate = document.addProductRewardForm.startDate.value
+    		object.endDate = document.addProductRewardForm.endDate.value
+    		object.ratio = document.addProductRewardForm.ratio.value
+    		productRewards.push(object)
+    		
+    		$('#addProductRewardTable').bootstrapTable('load', productRewards)
+    		
+    		util.form.reset($('#addProductRewardForm'))
+  		})
+		
+		
+		// 设置奖励收益“保存”按钮点击事件
+    	$('#saveProductRewardSubmit').on('click', function () {
+			
+			document.saveProductRewardForm.productOid.value = selectProductOid
+			document.saveProductRewardForm.reward.value = JSON.stringify(productRewards)
+			
+			$('#saveProductRewardForm').ajaxSubmit({
+				url: config.api.saveProductReward,
+      			success: function (addResult) {
+        			$('#productRewardModal').modal('hide')
+        			util.form.reset($('#saveProductRewardForm'))
+        			$('#productDesignTable').bootstrapTable('refresh')
+      			}
+				
+			})
+			
+		})
+			
+
+		
+		
+		
 		
     }
   }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.guohuai.asset.manage.boot.file.FileResp;
+import com.guohuai.asset.manage.boot.product.reward.ProductRewardResp;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
@@ -261,6 +262,8 @@ public class ProductDetailResp extends BaseResp {
 	private String investMaxStr;//单笔投资最高份额
 	private String investAdditionalStr;//单笔投资追加份额
 	private String netUnitShareStr;//单位份额净值
+	
+	private List<ProductRewardResp> rewards;//奖励收益
 
 }
 

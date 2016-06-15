@@ -280,7 +280,9 @@ define(function() {
 			spvOrderInvalid: this.host + "/ams/spv/order/delete", //spv作废订单
 			spvOrderConfirm: this.host + "/ams/spv/order/confirm", //审核确定spv订单
 			spvOrderReemAmount: this.host + "/ams/spv/order/reemAmount", //赎回订单可赎回金额
-			saveSpvOrder: this.host + "/ams/spv/order/save" //新加spv订单
+			saveSpvOrder: this.host + "/ams/spv/order/save",  //新加spv订单
+			productRewardList: this.host + "/ams/product/reward/list",  //产品奖励收益设置查询列表
+			saveProductReward: this.host + "/ams/product/reward/save"  //保存产品奖励收益设置
 		},
 
 		/**
