@@ -89,13 +89,15 @@ define([
 					visible: true,
 					field: 'holdAmount',
 					formatter: function(val) {
-						return val;
+						var temp = val / 10000;
+						return temp.toFixed(0) + "万";
 					}
 				}, { // 申请中份额
 					visible: true,
 					field: 'applyAmount',
 					formatter: function(val) {
-						return val;
+						var temp = val / 10000;
+						return temp.toFixed(0) + "万";
 					}
 				}, { // 风险等级
 					align: 'center',
