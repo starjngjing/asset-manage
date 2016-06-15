@@ -262,9 +262,12 @@ define(function() {
 				getRoleAuths: this.host + '/operate/admin/ctrl/role/auth/auths', // 获取角色权限
 			},
 			user: {
-				search: this.host + '/operate/admin/search', // 用户查找
-				roles: this.host + '/operate/admin/role/roles', //当前用户角色
-				create: this.host + '/operate/admin/create', // 添加用户
+				search: this.host + '/operate/admin/search',	// 用户查找
+				roles: this.host + '/operate/admin/role/roles',	//当前用户角色
+				create: this.host + '/operate/admin/create',	// 添加用户
+				update: this.host + '/operate/admin/update',	// 修改用户
+				freeze: this.host + '/operate/admin/freeze',	// 冻结用户
+				unfreeze: this.host + '/operate/admin/unfreeze'	//解冻用户
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表

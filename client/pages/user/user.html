@@ -224,9 +224,6 @@
                    placeholder="请输入备注">
           </div>
           <input type="hidden" name="oid">
-          <input type="hidden" name="resources" value="USERREGIST">
-          <input type="hidden" name="system" value="GAH">
-          <input type="hidden" name="type" value="ADMIN">
         </form>
       </div>
       <!-- 模态窗底部 -->
@@ -284,13 +281,13 @@
         <dl class="dl-horizontal">
           <dt>角色:</dt>
           <dd>
-            <div data-detail-fetch="roles"></div>
+            <div data-detail-fetch="roleStr"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal">
           <dt>有效期:</dt>
           <dd>
-            <div data-detail-fetch="validTime"></div>
+            <div data-detail-fetch="validTimeStr"></div>
           </dd>
         </dl>
         <dl class="dl-horizontal">
@@ -309,7 +306,7 @@
   <div class="arrow"></div>
   <h3 class="popover-title">提示</h3>
   <div class="popover-content">
-    <p>确定删除此条数据？</p>
+    <p class="confirmTitle"></p>
     <div class="popover-btn clearfix">
       <div class="unit">
         <button class="btn btn-block btn-primary accept" data-dismiss="modal">确 定</button>

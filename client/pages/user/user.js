@@ -81,7 +81,8 @@ function (http, config, util, $$) {
 						formatter: function (val) {
 							switch (val) {
 								case 'VALID': return '<span class="text-green">正常</span>'
-								case 'EXPIRED': return '<span class="text-red">过期</span>'
+								case 'EXPIRED': return '<span class="text-yellow">过期</span>'
+								case 'FREEZE': return '<span class="text-red">冻结</span>'
 							}
 						}
 					},
@@ -107,24 +108,30 @@ function (http, config, util, $$) {
 									text: '修改',
 									class: 'item-update'
 								}, {
-									text: '删除',
-									class: 'item-delete'
+									text: '冻结',
+									class: 'item-freeze',
+									isRender: row.status !== 'EXPIRED' && row.status !== 'FREEZE'
+								}, {
+									text: '解冻',
+									class: 'item-unfreeze',
+									isRender: row.status === 'FREEZE'
 								}]
 							}]
 							return util.table.formatter.generateButton(buttons)
 						},
 						events: {
 							'click .item-detail': function (e, val, row) {
+								console.log(row)
 								http.post(config.api.user.roles, {
 									data: {
 										adminOid: row.oid
 									},
 									contentType: 'form'
 								}, function (result) {
-									row.roles = result.rows.map(function (item) {
+									row.roleStr = result.rows.map(function (item) {
 										return '<span style="margin-right: 10px;">' + item.name + '</span>'
 									}).join('')
-									row.validTime = row.validTime || '永久性'
+									row.validTimeStr = row.validTime || '永久性'
 									$$.detailAutoFix($('#detailModal'), row)
 								})
 								$('#detailModal').modal('show')
@@ -136,6 +143,11 @@ function (http, config, util, $$) {
 								util.form.validator.init($(form));
 
 								$$.formAutoFix($(form), row)
+								if (!row.validTime) {
+									$(form.validSign).val('').trigger('change')
+								} else {
+									$(form.validSign).val('1').trigger('change')
+								}
 								// 角色select2赋值
 								http.post(config.api.user.roles, {
 									data: {
@@ -150,18 +162,36 @@ function (http, config, util, $$) {
 								
 								$('#updateUserModal').modal('show')
 							},
-							'click .item-delete': function (e, val, row) {
+							'click .item-freeze': function (e, val, row) {
+								confirm.find('.confirmTitle').text('确定冻结此用户？')
 								$$.confirm({
-									container: $('#confirmModal'),
-									trigger: this,
+									container: confirm,
+									trigger: this.parentNode.parentNode.parentNode,
 									accept: function () {
-										http.post(config.api.role.delete, {
+										http.post(config.api.user.freeze, {
 											data: {
 												oid: row.oid
 											},
 											contentType: 'form'
 										}, function () {
-											$('#roleTable').bootstrapTable('refresh')
+											$('#userTable').bootstrapTable('refresh')
+										})
+									}
+								})
+							},
+							'click .item-unfreeze': function (e, val, row) {
+								confirm.find('.confirmTitle').text('确定解冻此用户？')
+								$$.confirm({
+									container: confirm,
+									trigger: this.parentNode.parentNode.parentNode,
+									accept: function () {
+										http.post(config.api.user.unfreeze, {
+											data: {
+												oid: row.oid
+											},
+											contentType: 'form'
+										}, function () {
+											$('#userTable').bootstrapTable('refresh')
 										})
 									}
 								})
@@ -175,7 +205,7 @@ function (http, config, util, $$) {
 			// 初始化权限表格搜索表单
 			$$.searchInit($('#searchForm'), $('#userTable'))
 
-			// 新建用户 - 有效期下拉菜单change事件
+			// 新建/修改用户 - 有效期下拉菜单change事件
 			$(document.addUserForm.validSign).on('change', function () {
 				var form = $('#addUserForm')
 				var nextCol = $(this).parent().parent().next('.col-sm-6')
@@ -191,6 +221,22 @@ function (http, config, util, $$) {
 					nextCol.hide()
 				}
 			}).change()
+
+			$(document.updateUserForm.validSign).on('change', function () {
+				var form = $('#updateUserForm')
+				var nextCol = $(this).parent().parent().next('.col-sm-6')
+				if (this.value) {
+					nextCol.find('input[name=validTime]').attr('disabled', false)
+					form.validator('destroy')
+					util.form.validator.init(form)
+					nextCol.show()
+				} else {
+					nextCol.find('input[name=validTime]').attr('disabled', 'disabled')
+					form.validator('destroy')
+					util.form.validator.init(form)
+					nextCol.hide()
+				}
+			})
 
 			// 新建用户按钮点击事件
 			$('#addUser').on('click', function () {
@@ -215,14 +261,9 @@ function (http, config, util, $$) {
 			$('#doUpdateUser').on('click', function () {
 				var form = document.updateUserForm
 				if (!$(form).validator('doSubmitCheck')) return
-				form.systemOid.value = 'GAH'
-				chosenAuths.forEach(function (item) {
-					$(form).append('<input name="auths" type="hidden" value="' + item.oid + '">')
-				})
 				$(form).ajaxSubmit({
 					url: config.api.user.update,
 					success: function () {
-						$(form).find('input[name=auths]').remove()
 						util.form.reset($(form))
 						$('#userTable').bootstrapTable('refresh')
 						$('#updateUserModal').modal('hide')
