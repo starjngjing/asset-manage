@@ -138,6 +138,13 @@ public class InvestmentPoolService {
 		String oid = form.getOid();
 		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
+		
+		// 投资标的募集期收益 百分比转小数
+		if (form.getCollectIncomeRate() != null) {
+			BigDecimal decimal = form.getCollectIncomeRate().divide(new BigDecimal(100));
+			it.setCollectIncomeRate(decimal);
+		}
+		
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
 		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_UP); // 重置为成立
 
@@ -160,6 +167,11 @@ public class InvestmentPoolService {
 		String oid = form.getOid();
 		Investment it = investmentService.getInvestment(oid);
 		BeanUtils.copyProperties(form, it);
+		// 投资标的募集期收益 百分比转小数
+		if (form.getCollectIncomeRate() != null) {
+			BigDecimal decimal = form.getCollectIncomeRate().divide(new BigDecimal(100));
+			it.setCollectIncomeRate(decimal);
+		}
 		it.setUpdateTime(DateUtil.getSqlCurrentDate());
 		it.setLifeState(Investment.INVESTMENT_LIFESTATUS_STAND_FAIL); // 重置为成立失败
 
@@ -174,26 +186,31 @@ public class InvestmentPoolService {
 	 * @author vania
 	 * @version 1.0
 	 * @see:
-	 * @param interestForm
+	 * @param form
 	 * @return Interest    返回类型
 	 */
-	public TargetIncome targetIncome(TargetIncomeForm interestForm) {
-		String targetOid = interestForm.getTargetOid();
+	public TargetIncome targetIncome(TargetIncomeForm form) {
+		String targetOid = form.getTargetOid();
 		if (StringUtils.isBlank(targetOid))
 			throw AMPException.getException("投资标的id不能为空");
 
 		TargetIncome interest = new TargetIncome();
-		BeanUtils.copyProperties(interestForm, interest);
+		BeanUtils.copyProperties(form, interest);
+		// 投资标的募集期收益 百分比转小数
+		if (form.getIncomeRate() != null) {
+			BigDecimal decimal = form.getIncomeRate().divide(new BigDecimal(100));
+			interest.setIncomeRate(decimal);
+		}
 
 		Investment investment = investmentService.getInvestment(targetOid);
 		interest.setInvestment(investment);
 
 		// 保存之前先删除标的某一期本兮兑付的数据
-		targetIncomeDao.deleteByTargetOidAndSeq(targetOid, interestForm.getSeq());
+		targetIncomeDao.deleteByTargetOidAndSeq(targetOid, form.getSeq());
 
 		interest.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		interest.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-		investmentLogService.saveInvestmentLog(investment, TargetEventType.income, interestForm.getOperator()); // 保存标的操作日志
+		investmentLogService.saveInvestmentLog(investment, TargetEventType.income, form.getOperator()); // 保存标的操作日志
 		return targetIncomeDao.save(interest);
 	}
 
