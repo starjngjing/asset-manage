@@ -8,10 +8,12 @@ import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.guohuai.asset.manage.component.persist.UUID;
+import com.guohuai.asset.manage.component.web.parameter.validation.Enumerations;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

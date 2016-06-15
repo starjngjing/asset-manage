@@ -233,6 +233,21 @@ public class InvestmentService {
 				BigDecimal decimal = form.getExpAror().divide(new BigDecimal(100));
 				entity.setExpAror(decimal);
 			}
+			
+			String lifeUnit = form.getLifeUnit();// day month year
+			int life = form.getLife();
+			int lifed = 0;
+			
+			if (null == lifeUnit)
+				new RuntimeException();
+			else if ("month".equals(lifeUnit))
+				lifed = life * 30; // 一个月以30天算
+			else if ("year".equals(lifeUnit))
+				lifed = life * 360; // 一年以360天算
+			else
+				lifed = life;
+			
+			entity.setLifed(lifed);
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();

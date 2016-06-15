@@ -7,6 +7,8 @@ import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
+import com.guohuai.asset.manage.component.web.parameter.validation.Enumerations;
+
 import lombok.Data;
 
 @Data
@@ -57,10 +59,13 @@ public class InvestmentManageForm implements Serializable {
 	/**
 	 * 标的限期
 	 */
+	@NotNull
 	private Integer life;
 	/**
 	 * 标的限期单位
 	 */
+	@NotNull
+	@Enumerations(values = { "day", "month", "year" })
 	private String lifeUnit;
 	/**
 	 * 标的限期（日）
