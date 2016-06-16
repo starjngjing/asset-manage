@@ -16,7 +16,9 @@ public class SaveSpvOrderForm implements Serializable {
 	@NotBlank
 	private String assetPoolOid;//资产池
 	@NotBlank
-	private String orderType;//订单类型
+	private String orderType;//交易类型
+	@NotBlank
+	private String orderCate;//订单类型
 	@NotBlank
 	private String orderAmount;//订单金额
 	@NotBlank

@@ -27,6 +27,8 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.guohuai.asset.manage.boot.product.ProductDetailResp;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.PageResp;
 
@@ -52,35 +54,63 @@ public class SpvOrderController extends BaseController {
 		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
 	}
 	
+	/**
+	 * 作废
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "/delete", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
-	public ResponseEntity<SpvOrderResp> delete(@RequestParam(required = true) String oid) {
+	public ResponseEntity<SpvOrderResp> delete(@RequestParam String oid) {
 		String operator = super.getLoginAdmin();
 		InvestorOrder investorOrder = this.spvOrderService.delete(oid, operator);
 		return new ResponseEntity<SpvOrderResp>(new SpvOrderResp(investorOrder), HttpStatus.OK);
 	}
 	
+	/**
+	 * 审核确定
+	 * @param oid
+	 * @return
+	 */
 	@RequestMapping(value = "/confirm", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
-	public ResponseEntity<SpvOrderResp> confirm(@RequestParam(required = true) String oid) {
+	public ResponseEntity<SpvOrderResp> confirm(@RequestParam String oid) {
 		String operator = super.getLoginAdmin();
 		InvestorOrder investorOrder = this.spvOrderService.confirm(oid, operator);
 		return new ResponseEntity<SpvOrderResp>(new SpvOrderResp(investorOrder), HttpStatus.OK);
 	}
 	
+	/**
+	 * 根据资产池获取可以赎回金额
+	 * @param assetPoolOid
+	 * @return
+	 */
 	@RequestMapping(value = "/reemAmount", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
-	public BigDecimal reemAmount(@RequestParam(required = true) String assetPoolOid) {
+	public BigDecimal reemAmount(@RequestParam String assetPoolOid) {
 		return this.spvOrderService.reemAmount(assetPoolOid);
 	}
 	
+	/**
+	 * 根据资产池获取关联的产品名称
+	 * @param assetPoolOid
+	 * @return
+	 */
+	@RequestMapping(value = "/product", method = {RequestMethod.POST,RequestMethod.DELETE})
+	@ResponseBody
+	public ResponseEntity<ProductDetailResp> product(@RequestParam String assetPoolOid) {
+		ProductDetailResp pr = this.spvOrderService.getProduct(assetPoolOid);
+		return new ResponseEntity<ProductDetailResp>(pr, HttpStatus.OK);
+	}
 	
 	/**
 	 * spv订单列表
 	 * @param request
 	 * @param productName
-	 * @param orderType
-	 * * @param orderStatus
+	 * @param orderType 交易类型
+	 * @param orderCate 订单类型
+	 * @param orderStatus 订单状态
+	 * @param entryStatus 订单入账状态
 	 * @param page 第几页
 	 * @param rows  每页显示多少记录数
 	 * @param sort 排序字段 update
@@ -92,7 +122,9 @@ public class SpvOrderController extends BaseController {
 	public ResponseEntity<PageResp<SpvOrderResp>> indetList(HttpServletRequest request,
 			@RequestParam String productName,
 			@RequestParam String orderType,
+			@RequestParam String orderCate,
 			@RequestParam String orderStatus,
+			@RequestParam String entryStatus,
 			@RequestParam int page, 
 			@RequestParam int rows,
 			@RequestParam(required = false, defaultValue = "updateTime") String sort,
@@ -109,31 +141,44 @@ public class SpvOrderController extends BaseController {
 		if (!"desc".equals(order)) {
 			sortDirection = Direction.ASC;
 		}
-		Specification<InvestorOrder> orderTypeSpec = null;
+		Specification<InvestorOrder> spec = null;
 		if(StringUtil.isEmpty(orderType)) {
-			orderTypeSpec = new Specification<InvestorOrder>() {
+			spec = new Specification<InvestorOrder>() {
 				@Override
 				public Predicate toPredicate(Root<InvestorOrder> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 					return cb.or(cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_Invest), 
-							cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_PartRedeem),
-							cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_FullRedeem));
+							cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_Redeem));
 				}
 			};
 		} else {
-			orderTypeSpec = new Specification<InvestorOrder>() {
+			spec = new Specification<InvestorOrder>() {
 				@Override
 				public Predicate toPredicate(Root<InvestorOrder> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					if("REDEEM".equals(orderType)) {
-						return cb.or(cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_PartRedeem),
-								cb.equal(root.get("orderType").as(String.class), InvestorOrder.ORDER_TYPE_FullRedeem));
-					} else {
-						return cb.equal(root.get("orderType").as(String.class), orderType);
-					}
-					
+					return cb.equal(root.get("orderType").as(String.class), orderType);
 				}
 			};
 		}
-		orderTypeSpec = Specifications.where(orderTypeSpec);
+		spec = Specifications.where(spec);
+		
+		Specification<InvestorOrder> orderCateSpec = null;
+		if(StringUtil.isEmpty(orderCate)) {
+			orderCateSpec = new Specification<InvestorOrder>() {
+				@Override
+				public Predicate toPredicate(Root<InvestorOrder> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					return cb.or(cb.equal(root.get("orderCate").as(String.class), InvestorOrder.ORDER_CATE_Trade), 
+							cb.equal(root.get("orderCate").as(String.class), InvestorOrder.ORDER_CATE_Strike));
+				}
+			};
+			spec = Specifications.where(spec).and(orderCateSpec);
+		} else {
+			orderCateSpec = new Specification<InvestorOrder>() {
+				@Override
+				public Predicate toPredicate(Root<InvestorOrder> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					return cb.equal(root.get("orderCate").as(String.class), orderCate);
+				}
+			};
+			spec = Specifications.where(spec).and(orderCateSpec);
+		}
 		
 		Specification<InvestorOrder> orderStatusSpec = null;
 		if(!StringUtil.isEmpty(orderStatus)) {
@@ -143,7 +188,18 @@ public class SpvOrderController extends BaseController {
 					return cb.equal(root.get("orderStatus").as(String.class), orderStatus);
 				}
 			};
-			orderTypeSpec = Specifications.where(orderTypeSpec).and(orderStatusSpec);
+			spec = Specifications.where(spec).and(orderStatusSpec);
+		}
+		
+		Specification<InvestorOrder> entryStatusSpec = null;
+		if(!StringUtil.isEmpty(entryStatus)) {
+			entryStatusSpec = new Specification<InvestorOrder>() {
+				@Override
+				public Predicate toPredicate(Root<InvestorOrder> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					return cb.equal(root.get("entryStatus").as(String.class), entryStatus);
+				}
+			};
+			spec = Specifications.where(spec).and(entryStatusSpec);
 		}
 				
 		Specification<InvestorOrder> productNameSpec = null;
@@ -155,11 +211,11 @@ public class SpvOrderController extends BaseController {
 							cb.like(root.get("account").get("product").get("fullName").as(String.class), "%" + productName + "%"));
 				}
 			};
-			orderTypeSpec = Specifications.where(orderTypeSpec).and(productNameSpec);
+			spec = Specifications.where(spec).and(productNameSpec);
 		}
 		
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
-		PageResp<SpvOrderResp> rep = this.spvOrderService.list(orderTypeSpec, pageable);
+		PageResp<SpvOrderResp> rep = this.spvOrderService.list(spec, pageable);
 		return new ResponseEntity<PageResp<SpvOrderResp>>(rep, HttpStatus.OK);
 	}
 	

@@ -29,13 +29,13 @@
 					<!-- 搜索项表单 -->
 					<form id="searchForm" name="searchForm" method="post" class="search-body">
 						<div class="row">
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<div class="form-group">
 									<label>产品名称</label>
 									<input name="productName" type="text" class="form-control input-sm" placeholder="搜索产品名称">
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<div class="form-group">
 									<label>订单状态</label>
 									<select name="orderStatus" class="form-control input-sm">
@@ -46,13 +46,33 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-2">
 								<div class="form-group">
-									<label>订单类型</label>
+									<label>交易类型</label>
 									<select name="orderType" class="form-control input-sm">
 										<option value="" selected="selected">全部</option>
 										<option value="INVEST">申购订单</option>
 										<option value="REDEEM">赎回订单</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label>订单类型</label>
+									<select name="orderCate" class="form-control input-sm">
+										<option value="" selected="selected">全部</option>
+										<option value="TRADE">交易订单</option>
+										<option value="STRIKE">冲账订单</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label>订单入账状态</label>
+									<select name="entryStatus" class="form-control input-sm">
+										<option value="" selected="selected">全部</option>
+										<option value="NO">未入账</option>
+										<option value="YES">已入账</option>
 									</select>
 								</div>
 							</div>
@@ -64,10 +84,12 @@
 						<thead>
 							<tr>
 								<th>订单号</th>
+								<th>交易类型</th>
 								<th>订单类型</th>
-								<th>订单金额(元)</th>
+								<th>订单金额(万元)</th>
 								<th>订单日期</th>
 								<th>订单状态</th>
+								<th>订单入账状态</th>
 								<th>资产池名称</th>
 								<th>产品名称</th>
 								<th>订单创建人</th>
@@ -104,12 +126,22 @@
                         <select id="assetPoolOid" name="assetPoolOid" class="form-control input-sm">
                         </select>
                     </div>
+                    <div class="form-group" id="productNameDiv">
+                        <label>关联产品名称</label>
+                        <input id="productName" name="productName" type="text" class="form-control input-sm" disabled="disabled">
+                    </div>
                     <div class="form-group">
-                      <label>订单类型</label>
+                      <label>交易类型</label>
                       <select id="orderType" name="orderType" class="form-control input-sm">
                         <option value="INVEST" selected="selected">申购</option>
-                        <option value="PART_REDEEM">部分赎回</option>
-                        <option value="FULL_REDEEM">全部赎回</option>
+                        <option value="REDEEM">赎回</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>订单类型</label>
+                      <select id="orderCate" name="orderCate" class="form-control input-sm">
+                        <option value="TRADE" selected="selected">交易订单</option>
+                        <option value="STRIKE">冲账订单</option>
                       </select>
                     </div>
                     <div class="form-group">
@@ -119,10 +151,10 @@
                               type="text"
                               class="form-control"  
                               required="required" 
-                              data-validfloat="12.2" 
-                              data-validfloat-error="订单金额只能为前12位后2位小数"
+                              data-validfloat="8.2" 
+                              data-validfloat-error="订单金额只能为前8位后2位小数"
                               data-validredeem="true">
-                            <span class="input-group-addon">元</span>
+                            <span class="input-group-addon">万元</span>
                         </div>
                         <div class="help-block with-errors text-red"></div>
                     </div>
@@ -163,3 +195,4 @@
 	  </div>
 	</div>
 </div>
+

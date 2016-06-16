@@ -56,8 +56,6 @@ public class InvestorBaseAccount implements Serializable {
 	private BigDecimal uncompound = new BigDecimal(0);//未复利本金
 	private BigDecimal income = new BigDecimal(0);//利息收益
 	private BigDecimal reward = new BigDecimal(0);//奖励收益	
-	private BigDecimal applyInvest = new BigDecimal(0);//未确认申购
-	private BigDecimal applyRedeem = new BigDecimal(0);//未确认赎回
 	private Timestamp createTime;
 	private Timestamp updateTime;
 	

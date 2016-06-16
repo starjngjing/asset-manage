@@ -41,11 +41,16 @@ public class InvestorOrder implements Serializable {
 	 * 交易类型orderType：
 	 */
 	public static final String ORDER_TYPE_Invest = "INVEST";//申购
-	public static final String ORDER_TYPE_PartRedeem = "PART_REDEEM";//部分赎回
-	public static final String ORDER_TYPE_FullRedeem = "FULL_REDEEM";//全部赎回
+	public static final String ORDER_TYPE_Redeem = "REDEEM";//赎回
 	public static final String ORDER_TYPE_BuyIn = "BUY_IN";//买入
 	public static final String ORDER_TYPE_PartSellOut = "PART_SELL_OUT";//部分卖出
 	public static final String ORDER_TYPE_FullSellOut = "FULL_SELL_OUT";//全部卖出
+	
+	/**
+	 * 订单类型orderCate：
+	 */
+	public static final String ORDER_CATE_Trade = "TRADE";//交易订单
+	public static final String ORDER_CATE_Strike = "STRIKE";//冲账订单
 	
 	/**
 	 * 订单状态orderStatus：
@@ -54,6 +59,12 @@ public class InvestorOrder implements Serializable {
 	public static final String STATUS_Confirm = "CONFIRM";//确认
 	public static final String STATUS_Disable = "DISABLE";//失效
 	public static final String STATUS_Calcing= "CALCING";//清算中
+	
+	/**
+	 * 订单入账状态entryStatus：
+	 */
+	public static final String ENTRY_STATUS_No = "NO";//未入账
+	public static final String ENTRY_STATUS_Yes = "YES";//已入账
 	
 	/**
 	 * 订单来源orderStem：
@@ -74,9 +85,12 @@ public class InvestorOrder implements Serializable {
 	
 	private String orderCode;//订单号
 	private String orderType;//交易类型
+	private String orderCate;//订单类型
 	private BigDecimal orderAmount = new BigDecimal(0);//订单金额	
+	private Date orderDate;//订单日期
 	private BigDecimal orderVolume = new BigDecimal(0);//订单份额
 	private String orderStatus;//订单状态
+	private String entryStatus;//订单入账状态
 	private String orderStem;//订单来源	
 	private BigDecimal payFee = new BigDecimal(0);//手续费
 	private String creater;//订单创建人
@@ -84,7 +98,6 @@ public class InvestorOrder implements Serializable {
 	private String auditor;//订单审核人
 	private Timestamp completeTime;//订单完成时间
 	private Timestamp updateTime;//订单修改时间
-	private Date orderDate;//订单日期
 	
 
 }

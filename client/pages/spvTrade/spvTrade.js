@@ -29,7 +29,9 @@ define([
 								rows: pageOptions.size,
 								productName: pageOptions.productName,
 								orderStatus: pageOptions.orderStatus,
-								orderType: pageOptions.orderType
+								orderType: pageOptions.orderType,
+								orderCate: pageOptions.orderCate,
+								entryStatus: pageOptions.entryStatus
 							},
 							contentType: 'form'
 						},
@@ -56,15 +58,24 @@ define([
 						formatter: function (val) {
 							switch (val) {
 								case 'INVEST': return '申购'
-								case 'PART_REDEEM': return '部分赎回'
-								case 'FULL_REDEEM': return '全部赎回'
+								case 'REDEEM': return '赎回'
 								case 'BUY_IN': return '买入'
 								case 'PART_SELL_OUT': return '部分卖出'
 								case 'FULL_SELL_OUT': return '全部卖出'
 								default : return '-'
 							}
 						}
-					
+					},
+					{
+						field: 'orderCate',
+						align: 'center',
+						formatter: function (val) {
+							switch (val) {
+								case 'TRADE': return '交易订单'
+								case 'STRIKE': return '冲账订单'
+								default : return '-'
+							}
+						}
 					},
 					{
 						field: 'orderAmount',
@@ -86,7 +97,17 @@ define([
 								default : return '-'
 							}
 						}
-					
+					},
+					{
+						field: 'entryStatus',
+						align: 'center',
+						formatter: function (val) {
+							switch (val) {
+								case 'NO': return '未入账'
+								case 'YES': return '已入账'
+								default : return '-'
+							}
+						}
 					},
 					{
 						field: 'assetPoolName',
@@ -181,18 +202,23 @@ define([
     		// 添加产品表单验证初始化
     		$('#addOrderForm').validator({
     			custom: {
-            validfloat: util.form.validator.validfloat,
-            validredeem: validredeem
-          },
-          errors: {
-            validfloat: '数据格式不正确',
-            validredeem: '订单金额不能大于xxx额度'
-          }
+            		validfloat: util.form.validator.validfloat,
+            		validredeem: validredeem
+        		},
+        		errors: {
+            		validfloat: '数据格式不正确',
+            		validredeem: '订单金额大于0'//'订单金额不能大于xxx额度'
+        		}
     		})
+    		// 自定义验证条件
+//  		function validredeem ($el) {
+//  			var orderType = document.addOrderForm.orderType
+//  			return orderType.value === 'INVEST' || (Number($el.val()) <= reemAmount)
+//  		}
     		// 自定义验证条件
     		function validredeem ($el) {
     			var orderType = document.addOrderForm.orderType
-    			return orderType.value === 'INVEST' || (Number($el.val()) <= reemAmount)
+    			return (Number($el.val()) > 0.0)
     		}
     		
     		
@@ -204,6 +230,8 @@ define([
     			pageOptions.productName = form.productName.value.trim()
     			pageOptions.orderStatus = form.orderStatus.value.trim()
     			pageOptions.orderType = form.orderType.value.trim()
+    			pageOptions.orderCate = form.orderCate.value.trim()
+    			pageOptions.entryStatus = form.entryStatus.value.trim()
     			return val
   			}
     		
@@ -218,16 +246,33 @@ define([
 					
 					if(result.rows.length>0) {
 						http.post(
-						config.api.spvOrderReemAmount,
+						config.api.spvOrderProduct,
 						{
 							data: {
 								assetPoolOid: result.rows[0].oid
 							},
 							contentType: 'form',
 						}, 
-						function(res) {
-							reemAmount = res
+						function(rlt) {
+							if (rlt.errorCode == 0 && rlt.oid!=null) {
+								$('#productName').val(rlt.name)
+								$('#productNameDiv').show()
+							} else {
+								$('#productNameDiv').hide()
+							}
 						})
+						
+//						http.post(
+//						config.api.spvOrderReemAmount,
+//						{
+//							data: {
+//								assetPoolOid: result.rows[0].oid
+//							},
+//							contentType: 'form',
+//						}, 
+//						function(res) {
+//							reemAmount = res
+//						})
 					}
 					
 				})
@@ -253,26 +298,43 @@ define([
 			$('#assetPoolOid').on('change', function () {
 				if(this.value!='') {
 					http.post(
-						config.api.spvOrderReemAmount,
+						config.api.spvOrderProduct,
 						{
 							data: {
 								assetPoolOid: this.value
 							},
 							contentType: 'form',
 						}, 
-						function(res) {
-							reemAmount = res
-						})
+						function(rlt) {
+							if (rlt.errorCode == 0 && rlt.oid!=null) {
+								$('#productName').val(rlt.name)
+								$('#productNameDiv').show()
+							} else {
+								$('#productNameDiv').hide()
+							}
+						}
+					)
+//					http.post(
+//						config.api.spvOrderReemAmount,
+//						{
+//							data: {
+//								assetPoolOid: this.value
+//							},
+//							contentType: 'form',
+//						}, 
+//						function(res) {
+//							reemAmount = res
+//						})
 				}
 			})
 			
-			$('#orderType').on('change', function () {
-				if(this.value=='FULL_REDEEM') {
-					$("#orderAmount").val(reemAmount)
-				} else {
-					$("#orderAmount").val('')
-				}
-			})
+//			$('#orderType').on('change', function () {
+//				if(this.value=='FULL_REDEEM') {
+//					$("#orderAmount").val(reemAmount)
+//				} else {
+//					$("#orderAmount").val('')
+//				}
+//			})
     	
 		}
 	}
