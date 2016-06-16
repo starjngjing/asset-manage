@@ -133,6 +133,11 @@ define(function() {
 					balance: this.host + '/ams/acct/books/balance'
 				}
 			},
+			invest: { // 持有人信息
+				manager: {
+					accountList: '/ams/boot/inverstorManager/accountList', // 持有人名录					
+				}
+			},
 			system: {
 				config: {
 					ccp: {

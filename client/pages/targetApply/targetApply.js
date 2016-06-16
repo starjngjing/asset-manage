@@ -540,8 +540,9 @@ define([
 			
 			// 新增/修改底层项目-房地产项目属性下拉列表选项改变事件
 			$(document.projectForm.estateProp).change(function() { // 房地产项目属性
-				var ptt = $(this).val();				
-				$(document.projectForm.estatePropName).val($(this).text()); // 设置房地产项目属性名称
+				var v = $(this).val();
+				var t = $(this).find("option:selected").text();
+				$(document.projectForm.estatePropName).val(t); // 设置房地产项目属性名称
 			});
 
 			// 新增/修改底层项目-是否有担保人单选按钮改变事件
