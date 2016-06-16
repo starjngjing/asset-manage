@@ -121,7 +121,7 @@ define([
 						var f0 = item.param0
 						var f1 = item.param3
 						if (max == '∞') {
-							if (f1 == "]") {
+							if (f0 == "[") {
 								if (parseFloat(inputVal) >= parseFloat(min)) {
 									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
@@ -135,7 +135,7 @@ define([
 								}
 							}
 						} else if (min == '∞') {
-							if (f0 == "[") {
+							if (f1 == "]") {
 								if (parseFloat(inputVal) <= parseFloat(max)) {
 									$("#riskLevel").html(util.table.formatter.convertRiskLevel(item.wlevel))
 									$("#optionOid").val(item.oid)
