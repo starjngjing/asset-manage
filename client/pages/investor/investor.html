@@ -26,8 +26,31 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label>关键字</label>
-									<input name="keyword" type="text" class="form-control input-sm" placeholder="搜索关键字">
+									<label>产品</label>
+									<input name="productName" type="text" class="form-control input-sm" placeholder="产品名称">
+									<!--<select name="productOid" class="form-control input-sm"></select>-->
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>手机号</label>
+									<input name="investorPhoneNum" type="text" class="form-control input-sm" placeholder="手机号">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>姓名</label>
+									<input name="investorRealName" type="text" class="form-control input-sm" placeholder="姓名">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>类型</label>
+									<select name="investorType" class="form-control input-sm">
+										<option value="">全部</option>
+										<option value="SPV">SPV</option>
+										<option value="INVESTOR">零售投资人</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -38,18 +61,13 @@
 						<thead>
 							<tr>
 								<th>编号</th>
-								<th>名称</th>
+								<th>姓名</th>
+								<th>手机号码</th>
 								<th>类型</th>
-								<th>管理人</th>
-								<th>状态</th>
-								<th>期限</th>
-								<th>预期年化收益</th>
-								<th>总份额</th>
-								<th>单位份额净值</th>
-								<th>渠道数量</th>
-								<th>资产池</th>
-								<th>申请人</th>
-								<th>申请时间</th>
+								<th>产品名称</th>
+								<th>本金份额</th>
+								<th>基础收益</th>
+								<th>奖励收益</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -59,3 +77,82 @@
 		</div>
 	</div>
 </section>
+
+<!-- 详情投票弹窗 -->
+<div id="investorDetailModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+				<h4 class="modal-title">持有人名册详情</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<!-- tabs -->
+				<div class="nav-tabs-custom">
+					<!-- tab页签定义，注意对应 href 对应的 id -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active">
+							<a href="#currHoldtab" role="tab" data-toggle="tab">当前持仓明细</a>
+						</li>
+						<li role="presentation">
+							<a href="#hisHoldtab" role="tab" data-toggle="tab">历史持仓明细</a>
+						</li>
+						<li role="presentation">
+							<a href="#ordertab" role="tab" data-toggle="tab">订单明细</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<!--当前持仓明细panel -->
+						<div class="tab-pane active" role="tabpanel" id="currHoldtab">
+							<table id="currHoldTable" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>渠道名称</th>
+										<th>本金份额</th>
+										<th>基础收益</th>
+										<th>奖励收益</th>
+										<th>持仓天数</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<!-- 历史持仓明细panel -->
+						<div class="tab-pane" role="tabpanel" id="hisHoldtab">
+							<table id="hisHoldTable" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>渠道名称</th>
+										<th>本金份额</th>
+										<th>基础收益</th>
+										<th>奖励收益</th>
+										<th>持仓天数</th>
+										<th>奖励收益率</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<!-- 订单明细panel -->
+						<div class="tab-pane" role="tabpanel" id="ordertab">
+							<table id="orderTable" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>订单号</th>
+										<th>交易类型</th>
+										<th>订单金额</th>
+										<th>订单状态</th>
+										<th>下单时间</th>
+										<th>确认时间</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
