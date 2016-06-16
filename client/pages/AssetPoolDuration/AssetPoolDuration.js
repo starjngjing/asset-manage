@@ -2146,6 +2146,8 @@ define([
 					},
 					events: {
 						'click .item-income': function(e, val, row) {
+							var form = document.trustIncomeForm
+							$(form).validator('destroy')
 							http.post(config.api.duration.order.getTrustByOid, {
 								data: {
 									oid: row.oid,
@@ -2155,7 +2157,6 @@ define([
 							}, function(json) {
 								var result = json.result.incomeForm
 //								seqs = json.result.incomeForm
-								var form = document.trustIncomeForm
 //								var seq = $(form.seq).empty()
 //								if (json.result.incomeForm.seq === 0) {
 //									seq.append('<option value="' + result.seq + '">无可兑付信息</option>')
@@ -2176,6 +2177,8 @@ define([
 //								seq.change()
 //								form.capital.value = result.capital
 								$$.formAutoFix($('#trustIncomeForm'), result)
+								// 信托计划本息兑付表单初始化
+								util.form.validator.init($(form))
 							})
 							$('#trustIncomeModal').modal('show')
 						},
@@ -2221,8 +2224,6 @@ define([
 			// 信托计划表格初始化
 			$('#trustTable').bootstrapTable(trustTableConfig)
 
-			// 信托计划本息兑付表单初始化
-			util.form.validator.init($('#trustIncomeForm'))
 				// 信托计划转让表单初始化
 			util.form.validator.init($('#trustTransferForm'))
 
