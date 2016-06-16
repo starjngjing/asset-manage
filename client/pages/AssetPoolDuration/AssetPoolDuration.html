@@ -15,196 +15,218 @@
 
 <!-- 主要内容 -->
 <section class="content">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="box box-primary">
-        <div class="box-header">
-          <div class="box-title">
-            <i class="fa fa-list-alt"></i> 资产池详情
+  <!-- tabs区域 -->
+  <div class="nav-tabs-custom">
+    <!-- tabs头部 -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation">
+        <a href="#tabpanel1" role="tab" data-toggle="tab">实际值</a>
+      </li>
+      <li role="presentation" class="active">
+        <a href="#tabpanel2" role="tab" data-toggle="tab">估值</a>
+      </li>
+    </ul>
+    <!-- tabs panels -->
+    <div class="tab-content">
+      <!-- 实际值 -->
+      <div role="tabpanel" class="tab-pane" id="tabpanel1">
+        123
+      </div>
+      <!-- 估值 -->
+      <div role="tabpanel" class="tab-pane active" id="tabpanel2">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="box box-primary">
+              <div class="box-header">
+                <div class="box-title">
+                  <i class="fa fa-list-alt"></i> 资产池详情
+                </div>
+              </div>
+              <div class="box-body">
+                <div style="height: 200px; position: relative;">
+                  <ul class="list-group list-group-unbordered" style="font-size: 14px;">
+                    <li class="list-group-item">
+                      <b>总估值(万):</b> <a id="detailPoolScale" class="text-black pull-right">0</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>可用现金(万):</b> <a id="detailPoolCash" class="text-black pull-right">0</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>偏离损益(万):</b> <a id="detailPoolProfit" class="text-black pull-right">0</a>
+                    </li>
+                  </ul>
+                  <div style="width: 100%; position: absolute; bottom: 0;">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <button id="buyAsset" class="btn btn-default btn-block btn-sm">
+                          <i class="fa fa-shopping-cart"></i> 资产申购
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                      <div class="col-xs-6" style="padding-right: 3px;">
+                        <button id="updateAccount" class="btn btn-default btn-block btn-sm">
+                          <i class="fa fa-pencil"></i> 现金校准
+                        </button>
+                      </div>
+                      <div class="col-xs-6" style="padding-left: 2px;">
+                        <button id="updateProfit" class="btn btn-default btn-block btn-sm">
+                          <i class="fa fa-pencil"></i> 损益校准
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="box box-primary">
+              <div class="box-header">
+                <div class="box-title">
+                  <i class="fa fa-bar-chart-o"></i> 资金构成
+                </div>
+                <div class="box-tools">
+                  <button id="showAccountDetail" class="btn btn-default btn-sm">
+                    <i class="fa fa-list"></i> 出入金明细
+                  </button>
+                </div>
+              </div>
+              <div class="box-body">
+                <div id="barChart" style="height: 200px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="box box-primary">
+              <div class="box-header">
+                <div class="box-title">
+                  <i class="fa fa-pie-chart"></i> 投资占比
+                </div>
+              </div>
+              <div class="box-body">
+                <div id="pieChart" style="height: 200px;"></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="box-body">
-          <div style="height: 200px; position: relative;">
-            <ul class="list-group list-group-unbordered" style="font-size: 14px;">
-              <li class="list-group-item">
-                <b>总估值(万):</b> <a id="detailPoolScale" class="text-black pull-right">0</a>
-              </li>
-              <li class="list-group-item">
-                <b>可用现金(万):</b> <a id="detailPoolCash" class="text-black pull-right">0</a>
-              </li>
-              <li class="list-group-item">
-                <b>偏离损益(万):</b> <a id="detailPoolProfit" class="text-black pull-right">0</a>
-              </li>
-            </ul>
-            <div style="width: 100%; position: absolute; bottom: 0;">
-              <div class="row">
-                <div class="col-lg-12 col-md-12 col-xs-6">
-                  <button id="buyAsset" class="btn btn-default btn-block btn-sm">
-                    <i class="fa fa-shopping-cart"></i> 资产申购
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-6">
-                  <button id="updateAccount" class="btn btn-default btn-block btn-sm">
-                    <i class="fa fa-pencil"></i> 现金校准
-                  </button>
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-6">
-                  <button id="updateProfit" class="btn btn-default btn-block btn-sm">
-                    <i class="fa fa-pencil"></i> 损益校准
-                  </button>
-                </div>
-              </div>
+
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#fundpanel1" role="tab" data-toggle="tab">预约中现金类管理工具</a>
+            </li>
+            <li role="presentation">
+              <a href="#fundpanel2" role="tab" data-toggle="tab">已成立现金类管理工具</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="fundpanel1">
+              <!-- 预约中现金类管理工具数据表格 -->
+              <table id="orderingToolTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>万份收益</th>
+                    <th>7日年化收益(%)</th>
+                    <!--<th>风险等级</th>
+                    <th>分红方式</th>-->
+                    <!--<th>最新流通份额(万份)</th>-->
+                    <th>投资日</th>
+                    <th>申购额度(万元)</th>
+                    <th>操作类型</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="fundpanel2">
+              <!-- 现金类管理工具数据表格 -->
+              <table id="toolTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>万份收益</th>
+                    <th>7日年化收益(%)</th>
+                    <!--<th>风险等级</th>
+                    <th>分红方式</th>-->
+                    <!--<th>最新流通份额(万份)</th>-->
+                    <th>持有额度(万元)</th>
+                    <th>冻结额度(万元)</th>
+                    <!--<th>状态</th>-->
+                    <th>每日收益</th>
+                    <th>总收益</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#trustpanel1" role="tab" data-toggle="tab">预约中信托计划</a>
+            </li>
+            <li role="presentation">
+              <a href="#trustpanel2" role="tab" data-toggle="tab">已成立信托计划</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="trustpanel1">
+              <!-- 预约中信托计划数据表格 -->
+              <table id="orderingTrustTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>预计年化收益(%)</th>
+                    <th>成立日</th>
+                    <th>付息方式</th>
+                    <th>标的规模(万元)</th>
+                    <th>预约份额(万份)</th>
+                    <th>预约金额(万元)</th>
+                    <th>主题评级</th>
+                    <th>类型</th>
+                    <th>收益方式</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="trustpanel2">
+              <!-- 信托计划数据表格 -->
+              <table id="trustTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>预计年化收益(%)</th>
+                    <th>成立日</th>
+                    <th>付息方式</th>
+                    <th>标的规模(万元)</th>
+                    <th>持有份额(万份)</th>
+                    <th>冻结份额(万份)</th>
+                    <th>主题评级</th>
+                    <th>收益方式</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-md-5">
-      <div class="box box-primary">
-        <div class="box-header">
-          <div class="box-title">
-            <i class="fa fa-bar-chart-o"></i> 资金构成
-          </div>
-          <div class="box-tools">
-            <button id="showAccountDetail" class="btn btn-default btn-sm">
-              <i class="fa fa-list"></i> 出入金明细
-            </button>
-          </div>
-        </div>
-        <div class="box-body">
-          <div id="barChart" style="height: 200px;"></div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="box box-primary">
-        <div class="box-header">
-          <div class="box-title">
-            <i class="fa fa-pie-chart"></i> 投资占比
-          </div>
-        </div>
-        <div class="box-body">
-          <div id="pieChart" style="height: 200px;"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nav-tabs-custom">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
-        <a href="#fundpanel1" role="tab" data-toggle="tab">预约中现金类管理工具</a>
-      </li>
-      <li role="presentation">
-        <a href="#fundpanel2" role="tab" data-toggle="tab">已成立现金类管理工具</a>
-      </li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" role="tabpanel" id="fundpanel1">
-        <!-- 预约中现金类管理工具数据表格 -->
-        <table id="orderingToolTable" class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th></th>
-              <th>名称</th>
-              <th>类型</th>
-              <th>万份收益</th>
-              <th>7日年化收益(%)</th>
-	            <!--<th>风险等级</th>
-	            <th>分红方式</th>-->
-	            <!--<th>最新流通份额(万份)</th>-->
-	            <th>投资日</th>
-	            <th>申购额度(万元)</th>
-	            <th>操作类型</th>
-	            <th>状态</th>
-	            <th>操作</th>
-	          </tr>
-	        </thead>
-	      </table>
-	    </div>
-	    <div class="tab-pane" role="tabpanel" id="fundpanel2">
-	      <!-- 现金类管理工具数据表格 -->
-	      <table id="toolTable" class="table table-bordered table-striped">
-	        <thead>
-	          <tr>
-	            <th></th>
-	            <th>名称</th>
-	            <th>类型</th>
-	            <th>万份收益</th>
-	            <th>7日年化收益(%)</th>
-	            <!--<th>风险等级</th>
-	            <th>分红方式</th>-->
-	            <!--<th>最新流通份额(万份)</th>-->
-	            <th>持有额度(万元)</th>
-	            <th>冻结额度(万元)</th>
-	            <!--<th>状态</th>-->
-	            <th>每日收益</th>
-	            <th>总收益</th>
-	            <th>操作</th>
-	          </tr>
-	        </thead>
-	      </table>
-	    </div>
-	  </div>
-	</div>
-
-	<div class="nav-tabs-custom">
-	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" class="active">
-	      <a href="#trustpanel1" role="tab" data-toggle="tab">预约中信托计划</a>
-	    </li>
-	    <li role="presentation">
-	      <a href="#trustpanel2" role="tab" data-toggle="tab">已成立信托计划</a>
-	    </li>
-	  </ul>
-	  <div class="tab-content">
-	    <div class="tab-pane active" role="tabpanel" id="trustpanel1">
-	      <!-- 预约中信托计划数据表格 -->
-	      <table id="orderingTrustTable" class="table table-bordered table-striped">
-	        <thead>
-	          <tr>
-	            <th></th>
-	            <th>名称</th>
-	            <th>预计年化收益(%)</th>
-	            <th>成立日</th>
-	            <th>付息方式</th>
-	            <th>标的规模(万元)</th>
-	            <th>预约份额(万份)</th>
-	            <th>预约金额(万元)</th>
-	            <th>主题评级</th>
-	            <th>类型</th>
-	            <th>收益方式</th>
-	            <th>状态</th>
-	            <th>操作</th>
-	          </tr>
-	        </thead>
-	      </table>
-	    </div>
-	    <div class="tab-pane" role="tabpanel" id="trustpanel2">
-	      <!-- 信托计划数据表格 -->
-	      <table id="trustTable" class="table table-bordered table-striped">
-	        <thead>
-	          <tr>
-	            <th></th>
-	            <th>名称</th>
-	            <th>预计年化收益(%)</th>
-	            <th>成立日</th>
-	            <th>付息方式</th>
-	            <th>标的规模(万元)</th>
-	            <th>持有份额(万份)</th>
-	            <th>冻结份额(万份)</th>
-	            <th>主题评级</th>
-	            <th>收益方式</th>
-	            <th>状态</th>
-	            <th>操作</th>
-	          </tr>
-	        </thead>
-	      </table>
-	    </div>
-	  </div>
-	</div>
+  </div>   
 </section>
 
 <!-- 资产申购弹窗 -->
