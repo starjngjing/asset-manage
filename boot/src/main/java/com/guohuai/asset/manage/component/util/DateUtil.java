@@ -60,7 +60,7 @@ public class DateUtil {
 		return new SimpleDateFormat(pattern).format(date);
 	}
 	
-	public int getDaysBetweenTwoDate(Date sdate, Date edate) {
+	public static int getDaysBetweenTwoDate(Date sdate, Date edate) {
 		long days = (edate.getTime() - sdate.getTime()) / (1000*3600*24);
 		return Integer.parseInt(String.valueOf(days));
 	}

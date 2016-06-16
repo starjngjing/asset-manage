@@ -10,13 +10,15 @@
 package com.guohuai.asset.manage.boot.investor.manage;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
-import com.guohuai.asset.manage.boot.investor.Investor;
-import com.guohuai.asset.manage.boot.investor.InvestorAccount;
-import com.guohuai.asset.manage.boot.product.Product;
+import com.guohuai.asset.manage.boot.channel.Channel;
+import com.guohuai.asset.manage.boot.investor.InvestorBaseAccount;
+import com.guohuai.asset.manage.boot.investor.InvestorHolding;
+import com.guohuai.asset.manage.component.util.DateUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,24 +28,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvestorHoldingDet {
-	// 持有人信息
-	private String sn;// 持有人标识
-	private String phoneNum;// 手机号
-	private String realName;// 真实姓名
-	private String type;// 类型
-
-	// 产品信息
+	// 渠道信息Channel
 	/**
-	 * 产品编号
+	 * 渠道名称
 	 */
-	private String code;
+	private String channelName;
 
-	/**
-	 * 产品名称
-	 */
-	private String productName;
-
-	// 持有人账户信息
+	// 持仓信息
 	private String oid;// 状态
 	private String status;// 状态
 	private BigDecimal balance = new BigDecimal(0);// 本金余额
@@ -52,25 +43,33 @@ public class InvestorHoldingDet {
 
 	private BigDecimal income = new BigDecimal(0);// 利息收益
 	private BigDecimal reward = new BigDecimal(0);// 奖励收益
-	private BigDecimal freeze = new BigDecimal(0);// 冻结金额
+	private BigDecimal redeem = new BigDecimal(0);// 赎回金额
 
-	public InvestorHoldingDet(InvestorAccount ia) {
-		BeanUtils.copyProperties(ia, this);
+	private Integer holdDays; // 持仓天数
+	private BigDecimal rewardRatio = new BigDecimal(0);// 奖励收益率
 
-		Investor i = ia.getInvestor();
-		this.sn = i.getSn();
-		
-		this.phoneNum = i.getPhoneNum();
-		if (null != phoneNum && phoneNum.length() > 8) {// 手机号码加敏处理
-			this.phoneNum = StringUtils.overlay(phoneNum, "****", 3, 7);
+	public InvestorHoldingDet(InvestorHolding ih) {
+		if (null == ih)
+			return;
+		BeanUtils.copyProperties(ih, this);
+
+		InvestorBaseAccount iba = ih.getBaseAccount();
+		if (null != iba) {
+			Channel ch = iba.getChannel();
+			if (null != ch)
+				this.channelName = ch.getChannelName();
 		}
-		this.realName = i.getRealName();
-		this.type = i.getType();
 
-		Product p = ia.getProduct();
-		this.code = p.getCode();
-		this.productName = p.getName();
+		// 计算持仓天数
+		String sta = ih.getState();
+		if (StringUtils.equals(sta, InvestorHolding.STATE_CLOSE) || null != ih.getCloseTime()) {// 历史的
+			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCloseTime(), ih.getCloseTime());
+		} else { // 当前
+			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCloseTime(), new Date());
+		}
 
+		// 计算奖励收益率
+		
 	}
 
 }

@@ -35,6 +35,10 @@ import lombok.NoArgsConstructor;
 public class InvestorHolding implements Serializable {
 
 	private static final long serialVersionUID = 766183109221687996L;
+	
+	public static final String STATE_HOLDING = "HOLDING"; // 持仓中
+	public static final String STATE_PARD_REDEEM = "PARD_REDEEM";//部分赎回 
+	public static final String STATE_CLOSE = "CLOSE";//已平仓
 
 	@Id
 	private String oid;// 序号
@@ -55,6 +59,6 @@ public class InvestorHolding implements Serializable {
 	private BigDecimal redeem = new BigDecimal(0);// 赎回金额
 	private String state;// 类型
 	private Timestamp createTime;
-	private Timestamp updateTime;
+	private Timestamp closeTime;
 
 }

@@ -55,22 +55,27 @@ public class InvestorAccountDet {
 	private BigDecimal freeze = new BigDecimal(0);// 冻结金额
 
 	public InvestorAccountDet(InvestorAccount ia) {
+		if (null == ia)
+			return;
 		BeanUtils.copyProperties(ia, this);
 
 		Investor i = ia.getInvestor();
-		this.sn = i.getSn();
-		
-		this.phoneNum = i.getPhoneNum();
-		if (null != phoneNum && phoneNum.length() > 8) {// 手机号码加敏处理
-			this.phoneNum = StringUtils.overlay(phoneNum, "****", 3, 7);
+		if (null != i) {
+			this.sn = i.getSn();
+
+			this.phoneNum = i.getPhoneNum();
+			if (null != phoneNum && phoneNum.length() > 8) {// 手机号码加敏处理
+				this.phoneNum = StringUtils.overlay(phoneNum, "****", 3, 7);
+			}
+			this.realName = i.getRealName();
+			this.type = i.getType();
 		}
-		this.realName = i.getRealName();
-		this.type = i.getType();
 
 		Product p = ia.getProduct();
-		this.code = p.getCode();
-		this.productName = p.getName();
-
+		if (null != p) {
+			this.code = p.getCode();
+			this.productName = p.getName();
+		}
 	}
 
 }
