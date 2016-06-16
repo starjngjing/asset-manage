@@ -277,6 +277,7 @@ define(function() {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
 			},
 			spvOrderList: this.host + "/ams/spv/order/list", //spv订单列表
+			spvOrderDetail: this.host + "/ams/spv/order/detail", //spv订单列表
 			spvOrderInvalid: this.host + "/ams/spv/order/delete", //spv作废订单
 			spvOrderConfirm: this.host + "/ams/spv/order/confirm", //审核确定spv订单
 			spvOrderReemAmount: this.host + "/ams/spv/order/reemAmount", //赎回订单可赎回金额

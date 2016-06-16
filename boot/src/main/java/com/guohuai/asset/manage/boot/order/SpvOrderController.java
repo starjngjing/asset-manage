@@ -219,5 +219,12 @@ public class SpvOrderController extends BaseController {
 		return new ResponseEntity<PageResp<SpvOrderResp>>(rep, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/detail", method = {RequestMethod.POST,RequestMethod.DELETE})
+	@ResponseBody
+	public ResponseEntity<SpvOrderDetailResp> detail(@RequestParam String oid) {
+		SpvOrderDetailResp spvOrderResp = this.spvOrderService.detail(oid);
+		return new ResponseEntity<SpvOrderDetailResp>(spvOrderResp, HttpStatus.OK);
+	}
+	
 
 }

@@ -1,12 +1,7 @@
 package com.guohuai.asset.manage.boot.order;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -22,7 +17,6 @@ import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.investor.Investor;
 import com.guohuai.asset.manage.boot.investor.InvestorAccount;
 import com.guohuai.asset.manage.boot.investor.InvestorAccountDao;
-import com.guohuai.asset.manage.boot.investor.InvestorBaseAccount;
 import com.guohuai.asset.manage.boot.investor.InvestorDao;
 import com.guohuai.asset.manage.boot.product.Product;
 import com.guohuai.asset.manage.boot.product.ProductDao;
@@ -299,6 +293,40 @@ public class SpvOrderService {
 		pagesRep.setTotal(cas.getTotalElements());
 		
 		return pagesRep;
+	}
+	
+	public SpvOrderDetailResp detail(String oid) {
+		
+		InvestorOrder order = this.investorOrderDao.findOne(oid);
+		
+		SpvOrderDetailResp spvOrderRep = new SpvOrderDetailResp(order);
+		
+		Map<String,AdminObj> adminObjMap = new HashMap<String,AdminObj>();
+		
+		AdminObj adminObj = null;
+		
+		if(adminObjMap.get(order.getCreater())==null) {
+			try{
+				adminObj = adminSdk.getAdmin(order.getCreater());
+				adminObjMap.put(order.getCreater(),adminObj);
+			} catch (Exception e) {
+			}
+		}
+		if(adminObjMap.get(order.getCreater())!=null) {
+			spvOrderRep.setCreater(adminObjMap.get(order.getCreater()).getName());
+		}
+		
+		if(adminObjMap.get(order.getAuditor())==null) {
+			try{
+				adminObj = adminSdk.getAdmin(order.getAuditor());
+				adminObjMap.put(order.getAuditor(),adminObj);
+			} catch (Exception e) {
+			}
+		}
+		if(adminObjMap.get(order.getAuditor())!=null) {
+			spvOrderRep.setAuditor(adminObjMap.get(order.getAuditor()).getName());
+		}
+		return spvOrderRep;
 	}
 
 }
