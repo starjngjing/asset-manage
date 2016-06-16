@@ -422,6 +422,8 @@ define([
 									// 重置和初始化表单验证
 									$("#projectForm").validator('destroy')
 									util.form.validator.init($("#projectForm"));
+									
+									$(document.projectForm.projectType).val(data.projectType).change();
 									$('#projectModal').modal('show');
 								}
 							});
@@ -531,10 +533,11 @@ define([
 					$("#estateDiv").hide().find(':input').attr('disabled', 'disabled');
 					$("#financeDiv").hide().find(':input').attr('disabled', 'disabled');
 				}
+				
+				$(document.projectForm.projectTypeName).val($(this).find("option:selected").text()); // 设置项目类型名称
+				
 				$('#projectForm').validator('destroy'); // 先销毁验证规则
 				util.form.validator.init($('#projectForm')); // 然后添加验证规则
-				
-				$(document.projectForm.projectTypeName).val($(this).text()); // 设置项目类型名称
 			});
 			
 			
