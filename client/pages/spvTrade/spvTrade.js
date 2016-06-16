@@ -172,22 +172,42 @@ define([
 								})
 							},
 							'click .item-audit': function(e, value, row) {
-								$("#confirmTitle").html("确定提交订单号为:")
-								$("#confirmTitle1").html(row.orderCode+"的订单吗？")
-								$$.confirm({
-									container: $('#doConfirm'),
-									trigger: this,
-									accept: function() {
-										http.post(config.api.spvOrderConfirm, {
-											data: {
-												oid: row.oid
-											},
-											contentType: 'form',
-										}, function(result) {
-											$('#spvOrderTable').bootstrapTable('refresh')
-										})
+								http.post(
+									config.api.spvOrderDetail, 
+									{
+										data: {
+											oid: row.oid
+										},
+										contentType: 'form',
+									}, function(result) {
+										console.log(result)
+										if (result.errorCode == 0) {
+											var data = result;
+											$$.detailAutoFix($('#auditInvestorOrderModal'), data); // 自动填充详情
+											$$.formAutoFix($('#auditInvestorOrderForm'), data); // 自动填充表单
+									
+											$('#auditInvestorOrderModal').modal('show');
+										} else {
+											alert(查询失败);
+										}
 									}
-								})
+								)
+//								$("#confirmTitle").html("确定提交订单号为:")
+//								$("#confirmTitle1").html(row.orderCode+"的订单吗？")
+//								$$.confirm({
+//									container: $('#doConfirm'),
+//									trigger: this,
+//									accept: function() {
+//										http.post(config.api.spvOrderConfirm, {
+//											data: {
+//												oid: row.oid
+//											},
+//											contentType: 'form',
+//										}, function(result) {
+//											$('#spvOrderTable').bootstrapTable('refresh')
+//										})
+//									}
+//								})
 							}
 						
 		           		}
@@ -199,6 +219,7 @@ define([
     		$('#spvOrderTable').bootstrapTable(tableConfig)
     		// 搜索表单初始化
     		$$.searchInit($('#searchForm'), $('#spvOrderTable'))
+    		util.form.validator.init($('#auditInvestorOrderForm'))
     		// 添加产品表单验证初始化
     		$('#addOrderForm').validator({
     			custom: {
@@ -220,7 +241,6 @@ define([
     			var orderType = document.addOrderForm.orderType
     			return (Number($el.val()) > 0.0)
     		}
-    		
     		
     		// 表格querystring扩展函数，会在表格每次数据加载时触发，用于自定义querystring
     		function getQueryParams (val) {
