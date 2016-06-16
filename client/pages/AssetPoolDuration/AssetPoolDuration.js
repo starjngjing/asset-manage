@@ -10,6 +10,13 @@ define([
 	return {
 		name: 'AssetPoolDuration',
 		init: function() {
+			// 缓存标的名称数组值
+			var targetNames = null
+			// 缓存可用现金
+			var freeCash = 0
+			// 缓存持有份额
+			var holdAmount = 0;
+			// 缓存当前页资产池id
 			var pageState = {
 				pid: util.nav.getHashObj(location.hash).id || ''
 			}
@@ -24,6 +31,7 @@ define([
 				$(select).html(assetPoolOptions)
 				pageInit(pageState, http, config)
 			})
+			
 			// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
@@ -112,14 +120,7 @@ define([
 				$('#buyAssetModal').modal('show')
 			})
 
-			// 缓存标的名称数组值
-			var targetNames = null
-			// 缓存可用现金
-			var freeCash = 0
-			// 缓存持有份额
-			var holdAmount = 0;
-
-			// 资产申购标的名称下拉菜单change事件
+			// 资产申购标的名称下拉菜单change事件 - 现金管理工具
 			$('#fundTargetName').on('change', function() {
 				var source = targetNames.fund.filter(function(item) {
 					return item.cashtoolOid === this.value
@@ -128,6 +129,7 @@ define([
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
+			// 资产申购标的名称下拉菜单change事件 - 投资标的
 			$('#trustTargetName').on('change', function() {
 				var source = targetNames.trust.filter(function(item) {
 					return item.targetOid === this.value
@@ -136,6 +138,7 @@ define([
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
+			// 资产申购标的名称下拉菜单change事件 - 投资标的转入
 			$('#transTargetName').on('change', function() {
 				var source = targetNames.trans.filter(function(item) {
 					return item.t_targetOid === this.value
@@ -234,6 +237,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 出入金明细-查看详情
 						'click .item-detail': function(e, val, row) {
 							http.post(config.api.duration.order.getTargetOrderByOidForCapital, {
 								data: {
@@ -444,15 +448,6 @@ define([
 				{
 					field: 'yearYield7'
 				},
-				//        {
-				//          field: 'riskLevel'
-				//        },
-				//        {
-				//          field: 'dividendType'
-				//        },
-				//        {
-				//          field: 'circulationShares'
-				//        },
 				{
 					field: 'investDate'
 				}, 
@@ -469,16 +464,6 @@ define([
 					field: 'state',
 					formatter: function(val) {
 						switch (val) {
-//									case '-2':
-//										return '<span class="text-red">未通过</span>'
-//									case '-1':
-//										return '<span class="text-aqua">待审核</span>'
-//									case '0':
-//										return '<span class="text-blue">待预约</span>'
-//									case '1':
-//										return '<span class="text-yellow">待确认</span>'
-//									case '2':
-//										return '<span class="text-green">成立</span>'
 							case '00':
 								return '<span class="text-aqua">待审核</span>'
 							case '10':
@@ -531,6 +516,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 预约中现金管理工具-审核
 						'click .item-audit': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -573,9 +559,6 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -586,6 +569,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-预约
 						'click .item-ordering': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -629,9 +613,6 @@ define([
 									display: 'none'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -644,6 +625,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-确认
 						'click .item-accpet': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -687,9 +669,6 @@ define([
 									display: 'block'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -705,6 +684,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-查看详情
 						'click .item-detail': function(e, val, row) {
 							var modal = $('#fundOrderDetailModal')
 							if (row.optType === 'purchase') {
@@ -744,6 +724,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-删除
 						'click .item-delete': function(e, val, row) {
 							$$.confirm({
 								container: $('#confirmModal'),
@@ -816,32 +797,12 @@ define([
 				{
 					field: 'yearYield7'
 				},
-				//        {
-				//          field: 'riskLevel'
-				//        },
-				//        {
-				//          field: 'dividendType'
-				//        },
-				//        {
-				//          field: 'circulationShares'
-				//        },
 				{
 					field: 'amount'
 				}, 
 				{
 					field: 'redeemVolume'
 				},
-				//        {
-				//          field: 'state',
-				//          formatter: function (val) {
-				//            switch (val) {
-				//              case '-1':
-				//                return '<span class="text-aqua">未通过</span>'
-				//              case '0':
-				//                return '<span class="text-blue">成立</span>'
-				//            }
-				//          }
-				//        },
 				{
 					field: 'dailyProfit'
 				}, 
@@ -868,6 +829,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 现金管理工具-申购
 						'click .item-purchase': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -881,6 +843,7 @@ define([
 							})
 							$('#purchaseModal').modal('show')
 						},
+						// 现金管理工具-赎回
 						'click .item-redeem': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -894,6 +857,7 @@ define([
 							})
 							$('#redeemModal').modal('show')
 						},
+						// 现金管理工具-纠偏
 						'click .item-update': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -947,6 +911,7 @@ define([
 					}
 				})
 			})
+			
 			// 现金类管理工具审核/预约/确认 - 不通过按钮点击事件
 			$('#doFundUnCheck').on('click', function() {
 				var form = document.fundCheckForm
@@ -1084,16 +1049,6 @@ define([
 					field: 'state',
 					formatter: function(val) {
 						switch (val) {
-//								case '-2':
-//									return '<span class="text-red">未通过</span>'
-//								case '-1':
-//									return '<span class="text-aqua">待审核</span>'
-//								case '0':
-//									return '<span class="text-blue">待预约</span>'
-//								case '1':
-//									return '<span class="text-yellow">待确认</span>'
-//								case '2':
-//									return '<span class="text-green">成立</span>'
 							case '00':
 								return '<span class="text-aqua">待审核</span>'
 							case '10':
@@ -1200,6 +1155,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 预约中信托计划-审核
 						'click .item-audit': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1260,6 +1216,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入审核
 						'click .item-trans-audit': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1320,6 +1277,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付审核
 						'click .item-income-audit': function(e, val, row) {
 							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1368,16 +1326,11 @@ define([
 								if (result.capital) {
 									result.capital = result.capital + '\t万元'
 								}
-//								if (result.applyVolume) {
-//									result.applyVolume = result.applyVolume + '\t万份'
-//								}
-//								if (result.applyCash) {
-//									result.applyCash = result.applyCash + '\t万元'
-//								}
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让审核
 						'click .item-transfer-audit': function(e, val, row) {
 							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1438,6 +1391,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-预约
 						'click .item-ordering': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1507,6 +1461,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入预约
 						'click .item-trans-ordering': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1573,6 +1528,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-确认
 						'click .item-accpet': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1648,6 +1604,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让确认
 						'click .item-trans-accpet': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1720,6 +1677,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付确认
 						'click .item-income-accpet': function(e, val, row) {
 							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1768,12 +1726,6 @@ define([
 								if (result.capital) {
 									result.capital = result.capital + '\t万元'
 								}
-//								if (result.applyVolume) {
-//									result.applyVolume = result.applyVolume + '\t%'
-//								}
-//								if (result.applyCash) {
-//									result.applyCash = result.applyCash + '\t万元'
-//								}
 								if (result.auditVolume) {
 									result.auditVolume = result.auditVolume + '\t%'
 								}
@@ -1787,6 +1739,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让确认
 						'click .item-transfer-accpet': function(e, val, row) {
 							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1853,6 +1806,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-查看详情
 						'click .item-detail': function(e, val, row) {
 							var modal = $('#trustOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1897,6 +1851,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入查看详情
 						'click .item-trans-detail': function(e, val, row) {
 							var modal = $('#trustTransOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1953,6 +1908,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付查看详情
 						'click .item-income-detail': function(e, val, row) {
 							var modal = $('#trustIncomeOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -2003,6 +1959,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-删除
 						'click .item-delete': function(e, val, row) {
 							currentPool = row
 							$$.confirm({
@@ -2117,12 +2074,6 @@ define([
 							case 'OVER_TIME':
 								return '<span class="text-blue">逾期 </span>'
 						}
-						//            switch (val) {
-						//              case '-1':
-						//                return '<span class="text-aqua">未通过</span>'
-						//              case '0':
-						//                return '<span class="text-blue">成立</span>'
-						//            }
 					}
 				}, 
 				{
@@ -2147,6 +2098,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 信托计划-本息兑付
 						'click .item-income': function(e, val, row) {
 							var form = document.trustIncomeForm
 							$(form).validator('destroy')
@@ -2158,32 +2110,15 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result.incomeForm
-//								seqs = json.result.incomeForm
-//								var seq = $(form.seq).empty()
-//								if (json.result.incomeForm.seq === 0) {
-//									seq.append('<option value="' + result.seq + '">无可兑付信息</option>')
-//									
-//								    $('#incomeRate').attr("readonly","readonly")
-//								    $('#income').attr("readonly","readonly")
-//								    $('#incomeRadio').attr("disabled","true")
-//								} else {
-//									seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
-//								}
-								
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
-								
-//				                seqs.forEach(function (item) {
-//				                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-//				                })
-//								seq.change()
-//								form.capital.value = result.capital
 								$$.formAutoFix($('#trustIncomeForm'), result)
 								// 信托计划本息兑付表单初始化
 								util.form.validator.init($(form))
 							})
 							$('#trustIncomeModal').modal('show')
 						},
+						// 信托计划-转让
 						'click .item-transfer': function(e, val, row) {
 							http.post(config.api.duration.order.getTrustByOid, {
 								data: {
@@ -2206,6 +2141,7 @@ define([
 							})
 							$('#trustTransferModal').modal('show')
 						},
+						// 信托计划-纠偏
 						'click .item-update': function(e, val, row) {
 							http.post(config.api.duration.order.getTrustByOid, {
 								data: {
@@ -2228,26 +2164,6 @@ define([
 
 				// 信托计划转让表单初始化
 			util.form.validator.init($('#trustTransferForm'))
-
-			// 信托计划本息兑付表单下拉菜单初始化
-			//    $(document.trustIncomeForm.seq).on('change', function () {
-			//      var val = this.value
-			//      seqs.forEach(function (item, index) {
-			//        if (item.seq == val) {
-			//          $$.formAutoFix($(document.trustIncomeForm), item)
-			//          if (index === seqs.length - 1) {
-			//            $('#capitalArea').show()
-			//          } else {
-			//            $('#capitalArea').hide()
-			//          }
-			//        }
-			//      })
-			//    })
-
-			// 改变资产池后刷新页面
-			//			$(document.searchForm.assetPoolName).on('change', function() {
-			//				pageInit(pageState, http, config)
-			//			})
 
 			// 当选择本金兑付时，显示本金
 			$(document.trustIncomeForm.capitalFlag).on('change', function () {
