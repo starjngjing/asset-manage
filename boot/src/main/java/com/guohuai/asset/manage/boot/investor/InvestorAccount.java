@@ -61,10 +61,10 @@ public class InvestorAccount implements Serializable {
 	private BigDecimal balance = new BigDecimal(0);//本金余额
 	private BigDecimal compound = new BigDecimal(0);//复利本金
 	private BigDecimal uncompound = new BigDecimal(0);//未复利本金
+	
 	private BigDecimal income = new BigDecimal(0);//利息收益
 	private BigDecimal reward = new BigDecimal(0);//奖励收益	
-	private BigDecimal applyInvest = new BigDecimal(0);//未确认申购
-	private BigDecimal applyRedeem = new BigDecimal(0);//未确认赎回
+	private BigDecimal freeze = new BigDecimal(0);//冻结金额	
 	private Timestamp createTime;
 	private Timestamp updateTime;
 

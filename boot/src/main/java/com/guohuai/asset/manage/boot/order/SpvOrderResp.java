@@ -20,9 +20,11 @@ public class SpvOrderResp extends BaseResp {
 		this.oid = io.getOid();
 		this.orderCode = io.getOrderCode();//订单号
 		this.orderType = io.getOrderType();//交易类型
+		this.orderCate = io.getOrderCate();//订单类型
 		this.orderAmount = io.getOrderAmount();//订单金额	
 		this.orderVolume = io.getOrderVolume();//订单份额
 		this.orderStatus = io.getOrderStatus();//订单状态
+		this.entryStatus = io.getEntryStatus();//订单入账状态
 		this.creater = io.getCreater();//订单创建人
 		this.createTime = DateUtil.formatDatetime(io.getCreateTime().getTime());//订单创建时间
 		this.auditor = io.getAuditor();//订单审核人
@@ -38,9 +40,11 @@ public class SpvOrderResp extends BaseResp {
 	private String oid;
 	private String orderCode;//订单号
 	private String orderType;//交易类型
+	private String orderCate;//订单类型
 	private BigDecimal orderAmount;//订单金额	
 	private BigDecimal orderVolume;//订单份额
 	private String orderStatus;//订单状态
+	private String entryStatus;//订单入账状态
 	private String creater;//订单创建人
 	private String createTime;//订单创建时间
 	private String auditor;//订单审核人

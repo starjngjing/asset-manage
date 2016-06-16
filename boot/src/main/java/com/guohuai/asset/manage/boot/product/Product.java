@@ -44,8 +44,8 @@ public class Product implements Serializable {
 	/**
 	 * 状态status：
 	 */
-	public static final String STATE_Create = "CREATE";// 新建
-	public static final String STATE_Update = "UPDATE";// 修改
+	public static final String STATE_Create = "CREATE";// 新建 已保存
+	public static final String STATE_Update = "UPDATE";// 修改 已保存
 	public static final String STATE_Auditing = "AUDITING";// 审核中
 	public static final String STATE_Auditfail = "AUDITFAIL";// 审核不通过
 	public static final String STATE_Auditpass = "AUDITPASS";// 审核通过(复核中)
@@ -57,19 +57,13 @@ public class Product implements Serializable {
 	public static final String STATE_Raising = "RAISING";// 募集中(募集期)
 	public static final String STATE_Noestablishing = "NOESTALISHING";// 成立未开始
 	public static final String STATE_Establishing = "ESTALISHING";// 已成立
+	public static final String STATE_Collectunreached = "COLLECTUNREACHED";//募集未满
 	public static final String STATE_Raiseend = "RAISEEND";// 募集结束
 	public static final String STATE_Risefail = "RISEFAIL";// 募集失败
 	public static final String STATE_Subsist = "SUBSIST";// 存续期
 	public static final String STATE_Subsistend = "SUBSISTEND";// 存续期结束(还本付息期)
-	public static final String STATE_Liquidation = "LIQUIDATION";// 已清算
-	public static final String PRODUCT_STATUS_waitPutOn = "waitPutOn";// 未排期
-	public static final String PRODUCT_STATUS_putOnShelf = "putOnShelf";// 已排期
-	public static final String PRODUCT_STATUS_collectingUnreached = "collectingUnreached";// 募集未满
-	public static final String PRODUCT_STATUS_running = "running";// 运行期
-	public static final String PRODUCT_STATUS_abortionWaitCalc = "abortionWaitCalc";// 流标结算中
-	public static final String PRODUCT_STATUS_endWaitCalc = "endWaitCalc";// 到期结算中
-	public static final String PRODUCT_STATUS_abortionEnd = "abortionEnd";// 流标终止
-	public static final String PRODUCT_STATUS_end = "end";// 到期完成
+	public static final String STATE_Liquidation = "LIQUIDATION";//已清算(到期结算中)
+	public static final String STATE_End = "END";//到期完成
 
 	public static final String UNIT_Day = "DAY";// 按日
 	public static final String UNIT_Week = "WEEK";
