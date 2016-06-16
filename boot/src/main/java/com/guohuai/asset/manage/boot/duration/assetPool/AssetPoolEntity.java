@@ -50,6 +50,10 @@ public class AssetPoolEntity implements Serializable {
 		this.transitCash = init0;
 		this.confirmProfit = init0;
 		this.factProfit = init0;
+		this.cashtoolFactRate = init0;
+		this.targetFactRate = init0;
+		this.deviationValue = init0;
+		this.factValuation = 0;
 		this.scheduleState = "未计算";
 		this.incomeState = "未分配";
 	}

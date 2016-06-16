@@ -109,6 +109,16 @@ define([
 							type: 'button',
 							class: 'item-detail',
 							isRender: parseInt(row.state) === 1
+						}, {
+							text: '部分计算',
+							type: 'button',
+							class: 'item-calc',
+							isRender: parseInt(row.state) === 1 && row.scheduleState === '未计算'
+						}, {
+							text: '不计算',
+							type: 'button',
+							class: 'item-uncalc',
+							isRender: parseInt(row.state) === 1 && row.scheduleState === '未计算'
 						}, 
 						{
 							text: '审核',
@@ -139,6 +149,28 @@ define([
 					events: {
 						'click .item-detail': function(e, val, row) {
 							util.nav.dispatch('AssetPoolDuration', 'id=' + row.oid)
+						},
+						'click .item-calc': function(e, val, row) {
+							http.post(config.api.duration.assetPool.userPoolProfit, {
+								data: {
+									oid: row.oid,
+									type: 'USER_CALC'
+								},
+								contentType: 'form'
+							}, function(json) {
+								$('#assetPoolTable').bootstrapTable('refresh');
+							})
+						},
+						'click .item-uncalc': function(e, val, row) {
+							http.post(config.api.duration.assetPool.userPoolProfit, {
+								data: {
+									oid: row.oid,
+									type: 'USER_NONE'
+								},
+								contentType: 'form'
+							}, function(json) {
+								$('#assetPoolTable').bootstrapTable('refresh');
+							})
 						},
 						'click .item-audit': function(e, val, row) {
 							currentPool = row

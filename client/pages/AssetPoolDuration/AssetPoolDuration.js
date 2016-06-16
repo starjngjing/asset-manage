@@ -1199,7 +1199,6 @@ define([
 					},
 					events: {
 						'click .item-audit': function(e, val, row) {
-							console.log(row.type)
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
@@ -1260,7 +1259,6 @@ define([
 							modal.modal('show')
 						},
 						'click .item-trans-audit': function(e, val, row) {
-							console.log(row.type)
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
 								data: {
@@ -2313,7 +2311,20 @@ define([
 				form.state.value = '0'
 				var url = ''
 				switch (form.type.value) {
-					case '申购':
+					case '投资标的申购':
+						switch (form.opType.value) {
+							case 'audit':
+								url = config.api.duration.order.auditForTrust
+								break
+							case 'ordering':
+								url = config.api.duration.order.appointmentForTrust
+								break
+							default:
+								url = config.api.duration.order.orderConfirmForTrust
+								break
+						}
+						break
+					case '投资标的转入':
 						switch (form.opType.value) {
 							case 'audit':
 								url = config.api.duration.order.auditForTrust
@@ -2366,7 +2377,20 @@ define([
 				form.state.value = '-1'
 				var url = ''
 				switch (form.type.value) {
-					case '申购':
+					case '投资标的申购':
+						switch (form.opType.value) {
+							case 'audit':
+								url = config.api.duration.order.auditForTrust
+								break
+							case 'ordering':
+								url = config.api.duration.order.appointmentForTrust
+								break
+							default:
+								url = config.api.duration.order.orderConfirmForTrust
+								break
+						}
+						break
+					case '投资标的转入':
 						switch (form.opType.value) {
 							case 'audit':
 								url = config.api.duration.order.auditForTrust
@@ -2467,6 +2491,16 @@ define([
 						$('#trustTransCheckModal').modal('hide')
 					}
 				})
+			})
+			
+			// 本息兑付 - 是否本金返还 - radio点击事件
+			$('#incomeRadio').on('click', function() {
+				var value = document.trustIncomeForm.capitalFlag.value
+				if (value === '0') {
+					$('#capitalArea').hide()
+				} else {
+					$('#capitalArea').show()
+				}
 			})
 
 			// 本息兑付审核/预约/确认 - 通过按钮点击事件
