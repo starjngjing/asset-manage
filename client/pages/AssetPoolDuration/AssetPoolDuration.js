@@ -2834,6 +2834,61 @@ function getPieOptions(config, source) {
 	}
 }
 
+function getLineOptions (config, source) {
+  return {
+    tooltip: {
+      trigger: 'axis'
+    },
+    grid: {
+			top: 10,
+			left: 50,
+			right: 30,
+			bottom: 70
+		},
+    dataZoom: {
+      show: true,
+      start: 100 - Math.round(7 / source.length * 100),
+      end: 100,
+      handleSize: 7
+    },
+    xAxis: [{
+      type: 'category',
+      boundaryGap: true,
+      data: source.map(function (item) {
+        return item.date
+      })
+    }],
+    yAxis: [{
+      name: '每日收益率',
+      boundaryGap: true,
+      min: '0',
+      axisLabel: {
+        formatter: function (val) {
+          return val + '%'
+        }
+      },
+      type: 'value'
+    }],
+    series: [{
+      name: '收益率',
+      type: 'line',
+      showAllSymbol: true,
+      label: {
+        normal: {
+          show: true,
+          textStyle: {
+            color: '#333'
+          }
+        }
+      },
+      data: source.map(function (item) {
+        return parseInt(item.yield * 100) / 100
+      })
+    }],
+    color: config.colors
+  }
+}
+
 // 自定义验证 - 现金比例/现金管理类工具比例/信托计划比例 加起来不能超过100
 function validpercentage($el) {
 	var form = $el.closest('form')
@@ -2858,12 +2913,22 @@ function pageInit (pageState, http, config) {
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
 		$('#detailPoolProfit').html(detail.deviationValue)
-			// 饼图生成
+		// 饼图生成
 		var pieChart = echarts.init(document.getElementById('pieChart'))
 		pieChart.setOption(getPieOptions(config, detail))
-			// 柱状图生成
+		// 柱状图生成
 		var barChart = echarts.init(document.getElementById('barChart'))
 		barChart.setOption(getBarOptions(config, detail))
+		// 折线图生成
+		var lineChart =	echarts.init(document.getElementById('lineChart'))
+		var mockData = [
+			{date: '2015-01-01', yield: 0.12},
+			{date: '2015-01-02', yield: 0.43},
+			{date: '2015-01-03', yield: 0.53},
+			{date: '2015-01-04', yield: 0.61},
+			{date: '2015-01-05', yield: 0.02},
+		]
+		lineChart.setOption(getLineOptions(config, mockData));
 	})
 }
 
