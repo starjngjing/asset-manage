@@ -233,11 +233,13 @@ define([
           form.validator({
             custom: {
               validfloat: this.validfloat,
-              validint: this.validint
+              validint: this.validint,
+              validpositive: this.validpositive
             },
             errors: {
               validfloat: '数据格式不正确',
-              validint: '数据格式不正确'
+              validint: '数据格式不正确',
+              validpositive: '数据必须为自然数'
             }
           })
         },
@@ -283,6 +285,24 @@ define([
             } else {
               return true
             }
+          }
+        },
+        /**
+         * 非负数校验 大于零：data-validpositive="non-zero" 大于等于零：data-validpositive="true"
+         * @param $el 验证表单元素 jquery对象
+         * @returns 验证结果 {boolean}
+         */
+        validpositive: function ($el) {
+          var value = $el.val().trim()
+          if (!value) {
+            return true
+          }
+          var type = $el.attr('data-validpositive')
+          switch (type) {
+            case 'non-zero':
+              return Number(value) > 0
+            default:
+              return Number(value) >= 0
           }
         }
       },
