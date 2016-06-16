@@ -548,7 +548,7 @@ public class CapitalService {
 				}
 			}
 		} else if ("trans".equals(operation)) {
-			entity.setCashtoolOrderOid(sn);
+			entity.setTargetOrderOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
 			entity.setOperation(CapitalEntity.TRANS);
@@ -691,7 +691,7 @@ public class CapitalService {
 				poolEntity.setFreezeCash(poolEntity.getFreezeCash().subtract(account).setScale(4, BigDecimal.ROUND_HALF_UP));
 			}
 		} else if ("trans".equals(operation)) {
-			entity.setCashtoolOrderOid(sn);
+			entity.setTargetOrderOid(sn);
 			entity.setUnfreezeCash(account);
 			entity.setFreezeCash(capital);
 			entity.setOperation(CapitalEntity.TRANS);
