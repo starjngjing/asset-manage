@@ -53,6 +53,7 @@ public class AssetPoolEntity implements Serializable {
 		this.cashtoolFactRate = init0;
 		this.targetFactRate = init0;
 		this.deviationValue = init0;
+		this.marketValue = init0;
 		this.factValuation = 0;
 		this.scheduleState = "未计算";
 		this.incomeState = "未分配";
@@ -63,6 +64,8 @@ public class AssetPoolEntity implements Serializable {
 	private String name;
 	// 资产规模(估值)
 	private BigDecimal scale;
+	// 真实市值
+	private BigDecimal marketValue;
 	// 现金比例
 	private BigDecimal cashRate;
 	// 货币基金（现金类管理工具）比例
