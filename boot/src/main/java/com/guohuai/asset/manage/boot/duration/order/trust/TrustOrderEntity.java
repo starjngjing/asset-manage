@@ -37,6 +37,12 @@ public class TrustOrderEntity implements Serializable {
 	public static final String STATE_CONFIRM		= "1";
 	public static final String STATE_SUCCESS 		= "2";
 	
+	/**
+	 * 类型(purchase:申购;transfer:转入)
+	 */
+	public static final String TYPE_PURCHASE	= "purchase";
+	public static final String TYPE_TRANSFER	= "transfer";
+	
 	@Id
 	private String oid;
 	// 关联投资标的
@@ -73,6 +79,8 @@ public class TrustOrderEntity implements Serializable {
 	private String reserver; 
 	// 状态（-2：失败，-1：待审核，0：待预约，1：待确认，2：已成立）
 	private String state;
+	// 类型(purchase:申购;transfer:转入)
+	private String type;
 	// 确认人
 	private String confirmer; 
 	// 操作员

@@ -134,8 +134,6 @@ public class OrderService {
 		
 		fundService.save(order);
 		
-		investService.IncApplyAmount(form.getCashtoolOid(), form.getApplyCash());
-		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getCashtoolOid(), 
 				order.getOid(), FUND, form.getApplyCash(), BigDecimal.ZERO, PURCHASE, APPLY, uid, null);
@@ -170,8 +168,6 @@ public class OrderService {
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
 		
 		fundService.save(order);
-		
-		investService.IncApplyAmount(entity.getCashTool().getOid(), entity.getRedeemVolume().negate());
 		
 		// 资金变动记录
 		capitalService.capitalFlow(entity.getAssetPoolOid(), entity.getCashTool().getOid(), 
@@ -313,16 +309,13 @@ public class OrderService {
 			if ("purchase".equals(order.getOptType())) {
 				fundEntity.setAmount(fundEntity.getAmount().add(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 				fundEntity.setState(FundEntity.INVESTING);
-				
-				investService.IncHoldAmount(fundEntity.getCashTool().getOid(), form.getInvestVolume());
 			} else {
 				fundEntity.setAmount(fundEntity.getAmount()
 						.add(order.getReturnVolume())
 						.subtract(order.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
-				if (fundEntity.getAmount().compareTo(BigDecimal.ZERO) < 1) {
-					fundEntity.setState(FundEntity.INVESTEND);
-				}
-				investService.IncHoldAmount(fundEntity.getCashTool().getOid(), form.getInvestVolume().negate());
+//				if (fundEntity.getAmount().compareTo(BigDecimal.ZERO) < 1) {
+//					fundEntity.setState(FundEntity.INVESTEND);
+//				}
 			}
 		} else {
 			order.setState(CONFIRM30);
@@ -390,11 +383,14 @@ public class OrderService {
 //		order.setApplyVolume(form.getApplyVolume());
 		order.setApplyCash(form.getApplyCash());
 		order.setProfitType(form.getProfitType());
+		order.setType(TrustOrderEntity.TYPE_PURCHASE);
 		order.setState(APPLY00);
 		order.setAsker(uid);
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
 		
 		trustService.save(order);
+		
+		investService.IncApplyAmount(form.getTargetOid(), form.getApplyCash());
 		
 		// 资金变动记录
 		capitalService.capitalFlow(form.getAssetPoolOid(), form.getTargetOid(), 
@@ -434,7 +430,9 @@ public class OrderService {
 		
 		// 资金变动记录
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
-				order.getOid(), TRUST, form.getAuditCash(), order.getApplyCash(), PURCHASE, AUDIT, uid, form.getState());
+				order.getOid(), TRUST, form.getAuditCash(), order.getApplyCash(), 
+				TrustOrderEntity.TYPE_PURCHASE.equals(order.getType()) ? PURCHASE : TRANS, 
+				AUDIT, uid, form.getState());
 	}
 	
 	/**
@@ -471,7 +469,9 @@ public class OrderService {
 		// 资金变动记录
 		BigDecimal account = order.getAuditCash() == null ? order.getApplyCash() : order.getAuditCash();
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
-				order.getOid(), TRUST, form.getReserveCash(), account, PURCHASE, APPOINTMENT, uid, form.getState());
+				order.getOid(), TRUST, form.getReserveCash(), account, 
+				TrustOrderEntity.TYPE_PURCHASE.equals(order.getType()) ? PURCHASE : TRANS, 
+				APPOINTMENT, uid, form.getState());
 	}
 	
 	/**
@@ -504,6 +504,8 @@ public class OrderService {
 			trustEntity.setProfitType(order.getProfitType());
 			
 			trustService.save(trustEntity);
+			
+			investService.IncHoldAmount(trustEntity.getTarget().getOid(), form.getInvestVolume());
 		} else
 			order.setState(CONFIRM30);
 		order.setConfirmer(uid);
@@ -525,7 +527,9 @@ public class OrderService {
 		BigDecimal account = order.getReserveCash() == null ? order.getAuditCash() == null ? order.getApplyCash() : order.getAuditCash()
 				: order.getReserveCash();
 		capitalService.capitalFlow(order.getAssetPoolOid(), order.getTarget().getOid(), 
-				order.getOid(), TRUST, form.getInvestCash(), account, PURCHASE, CONFIRM, uid, form.getState());
+				order.getOid(), TRUST, form.getInvestCash(), account, 
+				TrustOrderEntity.TYPE_PURCHASE.equals(order.getType()) ? PURCHASE : TRANS, 
+				CONFIRM, uid, form.getState());
 	}
 	
 	/**
@@ -545,6 +549,7 @@ public class OrderService {
 		order.setApplyVolume(form.getApplyVolume());
 		order.setApplyCash(form.getApplyCash());
 		order.setProfitType(form.getProfitType());
+		order.setType(TrustOrderEntity.TYPE_TRANSFER);
 		order.setState(APPLY00);
 		order.setAsker(uid);
 		order.setCreateTime(DateUtil.getSqlCurrentDate());
@@ -800,8 +805,9 @@ public class OrderService {
 			order.setState(CONFIRM31);
 			
 			if (BigDecimal.ZERO.compareTo(order.getCapital()) < 0) {
+				investService.IncHoldAmount(trustEntity.getTarget().getOid(), trustEntity.getInvestVolume().negate());
 				trustEntity.setInvestVolume(BigDecimal.ZERO);
-				trustEntity.setState(TrustEntity.INVESTEND);
+//				trustEntity.setState(TrustEntity.INVESTEND);
 			}
 			trustEntity.setTotalProfit(form.getInvestVolume());
 			trustService.save(trustEntity);
@@ -933,18 +939,11 @@ public class OrderService {
 					.subtract(form.getInvestVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			trustEntity.setTransOutVolume(trustEntity.getTransOutVolume().subtract(order.getTranVolume()).setScale(4, BigDecimal.ROUND_HALF_UP));
 			trustEntity.setTransOutFee(trustEntity.getTransOutFee().subtract(order.getTranCash()).setScale(4, BigDecimal.ROUND_HALF_UP));
-			if (trustEntity.getInvestVolume().compareTo(BigDecimal.ZERO) < 1)
-				trustEntity.setState(TrustEntity.INVESTEND);
+//			if (trustEntity.getInvestVolume().compareTo(BigDecimal.ZERO) < 1)
+//				trustEntity.setState(TrustEntity.INVESTEND);
 			trustService.save(trustEntity);
 			
-			if (order.getInvestVolume().compareTo(order.getInvestCash()) > 0) {
-				
-			} else {
-//				documentService.targetPremiumsTransOut(trustEntity.getAssetPoolOid(), order.getOid(), 
-//						order.getInvestVolume(), 
-//						order.getInvestVolume().add(trustEntity.getTotalProfit()).setScale(4, BigDecimal.ROUND_HALF_UP), 
-//						order.getInvestCash());
-			}
+			investService.IncHoldAmount(trustEntity.getTarget().getOid(), form.getInvestVolume().negate());
 		} else {
 			order.setState(CONFIRM30);
 			TrustEntity trustEntity = order.getTrustEntity();

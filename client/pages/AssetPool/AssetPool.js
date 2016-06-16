@@ -151,25 +151,39 @@ define([
 							util.nav.dispatch('AssetPoolDuration', 'id=' + row.oid)
 						},
 						'click .item-calc': function(e, val, row) {
-							http.post(config.api.duration.assetPool.userPoolProfit, {
-								data: {
-									oid: row.oid,
-									type: 'USER_CALC'
-								},
-								contentType: 'form'
-							}, function(json) {
-								$('#assetPoolTable').bootstrapTable('refresh');
+							currentPool = row
+							$$.confirm({
+								container: $('#calcConfirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.assetPool.userPoolProfit, {
+										data: {
+											oid: row.oid,
+											type: 'USER_CALC'
+										},
+										contentType: 'form'
+									}, function(json) {
+										$('#assetPoolTable').bootstrapTable('refresh');
+									})
+								}
 							})
 						},
 						'click .item-uncalc': function(e, val, row) {
-							http.post(config.api.duration.assetPool.userPoolProfit, {
-								data: {
-									oid: row.oid,
-									type: 'USER_NONE'
-								},
-								contentType: 'form'
-							}, function(json) {
-								$('#assetPoolTable').bootstrapTable('refresh');
+							currentPool = row
+							$$.confirm({
+								container: $('#calcConfirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.assetPool.userPoolProfit, {
+										data: {
+											oid: row.oid,
+											type: 'USER_NONE'
+										},
+										contentType: 'form'
+									}, function(json) {
+										$('#assetPoolTable').bootstrapTable('refresh');
+									})
+								}
 							})
 						},
 						'click .item-audit': function(e, val, row) {

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.guohuai.asset.manage.boot.duration.capital.CapitalEntity;
+
 @Service
 public class TrustService {
 
@@ -250,9 +252,9 @@ public class TrustService {
 	 */
 	@Transactional
 	public void updateOrder(String oid, String operation) {
-		if ("申购".equals(operation)) {
+		if (CapitalEntity.APPLY.equals(operation) || CapitalEntity.TRANS.equals(operation)) {
 			trustPurchaseDao.updateOrder(oid);
-		} else if ("本息兑付".equals(operation)) {
+		} else if (CapitalEntity.INCOME.equals(operation)) {
 			trustIncomeDao.updateOrder(oid);
 		} else {
 			trustTransDao.updateOrder(oid);
