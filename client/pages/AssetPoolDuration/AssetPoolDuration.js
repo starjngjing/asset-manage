@@ -985,6 +985,7 @@ define([
 						util.form.reset($(form))
 						$('#orderingToolTable').bootstrapTable('refresh')
 						$('#toolTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
 						$('#purchaseModal').modal('hide')
 					}
 				})
@@ -1000,6 +1001,7 @@ define([
 						util.form.reset($(form))
 						$('#orderingToolTable').bootstrapTable('refresh')
 						$('#toolTable').bootstrapTable('refresh')
+						pageInit(pageState, http, config)
 						$('#redeemModal').modal('hide')
 					}
 				})
