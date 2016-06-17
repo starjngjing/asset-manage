@@ -30,7 +30,16 @@ define([
 			}
 			// 市值校准--市值校准记录--点击审核时，保存当前订单的oid
 			var marketOid = null
-
+			// 市值校准--缓存前一日的 单位净值 * 份额
+			var calcData = 0;
+			// 市值校准--净交易额
+			var calcOrders = 0;
+			// 市值校准--份额
+			var calcShares = 0;
+			// 市值校准--单位净值
+			var calcNav = 0;
+			// 市值校准--净收益
+			var calcProfit = 0;
 			// 页面主tabs点击渲染图表
 			$('#mainTab').find('li').each(function (index, item) {
 				if (index) {
@@ -75,6 +84,7 @@ define([
 					$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
 					if (result.lastShares) {
 						result.lastShares = result.lastShares + '\t 万份'
+						calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
 					}
 					if (result.purchase) {
 						result.purchase = result.purchase + '\t 万元'
@@ -197,7 +207,7 @@ define([
 									result.profit = result.profit + '\t 万元'
 								}
 								if (result.ratio) {
-									result.ratio = result.ratio + '\t %'
+									result.ratio = result.ratio * 100 + '\t %'
 								}
 								$$.detailAutoFix(modal, result)
 							})
@@ -220,7 +230,7 @@ define([
 									result.profit = result.profit + '\t 万元'
 								}
 								if (result.ratio) {
-									result.ratio = result.ratio + '\t %'
+									result.ratio = result.ratio * 100 + '\t %'
 								}
 								$$.detailAutoFix(modal, result)
 							})
@@ -290,6 +300,28 @@ define([
 				})
 				modal.modal('hide')
 			})
+			
+		    // 可售余额和应付费金输入框input事件绑定
+		    $(document.marketAdjustForm.shares).on('input', function () {
+		      	calcShares = parseFloat(this.value) || 0
+		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
+		      	document.marketAdjustForm.profit.value = calcProfit
+		      	var ratio = 0
+		      	if (calcData !== 0) {
+		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	}
+		      	document.marketAdjustForm.ratio.value = ratio
+		    })
+		    $(document.marketAdjustForm.nav).on('input', function () {
+		        calcNav = parseFloat(this.value) || 0
+		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
+		      	document.marketAdjustForm.profit.value = calcProfit
+		      	var ratio = 0
+		      	if (calcData !== 0) {
+		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	}
+		      	document.marketAdjustForm.ratio.value = ratio
+		    })
 			// 实际市值 脚本区域 end ==============================================================================================================================
 			
 			// 资产池估值 脚本区域 start ==============================================================================================================================

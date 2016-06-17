@@ -1241,8 +1241,12 @@ public class OrderService {
 					int seq = trustService.getSeqByIncome(entity.getOid());
 //					List<TrustIncomeForm> list = targetService.getIncomeData(target, entity);
 //					form.setIncomeFormList(list);
-					TrustIncomeForm from = targetService.getIncomeData(target, entity, seq);
-					form.setIncomeForm(from);
+					TrustIncomeForm income = targetService.getIncomeData(target, entity, seq);
+					if (null == income) {
+						income = new TrustIncomeForm();
+						income.setSeq(++seq);
+					}
+					form.setIncomeForm(income);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
