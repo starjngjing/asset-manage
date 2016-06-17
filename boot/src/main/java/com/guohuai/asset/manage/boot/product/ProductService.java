@@ -1247,9 +1247,9 @@ public class ProductService {
 			@Override
 			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if(StringUtil.isEmpty(oid)) {
-					return cb.equal(root.get(attrName).as(String.class), value);
+					return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO),cb.equal(root.get(attrName).as(String.class), value));
 				} else {
-					return cb.and(cb.equal(root.get(attrName).as(String.class), value),cb.notEqual(root.get("oid").as(String.class), oid));
+					return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO),cb.equal(root.get(attrName).as(String.class), value),cb.notEqual(root.get("oid").as(String.class), oid));
 				}
 			}
 		};
