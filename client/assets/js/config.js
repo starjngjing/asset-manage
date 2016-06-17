@@ -592,6 +592,56 @@ define(function() {
 			id: "DOWN",
 			text: "风险降级",
 		}],
+		investorType:[{ // 持有人类型
+			id: "SPV",
+			text: "SPV",
+		}, {
+			id: "INVESTOR",
+			text: "零售投资人",
+		}],
+		investorOrderType:[{ // 持有人订单交易类型
+			id: "INVEST",
+			text: "申购",
+		}, {
+			id: "REDEEM",
+			text: "赎回",
+		}, {
+			id: "BUY_IN",
+			text: "买入",
+		}, {
+			id: "PART_SELL_OUT",
+			text: "部分卖出",
+		}, {
+			id: "FULL_SELL_OUT",
+			text: "全部卖出",
+		}],
+		investorOrderCate:[{ // 持有人订单Cate
+			id: "TRADE",
+			text: "交易订单",
+		}, {
+			id: "STRIKE",
+			text: "冲账订单",
+		}],
+		investorOrderStatus:[{ // 持有人订单状态
+			id: "SUBMIT",
+			text: "未确认",
+		}, {
+			id: "CONFIRM",
+			text: "确认",
+		}, {
+			id: "DISABLE",
+			text: "失败",
+		}, {
+			id : "CALCING",
+			text: "清算中",
+		}],
+		investorOrderEntryStatus:[{ // 持有人订单入账状态
+			id: "NO",
+			text: "未入账",
+		}, {
+			id: "YES",
+			text: "已入账",
+		}],
 		/**
 		 * 图标所用到的主题颜色
 		 */
