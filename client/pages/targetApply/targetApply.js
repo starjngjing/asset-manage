@@ -250,8 +250,7 @@ define([
 							//console.info("targetInfo---------->" + JSON.stringify(targetInfo))
 
 							$('#projectSearchForm').resetForm(); // 先清理搜索项目表单
-							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
-
+							$$.detailAutoFix($('#targetDetail'), formatTargetData(targetInfo)); // 自动填充详情
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
 							//111
@@ -361,7 +360,7 @@ define([
 								if (!data) {
 									alert('查询底层项目详情失败');
 								} else {
-									$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
+									$$.detailAutoFix($('#targetDetail_2'), formatTargetData(targetInfo)); // 自动填充详情
 									//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
 									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
 									if(data.warrantor === 'yes') { // 担保人信息									
@@ -1068,7 +1067,7 @@ define([
 		if (t) {
 			var t2 = {};
 			$.extend(t2, t); //合并对象，修改第一个对象
-			t2.expAror = t2.expAror ? t2.expAror.toFixed(2) + '%' : "";
+			t2.expAror = t2.expAror ? (t2.expAror*100).toFixed(2) + '%' : "";
 			t2.collectIncomeRate = t2.collectIncomeRate ? t2.collectIncomeRate.toFixed(2) + '%' : "";
 			
 			t2.raiseScope = t2.raiseScope + '万';
