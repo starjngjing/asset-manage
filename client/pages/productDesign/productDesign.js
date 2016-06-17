@@ -704,6 +704,14 @@ define([
 						break
 				}
 
+				if (selectProductOid === '') {
+					$('#addProductForm').validator('destroy')
+					util.form.validator.init($('#addProductForm'))
+				} else {
+					$('#updateProductForm').validator('destroy')
+					util.form.validator.init($('#updateProductForm'))
+				}
+
 			}).change()
 
 			//  付息方式select联动
