@@ -16,8 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.guohuai.asset.manage.boot.channel.Channel;
+import com.guohuai.asset.manage.boot.investor.InvestorAccount;
 import com.guohuai.asset.manage.boot.investor.InvestorBaseAccount;
 import com.guohuai.asset.manage.boot.investor.InvestorHolding;
+import com.guohuai.asset.manage.boot.product.Product;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
 import lombok.AllArgsConstructor;
@@ -34,9 +36,12 @@ public class InvestorHoldingDet {
 	 */
 	private String channelName;
 
+	// 产品信息
+//	private String productOid;
+
 	// 持仓信息
-	private String oid;// 状态
-	private String status;// 状态
+	private String oid;// 持仓oid
+	private String state;// 状态
 	private BigDecimal balance = new BigDecimal(0);// 本金余额
 	private BigDecimal compound = new BigDecimal(0);// 复利本金
 	private BigDecimal uncompound = new BigDecimal(0);// 未复利本金
@@ -56,8 +61,16 @@ public class InvestorHoldingDet {
 		InvestorBaseAccount iba = ih.getBaseAccount();
 		if (null != iba) {
 			Channel ch = iba.getChannel();
-			if (null != ch)
+			if (null != ch) {
 				this.channelName = ch.getChannelName();
+			}
+//			InvestorAccount ia = iba.getInvestorAccount();
+//			if (null != ia) {
+//				Product prd = ia.getProduct();
+//				if (null != prd) {
+//					productOid = prd.getOid();
+//				}
+//			}
 		}
 
 		// 计算持仓天数
@@ -69,7 +82,7 @@ public class InvestorHoldingDet {
 		}
 
 		// 计算奖励收益率
-		
+
 	}
 
 }

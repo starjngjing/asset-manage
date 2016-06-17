@@ -103,6 +103,7 @@ public class InvestorManageController {
 	@ApiOperation(value = "持有人名录持有份额列表")
 	public @ResponseBody ResponseEntity<InvestorHoldingDetListResp> holdList(HttpServletRequest request,
 			@RequestParam String op,
+			@RequestParam String accountOid,
 			@And({ 
 				@Spec(params = "accountOid", path = "baseAccount.investorAccount.oid", spec = Equal.class) 
 			}) Specification<InvestorHolding> spec,
@@ -138,8 +139,8 @@ public class InvestorManageController {
 		Order order = new Order(Direction.valueOf(sortDirection.toUpperCase()), sortField);
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(order));
 		
-		Page<InvestorHolding> pageData = investorHoldingService.list(spec, pageable);
-		InvestorHoldingDetListResp resp = new InvestorHoldingDetListResp(pageData);
+		InvestorHoldingDetListResp resp = investorManageService.holdList(spec, pageable, accountOid);
+		
 		return new ResponseEntity<InvestorHoldingDetListResp>(resp, HttpStatus.OK);
 	}
 	

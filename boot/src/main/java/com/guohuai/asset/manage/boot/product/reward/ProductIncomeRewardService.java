@@ -1,13 +1,17 @@
 package com.guohuai.asset.manage.boot.product.reward;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -20,7 +24,6 @@ import com.guohuai.asset.manage.boot.product.ProductService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 import com.guohuai.asset.manage.component.web.view.PageResp;
-import java.text.ParseException;
 
 @Service
 @Transactional
@@ -107,5 +110,33 @@ public class ProductIncomeRewardService {
 		return list;
 	}
 
+	
+	public Map<String, List<ProductIncomeReward>> productRewardList(List<String> productOid) {
+
+		List<ProductIncomeReward> list = this.productIncomeRewardDao.findByProductOid(productOid);
+
+		Map<String, List<ProductIncomeReward>> map = new HashMap<>();
+		if (null != list)
+			for (ProductIncomeReward pi : list) {
+				String poid = pi.getProduct().getOid();
+				List<ProductIncomeReward> l = map.get(poid);
+				if (null == l) {
+					l = new ArrayList<ProductIncomeReward>();
+					map.put(poid, l);
+				}
+				boolean has = false;
+				for (ProductIncomeReward p : l) {
+					if (p.getProduct().getOid().equals(poid)) {
+						has = true;
+					}
+				}
+				if (!has)
+					l.add(pi);
+			}
+
+		return map;
+	}
+	
+	
 
 }

@@ -276,11 +276,24 @@ define([
 									formatter: function(val) {
 										return val;
 									}
+
 								}, { //订单状态
 									field: 'orderStatus',
 									align: 'center',
 									formatter: function(val) {
-										return util.enum.transform('investorOrderStatus', val);
+										var className = ''
+										switch (val) {
+											case 'SUBMIT':
+												className = 'text-yellow'
+												break
+											case 'DISABLE':
+												className = 'text-red'
+												break
+											default:
+												className = 'text-green'
+												break
+										}
+										return '<span class="' + className + '">' + util.enum.transform('investorOrderStatus', val) + '</span>'
 									}
 								}, { //下单时间
 									field: 'createTime',
