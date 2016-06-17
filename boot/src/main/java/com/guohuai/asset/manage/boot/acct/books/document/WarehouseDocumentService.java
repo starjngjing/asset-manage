@@ -387,7 +387,7 @@ public class WarehouseDocumentService {
 					document.setCrAmount(document.getCrAmount().add(wipe));
 					b_2201 = this.accountBookService.drCredit(b_2201, wipe);
 					seq++;
-					entries.add(e3_110101);
+					entries.add(e4_2201);
 
 					// 现金头寸也要调整 收益部分
 					// 借 银行存款 1001
