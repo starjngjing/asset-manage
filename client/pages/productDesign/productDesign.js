@@ -267,20 +267,18 @@ define([
 										var data = result;
 										selectProductOid = data.oid
 										setDate = getCurentDate()
-										
-										if ('PRODUCTTYPE_01' == data.typeOid) {
-											if (data.raiseStartDate != null && data.raiseStartDate != '') {
-												setDate = data.raiseStartDate
-											} else {
-												data.raiseStartDate = setDate
-											}
-										} else if ('PRODUCTTYPE_02' == data.typeOid) {
-											if (data.setupDate != null && data.setupDate != '') {
-												setDate = data.setupDate
-											} else {
-												data.setupDate = setDate
-											}
+
+										if (data.raiseStartDate != null && data.raiseStartDate != '') {
+											setDate = data.raiseStartDate
+										} else {
+											data.raiseStartDate = setDate
 										}
+										if (data.setupDate != null && data.setupDate != '') {
+											setDate = data.setupDate
+										} else {
+											data.setupDate = setDate
+										}
+										
 										$(document.updateProductForm.name).attr("data-fetch-id", data.oid)
 										$(document.updateProductForm.fullName).attr("data-fetch-id", data.oid)
 										$(document.updateProductForm.code).attr("data-fetch-id", data.oid)
@@ -323,7 +321,6 @@ define([
 											})
 											select.value = data.assetPoolOid
 										})
-
 
 										$(document.updateProductForm.channels).select2()
 
@@ -706,8 +703,7 @@ define([
 						}
 						break
 				}
-				
-				
+
 			}).change()
 
 			//  付息方式select联动
