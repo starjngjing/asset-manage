@@ -156,7 +156,7 @@ define([
 									align: 'center',
 									formatter: function(val) {
 										if (val)
-											return val.toFixed(2) + '%';
+											return (val * 100).toFixed(2) + '%';
 										return val;
 									}
 								}]
@@ -224,7 +224,7 @@ define([
 									align: 'center',
 									formatter: function(val) {
 										if (val)
-											return val.toFixed(2) + '%';
+											return (val * 100).toFixed(2) + '%';
 										return val;
 									}
 								}]
