@@ -456,7 +456,7 @@
                 <div class="input-group input-group-sm">
                   <input name="shares" type="text"
                   class="form-control"
-                  placeholder="份额"
+                  placeholder="0"
                   data-validfloat="10.10" required>
                   <span class="input-group-addon">万</span>
                 </div>
@@ -466,12 +466,10 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label>单位净值</label>
-                <div class="input-group input-group-sm">
-                  <input name="nav" type="text"
-                  class="form-control"
-                  placeholder="单位净值"
-                  data-validfloat="10.10" required>
-                </div>
+	              <input name="nav" type="text"
+	              class="form-control input-sm"
+	              placeholder="0"
+	              data-validfloat="10.10" required>
             		<div class="help-block with-errors text-red"></div>
               </div>
             </div>
@@ -483,8 +481,8 @@
                 <div class="input-group input-group-sm">
                   <input name="profit" type="text"
                   class="form-control"
-                  placeholder="净收益"
-                  data-validfloat="10.10" required>
+                  placeholder="0"
+                  data-validfloat="10.10" readonly="readonly">
                   <span class="input-group-addon">万</span>
                 </div>
             		<div class="help-block with-errors text-red"></div>
@@ -496,8 +494,8 @@
                 <div class="input-group input-group-sm">
                   <input name="ratio" type="text"
                   class="form-control"
-                  placeholder="收益率"
-                  data-validfloat="10.10" required>
+                  placeholder="0"
+                  data-validfloat="10.10" readonly="readonly">
                   <span class="input-group-addon">%</span>
                 </div>
             		<div class="help-block with-errors text-red"></div>
@@ -598,7 +596,7 @@
                 <input name="buyType" type="radio" value="trust" class="icheck"> 信托计划
               </div>
               <div class="col-sm-4">
-                <input name="buyType" type="radio" value="trans" class="icheck"> 待转入信托计划
+                <input name="buyType" type="radio" value="trans" class="icheck"> 信托计划转入
               </div>
             </div>
           </div>
