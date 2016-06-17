@@ -76,9 +76,9 @@ public class InvestorHoldingDet {
 		// 计算持仓天数
 		String sta = ih.getState();
 		if (StringUtils.equals(sta, InvestorHolding.STATE_CLOSE) || null != ih.getCloseTime()) {// 历史的
-			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCloseTime(), ih.getCloseTime());
+			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCreateTime(), ih.getCloseTime());
 		} else { // 当前
-			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCloseTime(), new Date());
+			holdDays = DateUtil.getDaysBetweenTwoDate(ih.getCreateTime(), new Date());
 		}
 
 		// 计算奖励收益率
