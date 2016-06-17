@@ -5,15 +5,6 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
-
 import lombok.Data;
 
 /**
@@ -21,10 +12,8 @@ import lombok.Data;
  * @author star.zhu
  * 2016年6月16日
  */
-@Entity
 @Data
-@Table(name = "T_GAM_ASSETPOOL_MARKET_ADJUST")
-public class MarketAdjust implements Serializable {
+public class MarketAdjustForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,11 +25,10 @@ public class MarketAdjust implements Serializable {
 	public static final String FAIL 	= "fail";
 	public static final String DELETE 	= "delete";
 
-	@Id
 	private String oid;
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assetpoolOid", referencedColumnName = "oid")
-	private AssetPoolEntity assetPool;
+	private String assetpoolOid;
+	// 上一个校准日
+	private Date lastBaseDate; 
 	// 校准日
 	private Date baseDate; 
 	// 份额
@@ -69,4 +57,6 @@ public class MarketAdjust implements Serializable {
 	private Timestamp auditTime; 
 	// 状态 (待审核: CREATE;通过: PASS;驳回: FAIL;已删除: DELETE)
 	private String status;
+	// 关联的订单oid
+	private String oids;
 }

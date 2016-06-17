@@ -107,10 +107,13 @@ public class FundService {
 	 * @return
 	 */
 	@Transactional
-	public List<FundEntity> findByPidForConfirm(String pid, Pageable pageable) {
+	public Object[] findByPidForConfirm(String pid, Pageable pageable) {
 		Page<FundEntity> list = fundDao.findByPidForConfirm(pid, pageable);
 		if (null != list.getContent() && list.getContent().size() > 0) {
-			return list.getContent();
+			Object[] obj = new Object[2];
+			obj[0] = list.getTotalElements();
+			obj[1] = list.getContent();
+			return obj;
 		}
 		
 		return null;
@@ -145,7 +148,7 @@ public class FundService {
 	 * @return
 	 */
 	@Transactional
-	public void updateOrder(String oid) {
-		fundOrderDao.updateOrder(oid);
+	public void updateOrder(String oid, String operator) {
+		fundOrderDao.updateOrder(oid, operator);
 	}
 }

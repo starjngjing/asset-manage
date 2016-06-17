@@ -15,12 +15,263 @@ define([
 			// 缓存可用现金
 			var freeCash = 0
 			// 缓存持有份额
-			var holdAmount = 0;
+			var holdAmount = 0
 			// 缓存当前页资产池id
 			var pageState = {
 				pid: util.nav.getHashObj(location.hash).id || ''
 			}
+			// 市值校准--市值校准记录--点击审核时，保存当前订单的oid
+			var marketOid = null
 
+			// 实际市值 脚本区域 start ==============================================================================================================================
+			
+			// 市值校准录入表单验证初始化
+			$('#marketAdjustForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
+			
+			// 市值校准 按钮点击事件
+			$('#marketAdjsut').on('click', function() {
+				var modal = $('#marketAdjustModal')
+				http.post(config.api.duration.market.getMarketAdjustData, {
+					data: {
+						pid: pageState.pid,
+					},
+					contentType: 'form'
+				}, function(json) {
+					var form = document.marketAdjustForm
+					var result = json.result
+					form.assetpoolOid.value = json.result.assetpoolOid
+					$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
+					if (result.lastShares) {
+						result.lastShares = result.lastShares + '\t 万份'
+					}
+					if (result.purchase) {
+						result.purchase = result.purchase + '\t 万元'
+					}
+					if (result.redemption) {
+						result.redemption = result.redemption + '\t 万元'
+					}
+					if (result.lastOrders) {
+						result.lastOrders = result.lastOrders + '\t 万元'
+					}
+					$$.detailAutoFix(modal, json.result)
+				})
+				modal.modal('show')
+			})
+
+			// 市值校准记录 表格配置
+			var marketAdjustListPageOptions = {
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			var marketAdjustListTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.duration.market.getMarketAdjustList, {
+						data: marketAdjustListPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: marketAdjustListPageOptions.page,
+				pageSize: marketAdjustListPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					marketAdjustListPageOptions.rows = val.limit
+					marketAdjustListPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'baseDate'
+				}, 
+				{
+					field: 'shares'
+				}, 
+				{
+					field: 'nav'
+				}, 
+				{
+					field: 'purchase'
+				}, 
+				{
+					field: 'redemption'
+				}, 
+				{
+					field: 'orders'
+				}, 
+				{
+					field: 'ratio'
+				}, 
+				{
+					field: 'status',
+					formatter: function(val) {
+						if (val === 'create') {
+							return '待审核'
+						}
+						if (val === 'pass') {
+							return '通过'
+						}
+						if (val === 'fail') {
+							return '驳回'
+						}
+					}
+				}, 
+				{
+					width: 150,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-detail',
+        					isRender: row.status !== 'create'
+						},{
+							text: '审核',
+							type: 'button',
+							class: 'item-audit',
+        					isRender: row.status === 'create'
+						},{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+        					isRender: row.status === 'fail'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-detail': function(e, val, row) {
+							var modal = $('#marketAdjustAuditModal')
+							$('#marketAdjustDoCheck').hide()
+							http.post(config.api.duration.market.getMarketAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								if (result.shares) {
+									result.shares = result.shares + '\t 万份'
+								}
+								if (result.profit) {
+									result.profit = result.profit + '\t 万元'
+								}
+								if (result.ratio) {
+									result.ratio = result.ratio + '\t %'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},'click .item-audit': function(e, val, row) {
+							var modal = $('#marketAdjustAuditModal')
+							$('#marketAdjustDoCheck').show()
+							http.post(config.api.duration.market.getMarketAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								marketOid = result.oid
+								if (result.shares) {
+									result.shares = result.shares + '\t 万份'
+								}
+								if (result.profit) {
+									result.profit = result.profit + '\t 万元'
+								}
+								if (result.ratio) {
+									result.ratio = result.ratio + '\t %'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},'click .item-delete': function(e, val, row) {
+							$$.confirm({
+								container: $('#confirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.market.deleteMarketAdjust, {
+										data: {
+											oid: row.oid,
+										},
+										contentType: 'form'
+									}, function(json) {
+										$('#marketAdjustTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						}
+					}
+				}]
+			}
+			$('#marketAdjustTable').bootstrapTable(marketAdjustListTableConfig)
+			// 市值校准记录 表格配置 end
+			
+			// 市值校准记录 - 保存按钮点击事件
+			$('#doMarketAdjust').on('click', function() {
+				var form = document.marketAdjustForm
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: config.api.duration.market.saveMarketAdjust,
+					success: function() {
+						util.form.reset($(form))
+						$('#marketAdjustTable').bootstrapTable('refresh')
+						$('#marketAdjustModal').modal('hide')
+					}
+				})
+			})
+			
+			// 市值校准录入审核 - 通过按钮点击事件
+			$('#doMarketAdjustCheck').on('click', function() {
+				var modal = $('#marketAdjustAuditModal')
+				http.post(config.api.duration.market.auditMarketAdjust, {
+					data: {
+						oid: marketOid,
+						type: 'pass'
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#marketAdjustTable').bootstrapTable('refresh')
+				})
+				modal.modal('hide')
+			})
+			
+			// 市值校准录入审核 - 不通过按钮点击事件
+			$('#doMarketAdjustUnCheck').on('click', function() {
+				var modal = $('#marketAdjustAuditModal')
+				http.post(config.api.duration.market.auditMarketAdjust, {
+					data: {
+						oid: marketOid,
+						type: 'not'
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#marketAdjustTable').bootstrapTable('refresh')
+				})
+				modal.modal('hide')
+			})
+			// 实际市值 脚本区域 end ==============================================================================================================================
+			
+			// 资产池估值 脚本区域 start ==============================================================================================================================
 			// 资产池切换列表
 			http.post(config.api.duration.assetPool.getNameList, function(json) {
 				var assetPoolOptions = ''

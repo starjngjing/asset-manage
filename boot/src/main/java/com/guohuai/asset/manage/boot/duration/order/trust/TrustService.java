@@ -213,10 +213,13 @@ public class TrustService {
 	 * @return
 	 */
 	@Transactional
-	public List<TrustEntity> findByPidForConfirm(String pid, Pageable pageable) {
+	public Object[] findByPidForConfirm(String pid, Pageable pageable) {
 		Page<TrustEntity> list = trustDao.findByPidForConfirm(pid, pageable);
 		if (null != list.getContent() && list.getContent().size() > 0) {
-			return list.getContent();
+			Object[] obj = new Object[2];
+			obj[0] = list.getTotalElements();
+			obj[1] = list.getContent();
+			return obj;
 		}
 		
 		return null;
@@ -251,13 +254,13 @@ public class TrustService {
 	 * @return
 	 */
 	@Transactional
-	public void updateOrder(String oid, String operation) {
+	public void updateOrder(String oid, String operation, String operator) {
 		if (CapitalEntity.APPLY.equals(operation) || CapitalEntity.TRANS.equals(operation)) {
-			trustPurchaseDao.updateOrder(oid);
+			trustPurchaseDao.updateOrder(oid, operator);
 		} else if (CapitalEntity.INCOME.equals(operation)) {
-			trustIncomeDao.updateOrder(oid);
+			trustIncomeDao.updateOrder(oid, operator);
 		} else {
-			trustTransDao.updateOrder(oid);
+			trustTransDao.updateOrder(oid, operator);
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.order;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.ghg.pay.api.SeqGenerator;
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolDao;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.investor.Investor;
@@ -327,6 +329,33 @@ public class SpvOrderService {
 			spvOrderRep.setAuditor(adminObjMap.get(order.getAuditor()).getName());
 		}
 		return spvOrderRep;
+	}
+	
+	/**
+	 * 查询满足条件的订单列表，计算资产池的实际市值
+	 * @param pid
+	 * 			资产池id
+	 * @param baseDate
+	 * 			基准日
+	 * @author star
+	 * @return
+	 */
+	public List<Object[]> getListForMarketAdjust(String pid, Date baseDate) {
+		List<InvestorOrder> list = investorOrderDao.getListForMarketAdjust(pid, baseDate);
+		if (null != list && !list.isEmpty()) {
+			List<Object[]> objList = Lists.newArrayList();
+			Object[] obj = null;
+			for (InvestorOrder order : list) {
+				obj = new Object[3];
+				obj[0] = order.getOid();
+				obj[1] = order.getOrderType();
+				obj[2] = order.getOrderAmount();
+				objList.add(obj);
+			}
+			return objList;
+		}
+		
+		return null;
 	}
 
 }

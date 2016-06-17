@@ -263,6 +263,14 @@ define(function() {
 					delete: this.host + '/ams/duration/order/updateOrder',
 					updateFund: this.host + '/ams/duration/order/updateFund', // 纠偏持有额度
 					updateTrust: this.host + '/ams/duration/order/updateTrust', // 纠偏持有额度
+				},
+				market: { // 市值
+					getMarketAdjustData: this.host + '/ams/duration/market/getMarketAdjustData', // 市值校准录入 详情表单
+					saveMarketAdjust: this.host + '/ams/duration/market/saveMarketAdjust', // 市值校准录入
+					getMarketAdjust: this.host + '/ams/duration/market/getMarketAdjust', // 市值校准记录详情
+					auditMarketAdjust: this.host + '/ams/duration/market/auditMarketAdjust', // 市值校准录入审核
+					deleteMarketAdjust: this.host + '/ams/duration/market/deleteMarketAdjust', // 市值校准录入删除
+					getMarketAdjustList: this.host + '/ams/duration/market/getMarketAdjustList', // 市值校准记录 列表
 				}
 			},
 			role: {

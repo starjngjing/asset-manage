@@ -32,7 +32,7 @@
       <div role="tabpanel" class="tab-pane active" id="tabpanel1">
         <!-- tabpanel1 area one start -->
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <div class="box box-primary">
               <div class="box-header">
                 <div class="box-title">
@@ -45,26 +45,26 @@
                     <div class="col-xs-6" style="padding-right: 0;">
                       <ul class="list-group list-group-unbordered" style="font-size: 14px;">
                         <li class="list-group-item" style="padding-right: 10px;">
-                          <b>总估值(万):</b> <a class="text-black pull-right">0</a>
+                          <b>市值(万元):</b> <a class="text-black pull-right">0</a>
                         </li>
                         <li class="list-group-item" style="padding-right: 10px;">
-                          <b>可用现金(万):</b> <a class="text-black pull-right">0</a>
+                          <b>未分配收益(万元):</b> <a class="text-black pull-right">0</a>
                         </li>
                         <li class="list-group-item" style="padding-right: 10px;">
-                          <b>偏离损益(万):</b> <a class="text-black pull-right">0</a>
+                          <b>SPV所有者权益(万元):</b> <a class="text-black pull-right">0</a>
                         </li>
                       </ul>
                     </div>
                     <div class="col-xs-6" style="padding-left: 0;">
                       <ul class="list-group list-group-unbordered" style="font-size: 14px;">
                         <li class="list-group-item" style="padding-left: 10px;">
-                          <b>总估值(万):</b> <a class="text-black pull-right">0</a>
+                          <b>基准日:</b> <a class="text-black pull-right">0</a>
                         </li>
                         <li class="list-group-item" style="padding-left: 10px;">
-                          <b>可用现金(万):</b> <a class="text-black pull-right">0</a>
+                          <b>应付费金(万元):</b> <a class="text-black pull-right">0</a>
                         </li>
                         <li class="list-group-item" style="padding-left: 10px;">
-                          <b>偏离损益(万):</b> <a class="text-black pull-right">0</a>
+                          <b>投资者所有权益(万元):</b> <a class="text-black pull-right">0</a>
                         </li>
                       </ul>
                     </div>
@@ -72,27 +72,27 @@
                   <div style="width: 100%; position: absolute; bottom: 0;">
                     <div class="row">
                       <div class="col-xs-4" style="padding-right: 0;">
-                        <button id="buyAsset" class="btn btn-default btn-block btn-sm">
-                          <i class="fa fa-shopping-cart"></i> 资产申购
+                        <button id="marketAdjsut" class="btn btn-default btn-block btn-sm">
+                          <i class="fa fa-shopping-cart"></i> 市值校准
                         </button>
                       </div>
                       <div class="col-xs-4" style="padding-left: 5px; padding-right: 5px;">
-                        <button class="btn btn-default btn-block btn-sm">
-                          <i class="fa fa-pencil"></i> 现金校准
+                        <button id="profitDistribute" class="btn btn-default btn-block btn-sm">
+                          <i class="fa fa-pencil"></i> 收益分配
                         </button>
                       </div>
-                      <div class="col-xs-4" style="padding-left: 0;">
+                      <!--<div class="col-xs-4" style="padding-left: 0;">
                         <button class="btn btn-default btn-block btn-sm">
-                          <i class="fa fa-pencil"></i> 损益校准
+                          <i class="fa fa-pencil"></i> 费金提取
                         </button>
-                      </div>
+                      </div>-->
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-7">
             <div class="box box-primary">
               <div class="box-header">
                 <div class="box-title">
@@ -115,9 +115,9 @@
             <li role="presentation">
               <a href="#panel2" role="tab" data-toggle="tab">收益分配记录</a>
             </li>
-            <li role="presentation">
+            <!--<li role="presentation">
               <a href="#panel3" role="tab" data-toggle="tab">费金提取记录</a>
-            </li>
+            </li>-->
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" role="tabpanel" id="panel1">
@@ -127,7 +127,7 @@
                   <tr>
                     <th></th>
                     <th>基准日</th>
-                    <th>份额</th>
+                    <th>份额(万份)</th>
                     <th>单位净值</th>
                     <th>申购额(万元)</th>
                     <th>赎回额(万元)</th>
@@ -158,8 +158,8 @@
                 </thead>
               </table>
             </div>
-            <div class="tab-pane" role="tabpanel" id="panel3">
-              <!-- 费金提取记录数据表格 -->
+            <!-- 费金提取记录数据表格 -->
+            <!--<div class="tab-pane" role="tabpanel" id="panel3">
               <table id="commissionExtractTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -176,7 +176,7 @@
                   </tr>
                 </thead>
               </table>
-            </div>
+            </div>-->
           </div>
         </div>
         <!-- tabpanel1 area two end -->
@@ -383,7 +383,196 @@
 </section>
 <!-- =========================================主要内容 end============================================================== -->
 
-<!-- =========================================弹层区域 start============================================================ -->
+
+<!-- =========================================tabpanel1 弹层区域 start================================================== -->
+<!-- 市值校准 按钮弹窗 start-->
+<div id="marketAdjustModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">市值校准录入</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>前一基准日:</dt>
+          <dd>
+            <div data-detail-fetch="lastBaseDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>前一日单位净值:</dt>
+          <dd>
+            <div data-detail-fetch="lastNav"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>前一日份额:</dt>
+          <dd>
+            <div data-detail-fetch="lastShares"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>净申购额:</dt>
+          <dd>
+            <div data-detail-fetch="purchase"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>净赎回额:</dt>
+          <dd>
+            <div data-detail-fetch="redemption"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>净交易额:</dt>
+          <dd>
+            <div data-detail-fetch="lastOrders"></div>
+          </dd>
+        </dl>
+        <form id="marketAdjustForm" name="marketAdjustForm" method="post">
+          <input name="oids" type="hidden"/>
+          <input name="assetpoolOid" type="hidden" />
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>基准日</label>
+                <div class="input-group input-group-sm">
+                  <input name="baseDate" type="text"
+                  class="form-control"
+                  placeholder="" readonly="readonly">
+                </div>
+              </div>
+            </div>
+         	</div>
+         	<div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="shares" type="text"
+                  class="form-control"
+                  placeholder="份额"
+                  data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>单位净值</label>
+                <div class="input-group input-group-sm">
+                  <input name="nav" type="text"
+                  class="form-control"
+                  placeholder="单位净值"
+                  data-validfloat="10.10" required>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+          </div>
+         	<div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>净收益</label>
+                <div class="input-group input-group-sm">
+                  <input name="profit" type="text"
+                  class="form-control"
+                  placeholder="净收益"
+                  data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>收益率</label>
+                <div class="input-group input-group-sm">
+                  <input name="ratio" type="text"
+                  class="form-control"
+                  placeholder="收益率"
+                  data-validfloat="10.10" required>
+                  <span class="input-group-addon">%</span>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="doMarketAdjust" type="button" class="btn btn-primary btn-submit marketAdjustSubmit">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 市值校准 按钮弹窗 end-->
+
+<!-- 市值校准录入 审核弹窗 start -->
+<div id="marketAdjustAuditModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="trustTitleName">市值校准录入审核</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>基准日:</dt>
+          <dd>
+            <div data-detail-fetch="baseDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>单位净值:</dt>
+          <dd>
+            <div data-detail-fetch="nav"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>份额:</dt>
+          <dd>
+            <div data-detail-fetch="shares"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>净收益:</dt>
+          <dd>
+            <div data-detail-fetch="profit"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>收益率:</dt>
+          <dd>
+            <div data-detail-fetch="ratio"></div>
+          </dd>
+        </dl>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer" id="marketAdjustDoCheck">
+        <button id="doMarketAdjustUnCheck" type="button" class="btn btn-warning">驳 回</button>
+        <button id="doMarketAdjustCheck" type="button" class="btn btn-primary">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 市值校准录入 审核弹窗 end -->
+
+<!-- =========================================tabpanel1 弹层区域 end =================================================== -->
+
+<!-- =========================================tabpanel2 弹层区域 start================================================== -->
 <!-- 资产申购弹窗 start -->
 <div id="buyAssetModal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -3316,6 +3505,7 @@
   </div>
 </div>
 <!-- 出入金明细 信托计划弹窗 end -->
+<!-- =========================================tabpanel2 弹层区域 end==================================================== -->
 
 <!--确认提示框-->
 <div id="confirmModal" class="popover func-delete-popover">

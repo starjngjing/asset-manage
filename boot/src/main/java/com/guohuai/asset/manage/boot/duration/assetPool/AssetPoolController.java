@@ -50,7 +50,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/createPool", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> createPool(AssetPoolForm form) {
-		assetPoolService.createPool(form, "STAR");
+		assetPoolService.createPool(form, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -65,7 +65,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/auditPool", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditPool(@RequestParam String operation, @RequestParam String oid) {
-		assetPoolService.auditPool(operation, oid, "STAR");
+		assetPoolService.auditPool(operation, oid, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -130,7 +130,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/editPool", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> editPool(AssetPoolForm form) {
-		assetPoolService.editPool(form, "STAR");
+		assetPoolService.editPool(form, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -143,7 +143,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/editPoolForCash", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> editPoolForCash(AssetPoolForm form) {
-		assetPoolService.editPoolForCash(form, "STAR");
+		assetPoolService.editPoolForCash(form, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -216,7 +216,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/userPoolProfit", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> calcCapital(@RequestParam String oid, @RequestParam String type) {
-		assetPoolService.userPoolProfit(oid, type);
+		assetPoolService.userPoolProfit(oid, super.getLoginAdmin(), type);
 		Response r = new Response();
 		r.with("result", "SUCCESS");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
@@ -228,7 +228,7 @@ public class AssetPoolController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateDeviationValue", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> updateDeviationValue(AssetPoolForm form) {
-		assetPoolService.updateDeviationValue(form);
+		assetPoolService.updateDeviationValue(form, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESS");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

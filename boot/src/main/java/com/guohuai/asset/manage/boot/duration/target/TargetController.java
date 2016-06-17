@@ -110,19 +110,13 @@ public class TargetController {
 	@RequestMapping(value = "/getFundList", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getFundList(@RequestParam String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "10") int rows,
-			@RequestParam(required = false, defaultValue = "oid") String sortField,
-			@RequestParam(required = false, defaultValue = "desc") String sort) {
-		Direction sortDirection = Direction.DESC;
-		if (!"desc".equals(sort)) {
-			sortDirection = Direction.ASC;
-		}
-		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+			@RequestParam(required = false, defaultValue = "10") int rows) {
+		Pageable pageable = new PageRequest(page - 1, rows);
 		
-		List<FundForm> list = orderService.getFundListByPid(pid, pageable);
+		Object[] obj = orderService.getFundListByPid(pid, pageable);
 		Response r = new Response();
-		r.with("rows", list);
-		r.with("total", list.size());
+		r.with("rows", obj[1]);
+		r.with("total", obj[0]);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 
@@ -135,15 +129,7 @@ public class TargetController {
 	@RequestMapping(value = "/getTrustListForAppointment", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getTrustListForAppointment(@RequestParam String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "10") int rows,
-			@RequestParam(required = false, defaultValue = "createTime") String sortField,
-			@RequestParam(required = false, defaultValue = "desc") String sort) {
-//		Direction sortDirection = Direction.DESC;
-//		if (!"desc".equals(sort)) {
-//			sortDirection = Direction.ASC;
-//		}
-//		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
-		
+			@RequestParam(required = false, defaultValue = "10") int rows) {
 		List<TrustForm> list = orderService.getTrustListForAppointmentByPid(pid);
 		Response r = new Response();
 		r.with("rows", list);
@@ -160,19 +146,13 @@ public class TargetController {
 	@RequestMapping(value = "/getTrustList", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getTrustList(@RequestParam String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "10") int rows,
-			@RequestParam(required = false, defaultValue = "oid") String sortField,
-			@RequestParam(required = false, defaultValue = "desc") String sort) {
-		Direction sortDirection = Direction.DESC;
-		if (!"desc".equals(sort)) {
-			sortDirection = Direction.ASC;
-		}
-		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
+			@RequestParam(required = false, defaultValue = "10") int rows) {
+		Pageable pageable = new PageRequest(page - 1, rows);
 		
-		List<TrustForm> list = orderService.getTrustListByPid(pid, pageable);
+		Object[] obj = orderService.getTrustListByPid(pid, pageable);
 		Response r = new Response();
-		r.with("rows", list);
-		r.with("total", list.size());
+		r.with("rows", obj[1]);
+		r.with("total", obj[0]);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 	

@@ -382,9 +382,10 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public void userPoolProfit(String oid, String type) {
+	public void userPoolProfit(String oid, String operator, String type) {
 		// 资产池
 		AssetPoolEntity entity = assetPoolDao.findOne(oid);
+		entity.setOperator(operator);
 		List<AssetPoolEntity> saveList = Lists.newArrayList();
 		// 日期
 		Date sqlDate = new Date(System.currentTimeMillis());
@@ -454,6 +455,7 @@ public class AssetPoolService {
 						errorCalc.setAssetPool(assetPool);
 						jsonObj.put("DaylyProfit", "收益率为空");
 						errorCalc.setMessage(jsonObj);
+						errorCalc.setOperator(assetPool.getOperator());
 						errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 						errorList.add(errorCalc);
 					} else {
@@ -483,6 +485,7 @@ public class AssetPoolService {
 								if (null == entity.getTarget().getContractDays())
 									jsonObj.put("ContractDays", "合同年天数为空");
 								errorCalc.setMessage(jsonObj);
+								errorCalc.setOperator(assetPool.getOperator());
 								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 								errorList.add(errorCalc);
 							} else {
@@ -504,6 +507,7 @@ public class AssetPoolService {
 								if (null == entity.getTarget().getContractDays())
 									jsonObj.put("ContractDays", "合同年天数为空");
 								errorCalc.setMessage(jsonObj);
+								errorCalc.setOperator(assetPool.getOperator());
 								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 								errorList.add(errorCalc);
 							} else {
@@ -724,9 +728,10 @@ public class AssetPoolService {
 	 * @param form
 	 */
 	@Transactional
-	public void updateDeviationValue(AssetPoolForm form) {
+	public void updateDeviationValue(AssetPoolForm form, String operator) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
 		entity.setDeviationValue(form.getDeviationValue());
+		entity.setOperator(operator);
 		BigDecimal nscale = entity.getScale().add(
 				form.getDeviationValue().subtract(entity.getDeviationValue())
 				.setScale(4, BigDecimal.ROUND_HALF_UP));
