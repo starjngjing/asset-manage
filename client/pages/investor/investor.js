@@ -136,7 +136,7 @@ define([
 										return val;
 									}
 								}, { // 基础收益
-									field: 'compound',
+									field: 'income',
 									align: 'center',
 									formatter: function(val) {
 										return val;
@@ -204,7 +204,7 @@ define([
 										return val;
 									}
 								}, { // 基础收益
-									field: 'compound',
+									field: 'income',
 									align: 'center',
 									formatter: function(val) {
 										return val;
