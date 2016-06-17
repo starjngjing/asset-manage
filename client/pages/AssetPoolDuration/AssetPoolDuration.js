@@ -16,12 +16,33 @@ define([
 			var freeCash = 0
 			// 缓存持有份额
 			var holdAmount = 0
-			// 缓存当前页资产池id
+			// 缓存当前页资产池id、图标echarts对象、明细数据
 			var pageState = {
-				pid: util.nav.getHashObj(location.hash).id || ''
+				pid: util.nav.getHashObj(location.hash).id || '',
+				detail: null,	//当前资产池明细数据
+				mockData: [
+					{date: '2015-01-01', yield: 0.12},
+					{date: '2015-01-02', yield: 0.43},
+					{date: '2015-01-03', yield: 0.53},
+					{date: '2015-01-04', yield: 0.61},
+					{date: '2015-01-05', yield: 0.02},
+				]	// 折线图假数据
 			}
 			// 市值校准--市值校准记录--点击审核时，保存当前订单的oid
 			var marketOid = null
+
+			// 页面主tabs点击渲染图表
+			$('#mainTab').find('li').each(function (index, item) {
+				if (index) {
+					$(item).on('shown.bs.tab', function () {
+						initPieChartAndBarChart(config, pageState)
+					})
+				} else {
+					$(item).on('shown.bs.tab', function () {
+						initLineChart(config, pageState)
+					})
+				}
+			})
 
 			// 实际市值 脚本区域 start ==============================================================================================================================
 			
@@ -3158,29 +3179,31 @@ function pageInit (pageState, http, config) {
 		},
 		contentType: 'form'
 	}, function(json) {
-		var detail = json.result
+		var detail = pageState.detail = json.result
 		freeCash = detail.cashPosition
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
 		$('#detailPoolProfit').html(detail.deviationValue)
-		// 饼图生成
-		var pieChart = echarts.init(document.getElementById('pieChart'))
-		pieChart.setOption(getPieOptions(config, detail))
-		// 柱状图生成
-		var barChart = echarts.init(document.getElementById('barChart'))
-		barChart.setOption(getBarOptions(config, detail))
-		// 折线图生成
-		var lineChart =	echarts.init(document.getElementById('lineChart'))
-		var mockData = [
-			{date: '2015-01-01', yield: 0.12},
-			{date: '2015-01-02', yield: 0.43},
-			{date: '2015-01-03', yield: 0.53},
-			{date: '2015-01-04', yield: 0.61},
-			{date: '2015-01-05', yield: 0.02},
-		]
-		lineChart.setOption(getLineOptions(config, mockData));
+		
+		initPieChartAndBarChart(config, pageState)
+
+		initLineChart(config, pageState)
 	})
+}
+
+// tab1页饼图与柱状图生成
+function initPieChartAndBarChart (config, pageState) {
+	var pieChart = echarts.init(document.getElementById('pieChart'))
+	var barChart = echarts.init(document.getElementById('barChart'))
+	pieChart.setOption(getPieOptions(config, pageState.detail))
+	barChart.setOption(getBarOptions(config, pageState.detail))
+}
+
+// tab2页折线图生成
+function initLineChart (config, pageState) {
+	var lineChart =	echarts.init(document.getElementById('lineChart'))
+	lineChart.setOption(getLineOptions(config, pageState.mockData))
 }
 
 function validCapital($el) {
