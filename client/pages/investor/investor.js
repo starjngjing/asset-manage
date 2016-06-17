@@ -69,15 +69,11 @@ define([
 				}, { // 基础收益
 					field: 'income',
 					formatter: function(val, row) {
-						if (val)
-							return (val * 100.0).toFixed(2) + "%";
 						return val;
 					}
 				}, { // 奖励收益
 					field: 'reward',
 					formatter: function(val, row) {
-						if (val)
-							return (val * 100.0).toFixed(2) + "%";
 						return val;
 					}
 				}, {
