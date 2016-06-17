@@ -273,7 +273,10 @@ define([
 				}]
 			};
 
-			var prjPageOptions = {}
+			var prjPageOptions = {
+				page: 1,
+				rows: 10
+			}
 			var projectTableConfig = {
 				ajax: function(origin) {
 					http.post(config.api.targetProjectList, {
@@ -283,8 +286,8 @@ define([
 						origin.success(rlt)
 					})
 				},
-				pageNumber: pageOptions.number,
-				pageSize: pageOptions.size,
+				pageNumber: prjPageOptions.page,
+				pageSize: prjPageOptions.rows,
 				pagination: true,
 				sidePagination: 'server',
 				pageList: [10, 20, 30, 50, 100],
