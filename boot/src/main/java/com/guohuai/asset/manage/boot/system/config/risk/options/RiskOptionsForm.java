@@ -25,7 +25,7 @@ public class RiskOptionsForm {
 	@NotEmpty
 	@NotBlank
 	@Digits(integer = 4, fraction = 0)
-	private int dftScore;
+	private Integer dftScore;
 	private List<Option> options;
 
 	@Data
@@ -35,7 +35,7 @@ public class RiskOptionsForm {
 		@NotBlank
 		@NotEmpty
 		@Digits(integer = 4, fraction = 0)
-		private int score;
+		private Integer score;
 		private String param0;
 		private String param1;
 		private String param2;
