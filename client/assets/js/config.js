@@ -136,6 +136,8 @@ define(function() {
 			invest: { // 持有人信息
 				manager: {
 					accountList: '/ams/boot/inverstorManager/accountList', // 持有人名录					
+					holdList: '/ams/boot/inverstorManager/holdList', // 持有人名录持有份额列表					
+					orderList: '/ams/boot/inverstorManager/orderList', // 持有人名录订单列表					
 				}
 			},
 			system: {
