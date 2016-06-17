@@ -270,40 +270,48 @@
 							</dd>
 						</dl>
 					</div>
+					<div class="row" id="reemAmount">	
+						<dl class="dl-horizontal">
+							<dt>可赎回余额:</dt>
+							<dd>
+								<div data-detail-fetch="reemAmountStr"></div>
+							</dd>
+						</dl>
+					</div>
 					<p class="form-header">审核确定信息</p>
 					<div class="row">
-  					<div class="col-sm-6">
-  						<div class="form-group">
-                  <label>可售余额</label>
-                  <div class="input-group input-group-sm">
-	                    <input id="avaibleAmount" name="avaibleAmount" 
-    	                  type="text"
-        	              class="form-control"  
-            	          required="required" 
-                	      data-validfloat="8.6" 
-                    	  data-validfloat-error="可售余额只能为前8位后6位小数"
-                        data-validredeemaddorder="true"
-                        data-validredeemaddorder-error="订单金额不能大于可赎回额度">
-                      <span class="input-group-addon">万元</span>
-	                </div>
-    	            <div class="help-block with-errors text-red"></div>
-        	    </div>
-  					</div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                  <label>应付费金</label>
-                  <div class="input-group input-group-sm">
-                      <input id="payFee" name="payFee" 
-                        type="text"
-                        class="form-control"  
-                        required="required" 
-                        data-validfloat="8.6" 
-                        data-validfloat-error="应付费金只能为前8位后6位小数">
-                      <span class="input-group-addon">万元</span>
-                  </div>
-                  <div class="help-block with-errors text-red"></div>
-              </div>
-            </div>
+  						<div class="col-sm-6">
+	  						<div class="form-group">
+    	              			<label>可售余额</label>
+        	        			<div class="input-group input-group-sm">
+	        	            		<input id="avaibleAmount" name="avaibleAmount" 
+    	        	        			type="text"
+        	        	    			class="form-control"  
+            	        				required="required" 
+                	    				data-validfloat="8.6" 
+                    					data-validfloat-error="可售余额只能为前8位后6位小数"
+                        				data-validredeemaddorder="true"
+                        				data-validredeemaddorder-error="可售余额不能大于可赎回额度">
+	                    			<span class="input-group-addon">万元</span>
+		                		</div>
+    		            		<div class="help-block with-errors text-red"></div>
+        		    		</div>
+  						</div>
+            			<div class="col-sm-6">
+            				<div class="form-group">
+                				<label>应付费金</label>
+                				<div class="input-group input-group-sm">
+                    				<input id="payFee" name="payFee" 
+				                        type="text"
+                				        class="form-control"  
+                        				required="required" 
+				                        data-validfloat="8.6" 
+				                        data-validfloat-error="应付费金只能为前8位后6位小数">
+                    				<span class="input-group-addon">万元</span>
+                				</div>
+                				<div class="help-block with-errors text-red"></div>
+            				</div>
+            			</div>
 					</div>
 				</form>
 			</div>

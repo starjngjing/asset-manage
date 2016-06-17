@@ -114,7 +114,7 @@ public class ProductService {
 		{
 			//募集开始时间  募集期:()个自然日  起息日:募集满额后()个自然日  存续期:()个自然日
 			if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType())) {
-				java.util.Date raiseStartDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datePattern);
+				java.util.Date raiseStartDate = DateUtil.parseDate(form.getRaiseStartDate(), DateUtil.datePattern);
 				pb.raiseStartDate(new Date(raiseStartDate.getTime()));
 				
 				if(!StringUtil.isEmpty(form.getRaisePeriod())) {
@@ -485,7 +485,7 @@ public class ProductService {
 		if(Product.DATE_TYPE_FirstRackTime.equals(form.getRaiseStartDateType())) {
 			product.setRaiseStartDate(null);
 		} else {
-			java.util.Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStatrtDate(), DateUtil.datePattern);
+			java.util.Date raiseStatrtDate = DateUtil.parseDate(form.getRaiseStartDate(), DateUtil.datePattern);
 			product.setRaiseStartDate(new Date(raiseStatrtDate.getTime()));
 			
 			if(!StringUtil.isEmpty(form.getRaisePeriod())) {

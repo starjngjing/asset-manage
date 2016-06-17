@@ -50,7 +50,7 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> savePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStatrtDate())) {
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStartDate())) {
 			throw AMPException.getException(90009);
 		}
 		BaseResp repponse = this.productService.savePeriodic(form, operator);
@@ -90,7 +90,7 @@ public class ProductController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<BaseResp> updatePeriodic(@Valid SavePeriodicProductForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStatrtDate())) {
+		if(Product.DATE_TYPE_ManualInput.equals(form.getRaiseStartDateType()) && StringUtil.isEmpty(form.getRaiseStartDate())) {
 			throw AMPException.getException(90009);
 		}
 			
