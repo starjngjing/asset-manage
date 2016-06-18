@@ -68,6 +68,9 @@ public class Document implements Serializable {
 	// 股指校准 - 现金管理工具
 	public static final String TYPE_ESTIMATE_CORRECT_CASHTOOL = "CASHTOOL_ESTIMATE_CORRECT";
 
+	// SPV交易
+	public static final String TYPE_SPV_TRADE = "SPV_TRADE";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
