@@ -2,6 +2,8 @@ package com.guohuai.asset.manage.boot.acct.books;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.acct.account.Account;
+import com.guohuai.asset.manage.boot.acct.account.AccountComparator;
 import com.guohuai.asset.manage.boot.acct.account.AccountService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -153,6 +156,30 @@ public class AccountBookService {
 			}
 		}
 
+		// 补充默认账户
+		List<Account> accounts = this.accountService.search();
+		if (null != accounts && accounts.size() > 0) {
+			for (Account a : accounts) {
+				if (a.getType().equals(Account.TYPE_Assets)) {
+					if (!laccount.containsKey(a.getOid())) {
+						laccount.put(a.getOid(), a);
+					}
+					if (!lbalance.containsKey(a.getOid())) {
+						lbalance.put(a.getOid(), BigDecimal.ZERO);
+					}
+				}
+				if (a.getType().equals(Account.TYPE_Equity) || a.getType().equals(Account.TYPE_Liability)) {
+					if (!raccount.containsKey(a.getOid())) {
+						raccount.put(a.getOid(), a);
+					}
+					if (!rbalance.containsKey(a.getOid())) {
+						rbalance.put(a.getOid(), BigDecimal.ZERO);
+					}
+				}
+
+			}
+		}
+
 		// 初始化 result 表
 		for (int i = 0; i < Math.max(laccount.size(), raccount.size()); i++) {
 			result.add(new AccountBookBalance());
@@ -162,31 +189,47 @@ public class AccountBookService {
 		AtomicInteger lindex = new AtomicInteger(0);
 		AtomicInteger rindex = new AtomicInteger(0);
 
+		List<Account> llist = new ArrayList<Account>();
+
 		laccount.forEach(new BiConsumer<String, Account>() {
 
 			@Override
 			public void accept(String t, Account u) {
-				AccountBookBalance bb = result.get(lindex.getAndIncrement());
-				bb.setLcode(u.getCode());
-				bb.setLname(u.getName());
-				bb.setLsn(String.valueOf(index.getAndIncrement()));
-				bb.setLbalance(lbalance.get(t));
+				llist.add(u);
 			}
 		});
 
+		Collections.sort(llist, new AccountComparator());
+
+		for (Account a : llist) {
+			AccountBookBalance bb = result.get(lindex.getAndIncrement());
+			bb.setLcode(a.getCode());
+			bb.setLname(a.getName());
+			bb.setLsn(String.valueOf(index.getAndIncrement()));
+			bb.setLbalance(lbalance.get(a.getOid()));
+		}
+
 		lsumIndex = index.getAndIncrement();
+
+		List<Account> rlist = new ArrayList<Account>();
 
 		raccount.forEach(new BiConsumer<String, Account>() {
 
 			@Override
 			public void accept(String t, Account u) {
-				AccountBookBalance bb = result.get(rindex.getAndIncrement());
-				bb.setRcode(u.getCode());
-				bb.setRname(u.getName());
-				bb.setRsn(String.valueOf(index.getAndIncrement()));
-				bb.setRbalance(rbalance.get(t));
+				rlist.add(u);
 			}
 		});
+
+		Collections.sort(rlist, new AccountComparator());
+
+		for (Account a : rlist) {
+			AccountBookBalance bb = result.get(rindex.getAndIncrement());
+			bb.setRcode(a.getCode());
+			bb.setRname(a.getName());
+			bb.setRsn(String.valueOf(index.getAndIncrement()));
+			bb.setRbalance(rbalance.get(a.getOid()));
+		}
 
 		equitySumIndex = index.getAndIncrement();
 		rsumIndex = index.getAndIncrement();

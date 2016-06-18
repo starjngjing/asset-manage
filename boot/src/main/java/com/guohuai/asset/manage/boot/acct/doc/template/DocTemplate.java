@@ -27,6 +27,11 @@ public class DocTemplate implements Serializable {
 
 	private static final long serialVersionUID = -5452547693688808084L;
 
+	// 状态: 启用
+	public static final String STATE_Enable = "ENABLE";
+	// 状态: 禁用
+	public static final String STATE_Disable = "DISABLE";
+
 	@Id
 	private String oid;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -37,5 +42,5 @@ public class DocTemplate implements Serializable {
 	private DocType type;
 	private String name;
 	private String initName;
-
+	private String state;
 }
