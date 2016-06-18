@@ -16,4 +16,10 @@ public interface AccountBookDao extends JpaRepository<AccountBook, String> {
 	@Query("from AccountBook b order by b.account.oid asc")
 	public List<AccountBook> search();
 
+	@Query("from AccountBook b where b.relative = ?1 order by b.account.oid asc")
+	public List<AccountBook> search(String relative);
+
+	@Query("from AccountBook b where b.relative = ?1 and b.account.oid in ?2 order by b.account.oid asc")
+	public List<AccountBook> search(String relative, String[] accounts);
+
 }

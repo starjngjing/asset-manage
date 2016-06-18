@@ -3,7 +3,6 @@ package com.guohuai.asset.manage.boot.acct.books;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -106,9 +105,19 @@ public class AccountBookService {
 
 	@Transactional
 	public List<AccountBookBalance> balance() {
-		LinkedList<AccountBookBalance> result = new LinkedList<AccountBookBalance>();
-
 		List<AccountBook> bs = this.accountBookDao.search();
+		return this.balance(bs);
+	}
+
+	@Transactional
+	public List<AccountBookBalance> balance(String relative) {
+		List<AccountBook> bs = this.accountBookDao.search(relative);
+		return this.balance(bs);
+	}
+
+	@Transactional
+	public List<AccountBookBalance> balance(List<AccountBook> bs) {
+		LinkedList<AccountBookBalance> result = new LinkedList<AccountBookBalance>();
 
 		LinkedHashMap<String, Account> laccount = new LinkedHashMap<String, Account>();
 		Map<String, BigDecimal> lbalance = new HashMap<String, BigDecimal>();
@@ -263,6 +272,25 @@ public class AccountBookService {
 		result.add(sum);
 
 		return result;
+	}
+
+	@Transactional
+	public Map<String, AccountBook> find(String relative, String... accounts) {
+		Map<String, AccountBook> books = new HashMap<String, AccountBook>();
+		List<AccountBook> abs = null;
+		if (null == accounts || accounts.length == 0) {
+			abs = this.accountBookDao.search(relative);
+		} else {
+			abs = this.accountBookDao.search(relative, accounts);
+		}
+
+		if (null != abs && abs.size() > 0) {
+			for (AccountBook ab : abs) {
+				books.put(ab.getAccount().getOid(), ab);
+			}
+		}
+
+		return books;
 	}
 
 }
