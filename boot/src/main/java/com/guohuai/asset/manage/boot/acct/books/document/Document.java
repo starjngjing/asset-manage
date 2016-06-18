@@ -70,6 +70,10 @@ public class Document implements Serializable {
 
 	// SPV交易
 	public static final String TYPE_SPV_TRADE = "SPV_TRADE";
+	// SPV收益确认/资管计划收益确认
+	public static final String TYPE_SPV_INCOME_CONFIRM = "SPV_INCOME_CONFIRM";
+	// SPV收益发放
+	public static final String TYPE_SPV_INCOME_ALLOCATE = "SPV_INCOME_ALLOCATE";
 
 	@Id
 	private String oid;

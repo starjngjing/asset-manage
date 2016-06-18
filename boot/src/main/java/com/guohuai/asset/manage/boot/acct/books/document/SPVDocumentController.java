@@ -31,4 +31,18 @@ public class SPVDocumentController extends BaseController {
 		return new ResponseEntity<DocumentResp>(new DocumentResp(d), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/income/confirm", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<DocumentResp> incomeConfirm(DocumentForm form) {
+		super.checkLogin();
+		Document d = this.spvDocumentService.incomeConfirm(form.getRelative(), form.getTicket(), form.getIncome());
+		return new ResponseEntity<DocumentResp>(new DocumentResp(d), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/income/allocate", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<DocumentResp> incomeAllocate(DocumentForm form) {
+		super.checkLogin();
+		Document d = this.spvDocumentService.incomeAllocate(form.getRelative(), form.getTicket(), form.getAmount());
+		return new ResponseEntity<DocumentResp>(new DocumentResp(d), HttpStatus.OK);
+	}
+
 }

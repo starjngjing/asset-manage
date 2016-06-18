@@ -16,4 +16,5 @@ public class DocumentForm {
 	private BigDecimal market;
 	private BigDecimal saleable;
 	private BigDecimal chargefee;
+	private BigDecimal income;
 }

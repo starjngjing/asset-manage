@@ -633,4 +633,397 @@ public class SPVDocumentService {
 		return document;
 	}
 
+	@Transactional
+	private Document incrIncome(String relative, String ticket, BigDecimal income) {
+
+		if (income.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new AMPException("收益参数错误.");
+		}
+
+		DocTemplate template = this.docTemplateService.safeGet("0051_SPVI_0001_SYZZ");
+		Map<String, DocTemplateEntry> maps = null;
+		if (null != template) {
+			maps = this.docTemplateEntryService.entryMap(template);
+		}
+		int seq = 1;
+		long timestamp = System.currentTimeMillis();
+		Date date = new Date(timestamp);
+		Timestamp now = new Timestamp(timestamp);
+
+		Document document = new Document();
+		document.setOid(StringUtil.uuid());
+		document.setDocword(null == template || null == template.getDocword() ? this.docWordService.get() : template.getDocword());
+		document.setType(Document.TYPE_SPV_INCOME_CONFIRM);
+		document.setRelative(relative);
+		document.setTicket(ticket);
+		document.setAcctSn(this.documentSnService.genSn(date));
+		document.setAcctDate(date);
+		document.setInvoiceNum(0);
+		document.setDrAmount(BigDecimal.ZERO);
+		document.setCrAmount(BigDecimal.ZERO);
+		document.setCreateTime(now);
+		document.setUpdateTime(now);
+
+		AccountBook b_1111 = this.accountBookService.safeGet(relative, this.accountService.get("1111"));
+		AccountBook b_2201 = this.accountBookService.safeGet(relative, this.accountService.get("2201"));
+		AccountBook b_1201 = this.accountBookService.safeGet(relative, this.accountService.get("1201"));
+
+		List<DocumentEntry> entries = new ArrayList<DocumentEntry>();
+
+		BigDecimal wipe = b_1201.getBalance().compareTo(income) > 0 ? income : b_1201.getBalance();
+		BigDecimal incr = income.subtract(wipe);
+
+		// 如果勾销完仍有收益
+		if (incr.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：投资资产
+			DocumentEntry e1_1111 = new DocumentEntry();
+			e1_1111.setOid(StringUtil.uuid());
+			e1_1111.setRelative(relative);
+			e1_1111.setTicket(ticket);
+			e1_1111.setDocument(document);
+			e1_1111.setBook(b_1111);
+			e1_1111.setDigest(null != maps && maps.containsKey("0051_0001_1111_01") ? maps.get("0051_0001_1111_01").getDigest() : "");
+			e1_1111.setDrAmount(incr);
+			e1_1111.setCrAmount(BigDecimal.ZERO);
+			e1_1111.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(incr));
+			b_1111 = this.accountBookService.drCredit(b_1111, incr);
+			seq++;
+			entries.add(e1_1111);
+
+			// 贷：未分配收益
+			DocumentEntry e2_2201 = new DocumentEntry();
+			e2_2201.setOid(StringUtil.uuid());
+			e2_2201.setRelative(relative);
+			e2_2201.setTicket(ticket);
+			e2_2201.setDocument(document);
+			e2_2201.setBook(b_2201);
+			e2_2201.setDigest(null != maps && maps.containsKey("0051_0001_2201_02") ? maps.get("0051_0001_2201_02").getDigest() : "");
+			e2_2201.setDrAmount(BigDecimal.ZERO);
+			e2_2201.setCrAmount(incr);
+			e2_2201.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(incr));
+			b_2201 = this.accountBookService.drCredit(b_2201, incr);
+			seq++;
+			entries.add(e2_2201);
+
+		}
+
+		// 如果需要进行未分配收益账户冲账
+		if (wipe.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：投资资产
+			DocumentEntry e1_1111 = new DocumentEntry();
+			e1_1111.setOid(StringUtil.uuid());
+			e1_1111.setRelative(relative);
+			e1_1111.setTicket(ticket);
+			e1_1111.setDocument(document);
+			e1_1111.setBook(b_1111);
+			e1_1111.setDigest(null != maps && maps.containsKey("0051_0001_1111_03") ? maps.get("0051_0001_1111_03").getDigest() : "");
+			e1_1111.setDrAmount(wipe);
+			e1_1111.setCrAmount(BigDecimal.ZERO);
+			e1_1111.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(wipe));
+			b_1111 = this.accountBookService.drCredit(b_1111, wipe);
+			seq++;
+			entries.add(e1_1111);
+
+			// 贷：应收投资收益
+			DocumentEntry e2_1201 = new DocumentEntry();
+			e2_1201.setOid(StringUtil.uuid());
+			e2_1201.setRelative(relative);
+			e2_1201.setTicket(ticket);
+			e2_1201.setDocument(document);
+			e2_1201.setBook(b_1201);
+			e2_1201.setDigest(null != maps && maps.containsKey("0051_0001_1201_04") ? maps.get("0051_0001_1201_04").getDigest() : "");
+			e2_1201.setDrAmount(BigDecimal.ZERO);
+			e2_1201.setCrAmount(wipe);
+			e2_1201.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(wipe));
+			b_1201 = this.accountBookService.crCredit(b_1201, wipe);
+			seq++;
+			entries.add(e2_1201);
+		}
+
+		document = this.documentDao.save(document);
+		for (DocumentEntry e : entries) {
+			this.documentEntryService.save(e);
+		}
+
+		return document;
+	}
+
+	@Transactional
+	private Document decrIncome(String relative, String ticket, BigDecimal income) {
+
+		if (income.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new AMPException("收益参数错误.");
+		}
+
+		DocTemplate template = this.docTemplateService.safeGet("0051_SPVI_0002_SYJZ");
+		Map<String, DocTemplateEntry> maps = null;
+		if (null != template) {
+			maps = this.docTemplateEntryService.entryMap(template);
+		}
+		int seq = 1;
+		long timestamp = System.currentTimeMillis();
+		Date date = new Date(timestamp);
+		Timestamp now = new Timestamp(timestamp);
+
+		Document document = new Document();
+		document.setOid(StringUtil.uuid());
+		document.setDocword(null == template || null == template.getDocword() ? this.docWordService.get() : template.getDocword());
+		document.setType(Document.TYPE_SPV_INCOME_CONFIRM);
+		document.setRelative(relative);
+		document.setTicket(ticket);
+		document.setAcctSn(this.documentSnService.genSn(date));
+		document.setAcctDate(date);
+		document.setInvoiceNum(0);
+		document.setDrAmount(BigDecimal.ZERO);
+		document.setCrAmount(BigDecimal.ZERO);
+		document.setCreateTime(now);
+		document.setUpdateTime(now);
+
+		AccountBook b_1111 = this.accountBookService.safeGet(relative, this.accountService.get("1111"));
+		AccountBook b_2201 = this.accountBookService.safeGet(relative, this.accountService.get("2201"));
+		AccountBook b_1201 = this.accountBookService.safeGet(relative, this.accountService.get("1201"));
+
+		List<DocumentEntry> entries = new ArrayList<DocumentEntry>();
+
+		BigDecimal decr = b_2201.getBalance().compareTo(income) > 0 ? income : b_2201.getBalance();
+		BigDecimal wipe = income.subtract(decr);
+
+		// 如果勾销完仍有收益
+		if (decr.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：未分配收益
+			DocumentEntry e1_2201 = new DocumentEntry();
+			e1_2201.setOid(StringUtil.uuid());
+			e1_2201.setRelative(relative);
+			e1_2201.setTicket(ticket);
+			e1_2201.setDocument(document);
+			e1_2201.setBook(b_2201);
+			e1_2201.setDigest(null != maps && maps.containsKey("0051_0002_2201_01") ? maps.get("0051_0002_2201_01").getDigest() : "");
+			e1_2201.setDrAmount(decr);
+			e1_2201.setCrAmount(BigDecimal.ZERO);
+			e1_2201.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(decr));
+			b_2201 = this.accountBookService.crCredit(b_2201, decr);
+			seq++;
+			entries.add(e1_2201);
+
+			// 贷：投资资产
+			DocumentEntry e2_1111 = new DocumentEntry();
+			e2_1111.setOid(StringUtil.uuid());
+			e2_1111.setRelative(relative);
+			e2_1111.setTicket(ticket);
+			e2_1111.setDocument(document);
+			e2_1111.setBook(b_1111);
+			e2_1111.setDigest(null != maps && maps.containsKey("0051_0002_1111_02") ? maps.get("0051_0002_1111_02").getDigest() : "");
+			e2_1111.setDrAmount(BigDecimal.ZERO);
+			e2_1111.setCrAmount(decr);
+			e2_1111.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(decr));
+			b_1111 = this.accountBookService.crCredit(b_1111, decr);
+			seq++;
+			entries.add(e2_1111);
+
+		}
+
+		// 未分配收益缺头寸
+		if (wipe.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：应收投资收益
+			DocumentEntry e1_1201 = new DocumentEntry();
+			e1_1201.setOid(StringUtil.uuid());
+			e1_1201.setRelative(relative);
+			e1_1201.setTicket(ticket);
+			e1_1201.setDocument(document);
+			e1_1201.setBook(b_1201);
+			e1_1201.setDigest(null != maps && maps.containsKey("0051_0002_1201_03") ? maps.get("0051_0002_1201_03").getDigest() : "");
+			e1_1201.setDrAmount(wipe);
+			e1_1201.setCrAmount(BigDecimal.ZERO);
+			e1_1201.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(wipe));
+			b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+			seq++;
+			entries.add(e1_1201);
+
+			// 贷：投资资产
+			DocumentEntry e2_1111 = new DocumentEntry();
+			e2_1111.setOid(StringUtil.uuid());
+			e2_1111.setRelative(relative);
+			e2_1111.setTicket(ticket);
+			e2_1111.setDocument(document);
+			e2_1111.setBook(b_1111);
+			e2_1111.setDigest(null != maps && maps.containsKey("0051_0002_1111_04") ? maps.get("0051_0002_1111_04").getDigest() : "");
+			e2_1111.setDrAmount(BigDecimal.ZERO);
+			e2_1111.setCrAmount(wipe);
+			e2_1111.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(wipe));
+			b_1111 = this.accountBookService.crCredit(b_1111, wipe);
+			seq++;
+			entries.add(e2_1111);
+		}
+
+		document = this.documentDao.save(document);
+		for (DocumentEntry e : entries) {
+			this.documentEntryService.save(e);
+		}
+
+		return document;
+	}
+
+	/**
+	 * 资管计划收益确认
+	 * 
+	 * @param relative
+	 *            资产池oid
+	 * @param ticket
+	 *            原始凭证oid
+	 * @param income
+	 *            收益: 增值为正数, 减值为负数
+	 * @return 凭证对象
+	 */
+	@Transactional
+	public Document incomeConfirm(String relative, String ticket, BigDecimal income) {
+
+		if (income.compareTo(BigDecimal.ZERO) > 0) {
+			return this.incrIncome(relative, ticket, income);
+		}
+
+		if (income.compareTo(BigDecimal.ZERO) < 0) {
+			return this.decrIncome(relative, ticket, income.abs());
+		}
+
+		throw new AMPException("收益参数错误.");
+
+	}
+
+	/**
+	 * 收益发放
+	 * 
+	 * @param relative
+	 *            资产池oid
+	 * @param ticket
+	 *            原始凭证oid
+	 * @param amount
+	 *            发放金额
+	 * @return 凭证对象
+	 */
+	@Transactional
+	public Document incomeAllocate(String relative, String ticket, BigDecimal amount) {
+
+		if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new AMPException("收益发放参数错误.");
+		}
+
+		DocTemplate template = this.docTemplateService.safeGet("0071_SPVA_0001_SYFF");
+		Map<String, DocTemplateEntry> maps = null;
+		if (null != template) {
+			maps = this.docTemplateEntryService.entryMap(template);
+		}
+		int seq = 1;
+		long timestamp = System.currentTimeMillis();
+		Date date = new Date(timestamp);
+		Timestamp now = new Timestamp(timestamp);
+
+		Document document = new Document();
+		document.setOid(StringUtil.uuid());
+		document.setDocword(null == template || null == template.getDocword() ? this.docWordService.get() : template.getDocword());
+		document.setType(Document.TYPE_SPV_INCOME_ALLOCATE);
+		document.setRelative(relative);
+		document.setTicket(ticket);
+		document.setAcctSn(this.documentSnService.genSn(date));
+		document.setAcctDate(date);
+		document.setInvoiceNum(0);
+		document.setDrAmount(BigDecimal.ZERO);
+		document.setCrAmount(BigDecimal.ZERO);
+		document.setCreateTime(now);
+		document.setUpdateTime(now);
+
+		AccountBook b_300101 = this.accountBookService.safeGet(relative, this.accountService.get("300101"));
+		AccountBook b_2201 = this.accountBookService.safeGet(relative, this.accountService.get("2201"));
+		AccountBook b_1201 = this.accountBookService.safeGet(relative, this.accountService.get("1201"));
+
+		List<DocumentEntry> entries = new ArrayList<DocumentEntry>();
+
+		BigDecimal allocate = b_2201.getBalance().compareTo(amount) > 0 ? amount : b_2201.getBalance();
+		BigDecimal wipe = amount.subtract(allocate);
+
+		// 未分配收益有头寸
+		if (allocate.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：未分配收益
+			DocumentEntry e1_2201 = new DocumentEntry();
+			e1_2201.setOid(StringUtil.uuid());
+			e1_2201.setRelative(relative);
+			e1_2201.setTicket(ticket);
+			e1_2201.setDocument(document);
+			e1_2201.setBook(b_2201);
+			e1_2201.setDigest(null != maps && maps.containsKey("0071_0001_2201_01") ? maps.get("0071_0001_2201_01").getDigest() : "");
+			e1_2201.setDrAmount(allocate);
+			e1_2201.setCrAmount(BigDecimal.ZERO);
+			e1_2201.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(allocate));
+			b_2201 = this.accountBookService.crCredit(b_2201, allocate);
+			seq++;
+			entries.add(e1_2201);
+
+			// 贷：所有者权益_投资者
+			DocumentEntry e2_300101 = new DocumentEntry();
+			e2_300101.setOid(StringUtil.uuid());
+			e2_300101.setRelative(relative);
+			e2_300101.setTicket(ticket);
+			e2_300101.setDocument(document);
+			e2_300101.setBook(b_300101);
+			e2_300101.setDigest(null != maps && maps.containsKey("0071_0001_300101_02") ? maps.get("0071_0001_300101_02").getDigest() : "");
+			e2_300101.setDrAmount(BigDecimal.ZERO);
+			e2_300101.setCrAmount(allocate);
+			e2_300101.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(allocate));
+			b_300101 = this.accountBookService.drCredit(b_300101, allocate);
+			seq++;
+			entries.add(e2_300101);
+		}
+
+		// 未分配收益缺头寸, 需要应收投资收益勾销
+		if (wipe.compareTo(BigDecimal.ZERO) > 0) {
+			// 借：应收投资收益
+			DocumentEntry e3_1201 = new DocumentEntry();
+			e3_1201.setOid(StringUtil.uuid());
+			e3_1201.setRelative(relative);
+			e3_1201.setTicket(ticket);
+			e3_1201.setDocument(document);
+			e3_1201.setBook(b_1201);
+			e3_1201.setDigest(null != maps && maps.containsKey("0071_0001_1201_03") ? maps.get("0071_0001_1201_03").getDigest() : "");
+			e3_1201.setDrAmount(wipe);
+			e3_1201.setCrAmount(BigDecimal.ZERO);
+			e3_1201.setSeq(seq);
+			document.setDrAmount(document.getDrAmount().add(wipe));
+			b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+			seq++;
+			entries.add(e3_1201);
+
+			// 贷：所有者权益_投资者
+			DocumentEntry e4_300101 = new DocumentEntry();
+			e4_300101.setOid(StringUtil.uuid());
+			e4_300101.setRelative(relative);
+			e4_300101.setTicket(ticket);
+			e4_300101.setDocument(document);
+			e4_300101.setBook(b_300101);
+			e4_300101.setDigest(null != maps && maps.containsKey("0071_0001_300101_04") ? maps.get("0071_0001_300101_04").getDigest() : "");
+			e4_300101.setDrAmount(BigDecimal.ZERO);
+			e4_300101.setCrAmount(wipe);
+			e4_300101.setSeq(seq);
+			document.setCrAmount(document.getCrAmount().add(wipe));
+			b_300101 = this.accountBookService.drCredit(b_300101, wipe);
+			seq++;
+			entries.add(e4_300101);
+		}
+
+		document = this.documentDao.save(document);
+		for (DocumentEntry e : entries) {
+			this.documentEntryService.save(e);
+		}
+
+		return document;
+	}
+
 }
