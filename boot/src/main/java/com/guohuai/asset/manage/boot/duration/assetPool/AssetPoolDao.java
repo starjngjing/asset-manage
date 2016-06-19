@@ -16,7 +16,7 @@ public interface AssetPoolDao extends JpaRepository<AssetPoolEntity, String>, Jp
 	@Query("from AssetPoolEntity a where a.name like ?1")
 	public List<AssetPoolEntity> getListByName(String name);
 	
-	@Query(value = "SELECT * FROM T_GAM_ASSETPOOL a WHERE a.state = '存续期' LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM T_GAM_ASSETPOOL a WHERE a.state = '存续期' order by a.createTime desc LIMIT 1", nativeQuery = true)
 	public AssetPoolEntity getLimitOne();
 	
 	@Query("from AssetPoolEntity a where a.state = '存续期'")

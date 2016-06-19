@@ -71,34 +71,48 @@ define([
 			
 			// 市值校准 按钮点击事件
 			$('#marketAdjsut').on('click', function() {
-				var modal = $('#marketAdjustModal')
-				http.post(config.api.duration.market.getMarketAdjustData, {
+				http.post(config.api.duration.market.getMarketAdjustStuts, {
 					data: {
 						pid: pageState.pid,
 					},
 					contentType: 'form'
 				}, function(json) {
-					var form = document.marketAdjustForm
-					var result = json.result
-					form.assetpoolOid.value = json.result.assetpoolOid
-					$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
-					if (result.lastShares) {
-						result.lastShares = result.lastShares + '\t 万份'
-						calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
+					var status = json.result
+					if (status === -1) {
+						alert('已进行市值校准，待审核！')
+					} else if (status === 1) {
+						alert('今日已进行市值校准')
+					} else {
+						var modal = $('#marketAdjustModal')
+						http.post(config.api.duration.market.getMarketAdjustData, {
+							data: {
+								pid: pageState.pid,
+							},
+							contentType: 'form'
+						}, function(json) {
+							var form = document.marketAdjustForm
+							var result = json.result
+							form.assetpoolOid.value = json.result.assetpoolOid
+							$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
+							if (result.lastShares) {
+								result.lastShares = result.lastShares + '\t 万份'
+								calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
+							}
+							if (result.purchase) {
+								result.purchase = result.purchase + '\t 万元'
+							}
+							if (result.redemption) {
+								result.redemption = result.redemption + '\t 万元'
+							}
+							if (result.lastOrders) {
+								calcOrders = result.lastOrders
+								result.lastOrders = result.lastOrders + '\t 万元'
+							}
+							$$.detailAutoFix(modal, json.result)
+						})
+						modal.modal('show')
 					}
-					if (result.purchase) {
-						result.purchase = result.purchase + '\t 万元'
-					}
-					if (result.redemption) {
-						result.redemption = result.redemption + '\t 万元'
-					}
-					if (result.lastOrders) {
-						calcOrders = result.lastOrders
-						result.lastOrders = result.lastOrders + '\t 万元'
-					}
-					$$.detailAutoFix(modal, json.result)
 				})
-				modal.modal('show')
 			})
 
 			// 市值校准记录 表格配置
@@ -283,6 +297,7 @@ define([
 					contentType: 'form'
 				}, function(json) {
 					$('#marketAdjustTable').bootstrapTable('refresh')
+				yieldInit(pageState, http, config)
 				})
 				modal.modal('hide')
 			})
@@ -325,6 +340,7 @@ define([
 		      	document.marketAdjustForm.ratio.value = ratio
 		      	document.marketAdjustForm.profit.value = calcProfit
 		    })
+
 			// 实际市值 脚本区域 end ==============================================================================================================================
 			
 			// 资产池估值 脚本区域 start ==============================================================================================================================
@@ -3228,6 +3244,8 @@ function pageInit (pageState, http, config) {
 		initPieChartAndBarChart(config, pageState)
 
 		initLineChart(config, pageState)
+
+		yieldInit(pageState, http, config)
 		
 		$('#marketValue').html(detail.marketValue)
 		$('#baseDate').html(detail.baseDate)
@@ -3235,6 +3253,18 @@ function pageInit (pageState, http, config) {
 		$('#payFeigin').html(detail.payFeigin)
 		$('#spvProfit').html(detail.spvProfit)
 		$('#investorProfit').html(detail.investorProfit)
+	})
+}
+
+function yieldInit (pageState, http, config) {
+	http.post(config.api.duration.market.getYield, {
+		data: {
+			pid: pageState.pid
+		},
+		contentType: 'form'
+	}, function(json) {
+		pageState.mockData = json.result
+		initLineChart(config, pageState)
 	})
 }
 

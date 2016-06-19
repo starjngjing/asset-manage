@@ -270,8 +270,10 @@ define(function() {
 					saveMarketAdjust: this.host + '/ams/duration/market/saveMarketAdjust', // 市值校准录入
 					getMarketAdjust: this.host + '/ams/duration/market/getMarketAdjust', // 市值校准记录详情
 					auditMarketAdjust: this.host + '/ams/duration/market/auditMarketAdjust', // 市值校准录入审核
+					getMarketAdjustStuts: this.host + '/ams/duration/market/getMarketAdjustStuts', // 查询当天的订单状态
 					deleteMarketAdjust: this.host + '/ams/duration/market/deleteMarketAdjust', // 市值校准录入删除
 					getMarketAdjustList: this.host + '/ams/duration/market/getMarketAdjustList', // 市值校准记录 列表
+					getYield: this.host + '/ams/duration/market/getYield', // 收益率 列表
 				}
 			},
 			role: {

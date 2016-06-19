@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.acct.books.document.SPVDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
@@ -99,16 +100,44 @@ public class MarketAdjustService {
 		return entity;
 	}
 	
+	/**
+	 * 市值校准录入审核
+	 * @param oid
+	 * @param type
+	 * @param operator
+	 */
+	@Transactional
 	public void auditMarketAdjust(String oid, String type, String operator) {
 		MarketAdjustEntity market = adjustDao.findOne(oid);
 		if ("pass".equals(type)) {
 			market.setStatus(MarketAdjustEntity.PASS);
-			spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
+			if (null != market.getProfit() && market.getProfit().compareTo(BigDecimal.ZERO) != 0) {
+				spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
+			}
 		} else
 			market.setStatus(MarketAdjustEntity.FAIL);
 		market.setAuditor(operator);
 		market.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		adjustDao.save(market);
+	}
+	
+	/**
+	 * 查询当天的订单状态
+	 * -1：未审核；0：未录入；1：已通过
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public int getMarketAdjustStatus(String pid) {
+		MarketAdjustEntity entity = adjustDao.findByBaseDate(pid, new Date(System.currentTimeMillis()));
+		if (null != entity) {
+			if (MarketAdjustEntity.CREATE.equals(entity.getStatus())) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+		return 0;
 	}
 	
 	/**
@@ -122,6 +151,27 @@ public class MarketAdjustService {
 		Page<MarketAdjustEntity> list = adjustDao.getListByPid(pid, pageable);
 		
 		return list;
+	}
+	
+	/**
+	 * 获取收益率列表
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public List<JSONObject> getListForYield(String pid) {
+		List<JSONObject> objList = Lists.newArrayList();
+		List<MarketAdjustEntity> list = adjustDao.getListForYield(pid);
+		if (null != list && !list.isEmpty()) {
+			JSONObject obj = new JSONObject();;
+			for (MarketAdjustEntity entity : list) {
+				obj.put("date", entity.getBaseDate());
+				obj.put("yield", entity.getRatio());
+				
+				objList.add(obj);
+			}
+		}
+		return objList;
 	}
 	
 	/**
