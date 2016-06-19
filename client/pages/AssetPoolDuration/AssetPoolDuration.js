@@ -364,7 +364,6 @@ define([
 				})
 				$(select).html(assetPoolOptions)
 				pageInit(pageState, http, config)
-				yieldInit(pageState, http, config)
 			})
 			
 			// 改变资产池后刷新页面
@@ -372,7 +371,6 @@ define([
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
 				marketAdjustListPageOptions.pid = this.value
 				pageInit(pageState, http, config)
-				yieldInit(pageState, http, config)
 				$('#marketAdjustTable').bootstrapTable('refresh')
 				$('#profitDistributeTable').bootstrapTable('refresh')
 				
@@ -3257,6 +3255,8 @@ function pageInit (pageState, http, config) {
 		initPieChartAndBarChart(config, pageState)
 
 		initLineChart(config, pageState)
+
+		yieldInit(pageState, http, config)
 		
 		$('#marketValue').html(detail.marketValue)
 		$('#baseDate').html(detail.baseDate)
