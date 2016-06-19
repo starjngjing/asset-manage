@@ -101,11 +101,11 @@ define([
 					}
 				}, 
 				{
-					width: 150,
+					width: 200,
 					align: 'center',
 					formatter: function(val, row) {
 						var buttons = [{
-							text: '查看详情',
+							text: '详情',
 							type: 'button',
 							class: 'item-detail',
 							isRender: parseInt(row.state) === 1

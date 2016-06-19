@@ -11,9 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guohuai.asset.manage.boot.cashtool.CashTool;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
-import com.guohuai.asset.manage.boot.duration.order.fund.FundEntity;
-import com.guohuai.asset.manage.boot.duration.order.trust.TrustEntity;
+import com.guohuai.asset.manage.boot.investment.Investment;
 
 import lombok.Data;
 
@@ -31,10 +31,10 @@ public class ErrorCalc implements Serializable {
 	private AssetPoolEntity assetPool;
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fundOid", referencedColumnName = "oid")
-	private FundEntity fund;
+	private CashTool cashTool;
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trustOid", referencedColumnName = "oid")
-	private TrustEntity trust;
+	private Investment target;
 	// 消息
 	private JSONObject message;
 	// 创建日期
