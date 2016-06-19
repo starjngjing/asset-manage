@@ -93,6 +93,7 @@ define([
 						result.redemption = result.redemption + '\t 万元'
 					}
 					if (result.lastOrders) {
+						calcOrders = result.lastOrders
 						result.lastOrders = result.lastOrders + '\t 万元'
 					}
 					$$.detailAutoFix(modal, json.result)
@@ -318,8 +319,8 @@ define([
 		      	var ratio = 0
 		      	var calcPorfit = 0
 		      	if (calcData !== 0) {
+		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
 		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
-		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
 		      	}
 		      	document.marketAdjustForm.ratio.value = ratio
 		      	document.marketAdjustForm.profit.value = calcProfit
@@ -341,6 +342,7 @@ define([
 			// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
+				marketAdjustListPageOptions.pid = this.value
 				pageInit(pageState, http, config)
 				$('#marketAdjustTable').bootstrapTable('refresh')
 				$('#profitDistributeTable').bootstrapTable('refresh')
@@ -3226,6 +3228,13 @@ function pageInit (pageState, http, config) {
 		initPieChartAndBarChart(config, pageState)
 
 		initLineChart(config, pageState)
+		
+		$('#marketValue').html(detail.marketValue)
+		$('#baseDate').html(detail.baseDate)
+		$('#undistributeProfit').html(detail.undistributeProfit)
+		$('#payFeigin').html(detail.payFeigin)
+		$('#spvProfit').html(detail.spvProfit)
+		$('#investorProfit').html(detail.investorProfit)
 	})
 }
 

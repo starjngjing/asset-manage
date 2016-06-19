@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.duration.fact.calibration;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.guohuai.asset.manage.boot.acct.books.document.SPVDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.order.SpvOrderService;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -34,6 +36,9 @@ public class MarketAdjustService {
 	private SpvOrderService orderService;
 	@Autowired
 	private AssetPoolService poolService;
+	
+	@Autowired
+	private SPVDocumentService spvService;
 	
 	@Transactional
 	public void save(MarketAdjustEntity entity) {
@@ -92,6 +97,18 @@ public class MarketAdjustService {
 		entity.setOrderOid(oid);
 		
 		return entity;
+	}
+	
+	public void auditMarketAdjust(String oid, String type, String operator) {
+		MarketAdjustEntity market = adjustDao.findOne(oid);
+		if ("pass".equals(type)) {
+			market.setStatus(MarketAdjustEntity.PASS);
+			spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
+		} else
+			market.setStatus(MarketAdjustEntity.FAIL);
+		market.setAuditor(operator);
+		market.setAuditTime(new Timestamp(System.currentTimeMillis()));
+		adjustDao.save(market);
 	}
 	
 	/**

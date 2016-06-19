@@ -19,6 +19,8 @@ public class AssetPoolForm implements Serializable {
 
 	private String oid;
 	private String name;
+	// 真实市值
+	private BigDecimal marketValue;
 	// 资产规模
 	private BigDecimal scale;
 	// 投资范围
@@ -53,6 +55,14 @@ public class AssetPoolForm implements Serializable {
 	private String incomeState;
 	// 是否录入真实估值(0:否;1:是)
 	private int factValuation;
+	// 未分配收益
+	private BigDecimal unDistributeProfit;
+	// 应付费金
+	private BigDecimal payFeigin;
+	// spv所有者权益
+	private BigDecimal spvProfit;
+	// 投资者所有权益
+	private BigDecimal investorProfit;
 	// 状态
 	private String state;
 	// 创建者

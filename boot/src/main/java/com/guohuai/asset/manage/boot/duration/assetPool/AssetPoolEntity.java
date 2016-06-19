@@ -98,6 +98,14 @@ public class AssetPoolEntity implements Serializable {
 	private String incomeState;
 	// 是否录入真实估值(0:否;1:是)
 	private int factValuation;
+	// 未分配收益
+	private BigDecimal unDistributeProfit;
+	// 应付费金
+	private BigDecimal payFeigin;
+	// spv所有者权益
+	private BigDecimal spvProfit;
+	// 投资者所有权益
+	private BigDecimal investorProfit;
 	// 创建者
 	private String creater;
 	// 操作员

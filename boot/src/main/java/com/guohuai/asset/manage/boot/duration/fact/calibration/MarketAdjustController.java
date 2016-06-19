@@ -76,14 +76,7 @@ public class MarketAdjustController extends BaseController {
 	 */
 	@RequestMapping(value = "/auditMarketAdjust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> auditMarketAdjust(@RequestParam String oid, @RequestParam String type) {
-		MarketAdjustEntity market = adjustService.findOne(oid);
-		if ("pass".equals(type))
-			market.setStatus(MarketAdjustEntity.PASS);
-		else
-			market.setStatus(MarketAdjustEntity.FAIL);
-		market.setAuditor(super.getLoginAdmin());
-		market.setAuditTime(new Timestamp(System.currentTimeMillis()));
-		adjustService.save(market);
+		adjustService.auditMarketAdjust(oid, type, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
