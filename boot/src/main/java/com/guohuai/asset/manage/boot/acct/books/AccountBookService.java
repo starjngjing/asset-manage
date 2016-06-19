@@ -78,26 +78,26 @@ public class AccountBookService {
 	}
 
 	@Transactional
-	public AccountBook drCredit(AccountBook book, BigDecimal cash) {
+	public AccountBook incrCredit(AccountBook book, BigDecimal cash) {
 		book.setBalance(book.getBalance().add(cash));
 		book = this.accountBookDao.save(book);
 
 		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
 			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
-			this.drCredit(parent, cash);
+			this.incrCredit(parent, cash);
 		}
 
 		return book;
 	}
 
 	@Transactional
-	public AccountBook crCredit(AccountBook book, BigDecimal cash) {
+	public AccountBook decrCredit(AccountBook book, BigDecimal cash) {
 		book.setBalance(book.getBalance().subtract(cash));
 		book = this.accountBookDao.save(book);
 
 		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
 			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
-			this.crCredit(parent, cash);
+			this.decrCredit(parent, cash);
 		}
 
 		return book;
@@ -111,6 +111,9 @@ public class AccountBookService {
 
 	@Transactional
 	public List<AccountBookBalance> balance(String relative) {
+		if (StringUtil.isEmpty(relative)) {
+			return this.balance();
+		}
 		List<AccountBook> bs = this.accountBookDao.search(relative);
 		return this.balance(bs);
 	}

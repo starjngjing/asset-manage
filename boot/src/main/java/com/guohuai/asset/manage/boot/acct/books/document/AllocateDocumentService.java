@@ -106,7 +106,7 @@ public class AllocateDocumentService {
 		e1_2201.setCrAmount(BigDecimal.ZERO);
 		e1_2201.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(allocate));
-		b_2201 = this.accountBookService.crCredit(b_2201, allocate);
+		b_2201 = this.accountBookService.decrCredit(b_2201, allocate);
 		seq++;
 		entries.add(e1_2201);
 
@@ -122,7 +122,7 @@ public class AllocateDocumentService {
 		e2_3001.setCrAmount(allocate);
 		e2_3001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(allocate));
-		b_3001 = this.accountBookService.drCredit(b_3001, allocate);
+		b_3001 = this.accountBookService.incrCredit(b_3001, allocate);
 		seq++;
 		entries.add(e2_3001);
 
@@ -140,7 +140,7 @@ public class AllocateDocumentService {
 			e3_1201.setCrAmount(BigDecimal.ZERO);
 			e3_1201.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(wipe));
-			b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+			b_1201 = this.accountBookService.incrCredit(b_1201, wipe);
 			seq++;
 			entries.add(e3_1201);
 
@@ -156,7 +156,7 @@ public class AllocateDocumentService {
 			e4_3001.setCrAmount(wipe);
 			e4_3001.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(wipe));
-			b_3001 = this.accountBookService.drCredit(b_3001, wipe);
+			b_3001 = this.accountBookService.incrCredit(b_3001, wipe);
 			seq++;
 			entries.add(e4_3001);
 		}
