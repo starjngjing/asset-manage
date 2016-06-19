@@ -11,7 +11,15 @@ define([
 		name: 'document',
 		init: function() {
 
+			http.post(config.api.duration.assetPool.getNameList, function(json) {
+				var select = $(document.searchForm.relative);
+				json.rows.forEach(function(item) {
+					$('<option value="' + item.oid + '">' + item.name + '</option>').appendTo(select);
+				});
+			});
+
 			var queryParams = {
+				relative: '',
 				startDate: '',
 				endDate: '',
 				page: 1,
@@ -30,6 +38,7 @@ define([
 				},
 				queryParams: function(val) {
 					var form = document.searchForm;
+					queryParams.relative = form.relative.value.trim();
 					queryParams.startDate = form.startDate.value.trim();
 					queryParams.endDate = form.endDate.value.trim();
 					queryParams.size = val.limit;
