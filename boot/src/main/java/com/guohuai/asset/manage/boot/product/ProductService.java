@@ -199,6 +199,8 @@ public class ProductService {
 			}
 		}
 		
+		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE");
+		
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
@@ -351,6 +353,8 @@ public class ProductService {
 				investFileForm = JSON.parseArray(form.getInvestFile(), SaveFileForm.class);
 			}
 		}
+		
+		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE");
 		
 		Product p = pb.build();
 		p = this.productDao.save(p);
@@ -968,7 +972,7 @@ public class ProductService {
 		AdminObj adminObj = null;
 		for (ProductLogListResp p : rows) {
 			ProductLog pl = this.getProductLog(p.getOid(), ProductLog.AUDIT_TYPE_Auditing, ProductLog.AUDIT_STATE_Approval);
-			
+
 			if(pl!=null) {
 				//审核人 审核时间
 				if(adminObjMap.get(pl.getAuditor())==null) {
@@ -1026,7 +1030,7 @@ public class ProductService {
 	 * @param auditState
 	 * @return
 	 */
-	private ProductLog getProductLog(final String oid, final String auditType, final String auditState) {
+	public ProductLog getProductLog(final String oid, final String auditType, final String auditState) {
 		Direction sortDirection = Direction.DESC;
 		Sort sort = new Sort(new Order(sortDirection, "auditTime"));
 		

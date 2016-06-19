@@ -400,4 +400,9 @@ public class Product implements Serializable {
 	 */
 	private Date newestProfitConfirmDate;
 
+	
+	private String purchaseStatus;
+	private String redeemStatus;
+	private String purchaseApplyStatus;
+	private String redeemApplyStatus;
 }

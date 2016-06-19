@@ -46,6 +46,7 @@ define(function() {
 			productAuditList: this.host + "/ams/product/audit/list", //查询产品审核列表
 			productCheckList: this.host + "/ams/product/check/list", //查询产品复核列表
 			productApproveList: this.host + "/ams/product/approve/list", //查询产品批准列表
+			productDurationList: this.host + "/ams/product/duration/list", // 查询产品运营列表
 			savePeriodic: this.host + "/ams/product/save/periodic", //新加定期产品
 			saveCurrent: this.host + "/ams/product/save/current", //新加活期产品
 			updatePeriodic: this.host + "/ams/product/update/periodic", //更新定期产品
