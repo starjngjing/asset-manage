@@ -69,6 +69,7 @@ public class ProductLogListResp extends BaseResp {
 		this.redeemStatus = p.getRedeemStatus();
 		this.purchaseApplyStatus = p.getPurchaseApplyStatus();
 		this.redeemApplyStatus = p.getRedeemApplyStatus();
+		this.maxSaleVolume = p.getMaxSaleVolume();
 	}
 
 	private String oid;
@@ -129,5 +130,6 @@ public class ProductLogListResp extends BaseResp {
 	private String redeemStatus;
 	private String purchaseApplyStatus;
 	private String redeemApplyStatus;
+	private BigDecimal maxSaleVolume;
 
 }

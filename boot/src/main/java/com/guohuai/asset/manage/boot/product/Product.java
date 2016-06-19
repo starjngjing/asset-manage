@@ -394,13 +394,17 @@ public class Product implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assetPoolOid", referencedColumnName = "oid")
 	private AssetPoolEntity assetPool;
-	
+
 	/**
 	 * 最新收益确认日期
 	 */
 	private Date newestProfitConfirmDate;
 
-	
+	/**
+	 * 最大可售份额
+	 */
+	private BigDecimal maxSaleVolume;
+
 	private String purchaseStatus;
 	private String redeemStatus;
 	private String purchaseApplyStatus;

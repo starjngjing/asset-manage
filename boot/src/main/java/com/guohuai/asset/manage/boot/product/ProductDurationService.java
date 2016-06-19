@@ -21,9 +21,6 @@ public class ProductDurationService {
 	private ProductService productService;
 
 	@Autowired
-	private ProductDao productDao;
-
-	@Autowired
 	private AdminSdk adminSdk;
 
 	public PageResp<ProductLogListResp> durationList(Specification<Product> spec, Pageable pageable) {
