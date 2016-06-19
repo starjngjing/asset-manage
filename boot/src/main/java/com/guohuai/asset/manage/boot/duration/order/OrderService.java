@@ -1193,6 +1193,10 @@ public class OrderService {
 				}
 			}
 			obj[1] = formList;
+		} else {
+			obj = new Object[2];
+			obj[0] = 0;
+			obj[1] = formList;
 		}
 		
 		return obj;
@@ -1485,11 +1489,10 @@ public class OrderService {
 	 */
 	@Transactional
 	public Object[] getTrustListByPid(String pid, Pageable pageable) {
-		
+		List<TrustForm> formList = Lists.newArrayList();
 		pid = assetPoolService.getPid(pid);
 		Object[] obj = trustService.findByPidForConfirm(pid, pageable);
 		if (null != obj) {
-			List<TrustForm> formList = Lists.newArrayList();
 			@SuppressWarnings("unchecked")
 			List<TrustEntity> list = (List<TrustEntity>)obj[1];
 			if (null != list && !list.isEmpty()) {
@@ -1527,6 +1530,10 @@ public class OrderService {
 					formList.add(form);
 				}
 			}
+			obj[1] = formList;
+		} else {
+			obj = new Object[2];
+			obj[0] = 0;
 			obj[1] = formList;
 		}
 		

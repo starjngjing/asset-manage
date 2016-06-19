@@ -304,23 +304,25 @@ define([
 		    // 可售余额和应付费金输入框input事件绑定
 		    $(document.marketAdjustForm.shares).on('input', function () {
 		      	calcShares = parseFloat(this.value) || 0
-		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
-		      	document.marketAdjustForm.profit.value = calcProfit
 		      	var ratio = 0
+		      	var calcPorfit = 0
 		      	if (calcData !== 0) {
+		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
 		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
 		      	}
 		      	document.marketAdjustForm.ratio.value = ratio
+		      	document.marketAdjustForm.profit.value = calcProfit
 		    })
 		    $(document.marketAdjustForm.nav).on('input', function () {
 		        calcNav = parseFloat(this.value) || 0
-		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
-		      	document.marketAdjustForm.profit.value = calcProfit
 		      	var ratio = 0
+		      	var calcPorfit = 0
 		      	if (calcData !== 0) {
 		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
 		      	}
 		      	document.marketAdjustForm.ratio.value = ratio
+		      	document.marketAdjustForm.profit.value = calcProfit
 		    })
 			// 实际市值 脚本区域 end ==============================================================================================================================
 			
@@ -340,6 +342,9 @@ define([
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
 				pageInit(pageState, http, config)
+				$('#marketAdjustTable').bootstrapTable('refresh')
+				$('#profitDistributeTable').bootstrapTable('refresh')
+				
 				$('#orderingToolTable').bootstrapTable('refresh')
 				$('#toolTable').bootstrapTable('refresh')
 				$('#orderingTrustTable').bootstrapTable('refresh')
