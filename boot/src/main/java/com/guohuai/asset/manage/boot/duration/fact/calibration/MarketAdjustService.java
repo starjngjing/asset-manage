@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.acct.books.document.SPVDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
@@ -158,15 +159,14 @@ public class MarketAdjustService {
 	 * @return
 	 */
 	@Transactional
-	public List<Object[]> getListForYield(String pid) {
-		List<Object[]> objList = Lists.newArrayList();
+	public List<JSONObject> getListForYield(String pid) {
+		List<JSONObject> objList = Lists.newArrayList();
 		List<MarketAdjustEntity> list = adjustDao.getListForYield(pid);
 		if (null != list && !list.isEmpty()) {
-			Object[] obj = null;
+			JSONObject obj = new JSONObject();;
 			for (MarketAdjustEntity entity : list) {
-				obj = new Object[2];
-				obj[0] = entity.getBaseDate();
-				obj[1] = entity.getRatio();
+				obj.put("date", entity.getBaseDate());
+				obj.put("yield", entity.getRatio());
 				
 				objList.add(obj);
 			}
