@@ -99,16 +99,44 @@ public class MarketAdjustService {
 		return entity;
 	}
 	
+	/**
+	 * 市值校准录入审核
+	 * @param oid
+	 * @param type
+	 * @param operator
+	 */
+	@Transactional
 	public void auditMarketAdjust(String oid, String type, String operator) {
 		MarketAdjustEntity market = adjustDao.findOne(oid);
 		if ("pass".equals(type)) {
 			market.setStatus(MarketAdjustEntity.PASS);
-			spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
+			if (null != market.getProfit() && market.getProfit().compareTo(BigDecimal.ZERO) != 0) {
+				spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
+			}
 		} else
 			market.setStatus(MarketAdjustEntity.FAIL);
 		market.setAuditor(operator);
 		market.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		adjustDao.save(market);
+	}
+	
+	/**
+	 * 查询当天的订单状态
+	 * -1：未审核；0：未录入；1：已通过
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public int getMarketAdjustStatus(String pid) {
+		MarketAdjustEntity entity = adjustDao.findByBaseDate(pid, new Date(System.currentTimeMillis()));
+		if (null != entity) {
+			if (MarketAdjustEntity.CREATE.equals(entity.getStatus())) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+		return 0;
 	}
 	
 	/**
@@ -122,6 +150,28 @@ public class MarketAdjustService {
 		Page<MarketAdjustEntity> list = adjustDao.getListByPid(pid, pageable);
 		
 		return list;
+	}
+	
+	/**
+	 * 获取收益率列表
+	 * @param pid
+	 * @return
+	 */
+	@Transactional
+	public List<Object[]> getListForYield(String pid) {
+		List<Object[]> objList = Lists.newArrayList();
+		List<MarketAdjustEntity> list = adjustDao.getListForYield(pid);
+		if (null != list && !list.isEmpty()) {
+			Object[] obj = null;
+			for (MarketAdjustEntity entity : list) {
+				obj = new Object[2];
+				obj[0] = entity.getBaseDate();
+				obj[1] = entity.getRatio();
+				
+				objList.add(obj);
+			}
+		}
+		return objList;
 	}
 	
 	/**

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -17,9 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.Income;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.IncomeType;
+import com.guohuai.asset.manage.boot.acct.books.AccountBook;
+import com.guohuai.asset.manage.boot.acct.books.AccountBookService;
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalc;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalcService;
@@ -67,8 +67,10 @@ public class AssetPoolService {
 	@Autowired
 	private ScheduleLogService logService;
 	
+//	@Autowired
+//	private IncomeDocumentService incomeService;
 	@Autowired
-	private IncomeDocumentService incomeService;
+	private AccountBookService accountService;
 	
 	/**
 	 * 新建资产池
@@ -216,6 +218,23 @@ public class AssetPoolService {
 			form.setScopes(scopes);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		// 获取收益数据
+		Map<String, AccountBook> accountMap = accountService.find(pid, "2201", "2301", "300101", "300102");
+		if (null != accountMap) {
+			if (accountMap.containsKey("2201")) {
+				form.setUnDistributeProfit(accountMap.get("2201").getBalance());
+			}
+			if (accountMap.containsKey("2301")) {
+				form.setPayFeigin(accountMap.get("2301").getBalance());
+			}
+			if (accountMap.containsKey("300101")) {
+				form.setInvestorProfit(accountMap.get("300101").getBalance());
+			}
+			if (accountMap.containsKey("300102")) {
+				form.setSpvProfit(accountMap.get("300102").getBalance());
+			}
 		}
 		
 		return form;
@@ -418,7 +437,7 @@ public class AssetPoolService {
 		// 总收益
 		BigDecimal totalProfit = BigDecimal.ZERO;
 		// 会计分录
-		List<Income> incomeList = Lists.newArrayList();
+//		List<Income> incomeList = Lists.newArrayList();
 		// 记录有问题的标的数据oid
 		List<ErrorCalc> errorList = Lists.newArrayList();
 		// 存档错误数据
@@ -523,9 +542,9 @@ public class AssetPoolService {
 				calc.setOid(StringUtil.uuid());
 				calc.setAssetPool(assetPool);
 				
-				totalProfit = this.calcFundProfit(calc, baseDate, totalProfit, fcList, fundCalcList, incomeList);
-				totalProfit = this.calcTrustProfitForCollect(calc, baseDate, totalProfit, mjq_tcList, trustCalcList, incomeList);
-				totalProfit = this.calcTrustProfitForDuration(calc, baseDate, totalProfit, cxq_tcList, trustCalcList, incomeList);
+				totalProfit = this.calcFundProfit(calc, baseDate, totalProfit, fcList, fundCalcList);
+				totalProfit = this.calcTrustProfitForCollect(calc, baseDate, totalProfit, mjq_tcList, trustCalcList);
+				totalProfit = this.calcTrustProfitForDuration(calc, baseDate, totalProfit, cxq_tcList, trustCalcList);
 				
 				calc.setCapital(assetPool.getScale().add(totalProfit).setScale(4, BigDecimal.ROUND_HALF_UP));
 				calc.setProfit(totalProfit);
@@ -565,8 +584,8 @@ public class AssetPoolService {
 				errorCalcService.save(errorList);
 			}
 			
-			if (incomeList.size() > 0)
-				incomeService.incomeConfirm(assetPool.getOid(), incomeList);
+//			if (incomeList.size() > 0)
+//				incomeService.incomeConfirm(assetPool.getOid(), incomeList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -585,8 +604,7 @@ public class AssetPoolService {
 	public BigDecimal calcFundProfit(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit,
 			List<FundEntity> fundList,
-			List<FundCalc> fundCalcList, 
-			List<Income> incomeList) {
+			List<FundCalc> fundCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != fundList && !fundList.isEmpty()) {
@@ -615,8 +633,8 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.CASHTOOL);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.CASHTOOL);
+//				incomeList.add(income);
 			}
 			fundService.save(fundList);
 		}
@@ -637,8 +655,7 @@ public class AssetPoolService {
 	public BigDecimal calcTrustProfitForCollect(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit, 
 			List<TrustEntity> trustList, 
-			List<TrustCalc> trustCalcList,
-			List<Income> incomeList) {
+			List<TrustCalc> trustCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != trustList && !trustList.isEmpty()) {
@@ -664,8 +681,8 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+//				incomeList.add(income);
 			}
 			trustService.save(trustList);
 		}
@@ -686,8 +703,7 @@ public class AssetPoolService {
 	public BigDecimal calcTrustProfitForDuration(AssetPoolCalc assetPoolCalc, Date baseDate, 
 			BigDecimal totalProfit,
 			List<TrustEntity> trustList, 
-			List<TrustCalc> trustCalcList,
-			List<Income> incomeList) {
+			List<TrustCalc> trustCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != trustList && !trustList.isEmpty()) {
@@ -713,8 +729,8 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+//				incomeList.add(income);
 			}
 			trustService.save(trustList);
 		}

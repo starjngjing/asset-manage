@@ -1,6 +1,7 @@
 package com.guohuai.asset.manage.boot.duration.fact.calibration;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,6 +84,20 @@ public class MarketAdjustController extends BaseController {
 	}
 	
 	/**
+	 * 查询当天的订单状态
+	 * -1：未审核；0：未录入；1：已通过
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/getMarketAdjustStuts", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getMarketAdjustStatus(@RequestParam String pid) {
+		int stutas = adjustService.getMarketAdjustStatus(pid);
+		Response r = new Response();
+		r.with("result", stutas);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
 	 * 市值校准录入删除
 	 * @param form
 	 * @return
@@ -121,6 +136,19 @@ public class MarketAdjustController extends BaseController {
 		Response r = new Response();
 		r.with("rows", list.getContent());
 		r.with("total", list.getTotalElements());
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	/**
+	 * 市值校准 - 收益率
+	 * @param form
+	 * @return
+	 */
+	@RequestMapping(value = "/getYield", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getYield(@RequestParam String pid) {
+		List<Object[]> obj = adjustService.getListForYield(pid);
+		Response r = new Response();
+		r.with("result", obj);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
 	}
 }
