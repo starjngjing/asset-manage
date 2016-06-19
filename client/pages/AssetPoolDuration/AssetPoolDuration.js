@@ -349,6 +349,7 @@ define([
 					contentType: 'form'
 				}, function(json) {
 					pageState.mockData = json.result
+					initLineChart(config, pageState)
 				})
 			}
 			// 实际市值 脚本区域 end ==============================================================================================================================
