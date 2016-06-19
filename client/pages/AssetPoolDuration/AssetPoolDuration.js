@@ -341,17 +341,6 @@ define([
 		      	document.marketAdjustForm.profit.value = calcProfit
 		    })
 
-			function yieldInit (pageState, http, config) {
-				http.post(config.api.duration.market.getYield, {
-					data: {
-						pid: pageState.pid
-					},
-					contentType: 'form'
-				}, function(json) {
-					pageState.mockData = json.result
-					initLineChart(config, pageState)
-				})
-			}
 			// 实际市值 脚本区域 end ==============================================================================================================================
 			
 			// 资产池估值 脚本区域 start ==============================================================================================================================
@@ -3264,6 +3253,18 @@ function pageInit (pageState, http, config) {
 		$('#payFeigin').html(detail.payFeigin)
 		$('#spvProfit').html(detail.spvProfit)
 		$('#investorProfit').html(detail.investorProfit)
+	})
+}
+
+function yieldInit (pageState, http, config) {
+	http.post(config.api.duration.market.getYield, {
+		data: {
+			pid: pageState.pid
+		},
+		contentType: 'form'
+	}, function(json) {
+		pageState.mockData = json.result
+		initLineChart(config, pageState)
 	})
 }
 
