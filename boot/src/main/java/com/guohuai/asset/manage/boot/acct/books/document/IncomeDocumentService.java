@@ -212,7 +212,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.decrCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -278,7 +278,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.decrCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -344,7 +344,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.decrCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);

@@ -29,8 +29,8 @@ public class DocumentEntryService {
 	}
 
 	@Transactional
-	public DocumentEntryPage search(Date startDate, Date endDate, int page, int size) {
-		Page<Document> documents = this.documentService.search(startDate, endDate, page, size);
+	public DocumentEntryPage search(String relative, Date startDate, Date endDate, int page, int size) {
+		Page<Document> documents = this.documentService.search(relative, startDate, endDate, page, size);
 
 		DocumentEntryPage ep = new DocumentEntryPage();
 
@@ -49,7 +49,8 @@ public class DocumentEntryService {
 			}
 
 			int index = 0;
-			for (String key : maps.keySet()) {
+			for (Document document : documents.getContent()) {
+				String key = document.getOid();
 				for (int i = 0; i < maps.get(key).size(); i++) {
 					DocumentEntryResp r = new DocumentEntryResp(maps.get(key).get(i));
 					if (i == 0) {
