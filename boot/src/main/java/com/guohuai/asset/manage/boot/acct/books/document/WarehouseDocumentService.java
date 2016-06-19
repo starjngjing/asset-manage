@@ -94,7 +94,7 @@ public class WarehouseDocumentService {
 		e1_110151.setCrAmount(BigDecimal.ZERO);
 		e1_110151.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_110151 = this.accountBookService.drCredit(b_110151, amount);
+		b_110151 = this.accountBookService.incrCredit(b_110151, amount);
 		seq++;
 
 		// 贷 银行存款
@@ -109,7 +109,7 @@ public class WarehouseDocumentService {
 		e2_1001.setCrAmount(amount);
 		e2_1001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1001 = this.accountBookService.crCredit(b_1001, amount);
+		b_1001 = this.accountBookService.decrCredit(b_1001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -165,7 +165,7 @@ public class WarehouseDocumentService {
 		e1_1001.setCrAmount(BigDecimal.ZERO);
 		e1_1001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_1001 = this.accountBookService.drCredit(b_1001, amount);
+		b_1001 = this.accountBookService.incrCredit(b_1001, amount);
 		seq++;
 
 		// 贷 交易性金融资产_货币基金
@@ -180,7 +180,7 @@ public class WarehouseDocumentService {
 		e2_110151.setCrAmount(amount);
 		e2_110151.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_110151 = this.accountBookService.crCredit(b_110151, amount);
+		b_110151 = this.accountBookService.decrCredit(b_110151, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -236,7 +236,7 @@ public class WarehouseDocumentService {
 		e1_110101.setCrAmount(BigDecimal.ZERO);
 		e1_110101.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_110101 = this.accountBookService.drCredit(b_110101, amount);
+		b_110101 = this.accountBookService.incrCredit(b_110101, amount);
 		seq++;
 
 		// 贷 银行存款
@@ -251,7 +251,7 @@ public class WarehouseDocumentService {
 		e2_1001.setCrAmount(amount);
 		e2_1001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1001 = this.accountBookService.crCredit(b_1001, amount);
+		b_1001 = this.accountBookService.decrCredit(b_1001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -334,7 +334,7 @@ public class WarehouseDocumentService {
 					e1_110101.setCrAmount(BigDecimal.ZERO);
 					e1_110101.setSeq(seq);
 					document.setDrAmount(document.getDrAmount().add(ar));
-					b_110101 = this.accountBookService.drCredit(b_110101, income);
+					b_110101 = this.accountBookService.incrCredit(b_110101, income);
 					seq++;
 					entries.add(e1_110101);
 
@@ -350,7 +350,7 @@ public class WarehouseDocumentService {
 					e2_1201.setCrAmount(ar);
 					e2_1201.setSeq(seq);
 					document.setCrAmount(document.getCrAmount().add(ar));
-					b_1201 = this.accountBookService.crCredit(b_2201, ar);
+					b_1201 = this.accountBookService.decrCredit(b_2201, ar);
 					seq++;
 					entries.add(e2_1201);
 				}
@@ -369,7 +369,7 @@ public class WarehouseDocumentService {
 					e3_110101.setCrAmount(BigDecimal.ZERO);
 					e3_110101.setSeq(seq);
 					document.setDrAmount(document.getDrAmount().add(wipe));
-					b_110101 = this.accountBookService.drCredit(b_110101, wipe);
+					b_110101 = this.accountBookService.incrCredit(b_110101, wipe);
 					seq++;
 					entries.add(e3_110101);
 
@@ -385,7 +385,7 @@ public class WarehouseDocumentService {
 					e4_2201.setCrAmount(wipe);
 					e4_2201.setSeq(seq);
 					document.setCrAmount(document.getCrAmount().add(wipe));
-					b_2201 = this.accountBookService.drCredit(b_2201, wipe);
+					b_2201 = this.accountBookService.incrCredit(b_2201, wipe);
 					seq++;
 					entries.add(e4_2201);
 
@@ -402,7 +402,7 @@ public class WarehouseDocumentService {
 					e5_1001.setCrAmount(BigDecimal.ZERO);
 					e5_1001.setSeq(seq);
 					document.setDrAmount(document.getDrAmount().add(wipe));
-					b_1001 = this.accountBookService.drCredit(b_1001, wipe);
+					b_1001 = this.accountBookService.incrCredit(b_1001, wipe);
 					seq++;
 					entries.add(e5_1001);
 
@@ -418,7 +418,7 @@ public class WarehouseDocumentService {
 					e6_110101.setCrAmount(wipe);
 					e6_110101.setSeq(seq);
 					document.setCrAmount(document.getCrAmount().add(wipe));
-					b_110101 = this.accountBookService.crCredit(b_110101, wipe);
+					b_110101 = this.accountBookService.decrCredit(b_110101, wipe);
 					seq++;
 					entries.add(e6_110101);
 
@@ -449,7 +449,7 @@ public class WarehouseDocumentService {
 					e7_1201.setCrAmount(BigDecimal.ZERO);
 					e7_1201.setSeq(seq);
 					document.setDrAmount(document.getDrAmount().add(ar));
-					b_1201 = this.accountBookService.drCredit(b_1201, ar);
+					b_1201 = this.accountBookService.incrCredit(b_1201, ar);
 					seq++;
 					entries.add(e7_1201);
 
@@ -465,7 +465,7 @@ public class WarehouseDocumentService {
 					e8_110101.setCrAmount(ar);
 					e8_110101.setSeq(seq);
 					document.setCrAmount(document.getCrAmount().add(ar));
-					b_110101 = this.accountBookService.crCredit(b_110101, ar);
+					b_110101 = this.accountBookService.decrCredit(b_110101, ar);
 					seq++;
 					entries.add(e8_110101);
 				}
@@ -483,7 +483,7 @@ public class WarehouseDocumentService {
 					e9_2201.setCrAmount(BigDecimal.ZERO);
 					e9_2201.setSeq(seq);
 					document.setDrAmount(document.getDrAmount().add(wipe));
-					b_2201 = this.accountBookService.crCredit(b_2201, wipe);
+					b_2201 = this.accountBookService.decrCredit(b_2201, wipe);
 					seq++;
 					entries.add(e9_2201);
 
@@ -499,7 +499,7 @@ public class WarehouseDocumentService {
 					e10_110101.setCrAmount(wipe);
 					e10_110101.setSeq(seq);
 					document.setCrAmount(document.getCrAmount().add(wipe));
-					b_110101 = this.accountBookService.crCredit(b_110101, wipe);
+					b_110101 = this.accountBookService.decrCredit(b_110101, wipe);
 					seq++;
 					entries.add(e10_110101);
 				}
@@ -528,7 +528,7 @@ public class WarehouseDocumentService {
 				e11_1201.setCrAmount(BigDecimal.ZERO);
 				e11_1201.setSeq(seq);
 				document.setDrAmount(document.getDrAmount().add(wipe));
-				b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+				b_1201 = this.accountBookService.incrCredit(b_1201, wipe);
 				seq++;
 				entries.add(e11_1201);
 
@@ -544,7 +544,7 @@ public class WarehouseDocumentService {
 				e12_110101.setCrAmount(wipe);
 				e12_110101.setSeq(seq);
 				document.setCrAmount(document.getCrAmount().add(wipe));
-				b_110101 = this.accountBookService.crCredit(b_110101, wipe);
+				b_110101 = this.accountBookService.decrCredit(b_110101, wipe);
 				seq++;
 				entries.add(e12_110101);
 			}
@@ -562,7 +562,7 @@ public class WarehouseDocumentService {
 			e13_1001.setCrAmount(BigDecimal.ZERO);
 			e13_1001.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(returns));
-			b_1001 = this.accountBookService.drCredit(b_1001, returns);
+			b_1001 = this.accountBookService.incrCredit(b_1001, returns);
 			seq++;
 			entries.add(e13_1001);
 
@@ -578,7 +578,7 @@ public class WarehouseDocumentService {
 			e14_110101.setCrAmount(returns);
 			e14_110101.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(returns));
-			b_110101 = this.accountBookService.crCredit(b_110101, returns);
+			b_110101 = this.accountBookService.decrCredit(b_110101, returns);
 			seq++;
 			entries.add(e14_110101);
 
@@ -658,7 +658,7 @@ public class WarehouseDocumentService {
 				e1_110101.setCrAmount(BigDecimal.ZERO);
 				e1_110101.setSeq(seq);
 				document.setDrAmount(document.getDrAmount().add(income));
-				b_110101 = this.accountBookService.drCredit(b_110101, income);
+				b_110101 = this.accountBookService.incrCredit(b_110101, income);
 				seq++;
 				entries.add(e1_110101);
 
@@ -674,7 +674,7 @@ public class WarehouseDocumentService {
 				e2_2201.setCrAmount(income);
 				e2_2201.setSeq(seq);
 				document.setCrAmount(document.getCrAmount().add(income));
-				b_2201 = this.accountBookService.drCredit(b_2201, income);
+				b_2201 = this.accountBookService.incrCredit(b_2201, income);
 				seq++;
 				entries.add(e2_2201);
 			}
@@ -693,7 +693,7 @@ public class WarehouseDocumentService {
 				e3_110101.setCrAmount(BigDecimal.ZERO);
 				e3_110101.setSeq(seq);
 				document.setDrAmount(document.getDrAmount().add(wipe));
-				b_110101 = this.accountBookService.drCredit(b_110101, wipe);
+				b_110101 = this.accountBookService.incrCredit(b_110101, wipe);
 				seq++;
 				entries.add(e3_110101);
 
@@ -709,7 +709,7 @@ public class WarehouseDocumentService {
 				e4_1201.setCrAmount(wipe);
 				e4_1201.setSeq(seq);
 				document.setCrAmount(document.getCrAmount().add(wipe));
-				b_1201 = this.accountBookService.crCredit(b_1201, wipe);
+				b_1201 = this.accountBookService.decrCredit(b_1201, wipe);
 				seq++;
 				entries.add(e4_1201);
 			}
@@ -727,7 +727,7 @@ public class WarehouseDocumentService {
 		e5_1001.setCrAmount(BigDecimal.ZERO);
 		e5_1001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(revenue));
-		b_1001 = this.accountBookService.drCredit(b_1001, revenue);
+		b_1001 = this.accountBookService.incrCredit(b_1001, revenue);
 		seq++;
 		entries.add(e5_1001);
 
@@ -743,7 +743,7 @@ public class WarehouseDocumentService {
 		e6_110101.setCrAmount(revenue);
 		e6_110101.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(revenue));
-		b_110101 = this.accountBookService.crCredit(b_110101, revenue);
+		b_110101 = this.accountBookService.decrCredit(b_110101, revenue);
 		seq++;
 		entries.add(e6_110101);
 
@@ -819,7 +819,7 @@ public class WarehouseDocumentService {
 			e1_2201.setCrAmount(BigDecimal.ZERO);
 			e1_2201.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(income));
-			b_2201 = this.accountBookService.crCredit(b_2201, income);
+			b_2201 = this.accountBookService.decrCredit(b_2201, income);
 			seq++;
 			entries.add(e1_2201);
 
@@ -835,7 +835,7 @@ public class WarehouseDocumentService {
 			e2_110101.setCrAmount(income);
 			e2_110101.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(income));
-			b_110101 = this.accountBookService.crCredit(b_110101, income);
+			b_110101 = this.accountBookService.decrCredit(b_110101, income);
 			seq++;
 			entries.add(e2_110101);
 		}
@@ -854,7 +854,7 @@ public class WarehouseDocumentService {
 			e3_1201.setCrAmount(BigDecimal.ZERO);
 			e3_1201.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(wipe));
-			b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+			b_1201 = this.accountBookService.incrCredit(b_1201, wipe);
 			seq++;
 			entries.add(e3_1201);
 
@@ -870,7 +870,7 @@ public class WarehouseDocumentService {
 			e4_110101.setCrAmount(wipe);
 			e4_110101.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(wipe));
-			b_110101 = this.accountBookService.crCredit(b_110101, wipe);
+			b_110101 = this.accountBookService.decrCredit(b_110101, wipe);
 			seq++;
 			entries.add(e4_110101);
 		}
@@ -887,7 +887,7 @@ public class WarehouseDocumentService {
 		e5_1001.setCrAmount(BigDecimal.ZERO);
 		e5_1001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(revenue));
-		b_1001 = this.accountBookService.drCredit(b_1001, revenue);
+		b_1001 = this.accountBookService.incrCredit(b_1001, revenue);
 		seq++;
 		entries.add(e5_1001);
 
@@ -903,7 +903,7 @@ public class WarehouseDocumentService {
 		e6_110101.setCrAmount(revenue);
 		e6_110101.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(revenue));
-		b_110101 = this.accountBookService.crCredit(b_110101, revenue);
+		b_110101 = this.accountBookService.decrCredit(b_110101, revenue);
 		seq++;
 		entries.add(e6_110101);
 
@@ -959,7 +959,7 @@ public class WarehouseDocumentService {
 		e1_110101.setCrAmount(BigDecimal.ZERO);
 		e1_110101.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_110101 = this.accountBookService.drCredit(b_110101, amount);
+		b_110101 = this.accountBookService.incrCredit(b_110101, amount);
 		seq++;
 
 		// 贷 银行存款
@@ -974,7 +974,7 @@ public class WarehouseDocumentService {
 		e2_1001.setCrAmount(amount);
 		e2_1001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1001 = this.accountBookService.crCredit(b_1001, amount);
+		b_1001 = this.accountBookService.decrCredit(b_1001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
