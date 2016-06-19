@@ -291,6 +291,9 @@ define(function() {
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
 			},
+			menu: {
+				load: this.host + '/operate/system/menu/load',	// 菜单-加载菜单数据
+			},
 			spvOrderList: this.host + "/ams/spv/order/list", //spv订单列表
 			spvOrderDetail: this.host + "/ams/spv/order/detail", //spv订单列表
 			spvOrderInvalid: this.host + "/ams/spv/order/delete", //spv作废订单
