@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.Response;
 
@@ -146,7 +147,7 @@ public class MarketAdjustController extends BaseController {
 	 */
 	@RequestMapping(value = "/getYield", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> getYield(@RequestParam String pid) {
-		List<Object[]> obj = adjustService.getListForYield(pid);
+		List<JSONObject> obj = adjustService.getListForYield(pid);
 		Response r = new Response();
 		r.with("result", obj);
 		return new ResponseEntity<Response>(r, HttpStatus.OK);
