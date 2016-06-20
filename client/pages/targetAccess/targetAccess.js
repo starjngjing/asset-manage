@@ -210,9 +210,51 @@ define([
 					},
 					events: {
 						'click .item-project-detail': function(e, value, row) { // 底层项目详情
-							$$.detailAutoFix($('#targetDetail_2'), targetInfo); // 自动填充详情
-							$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情
-							$('#projectDetailModal').modal('show');
+							http.post(config.api.projectDetail, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result.data;
+								if (!data) {
+									alert('查询底层项目详情失败');
+								} else {
+									$$.detailAutoFix($('#targetDetail_2'), formatTargetData(targetInfo)); // 自动填充详情
+									//									$$.detailAutoFix($('#projectDetail'), row); // 自动填充详情-取表格里的内容
+									$$.detailAutoFix($('#projectDetail'), data); // 自动填充详情-取后台返回的内容
+									if(data.warrantor === 'yes') { // 担保人信息									
+										$("#warrantorDetail").show()
+									} else {
+										$("#warrantorDetail").hide()
+									}
+									if(data.pledge === 'yes') { // 抵押人信息									
+										$("#pledgeDetail").show()
+									} else {
+										$("#pledgeDetail").hide()
+									}
+									if(data.hypothecation === 'yes') { // 质押人信息									
+										$("#hypothecationDetail").show()
+									} else {
+										$("#hypothecationDetail").hide()
+									}
+									
+									/* 判断项目类型 */
+									if(data.projectType === 'PROJECTTYPE_01') { // 金融类项目									
+										$("#estateDetail").hide()
+										$("#financeDetai").show()
+									} else if(data.projectType === 'PROJECTTYPE_02') { // 地产类项目									
+										$("#estateDetail").show()
+										$("#financeDetai").hide()
+									} else {
+										$("#estateDetail").hide()
+										$("#financeDetai").hide()
+									}
+									
+									$('#projectDetailModal').modal('show');
+								}
+							});
+
 						}
 					}
 				}]
