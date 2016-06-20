@@ -149,7 +149,8 @@ define([
 													},
 													events: {
 														'click .item-download': function(e, value, row) {
-															location.href = 'http://api.guohuaigroup.com' + row.file
+															downloadFile(row.file)
+//															location.href = 'http://api.guohuaigroup.com' + row.file
 														}
 													}
 												}]
@@ -261,7 +262,7 @@ define([
 											}, function(rlt) {
 												origin.success(rlt)
 												$('#batchFkey').val('');
-												if(rlt.rows.length > 0){
+												if (rlt.rows.length > 0) {
 													$('#batchFkey').val(rlt.rows[0].fkey);
 													$('#targetConventionSummaryBatchDownload').show()
 												} else {
@@ -275,7 +276,7 @@ define([
 										sidePagination: 'server',
 										columns: [{
 											field: 'name'
-										},{
+										}, {
 											field: 'operator'
 										}, {
 											field: 'updateTime'
@@ -297,7 +298,8 @@ define([
 											},
 											events: {
 												'click .item-download': function(e, value, row) {
-													location.href = 'http://api.guohuaigroup.com' + row.furl
+													downloadFile(row.fkey)
+													//location.href = 'http://api.guohuaigroup.com' + row.furl
 												},
 												'click .item-delete': function(e, value, row) {
 													http.post(config.api.meetingSummaryDelete, {
@@ -392,7 +394,8 @@ define([
 														},
 														events: {
 															'click .item-download': function(e, value, row) {
-																location.href = 'http://api.guohuaigroup.com' + row.file
+																downloadFile(row.file)
+																//location.href = 'http://api.guohuaigroup.com' + row.file
 															}
 														}
 													}]
@@ -511,17 +514,7 @@ define([
 						alert('无过会纪要');
 						return;
 					}
-					var key = {};
-					key.fkey = fkey;
-					var json = {
-						fkeys: []
-					};
-					json.fkeys.push(key);
-					http.post(config.api.files.pkg, {
-						data: JSON.stringify(json)
-					}, function(result) {
-						location.href = config.api.files.download + result.key
-					})
+					downloadFile(fkey)
 				})
 				// 上传纪要附件表格数据源
 			var uploadTargetConventionSummaryFiles = []
@@ -683,6 +676,20 @@ define([
 				pageOptions.title = form.title.value.trim();
 				pageOptions.state = form.state.value.trim();
 				return val
+			}
+
+			function downloadFile(fkey) {
+				var key = {};
+				key.fkey = fkey;
+				var json = {
+					fkeys: []
+				};
+				json.fkeys.push(key);
+				http.post(config.api.files.pkg, {
+					data: JSON.stringify(json)
+				}, function(result) {
+					location.href = config.api.files.download + result.key
+				})
 			}
 
 		}

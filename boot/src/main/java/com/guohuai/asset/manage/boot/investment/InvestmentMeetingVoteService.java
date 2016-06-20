@@ -131,11 +131,12 @@ public class InvestmentMeetingVoteService {
 			if (vote != null) {
 				resp.setVoteStatus(vote.getState());
 				resp.setTime(vote.getVoteTime());
-				if (!StringUtils.isEmpty(vote.getFile())) {
-					List<File> files = fileService.list(vote.getFile(), 1);
-					if (files != null && files.size() > 0)
-						resp.setFile(files.get(0).getFurl());
-				}
+				resp.setFile(vote.getFile());
+//				if (!StringUtils.isEmpty(vote.getFile())) {
+//					List<File> files = fileService.list(vote.getFile(), 1);
+//					if (files != null && files.size() > 0)
+//						resp.setFile(files.get(0).getFurl());
+//				}
 			} else {
 				resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
 			}

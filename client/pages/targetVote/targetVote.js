@@ -62,23 +62,23 @@ define([
 					},
 					events: {
 						'click .item-detail': function(e, value, row) {
-								http.post(config.api.targetDetQuery, {
-									data: {
-										oid: row.oid
-									},
-									contentType: 'form'
-								}, function(result) {
-									var data = result.investment;
-									data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
-									$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
-//									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
-									$('#targetDetailModal').modal('show');
-								})
-							},
+							http.post(config.api.targetDetQuery, {
+								data: {
+									oid: row.oid
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result.investment;
+								data.riskRate = util.table.formatter.convertRisk(data.riskRate); // 格式化风险等级
+								$$.detailAutoFix($('#detTargetForm'), data); // 自动填充详情
+								//									$$.formAutoFix($('#detTargetForm'), data); // 自动填充表单
+								$('#targetDetailModal').modal('show');
+							})
+						},
 						'click .item-vote': function(e, value, row) {
 							$('#fileSpan').html('');
 							$('#fileInput').val('');
-							$('#fileA').attr('href','#');
+							$('#fileA').attr('href', '#');
 							$('#meetingOid').val(row.meetingOid);
 							$('#targetOid').val(row.oid);
 							//删除会议报告表
@@ -123,7 +123,7 @@ define([
 									},
 									events: {
 										'click .item-download': function(e, value, row) {
-											location.href = 'http://api.guohuaigroup.com' + row.file
+											downloadFile(row.file)
 										}
 									}
 								}]
@@ -164,17 +164,7 @@ define([
 									},
 									events: {
 										'click .item-download': function(e, value, row) {
-											var key = {};
-											key.fkey = row.fkey;
-											var json = {
-												fkeys: []
-											};
-											json.fkeys.push(key);
-											http.post(config.api.files.pkg, {
-												data: JSON.stringify(json)
-											}, function(result) {
-												location.href = config.api.files.download + result.key
-											})
+											downloadFile(row.fkey)
 										}
 									}
 								}]
@@ -220,6 +210,20 @@ define([
 				$('#targetVoteTable').bootstrapTable('refresh')
 				$('#voteModal').modal('hide')
 			}
+		})
+	}
+
+	function downloadFile(fkey) {
+		var key = {};
+		key.fkey = fkey;
+		var json = {
+			fkeys: []
+		};
+		json.fkeys.push(key);
+		http.post(config.api.files.pkg, {
+			data: JSON.stringify(json)
+		}, function(result) {
+			location.href = config.api.files.download + result.key
 		})
 	}
 })
