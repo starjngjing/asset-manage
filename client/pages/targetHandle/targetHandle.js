@@ -10,7 +10,6 @@ define([
 	return {
 		name: 'targetHandle',
 		init: function() {
-			var initRelative = false
 			$("#a1").click(function() {
 				$('#riskWarningHandleTable').bootstrapTable('refresh')
 			})
@@ -41,16 +40,26 @@ define([
 				}
 			})
 
-			riskHandleSubmit
 			//风险处置按钮
 			$('#riskHandleSubmit').on('click', function() {
-				$('#riskHandleForm').ajaxSubmit({
-					url: config.api.system.config.ccr.warning.handle.handle,
-					success: function(result) {
-						$('#targetDetailModal').modal('hide');
-						$('#riskWarningHandleTable').bootstrapTable('refresh');
-					}
+					$('#riskHandleForm').ajaxSubmit({
+						url: config.api.system.config.ccr.warning.handle.handle,
+						success: function(result) {
+							$('#targetDetailModal').modal('hide');
+							$('#riskWarningHandleTable').bootstrapTable('refresh');
+						}
+					})
 				})
+				//投资标的检索框
+			http.post(config.api.system.config.ccr.warning.handle.targetList, {
+				contentType: 'form'
+			}, function(rlt) {
+				var select = document.targetSearchForm.relative
+				var collectOptions = '<option value="" selected>全部</option>'
+				for (var key in rlt) {
+					collectOptions += '<option value="' + key + '">' + rlt[key] + '</option>'
+				}
+				$(select).html(collectOptions)
 			})
 
 			//分页配置
@@ -70,20 +79,11 @@ define([
 							rows: pageOptions.size,
 							relative: pageOptions.relative,
 							wlevel: pageOptions.wlevel,
-							riskName : pageOptions.riskName
+							riskName: pageOptions.riskName
 						},
 						contentType: 'form'
 					}, function(rlt) {
 						origin.success(rlt)
-						if (!initRelative) {
-							var select = document.targetSearchForm.relative
-							var collectOptions = '<option value="" selected>全部</option>'
-							for (var key in rlt.investment) {
-								collectOptions += '<option value="' + key + '">' + rlt.investment[key] + '</option>'
-							}
-							$(select).html(collectOptions)
-							initRelative = true
-						}
 					})
 				},
 				pageNumber: pageOptions.number,
@@ -157,8 +157,8 @@ define([
 				}]
 			}
 			$('#riskWarningHandleTable').bootstrapTable(tableConfig)
-			// 搜索表单初始化
-		$$.searchInit($('#targetSearchForm'), $('#riskWarningHandleTable'))
+				// 搜索表单初始化
+			$$.searchInit($('#targetSearchForm'), $('#riskWarningHandleTable'))
 
 			//分页配置
 			var pageOptions2 = {
@@ -263,7 +263,6 @@ define([
 				}]
 			}
 			$('#riskWarningHandleHisTable').bootstrapTable(tableConfig2)
-			
 
 			function getQueryParams(val) {
 				var form = document.targetSearchForm

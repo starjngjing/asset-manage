@@ -23,7 +23,4 @@ public class RiskWarningHandleListResp extends PageResp<RiskWarningHandleDetResp
 		super.setTotal(total);
 		super.setRows(Approvals);
 	}
-
-	private Map<String, String> investment;
-
 }

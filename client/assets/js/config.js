@@ -213,6 +213,7 @@ define(function() {
 								handle: this.host + "/ams/system/ccr/warning/collect/handle/handle", //风险处置
 								hisListAll: this.host + "/ams/system/ccr/warning/collect/handle/hisListAll", //风险处置历史全列表
 								hisList: this.host + "/ams/system/ccr/warning/collect/handle/hisList", //风险处置历史列表
+								targetList: this.host + "/ams/system/ccr/warning/collect/handle/targetList",
 							}
 						},
 						options: {

@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.system.config.risk.warning.collect.handle;
 
+import java.util.Map;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -90,6 +92,12 @@ public class RiskWarningHandleController extends BaseController {
 		}
 		return new ResponseEntity<RiskWarningHandleListResp>(riskWarningHandleService.list(spec, pageable),
 				HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "targetList", method = { RequestMethod.POST, RequestMethod.GET })
+	public @ResponseBody ResponseEntity<Map<String,String>> targetList() {
+		riskWarningHandleService.targetList();
+		return new ResponseEntity<Map<String,String>>(riskWarningHandleService.targetList(), HttpStatus.OK);
 	}
 
 	/**

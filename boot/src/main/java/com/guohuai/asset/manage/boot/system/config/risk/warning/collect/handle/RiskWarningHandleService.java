@@ -39,11 +39,22 @@ public class RiskWarningHandleService {
 
 	@Autowired
 	FileService fileService;
+	
+	public Map<String,String> targetList(){
+		List<RiskWarningCollect> allLists = riskWarningCollectDao.findAll();
+		Map<String, String> investments = new HashMap<String, String>();
+		for (RiskWarningCollect riskWarningCollect : allLists) {
+			Investment investment = investmentService.getInvestment(riskWarningCollect.getRelative());
+			if (null != investment){
+				investments.put(investment.getOid(), investment.getName());
+			}
+		}
+		return investments;
+	}
 
 	public RiskWarningHandleListResp list(Specification<RiskWarningCollect> spec, Pageable pageable) {
 		List<RiskWarningHandleDetResp> dets = new ArrayList<RiskWarningHandleDetResp>();
 		Page<RiskWarningCollect> list = riskWarningCollectDao.findAll(spec, pageable);
-		Map<String, String> investments = new HashMap<String, String>();
 		for (RiskWarningCollect entity : list) {
 			RiskWarningHandleDetResp temp = new RiskWarningHandleDetResp();
 			temp.setOid(entity.getOid());
@@ -58,12 +69,10 @@ public class RiskWarningHandleService {
 			Investment investment = investmentService.getInvestment(entity.getRelative());
 			if (null != investment){
 				temp.setRelativeName(investment.getName());
-				investments.put(investment.getOid(), investment.getName());
 			}
 			dets.add(temp);
 		}
 		RiskWarningHandleListResp res = new RiskWarningHandleListResp(dets,list.getTotalElements());
-		res.setInvestment(investments);
 		return res ;
 	}
 
