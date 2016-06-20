@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 
 import lombok.Data;
 
@@ -27,12 +28,11 @@ import lombok.Data;
 public class AssetPoolCalc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	public AssetPoolCalc() {
-		this.capital = init0;
-		this.yield = init0;
-		this.profit = init0;
+		this.capital 	= BigDecimalUtil.init0;
+		this.yield 		= BigDecimalUtil.init0;
+		this.profit 	= BigDecimalUtil.init0;
 	}
 	
 	@Id

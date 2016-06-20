@@ -45,6 +45,8 @@ public class MarketAdjustForm implements Serializable {
 	private BigDecimal lastShares;
 	// 昨日单位净值
 	private BigDecimal lastNav;
+	// 净收益
+	private BigDecimal profit;
 	// 收益率
 	private BigDecimal ratio;
 	// 申请人

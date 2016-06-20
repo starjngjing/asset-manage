@@ -20,6 +20,6 @@ public interface MarketAdjustDao extends JpaRepository<MarketAdjustEntity, Strin
 	@Query("from MarketAdjustEntity a where a.assetPool.oid = ?1 and  a.baseDate = ?2 and a.status in ('create', 'pass')")
 	public MarketAdjustEntity findByBaseDate(String pid, Date baseDate);
 	
-	@Query("from MarketAdjustEntity a where a.assetPool.oid = ?1 and a.status = 'pass'")
+	@Query("from MarketAdjustEntity a where a.assetPool.oid = ?1 and a.status = 'pass' order by a.baseDate asc")
 	public List<MarketAdjustEntity> getListForYield(String pid);
 }

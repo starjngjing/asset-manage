@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalc;
 import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 
 import lombok.Data;
 
@@ -23,12 +24,11 @@ import lombok.Data;
 public class TrustCalc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	public TrustCalc() {
-		this.capital = init0;
-		this.yield = init0;
-		this.profit = init0;
+		this.capital 	= BigDecimalUtil.init0;
+		this.yield 		= BigDecimalUtil.init0;
+		this.profit 	= BigDecimalUtil.init0;
 	}
 	
 	@Id

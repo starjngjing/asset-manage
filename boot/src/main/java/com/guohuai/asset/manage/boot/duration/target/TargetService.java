@@ -22,6 +22,7 @@ import com.guohuai.asset.manage.boot.investment.Investment;
 import com.guohuai.asset.manage.boot.investment.InvestmentService;
 import com.guohuai.asset.manage.boot.investment.pool.InvestmentPoolService;
 import com.guohuai.asset.manage.boot.investment.pool.TargetIncome;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 import com.guohuai.asset.manage.component.util.DateUtil;
 
 /**
@@ -261,11 +262,11 @@ public class TargetService {
 		List<TrustIncomeForm> formList = Lists.newArrayList();
 		List<TargetIncome> list = investmentPoolService.getTargetIncome(target.getOid());
 		// 日利息 算法：利息=本金×收益率%÷365天(有时是360天)
-		BigDecimal day_yield = new BigDecimal(0);
+		BigDecimal day_yield = BigDecimalUtil.init0;
 		TrustIncomeForm form = null;
 		if (target.getContractDays() != 0)
 			day_yield = entity.getInvestVolume()
-					.multiply(entity.getTarget().getExpAror().divide(TrustIncomeForm.NUM100))
+					.multiply(entity.getTarget().getExpAror())
 					.divide(new BigDecimal(target.getContractDays()), 4, BigDecimal.ROUND_HALF_UP);
 		
 		// 获取付息方式 OTP:一次性；CYCLE:周期

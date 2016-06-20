@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.cashtool.CashTool;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 
 import lombok.Data;
 
@@ -21,8 +22,6 @@ public class FundEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final BigDecimal init0 = BigDecimal.ZERO;
-	
 	/**
 	 * 状态
 	 */
@@ -30,14 +29,14 @@ public class FundEntity implements Serializable {
 	public static final String INVESTEND = "-1";
 	
 	public FundEntity() {
-		this.amount = init0;
-		this.interestAcount = init0;
-		this.purchaseVolume = init0;
-		this.redeemVolume = init0;
-		this.frozenCapital = init0;
-		this.onWayCapital = init0;
-		this.dailyProfit = init0;
-		this.totalProfit = init0;
+		this.amount 		= BigDecimalUtil.init0;
+		this.interestAcount = BigDecimalUtil.init0;
+		this.purchaseVolume = BigDecimalUtil.init0;
+		this.redeemVolume 	= BigDecimalUtil.init0;
+		this.frozenCapital 	= BigDecimalUtil.init0;
+		this.onWayCapital 	= BigDecimalUtil.init0;
+		this.dailyProfit 	= BigDecimalUtil.init0;
+		this.totalProfit 	= BigDecimalUtil.init0;
 	}
 
 	@Id

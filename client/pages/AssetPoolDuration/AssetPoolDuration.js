@@ -98,20 +98,21 @@ define([
 							var result = json.result
 							form.assetpoolOid.value = json.result.assetpoolOid
 							$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
-							if (result.lastShares) {
-								result.lastShares = result.lastShares + '\t 万份'
-								calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
-							}
-							if (result.purchase) {
-								result.purchase = result.purchase + '\t 万元'
-							}
-							if (result.redemption) {
-								result.redemption = result.redemption + '\t 万元'
-							}
-							if (result.lastOrders) {
-								calcOrders = result.lastOrders
-								result.lastOrders = result.lastOrders + '\t 万元'
-							}
+//							if (result.lastShares) {
+//								result.lastShares = result.lastShares + '\t 万份'
+//								calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
+//							}
+//							if (result.purchase) {
+//								result.purchase = result.purchase + '\t 万元'
+//							}
+//							if (result.redemption) {
+//								result.redemption = result.redemption + '\t 万元'
+//							}
+//							if (result.lastOrders) {
+//								calcOrders = result.lastOrders
+//								result.lastOrders = result.lastOrders + '\t 万元'
+//							}
+							result = resultDataFormat(result)
 							$$.detailAutoFix(modal, json.result)
 						})
 						modal.modal('show')
@@ -219,15 +220,16 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result
-								if (result.shares) {
-									result.shares = result.shares + '\t 万份'
-								}
-								if (result.profit) {
-									result.profit = result.profit + '\t 万元'
-								}
-								if (result.ratio) {
-									result.ratio = result.ratio * 100 + '\t %'
-								}
+//								if (result.shares) {
+//									result.shares = result.shares + '\t 万份'
+//								}
+//								if (result.profit) {
+//									result.profit = result.profit + '\t 万元'
+//								}
+//								if (result.ratio) {
+//									result.ratio = result.ratio * 100 + '\t %'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -242,15 +244,16 @@ define([
 							}, function(json) {
 								var result = json.result
 								marketOid = result.oid
-								if (result.shares) {
-									result.shares = result.shares + '\t 万份'
-								}
-								if (result.profit) {
-									result.profit = result.profit + '\t 万元'
-								}
-								if (result.ratio) {
-									result.ratio = result.ratio * 100 + '\t %'
-								}
+//								if (result.shares) {
+//									result.shares = result.shares + '\t 万份'
+//								}
+//								if (result.profit) {
+//									result.profit = result.profit + '\t 万元'
+//								}
+//								if (result.ratio) {
+//									result.ratio = result.ratio * 100 + '\t %'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -327,9 +330,17 @@ define([
 		      	calcShares = parseFloat(this.value) || 0
 		      	var ratio = 0
 		      	var calcPorfit = 0
-		      	if (calcData !== 0) {
-		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
-		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	if (calcData === 0) {
+		      		if (calcOrders === 0) {
+		      			ratio = 100
+		      			calcProfit = parseInt(calcNav * 10000) * parseInt(calcShares * 10000) / 100000000
+		      		} else {
+		      			calcProfit = (parseInt(calcNav * 10000) * parseInt(calcShares * 10000) - parseInt(calcOrders * 100000000)) / 1000000000
+		      			ratio = parseInt(calcProfit * 10000) / parseInt(calcOrder * 10000) * 100
+		      		}
+		      	} else {
+		      		calcProfit = (parseInt(calcNav * 10000) * parseInt(calcShares * 10000) - parseInt(calcData * 100000000) - parseInt(calcOrders * 100000000)) / 1000000000
+		      		ratio = parseInt(calcProfit * 10000) / parseInt(calcData * 10000) * 100
 		      	}
 		      	document.marketAdjustForm.ratio.value = ratio
 		      	document.marketAdjustForm.profit.value = calcProfit
@@ -338,9 +349,17 @@ define([
 		        calcNav = parseFloat(this.value) || 0
 		      	var ratio = 0
 		      	var calcPorfit = 0
-		      	if (calcData !== 0) {
-		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
-		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	if (calcData === 0) {
+		      		if (calcOrders === 0) {
+		      			ratio = 100
+		      			calcProfit = parseInt(calcNav * 10000) * parseInt(calcShares * 10000) / 100000000
+		      		} else {
+		      			calcProfit = (parseInt(calcNav * 10000) * parseInt(calcShares * 10000) - parseInt(calcOrders * 100000000)) / 1000000000
+		      			ratio = parseInt(calcProfit * 10000) / parseInt(calcOrder * 10000) * 100
+		      		}
+		      	} else {
+		      		calcProfit = (parseInt(calcNav * 10000) * parseInt(calcShares * 10000) - parseInt(calcData * 100000000) - parseInt(calcOrders * 100000000)) / 1000000000
+		      		ratio = parseInt(calcProfit * 10000) / parseInt(calcData * 10000)* 100
 		      	}
 		      	document.marketAdjustForm.ratio.value = ratio
 		      	document.marketAdjustForm.profit.value = calcProfit
@@ -554,7 +573,10 @@ define([
 					field: 'operation'
 				}, 
 				{
-					field: 'capital'
+					field: 'capital',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
 					field: 'status'
@@ -582,22 +604,24 @@ define([
 							}, function(json) {
 								// 操作类型（现金管理工具申购，现金管理工赎回，投资标的申购，本息兑付，投资标的转入，投资标的转出）
 								if (row.operation === '现金管理工具申购' || row.operation === '现金管理工赎回') {
-									json.result.cashtoolType = util.enum.transform('CASHTOOLTYPE', json.result.cashtoolType)
-									if (json.result.applyCash) {
-										json.result.applyCash = json.result.applyCash + '\t万元'
-									}
-									if (json.result.returnVolume) {
-										json.result.returnVolume = json.result.returnVolume + '\t万元'
-									}
-									if (json.result.auditVolume) {
-										json.result.auditVolume = json.result.auditVolume + '\t万元'
-									}
-									if (json.result.reserveVolume) {
-										json.result.reserveVolume = json.result.reserveVolume + '\t万元'
-									}
-									if (json.result.investVolume) {
-										json.result.investVolume = json.result.investVolume + '\t万元'
-									}
+									var result = json.result
+									result.cashtoolType = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+//									if (json.result.applyCash) {
+//										json.result.applyCash = json.result.applyCash + '\t万元'
+//									}
+//									if (json.result.returnVolume) {
+//										json.result.returnVolume = json.result.returnVolume + '\t万元'
+//									}
+//									if (json.result.auditVolume) {
+//										json.result.auditVolume = json.result.auditVolume + '\t万元'
+//									}
+//									if (json.result.reserveVolume) {
+//										json.result.reserveVolume = json.result.reserveVolume + '\t万元'
+//									}
+//									if (json.result.investVolume) {
+//										json.result.investVolume = json.result.investVolume + '\t万元'
+//									}
+									result = resultDataFormat(result)
 									if (row.operation === '现金管理工具申购') {
 										$('#applyVolume').show()
 										$('#redeemVolume').hide()
@@ -611,119 +635,120 @@ define([
 									var result = json.result
 									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
 									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									if (result.expAror) {
-										result.expAror = result.expAror + '\t%'
-									}
-									if (result.collectIncomeRate) {
-										result.collectIncomeRate = result.collectIncomeRate + '\t%'
-									}
-									if (result.applyVolume) {
-										result.applyVolume = result.applyVolume + '\t万份'
-									}
-									if (result.applyCash) {
-										result.applyCash = result.applyCash + '\t万元'
-									}
-									if (result.life) {
-										result.life = result.life + '\t天'
-									}
-									if (result.floorVolume) {
-										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									}
-									if (result.auditVolume) {
-										result.auditVolume = result.auditVolume + '\t万份'
-									}
-									if (result.auditCash) {
-										result.auditCash = result.auditCash + '\t万元'
-									}
-									if (result.reserveVolume) {
-										result.reserveVolume = result.reserveVolume + '\t万份'
-									}
-									if (result.reserveCash) {
-										result.reserveCash = result.reserveCash + '\t万元'
-									}
-									if (result.investVolume) {
-										result.investVolume = result.investVolume + '\t万份'
-									}
-									if (result.investCash) {
-										result.investCash = result.investCash + '\t万元'
-									}
+//									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
+//									if (result.expAror) {
+//										result.expAror = result.expAror + '\t%'
+//									}
+//									if (result.collectIncomeRate) {
+//										result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//									}
+//									if (result.applyVolume) {
+//										result.applyVolume = result.applyVolume + '\t万份'
+//									}
+//									if (result.applyCash) {
+//										result.applyCash = result.applyCash + '\t万元'
+//									}
+//									if (result.life) {
+//										result.life = result.life + '\t天'
+//									}
+//									if (result.floorVolume) {
+//										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//									}
+//									if (result.auditVolume) {
+//										result.auditVolume = result.auditVolume + '\t万份'
+//									}
+//									if (result.auditCash) {
+//										result.auditCash = result.auditCash + '\t万元'
+//									}
+//									if (result.reserveVolume) {
+//										result.reserveVolume = result.reserveVolume + '\t万份'
+//									}
+//									if (result.reserveCash) {
+//										result.reserveCash = result.reserveCash + '\t万元'
+//									}
+//									if (result.investVolume) {
+//										result.investVolume = result.investVolume + '\t万份'
+//									}
+//									if (result.investCash) {
+//										result.investCash = result.investCash + '\t万元'
+//									}
+									result = resultDataFormat(result)
 									$$.detailAutoFix($('#trustDetailModal'), json.result)
 									$('#trustDetailModal').modal('show')
 								} else if (row.operation === '本息兑付') {
 									var result = json.result
-									if (result.seq) {
-										result.seq = result.seq + '\t期'
-									}
-									if (result.incomeRate) {
-										result.incomeRate = result.incomeRate + '\t%'
-									}
-									if (result.income) {
-										result.income = result.income + '\t万元'
-									}
-									if (result.capital) {
-										result.capital = result.capital + '\t万元'
-									}
-									if (result.auditVolume) {
-										result.auditVolume = result.auditVolume + '\t%'
-									}
-									if (result.auditCash) {
-										result.auditCash = result.auditCash + '\t万元'
-									}
-									if (result.auditCapital) {
-										result.auditCapital = result.auditCapital + '\t万元'
-									}
-									if (result.investVolume) {
-										result.investVolume = result.investVolume + '\t%'
-									}
-									if (result.investCash) {
-										result.investCash = result.investCash + '\t万元'
-									}
-									if (result.investCapital) {
-										result.investCapital = result.investCapital + '\t万元'
-									}
+//									if (result.seq) {
+//										result.seq = result.seq + '\t期'
+//									}
+//									if (result.incomeRate) {
+//										result.incomeRate = result.incomeRate + '\t%'
+//									}
+//									if (result.income) {
+//										result.income = result.income + '\t万元'
+//									}
+//									if (result.capital) {
+//										result.capital = result.capital + '\t万元'
+//									}
+//									if (result.auditVolume) {
+//										result.auditVolume = result.auditVolume + '\t%'
+//									}
+//									if (result.auditCash) {
+//										result.auditCash = result.auditCash + '\t万元'
+//									}
+//									if (result.auditCapital) {
+//										result.auditCapital = result.auditCapital + '\t万元'
+//									}
+//									if (result.investVolume) {
+//										result.investVolume = result.investVolume + '\t%'
+//									}
+//									if (result.investCash) {
+//										result.investCash = result.investCash + '\t万元'
+//									}
+//									if (result.investCapital) {
+//										result.investCapital = result.investCapital + '\t万元'
+//									}
+									result = resultDataFormat(result)
 									$$.detailAutoFix($('#trustIncomeOrderDetailModal'), json.result)
 									$('#trustIncomeOrderDetailModal').modal('show')
 								} else if (row.operation === '投资标的转入' || row.operation === '投资标的转出') {
 									var result = json.result
 									result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
 									result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
-									result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-									if (result.expAror) {
-										result.expAror = result.expAror + '\t%'
-									}
-									if (result.applyVolume) {
-										result.applyVolume = result.applyVolume + '\t万份'
-									}
-									if (result.applyCash) {
-										result.applyCash = result.applyCash + '\t万元'
-									}
-									if (result.life) {
-										result.life = result.life + '\t天'
-									}
-									if (result.floorVolume) {
-										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-									}
-									if (result.auditVolume) {
-										result.auditVolume = result.auditVolume + '\t万份'
-									}
-									if (result.auditCash) {
-										result.auditCash = result.auditCash + '\t万元'
-									}
-									if (result.reserveVolume) {
-										result.reserveVolume = result.reserveVolume + '\t万份'
-									}
-									if (result.reserveCash) {
-										result.reserveCash = result.reserveCash + '\t万元'
-									}
-									if (result.investVolume) {
-										result.investVolume = result.investVolume + '\t万份'
-									}
-									if (result.investCash) {
-										result.investCash = result.investCash + '\t万元'
-									}
+//									result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
+//									if (result.expAror) {
+//										result.expAror = result.expAror + '\t%'
+//									}
+//									if (result.applyVolume) {
+//										result.applyVolume = result.applyVolume + '\t万份'
+//									}
+//									if (result.applyCash) {
+//										result.applyCash = result.applyCash + '\t万元'
+//									}
+//									if (result.life) {
+//										result.life = result.life + '\t天'
+//									}
+//									if (result.floorVolume) {
+//										result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//									}
+//									if (result.auditVolume) {
+//										result.auditVolume = result.auditVolume + '\t万份'
+//									}
+//									if (result.auditCash) {
+//										result.auditCash = result.auditCash + '\t万元'
+//									}
+//									if (result.reserveVolume) {
+//										result.reserveVolume = result.reserveVolume + '\t万份'
+//									}
+//									if (result.reserveCash) {
+//										result.reserveCash = result.reserveCash + '\t万元'
+//									}
+//									if (result.investVolume) {
+//										result.investVolume = result.investVolume + '\t万份'
+//									}
+//									if (result.investCash) {
+//										result.investCash = result.investCash + '\t万元'
+//									}
+									result = resultDataFormat(result)
 									$$.detailAutoFix($('#trustTransOrderDetailModal'), json.result)
 									$('#trustTransOrderDetailModal').modal('show')
 								}
@@ -777,16 +802,25 @@ define([
 					}
 				}, 
 				{
-					field: 'netRevenue'
+					field: 'netRevenue',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'yearYield7'
+					field: 'yearYield7',
+					formatter: function(val) {
+						return val * 100
+					}
 				},
 				{
 					field: 'investDate'
 				}, 
 				{
-					field: 'applyCash'
+					field: 'applyCash',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
 					field: 'optType',
@@ -893,12 +927,13 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								if (result.yearYield7) {
-									result.yearYield7 = result.yearYield7 + '\t%'
-								}
-								result.applyCash = result.applyCash + '\t万元'
-								result.returnVolume = result.returnVolume + '\t万元'
+//								if (result.yearYield7) {
+//									result.yearYield7 = result.yearYield7 + '\t%'
+//								}
+//								result.applyCash = result.applyCash + '\t万元'
+//								result.returnVolume = result.returnVolume + '\t万元'
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -947,14 +982,15 @@ define([
 									display: 'none'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-								if (result.yearYield7) {
-									result.yearYield7 = result.yearYield7 + '\t%'
-								}
-								result.applyCash = result.applyCash + '\t万元'
-								result.returnVolume = result.returnVolume + '\t万元'
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万元'
-								}
+//								if (result.yearYield7) {
+//									result.yearYield7 = result.yearYield7 + '\t%'
+//								}
+//								result.applyCash = result.applyCash + '\t万元'
+//								result.returnVolume = result.returnVolume + '\t万元'
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1003,17 +1039,18 @@ define([
 									display: 'block'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-								if (result.yearYield7) {
-									result.yearYield7 = result.yearYield7 + '\t%'
-								}
-								result.applyCash = result.applyCash + '\t万元'
-								result.returnVolume = result.returnVolume + '\t万元'
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万元'
-								}
-								if (result.reserveVolume) {
-									result.reserveVolume = result.reserveVolume + '\t万元'
-								}
+//								if (result.yearYield7) {
+//									result.yearYield7 = result.yearYield7 + '\t%'
+//								}
+//								result.applyCash = result.applyCash + '\t万元'
+//								result.returnVolume = result.returnVolume + '\t万元'
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万元'
+//								}
+//								if (result.reserveVolume) {
+//									result.reserveVolume = result.reserveVolume + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1043,17 +1080,18 @@ define([
 									display: 'block'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-								if (result.yearYield7) {
-									result.yearYield7 = result.yearYield7 + '\t%'
-								}
-								result.applyCash = result.applyCash + '\t万元'
-								result.returnVolume = result.returnVolume + '\t万元'
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万元'
-								}
-								if (result.reserveVolume) {
-									result.reserveVolume = result.reserveVolume + '\t万元'
-								}
+//								if (result.yearYield7) {
+//									result.yearYield7 = result.yearYield7 + '\t%'
+//								}
+//								result.applyCash = result.applyCash + '\t万元'
+//								result.returnVolume = result.returnVolume + '\t万元'
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万元'
+//								}
+//								if (result.reserveVolume) {
+//									result.reserveVolume = result.reserveVolume + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1126,22 +1164,40 @@ define([
 					}
 				}, 
 				{
-					field: 'netRevenue'
+					field: 'netRevenue',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'yearYield7'
+					field: 'yearYield7',
+					formatter: function(val) {
+						return val * 100
+					}
 				},
 				{
-					field: 'amount'
+					field: 'amount',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'redeemVolume'
+					field: 'redeemVolume',
+					formatter: function(val) {
+						return val / 10000
+					}
 				},
 				{
-					field: 'dailyProfit'
+					field: 'dailyProfit',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'totalProfit'
+					field: 'totalProfit',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
 					width: 150,
@@ -1344,7 +1400,10 @@ define([
 					field: 'targetName'
 				}, 
 				{
-					field: 'expAror'
+					field: 'expAror',
+					formatter: function(val) {
+						return val * 100
+					}
 				}, 
 				{
 					field: 'setDate'
@@ -1362,10 +1421,16 @@ define([
 					}
 				}, 
 				{
-					field: 'applyVolume'
+					field: 'applyVolume',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'applyCash'
+					field: 'applyCash',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
 					field: 'subjectRating'
@@ -1527,25 +1592,26 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1591,22 +1657,23 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1648,18 +1715,19 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								if (result.seq) {
-									result.seq = result.seq + '\t期'
-								}
-								if (result.incomeRate) {
-									result.incomeRate = result.incomeRate + '\t%'
-								}
-								if (result.income) {
-									result.income = result.income + '\t万元'
-								}
-								if (result.capital) {
-									result.capital = result.capital + '\t万元'
-								}
+//								if (result.seq) {
+//									result.seq = result.seq + '\t期'
+//								}
+//								if (result.incomeRate) {
+//									result.incomeRate = result.incomeRate + '\t%'
+//								}
+//								if (result.income) {
+//									result.income = result.income + '\t万元'
+//								}
+//								if (result.capital) {
+//									result.capital = result.capital + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1702,25 +1770,26 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1766,31 +1835,32 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1836,28 +1906,29 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1903,37 +1974,38 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.reserveVolume) {
-									result.reserveVolume = result.reserveVolume + '\t万份'
-								}
-								if (result.reserveCash) {
-									result.reserveCash = result.reserveCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.reserveVolume) {
+//									result.reserveVolume = result.reserveVolume + '\t万份'
+//								}
+//								if (result.reserveCash) {
+//									result.reserveCash = result.reserveCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -1979,34 +2051,35 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.reserveVolume) {
-									result.reserveVolume = result.reserveVolume + '\t万份'
-								}
-								if (result.reserveCash) {
-									result.reserveCash = result.reserveCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.reserveVolume) {
+//									result.reserveVolume = result.reserveVolume + '\t万份'
+//								}
+//								if (result.reserveCash) {
+//									result.reserveCash = result.reserveCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2048,27 +2121,28 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-								if (result.seq) {
-									result.seq = result.seq + '\t期'
-								}
-								if (result.incomeRate) {
-									result.incomeRate = result.incomeRate + '\t%'
-								}
-								if (result.income) {
-									result.income = result.income + '\t万元'
-								}
-								if (result.capital) {
-									result.capital = result.capital + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t%'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.auditCapital) {
-									result.auditCapital = result.auditCapital + '\t万元'
-								}
+//								if (result.seq) {
+//									result.seq = result.seq + '\t期'
+//								}
+//								if (result.incomeRate) {
+//									result.incomeRate = result.incomeRate + '\t%'
+//								}
+//								if (result.income) {
+//									result.income = result.income + '\t万元'
+//								}
+//								if (result.capital) {
+//									result.capital = result.capital + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t%'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.auditCapital) {
+//									result.auditCapital = result.auditCapital + '\t万元'
+//								}
+								result = resuleDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2111,31 +2185,32 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2159,28 +2234,29 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.collectIncomeRate) {
-									result.collectIncomeRate = result.collectIncomeRate + '\t%'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.reserveCash) {
-									result.reserveCash = result.reserveCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.collectIncomeRate) {
+//									result.collectIncomeRate = result.collectIncomeRate + '\t%'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.reserveCash) {
+//									result.reserveCash = result.reserveCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2204,40 +2280,41 @@ define([
 								})
 								result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
-								if (result.expAror) {
-									result.expAror = result.expAror + '\t%'
-								}
-								if (result.applyVolume) {
-									result.applyVolume = result.applyVolume + '\t万份'
-								}
-								if (result.applyCash) {
-									result.applyCash = result.applyCash + '\t万元'
-								}
-								if (result.life) {
-									result.life = result.life + '\t天'
-								}
-								if (result.floorVolume) {
-									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t万份'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.reserveVolume) {
-									result.reserveVolume = result.reserveVolume + '\t万份'
-								}
-								if (result.reserveCash) {
-									result.reserveCash = result.reserveCash + '\t万元'
-								}
-								if (result.investVolume) {
-									result.investVolume = result.investVolume + '\t万份'
-								}
-								if (result.investCash) {
-									result.investCash = result.investCash + '\t万元'
-								}
+//								result.raiseScope = parseFloat(result.raiseScope) / 10000 + '万元'
+//								if (result.expAror) {
+//									result.expAror = result.expAror + '\t%'
+//								}
+//								if (result.applyVolume) {
+//									result.applyVolume = result.applyVolume + '\t万份'
+//								}
+//								if (result.applyCash) {
+//									result.applyCash = result.applyCash + '\t万元'
+//								}
+//								if (result.life) {
+//									result.life = result.life + '\t天'
+//								}
+//								if (result.floorVolume) {
+//									result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t万份'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.reserveVolume) {
+//									result.reserveVolume = result.reserveVolume + '\t万份'
+//								}
+//								if (result.reserveCash) {
+//									result.reserveCash = result.reserveCash + '\t万元'
+//								}
+//								if (result.investVolume) {
+//									result.investVolume = result.investVolume + '\t万份'
+//								}
+//								if (result.investCash) {
+//									result.investCash = result.investCash + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2259,36 +2336,37 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'block'
 								})
-								if (result.seq) {
-									result.seq = result.seq + '\t期'
-								}
-								if (result.incomeRate) {
-									result.incomeRate = result.incomeRate + '\t%'
-								}
-								if (result.income) {
-									result.income = result.income + '\t万元'
-								}
-								if (result.capital) {
-									result.capital = result.capital + '\t万元'
-								}
-								if (result.auditVolume) {
-									result.auditVolume = result.auditVolume + '\t%'
-								}
-								if (result.auditCash) {
-									result.auditCash = result.auditCash + '\t万元'
-								}
-								if (result.auditCapital) {
-									result.auditCapital = result.auditCapital + '\t万元'
-								}
-								if (result.investVolume) {
-									result.investVolume = result.investVolume + '\t万份'
-								}
-								if (result.investCash) {
-									result.investCash = result.investCash + '\t万元'
-								}
-								if (result.investCapital) {
-									result.investCapital = result.investCapital + '\t万元'
-								}
+//								if (result.seq) {
+//									result.seq = result.seq + '\t期'
+//								}
+//								if (result.incomeRate) {
+//									result.incomeRate = result.incomeRate + '\t%'
+//								}
+//								if (result.income) {
+//									result.income = result.income + '\t万元'
+//								}
+//								if (result.capital) {
+//									result.capital = result.capital + '\t万元'
+//								}
+//								if (result.auditVolume) {
+//									result.auditVolume = result.auditVolume + '\t%'
+//								}
+//								if (result.auditCash) {
+//									result.auditCash = result.auditCash + '\t万元'
+//								}
+//								if (result.auditCapital) {
+//									result.auditCapital = result.auditCapital + '\t万元'
+//								}
+//								if (result.investVolume) {
+//									result.investVolume = result.investVolume + '\t万份'
+//								}
+//								if (result.investCash) {
+//									result.investCash = result.investCash + '\t万元'
+//								}
+//								if (result.investCapital) {
+//									result.investCapital = result.investCapital + '\t万元'
+//								}
+								result = resultDataFormat(result)
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
@@ -2361,7 +2439,10 @@ define([
 					field: 'targetName'
 				}, 
 				{
-					field: 'expAror'
+					field: 'expAror',
+					formatter: function(val) {
+						return val * 100
+					}
 				}, 
 				{
 					field: 'setDate'
@@ -2379,10 +2460,16 @@ define([
 					}
 				}, 
 				{
-					field: 'holdAmount'
+					field: 'holdAmount',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
-					field: 'tranVolume'
+					field: 'tranVolume',
+					formatter: function(val) {
+						return val / 10000
+					}
 				}, 
 				{
 					field: 'subjectRating'
@@ -2446,6 +2533,9 @@ define([
 								var result = json.result.incomeForm
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
+								result.income = (result.income / 10000).toFixed(4)
+								result.capital = result.capital / 10000
+//								result = resultDataFormat(result)
 								$$.formAutoFix($('#trustIncomeForm'), result)
 								// 信托计划本息兑付表单初始化
 								util.form.validator.init($(form))
@@ -2467,9 +2557,10 @@ define([
 								form.assetPoolOid.value = pageState.pid
 								result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
 								result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
-								result.raiseScope = result.raiseScope + '万元'
-								result.holdAmount = result.holdAmount + '万份'
-								result.volume = result.volume + '万元'
+//								result.raiseScope = result.raiseScope + '万元'
+//								result.holdAmount = result.holdAmount + '万份'
+//								result.volume = result.volume + '万元'
+								result = resultDataFormat(result)
 								holdAmount = json.result.holdAmount
 								$$.detailAutoFix($('#trustTransferModal'), result)
 							})
@@ -2985,6 +3076,7 @@ define([
 			// 编辑偏离损益按钮点击事件
 			$('#updateProfit').on('click', function() {
 				document.updateAssetPoolProfitForm.oid.value = pageState.pid
+				util.form.reset($('#updateAssetPoolProfitForm'))
 				$('#updateAssetPoolProfitModal').modal('show')
 //				http.post(config.api.duration.assetPool.getById, {
 //					data: {
@@ -3602,8 +3694,8 @@ function pageInit (pageState, http, config) {
 		var detail = pageState.detail = json.result
 		freeCash = detail.cashPosition
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
-		$('#detailPoolScale').html(detail.scale)
-		$('#detailPoolCash').html(detail.cashPosition)
+		$('#detailPoolScale').html(detail.scale / 10000)
+		$('#detailPoolCash').html(detail.cashPosition / 10000)
 		if (detail.deviationValue < 0) {
 			$('#detailPoolProfit').removeClass('text-black')
 			$('#detailPoolProfit').addClass('text-red')
@@ -3611,7 +3703,7 @@ function pageInit (pageState, http, config) {
 			$('#detailPoolProfit').removeClass('text-red')
 			$('#detailPoolProfit').addClass('text-black')
 		}
-		$('#detailPoolProfit').html(detail.deviationValue)
+		$('#detailPoolProfit').html(detail.deviationValue / 10000)
 		
 		initPieChartAndBarChart(config, pageState)
 
@@ -3619,12 +3711,12 @@ function pageInit (pageState, http, config) {
 
 		yieldInit(pageState, http, config)
 		
-		$('#marketValue').html(detail.marketValue)
-		$('#baseDate').html(detail.baseDate)
-		$('#undistributeProfit').html(detail.undistributeProfit)
-		$('#payFeigin').html(detail.payFeigin)
-		$('#spvProfit').html(detail.spvProfit)
-		$('#investorProfit').html(detail.investorProfit)
+		$('#marketValue').html(detail.marketValue / 10000)
+		$('#baseDate').html(detail.baseDate / 10000)
+		$('#undistributeProfit').html(detail.undistributeProfit / 10000)
+		$('#payFeigin').html(detail.payFeigin / 10000)
+		$('#spvProfit').html(detail.spvProfit / 10000)
+		$('#investorProfit').html(detail.investorProfit / 10000)
 	})
 }
 
@@ -3676,4 +3768,117 @@ function validredeemamount($el) {
 function validtransamount($el) {
 	var tranVolume = $el.val()
 	return parseFloat(tranvolume) > 0 && parseFloat(tranvolume) <= parseFloat(holdAmount)
+}
+
+// 格式化数据
+function resultDataFormat(result) {
+	if (result.lastShares) {
+		result.lastShares = result.lastShares * 10000 + '\t 万份'
+		calcData = parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000) / 100000000
+	}
+	if (result.purchase) {
+		result.purchase = result.purchase / 10000 + '\t 万元'
+	}
+	if (result.redemption) {
+		result.redemption = result.redemption / 10000 + '\t 万元'
+	}
+	if (result.lastOrders) {
+		calcOrders = result.lastOrders
+		result.lastOrders = result.lastOrders / 10000 + '\t 万元'
+	}
+	if (result.shares) {
+		result.shares = result.shares / 10000 + '\t 万份'
+	}
+	if (result.profit) {
+		result.profit = result.profit / 10000 + '\t 万元'
+	}
+	if (result.ratio) {
+		result.ratio = result.ratio * 100 + '\t %'
+	}
+	
+//	if (result.targetType) {
+//		result.targetType = util.enum.transform('TARGETTYPE', result.targetType)
+//	}
+//	if (result.targetTypeStr) {
+//		result.targetTypeStr = util.enum.transform('TARGETTYPE', result.targetType)
+//	}
+//	if (result.accrualType) {
+//		result.accrualType = util.enum.transform('ACCRUALTYPE', result.accrualType)
+//	}
+//	if (result.cashtoolTypeStr) {
+//		result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
+//	}
+	if (result.expAror) {
+		result.expAror = result.expAror * 100 + '\t%'
+	}
+	if (result.life) {
+		result.life = result.life + '\t天'
+	}
+	if (result.raiseScope) {
+		result.raiseScope = parseFloat(result.raiseScope) / 10000 + "\t万元"
+	}
+	if (result.floorVolume) {
+		result.floorVolume = parseFloat(result.floorVolume) / 10000 + '\t万元'
+	}
+	if (result.collectIncomeRate) {
+		result.collectIncomeRate = result.collectIncomeRate + '\t%'
+	}
+	if (result.returnVolume) {
+		result.returnVolume = result.returnVolume / 10000 + '\t万元'
+	}
+	if (result.seq) {
+		result.seq = result.seq + '\t期'
+	}
+	if (result.incomeRate) {
+		result.incomeRate = result.incomeRate * 100 + '\t%'
+	}
+	if (result.income) {
+		result.income = result.income / 10000 + '\t万元'
+	}
+	if (result.capital) {
+		result.capital = result.capital / 10000 + '\t万元'
+	}
+	if (result.applyCash) {
+		result.applyCash = result.applyCash / 10000 + '\t万元'
+	}
+	if (result.applyVolume) {
+		result.applyVolume = result.applyVolume / 10000 + '\t万份'
+	}
+	if (result.auditCapital) {
+		result.auditCapital = result.auditCapital / 10000 + '\t万元'
+	}
+	if (result.auditCash) {
+		result.auditCash = result.auditCash / 10000 + '\t万元'
+	}
+	if (result.auditVolume) {
+		result.auditVolume = result.auditVolume / 10000 + '\t万元'
+	}
+	if (result.reserveCash) {
+		result.reserveCash = result.reserveCash / 10000 + '\t万元'
+	}
+	if (result.reserveVolume) {
+		result.reserveVolume = result.reserveVolume / 10000 + '\t万元'
+	}
+	if (result.investVolume) {
+		result.investVolume = result.investVolume / 10000 + '\t万元'
+	}
+	if (result.investCash) {
+		result.investCash = result.investCash / 10000 + '\t万元'
+	}
+	if (result.investVolume) {
+		result.investVolume = result.investVolume / 10000 + '\t万份'
+	}
+	if (result.investCapital) {
+		result.investCapital = result.investCapital / 10000 + '\t万元'
+	}
+	if (result.yearYield7) {
+		result.yearYield7 = result.yearYield7 * 100 + '\t%'
+	}
+	if (result.holdAmount) {
+		result.holdAmount = result.holdAmount / 10000 + '万份'
+	}
+	if (result.volume) {
+		result.volume = result.volume / 10000 + '万元'
+	}
+	return result
 }

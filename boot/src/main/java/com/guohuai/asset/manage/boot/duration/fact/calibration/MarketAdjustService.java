@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +17,7 @@ import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.acct.books.document.SPVDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.order.SpvOrderService;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
 /**
@@ -61,12 +61,18 @@ public class MarketAdjustService {
 	 * @param form
 	 */
 	@Transactional
-	public void saveMarketAdjust(MarketAdjustForm form) {
+	public void saveMarketAdjust(MarketAdjustForm form, String operator) {
 		try {
 			MarketAdjustEntity entity = new MarketAdjustEntity();
-			BeanUtils.copyProperties(entity, form);
 			entity.setOid(StringUtil.uuid());
+			entity.setBaseDate(form.getBaseDate());
+			entity.setShares(BigDecimalUtil.formatForMul10000(form.getShares()));
+			entity.setNav(form.getNav());
+			entity.setProfit(BigDecimalUtil.formatForMul10000(form.getProfit()));
+			entity.setRatio(BigDecimalUtil.formatForDivide100(form.getRatio()));
 			entity.setAssetPool(poolService.getByOid(form.getAssetpoolOid()));
+			entity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			entity.setCreator(operator);
 			this.save(entity);
 
 			List<MarketAdjustOrderEntity> list = Lists.newArrayList();

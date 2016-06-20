@@ -199,10 +199,10 @@ define([
 									scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
 								})
 								json.result.scopeStr = scopeStr
-								json.result.scale = json.result.scale + '\t万元'
-								json.result.cashRate = json.result.cashRate + '\t%'
-								json.result.cashtoolRate = json.result.cashtoolRate + '\t%'
-								json.result.targetRate = json.result.targetRate + '\t%'
+								json.result.scale = json.result.scale / 10000 + '\t万元'
+								json.result.cashRate = json.result.cashRate * 100 + '\t%'
+								json.result.cashtoolRate = json.result.cashtoolRate * 100 + '\t%'
+								json.result.targetRate = json.result.targetRate * 100 + '\t%'
 								$('#modal-footer').show()
 								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
 								$('#auditAssetPoolModal').modal('show')
@@ -234,10 +234,10 @@ define([
 									scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
 								})
 								json.result.scopeStr = scopeStr
-								json.result.scale = json.result.scale + '\t万元'
-								json.result.cashRate = json.result.cashRate + '\t%'
-								json.result.cashtoolRate = json.result.cashtoolRate + '\t%'
-								json.result.targetRate = json.result.targetRate + '\t%'
+								json.result.scale = json.result.scale / 10000 + '\t万元'
+								json.result.cashRate = json.result.cashRate * 100 + '\t%'
+								json.result.cashtoolRate = json.result.cashtoolRate * 100 + '\t%'
+								json.result.targetRate = json.result.targetRate * 100 + '\t%'
 								$('#modal-footer').hide()
 								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
 								$('#auditAssetPoolModal').modal('show')

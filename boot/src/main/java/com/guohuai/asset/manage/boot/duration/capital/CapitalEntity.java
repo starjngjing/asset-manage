@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
+
 import lombok.Data;
 
 /**
@@ -22,8 +24,6 @@ import lombok.Data;
 public class CapitalEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	/**
 	 * 订单状态
@@ -48,12 +48,12 @@ public class CapitalEntity implements Serializable {
 	
 	
 	public CapitalEntity() {
-		this.freezeCash = init0;
-		this.unfreezeCash = init0;
-		this.transitCash = init0;
-		this.untransitCash = init0;
-		this.inputCash = init0;
-		this.outputCash = init0;
+		this.freezeCash 	= BigDecimalUtil.init0;
+		this.unfreezeCash 	= BigDecimalUtil.init0;
+		this.transitCash 	= BigDecimalUtil.init0;
+		this.untransitCash 	= BigDecimalUtil.init0;
+		this.inputCash 		= BigDecimalUtil.init0;
+		this.outputCash 	= BigDecimalUtil.init0;
 	}
 	
 	@Id

@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
+
 import lombok.Data;
 
 /**
@@ -24,7 +26,6 @@ import lombok.Data;
 public class AssetPoolEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	/**
 	 * 每日定时任务状态(未计算，已计算，部分计算，当日不计算)
@@ -41,22 +42,22 @@ public class AssetPoolEntity implements Serializable {
 	public static final String income_yfp 	= "已分配";
 	
 	public AssetPoolEntity() {
-		this.scale = init0;
-		this.cashRate = init0;
-		this.cashtoolRate = init0;
-		this.targetRate = init0;
-		this.cashPosition = init0;
-		this.freezeCash = init0;
-		this.transitCash = init0;
-		this.confirmProfit = init0;
-		this.factProfit = init0;
-		this.cashtoolFactRate = init0;
-		this.targetFactRate = init0;
-		this.deviationValue = init0;
-		this.marketValue = init0;
-		this.factValuation = 0;
-		this.scheduleState = "未计算";
-		this.incomeState = "未分配";
+		this.scale 				= BigDecimalUtil.init0;
+		this.cashRate 			= BigDecimalUtil.init0;
+		this.cashtoolRate 		= BigDecimalUtil.init0;
+		this.targetRate 		= BigDecimalUtil.init0;
+		this.cashPosition 		= BigDecimalUtil.init0;
+		this.freezeCash 		= BigDecimalUtil.init0;
+		this.transitCash 		= BigDecimalUtil.init0;
+		this.confirmProfit 		= BigDecimalUtil.init0;
+		this.factProfit 		= BigDecimalUtil.init0;
+		this.cashtoolFactRate 	= BigDecimalUtil.init0;
+		this.targetFactRate 	= BigDecimalUtil.init0;
+		this.deviationValue 	= BigDecimalUtil.init0;
+		this.marketValue 		= BigDecimalUtil.init0;
+		this.factValuation 		= 0;
+		this.scheduleState 		= "未计算";
+		this.incomeState 		= "未分配";
 	}
 
 	@Id

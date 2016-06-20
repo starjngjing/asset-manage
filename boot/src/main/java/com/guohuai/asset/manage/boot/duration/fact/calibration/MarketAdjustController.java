@@ -50,9 +50,7 @@ public class MarketAdjustController extends BaseController {
 	@RequestMapping(value = "/saveMarketAdjust", method = { RequestMethod.POST })
 	public @ResponseBody ResponseEntity<Response> purchaseForFund(MarketAdjustForm form) {
 		form.setStatus(MarketAdjustEntity.CREATE);
-		form.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		form.setCreator(super.getLoginAdmin());
-		adjustService.saveMarketAdjust(form);
+		adjustService.saveMarketAdjust(form, super.getLoginAdmin());
 		Response r = new Response();
 		r.with("result", "SUCCESSED!");
 		return new ResponseEntity<Response>(r, HttpStatus.OK);

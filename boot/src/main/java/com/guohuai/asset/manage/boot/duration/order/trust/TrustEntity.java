@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.investment.Investment;
+import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 
 import lombok.Data;
 
@@ -21,7 +22,6 @@ import lombok.Data;
 public class TrustEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final BigDecimal init0 = BigDecimal.ZERO;
 	
 	/**
 	 * 状态
@@ -30,14 +30,14 @@ public class TrustEntity implements Serializable {
 	public static final String INVESTEND = "-1";
 	
 	public TrustEntity() {
-		this.confirmVolume = init0;
-		this.investVolume = init0;
-		this.transOutVolume = init0;
-		this.transOutFee = init0;
-		this.transInVolume = init0;
-		this.transInFee = init0;
-		this.dailyProfit = init0;
-		this.totalProfit = init0;
+		this.confirmVolume 	= BigDecimalUtil.init0;
+		this.investVolume 	= BigDecimalUtil.init0;
+		this.transOutVolume = BigDecimalUtil.init0;
+		this.transOutFee 	= BigDecimalUtil.init0;
+		this.transInVolume 	= BigDecimalUtil.init0;
+		this.transInFee 	= BigDecimalUtil.init0;
+		this.dailyProfit 	= BigDecimalUtil.init0;
+		this.totalProfit 	= BigDecimalUtil.init0;
 	}
 
 	@Id
