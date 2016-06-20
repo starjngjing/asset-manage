@@ -161,6 +161,11 @@ define(function() {
 							update: this.host + "/ams/system/ccp/warrantyExpire/update",
 							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
 							search: this.host + "/ams/system/ccp/warrantyExpire/search"
+						},
+						warrantyLevel: { // 风险等级配置
+							save: this.host + "/ams/system/ccp/warrantyLevel/save",
+							delete: this.host + "/ams/system/ccp/warrantyLevel/delete",
+							search: this.host + "/ams/system/ccp/warrantyLevel/search"
 						}
 					},
 					ccr: {
