@@ -146,12 +146,17 @@
                   <tr>
                     <th></th>
                     <th>基准日</th>
-                    <th>份额</th>
-                    <th>单位净值</th>
-                    <th>申购额(万元)</th>
-                    <th>赎回额(万元)</th>
-                    <th>净交易额(万元)</th>
-                    <th>收益率(%)</th>
+                    <th>资产池名称</th>
+                    <th>产品名称</th>
+                    <th>总分配收益(元)</th>
+                    <th>产品总规模(元)</th>
+                    <th>分配收益(元)</th>
+                    <th>奖励收益(元)</th>
+                    <th>年化收益率(%)</th>
+                    <th>申请人</th>
+                    <th>申请时间</th>
+                    <th>审批人</th>
+                    <th>审批时间</th>
                     <th>状态</th>
                     <th>操作</th>
                   </tr>
@@ -3559,3 +3564,296 @@
 		</div>
 	</div>
 </div>
+
+<!-- 收益分配弹窗 -->
+<div id="profitDistributeModal" class="modal fade bs-example-modal-md item_box" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<!-- 模态窗头部 -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+        			<span aria-hidden="true">&times;</span>
+        		</button>
+				<h4 class="modal-title">收益分配</h4>
+			</div>
+			<!-- 模态窗内容体 -->
+			<div class="modal-body">
+				<!-- 订单审核确定事件表单 -->
+				<form id="profitDistributeForm" name="profitDistributeForm" method="post">
+					<input name="assetpoolOid" type="hidden" />
+					<input name="productOid" type="hidden" />
+					<input name="apUndisIncome" type="hidden" />
+					<input name="incomeCalcBasis" type="hidden" />
+					<input name="productTotalScale" type="hidden" />
+					<input name="productRewardBenefit" type="hidden" />
+					<input name="incomeDays" type="hidden" />
+					
+					<p class="form-header">资产池范畴</p>
+					<input name="oid" type="hidden">
+					<div class="row">
+						<dl class="dl-horizontal">
+							<dt>投资资产:</dt>
+							<dd>
+								<div data-detail-fetch="investmentAssetsStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>未分配收益:</dt>
+							<dd>
+								<div data-detail-fetch="apUndisIncomeStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>应收投资收益:</dt>
+							<dd>
+								<div data-detail-fetch="apReceiveIncomeStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>上一收益分配日:</dt>
+							<dd>
+								<div data-detail-fetch="lastIncomeDate"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>收益分配日:</dt>
+							<dd>
+								<div data-detail-fetch="incomeDate"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>收益分配天数:</dt>
+							<dd>
+								<div data-detail-fetch="incomeDaysStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<p class="form-header">产品范畴</p>
+					<div class="row">
+						<dl class="dl-horizontal">
+							<dt>产品总规模:</dt>
+							<dd>
+								<div data-detail-fetch="productTotalScaleStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+						<dl class="dl-horizontal">
+							<dt>奖励收益:</dt>
+							<dd>
+								<div data-detail-fetch="productRewardBenefitStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row">	
+		        <div class="col-sm-6">
+	  					<div class="form-group">
+    	        	<label>分配收益</label>
+        	      <div class="input-group input-group-sm">
+	        	      <input id="productDistributionIncome" 
+	        	      	name="productDistributionIncome" 
+	        	      	type="text"
+	        	      	class="form-control"  
+	        	      	required="required" 
+	        	      	data-validfloat="12.2" 
+	        	      	data-error="可分配收益只能为前12位后2位小数">
+	                <span class="input-group-addon">元</span>
+		            </div>
+    		        <div class="help-block with-errors text-red"></div>
+        		  </div>
+  					</div>
+						<div class="col-sm-6">
+              <div class="form-group">
+                <label>年化收益率</label>
+                <div class="input-group input-group-sm">
+                  <input id="productAnnualYield" 
+                  	name="productAnnualYield" 
+                  	type="text"
+                  	class="form-control"
+                  	required="required" 
+                  	data-validfloat="4.2" 
+                  	data-error="预期年化收益只能为前4位后2位小数">
+                  <span class="input-group-addon">%</span>
+                </div>
+                <div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+					</div>
+					<p class="form-header">试算结果</p>
+					<div class="row">
+  					<div class="col-sm-6">
+	  					<div class="form-group">
+    	        	<label>未分配收益</label>
+        	    	<div class="input-group input-group-sm">
+	        	   		<input id="undisIncome" 
+	        	   			name="undisIncome" 
+	        	   			readonly="readonly" 
+	        	   			type="text"
+	        	   			class="form-control"  
+	        	   			required="required" 
+	        	   			data-validfloat="12.2" 
+	        	   			data-error="未分配收益只能为前12位后2位小数">
+	                <span class="input-group-addon">元</span>
+		            </div>
+    		        <div class="help-block with-errors text-red"></div>
+        		  </div>
+  					</div>
+  					<div class="col-sm-6">
+	  					<div class="form-group">
+    	        	<label>应收投资收益</label>
+        	    	<div class="input-group input-group-sm">
+	        	   		<input id="receiveIncome" 
+	        	   			name="receiveIncome" 
+	        	   			readonly="readonly" 
+	        	   			type="text"
+	        	   			class="form-control"  
+	        	   			required="required" 
+	        	   			data-validfloat="12.2" 
+	        	   			data-error="应收投资收益只能为前12位后2位小数">
+	                <span class="input-group-addon">元</span>
+		            </div>
+    		        <div class="help-block with-errors text-red"></div>
+        		  </div>
+  					</div>
+  					<div class="col-sm-6">
+	  					<div class="form-group">
+    	        	<label>产品总规模</label>
+        	    	<div class="input-group input-group-sm">
+	        	   		<input id="totalScale" 
+	        	   			name="totalScale" 
+	        	   			readonly="readonly" 
+	        	   			type="text"
+	        	   			class="form-control"  
+	        	   			required="required" 
+	        	   			data-validfloat="12.2" 
+	        	   			data-error="产品总规模只能为前12位后2位小数">
+	                <span class="input-group-addon">元</span>
+		            </div>
+    		        <div class="help-block with-errors text-red"></div>
+        		  </div>
+  					</div>
+  					<div class="col-sm-6">
+              <div class="form-group">
+                <label>产品年化收益率</label>
+                <div class="input-group input-group-sm">
+                  <input id="annualYield" 
+                  	name="annualYield" 
+                  	type="text"
+                  	readonly="readonly" 
+                    class="form-control"
+                    required="required" 
+                    data-validfloat="4.2" data-error="预期年化收益只能为前四位后两位小数">
+                  <span class="input-group-addon">%</span>
+                </div>
+                <div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+  					<div class="col-sm-6">
+            	<div class="form-group">
+                <label>产品万份收益</label>
+                <div class="input-group input-group-sm">
+                  <input id="millionCopiesIncome" 
+                  	name="millionCopiesIncome"
+                  	readonly="readonly" 
+                  	type="text"
+                  	class="form-control"  
+                  	required="required" 
+                  	data-validfloat="8.4" 
+                  	data-error="应付费金只能为前8位后4位小数">
+                </div>
+                <div class="help-block with-errors text-red"></div>
+            	</div>
+            </div>
+					</div>
+				</form>
+			</div>
+			<!-- 模态窗底部 -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+				<button id="profitDistributeSubmit" type="button" class="btn btn-primary btn-submit profitDistributeSubmit">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 收益分配录入 审核弹窗 start -->
+<div id="profitDistributeAuditModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- 模态窗头部 -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="trustTitleName">收益分配录入审核详情</h4>
+      </div>
+      <!-- 模态窗内容体 -->
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+          <dt>资产池名称:</dt>
+          <dd>
+            <div data-detail-fetch="assetPoolName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>产品名称:</dt>
+          <dd>
+            <div data-detail-fetch="productName"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>基准日:</dt>
+          <dd>
+            <div data-detail-fetch="baseDate"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>总分配收益:</dt>
+          <dd>
+            <div data-detail-fetch="totalAllocateIncome"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>产品总规模:</dt>
+          <dd>
+            <div data-detail-fetch="capital"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>分配收益:</dt>
+          <dd>
+            <div data-detail-fetch="allocateIncome"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>奖励收益:</dt>
+          <dd>
+            <div data-detail-fetch="rewardIncome"></div>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>年化收益率:</dt>
+          <dd>
+            <div data-detail-fetch="ratio"></div>
+          </dd>
+        </dl>
+      </div>
+      <!-- 模态窗底部 -->
+      <div class="modal-footer" id="doProfitDistributeAudit">
+        <button id="profitDistributeAuditFail" type="button" class="btn btn-warning">驳 回</button>
+        <button id="profitDistributeAuditPass" type="button" class="btn btn-primary">通 过</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 收益分配录入 审核弹窗 end -->

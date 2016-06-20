@@ -161,6 +161,11 @@ define(function() {
 							update: this.host + "/ams/system/ccp/warrantyExpire/update",
 							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
 							search: this.host + "/ams/system/ccp/warrantyExpire/search"
+						},
+						warrantyLevel: { // 风险等级配置
+							save: this.host + "/ams/system/ccp/warrantyLevel/save",
+							delete: this.host + "/ams/system/ccp/warrantyLevel/delete",
+							search: this.host + "/ams/system/ccp/warrantyLevel/search"
 						}
 					},
 					ccr: {
@@ -274,6 +279,15 @@ define(function() {
 					deleteMarketAdjust: this.host + '/ams/duration/market/deleteMarketAdjust', // 市值校准录入删除
 					getMarketAdjustList: this.host + '/ams/duration/market/getMarketAdjustList', // 市值校准记录 列表
 					getYield: this.host + '/ams/duration/market/getYield', // 收益率 列表
+				},
+				income: { // 收益分配
+					getIncomeAdjustData: this.host + '/ams/duration/income/getIncomeAdjustData', // 收益分配录入 详情表单
+					saveIncomeAdjust: this.host + '/ams/duration/income/saveIncomeAdjust', // 收益分配录入
+					getIncomeAdjust: this.host + '/ams/duration/income/getIncomeAdjust', // 收益分配记录详情
+					auditPassIncomeAdjust: this.host + '/ams/duration/income/auditPassIncomeAdjust', // 收益分配录入审核通过
+					auditFailIncomeAdjust: this.host + '/ams/duration/income/auditFailIncomeAdjust', // 收益分配录入审核不通过
+					deleteIncomeAdjust: this.host + '/ams/duration/income/deleteIncomeAdjust', // 收益分配录入删除
+					getIncomeAdjustList: this.host + '/ams/duration/income/getIncomeAdjustList', // 收益分配记录 列表
 				}
 			},
 			role: {

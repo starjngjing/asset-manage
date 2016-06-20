@@ -65,8 +65,6 @@ public class ProductLogListResp extends BaseResp {
 		this.isOpenPurchase = p.getIsOpenPurchase();// 开放申购期
 		this.isOpenRemeed = p.getIsOpenRemeed();// 开放赎回期
 
-		this.purchaseStatus = p.getPurchaseStatus();
-		this.redeemStatus = p.getRedeemStatus();
 		this.purchaseApplyStatus = p.getPurchaseApplyStatus();
 		this.redeemApplyStatus = p.getRedeemApplyStatus();
 		this.maxSaleVolume = p.getMaxSaleVolume();
@@ -126,8 +124,6 @@ public class ProductLogListResp extends BaseResp {
 	private String reviewTime;// 复核时间
 	private String accesser; // 准入人
 	private String accessTime; // 准入时间
-	private String purchaseStatus;
-	private String redeemStatus;
 	private String purchaseApplyStatus;
 	private String redeemApplyStatus;
 	private BigDecimal maxSaleVolume;

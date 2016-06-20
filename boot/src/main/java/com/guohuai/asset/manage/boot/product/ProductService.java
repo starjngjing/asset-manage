@@ -201,7 +201,7 @@ public class ProductService {
 			}
 		}
 
-		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
+		pb.purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
 
 		Product p = pb.build();
 		p = this.productDao.save(p);
@@ -354,7 +354,7 @@ public class ProductService {
 			}
 		}
 
-		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
+		pb.purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
 
 		Product p = pb.build();
 		p = this.productDao.save(p);
@@ -1155,7 +1155,7 @@ public class ProductService {
 		}
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		product.setState(Product.STATE_Reviewpass);
-		product.setAuditState(Product.AUDIT_STATE_Approvaling);
+		product.setAuditState(Product.AUDIT_STATE_Reviewed);
 		product.setOperator(operator);
 		product.setUpdateTime(now);
 
@@ -1199,23 +1199,23 @@ public class ProductService {
 	public BaseResp admitApprove(String oid, String operator) throws ParseException {
 		BaseResp response = new BaseResp();
 
-		Product product = this.getProductById(oid);
-		if (!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
-			throw AMPException.getException(90015);
-		}
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setState(Product.STATE_Admitpass);
-		product.setAuditState(Product.AUDIT_STATE_Approval);
-		product.setOperator(operator);
-		product.setUpdateTime(now);
-
-		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
-		{
-			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Approval).auditor(operator).auditTime(now);
-		}
-
-		this.productDao.saveAndFlush(product);
-		this.productLogDao.save(plb.build());
+//		Product product = this.getProductById(oid);
+//		if (!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
+//			throw AMPException.getException(90015);
+//		}
+//		Timestamp now = new Timestamp(System.currentTimeMillis());
+//		product.setState(Product.STATE_Admitpass);
+//		product.setAuditState(Product.AUDIT_STATE_Approval);
+//		product.setOperator(operator);
+//		product.setUpdateTime(now);
+//
+//		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+//		{
+//			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Approval).auditor(operator).auditTime(now);
+//		}
+//
+//		this.productDao.saveAndFlush(product);
+//		this.productLogDao.save(plb.build());
 
 		return response;
 	}
@@ -1224,23 +1224,23 @@ public class ProductService {
 	public BaseResp admitReject(String oid, String auditComment, String operator) throws ParseException {
 		BaseResp response = new BaseResp();
 
-		Product product = this.getProductById(oid);
-		if (!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
-			throw AMPException.getException(90015);
-		}
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		product.setState(Product.STATE_Admitfail);
-		product.setAuditState(Product.AUDIT_STATE_Reviewing);
-		product.setOperator(operator);
-		product.setUpdateTime(now);
-
-		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
-		{
-			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Reject).auditor(operator).auditTime(now).auditComment(auditComment);
-		}
-
-		this.productDao.saveAndFlush(product);
-		this.productLogDao.save(plb.build());
+//		Product product = this.getProductById(oid);
+//		if (!Product.AUDIT_STATE_Approvaling.equals(product.getAuditState())) {
+//			throw AMPException.getException(90015);
+//		}
+//		Timestamp now = new Timestamp(System.currentTimeMillis());
+//		product.setState(Product.STATE_Admitfail);
+//		product.setAuditState(Product.AUDIT_STATE_Reviewing);
+//		product.setOperator(operator);
+//		product.setUpdateTime(now);
+//
+//		ProductLog.ProductLogBuilder plb = ProductLog.builder().oid(StringUtil.uuid());
+//		{
+//			plb.product(product).auditType(ProductLog.AUDIT_TYPE_Approving).auditState(ProductLog.AUDIT_STATE_Reject).auditor(operator).auditTime(now).auditComment(auditComment);
+//		}
+//
+//		this.productDao.saveAndFlush(product);
+//		this.productLogDao.save(plb.build());
 
 		return response;
 	}
@@ -1262,6 +1262,25 @@ public class ProductService {
 		spec = Specifications.where(spec);
 
 		return this.productDao.count(spec);
+	}
+	
+	/**
+	 * 查询某个资产下的未删除的产品
+	 * @param assetPoolOid
+	 * @return
+	 */
+	public List<Product> getProductListByAssetPoolOid(String assetPoolOid) {
+		
+		Specification<Product> spec = new Specification<Product>() {
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid),
+						cb.equal(root.get("isDeleted").as(String.class), Product.NO));
+			}
+		};
+		List<Product> products = productDao.findAll(spec);
+					
+		return products;
 	}
 
 }

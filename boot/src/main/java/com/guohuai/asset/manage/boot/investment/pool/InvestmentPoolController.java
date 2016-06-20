@@ -111,13 +111,13 @@ public class InvestmentPoolController extends BaseController {
 			public Predicate toPredicate(Root<Investment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicate = new ArrayList<>();
 				if (op.equals("storageList")) { // 投资标的备选库
-					Expression<String> exp = root.get("state").as(String.class);					
-					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_meetingpass }));
+					Expression<String> exp_state = root.get("state").as(String.class);					
+					predicate.add(exp_state.in(new Object[] { Investment.INVESTMENT_STATUS_collecting, Investment.INVESTMENT_STATUS_meetingpass }));
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
 					predicate.add(exp_lifeState.in(new Object[] { Investment.INVESTMENT_LIFESTATUS_PREPARE, Investment.INVESTMENT_LIFESTATUS_STAND_UP, Investment.INVESTMENT_LIFESTATUS_OVER_TIME }));
 				} else if (op.equals("holdList")) { // 已持有列表
-//					Expression<String> exp = root.get("state").as(String.class);					
-//					predicate.add(exp.in(new Object[] { Investment.INVESTMENT_STATUS_collecting }));
+					Expression<String> exp_state = root.get("state").as(String.class);					
+					predicate.add(cb.not(exp_state.in(new Object[] { Investment.INVESTMENT_STATUS_invalid })));
 					
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
 					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
@@ -126,6 +126,8 @@ public class InvestmentPoolController extends BaseController {
 					Predicate p = cb.gt(expHa, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
 					predicate.add(p);					
 				} else if (op.equals("notHoldList")) { // 未持有列表
+					Expression<String> exp_state = root.get("state").as(String.class);					
+					predicate.add(cb.not(exp_state.in(new Object[] { Investment.INVESTMENT_STATUS_invalid })));
 //					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					
 					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					

@@ -346,49 +346,48 @@ public class ProductController extends BaseController {
 			@RequestParam(required = false, defaultValue = "updateTime") String sort,
 			@RequestParam(required = false, defaultValue = "desc") String order) {
 		
-		if (page < 1) {
-			page = 1;
-		}
-		if (rows < 1) {
-			rows = 1;
-		}
-		Direction sortDirection = Direction.DESC;
-		if (!"desc".equals(order)) {
-			sortDirection = Direction.ASC;
-		}
-		Specification<Product> spec = new Specification<Product>() {
-			@Override
-			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO), cb.equal(root.get("auditState").as(String.class), Product.AUDIT_STATE_Approvaling));
-			}
-		};
-		spec = Specifications.where(spec);
-				
-		Specification<Product> nameSpec = null;
-		if(!StringUtil.isEmpty(name)) {
-			nameSpec = new Specification<Product>() {
-				@Override
-				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.or(cb.like(root.get("name").as(String.class), "%" + name + "%"), cb.like(root.get("fullName").as(String.class), "%" + name + "%"));
-				}
-			};
-			spec = Specifications.where(spec).and(nameSpec);
-		}
-		Specification<Product> typeSpec = null;
-		if(!StringUtil.isEmpty(type)) {
-			typeSpec = new Specification<Product>() {
-				@Override
-				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					return cb.equal(root.get("type").get("oid").as(String.class), type);
-				}
-			};
-			spec = Specifications.where(spec).and(typeSpec);
-		}
-		
-		
-		
-		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
-		PageResp<ProductLogListResp> rep = this.productService.approveList(spec, pageable);
+//		if (page < 1) {
+//			page = 1;
+//		}
+//		if (rows < 1) {
+//			rows = 1;
+//		}
+//		Direction sortDirection = Direction.DESC;
+//		if (!"desc".equals(order)) {
+//			sortDirection = Direction.ASC;
+//		}
+//		Specification<Product> spec = new Specification<Product>() {
+//			@Override
+//			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//				return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO), cb.equal(root.get("auditState").as(String.class), Product.AUDIT_STATE_Approvaling));
+//			}
+//		};
+//		spec = Specifications.where(spec);
+//				
+//		Specification<Product> nameSpec = null;
+//		if(!StringUtil.isEmpty(name)) {
+//			nameSpec = new Specification<Product>() {
+//				@Override
+//				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//					return cb.or(cb.like(root.get("name").as(String.class), "%" + name + "%"), cb.like(root.get("fullName").as(String.class), "%" + name + "%"));
+//				}
+//			};
+//			spec = Specifications.where(spec).and(nameSpec);
+//		}
+//		Specification<Product> typeSpec = null;
+//		if(!StringUtil.isEmpty(type)) {
+//			typeSpec = new Specification<Product>() {
+//				@Override
+//				public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//					return cb.equal(root.get("type").get("oid").as(String.class), type);
+//				}
+//			};
+//			spec = Specifications.where(spec).and(typeSpec);
+//		}
+//		
+//		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sort)));
+//		PageResp<ProductLogListResp> rep = this.productService.approveList(spec, pageable);
+		PageResp<ProductLogListResp> rep = new PageResp<ProductLogListResp>();
 		return new ResponseEntity<PageResp<ProductLogListResp>>(rep, HttpStatus.OK);
 	}
 	

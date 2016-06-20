@@ -40,6 +40,8 @@ define([
 			var calcNav = 0;
 			// 市值校准--净收益
 			var calcProfit = 0;
+			//实际值--收益分配
+			var incomeEventOid = null
 			// 页面主tabs点击渲染图表
 			$('#mainTab').find('li').each(function (index, item) {
 				if (index) {
@@ -355,6 +357,7 @@ define([
 					assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
 				})
 				$(select).html(assetPoolOptions)
+				pageState.pid = document.searchForm.assetPoolName.value
 				pageInit(pageState, http, config)
 			})
 			
@@ -362,6 +365,7 @@ define([
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
 				marketAdjustListPageOptions.pid = this.value
+				pdListPageOptions.assetPoolOid = this.value
 				pageInit(pageState, http, config)
 				$('#marketAdjustTable').bootstrapTable('refresh')
 				$('#profitDistributeTable').bootstrapTable('refresh')
@@ -3033,6 +3037,362 @@ define([
 					}
 				})
 			})
+			
+			// 收益分配记录 表格配置
+			var pdListPageOptions = {
+				page: 1,
+				rows: 10,
+				assetPoolOid: ''
+			}
+			var pdListPageOptions = {
+				number: 1,
+				size: 10,
+				assetPoolOid: ''
+			}
+			
+			function getProfitDistributeQueryParams(val) {
+				pdListPageOptions.rows = val.limit
+				pdListPageOptions.page = parseInt(val.offset / val.limit) + 1
+				pdListPageOptions.assetPoolOid = document.searchForm.assetPoolName.value.trim()
+				return val
+			}
+			
+			var profitDistributeTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.duration.income.getIncomeAdjustList, {
+						data: {
+							page: pdListPageOptions.number,
+							rows: pdListPageOptions.size,
+							assetPoolOid: pdListPageOptions.assetPoolOid
+						},
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: pdListPageOptions.number,
+				pageSize: pdListPageOptions.size,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: getProfitDistributeQueryParams,
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					align: 'center',
+					field: 'baseDate'
+				}, 
+				{
+					align: 'center',
+					field: 'assetPoolName'
+				}, 
+				{
+					align: 'center',
+					field: 'productName'
+				}, 
+				{
+					align: 'center',
+					field: 'totalAllocateIncome'
+				}, 
+				{
+					align: 'center',
+					field: 'capital'
+				}, 
+				{
+					align: 'center',
+					field: 'allocateIncome'
+				}, 
+				{
+					align: 'center',
+					field: 'rewardIncome'
+				}, 
+				{
+					align: 'center',
+					field: 'ratio'
+				}, 
+				{
+					align: 'center',
+					field: 'creator'
+				}, 
+				{
+					align: 'center',
+					field: 'createTime'
+				}, 
+				{
+					align: 'center',
+					field: 'auditor'
+				}, 
+				{
+					align: 'center',
+					field: 'auditTime'
+				}, 
+				{
+					align: 'center',
+					field: 'status',
+					formatter: function(val) {
+						if (val == 'CREATE') {
+							return '待审核'
+						}
+						if (val == 'PASS') {
+							return '通过'
+						}
+						if (val == 'FAIL') {
+							return '驳回'
+						}
+					}
+				}, 
+				{
+					width: 150,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '详情',
+							type: 'button',
+							class: 'item-detail',
+        					isRender: true
+						},{
+							text: '审核',
+							type: 'button',
+							class: 'item-audit',
+        					isRender: row.status == 'CREATE'
+						},{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+        					isRender: row.status != 'PASS'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-detail': function(e, val, row) {
+							var modal = $('#profitDistributeAuditModal')
+							$('#doProfitDistributeAudit').hide()
+							http.post(config.api.duration.income.getIncomeAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result
+								data.totalAllocateIncome = data.totalAllocateIncome + '\t 元'
+								data.capital = data.capital + '\t 元'
+								data.allocateIncome = data.allocateIncome + '\t 元'
+								data.rewardIncome = data.rewardIncome + '\t 元'
+								data.ratio = data.ratio + '\t %'
+								$$.detailAutoFix(modal, data)
+							})
+							modal.modal('show')
+						},'click .item-audit': function(e, val, row) {
+							incomeEventOid = row.oid
+							var modal = $('#profitDistributeAuditModal')
+							$('#doProfitDistributeAudit').show()
+							http.post(config.api.duration.income.getIncomeAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(result) {
+								var data = result
+								data.totalAllocateIncome = data.totalAllocateIncome + '\t 元'
+								data.capital = data.capital + '\t 元'
+								data.allocateIncome = data.allocateIncome + '\t 元'
+								data.rewardIncome = data.rewardIncome + '\t 元'
+								data.ratio = data.ratio + '\t %'
+								$$.detailAutoFix(modal, data)
+							})
+							modal.modal('show')
+						},'click .item-delete': function(e, val, row) {
+							$$.confirm({
+								container: $('#confirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.income.deleteIncomeAdjust, {
+										data: {
+											oid: row.oid,
+										},
+										contentType: 'form'
+									}, function(json) {
+										$('#profitDistributeTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						}
+					}
+				}]
+			}
+			$('#profitDistributeTable').bootstrapTable(profitDistributeTableConfig)
+			// 收益分配记录 表格配置 end
+			
+			// 收益分配录入审核 - 通过按钮点击事件
+			$('#profitDistributeAuditPass').on('click', function() {
+				var modal = $('#profitDistributeAuditModal')
+				http.post(config.api.duration.income.auditPassIncomeAdjust, {
+					data: {
+						oid: incomeEventOid
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#profitDistributeTable').bootstrapTable('refresh')
+				})
+				modal.modal('hide')
+			})
+			
+			// 收益分配录入审核 - 不通过按钮点击事件
+			$('#profitDistributeAuditFail').on('click', function() {
+				var modal = $('#profitDistributeAuditModal')
+				http.post(config.api.duration.income.auditFailIncomeAdjust, {
+					data: {
+						oid: incomeEventOid
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#profitDistributeTable').bootstrapTable('refresh')
+				})
+				modal.modal('hide')
+			})
+			
+			
+			// 收益分配 按钮点击事件
+			$('#profitDistribute').on('click', function() {
+				var modal = $('#profitDistributeModal')
+				http.post(config.api.duration.income.getIncomeAdjustData, {
+					data: {
+						assetPoolOid: document.searchForm.assetPoolName.value,
+					},
+					contentType: 'form'
+				}, function(result) {
+					if (result.errorCode == 0) {
+						util.form.reset($('#profitDistributeForm'))
+						var form = document.profitDistributeForm
+						form.assetpoolOid.value = pageState.pid
+						
+						$$.detailAutoFix(modal, result)
+						$$.formAutoFix($(form), result) // 自动填充表单
+						util.form.validator.init($('#profitDistributeForm'))
+						modal.modal('show')
+					} else {
+						alert(result.errorMessage);
+					}
+				})
+				
+			})
+			
+			// 分配收益和年化收益率输入框input事件绑定
+			$(document.profitDistributeForm.productDistributionIncome).on('input', function() {
+				var productDistributionIncome = parseFloat(this.value) || 0 //产品范畴 分配收益1
+				var productTotalScale = parseFloat(document.profitDistributeForm.productTotalScale.value)//产品范畴 产品总规模 1
+				var productRewardBenefit = parseFloat(document.profitDistributeForm.productRewardBenefit.value)//产品范畴 产品奖励收益 
+				var incomeCalcBasis = parseInt(document.profitDistributeForm.incomeCalcBasis.value)//计算基础
+				var incomeDays = parseInt(document.profitDistributeForm.incomeDays.value)//收益分配天数
+				var apUndisIncome = parseFloat(document.profitDistributeForm.apUndisIncome.value)//未分配收益 资产池范畴
+				
+				if(isNaN(apUndisIncome)){
+					apUndisIncome = 0
+				}
+				if(isNaN(productTotalScale)) {
+					productTotalScale = 0
+				}
+				if(isNaN(productRewardBenefit)) {
+					productRewardBenefit = 0
+				}
+				if(isNaN(incomeCalcBasis)) {
+					incomeCalcBasis = 365
+				}
+				
+				var productAnnualYield = 0//产品范畴 年化收益率
+				if(!isNaN(productTotalScale) && productTotalScale!=0) {
+					productAnnualYield = productDistributionIncome/productTotalScale*incomeCalcBasis/incomeDays*100
+				}
+				
+				var receiveIncome = 0
+				var undisIncome = apUndisIncome-productRewardBenefit-productDistributionIncome//未分配收益 试算结果
+				if(isNaN(undisIncome)) {
+					undisIncome = 0
+				}
+				
+				if(undisIncome<0) {
+					receiveIncome = Math.abs(undisIncome)
+					undisIncome = 0
+				}
+				
+				var totalScale = productTotalScale+productRewardBenefit+productDistributionIncome//产品总规模 试算结果
+				var millionCopiesIncome = productAnnualYield/incomeCalcBasis*10000//万份收益 试算结果
+				
+				document.profitDistributeForm.productAnnualYield.value = productAnnualYield.toFixed(2)//年化收益率 产品范畴
+				document.profitDistributeForm.undisIncome.value = undisIncome.toFixed(2)//未分配收益 试算结果
+				document.profitDistributeForm.receiveIncome.value = receiveIncome.toFixed(2)//应收投资收益 试算结果
+				document.profitDistributeForm.totalScale.value = totalScale.toFixed(2)//产品总规模 试算结果
+				document.profitDistributeForm.annualYield.value = productAnnualYield.toFixed(2)//年化收益率 试算结果
+				document.profitDistributeForm.millionCopiesIncome.value = millionCopiesIncome.toFixed(4)//万份收益 试算结果
+			})
+			
+			
+			$(document.profitDistributeForm.productAnnualYield).on('input', function() {
+				
+				var productAnnualYield = parseFloat(this.value) || 0 //产品范畴 年化收益率
+				
+				var productTotalScale = parseFloat(document.profitDistributeForm.productTotalScale.value)//产品范畴 产品总规模 1
+				var productRewardBenefit = parseFloat(document.profitDistributeForm.productRewardBenefit.value)//产品范畴 产品奖励收益 
+				var incomeCalcBasis = parseInt(document.profitDistributeForm.incomeCalcBasis.value)//计算基础
+				var incomeDays = parseInt(document.profitDistributeForm.incomeDays.value)//收益分配天数
+				var apUndisIncome = parseFloat(document.profitDistributeForm.apUndisIncome.value)//未分配收益 资产池范畴
+				
+				if(isNaN(apUndisIncome)) {
+					apUndisIncome = 0
+				}
+				if(isNaN(productTotalScale)) {
+					productTotalScale = 0
+				}
+				if(isNaN(productRewardBenefit)) {
+					productRewardBenefit = 0
+				}
+				if(isNaN(incomeCalcBasis)) {
+					incomeCalcBasis = 365
+				}
+				
+				
+				var productDistributionIncome = productAnnualYield*productTotalScale*incomeDays/incomeCalcBasis/100//产品范畴 分配收益1
+				
+				var receiveIncome = 0
+				var undisIncome = apUndisIncome-productRewardBenefit-productDistributionIncome//未分配收益 试算结果
+				if(isNaN(undisIncome)) {
+					undisIncome = 0
+				}
+				if(undisIncome<0) {
+					receiveIncome = Math.abs(undisIncome)
+					undisIncome = 0
+				}
+				
+				var totalScale = productTotalScale+productRewardBenefit+productDistributionIncome//产品总规模 试算结果
+				var millionCopiesIncome = productAnnualYield/incomeCalcBasis*10000//万份收益 试算结果
+				
+				document.profitDistributeForm.productDistributionIncome.value = productDistributionIncome.toFixed(2)
+				document.profitDistributeForm.undisIncome.value = undisIncome.toFixed(2)//未分配收益 试算结果
+				document.profitDistributeForm.receiveIncome.value = receiveIncome.toFixed(2)//应收投资收益 试算结果
+				document.profitDistributeForm.totalScale.value = totalScale.toFixed(2)//产品总规模 试算结果
+				document.profitDistributeForm.annualYield.value = productAnnualYield.toFixed(2)//年化收益率 试算结果
+				document.profitDistributeForm.millionCopiesIncome.value = millionCopiesIncome.toFixed(4)//万份收益 试算结果
+				
+			})
+			
+			// 审收益分配“确定”按钮点击事件
+			$('#profitDistributeSubmit').on('click', function() {
+				if (!$('#profitDistributeForm').validator('doSubmitCheck')) return
+
+				$('#profitDistributeForm').ajaxSubmit({
+					url: config.api.duration.income.saveIncomeAdjust,
+					success: function(addResult) {
+						$('#profitDistributeModal').modal('hide')
+						$('#profitDistributeTable').bootstrapTable('refresh')
+					}
+				})
+			})
+			
 		}
 	}
 })

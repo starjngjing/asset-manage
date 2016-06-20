@@ -24,6 +24,7 @@ import com.guohuai.asset.manage.boot.product.Product;
 import com.guohuai.asset.manage.boot.product.ProductDao;
 import com.guohuai.asset.manage.boot.product.ProductDecimalFormat;
 import com.guohuai.asset.manage.boot.product.ProductDetailResp;
+import com.guohuai.asset.manage.boot.product.ProductService;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
@@ -48,6 +49,8 @@ public class SpvOrderService {
 	private InvestorOrderDao investorOrderDao;
 	@Autowired
 	private ProductDao productDao;
+	@Autowired
+	private ProductService productService;
 	@Autowired
 	private SeqGenerator seqGenerator;
 	@Autowired
@@ -77,7 +80,7 @@ public class SpvOrderService {
 			throw AMPException.getException(30001);
 		}
 		
-		List<Product> products = this.getProductListByAssetPoolOid(form.getAssetPoolOid());
+		List<Product> products = productService.getProductListByAssetPoolOid(form.getAssetPoolOid());
 		Product product = null;
 		if(products!=null && products.size()>0) {
 			product = products.get(0);
@@ -236,7 +239,7 @@ public class SpvOrderService {
 				
 				Product product = null;
 				if(investorOrder.getAccount().getProduct()!=null) {
-					product = productDao.findOne(investorOrder.getAccount().getProduct().getOid());
+					product = productService.getProductById(investorOrder.getAccount().getProduct().getOid());
 					product.setRaisedTotalNumber(product.getRaisedTotalNumber().subtract(avaibleAmount));
 					product.setUpdateTime(now);
 				}
@@ -267,7 +270,7 @@ public class SpvOrderService {
 				
 				Product product = null;
 				if(investorOrder.getAccount().getProduct()!=null) {
-					product = productDao.findOne(investorOrder.getAccount().getProduct().getOid());
+					product = productService.getProductById(investorOrder.getAccount().getProduct().getOid());
 					if(product.getRaisedTotalNumber()==null) {
 						product.setRaisedTotalNumber(new BigDecimal(0));
 					}
@@ -308,7 +311,7 @@ public class SpvOrderService {
 	
 	public ProductDetailResp getProduct(String assetPoolOid) {
 		
-		List<Product> products = getProductListByAssetPoolOid(assetPoolOid);
+		List<Product> products = productService.getProductListByAssetPoolOid(assetPoolOid);
 		ProductDetailResp pr = null;
 		if(products!=null && products.size()>0) {
 			pr = new ProductDetailResp(products.get(0));
@@ -318,19 +321,6 @@ public class SpvOrderService {
 		return pr;
 	}
 	
-	public List<Product> getProductListByAssetPoolOid(String assetPoolOid) {
-		
-		Specification<Product> spec = new Specification<Product>() {
-			@Override
-			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid),
-						cb.equal(root.get("isDeleted").as(String.class), Product.NO));
-			}
-		};
-		List<Product> products = productDao.findAll(spec);
-					
-		return products;
-	}
 	
 	public PageResp<SpvOrderResp> list(Specification<InvestorOrder> spec, Pageable pageable) {
 		PageResp<SpvOrderResp> pagesRep = new PageResp<SpvOrderResp>();

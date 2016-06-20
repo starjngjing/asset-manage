@@ -82,8 +82,9 @@ public class Product implements Serializable {
 	public static final String AUDIT_STATE_Nocommit = "NOCOMMIT";// 未提交审核
 	public static final String AUDIT_STATE_Auditing = "AUDITING";// 待审核(已经提交:审核中)
 	public static final String AUDIT_STATE_Reviewing = "REVIEWING";// 待复核(已经提交复核:复核中)
-	public static final String AUDIT_STATE_Approvaling = "APPROVALING";// 待批准(已经提交批准申请:批准申请中)
-	public static final String AUDIT_STATE_Approval = "APPROVAL";// 批准
+	public static final String AUDIT_STATE_Reviewed = "REVIEWED";// 复核通过
+//	public static final String AUDIT_STATE_Approvaling = "APPROVALING";// 待批准(已经提交批准申请:批准申请中)
+//	public static final String AUDIT_STATE_Approval = "APPROVAL";// 批准
 	public static final String AUDIT_STATE_Reject = "REJECT";// 驳回
 
 	public static final int OPEN_Off = 0;
@@ -323,14 +324,6 @@ public class Product implements Serializable {
 	 * 存续期结束日期
 	 */
 	private Date durationPeriodEndDate;
-	/**
-	 * 开放申购期
-	 */
-	private String isOpenPurchase;
-	/**
-	 * 开放赎回期
-	 */
-	private String isOpenRemeed;
 
 	/**
 	 * 产品清算（结束）日期
@@ -405,8 +398,14 @@ public class Product implements Serializable {
 	 */
 	private BigDecimal maxSaleVolume;
 
-	private String purchaseStatus;
-	private String redeemStatus;
+	/**
+	 * 开放申购期
+	 */
+	private String isOpenPurchase;
+	/**
+	 * 开放赎回期
+	 */
+	private String isOpenRemeed;
 	private String purchaseApplyStatus;
 	private String redeemApplyStatus;
 }
