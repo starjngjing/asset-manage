@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 /**
  * 风险等级配置
  * 
- * @author Arthur
+ * @author vania
  *
  */
 
