@@ -127,7 +127,7 @@ public class InvestmentMeetingCheckService {
 				SaveFileForm fileform = new SaveFileForm();
 				fileform.setFurl(form.getFile());
 				fileform.setName(form.getFileName());
-				fileform.setSize(form.getFileSize());
+				fileform.setSize(Long.valueOf(form.getFileSize()));
 				fileForms.add(fileform);
 				fileService.save(fileForms, fkey, File.CATE_User, operator);
 				check.setCheckFile(fkey);

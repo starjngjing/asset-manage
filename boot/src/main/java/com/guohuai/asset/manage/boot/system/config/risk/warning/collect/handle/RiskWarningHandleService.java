@@ -107,6 +107,9 @@ public class RiskWarningHandleService {
 			}
 			collect.setHandleLevel(collect.getWlevel());
 			collect.setWlevel(RiskWarningCollectLevel.getLevel(riskCode - 1));
+		} else if(RiskWarningHandle.HANDLE_KEEPLEVEL.equals(form.getHandle())){
+			//保留等级
+			collect.setHandleLevel(collect.getWlevel());
 		}
 		String reportFkey = null;
 		if (!StringUtils.isEmpty(form.getReport())) {
@@ -115,7 +118,7 @@ public class RiskWarningHandleService {
 			SaveFileForm fileform = new SaveFileForm();
 			fileform.setFurl(form.getReport());
 			fileform.setName(form.getReportName());
-			fileform.setSize(form.getReportSize());
+			fileform.setSize(Long.valueOf(form.getReportSize()));
 			fileForms.add(fileform);
 			fileService.save(fileForms, reportFkey, File.CATE_User, operator);
 		}
@@ -126,7 +129,7 @@ public class RiskWarningHandleService {
 			SaveFileForm fileform = new SaveFileForm();
 			fileform.setFurl(form.getMeeting());
 			fileform.setName(form.getMeetingName());
-			fileform.setSize(form.getMeetingSize());
+			fileform.setSize(Long.valueOf(form.getMeetingSize()));
 			fileForms.add(fileform);
 			fileService.save(fileForms, meetingFkey, File.CATE_User, operator);
 		}

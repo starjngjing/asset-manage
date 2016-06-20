@@ -13,9 +13,9 @@ public class RiskWarningHandleForm {
 	private String handle;
 	private String summary;
 	private String report;
-	private long reportSize;
+	private String reportSize;
 	private String reportName;
 	private String meeting;
-	private long meetingSize;
+	private String meetingSize;
 	private String meetingName;
 }

@@ -117,7 +117,7 @@ define([
 								},
 								contentType: 'form'
 							}, function(result) {
-								util.form.reset($('#riskCollectForm')); // 先清理表单
+								util.form.reset($('#riskHandleForm')); // 先清理表单
 								var data = result.investment;
 								data.raiseScope = data.raiseScope + '万';
 								data.life = data.life + util.enum.transform('lifeUnit', data.lifeUnit);
