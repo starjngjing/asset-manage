@@ -22,6 +22,33 @@
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" role="tabpanel" id="fundpanel1">
+				<!-- 搜索项表单 -->
+				<form id="targetSearchForm" name="targetSearchForm" method="post" class="search-body">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label>标的名称</label>
+								<select name="relative" class="form-control input-sm">
+                    				<option value="" selected>全部</option>
+                  				</select>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label>指标名称</label>
+								<input name="riskName" type="text" class="form-control input-sm" placeholder="搜索指标名称">
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label>风险等级</label>
+								<select name="wlevel" class="form-control input-sm" data-enum-fetch="riskLevel" data-enum-text="全部">
+                    <option value="" selected>全部</option>
+                  </select>
+							</div>
+						</div>
+					</div>
+				</form>
 				<!-- 风险处置列表 -->
 				<table id="riskWarningHandleTable" class="table table-bordered table-striped">
 					<thead>
@@ -31,6 +58,7 @@
 							<th>指标名称</th>
 							<th>指标描述</th>
 							<th>处置状态</th>
+							<th>指标数据</th>
 							<th>风险等级</th>
 							<th>操作</th>
 						</tr>

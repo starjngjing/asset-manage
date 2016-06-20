@@ -13,6 +13,7 @@ public class RiskWarningCollectListResp extends PageResp<RiskWarningCollectListI
 	public RiskWarningCollectListResp(List<RiskWarningCollectListInfoResp> approvals) {
 		this(approvals, null == approvals ? 0 : approvals.size());
 	}
+	
 
 	public RiskWarningCollectListResp(List<RiskWarningCollectListInfoResp> Approvals, long total) {
 		this();

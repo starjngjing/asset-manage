@@ -46,11 +46,11 @@ public class RiskWarningCollectService {
 	 * @param pageable
 	 * @return
 	 */
-	public List<RiskWarningCollectListInfoResp> list(Specification<Investment> spec, Pageable pageable) {
+	public RiskWarningCollectListResp list(Specification<Investment> spec, Pageable pageable) {
 		List<RiskWarningCollectListInfoResp> res = new ArrayList<RiskWarningCollectListInfoResp>();
 		Page<Investment> pageData = investmentPoolService.getInvestmentList(spec, pageable);
 		if (null == pageData || 0 == pageData.getSize()) {
-			return res;
+			return new RiskWarningCollectListResp(res);
 		}
 		for (Investment investment : pageData) {
 			List<RiskWarningCollect> list = riskWarningCollectDao.findByRelative(investment.getOid());
@@ -66,7 +66,7 @@ public class RiskWarningCollectService {
 					.level(RiskWarningCollectLevel.getLevel(levelCode)).build();
 			res.add(temp);
 		}
-		return res;
+		return new RiskWarningCollectListResp(res,pageData.getTotalElements());
 	}
 
 	public List<RiskWarningCollectDetResp> detail(String oid) {

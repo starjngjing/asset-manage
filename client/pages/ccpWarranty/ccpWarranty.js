@@ -283,6 +283,74 @@ define([
 					}
 				}]
 			});
+			
+			
+			$('#ccpWarrantyLevelTable').bootstrapTable({
+				ajax: function(origin) {
+					http.post(config.api.system.config.ccp.warrantyLevel.search, {
+						data: {},
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				columns: [{
+					field: 'oid',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, {
+					field: 'name'
+				}, {
+					//field: 'Factor',
+					formatter: function(val, row) {
+						return '<i>' + row.coverLow + (row.lowFactor || '∞') + ', ' + (row.highFactor || '∞') + row.coverHigh + '</i>';
+					}
+				}, {
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '修改',
+							type: 'button',
+							class: 'item-update',
+							isRender: true
+						}, {
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+							isRender: true
+						}]
+						return util.table.formatter.generateButton(buttons);
+					},
+					events: {
+						'click .item-update': function(e, value, row) {
+							$$.formAutoFix($('#ccpRiskLevelForm'), row);
+							// 重置和初始化表单验证
+							$("#ccpRiskLevelForm").validator('destroy')
+							util.form.validator.init($("#ccpRiskLevelForm"));
+							$('#ccpRiskLevelModal').modal('show');
+						},
+						'click .item-delete': function(e, value, row) {
+							$("#deleteCcpWarrantyExpireConfirmTitle").html("确定删除担保期限权数配置？");
+							$$.confirm({
+								container: $('#deleteCcpWarrantyExpireModal'),
+								trigger: this,
+								accept: function() {
+									http.post(config.api.system.config.ccp.warrantyLevel.delete, {
+										data: {
+											oid: row.oid
+										},
+										contentType: 'form'
+									}, function(result) {
+										$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+									})
+								}
+							})
+
+						}
+					}
+				}]
+			});
 
 			$('#ccpWarrantyExpireAdd').on('click', function() {
 				$('#addCcpWarrantyExpireModal').modal('show');
@@ -306,6 +374,25 @@ define([
 						$('#updateCcpWarrantyExpireForm').clearForm();
 						$('#updateCcpWarrantyExpireModal').modal('hide');
 						$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+					}
+				})
+			});
+			
+			$('#ccpWarrantyLevelAdd').on('click', function() {
+				// 重置和初始化表单验证
+				$("#ccpRiskLevelForm").validator('destroy')
+				util.form.validator.init($("#ccpRiskLevelForm"));
+				$('#ccpWarrantyLevelModal').modal('show');
+			});
+			
+			$('#ccpWarrantyLevelSubmit').on('click', function() {
+				if (!$('#ccpWarrantyLevelForm').validator('doSubmitCheck')) return
+				$('#ccpWarrantyLevelForm').ajaxSubmit({
+					url: config.api.system.config.ccp.warrantyLevel.save,
+					success: function(result) {
+						$('#ccpWarrantyLevelForm').clearForm();
+						$('#ccpWarrantyLevelModal').modal('hide');
+						$('#ccpWarrantyLevelTable').bootstrapTable('refresh');
 					}
 				})
 			});

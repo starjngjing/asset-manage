@@ -1,7 +1,9 @@
 package com.guohuai.asset.manage.boot.system.config.risk.warning.collect.handle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,10 @@ public class RiskWarningHandleService {
 	@Autowired
 	FileService fileService;
 
-	public List<RiskWarningHandleDetResp> list(Specification<RiskWarningCollect> spec, Pageable pageable) {
-		List<RiskWarningHandleDetResp> res = new ArrayList<RiskWarningHandleDetResp>();
+	public RiskWarningHandleListResp list(Specification<RiskWarningCollect> spec, Pageable pageable) {
+		List<RiskWarningHandleDetResp> dets = new ArrayList<RiskWarningHandleDetResp>();
 		Page<RiskWarningCollect> list = riskWarningCollectDao.findAll(spec, pageable);
+		Map<String, String> investments = new HashMap<String, String>();
 		for (RiskWarningCollect entity : list) {
 			RiskWarningHandleDetResp temp = new RiskWarningHandleDetResp();
 			temp.setOid(entity.getOid());
@@ -53,14 +56,18 @@ public class RiskWarningHandleService {
 			temp.setRiskUnit(entity.getRiskWarning().getIndicate().getDataUnit());
 			temp.setRelative(entity.getRelative());
 			Investment investment = investmentService.getInvestment(entity.getRelative());
-			if (null != investment)
+			if (null != investment){
 				temp.setRelativeName(investment.getName());
-			res.add(temp);
+				investments.put(investment.getOid(), investment.getName());
+			}
+			dets.add(temp);
 		}
-		return res;
+		RiskWarningHandleListResp res = new RiskWarningHandleListResp(dets,list.getTotalElements());
+		res.setInvestment(investments);
+		return res ;
 	}
 
-	public List<RiskWarningHandleHisDetResp> hisList(Specification<RiskWarningHandle> spec, Pageable pageable) {
+	public RiskWarningHandleHisListResp hisList(Specification<RiskWarningHandle> spec, Pageable pageable) {
 		List<RiskWarningHandleHisDetResp> res = new ArrayList<RiskWarningHandleHisDetResp>();
 		Page<RiskWarningHandle> pageData = riskWarningHandleDao.findAll(spec, pageable);
 		for (RiskWarningHandle entity : pageData) {
@@ -74,12 +81,12 @@ public class RiskWarningHandleService {
 			temp.setCreateTime(entity.getCreateTime());
 			temp.setSummary(entity.getSummary());
 			temp.setReport(entity.getReport());
+			temp.setMeeting(entity.getMeeting());
 //			if (!StringUtils.isEmpty(entity.getReport())) {
 //				List<File> files = fileService.list(entity.getReport(), 1);
 //				if (files != null && files.size() > 0)
 //					temp.setReport(files.get(0).getFurl());
 //			}
-			temp.setMeeting(entity.getMeeting());
 //			if (!StringUtils.isEmpty(entity.getMeeting())) {
 //				List<File> files = fileService.list(entity.getMeeting(), 1);
 //				if (files != null && files.size() > 0)
@@ -90,7 +97,7 @@ public class RiskWarningHandleService {
 				temp.setRelativeName(investment.getName());
 			res.add(temp);
 		}
-		return res;
+		return new RiskWarningHandleHisListResp(res,pageData.getTotalElements());
 	}
 
 	public void handle(RiskWarningHandleForm form, String operator) {
@@ -109,8 +116,8 @@ public class RiskWarningHandleService {
 			}
 			collect.setHandleLevel(collect.getWlevel());
 			collect.setWlevel(RiskWarningCollectLevel.getLevel(riskCode - 1));
-		} else if(RiskWarningHandle.HANDLE_KEEPLEVEL.equals(form.getHandle())){
-			//保留等级
+		} else if (RiskWarningHandle.HANDLE_KEEPLEVEL.equals(form.getHandle())) {
+			// 保留等级
 			collect.setHandleLevel(collect.getWlevel());
 		}
 		String reportFkey = null;

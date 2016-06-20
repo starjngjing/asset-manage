@@ -10,7 +10,7 @@ define([
 	return {
 		name: 'targetHandle',
 		init: function() {
-
+			var initRelative = false
 			$("#a1").click(function() {
 				$('#riskWarningHandleTable').bootstrapTable('refresh')
 			})
@@ -57,6 +57,9 @@ define([
 			var pageOptions = {
 					number: 1,
 					size: 10,
+					relative: '',
+					wlevel: '',
+					riskName: ','
 				}
 				// 数据表格配置
 			var tableConfig = {
@@ -65,10 +68,22 @@ define([
 						data: {
 							page: pageOptions.number,
 							rows: pageOptions.size,
+							relative: pageOptions.relative,
+							wlevel: pageOptions.wlevel,
+							riskName : pageOptions.riskName
 						},
 						contentType: 'form'
 					}, function(rlt) {
 						origin.success(rlt)
+						if (!initRelative) {
+							var select = document.targetSearchForm.relative
+							var collectOptions = '<option value="" selected>全部</option>'
+							for (var key in rlt.investment) {
+								collectOptions += '<option value="' + key + '">' + rlt.investment[key] + '</option>'
+							}
+							$(select).html(collectOptions)
+							initRelative = true
+						}
 					})
 				},
 				pageNumber: pageOptions.number,
@@ -76,6 +91,7 @@ define([
 				pagination: true,
 				sidePagination: 'server',
 				pageList: [10, 20, 30, 50, 100],
+				queryParams: getQueryParams,
 				columns: [{
 					field: 'relativeName'
 				}, {
@@ -93,10 +109,16 @@ define([
 						return '已处置';
 					}
 				}, {
+					field: 'riskData',
+					align: 'center',
+					formatter: function(val, row) {
+						return val + row.riskUnit;
+					}
+				}, {
 					field: 'wlevel',
 					align: 'center',
 					formatter: function(val, row) {
-						return util.table.formatter.convertRiskLevelStrs(val, row.riskData + row.riskUnit);
+						return util.table.formatter.convertRiskLevel(val);
 					}
 				}, {
 					align: 'center',
@@ -135,6 +157,8 @@ define([
 				}]
 			}
 			$('#riskWarningHandleTable').bootstrapTable(tableConfig)
+			// 搜索表单初始化
+		$$.searchInit($('#targetSearchForm'), $('#riskWarningHandleTable'))
 
 			//分页配置
 			var pageOptions2 = {
@@ -219,7 +243,7 @@ define([
 								}, function(result) {
 									location.href = config.api.files.download + result.key
 								})
-								//							location.href = 'http://api.guohuaigroup.com' + row.report
+								//							location.href = 'http://api.guohuaigroup.com' + row.report + '?filename=hhh'
 						},
 						'click .item-meeting': function(e, value, row) {
 							var key = {};
@@ -233,12 +257,23 @@ define([
 								}, function(result) {
 									location.href = config.api.files.download + result.key
 								})
-								//							location.href = 'http://api.guohuaigroup.com' + row.meeting
+								//							location.href = 'http://api.guohuaigroup.com' + row.meeting + '?filename=hhh'
 						}
 					}
 				}]
 			}
 			$('#riskWarningHandleHisTable').bootstrapTable(tableConfig2)
+			
+
+			function getQueryParams(val) {
+				var form = document.targetSearchForm
+				pageOptions.size = val.limit
+				pageOptions.number = parseInt(val.offset / val.limit) + 1
+				pageOptions.relative = form.relative.value.trim();
+				pageOptions.wlevel = form.wlevel.value.trim();
+				pageOptions.riskName = form.riskName.value.trim();
+				return val
+			}
 		}
 	}
 

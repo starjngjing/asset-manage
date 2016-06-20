@@ -1,6 +1,11 @@
 package com.guohuai.asset.manage.boot.investment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -109,8 +114,44 @@ public class InvestmentMeetingVoteService {
 				}
 			}
 		}
+		Collections.sort(res, new meetingTimeComparator());
 		return res;
 	}
+
+	static class meetingTimeComparator implements Comparator {
+		public int compare(Object object1, Object object2) {// 实现接口中的方法
+			MeetingInvestmentDetResp p1 = (MeetingInvestmentDetResp) object1; // 强制转换
+			MeetingInvestmentDetResp p2 = (MeetingInvestmentDetResp) object2;
+			try {
+				Date d1 = p1.getMeetingTime();
+				Date d2 = p2.getMeetingTime();
+				if (d1.getTime() - d2.getTime() > 0) {
+					return -1;
+				} else if (d1.getTime() - d2.getTime() < 0) {
+					return 1;
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return 0;
+		}
+	}
+
+	// private List<MeetingInvestmentDetResp>
+	// orderByMeeting(List<MeetingInvestmentDetResp> list){
+	// List<MeetingInvestmentDetResp> res = new
+	// ArrayList<MeetingInvestmentDetResp>();
+	// for (int i = 0; i < list.size(); i++) {
+	// for (int j = 0; j < list.size()-1; j++) {
+	// MeetingInvestmentDetResp temp;
+	// if(){
+	//
+	// }
+	// }
+	// }
+	// }
 
 	/**
 	 * 根据会议和标的查询投票详情
@@ -132,11 +173,11 @@ public class InvestmentMeetingVoteService {
 				resp.setVoteStatus(vote.getState());
 				resp.setTime(vote.getVoteTime());
 				resp.setFile(vote.getFile());
-//				if (!StringUtils.isEmpty(vote.getFile())) {
-//					List<File> files = fileService.list(vote.getFile(), 1);
-//					if (files != null && files.size() > 0)
-//						resp.setFile(files.get(0).getFurl());
-//				}
+				// if (!StringUtils.isEmpty(vote.getFile())) {
+				// List<File> files = fileService.list(vote.getFile(), 1);
+				// if (files != null && files.size() > 0)
+				// resp.setFile(files.get(0).getFurl());
+				// }
 			} else {
 				resp.setVoteStatus(InvestmentMeetingVote.VOTE_STATUS_notvote);
 			}

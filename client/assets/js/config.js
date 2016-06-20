@@ -161,6 +161,11 @@ define(function() {
 							update: this.host + "/ams/system/ccp/warrantyExpire/update",
 							delete: this.host + "/ams/system/ccp/warrantyExpire/delete",
 							search: this.host + "/ams/system/ccp/warrantyExpire/search"
+						},
+						warrantyLevel: { // 风险等级配置
+							save: this.host + "/ams/system/ccp/warrantyLevel/save",
+							delete: this.host + "/ams/system/ccp/warrantyLevel/delete",
+							search: this.host + "/ams/system/ccp/warrantyLevel/search"
 						}
 					},
 					ccr: {
@@ -664,6 +669,16 @@ define(function() {
 		}, {
 			id: "YES",
 			text: "已入账",
+		}],
+		riskLevel:[{ // 持有人订单入账状态
+			id: "LOW",
+			text: "低",
+		}, {
+			id: "MID",
+			text: "中",
+		}, {
+			id: "HIGH",
+			text: "高",
 		}],
 		/**
 		 * 图标所用到的主题颜色
