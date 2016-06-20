@@ -79,9 +79,11 @@ define([
 				}, function(json) {
 					var status = json.result
 					if (status === -1) {
-						alert('已进行市值校准，待审核！')
+						$('#marketAdjustMessage').html('已进行市值校准，待审核！')
+						$('#showMessageModal').modal('show')
 					} else if (status === 1) {
-						alert('今日已进行市值校准')
+						$('#marketAdjustMessage').html('今日已进行市值校准！')
+						$('#showMessageModal').modal('show')
 					} else {
 						var modal = $('#marketAdjustModal')
 						http.post(config.api.duration.market.getMarketAdjustData, {
@@ -297,7 +299,8 @@ define([
 					contentType: 'form'
 				}, function(json) {
 					$('#marketAdjustTable').bootstrapTable('refresh')
-				yieldInit(pageState, http, config)
+					pageInit(pageState, http, config)
+					yieldInit(pageState, http, config)
 				})
 				modal.modal('hide')
 			})

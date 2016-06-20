@@ -110,6 +110,7 @@ public class MarketAdjustService {
 	public void auditMarketAdjust(String oid, String type, String operator) {
 		MarketAdjustEntity market = adjustDao.findOne(oid);
 		if ("pass".equals(type)) {
+			market.getAssetPool().setBaseDate(market.getBaseDate());
 			market.setStatus(MarketAdjustEntity.PASS);
 			if (null != market.getProfit() && market.getProfit().compareTo(BigDecimal.ZERO) != 0) {
 				spvService.incomeConfirm(market.getAssetPool().getOid(), oid, market.getProfit());
@@ -148,6 +149,7 @@ public class MarketAdjustService {
 	 */
 	@Transactional
 	public Page<MarketAdjustEntity> getMarketAdjustList(String pid, Pageable pageable) {
+		pid = poolService.getPid(pid);
 		Page<MarketAdjustEntity> list = adjustDao.getListByPid(pid, pageable);
 		
 		return list;
@@ -163,8 +165,9 @@ public class MarketAdjustService {
 		List<JSONObject> objList = Lists.newArrayList();
 		List<MarketAdjustEntity> list = adjustDao.getListForYield(pid);
 		if (null != list && !list.isEmpty()) {
-			JSONObject obj = new JSONObject();;
+			JSONObject obj = null;
 			for (MarketAdjustEntity entity : list) {
+				obj = new JSONObject();
 				obj.put("date", entity.getBaseDate());
 				obj.put("yield", entity.getRatio());
 				
