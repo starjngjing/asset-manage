@@ -656,6 +656,16 @@ define(function() {
 			id: "YES",
 			text: "已入账",
 		}],
+		riskLevel:[{ // 持有人订单入账状态
+			id: "LOW",
+			text: "低",
+		}, {
+			id: "MID",
+			text: "中",
+		}, {
+			id: "HIGH",
+			text: "高",
+		}],
 		/**
 		 * 图标所用到的主题颜色
 		 */

@@ -96,7 +96,7 @@ define([
 									})
 								},
 								columns: [{
-									field: 'role',
+									field: 'name',
 									align: 'center'
 								}, {
 									field: 'voteStatus',
@@ -104,9 +104,6 @@ define([
 									formatter: function(val) {
 										return util.enum.transform('voteStates', val);
 									}
-								}, {
-									field: 'name',
-									align: 'center'
 								}, {
 									field: 'time',
 									align: 'center'

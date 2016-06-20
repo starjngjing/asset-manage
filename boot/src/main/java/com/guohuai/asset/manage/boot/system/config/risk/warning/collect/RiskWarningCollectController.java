@@ -90,8 +90,7 @@ public class RiskWarningCollectController {
 				return query.where(predicate.toArray(pre)).getRestriction();
 			}
 		});
-		List<RiskWarningCollectListInfoResp> resp = riskWarningCollectService.list(spec, pageable);
-		return new ResponseEntity<RiskWarningCollectListResp>(new RiskWarningCollectListResp(resp), HttpStatus.OK);
+		return new ResponseEntity<RiskWarningCollectListResp>(riskWarningCollectService.list(spec, pageable), HttpStatus.OK);
 	}
 
 	/**

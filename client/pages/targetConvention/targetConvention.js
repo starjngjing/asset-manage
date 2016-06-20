@@ -353,7 +353,7 @@ define([
 											onExpandRow: function(index, row, $detail) {
 												var table = $('<table><thead><tr>' +
 													'<th>表决人</th>' +
-													'<th>表决意见</th>' +
+													'<th>表决状态</th>' +
 													'<th>表决时间</th>' +
 													'<th>附件</th>' +
 													'</tr></thead></table>')
