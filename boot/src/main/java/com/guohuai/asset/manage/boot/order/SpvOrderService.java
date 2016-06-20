@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.ghg.pay.api.SeqGenerator;
 import com.google.common.collect.Lists;
+import com.guohuai.asset.manage.boot.acct.books.document.SPVDocumentService;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolDao;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.investor.Investor;
@@ -57,6 +58,8 @@ public class SpvOrderService {
 	private AssetPoolDao assetPoolDao;
 	@Autowired
 	private AdminSdk adminSdk;
+	@Autowired
+	private SPVDocumentService spvDocumentService;
 	
 	/**
 	 * 获取指定oid的订单对象
@@ -251,6 +254,7 @@ public class SpvOrderService {
 					productDao.saveAndFlush(product);
 				}
 				assetPoolDao.saveAndFlush(assetPool);
+				spvDocumentService.redemption(assetPool.getOid(), investorOrder.getOid(), investorOrder.getOrderAmount(), avaibleAmount, payFee);
 			} else if(InvestorOrder.ORDER_TYPE_Invest.equals(investorOrder.getOrderType())) {
 				investorOrder.setOrderStatus(InvestorOrder.STATUS_Confirm);
 				investorOrder.setAuditor(operator);
@@ -285,6 +289,8 @@ public class SpvOrderService {
 					productDao.saveAndFlush(product);
 				}
 				assetPoolDao.saveAndFlush(assetPool);
+				
+				spvDocumentService.purchase(assetPool.getOid(), investorOrder.getOid(), investorOrder.getOrderAmount(), avaibleAmount, payFee);
 			}
 			
 		}
