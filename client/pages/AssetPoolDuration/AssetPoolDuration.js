@@ -3244,6 +3244,13 @@ function pageInit (pageState, http, config) {
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
+		if (detail.deviationValue < 0) {
+			$('#detailPoolProfit').removeClass('text-black')
+			$('#detailPoolProfit').addClass('text-red')
+		} else {
+			$('#detailPoolProfit').removeClass('text-red')
+			$('#detailPoolProfit').addClass('text-black')
+		}
 		$('#detailPoolProfit').html(detail.deviationValue)
 		
 		initPieChartAndBarChart(config, pageState)

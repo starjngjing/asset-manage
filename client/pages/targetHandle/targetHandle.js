@@ -208,10 +208,32 @@ define([
 							$('#summaryDetailModal').modal('show');
 						},
 						'click .item-report': function(e, value, row) {
-							location.href = 'http://api.guohuaigroup.com' + row.report
+							var key = {};
+							key.fkey = row.report;
+							var json = {
+								fkeys: []
+							};
+							json.fkeys.push(key);
+							http.post(config.api.files.pkg, {
+									data: JSON.stringify(json)
+								}, function(result) {
+									location.href = config.api.files.download + result.key
+								})
+								//							location.href = 'http://api.guohuaigroup.com' + row.report
 						},
 						'click .item-meeting': function(e, value, row) {
-							location.href = 'http://api.guohuaigroup.com' + row.meeting
+							var key = {};
+							key.fkey = row.meeting;
+							var json = {
+								fkeys: []
+							};
+							json.fkeys.push(key);
+							http.post(config.api.files.pkg, {
+									data: JSON.stringify(json)
+								}, function(result) {
+									location.href = config.api.files.download + result.key
+								})
+								//							location.href = 'http://api.guohuaigroup.com' + row.meeting
 						}
 					}
 				}]

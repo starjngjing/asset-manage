@@ -73,16 +73,18 @@ public class RiskWarningHandleService {
 			temp.setHandle(entity.getHandle());
 			temp.setCreateTime(entity.getCreateTime());
 			temp.setSummary(entity.getSummary());
-			if (!StringUtils.isEmpty(entity.getReport())) {
-				List<File> files = fileService.list(entity.getReport(), 1);
-				if (files != null && files.size() > 0)
-					temp.setReport(files.get(0).getFurl());
-			}
-			if (!StringUtils.isEmpty(entity.getMeeting())) {
-				List<File> files = fileService.list(entity.getMeeting(), 1);
-				if (files != null && files.size() > 0)
-					temp.setMeeting(files.get(0).getFurl());
-			}
+			temp.setReport(entity.getReport());
+//			if (!StringUtils.isEmpty(entity.getReport())) {
+//				List<File> files = fileService.list(entity.getReport(), 1);
+//				if (files != null && files.size() > 0)
+//					temp.setReport(files.get(0).getFurl());
+//			}
+			temp.setMeeting(entity.getMeeting());
+//			if (!StringUtils.isEmpty(entity.getMeeting())) {
+//				List<File> files = fileService.list(entity.getMeeting(), 1);
+//				if (files != null && files.size() > 0)
+//					temp.setMeeting(files.get(0).getFurl());
+//			}
 			Investment investment = investmentService.getInvestment(entity.getRiskWarningCollect().getRelative());
 			if (null != investment)
 				temp.setRelativeName(investment.getName());
