@@ -278,7 +278,7 @@ define([
 										} else {
 											data.setupDate = setDate
 										}
-										
+
 										$(document.updateProductForm.name).attr("data-fetch-id", data.oid)
 										$(document.updateProductForm.fullName).attr("data-fetch-id", data.oid)
 										$(document.updateProductForm.code).attr("data-fetch-id", data.oid)

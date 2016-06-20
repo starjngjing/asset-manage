@@ -1263,5 +1263,24 @@ public class ProductService {
 
 		return this.productDao.count(spec);
 	}
+	
+	/**
+	 * 查询某个资产下的未删除的产品
+	 * @param assetPoolOid
+	 * @return
+	 */
+	public List<Product> getProductListByAssetPoolOid(String assetPoolOid) {
+		
+		Specification<Product> spec = new Specification<Product>() {
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid),
+						cb.equal(root.get("isDeleted").as(String.class), Product.NO));
+			}
+		};
+		List<Product> products = productDao.findAll(spec);
+					
+		return products;
+	}
 
 }
