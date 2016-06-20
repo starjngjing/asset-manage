@@ -327,7 +327,7 @@
 							<div class="form-group">
 								<label>募集期收益</label>
 								<div class="input-group input-group-sm">
-									<input name="collectIncomeRate" type="text" class="form-control input-sm" placeholder="募集期收益" required data-validfloat="3.4" data-error="募集期收益必须为前2位后4位小数">
+									<input name="collectIncomeRate" type="text" class="form-control input-sm" placeholder="募集期收益" required data-validpositive="non-zero" data-validfloat="3.4" data-error="募集期收益必须为前2位后4位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -504,7 +504,7 @@
 							<div class="form-group">
 								<label>募集期收益</label>
 								<div class="input-group input-group-sm">
-									<input name="collectIncomeRate" type="text" class="form-control input-sm" placeholder="募集期收益" required data-validfloat="3.4" data-error="募集期收益必须为前2位后4位小数">
+									<input name="collectIncomeRate" type="text" class="form-control input-sm" placeholder="募集期收益" required data-validpositive="non-zero" data-validfloat="3.4" data-error="募集期收益必须为前2位后4位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -598,7 +598,7 @@
 							<div class="form-group">
 								<label>实际收益</label>
 								<div class="input-group input-group-sm">
-									<input name="incomeRate" type="text" class="form-control input-sm" placeholder="实际收益" required data-validfloat="3.4" data-error="实际收益必须为前2位后4位小数">
+									<input name="incomeRate" type="text" class="form-control input-sm" placeholder="实际收益" required data-validpositive="non-zero" data-validfloat="3.4" data-error="实际收益必须为前2位后4位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -791,7 +791,7 @@
 							<div class="form-group">
 								<label>逾期利率</label>
 								<div class="input-group input-group-sm">
-									<input name="overdueRate" type="text" class="form-control input-sm" placeholder="逾期利率" data-validfloat="2.4" data-error="逾期利率必须为前两位后四位小数">
+									<input name="overdueRate" type="text" class="form-control input-sm" placeholder="逾期利率" data-validpositive="non-zero" data-validfloat="2.4" data-error="逾期利率必须为前两位后四位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>

@@ -399,7 +399,7 @@ define([
 						'click .item-project-update': function(e, value, row) { // 底层项目修改
 							util.form.reset($('#projectForm')); // 先清理表单
 
-							$$.detailAutoFix($('#targetDetail'), targetInfo); // 自动填充详情
+							$$.detailAutoFix($('#targetDetail'), formatTargetData(targetInfo)); // 自动填充详情
 
 							// 给项目表单的 标的id属性赋值
 							$("#targetOid")[0].value = targetInfo.oid;
