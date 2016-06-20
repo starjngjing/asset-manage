@@ -323,14 +323,6 @@ public class Product implements Serializable {
 	 * 存续期结束日期
 	 */
 	private Date durationPeriodEndDate;
-	/**
-	 * 开放申购期
-	 */
-	private String isOpenPurchase;
-	/**
-	 * 开放赎回期
-	 */
-	private String isOpenRemeed;
 
 	/**
 	 * 产品清算（结束）日期
@@ -405,8 +397,14 @@ public class Product implements Serializable {
 	 */
 	private BigDecimal maxSaleVolume;
 
-	private String purchaseStatus;
-	private String redeemStatus;
+	/**
+	 * 开放申购期
+	 */
+	private String isOpenPurchase;
+	/**
+	 * 开放赎回期
+	 */
+	private String isOpenRemeed;
 	private String purchaseApplyStatus;
 	private String redeemApplyStatus;
 }

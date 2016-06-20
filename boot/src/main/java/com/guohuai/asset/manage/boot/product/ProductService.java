@@ -201,7 +201,7 @@ public class ProductService {
 			}
 		}
 
-		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
+		pb.purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
 
 		Product p = pb.build();
 		p = this.productDao.save(p);
@@ -354,7 +354,7 @@ public class ProductService {
 			}
 		}
 
-		pb.purchaseStatus("OFF").redeemStatus("OFF").purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
+		pb.purchaseApplyStatus("NONE").redeemApplyStatus("NONE").maxSaleVolume(BigDecimal.ZERO);
 
 		Product p = pb.build();
 		p = this.productDao.save(p);
