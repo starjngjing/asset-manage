@@ -13,4 +13,8 @@ public class DocumentForm {
 	private BigDecimal principal;
 	private BigDecimal estimate;
 	private BigDecimal revenue;
+	private BigDecimal market;
+	private BigDecimal saleable;
+	private BigDecimal chargefee;
+	private BigDecimal income;
 }

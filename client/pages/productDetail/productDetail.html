@@ -1,0 +1,195 @@
+<!-- 页面头部 -->
+<section class="content-header">
+	<h1>产品详情</h1>
+	<ol class="breadcrumb">
+		<li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 产品管理</a></li>
+		<li class="active">产品详情</li>
+	</ol>
+</section>
+
+<!-- 主要内容 -->
+<section class="content">
+	<div class="box box-primary">
+		<div class="box-body">
+			<div class="row">
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道标识：</dt>
+						<dd>
+							<div data-detail-fetch="channelId"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道名称：</dt>
+						<dd>
+							<div data-detail-fetch="channelName"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道费率(%)：</dt>
+						<dd>
+							<div data-detail-fetch="channelFee"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>接入方式：</dt>
+						<dd>
+							<div data-detail-fetch="joinType" data-enum-transform="joinTypes"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道机构：</dt>
+						<dd>
+							<div data-detail-fetch="partner"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道联系人：</dt>
+						<dd>
+							<div data-detail-fetch="channelContactName"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道联系人邮箱：</dt>
+						<dd>
+							<div data-detail-fetch="channelEmail"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道联系人电话：</dt>
+						<dd>
+							<div data-detail-fetch="channelPhone"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>渠道状态：</dt>
+						<dd>
+							<div data-detail-fetch="channelStatus" data-enum-transform="channelStatus"></div>
+						</dd>
+					</dl>
+				</div>
+
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>审核状态：</dt>
+						<dd>
+							<div data-detail-fetch="approvelStatus" data-enum-transform="approveStatus"></div>
+						</dd>
+					</dl>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<dl class="dl-horizontal">
+						<dt>删除状态：</dt>
+						<dd>
+							<div data-detail-fetch="deleteStatus" data-enum-transform="delStatus"></div>
+						</dd>
+					</dl>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<button class="btn btn-default btn-sm">运营申请</button>
+					<button class="btn btn-default btn-sm">可售份额申请</button>
+					<button class="btn btn-default btn-sm">发行渠道申请</button>
+					<button class="btn btn-default btn-sm">投资协议申请</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="nav-tabs-custom">
+		<!-- tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active">
+				<a href="#tabpanel1" role="tab" data-toggle="tab">运营申请</a>
+			</li>
+			<li role="presentation">
+				<a href="#tabpanel2" role="tab" data-toggle="tab">可售份额申请</a>
+			</li>
+			<li role="presentation">
+				<a href="#tabpanel3" role="tab" data-toggle="tab">发行渠道申请</a>
+			</li>
+			<li role="presentation">
+				<a href="#tabpanel4" role="tab" data-toggle="tab">投资协议申请</a>
+			</li>
+		</ul>
+		<!-- tab panels -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="tabpanel1">
+				<table id="aTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>序号</th>
+						<th>渠道名称</th>
+						<th>渠道审批编号</th>
+						<th>申请类型</th>
+						<th>申请人</th>
+						<th>申请时间</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="tabpanel2">
+				<table id="bTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>序号</th>
+						<th>渠道名称</th>
+						<th>渠道审批编号</th>
+						<th>申请类型</th>
+						<th>申请人</th>
+						<th>申请时间</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="tabpanel3">
+				<table id="cTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>序号</th>
+						<th>渠道名称</th>
+						<th>渠道审批编号</th>
+						<th>申请类型</th>
+						<th>申请人</th>
+						<th>申请时间</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="tabpanel4">
+				<table id="dTable" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>序号</th>
+						<th>渠道名称</th>
+						<th>渠道审批编号</th>
+						<th>申请类型</th>
+						<th>申请人</th>
+						<th>申请时间</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>

@@ -22,7 +22,7 @@ public class DocumentEntryController extends BaseController {
 	public @ResponseBody ResponseEntity<DocumentEntryPage> search(DocumentEntryForm form) {
 		super.checkLogin();
 
-		DocumentEntryPage ep = this.documentEntryService.search(form.getStartDate(), form.getEndDate(), form.getPage() - 1, form.getSize());
+		DocumentEntryPage ep = this.documentEntryService.search(form.getRelative(), form.getStartDate(), form.getEndDate(), form.getPage() - 1, form.getSize());
 
 		return new ResponseEntity<DocumentEntryPage>(ep, HttpStatus.OK);
 	}

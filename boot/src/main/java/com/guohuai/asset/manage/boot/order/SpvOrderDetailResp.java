@@ -48,7 +48,7 @@ public class SpvOrderDetailResp extends BaseResp {
 		this.entryStatusStr = InvestorOrderEnum.enums.get(io.getEntryStatus());//订单入账状态
 		
 		BigDecimal mv = io.getAccount().getAssetPool().getMarketValue();
-		BigDecimal av = io.getAccount().getBalance().subtract(io.getAccount().getFreeze());
+		BigDecimal av = io.getAccount().getBalance().subtract(io.getAccount().getFreeze()).add(io.getOrderAmount());
 		if(mv==null) {
 			mv = new BigDecimal(0);
 		}
@@ -56,6 +56,9 @@ public class SpvOrderDetailResp extends BaseResp {
 			this.reemAmount = ProductDecimalFormat.format(ProductDecimalFormat.divide(av, 10000), "0.######");
 		} else {
 			this.reemAmount = ProductDecimalFormat.format(ProductDecimalFormat.divide(mv, 10000), "0.######");
+		}
+		if(!"0".equals(this.reemAmount)) {
+			this.reemAmountStr = this.reemAmount+"万元";
 		}
 		
 	}
@@ -78,6 +81,7 @@ public class SpvOrderDetailResp extends BaseResp {
 	private String productName;//产品名称
 	
 	private String reemAmount;//可赎回金额
+	private String reemAmountStr;//可赎回金额
 	private String orderAmountStr;//订单金额
 	private String orderTypeStr;//交易类型
 	private String orderCateStr;//订单类型

@@ -19,9 +19,18 @@ public class TrustIncomeForm implements Serializable {
 	/**
 	 * 初始化数值
 	 */
+	public static final BigDecimal init0 	= BigDecimal.ZERO;
 	public static final BigDecimal NUM100 	= new BigDecimal(100);
 	public static final BigDecimal NUM10000 = new BigDecimal(10000);
 	public static final BigDecimal NUM365 	= new BigDecimal(365);
+	
+	public TrustIncomeForm() {
+		this.capital = init0;
+		this.expIncomeRate = init0;
+		this.expIncome = init0;
+		this.incomeRate = init0;
+		this.income = init0;
+	}
 
 	// 兑付期数
 	private int seq;

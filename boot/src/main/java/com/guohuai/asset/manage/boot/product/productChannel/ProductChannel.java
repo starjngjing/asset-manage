@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.guohuai.asset.manage.boot.channel.Channel;
 import com.guohuai.asset.manage.boot.product.Product;
+import com.guohuai.asset.manage.boot.product.order.channel.ProductChannelOrder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,9 @@ public class ProductChannel implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="channelOid")
 	private Channel  channel;//渠道
+	@ManyToOne
+	@JoinColumn(name="orderOid")
+	private ProductChannelOrder order;
 	private String operator;//申请人
 	private Timestamp updateTime;
 	private Timestamp createTime;//申请渠道销售时间

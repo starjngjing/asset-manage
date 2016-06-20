@@ -92,7 +92,7 @@ public class SettlementDocumentService {
 		e1_1001.setCrAmount(BigDecimal.ZERO);
 		e1_1001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_1001 = this.accountBookService.drCredit(b_1001, amount);
+		b_1001 = this.accountBookService.incrCredit(b_1001, amount);
 		seq++;
 
 		// 贷 应收投资结算款 1301
@@ -107,7 +107,7 @@ public class SettlementDocumentService {
 		e2_1301.setCrAmount(amount);
 		e2_1301.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1301 = this.accountBookService.crCredit(b_1301, amount);
+		b_1301 = this.accountBookService.decrCredit(b_1301, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -160,7 +160,7 @@ public class SettlementDocumentService {
 		e1_2001.setCrAmount(BigDecimal.ZERO);
 		e1_2001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_2001 = this.accountBookService.crCredit(b_2001, amount);
+		b_2001 = this.accountBookService.decrCredit(b_2001, amount);
 		seq++;
 
 		// 贷 银行存款 1001
@@ -175,7 +175,7 @@ public class SettlementDocumentService {
 		e2_1001.setCrAmount(amount);
 		e2_1001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1001 = this.accountBookService.crCredit(b_1001, amount);
+		b_1001 = this.accountBookService.decrCredit(b_1001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);

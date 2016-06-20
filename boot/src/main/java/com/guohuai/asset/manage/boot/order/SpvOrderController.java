@@ -10,8 +10,6 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.guohuai.asset.manage.component.web.view.BaseResp;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -27,7 +25,6 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.guohuai.asset.manage.boot.product.ProductDetailResp;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.PageResp;
@@ -48,10 +45,10 @@ public class SpvOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<BaseResp> saveInvestorOrder(@Valid SaveSpvOrderForm form) throws ParseException {
+	public ResponseEntity<SpvOrderResp> saveInvestorOrder(@Valid SaveSpvOrderForm form) throws ParseException {
 		String operator = super.getLoginAdmin();
-		BaseResp repponse = this.spvOrderService.saveSpvOrder(form, operator);
-		return new ResponseEntity<BaseResp>(repponse, HttpStatus.OK);
+		InvestorOrder investorOrder = this.spvOrderService.saveSpvOrder(form, operator);
+		return new ResponseEntity<SpvOrderResp>(new SpvOrderResp(investorOrder), HttpStatus.OK);
 	}
 	
 	/**
@@ -74,9 +71,9 @@ public class SpvOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "/confirm", method = {RequestMethod.POST,RequestMethod.DELETE})
 	@ResponseBody
-	public ResponseEntity<SpvOrderResp> confirm(@RequestParam String oid) {
+	public ResponseEntity<SpvOrderResp> confirm(@Valid AuditSpvOrderForm form) {
 		String operator = super.getLoginAdmin();
-		InvestorOrder investorOrder = this.spvOrderService.confirm(oid, operator);
+		InvestorOrder investorOrder = this.spvOrderService.confirm(form, operator);
 		return new ResponseEntity<SpvOrderResp>(new SpvOrderResp(investorOrder), HttpStatus.OK);
 	}
 	

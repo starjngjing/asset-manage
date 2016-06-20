@@ -21,9 +21,6 @@ public class RiskOptionsForm {
 	private String indicateOid;
 	private String indicateTitle;
 	private String indicateDataType;
-	@NotNull
-	@NotEmpty
-	@NotBlank
 	@Digits(integer = 4, fraction = 0)
 	private int dftScore;
 	private List<Option> options;
@@ -32,10 +29,8 @@ public class RiskOptionsForm {
 	public static class Option {
 
 		@NotNull
-		@NotBlank
-		@NotEmpty
 		@Digits(integer = 4, fraction = 0)
-		private int score;
+		private Integer score;
 		private String param0;
 		private String param1;
 		private String param2;

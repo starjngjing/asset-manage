@@ -51,6 +51,14 @@ public class DocTemplateService {
 
 		}
 
+		spec = Specifications.where(spec).and(new Specification<DocTemplate>() {
+
+			@Override
+			public Predicate toPredicate(Root<DocTemplate> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.get("state").as(String.class), DocTemplate.STATE_Enable);
+			}
+		});
+
 		Pageable pageable = new PageRequest(page, size, Direction.ASC, "oid");
 
 		return this.docTemplateDao.findAll(spec, pageable);

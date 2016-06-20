@@ -8,11 +8,14 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.hsqldb.lib.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -26,11 +29,23 @@ public class DocumentService {
 	private DocumentDao documentDao;
 
 	@Transactional
-	public Page<Document> search(Date startDate, Date endDate, int page, int size) {
+	public Page<Document> search(String relative, Date startDate, Date endDate, int page, int size) {
 
-		Pageable pageable = new PageRequest(page, size, Direction.DESC, "updateTime");
+		Pageable pageable = new PageRequest(page, size, new Sort(new Order(Direction.DESC, "updateTime"), new Order(Direction.DESC, "acctSn")));
 
 		Specification<Document> spec = null;
+
+		if (!StringUtil.isEmpty(relative)) {
+			Specification<Document> q = new Specification<Document>() {
+
+				@Override
+				public Predicate toPredicate(Root<Document> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+					return cb.equal(root.get("relative").as(String.class), relative);
+				}
+			};
+			spec = q;
+		}
 
 		if (null != startDate) {
 			Specification<Document> q = new Specification<Document>() {
@@ -40,7 +55,11 @@ public class DocumentService {
 					return cb.greaterThanOrEqualTo(root.get("acctDate").as(Date.class), startDate);
 				}
 			};
-			spec = Specifications.where(spec).and(q);
+			if (null != spec) {
+				spec = Specifications.where(spec).and(q);
+			} else {
+				spec = q;
+			}
 		}
 
 		if (null != endDate) {

@@ -46,6 +46,7 @@ define(function() {
 			productAuditList: this.host + "/ams/product/audit/list", //查询产品审核列表
 			productCheckList: this.host + "/ams/product/check/list", //查询产品复核列表
 			productApproveList: this.host + "/ams/product/approve/list", //查询产品批准列表
+			productDurationList: this.host + "/ams/product/duration/list", // 查询产品运营列表
 			savePeriodic: this.host + "/ams/product/save/periodic", //新加定期产品
 			saveCurrent: this.host + "/ams/product/save/current", //新加活期产品
 			updatePeriodic: this.host + "/ams/product/update/periodic", //更新定期产品
@@ -131,6 +132,13 @@ define(function() {
 						}
 					},
 					balance: this.host + '/ams/acct/books/balance'
+				}
+			},
+			invest: { // 持有人信息
+				manager: {
+					accountList: '/ams/boot/inverstorManager/accountList', // 持有人名录					
+					holdList: '/ams/boot/inverstorManager/holdList', // 持有人名录持有份额列表					
+					orderList: '/ams/boot/inverstorManager/orderList', // 持有人名录订单列表					
 				}
 			},
 			system: {
@@ -256,6 +264,16 @@ define(function() {
 					delete: this.host + '/ams/duration/order/updateOrder',
 					updateFund: this.host + '/ams/duration/order/updateFund', // 纠偏持有额度
 					updateTrust: this.host + '/ams/duration/order/updateTrust', // 纠偏持有额度
+				},
+				market: { // 市值
+					getMarketAdjustData: this.host + '/ams/duration/market/getMarketAdjustData', // 市值校准录入 详情表单
+					saveMarketAdjust: this.host + '/ams/duration/market/saveMarketAdjust', // 市值校准录入
+					getMarketAdjust: this.host + '/ams/duration/market/getMarketAdjust', // 市值校准记录详情
+					auditMarketAdjust: this.host + '/ams/duration/market/auditMarketAdjust', // 市值校准录入审核
+					getMarketAdjustStuts: this.host + '/ams/duration/market/getMarketAdjustStuts', // 查询当天的订单状态
+					deleteMarketAdjust: this.host + '/ams/duration/market/deleteMarketAdjust', // 市值校准录入删除
+					getMarketAdjustList: this.host + '/ams/duration/market/getMarketAdjustList', // 市值校准记录 列表
+					getYield: this.host + '/ams/duration/market/getYield', // 收益率 列表
 				}
 			},
 			role: {
@@ -275,6 +293,9 @@ define(function() {
 			},
 			auth: {
 				list: this.host + '/operate/admin/ctrl/auth/list' // 权限列表
+			},
+			menu: {
+				load: this.host + '/operate/system/menu/load',	// 菜单-加载菜单数据
 			},
 			spvOrderList: this.host + "/ams/spv/order/list", //spv订单列表
 			spvOrderDetail: this.host + "/ams/spv/order/detail", //spv订单列表
@@ -584,6 +605,56 @@ define(function() {
 		}, {
 			id: "DOWN",
 			text: "风险降级",
+		}],
+		investorType:[{ // 持有人类型
+			id: "SPV",
+			text: "SPV",
+		}, {
+			id: "INVESTOR",
+			text: "零售投资人",
+		}],
+		investorOrderType:[{ // 持有人订单交易类型
+			id: "INVEST",
+			text: "申购",
+		}, {
+			id: "REDEEM",
+			text: "赎回",
+		}, {
+			id: "BUY_IN",
+			text: "买入",
+		}, {
+			id: "PART_SELL_OUT",
+			text: "部分卖出",
+		}, {
+			id: "FULL_SELL_OUT",
+			text: "全部卖出",
+		}],
+		investorOrderCate:[{ // 持有人订单Cate
+			id: "TRADE",
+			text: "交易订单",
+		}, {
+			id: "STRIKE",
+			text: "冲账订单",
+		}],
+		investorOrderStatus:[{ // 持有人订单状态
+			id: "SUBMIT",
+			text: "未确认",
+		}, {
+			id: "CONFIRM",
+			text: "确认",
+		}, {
+			id: "DISABLE",
+			text: "失败",
+		}, {
+			id : "CALCING",
+			text: "清算中",
+		}],
+		investorOrderEntryStatus:[{ // 持有人订单入账状态
+			id: "NO",
+			text: "未入账",
+		}, {
+			id: "YES",
+			text: "已入账",
 		}],
 		/**
 		 * 图标所用到的主题颜色

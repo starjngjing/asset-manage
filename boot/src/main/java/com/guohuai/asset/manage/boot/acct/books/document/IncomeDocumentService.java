@@ -52,7 +52,7 @@ public class IncomeDocumentService {
 	private AccountService accountService;
 	@Autowired
 	private AccountBookService accountBookService;
-	
+
 	public enum IncomeType {
 		DEPOSIT, // 银行存款
 		TARGET, // 投资标的
@@ -129,7 +129,7 @@ public class IncomeDocumentService {
 			e1_2201.setCrAmount(BigDecimal.ZERO);
 			e1_2201.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(wipe));
-			b_2201 = this.accountBookService.crCredit(b_2201, wipe);
+			b_2201 = this.accountBookService.decrCredit(b_2201, wipe);
 			seq++;
 
 			// 贷 应收投资收益
@@ -144,7 +144,7 @@ public class IncomeDocumentService {
 			e1_1201.setCrAmount(wipe);
 			e1_1201.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(wipe));
-			b_1201 = this.accountBookService.crCredit(b_1201, wipe);
+			b_1201 = this.accountBookService.decrCredit(b_1201, wipe);
 			seq++;
 
 			document = this.documentDao.save(document);
@@ -197,7 +197,7 @@ public class IncomeDocumentService {
 		e1_1001.setCrAmount(BigDecimal.ZERO);
 		e1_1001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(income));
-		b_1001 = this.accountBookService.drCredit(b_1001, income);
+		b_1001 = this.accountBookService.incrCredit(b_1001, income);
 		seq++;
 
 		// 贷 未分配收益
@@ -212,7 +212,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.crCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -263,7 +263,7 @@ public class IncomeDocumentService {
 		e1_110101.setCrAmount(BigDecimal.ZERO);
 		e1_110101.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(income));
-		b_110101 = this.accountBookService.drCredit(b_110101, income);
+		b_110101 = this.accountBookService.incrCredit(b_110101, income);
 		seq++;
 
 		// 贷 未分配收益
@@ -278,7 +278,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.crCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -329,7 +329,7 @@ public class IncomeDocumentService {
 		e1_110151.setCrAmount(BigDecimal.ZERO);
 		e1_110151.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(income));
-		b_110151 = this.accountBookService.drCredit(b_110151, income);
+		b_110151 = this.accountBookService.incrCredit(b_110151, income);
 		seq++;
 
 		// 贷 未分配收益
@@ -344,7 +344,7 @@ public class IncomeDocumentService {
 		e2_2201.setCrAmount(income);
 		e2_2201.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(income));
-		b_2201 = this.accountBookService.crCredit(b_2201, income);
+		b_2201 = this.accountBookService.incrCredit(b_2201, income);
 		seq++;
 
 		document = this.documentDao.save(document);

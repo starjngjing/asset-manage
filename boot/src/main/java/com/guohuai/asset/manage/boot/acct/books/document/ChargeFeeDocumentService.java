@@ -104,7 +104,7 @@ public class ChargeFeeDocumentService {
 		e1_2201.setCrAmount(BigDecimal.ZERO);
 		e1_2201.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(charges));
-		b_2201 = this.accountBookService.crCredit(b_2201, charges);
+		b_2201 = this.accountBookService.decrCredit(b_2201, charges);
 		seq++;
 		entries.add(e1_2201);
 
@@ -120,7 +120,7 @@ public class ChargeFeeDocumentService {
 		e2_2301.setCrAmount(charges);
 		e2_2301.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(charges));
-		b_2301 = this.accountBookService.drCredit(b_2301, charges);
+		b_2301 = this.accountBookService.incrCredit(b_2301, charges);
 		seq++;
 		entries.add(e2_2301);
 
@@ -138,7 +138,7 @@ public class ChargeFeeDocumentService {
 			e3_1201.setCrAmount(BigDecimal.ZERO);
 			e3_1201.setSeq(seq);
 			document.setDrAmount(document.getDrAmount().add(wipe));
-			b_1201 = this.accountBookService.drCredit(b_1201, wipe);
+			b_1201 = this.accountBookService.incrCredit(b_1201, wipe);
 			seq++;
 			entries.add(e3_1201);
 
@@ -154,7 +154,7 @@ public class ChargeFeeDocumentService {
 			e4_2301.setCrAmount(wipe);
 			e4_2301.setSeq(seq);
 			document.setCrAmount(document.getCrAmount().add(wipe));
-			b_2301 = this.accountBookService.drCredit(b_2301, wipe);
+			b_2301 = this.accountBookService.incrCredit(b_2301, wipe);
 			seq++;
 			entries.add(e4_2301);
 		}
@@ -220,7 +220,7 @@ public class ChargeFeeDocumentService {
 		e1_2301.setCrAmount(BigDecimal.ZERO);
 		e1_2301.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_2301 = this.accountBookService.crCredit(b_2301, amount);
+		b_2301 = this.accountBookService.decrCredit(b_2301, amount);
 		seq++;
 
 		// 贷 银行存款 1001
@@ -235,7 +235,7 @@ public class ChargeFeeDocumentService {
 		e2_1001.setCrAmount(amount);
 		e2_1001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_1001 = this.accountBookService.crCredit(b_1001, amount);
+		b_1001 = this.accountBookService.decrCredit(b_1001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);

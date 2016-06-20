@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.order;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.sql.Date;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.ghg.pay.api.SeqGenerator;
+import com.google.common.collect.Lists;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolDao;
 import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolEntity;
 import com.guohuai.asset.manage.boot.investor.Investor;
@@ -25,7 +27,6 @@ import com.guohuai.asset.manage.boot.product.ProductDetailResp;
 import com.guohuai.asset.manage.component.exception.AMPException;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
-import com.guohuai.asset.manage.component.web.view.BaseResp;
 import com.guohuai.asset.manage.component.web.view.PageResp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,9 +69,7 @@ public class SpvOrderService {
 		
 	}
 	
-	public BaseResp saveSpvOrder(SaveSpvOrderForm form, String operator) {
-		BaseResp response = new BaseResp();
-		
+	public InvestorOrder saveSpvOrder(SaveSpvOrderForm form, String operator) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		
 		AssetPoolEntity assetPool = assetPoolDao.findOne(form.getAssetPoolOid());
@@ -86,7 +85,7 @@ public class SpvOrderService {
 		
 		/***************持有人 start************/
 		Investor investor = investorDao.findByType(Investor.TYPE_Spv);
-		InvestorAccount investorAccount = null;
+		InvestorAccount oldInvestorAccount = null;
 		
 		if(investor != null) {
 			final String investorOid = investor.getOid();
@@ -98,11 +97,11 @@ public class SpvOrderService {
 							cb.equal(root.get("status").as(String.class), InvestorAccount.STATUS_Enable));
 				}
 			};
-			investorAccount = investorAccountDao.findOne(iaSpec);
+			oldInvestorAccount = investorAccountDao.findOne(iaSpec);
 			
 		}
 		if(InvestorOrder.ORDER_TYPE_Redeem.equals(form.getOrderType())) {//判断能否赎回
-			if(investor == null || investorAccount == null) {
+			if(investor == null || oldInvestorAccount == null) {
 				throw AMPException.getException(100001);
 			}
 //			if(investorAccount.getBalance().add(investorAccount.getCompound()).subtract(investorAccount.getApplyRedeem()).compareTo(new BigDecimal(form.getOrderAmount()))<0) {
@@ -124,21 +123,27 @@ public class SpvOrderService {
 			investorDao.saveAndFlush(investor);
 		}
 		
-		if(investorAccount == null) {
+		InvestorAccount investorAccount = null;
+		if(oldInvestorAccount == null) {
 			investorAccount = new InvestorAccount();
 			investorAccount.setOid(StringUtil.uuid());
 			investorAccount.setAssetPool(assetPool);
 			investorAccount.setProduct(product);
 			investorAccount.setInvestor(investor);
 			investorAccount.setStatus(InvestorAccount.STATUS_Enable);
-			investorAccount.setFreeze(ProductDecimalFormat.multiply(new BigDecimal(form.getOrderAmount()), 10000));
+			if(InvestorOrder.ORDER_TYPE_Redeem.equals(form.getOrderType())) {
+				investorAccount.setFreeze(ProductDecimalFormat.multiply(new BigDecimal(form.getOrderAmount()), 10000));
+			}
 			investorAccount.setCreateTime(now);
 			investorAccount.setUpdateTime(now);
 			investorAccountDao.save(investorAccount);
 		} else {
+			investorAccount = investorAccountDao.findOne(oldInvestorAccount.getOid());
 			investorAccount.setProduct(product);
 			investorAccount.setStatus(InvestorAccount.STATUS_Enable);
-			investorAccount.setFreeze(investorAccount.getFreeze().add(ProductDecimalFormat.multiply(new BigDecimal(form.getOrderAmount()), 10000)));
+			if(InvestorOrder.ORDER_TYPE_Redeem.equals(form.getOrderType())) {
+				investorAccount.setFreeze(investorAccount.getFreeze().add(ProductDecimalFormat.multiply(new BigDecimal(form.getOrderAmount()), 10000)));
+			}
 			investorAccount.setUpdateTime(now);
 			investorAccountDao.saveAndFlush(investorAccount);
 		}
@@ -160,7 +165,7 @@ public class SpvOrderService {
 		investorOrder.setUpdateTime(now);
 		investorOrderDao.save(investorOrder);
 		
-		return response;
+		return investorOrder;
 	}
 	
 	public InvestorOrder delete(String oid, String operator) {
@@ -182,42 +187,118 @@ public class SpvOrderService {
 		return investorOrder;
 	}
 	
-	public InvestorOrder confirm(String oid, String operator) {
+	public InvestorOrder confirm(AuditSpvOrderForm form, String operator) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		
-		InvestorOrder investorOrder = this.getSpvOrderById(oid);
-		investorOrder.setOrderStatus(InvestorOrder.STATUS_Confirm);
-		investorOrder.setAuditor(operator);
-		investorOrder.setCompleteTime(now);
-		investorOrder.setUpdateTime(now);
-		investorOrderDao.saveAndFlush(investorOrder);
+		InvestorOrder investorOrder = this.getSpvOrderById(form.getOid());
+		
+		BigDecimal avaibleAmount = ProductDecimalFormat.multiply(new BigDecimal(form.getAvaibleAmount()), 10000);
+		BigDecimal payFee = ProductDecimalFormat.multiply(new BigDecimal(form.getPayFee()), 10000);
+		
+		if(investorOrder.getOrderAmount().compareTo(avaibleAmount.add(payFee))!=0) {
+			throw AMPException.getException(100004);
+		}
 		
 		InvestorAccount investorAccount = null;
 		if(investorOrder.getAccount()!=null) {
 			investorAccount = investorAccountDao.findOne(investorOrder.getAccount().getOid());
-//			if(InvestorOrder.ORDER_TYPE_Redeem.equals(investorOrder.getOrderType())) {
-//				investorAccount.setApplyRedeem(investorAccount.getApplyRedeem().subtract(investorOrder.getOrderAmount()));
-//				investorAccount.setBalance(investorAccount.getBalance().subtract(investorOrder.getOrderAmount()));
-//			} else if(InvestorOrder.ORDER_TYPE_Invest.equals(investorOrder.getOrderType())) {
-//				investorAccount.setApplyInvest(investorAccount.getApplyInvest().subtract(investorOrder.getOrderAmount()));
-//				investorAccount.setBalance(investorAccount.getBalance().add(investorOrder.getOrderAmount()));
-//			}
-			investorAccount.setUpdateTime(now);
-			investorAccountDao.saveAndFlush(investorAccount);
+			if(InvestorOrder.ORDER_TYPE_Redeem.equals(investorOrder.getOrderType())) {
+				AssetPoolEntity assetPool = assetPoolDao.findOne(investorOrder.getAccount().getAssetPool().getOid());
+				
+				BigDecimal mv = assetPool.getMarketValue();
+				BigDecimal av = investorAccount.getBalance().subtract(investorAccount.getFreeze());
+				if(mv==null) {
+					mv = new BigDecimal(0);
+				}
+				BigDecimal reemAmount = new BigDecimal(0);
+				if(mv.compareTo(av)>0) {
+					reemAmount = av;
+				} else {
+					reemAmount = mv;
+				}
+				if(avaibleAmount.compareTo(reemAmount)>0) {
+					throw AMPException.getException(100003);
+				}
+				
+				investorOrder.setOrderStatus(InvestorOrder.STATUS_Confirm);
+				investorOrder.setAuditor(operator);
+				investorOrder.setCompleteTime(now);
+				investorOrder.setUpdateTime(now);
+				investorOrder.setPayFee(investorOrder.getPayFee().add(payFee));
+				
+				investorAccount.setFreeze(investorAccount.getFreeze().subtract(investorOrder.getOrderAmount()));
+				investorAccount.setBalance(investorAccount.getBalance().subtract(avaibleAmount));
+				investorAccount.setUpdateTime(now);
+				
+				
+				assetPool.setMarketValue(assetPool.getMarketValue().subtract(avaibleAmount));
+				assetPool.setUpdateTime(now);
+				
+				Product product = null;
+				if(investorOrder.getAccount().getProduct()!=null) {
+					product = productDao.findOne(investorOrder.getAccount().getProduct().getOid());
+					product.setRaisedTotalNumber(product.getRaisedTotalNumber().subtract(avaibleAmount));
+					product.setUpdateTime(now);
+				}
+				
+				investorOrderDao.saveAndFlush(investorOrder);
+				investorAccountDao.saveAndFlush(investorAccount);
+				
+				if(product!=null) {
+					productDao.saveAndFlush(product);
+				}
+				assetPoolDao.saveAndFlush(assetPool);
+			} else if(InvestorOrder.ORDER_TYPE_Invest.equals(investorOrder.getOrderType())) {
+				investorOrder.setOrderStatus(InvestorOrder.STATUS_Confirm);
+				investorOrder.setAuditor(operator);
+				investorOrder.setCompleteTime(now);
+				investorOrder.setUpdateTime(now);
+				investorOrder.setPayFee(investorOrder.getPayFee().add(payFee));
+				
+				investorAccount.setBalance(investorAccount.getBalance().add(avaibleAmount));
+				investorAccount.setUpdateTime(now);
+				
+				AssetPoolEntity assetPool = assetPoolDao.findOne(investorOrder.getAccount().getAssetPool().getOid());
+				if(assetPool.getMarketValue()==null) {
+					assetPool.setMarketValue(new BigDecimal(0));
+				}
+				assetPool.setMarketValue(assetPool.getMarketValue().add(avaibleAmount));
+				assetPool.setUpdateTime(now);
+				
+				Product product = null;
+				if(investorOrder.getAccount().getProduct()!=null) {
+					product = productDao.findOne(investorOrder.getAccount().getProduct().getOid());
+					if(product.getRaisedTotalNumber()==null) {
+						product.setRaisedTotalNumber(new BigDecimal(0));
+					}
+					product.setRaisedTotalNumber(product.getRaisedTotalNumber().add(avaibleAmount));
+					product.setUpdateTime(now);
+				}
+				
+				investorOrderDao.saveAndFlush(investorOrder);
+				investorAccountDao.saveAndFlush(investorAccount);
+				
+				if(product!=null) {
+					productDao.saveAndFlush(product);
+				}
+				assetPoolDao.saveAndFlush(assetPool);
+			}
+			
 		}
 					
 		return investorOrder;
 	}
 	
+	
 	public BigDecimal reemAmount(String assetPoolOid) {
-		Specification<InvestorAccount> iaSpec = new Specification<InvestorAccount>() {
-			@Override
-			public Predicate toPredicate(Root<InvestorAccount> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid),
-						cb.equal(root.get("status").as(String.class), InvestorAccount.STATUS_Enable));
-			}
-		};
-		InvestorAccount investorAccount = investorAccountDao.findOne(iaSpec);
+//		Specification<InvestorAccount> iaSpec = new Specification<InvestorAccount>() {
+//			@Override
+//			public Predicate toPredicate(Root<InvestorAccount> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid),
+//						cb.equal(root.get("status").as(String.class), InvestorAccount.STATUS_Enable));
+//			}
+//		};
+//		InvestorAccount investorAccount = investorAccountDao.findOne(iaSpec);
 //		if(investorAccount!=null) {
 //			return investorAccount.getBalance().add(investorAccount.getCompound()).subtract(investorAccount.getApplyRedeem());
 //		}
@@ -327,6 +408,33 @@ public class SpvOrderService {
 			spvOrderRep.setAuditor(adminObjMap.get(order.getAuditor()).getName());
 		}
 		return spvOrderRep;
+	}
+	
+	/**
+	 * 查询满足条件的订单列表，计算资产池的实际市值
+	 * @param pid
+	 * 			资产池id
+	 * @param baseDate
+	 * 			基准日
+	 * @author star
+	 * @return
+	 */
+	public List<Object[]> getListForMarketAdjust(String pid, Date baseDate) {
+		List<InvestorOrder> list = investorOrderDao.getListForMarketAdjust(pid, baseDate);
+		if (null != list && !list.isEmpty()) {
+			List<Object[]> objList = Lists.newArrayList();
+			Object[] obj = null;
+			for (InvestorOrder order : list) {
+				obj = new Object[3];
+				obj[0] = order.getOid();
+				obj[1] = order.getOrderType();
+				obj[2] = order.getOrderAmount();
+				objList.add(obj);
+			}
+			return objList;
+		}
+		
+		return null;
 	}
 
 }

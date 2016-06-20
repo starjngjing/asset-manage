@@ -92,7 +92,7 @@ public class ClearingDocumentService {
 		e1_1301.setCrAmount(BigDecimal.ZERO);
 		e1_1301.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_1301 = this.accountBookService.drCredit(b_1301, amount);
+		b_1301 = this.accountBookService.incrCredit(b_1301, amount);
 		seq++;
 
 		// 贷 所有者权益 3001
@@ -107,7 +107,7 @@ public class ClearingDocumentService {
 		e2_3001.setCrAmount(amount);
 		e2_3001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_3001 = this.accountBookService.drCredit(b_3001, amount);
+		b_3001 = this.accountBookService.incrCredit(b_3001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);
@@ -160,7 +160,7 @@ public class ClearingDocumentService {
 		e1_3001.setCrAmount(BigDecimal.ZERO);
 		e1_3001.setSeq(seq);
 		document.setDrAmount(document.getDrAmount().add(amount));
-		b_3001 = this.accountBookService.crCredit(b_3001, amount);
+		b_3001 = this.accountBookService.decrCredit(b_3001, amount);
 		seq++;
 
 		// 贷 应付投资结算款 2001
@@ -175,7 +175,7 @@ public class ClearingDocumentService {
 		e2_2001.setCrAmount(amount);
 		e2_2001.setSeq(seq);
 		document.setCrAmount(document.getCrAmount().add(amount));
-		b_2001 = this.accountBookService.drCredit(b_2001, amount);
+		b_2001 = this.accountBookService.incrCredit(b_2001, amount);
 		seq++;
 
 		document = this.documentDao.save(document);

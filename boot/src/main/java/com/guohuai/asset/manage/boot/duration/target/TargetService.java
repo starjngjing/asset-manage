@@ -357,6 +357,6 @@ public class TargetService {
 			}
 		}
 		
-		return formList.size() > no ? formList.get(no) : new TrustIncomeForm();
+		return formList.size() > no ? formList.get(no) : null;
 	}
 }

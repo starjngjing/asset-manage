@@ -2,6 +2,7 @@ package com.guohuai.asset.manage.boot.acct.books;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.boot.acct.account.Account;
+import com.guohuai.asset.manage.boot.acct.account.AccountComparator;
 import com.guohuai.asset.manage.boot.acct.account.AccountService;
 import com.guohuai.asset.manage.component.util.StringUtil;
 
@@ -76,26 +78,26 @@ public class AccountBookService {
 	}
 
 	@Transactional
-	public AccountBook drCredit(AccountBook book, BigDecimal cash) {
+	public AccountBook incrCredit(AccountBook book, BigDecimal cash) {
 		book.setBalance(book.getBalance().add(cash));
 		book = this.accountBookDao.save(book);
 
 		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
 			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
-			this.drCredit(parent, cash);
+			this.incrCredit(parent, cash);
 		}
 
 		return book;
 	}
 
 	@Transactional
-	public AccountBook crCredit(AccountBook book, BigDecimal cash) {
+	public AccountBook decrCredit(AccountBook book, BigDecimal cash) {
 		book.setBalance(book.getBalance().subtract(cash));
 		book = this.accountBookDao.save(book);
 
 		if (!StringUtil.isEmpty(book.getAccount().getParent())) {
 			AccountBook parent = this.safeGet(book.getRelative(), this.accountService.get(book.getAccount().getParent()));
-			this.crCredit(parent, cash);
+			this.decrCredit(parent, cash);
 		}
 
 		return book;
@@ -103,9 +105,22 @@ public class AccountBookService {
 
 	@Transactional
 	public List<AccountBookBalance> balance() {
-		LinkedList<AccountBookBalance> result = new LinkedList<AccountBookBalance>();
-
 		List<AccountBook> bs = this.accountBookDao.search();
+		return this.balance(bs);
+	}
+
+	@Transactional
+	public List<AccountBookBalance> balance(String relative) {
+		if (StringUtil.isEmpty(relative)) {
+			return this.balance();
+		}
+		List<AccountBook> bs = this.accountBookDao.search(relative);
+		return this.balance(bs);
+	}
+
+	@Transactional
+	public List<AccountBookBalance> balance(List<AccountBook> bs) {
+		LinkedList<AccountBookBalance> result = new LinkedList<AccountBookBalance>();
 
 		LinkedHashMap<String, Account> laccount = new LinkedHashMap<String, Account>();
 		Map<String, BigDecimal> lbalance = new HashMap<String, BigDecimal>();
@@ -153,6 +168,30 @@ public class AccountBookService {
 			}
 		}
 
+		// 补充默认账户
+		List<Account> accounts = this.accountService.search();
+		if (null != accounts && accounts.size() > 0) {
+			for (Account a : accounts) {
+				if (a.getType().equals(Account.TYPE_Assets)) {
+					if (!laccount.containsKey(a.getOid())) {
+						laccount.put(a.getOid(), a);
+					}
+					if (!lbalance.containsKey(a.getOid())) {
+						lbalance.put(a.getOid(), BigDecimal.ZERO);
+					}
+				}
+				if (a.getType().equals(Account.TYPE_Equity) || a.getType().equals(Account.TYPE_Liability)) {
+					if (!raccount.containsKey(a.getOid())) {
+						raccount.put(a.getOid(), a);
+					}
+					if (!rbalance.containsKey(a.getOid())) {
+						rbalance.put(a.getOid(), BigDecimal.ZERO);
+					}
+				}
+
+			}
+		}
+
 		// 初始化 result 表
 		for (int i = 0; i < Math.max(laccount.size(), raccount.size()); i++) {
 			result.add(new AccountBookBalance());
@@ -162,31 +201,47 @@ public class AccountBookService {
 		AtomicInteger lindex = new AtomicInteger(0);
 		AtomicInteger rindex = new AtomicInteger(0);
 
+		List<Account> llist = new ArrayList<Account>();
+
 		laccount.forEach(new BiConsumer<String, Account>() {
 
 			@Override
 			public void accept(String t, Account u) {
-				AccountBookBalance bb = result.get(lindex.getAndIncrement());
-				bb.setLcode(u.getCode());
-				bb.setLname(u.getName());
-				bb.setLsn(String.valueOf(index.getAndIncrement()));
-				bb.setLbalance(lbalance.get(t));
+				llist.add(u);
 			}
 		});
 
+		Collections.sort(llist, new AccountComparator());
+
+		for (Account a : llist) {
+			AccountBookBalance bb = result.get(lindex.getAndIncrement());
+			bb.setLcode(a.getCode());
+			bb.setLname(a.getName());
+			bb.setLsn(String.valueOf(index.getAndIncrement()));
+			bb.setLbalance(lbalance.get(a.getOid()));
+		}
+
 		lsumIndex = index.getAndIncrement();
+
+		List<Account> rlist = new ArrayList<Account>();
 
 		raccount.forEach(new BiConsumer<String, Account>() {
 
 			@Override
 			public void accept(String t, Account u) {
-				AccountBookBalance bb = result.get(rindex.getAndIncrement());
-				bb.setRcode(u.getCode());
-				bb.setRname(u.getName());
-				bb.setRsn(String.valueOf(index.getAndIncrement()));
-				bb.setRbalance(rbalance.get(t));
+				rlist.add(u);
 			}
 		});
+
+		Collections.sort(rlist, new AccountComparator());
+
+		for (Account a : rlist) {
+			AccountBookBalance bb = result.get(rindex.getAndIncrement());
+			bb.setRcode(a.getCode());
+			bb.setRname(a.getName());
+			bb.setRsn(String.valueOf(index.getAndIncrement()));
+			bb.setRbalance(rbalance.get(a.getOid()));
+		}
 
 		equitySumIndex = index.getAndIncrement();
 		rsumIndex = index.getAndIncrement();
@@ -220,6 +275,25 @@ public class AccountBookService {
 		result.add(sum);
 
 		return result;
+	}
+
+	@Transactional
+	public Map<String, AccountBook> find(String relative, String... accounts) {
+		Map<String, AccountBook> books = new HashMap<String, AccountBook>();
+		List<AccountBook> abs = null;
+		if (null == accounts || accounts.length == 0) {
+			abs = this.accountBookDao.search(relative);
+		} else {
+			abs = this.accountBookDao.search(relative, accounts);
+		}
+
+		if (null != abs && abs.size() > 0) {
+			for (AccountBook ab : abs) {
+				books.put(ab.getAccount().getOid(), ab);
+			}
+		}
+
+		return books;
 	}
 
 }

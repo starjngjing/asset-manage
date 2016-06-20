@@ -52,9 +52,9 @@ define([
 					}
 				}, { // 预期年化收益率
 					field: 'expAror',
-					formatter: function(val) {
+					formatter: function(val, row) {
 						if (val)
-							return val.toFixed(2) + "%";
+							return (val * 100.0).toFixed(2) + "%";						
 						return val;
 					}
 				}, {
@@ -90,14 +90,14 @@ define([
 					field: 'holdAmount',
 					formatter: function(val) {
 						var temp = val / 10000;
-						return temp.toFixed(0) + "万";
+						return temp.toFixed(4) + "万";
 					}
 				}, { // 申请中份额
 					visible: true,
 					field: 'applyAmount',
 					formatter: function(val) {
 						var temp = val / 10000;
-						return temp.toFixed(0) + "万";
+						return temp.toFixed(4) + "万";
 					}
 				}, { // 风险等级
 					align: 'center',
@@ -414,7 +414,8 @@ define([
 					field: 'incomeRate',
 					formatter: function(val, row, index) {
 						if (val)
-							return val.toFixed(2) + "%";
+							return (val * 100.0).toFixed(2) + "%";						
+						return val;
 					}
 				}, { // 收益支付日
 					field: 'incomeDate',

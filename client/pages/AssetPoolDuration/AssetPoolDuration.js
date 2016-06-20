@@ -10,10 +10,340 @@ define([
 	return {
 		name: 'AssetPoolDuration',
 		init: function() {
+			// 缓存标的名称数组值
+			var targetNames = null
+			// 缓存可用现金
+			var freeCash = 0
+			// 缓存持有份额
+			var holdAmount = 0
+			// 缓存当前页资产池id、图标echarts对象、明细数据
 			var pageState = {
-				pid: util.nav.getHashObj(location.hash).id || ''
+				pid: util.nav.getHashObj(location.hash).id || '',
+				detail: null,	//当前资产池明细数据
+				mockData: [
+					{date: '2015-01-01', yield: 0.12},
+					{date: '2015-01-02', yield: 0.43},
+					{date: '2015-01-03', yield: 0.53},
+					{date: '2015-01-04', yield: 0.61},
+					{date: '2015-01-05', yield: 0.02},
+				]	// 折线图假数据
 			}
+			// 市值校准--市值校准记录--点击审核时，保存当前订单的oid
+			var marketOid = null
+			// 市值校准--缓存前一日的 单位净值 * 份额
+			var calcData = 0;
+			// 市值校准--净交易额
+			var calcOrders = 0;
+			// 市值校准--份额
+			var calcShares = 0;
+			// 市值校准--单位净值
+			var calcNav = 0;
+			// 市值校准--净收益
+			var calcProfit = 0;
+			// 页面主tabs点击渲染图表
+			$('#mainTab').find('li').each(function (index, item) {
+				if (index) {
+					$(item).on('shown.bs.tab', function () {
+						initPieChartAndBarChart(config, pageState)
+					})
+				} else {
+					$(item).on('shown.bs.tab', function () {
+						initLineChart(config, pageState)
+					})
+				}
+			})
 
+			// 实际市值 脚本区域 start ==============================================================================================================================
+			
+			// 市值校准录入表单验证初始化
+			$('#marketAdjustForm').validator({
+				custom: {
+					validfloat: util.form.validator.validfloat,
+					validint: util.form.validator.validint,
+					validpercentage: validpercentage
+				},
+				errors: {
+					validfloat: '数据格式不正确',
+					validint: '数据格式不正确',
+					validpercentage: '现金、现金管理类工具、信托计划三者比例总和不能超过100%'
+				}
+			})
+			
+			// 市值校准 按钮点击事件
+			$('#marketAdjsut').on('click', function() {
+				http.post(config.api.duration.market.getMarketAdjustStuts, {
+					data: {
+						pid: pageState.pid,
+					},
+					contentType: 'form'
+				}, function(json) {
+					var status = json.result
+					if (status === -1) {
+						alert('已进行市值校准，待审核！')
+					} else if (status === 1) {
+						alert('今日已进行市值校准')
+					} else {
+						var modal = $('#marketAdjustModal')
+						http.post(config.api.duration.market.getMarketAdjustData, {
+							data: {
+								pid: pageState.pid,
+							},
+							contentType: 'form'
+						}, function(json) {
+							var form = document.marketAdjustForm
+							var result = json.result
+							form.assetpoolOid.value = json.result.assetpoolOid
+							$('#marketAdjustForm').find('input[name=baseDate]').val(moment().format('YYYY-MM-DD'))
+							if (result.lastShares) {
+								result.lastShares = result.lastShares + '\t 万份'
+								calcData = parseFloat(parseInt(result.lastShares * 10000) * parseInt(result.lastNav * 10000)) / 10000
+							}
+							if (result.purchase) {
+								result.purchase = result.purchase + '\t 万元'
+							}
+							if (result.redemption) {
+								result.redemption = result.redemption + '\t 万元'
+							}
+							if (result.lastOrders) {
+								calcOrders = result.lastOrders
+								result.lastOrders = result.lastOrders + '\t 万元'
+							}
+							$$.detailAutoFix(modal, json.result)
+						})
+						modal.modal('show')
+					}
+				})
+			})
+
+			// 市值校准记录 表格配置
+			var marketAdjustListPageOptions = {
+				page: 1,
+				rows: 10,
+				pid: pageState.pid
+			}
+			var marketAdjustListTableConfig = {
+				ajax: function(origin) {
+					http.post(config.api.duration.market.getMarketAdjustList, {
+						data: marketAdjustListPageOptions,
+						contentType: 'form'
+					}, function(rlt) {
+						origin.success(rlt)
+					})
+				},
+				pageNumber: marketAdjustListPageOptions.page,
+				pageSize: marketAdjustListPageOptions.rows,
+				pagination: true,
+				sidePagination: 'server',
+				pageList: [10, 20, 30, 50, 100],
+				queryParams: function(val) {
+					marketAdjustListPageOptions.rows = val.limit
+					marketAdjustListPageOptions.page = parseInt(val.offset / val.limit) + 1
+					return val
+				},
+				columns: [{
+					width: 60,
+					align: 'center',
+					formatter: function(val, row, index) {
+						return index + 1
+					}
+				}, 
+				{
+					field: 'baseDate'
+				}, 
+				{
+					field: 'shares'
+				}, 
+				{
+					field: 'nav'
+				}, 
+				{
+					field: 'purchase'
+				}, 
+				{
+					field: 'redemption'
+				}, 
+				{
+					field: 'orders'
+				}, 
+				{
+					field: 'ratio'
+				}, 
+				{
+					field: 'status',
+					formatter: function(val) {
+						if (val === 'create') {
+							return '待审核'
+						}
+						if (val === 'pass') {
+							return '通过'
+						}
+						if (val === 'fail') {
+							return '驳回'
+						}
+					}
+				}, 
+				{
+					width: 150,
+					align: 'center',
+					formatter: function(val, row) {
+						var buttons = [{
+							text: '查看详情',
+							type: 'button',
+							class: 'item-detail',
+        					isRender: row.status !== 'create'
+						},{
+							text: '审核',
+							type: 'button',
+							class: 'item-audit',
+        					isRender: row.status === 'create'
+						},{
+							text: '删除',
+							type: 'button',
+							class: 'item-delete',
+        					isRender: row.status === 'fail'
+						}]
+						return util.table.formatter.generateButton(buttons)
+					},
+					events: {
+						'click .item-detail': function(e, val, row) {
+							var modal = $('#marketAdjustAuditModal')
+							$('#marketAdjustDoCheck').hide()
+							http.post(config.api.duration.market.getMarketAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								if (result.shares) {
+									result.shares = result.shares + '\t 万份'
+								}
+								if (result.profit) {
+									result.profit = result.profit + '\t 万元'
+								}
+								if (result.ratio) {
+									result.ratio = result.ratio * 100 + '\t %'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},'click .item-audit': function(e, val, row) {
+							var modal = $('#marketAdjustAuditModal')
+							$('#marketAdjustDoCheck').show()
+							http.post(config.api.duration.market.getMarketAdjust, {
+								data: {
+									oid: row.oid,
+								},
+								contentType: 'form'
+							}, function(json) {
+								var result = json.result
+								marketOid = result.oid
+								if (result.shares) {
+									result.shares = result.shares + '\t 万份'
+								}
+								if (result.profit) {
+									result.profit = result.profit + '\t 万元'
+								}
+								if (result.ratio) {
+									result.ratio = result.ratio * 100 + '\t %'
+								}
+								$$.detailAutoFix(modal, result)
+							})
+							modal.modal('show')
+						},'click .item-delete': function(e, val, row) {
+							$$.confirm({
+								container: $('#confirmModal'),
+								trigger: this,
+								accept: function () {
+									http.post(config.api.duration.market.deleteMarketAdjust, {
+										data: {
+											oid: row.oid,
+										},
+										contentType: 'form'
+									}, function(json) {
+										$('#marketAdjustTable').bootstrapTable('refresh')
+									})
+								}
+							})
+						}
+					}
+				}]
+			}
+			$('#marketAdjustTable').bootstrapTable(marketAdjustListTableConfig)
+			// 市值校准记录 表格配置 end
+			
+			// 市值校准记录 - 保存按钮点击事件
+			$('#doMarketAdjust').on('click', function() {
+				var form = document.marketAdjustForm
+				if (!$(form).validator('doSubmitCheck')) return
+				$(form).ajaxSubmit({
+					url: config.api.duration.market.saveMarketAdjust,
+					success: function() {
+						util.form.reset($(form))
+						$('#marketAdjustTable').bootstrapTable('refresh')
+						$('#marketAdjustModal').modal('hide')
+					}
+				})
+			})
+			
+			// 市值校准录入审核 - 通过按钮点击事件
+			$('#doMarketAdjustCheck').on('click', function() {
+				var modal = $('#marketAdjustAuditModal')
+				http.post(config.api.duration.market.auditMarketAdjust, {
+					data: {
+						oid: marketOid,
+						type: 'pass'
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#marketAdjustTable').bootstrapTable('refresh')
+				yieldInit(pageState, http, config)
+				})
+				modal.modal('hide')
+			})
+			
+			// 市值校准录入审核 - 不通过按钮点击事件
+			$('#doMarketAdjustUnCheck').on('click', function() {
+				var modal = $('#marketAdjustAuditModal')
+				http.post(config.api.duration.market.auditMarketAdjust, {
+					data: {
+						oid: marketOid,
+						type: 'not'
+					},
+					contentType: 'form'
+				}, function(json) {
+					$('#marketAdjustTable').bootstrapTable('refresh')
+				})
+				modal.modal('hide')
+			})
+			
+		    // 可售余额和应付费金输入框input事件绑定
+		    $(document.marketAdjustForm.shares).on('input', function () {
+		      	calcShares = parseFloat(this.value) || 0
+		      	var ratio = 0
+		      	var calcPorfit = 0
+		      	if (calcData !== 0) {
+		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
+		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	}
+		      	document.marketAdjustForm.ratio.value = ratio
+		      	document.marketAdjustForm.profit.value = calcProfit
+		    })
+		    $(document.marketAdjustForm.nav).on('input', function () {
+		        calcNav = parseFloat(this.value) || 0
+		      	var ratio = 0
+		      	var calcPorfit = 0
+		      	if (calcData !== 0) {
+		      		calcProfit = parseFloat(parseInt(calcNav * 100) * parseInt(calcShares * 100) - parseInt(calcOrders * 10000)) / 10000
+		      		ratio = parseFloat(parseInt(calcProfit * 1000000) / parseInt(calcData * 1000000)) / 10000
+		      	}
+		      	document.marketAdjustForm.ratio.value = ratio
+		      	document.marketAdjustForm.profit.value = calcProfit
+		    })
+
+			// 实际市值 脚本区域 end ==============================================================================================================================
+			
+			// 资产池估值 脚本区域 start ==============================================================================================================================
 			// 资产池切换列表
 			http.post(config.api.duration.assetPool.getNameList, function(json) {
 				var assetPoolOptions = ''
@@ -24,10 +354,15 @@ define([
 				$(select).html(assetPoolOptions)
 				pageInit(pageState, http, config)
 			})
+			
 			// 改变资产池后刷新页面
 			$(document.searchForm.assetPoolName).on('change', function() {
 				pageState.pid = orderingToolPageOptions.pid = toolPageOptions.pid = orderingTrustPageOptions.pid = trustPageOptions.pid = accountDetailPageOptions.pid = this.value
+				marketAdjustListPageOptions.pid = this.value
 				pageInit(pageState, http, config)
+				$('#marketAdjustTable').bootstrapTable('refresh')
+				$('#profitDistributeTable').bootstrapTable('refresh')
+				
 				$('#orderingToolTable').bootstrapTable('refresh')
 				$('#toolTable').bootstrapTable('refresh')
 				$('#orderingTrustTable').bootstrapTable('refresh')
@@ -112,14 +447,7 @@ define([
 				$('#buyAssetModal').modal('show')
 			})
 
-			// 缓存标的名称数组值
-			var targetNames = null
-			// 缓存可用现金
-			var freeCash = 0
-			// 缓存持有份额
-			var holdAmount = 0;
-
-			// 资产申购标的名称下拉菜单change事件
+			// 资产申购标的名称下拉菜单change事件 - 现金管理工具
 			$('#fundTargetName').on('change', function() {
 				var source = targetNames.fund.filter(function(item) {
 					return item.cashtoolOid === this.value
@@ -128,6 +456,7 @@ define([
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
+			// 资产申购标的名称下拉菜单change事件 - 投资标的
 			$('#trustTargetName').on('change', function() {
 				var source = targetNames.trust.filter(function(item) {
 					return item.targetOid === this.value
@@ -136,6 +465,7 @@ define([
 					$$.formAutoFix($('#buyAssetForm'), source[0])
 				}
 			})
+			// 资产申购标的名称下拉菜单change事件 - 投资标的转入
 			$('#transTargetName').on('change', function() {
 				var source = targetNames.trans.filter(function(item) {
 					return item.t_targetOid === this.value
@@ -234,6 +564,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 出入金明细-查看详情
 						'click .item-detail': function(e, val, row) {
 							http.post(config.api.duration.order.getTargetOrderByOidForCapital, {
 								data: {
@@ -444,15 +775,6 @@ define([
 				{
 					field: 'yearYield7'
 				},
-				//        {
-				//          field: 'riskLevel'
-				//        },
-				//        {
-				//          field: 'dividendType'
-				//        },
-				//        {
-				//          field: 'circulationShares'
-				//        },
 				{
 					field: 'investDate'
 				}, 
@@ -469,16 +791,6 @@ define([
 					field: 'state',
 					formatter: function(val) {
 						switch (val) {
-//									case '-2':
-//										return '<span class="text-red">未通过</span>'
-//									case '-1':
-//										return '<span class="text-aqua">待审核</span>'
-//									case '0':
-//										return '<span class="text-blue">待预约</span>'
-//									case '1':
-//										return '<span class="text-yellow">待确认</span>'
-//									case '2':
-//										return '<span class="text-green">成立</span>'
 							case '00':
 								return '<span class="text-aqua">待审核</span>'
 							case '10':
@@ -531,6 +843,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 预约中现金管理工具-审核
 						'click .item-audit': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -573,9 +886,6 @@ define([
 								modal.find('.labelForAccept').css({
 									display: 'none'
 								})
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -586,6 +896,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-预约
 						'click .item-ordering': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -629,9 +940,6 @@ define([
 									display: 'none'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -644,6 +952,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-确认
 						'click .item-accpet': function(e, val, row) {
 							var modal = $('#fundCheckModal')
 							if (row.optType === 'purchase') {
@@ -687,9 +996,6 @@ define([
 									display: 'block'
 								})
 								result.cashtoolTypeStr = util.enum.transform('CASHTOOLTYPE', result.cashtoolType)
-//										if (result.netRevenue) {
-//											result.netRevenue = result.netRevenue + '\t元'
-//										}
 								if (result.yearYield7) {
 									result.yearYield7 = result.yearYield7 + '\t%'
 								}
@@ -705,6 +1011,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-查看详情
 						'click .item-detail': function(e, val, row) {
 							var modal = $('#fundOrderDetailModal')
 							if (row.optType === 'purchase') {
@@ -744,6 +1051,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中现金管理工具-删除
 						'click .item-delete': function(e, val, row) {
 							$$.confirm({
 								container: $('#confirmModal'),
@@ -816,32 +1124,12 @@ define([
 				{
 					field: 'yearYield7'
 				},
-				//        {
-				//          field: 'riskLevel'
-				//        },
-				//        {
-				//          field: 'dividendType'
-				//        },
-				//        {
-				//          field: 'circulationShares'
-				//        },
 				{
 					field: 'amount'
 				}, 
 				{
 					field: 'redeemVolume'
 				},
-				//        {
-				//          field: 'state',
-				//          formatter: function (val) {
-				//            switch (val) {
-				//              case '-1':
-				//                return '<span class="text-aqua">未通过</span>'
-				//              case '0':
-				//                return '<span class="text-blue">成立</span>'
-				//            }
-				//          }
-				//        },
 				{
 					field: 'dailyProfit'
 				}, 
@@ -868,6 +1156,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 现金管理工具-申购
 						'click .item-purchase': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -881,6 +1170,7 @@ define([
 							})
 							$('#purchaseModal').modal('show')
 						},
+						// 现金管理工具-赎回
 						'click .item-redeem': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -894,6 +1184,7 @@ define([
 							})
 							$('#redeemModal').modal('show')
 						},
+						// 现金管理工具-纠偏
 						'click .item-update': function(e, val, row) {
 							http.post(config.api.duration.order.getFundByOid, {
 								data: {
@@ -947,6 +1238,7 @@ define([
 					}
 				})
 			})
+			
 			// 现金类管理工具审核/预约/确认 - 不通过按钮点击事件
 			$('#doFundUnCheck').on('click', function() {
 				var form = document.fundCheckForm
@@ -1084,16 +1376,6 @@ define([
 					field: 'state',
 					formatter: function(val) {
 						switch (val) {
-//								case '-2':
-//									return '<span class="text-red">未通过</span>'
-//								case '-1':
-//									return '<span class="text-aqua">待审核</span>'
-//								case '0':
-//									return '<span class="text-blue">待预约</span>'
-//								case '1':
-//									return '<span class="text-yellow">待确认</span>'
-//								case '2':
-//									return '<span class="text-green">成立</span>'
 							case '00':
 								return '<span class="text-aqua">待审核</span>'
 							case '10':
@@ -1200,6 +1482,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 预约中信托计划-审核
 						'click .item-audit': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1260,6 +1543,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入审核
 						'click .item-trans-audit': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1320,6 +1604,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付审核
 						'click .item-income-audit': function(e, val, row) {
 							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1368,16 +1653,11 @@ define([
 								if (result.capital) {
 									result.capital = result.capital + '\t万元'
 								}
-//								if (result.applyVolume) {
-//									result.applyVolume = result.applyVolume + '\t万份'
-//								}
-//								if (result.applyCash) {
-//									result.applyCash = result.applyCash + '\t万元'
-//								}
 								$$.detailAutoFix(modal, result)
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让审核
 						'click .item-transfer-audit': function(e, val, row) {
 							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1438,6 +1718,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-预约
 						'click .item-ordering': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1507,6 +1788,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入预约
 						'click .item-trans-ordering': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1573,6 +1855,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-确认
 						'click .item-accpet': function(e, val, row) {
 							var modal = $('#trustCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1648,6 +1931,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让确认
 						'click .item-trans-accpet': function(e, val, row) {
 							var modal = $('#trustTransCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1720,6 +2004,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付确认
 						'click .item-income-accpet': function(e, val, row) {
 							var modal = $('#trustIncomeCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1768,12 +2053,6 @@ define([
 								if (result.capital) {
 									result.capital = result.capital + '\t万元'
 								}
-//								if (result.applyVolume) {
-//									result.applyVolume = result.applyVolume + '\t%'
-//								}
-//								if (result.applyCash) {
-//									result.applyCash = result.applyCash + '\t万元'
-//								}
 								if (result.auditVolume) {
 									result.auditVolume = result.auditVolume + '\t%'
 								}
@@ -1787,6 +2066,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转让确认
 						'click .item-transfer-accpet': function(e, val, row) {
 							var modal = $('#transCheckModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1853,6 +2133,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-查看详情
 						'click .item-detail': function(e, val, row) {
 							var modal = $('#trustOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1897,6 +2178,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-转入查看详情
 						'click .item-trans-detail': function(e, val, row) {
 							var modal = $('#trustTransOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -1953,6 +2235,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-本息兑付查看详情
 						'click .item-income-detail': function(e, val, row) {
 							var modal = $('#trustIncomeOrderDetailModal')
 							http.post(config.api.duration.order.getTrustOrderByOid, {
@@ -2003,6 +2286,7 @@ define([
 							})
 							modal.modal('show')
 						},
+						// 预约中信托计划-删除
 						'click .item-delete': function(e, val, row) {
 							currentPool = row
 							$$.confirm({
@@ -2117,12 +2401,6 @@ define([
 							case 'OVER_TIME':
 								return '<span class="text-blue">逾期 </span>'
 						}
-						//            switch (val) {
-						//              case '-1':
-						//                return '<span class="text-aqua">未通过</span>'
-						//              case '0':
-						//                return '<span class="text-blue">成立</span>'
-						//            }
 					}
 				}, 
 				{
@@ -2147,6 +2425,7 @@ define([
 						return util.table.formatter.generateButton(buttons)
 					},
 					events: {
+						// 信托计划-本息兑付
 						'click .item-income': function(e, val, row) {
 							var form = document.trustIncomeForm
 							$(form).validator('destroy')
@@ -2158,32 +2437,15 @@ define([
 								contentType: 'form'
 							}, function(json) {
 								var result = json.result.incomeForm
-//								seqs = json.result.incomeForm
-//								var seq = $(form.seq).empty()
-//								if (json.result.incomeForm.seq === 0) {
-//									seq.append('<option value="' + result.seq + '">无可兑付信息</option>')
-//									
-//								    $('#incomeRate').attr("readonly","readonly")
-//								    $('#income').attr("readonly","readonly")
-//								    $('#incomeRadio').attr("disabled","true")
-//								} else {
-//									seq.append('<option value="' + result.seq + '">第' + result.seq + '期</option>')
-//								}
-								
 								form.oid.value = json.result.oid
 								form.assetPoolOid.value = json.result.assetPoolOid
-								
-//				                seqs.forEach(function (item) {
-//				                  seq.append('<option value="' + item.seq + '">第' + item.seq + '期</option>')
-//				                })
-//								seq.change()
-//								form.capital.value = result.capital
 								$$.formAutoFix($('#trustIncomeForm'), result)
 								// 信托计划本息兑付表单初始化
 								util.form.validator.init($(form))
 							})
 							$('#trustIncomeModal').modal('show')
 						},
+						// 信托计划-转让
 						'click .item-transfer': function(e, val, row) {
 							http.post(config.api.duration.order.getTrustByOid, {
 								data: {
@@ -2206,6 +2468,7 @@ define([
 							})
 							$('#trustTransferModal').modal('show')
 						},
+						// 信托计划-纠偏
 						'click .item-update': function(e, val, row) {
 							http.post(config.api.duration.order.getTrustByOid, {
 								data: {
@@ -2228,26 +2491,6 @@ define([
 
 				// 信托计划转让表单初始化
 			util.form.validator.init($('#trustTransferForm'))
-
-			// 信托计划本息兑付表单下拉菜单初始化
-			//    $(document.trustIncomeForm.seq).on('change', function () {
-			//      var val = this.value
-			//      seqs.forEach(function (item, index) {
-			//        if (item.seq == val) {
-			//          $$.formAutoFix($(document.trustIncomeForm), item)
-			//          if (index === seqs.length - 1) {
-			//            $('#capitalArea').show()
-			//          } else {
-			//            $('#capitalArea').hide()
-			//          }
-			//        }
-			//      })
-			//    })
-
-			// 改变资产池后刷新页面
-			//			$(document.searchForm.assetPoolName).on('change', function() {
-			//				pageInit(pageState, http, config)
-			//			})
 
 			// 当选择本金兑付时，显示本金
 			$(document.trustIncomeForm.capitalFlag).on('change', function () {
@@ -2918,6 +3161,61 @@ function getPieOptions(config, source) {
 	}
 }
 
+function getLineOptions (config, source) {
+  return {
+    tooltip: {
+      trigger: 'axis'
+    },
+    grid: {
+			top: 10,
+			left: 50,
+			right: 30,
+			bottom: 70
+		},
+    dataZoom: {
+      show: true,
+      start: 100 - Math.round(7 / source.length * 100),
+      end: 100,
+      handleSize: 7
+    },
+    xAxis: [{
+      type: 'category',
+      boundaryGap: true,
+      data: source.map(function (item) {
+        return item.date
+      })
+    }],
+    yAxis: [{
+      name: '每日收益率',
+      boundaryGap: true,
+      min: '0',
+      axisLabel: {
+        formatter: function (val) {
+          return val + '%'
+        }
+      },
+      type: 'value'
+    }],
+    series: [{
+      name: '收益率',
+      type: 'line',
+      showAllSymbol: true,
+      label: {
+        normal: {
+          show: true,
+          textStyle: {
+            color: '#333'
+          }
+        }
+      },
+      data: source.map(function (item) {
+        return parseInt(item.yield * 100) / 100
+      })
+    }],
+    color: config.colors
+  }
+}
+
 // 自定义验证 - 现金比例/现金管理类工具比例/信托计划比例 加起来不能超过100
 function validpercentage($el) {
 	var form = $el.closest('form')
@@ -2936,19 +3234,52 @@ function pageInit (pageState, http, config) {
 		},
 		contentType: 'form'
 	}, function(json) {
-		var detail = json.result
+		var detail = pageState.detail = json.result
 		freeCash = detail.cashPosition
 		pageState.pid = document.searchForm.assetPoolName.value =  detail.oid
 		$('#detailPoolScale').html(detail.scale)
 		$('#detailPoolCash').html(detail.cashPosition)
 		$('#detailPoolProfit').html(detail.deviationValue)
-			// 饼图生成
-		var pieChart = echarts.init(document.getElementById('pieChart'))
-		pieChart.setOption(getPieOptions(config, detail))
-			// 柱状图生成
-		var barChart = echarts.init(document.getElementById('barChart'))
-		barChart.setOption(getBarOptions(config, detail))
+		
+		initPieChartAndBarChart(config, pageState)
+
+		initLineChart(config, pageState)
+
+		yieldInit(pageState, http, config)
+		
+		$('#marketValue').html(detail.marketValue)
+		$('#baseDate').html(detail.baseDate)
+		$('#undistributeProfit').html(detail.undistributeProfit)
+		$('#payFeigin').html(detail.payFeigin)
+		$('#spvProfit').html(detail.spvProfit)
+		$('#investorProfit').html(detail.investorProfit)
 	})
+}
+
+function yieldInit (pageState, http, config) {
+	http.post(config.api.duration.market.getYield, {
+		data: {
+			pid: pageState.pid
+		},
+		contentType: 'form'
+	}, function(json) {
+		pageState.mockData = json.result
+		initLineChart(config, pageState)
+	})
+}
+
+// tab1页饼图与柱状图生成
+function initPieChartAndBarChart (config, pageState) {
+	var pieChart = echarts.init(document.getElementById('pieChart'))
+	var barChart = echarts.init(document.getElementById('barChart'))
+	pieChart.setOption(getPieOptions(config, pageState.detail))
+	barChart.setOption(getBarOptions(config, pageState.detail))
+}
+
+// tab2页折线图生成
+function initLineChart (config, pageState) {
+	var lineChart =	echarts.init(document.getElementById('lineChart'))
+	lineChart.setOption(getLineOptions(config, pageState.mockData))
 }
 
 function validCapital($el) {

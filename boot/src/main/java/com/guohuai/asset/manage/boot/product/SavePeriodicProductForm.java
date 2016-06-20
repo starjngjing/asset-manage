@@ -34,7 +34,7 @@ public class SavePeriodicProductForm implements Serializable {
 	@Enumerations(values = { "MANUALINPUT", "FIRSTRACKTIME" }, message = "募集开始时间类型参数错误")
 	@NotBlank
 	private String raiseStartDateType;//募集开始时间类型
-	private String raiseStatrtDate;//募集开始时间
+	private String raiseStartDate;//募集开始时间
 	private String raisePeriod;//募集期:()个自然日
 	private String interestsFirstDate;//起息日:募集满额后()个自然日
 	private String durationPeriod;//存续期:()个自然日

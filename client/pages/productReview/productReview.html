@@ -1,73 +1,71 @@
 <!-- 页面头部 -->
 <section class="content-header">
-  <h1>
-    复核列表
+	<h1>
+    产品复核管理
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 产品管理</a></li>
-    <li class="active">复核列表</li>
-  </ol>
+	<ol class="breadcrumb">
+		<li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 产品管理</a></li>
+		<li class="active">产品复核管理</li>
+	</ol>
 </section>
 
 <!-- 主要内容 -->
 <section class="content">
-  <div class="row">
-    <div class="col-xs-12">
-      <!-- 主体Grid -->
-      <div id="productReviewGrid" class="box box-primary">
-        <!-- Grid头部 -->
-        <div class="box-header">
-          <h3 class="box-title">复核列表</h3>
-        </div>
-        <!-- Grid内容体 -->
-        <div class="box-body">
-          <!-- 搜索项表单 -->
-          <form id="searchForm" name="searchForm" method="post" class="search-body">
-            <div class="row">
-              <div class="col-sm-3">
-                <div class="form-group">
-                  <label>产品名称</label>
-                  <input name="name" type="text"
-                         class="form-control input-sm"
-                         placeholder="搜索产品名称">
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="form-group">
-                  <label>产品类型</label>
-                  <select name="type" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE" data-enum-text="全部">
-                  </select>
-                </div>
-              </div>
-            </div>
-          </form>
-          <!-- 主体数据表格 -->
-          <table id="productReviewTable" class="table table-bordered table-striped">
-            <thead>
-            <tr>
-              <th>编号</th>
-              <th>名称</th>
-              <th>类型</th>
-              <th>管理人</th>
-              <th>状态</th>
-              <th>期限</th>
-              <th>预期年化收益</th>
-              <th>总份额</th>
-              <th>单位份额净值</th>
-              <th>渠道数量</th>
-              <th>资产池</th>
-              <th>申请人</th>
-              <th>申请时间</th>
-              <th>审核人</th>
-              <th>审核时间</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-xs-12">
+			<!-- 主体Grid -->
+			<div id="productReviewGrid" class="box box-primary">
+				<!-- Grid头部 -->
+				<div class="box-header">
+					<h3 class="box-title">复核列表</h3>
+				</div>
+				<!-- Grid内容体 -->
+				<div class="box-body">
+					<!-- 搜索项表单 -->
+					<form id="searchForm" name="searchForm" method="post" class="search-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>产品名称</label>
+									<input name="name" type="text" class="form-control input-sm" placeholder="搜索产品名称">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>产品类型</label>
+									<select name="type" class="form-control input-sm" data-enum-fetch="PRODUCTTYPE" data-enum-text="全部">
+									</select>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- 主体数据表格 -->
+					<table id="productReviewTable" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>编号</th>
+								<th>名称</th>
+								<th>类型</th>
+								<th>管理人</th>
+								<th>状态</th>
+								<th>期限</th>
+								<th>预期年化收益</th>
+								<th>总份额</th>
+								<th>单位份额净值</th>
+								<th>渠道数量</th>
+								<th>资产池</th>
+								<th>申请人</th>
+								<th>申请时间</th>
+								<th>审核人</th>
+								<th>审核时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <!-- 产品详情弹窗 -->
@@ -77,8 +75,8 @@
 			<!-- 模态窗头部 -->
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-        </button>
+					<span aria-hidden="true">&times;</span>
+				</button>
 				<h4 class="modal-title">产品详情</h4>
 			</div>
 			<!-- 模态窗内容体 -->
@@ -173,90 +171,90 @@
 							</dd>
 						</dl>
 					</div>
-        </div>
-        <!-- 封闭式产品显示/隐藏层 -->
-        <div id="detailProductType01Area">
-          <p class="form-header">封闭式产品信息</p>
-          <div class="row">
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>募集开始时间:</dt>
-                <dd>
-                  <div data-detail-fetch="raiseStartDateStr"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>募集期:</dt>
-                <dd>
-                  <div data-detail-fetch="raisePeriodStr"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>起息日:</dt>
-                <dd>
-                  <div data-detail-fetch="interestsFirstDateStr"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>存续期:</dt>
-                <dd>
-                  <div data-detail-fetch="durationPeriodStr"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>募集总份额:</dt>
-                <dd>
-                  <div data-detail-fetch="raisedTotalNumberStr"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-              	<dt>已售总份额:</dt>
-                <dd>
-                  <div data-detail-fetch="collectedVolume"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>到期最晚还本付息日:</dt>
-                <dd>
-                  <div data-detail-fetch="accrualDateStr"></div>
-                </dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-        <!-- 开放式产品显示/隐藏层 -->
-        <div id="detailProductType02Area">
-          <p class="form-header">开放式产品信息</p>
-          <div class="row">
-            <div class="col-sm-6">
-            	<dl class="dl-horizontal">
-                <dt>目前持有份额总数:</dt>
-                <dd>
-                  <div data-detail-fetch="currentVolume"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="dl-horizontal">
-                <dt>已售总份额:</dt>
-                <dd>
-                  <div data-detail-fetch="collectedVolume"></div>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
+				</div>
+				<!-- 封闭式产品显示/隐藏层 -->
+				<div id="detailProductType01Area">
+					<p class="form-header">封闭式产品信息</p>
+					<div class="row">
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集开始时间:</dt>
+								<dd>
+									<div data-detail-fetch="raiseStartDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集期:</dt>
+								<dd>
+									<div data-detail-fetch="raisePeriodStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>起息日:</dt>
+								<dd>
+									<div data-detail-fetch="interestsFirstDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>存续期:</dt>
+								<dd>
+									<div data-detail-fetch="durationPeriodStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>募集总份额:</dt>
+								<dd>
+									<div data-detail-fetch="raisedTotalNumberStr"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>已售总份额:</dt>
+								<dd>
+									<div data-detail-fetch="collectedVolume"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>到期最晚还本付息日:</dt>
+								<dd>
+									<div data-detail-fetch="accrualDateStr"></div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+				<!-- 开放式产品显示/隐藏层 -->
+				<div id="detailProductType02Area">
+					<p class="form-header">开放式产品信息</p>
+					<div class="row">
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>目前持有份额总数:</dt>
+								<dd>
+									<div data-detail-fetch="currentVolume"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
+							<dl class="dl-horizontal">
+								<dt>已售总份额:</dt>
+								<dd>
+									<div data-detail-fetch="collectedVolume"></div>
+								</dd>
+							</dl>
+						</div>
+						<div class="col-sm-6">
 							<dl class="dl-horizontal">
 								<dt>成立时间:</dt>
 								<dd>
@@ -328,9 +326,9 @@
 								</dd>
 							</dl>
 						</div>
-          </div>
-        </div>
-        <div class="row">
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>单笔投资最低份额:</dt>
@@ -371,18 +369,18 @@
 							</dd>
 						</dl>
 					</div>
-		    </div>
-        <p class="form-header">其他信息</p>
-        <div class="row">
-          <div class="col-sm-6">
-            <dl class="dl-horizontal">
-              <dt>已选渠道:</dt>
-              <dd>
-                <div data-detail-fetch="channelNames"></div>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-6">
+				</div>
+				<p class="form-header">其他信息</p>
+				<div class="row">
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>已选渠道:</dt>
+							<dd>
+								<div data-detail-fetch="channelNames"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
 						<dl class="dl-horizontal">
 							<dt>额外增信:</dt>
 							<dd>
@@ -391,108 +389,107 @@
 						</dl>
 					</div>
 					<div class="col-sm-6">
-            <dl class="dl-horizontal">
-              <dt>增信备注:</dt>
-              <dd>
-                <div data-detail-fetch="revealComment"></div>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-6">
-            <dl class="dl-horizontal">
-              <dt>产品说明:</dt>
-              <dd>
-                <div data-detail-fetch="instruction"></div>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-6">
-            <dl class="dl-horizontal">
-              <dt>投资标的:</dt>
-              <dd>
-                <div data-detail-fetch="investComment"></div>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-6">
-            <dl class="dl-horizontal">
-              <dt>风险等级:</dt>
-              <dd>
-                <div data-detail-fetch="riskLevelStr"></div>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-10">
-            <dl class="dl-horizontal">
-              <dt>投资协议书:</dt>
-              <dd>
-                <table id="productDetailInvestFileTable" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>投资协议书</th>
-                    <th>上传人</th>
-                    <th>上传时间</th>
-                    <th>操作</th>
-                  </tr>
-                  </thead>
-                </table>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-10">
-            <dl class="dl-horizontal">
-              <dt>附件:</dt>
-              <dd>
-                <table id="productDetailFileTable" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>附件名称</th>
-                    <th>上传人</th>
-                    <th>上传时间</th>
-                    <th>操作</th>
-                  </tr>
-                  </thead>
-                </table>
-              </dd>
-            </dl>
-          </div>
-          <div class="col-sm-10">
-            <dl class="dl-horizontal">
-              <dt>奖励收益:</dt>
-              <dd>
-                <table id="productRewardTable" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>奖励天数</th>
-                    <th>奖励收益率(%)</th>
-                  </tr>
-                  </thead>
-                </table>
-              </dd>
-            </dl>
-          </div>
-        </div>
-		  </div>
+						<dl class="dl-horizontal">
+							<dt>增信备注:</dt>
+							<dd>
+								<div data-detail-fetch="revealComment"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>产品说明:</dt>
+							<dd>
+								<div data-detail-fetch="instruction"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>投资标的:</dt>
+							<dd>
+								<div data-detail-fetch="investComment"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-6">
+						<dl class="dl-horizontal">
+							<dt>风险等级:</dt>
+							<dd>
+								<div data-detail-fetch="riskLevelStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-10">
+						<dl class="dl-horizontal">
+							<dt>投资协议书:</dt>
+							<dd>
+								<table id="productDetailInvestFileTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>投资协议书</th>
+											<th>上传人</th>
+											<th>上传时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+								</table>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-10">
+						<dl class="dl-horizontal">
+							<dt>附件:</dt>
+							<dd>
+								<table id="productDetailFileTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>附件名称</th>
+											<th>上传人</th>
+											<th>上传时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+								</table>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-sm-10">
+						<dl class="dl-horizontal">
+							<dt>奖励收益:</dt>
+							<dd>
+								<table id="productRewardTable" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>奖励天数</th>
+											<th>奖励收益率(%)</th>
+										</tr>
+									</thead>
+								</table>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <!-- 操作confirm窗 使用 $$.confirm 初始化 -->
 <div id="doReviewConfirm" class="popover func-delete-popover">
-  <div class="arrow"></div>
-  <h3 class="popover-title">提示</h3>
-  <div class="popover-content">
-    <input id="oid" type="hidden">
-	  <p class="form-header">理由:</p>
-	  <textarea id="reviewComment"></textarea>
-	  <div class="popover-btn clearfix">
-	    <div class="unit">
-	      <button class="btn btn-block btn-default cancel">取 消</button>
-	    </div>
-	    <div class="unit">
-	      <button id="doProductReview" class="btn btn-block btn-primary accept">确 定</button>
-	    </div>
-	  </div>
+	<div class="arrow"></div>
+	<h3 class="popover-title">提示</h3>
+	<div class="popover-content">
+		<input id="oid" type="hidden">
+		<p class="form-header">理由:</p>
+		<textarea id="reviewComment"></textarea>
+		<div class="popover-btn clearfix">
+			<div class="unit">
+				<button class="btn btn-block btn-default cancel">取 消</button>
+			</div>
+			<div class="unit">
+				<button id="doProductReview" class="btn btn-block btn-primary accept">确 定</button>
+			</div>
+		</div>
 	</div>
 </div>
-

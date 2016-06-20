@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -17,9 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.Income;
-import com.guohuai.asset.manage.boot.acct.books.document.IncomeDocumentService.IncomeType;
+import com.guohuai.asset.manage.boot.acct.books.AccountBook;
+import com.guohuai.asset.manage.boot.acct.books.AccountBookService;
 import com.guohuai.asset.manage.boot.duration.assetPool.scope.ScopeService;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalc;
 import com.guohuai.asset.manage.boot.duration.capital.calc.AssetPoolCalcService;
@@ -67,8 +67,10 @@ public class AssetPoolService {
 	@Autowired
 	private ScheduleLogService logService;
 	
+//	@Autowired
+//	private IncomeDocumentService incomeService;
 	@Autowired
-	private IncomeDocumentService incomeService;
+	private AccountBookService accountService;
 	
 	/**
 	 * 新建资产池
@@ -218,6 +220,23 @@ public class AssetPoolService {
 			e.printStackTrace();
 		}
 		
+		// 获取收益数据
+		Map<String, AccountBook> accountMap = accountService.find(pid, "2201", "2301", "300101", "300102");
+		if (null != accountMap) {
+			if (accountMap.containsKey("2201")) {
+				form.setUnDistributeProfit(accountMap.get("2201").getBalance());
+			}
+			if (accountMap.containsKey("2301")) {
+				form.setPayFeigin(accountMap.get("2301").getBalance());
+			}
+			if (accountMap.containsKey("300101")) {
+				form.setInvestorProfit(accountMap.get("300101").getBalance());
+			}
+			if (accountMap.containsKey("300102")) {
+				form.setSpvProfit(accountMap.get("300102").getBalance());
+			}
+		}
+		
 		return form;
 	}
 	
@@ -351,7 +370,6 @@ public class AssetPoolService {
 	public void calcPoolProfit() {
 		// 所有资产池列表
 		List<AssetPoolEntity> poolList = assetPoolDao.getListByState();
-		List<AssetPoolEntity> saveList = Lists.newArrayList();
 		if (null != poolList && !poolList.isEmpty()) {
 			// 日期
 			Date sqlDate = new Date(System.currentTimeMillis());
@@ -365,10 +383,9 @@ public class AssetPoolService {
 			log.setStartTime(new Timestamp(System.currentTimeMillis()));
 			
 			for (AssetPoolEntity entity : poolList) {
-				saveList.add(this.calcPoolProfit(entity, sqlDate, AssetPoolCalc.EventType.SCHEDULE.toString(),
-						jobCount, successCount));
+				this.calcPoolProfit(entity, sqlDate, AssetPoolCalc.EventType.SCHEDULE.toString(),
+						jobCount, successCount);
 			}
-			assetPoolDao.save(saveList);
 			
 			log.setJobCount(jobCount);
 			log.setSuccessCount(successCount);
@@ -382,10 +399,10 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public void userPoolProfit(String oid, String type) {
+	public void userPoolProfit(String oid, String operator, String type) {
 		// 资产池
 		AssetPoolEntity entity = assetPoolDao.findOne(oid);
-		List<AssetPoolEntity> saveList = Lists.newArrayList();
+		entity.setOperator(operator);
 		// 日期
 		Date sqlDate = new Date(System.currentTimeMillis());
 		// 统计一共有多少个标的数据
@@ -397,9 +414,8 @@ public class AssetPoolService {
 		log.setBaseDate(sqlDate);
 		log.setStartTime(new Timestamp(System.currentTimeMillis()));
 		
-		saveList.add(this.calcPoolProfit(entity, sqlDate, type,
-				jobCount, successCount));
-		assetPoolDao.save(saveList);
+		this.calcPoolProfit(entity, sqlDate, type,
+				jobCount, successCount);
 		
 		log.setJobCount(jobCount);
 		log.setSuccessCount(successCount);
@@ -416,12 +432,12 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public AssetPoolEntity calcPoolProfit(AssetPoolEntity assetPool, Date baseDate, 
+	public void calcPoolProfit(AssetPoolEntity assetPool, Date baseDate, 
 			String type, int jobCount, int successCount) {
 		// 总收益
 		BigDecimal totalProfit = BigDecimal.ZERO;
 		// 会计分录
-		List<Income> incomeList = Lists.newArrayList();
+//		List<Income> incomeList = Lists.newArrayList();
 		// 记录有问题的标的数据oid
 		List<ErrorCalc> errorList = Lists.newArrayList();
 		// 存档错误数据
@@ -450,10 +466,11 @@ public class AssetPoolService {
 						errorCalc = new ErrorCalc();
 						jsonObj = new JSONObject();
 						errorCalc.setOid(StringUtil.uuid());
-						errorCalc.setFund(entity);
+						errorCalc.setCashTool(entity.getCashTool());
 						errorCalc.setAssetPool(assetPool);
 						jsonObj.put("DaylyProfit", "收益率为空");
 						errorCalc.setMessage(jsonObj);
+						errorCalc.setOperator(assetPool.getOperator());
 						errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 						errorList.add(errorCalc);
 					} else {
@@ -476,13 +493,14 @@ public class AssetPoolService {
 								errorCalc = new ErrorCalc();
 								jsonObj = new JSONObject();
 								errorCalc.setOid(StringUtil.uuid());
-								errorCalc.setTrust(entity);
+								errorCalc.setTarget(entity.getTarget());
 								errorCalc.setAssetPool(assetPool);
 								if (null == entity.getTarget().getExpAror())
 									jsonObj.put("ExpAror", "收益率为空");
 								if (null == entity.getTarget().getContractDays())
 									jsonObj.put("ContractDays", "合同年天数为空");
 								errorCalc.setMessage(jsonObj);
+								errorCalc.setOperator(assetPool.getOperator());
 								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 								errorList.add(errorCalc);
 							} else {
@@ -497,13 +515,14 @@ public class AssetPoolService {
 								errorCalc = new ErrorCalc();
 								jsonObj = new JSONObject();
 								errorCalc.setOid(StringUtil.uuid());
-								errorCalc.setTrust(entity);
+								errorCalc.setTarget(entity.getTarget());
 								errorCalc.setAssetPool(assetPool);
 								if (null == entity.getTarget().getCollectIncomeRate())
 									jsonObj.put("CollectIncomeRate", "募集期收益率为空");
 								if (null == entity.getTarget().getContractDays())
 									jsonObj.put("ContractDays", "合同年天数为空");
 								errorCalc.setMessage(jsonObj);
+								errorCalc.setOperator(assetPool.getOperator());
 								errorCalc.setCreateTime(new Timestamp(System.currentTimeMillis()));
 								errorList.add(errorCalc);
 							} else {
@@ -513,10 +532,6 @@ public class AssetPoolService {
 					}
 				}
 			}
-			if (errorList.size() > 0) {
-				errorCalcService.save(errorList);
-			}
-			
 			if (type.equals(AssetPoolCalc.EventType.SCHEDULE.toString())) {
 				if (errorList.size() > 0) {
 					assetPool.setScheduleState(AssetPoolEntity.schedule_wjs);
@@ -527,9 +542,9 @@ public class AssetPoolService {
 				calc.setOid(StringUtil.uuid());
 				calc.setAssetPool(assetPool);
 				
-				this.calcFundProfit(calc, baseDate, totalProfit, fcList, fundCalcList, incomeList);
-				this.calcTrustProfitForCollect(calc, baseDate, totalProfit, mjq_tcList, trustCalcList, incomeList);
-				this.calcTrustProfitForDuration(calc, baseDate, totalProfit, cxq_tcList, trustCalcList, incomeList);
+				totalProfit = this.calcFundProfit(calc, baseDate, totalProfit, fcList, fundCalcList);
+				totalProfit = this.calcTrustProfitForCollect(calc, baseDate, totalProfit, mjq_tcList, trustCalcList);
+				totalProfit = this.calcTrustProfitForDuration(calc, baseDate, totalProfit, cxq_tcList, trustCalcList);
 				
 				calc.setCapital(assetPool.getScale().add(totalProfit).setScale(4, BigDecimal.ROUND_HALF_UP));
 				calc.setProfit(totalProfit);
@@ -563,16 +578,17 @@ public class AssetPoolService {
 				
 //				throw new RuntimeException("=================定时任务默认录入一条初始化数据==============="); 
 			}
+			assetPoolDao.save(assetPool);
 			
-			if (incomeList.size() > 0)
-				incomeService.incomeConfirm(assetPool.getOid(), incomeList);
+			if (errorList.size() > 0) {
+				errorCalcService.save(errorList);
+			}
 			
-			return assetPool;
+//			if (incomeList.size() > 0)
+//				incomeService.incomeConfirm(assetPool.getOid(), incomeList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return new AssetPoolEntity();
 	}
 	
 	/**
@@ -585,11 +601,10 @@ public class AssetPoolService {
 	 * @param incomeList
 	 */
 	@Transactional
-	public void calcFundProfit(AssetPoolCalc assetPoolCalc, Date baseDate,
+	public BigDecimal calcFundProfit(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit,
 			List<FundEntity> fundList,
-			List<FundCalc> fundCalcList, 
-			List<Income> incomeList) {
+			List<FundCalc> fundCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != fundList && !fundList.isEmpty()) {
@@ -618,11 +633,13 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.CASHTOOL);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.CASHTOOL);
+//				incomeList.add(income);
 			}
 			fundService.save(fundList);
 		}
+		
+		return totalProfit;
 	}
 	
 	/**
@@ -635,11 +652,10 @@ public class AssetPoolService {
 	 * @param incomeList
 	 */
 	@Transactional
-	public void calcTrustProfitForCollect(AssetPoolCalc assetPoolCalc, Date baseDate,
+	public BigDecimal calcTrustProfitForCollect(AssetPoolCalc assetPoolCalc, Date baseDate,
 			BigDecimal totalProfit, 
 			List<TrustEntity> trustList, 
-			List<TrustCalc> trustCalcList,
-			List<Income> incomeList) {
+			List<TrustCalc> trustCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != trustList && !trustList.isEmpty()) {
@@ -665,11 +681,13 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+//				incomeList.add(income);
 			}
 			trustService.save(trustList);
 		}
+		
+		return totalProfit;
 	}
 	
 	/**
@@ -682,11 +700,10 @@ public class AssetPoolService {
 	 * @param incomeList
 	 */
 	@Transactional
-	public void calcTrustProfitForDuration(AssetPoolCalc assetPoolCalc, Date baseDate, 
+	public BigDecimal calcTrustProfitForDuration(AssetPoolCalc assetPoolCalc, Date baseDate, 
 			BigDecimal totalProfit,
 			List<TrustEntity> trustList, 
-			List<TrustCalc> trustCalcList,
-			List<Income> incomeList) {
+			List<TrustCalc> trustCalcList) {
 		// 当日收益
 		BigDecimal dayProfit = BigDecimal.ZERO;
 		if (null != trustList && !trustList.isEmpty()) {
@@ -712,11 +729,13 @@ public class AssetPoolService {
 				
 				totalProfit = totalProfit.add(dayProfit).setScale(4, BigDecimal.ROUND_HALF_UP);
 				
-				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
-				incomeList.add(income);
+//				Income income = new Income(calc.getOid(), dayProfit, IncomeType.TARGET);
+//				incomeList.add(income);
 			}
 			trustService.save(trustList);
 		}
+		
+		return totalProfit;
 	}
 	
 	/**
@@ -724,9 +743,10 @@ public class AssetPoolService {
 	 * @param form
 	 */
 	@Transactional
-	public void updateDeviationValue(AssetPoolForm form) {
+	public void updateDeviationValue(AssetPoolForm form, String operator) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
 		entity.setDeviationValue(form.getDeviationValue());
+		entity.setOperator(operator);
 		BigDecimal nscale = entity.getScale().add(
 				form.getDeviationValue().subtract(entity.getDeviationValue())
 				.setScale(4, BigDecimal.ROUND_HALF_UP));
