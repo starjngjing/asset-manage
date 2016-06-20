@@ -145,9 +145,6 @@ define([
 							})
 						},
 						'click .item-edit': function(e, value, row) {
-							// 重置和初始化表单验证
-							$("#editTargetForm").validator('destroy')
-							util.form.validator.init($("#editTargetForm"));
 
 							http.post(config.api.targetDetQuery, {
 								data: {
@@ -159,6 +156,9 @@ define([
 								var data = result.investment;
 								//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 								$$.formAutoFix($('#editTargetForm'), data); // 自动填充表单
+								// 重置和初始化表单验证
+								$("#editTargetForm").validator('destroy')
+								util.form.validator.init($("#editTargetForm"));
 								$('#editTargetModal').modal('show');
 							})
 						},
