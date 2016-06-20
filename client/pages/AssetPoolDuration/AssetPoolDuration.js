@@ -2980,17 +2980,19 @@ define([
 			
 			// 编辑偏离损益按钮点击事件
 			$('#updateProfit').on('click', function() {
-				http.post(config.api.duration.assetPool.getById, {
-					data: {
-						oid: pageState.pid
-					},
-					contentType: 'form'
-				}, function(json) {
-					json.result.deviationValue = json.result.deviationValue + '\t万元'
-					document.updateAssetPoolProfitForm.oid.value = json.result.oid
-					$$.detailAutoFix($('#updateAssetPoolProfitModal'), json.result)
-					$('#updateAssetPoolProfitModal').modal('show')
-				})
+				document.updateAssetPoolProfitForm.oid.value = pageState.pid
+				$('#updateAssetPoolProfitModal').modal('show')
+//				http.post(config.api.duration.assetPool.getById, {
+//					data: {
+//						oid: pageState.pid
+//					},
+//					contentType: 'form'
+//				}, function(json) {
+//					json.result.deviationValue = json.result.deviationValue + '\t万元'
+//					document.updateAssetPoolProfitForm.oid.value = json.result.oid
+//					$$.detailAutoFix($('#updateAssetPoolProfitModal'), json.result)
+//					$('#updateAssetPoolProfitModal').modal('show')
+//				})
 			})
 			// 编辑资产池偏离损益 - 确定按钮点击事件
 			$('#doUpdateAssetPoolProfit').on('click', function() {

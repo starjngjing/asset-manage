@@ -1126,23 +1126,34 @@
       </div>
       <!-- 模态窗内容体 -->
       <div class="modal-body">
-      	<dl class="dl-horizontal">
-          <dt>原偏离损益:</dt>
-          <dd>
-            <div data-detail-fetch="deviationValue"></div>
-          </dd>
-        </dl>
         <!-- 编辑表单 -->
         <form id="updateAssetPoolProfitForm" name="updateAssetPoolProfitForm" method="post">
           <input type="hidden" name="oid"/>
-          <div class="form-group">
-            <label>偏离损益(万元)</label>
-            <input name="deviationValue" type="text"
-            class="form-control input-sm"
-            placeholder="请输入可用现金"
-            data-validfloat="10.10" required>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>今日份额</label>
+                <div class="input-group input-group-sm">
+                  <input name="shares" type="text"
+                  class="form-control"
+                  placeholder="0"
+                  data-validfloat="10.10" required>
+                  <span class="input-group-addon">万</span>
+                </div>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>今日单位净值</label>
+	              <input name="nav" type="text"
+	              class="form-control input-sm"
+	              placeholder="0"
+	              data-validfloat="10.10" required>
+            		<div class="help-block with-errors text-red"></div>
+              </div>
+            </div>
           </div>
-          <div class="help-block with-errors text-red"></div>
         </form>
       </div>
       <!-- 模态窗底部 -->

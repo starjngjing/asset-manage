@@ -71,6 +71,10 @@ public class AssetPoolForm implements Serializable {
 	private String operator;
 	// 估值基准日
 	private Date baseDate;
+	// 今日实际份额
+	private BigDecimal shares;
+	// 今日单位净值
+	private BigDecimal nav;
 	// 创建日期
 	private Timestamp createTime;
 	// 更新日期

@@ -745,13 +745,18 @@ public class AssetPoolService {
 	@Transactional
 	public void updateDeviationValue(AssetPoolForm form, String operator) {
 		AssetPoolEntity entity = assetPoolDao.findOne(form.getOid());
-		entity.setDeviationValue(form.getDeviationValue());
-		entity.setOperator(operator);
-		BigDecimal nscale = entity.getScale().add(
-				form.getDeviationValue().subtract(entity.getDeviationValue())
+		BigDecimal marketValue = form.getShares().multiply(form.getNav())
+				.setScale(4, BigDecimal.ROUND_HALF_UP);
+		entity.setMarketValue(marketValue);
+		entity.setDeviationValue(marketValue.subtract(entity.getScale())
 				.setScale(4, BigDecimal.ROUND_HALF_UP));
-
-		this.calcAssetPoolRate(entity, nscale, BigDecimal.ZERO, BigDecimal.ZERO);
+		entity.setOperator(operator);
+		assetPoolDao.save(entity);
+//		BigDecimal nscale = entity.getScale().add(
+//				form.getDeviationValue().subtract(entity.getDeviationValue())
+//				.setScale(4, BigDecimal.ROUND_HALF_UP));
+//
+//		this.calcAssetPoolRate(entity, nscale, BigDecimal.ZERO, BigDecimal.ZERO);
 	}
 	
 	/**
