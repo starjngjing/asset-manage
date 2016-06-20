@@ -68,7 +68,7 @@ public class ProductDurationController {
 		Specification<Product> spec = new Specification<Product>() {
 			@Override
 			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO), cb.equal(root.get("auditState").as(String.class), Product.AUDIT_STATE_Approval));
+				return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO), cb.equal(root.get("auditState").as(String.class), Product.AUDIT_STATE_Reviewed));
 			}
 		};
 		spec = Specifications.where(spec);

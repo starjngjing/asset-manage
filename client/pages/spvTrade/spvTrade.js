@@ -185,7 +185,7 @@ define([
 									orderAmount = data.orderAmount
 									orderType = data.orderType
 									reemAmount = data.reemAmount
-									$(form.payFee).trigger('input')
+									$(form.payFeeValue).trigger('input')
 									
 									if(data.orderType=='REDEEM') {
 										$('#reemAmount').show()
@@ -203,6 +203,11 @@ define([
 										}
 									})
 									$(form.avaibleAmount).trigger('input')
+									
+									document.auditInvestorOrderForm.payFee.value = document.auditInvestorOrderForm.payFeeValue.value
+									$('#payFeeLabel').show()
+									$('#payFeeLabelAdd').hide()
+									$('#payFeeLabelSub').hide()
 
 									$('#auditInvestorOrderModal').modal('show');
 								} else {
@@ -309,11 +314,49 @@ define([
 			// 可售余额和应付费金输入框input事件绑定
 			$(document.auditInvestorOrderForm.avaibleAmount).on('input', function() {
 				var val = parseFloat(this.value) || 0
-				document.auditInvestorOrderForm.payFee.value = parseFloat(parseInt(orderAmount * 1000000) - parseInt(val * 1000000)) / 1000000
+				
+				var payFee = parseFloat(parseInt(orderAmount * 1000000) - parseInt(val * 1000000)) / 1000000
+				if(payFee<0) {
+					$('#payFeeLabel').hide()
+					$('#payFeeLabelAdd').hide()
+					$('#payFeeLabelSub').show()
+					document.auditInvestorOrderForm.payFeeValue.value = Math.abs(payFee)
+				} else if(payFee>0) {
+					$('#payFeeLabel').hide()
+					$('#payFeeLabelAdd').show()
+					$('#payFeeLabelSub').hide()
+					document.auditInvestorOrderForm.payFeeValue.value = payFee
+				} else {
+					$('#payFeeLabel').show()
+					$('#payFeeLabelAdd').hide()
+					$('#payFeeLabelSub').hide()
+					document.auditInvestorOrderForm.payFeeValue.value = payFee
+				}
+				document.auditInvestorOrderForm.payFee.value = payFee
+
 			})
-			$(document.auditInvestorOrderForm.payFee).on('input', function() {
-				var val = parseFloat(this.value) || 0
-				document.auditInvestorOrderForm.avaibleAmount.value = parseFloat(parseInt(orderAmount * 1000000) - parseInt(val * 1000000)) / 1000000
+			$(document.auditInvestorOrderForm.payFeeValue).on('input', function() {
+				var payFee = parseFloat(this.value) || 0
+				
+				if(payFee<0) {
+					$('#payFeeLabel').hide()
+					$('#payFeeLabelAdd').hide()
+					$('#payFeeLabelSub').show()
+					document.auditInvestorOrderForm.payFeeValue.value = Math.abs(payFee)
+				} else if(payFee>0) {
+					$('#payFeeLabel').hide()
+					$('#payFeeLabelAdd').show()
+					$('#payFeeLabelSub').hide()
+					document.auditInvestorOrderForm.payFeeValue.value = payFee
+				} else {
+					$('#payFeeLabel').show()
+					$('#payFeeLabelAdd').hide()
+					$('#payFeeLabelSub').hide()
+					document.auditInvestorOrderForm.payFeeValue.value = payFee
+				}
+				document.auditInvestorOrderForm.payFee.value = payFee
+				
+				document.auditInvestorOrderForm.avaibleAmount.value = parseFloat(parseInt(orderAmount * 1000000) - parseInt(payFee * 1000000)) / 1000000
 			})
 
 			// 审核确定订单“确定”按钮点击事件

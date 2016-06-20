@@ -214,6 +214,7 @@
 				<form id="auditInvestorOrderForm" name="auditInvestorOrderForm" method="post">
 					<p class="form-header">订单概况</p>
 					<input name="oid" type="hidden">
+					<input id="payFee" name="payFee" type="hidden">
 					<div class="row">
 						<dl class="dl-horizontal">
 							<dt>订单号:</dt>
@@ -299,9 +300,11 @@
   						</div>
             			<div class="col-sm-6">
             				<div class="form-group">
-                				<label>应付费金</label>
+                				<label id="payFeeLabel">应付费金</label>
+                				<label id="payFeeLabelAdd">应付费金增加</label>
+                				<label id="payFeeLabelSub">应付费金减少</label>
                 				<div class="input-group input-group-sm">
-                    				<input id="payFee" name="payFee" 
+                    				<input id="payFeeValue" name="payFeeValue" 
 				                        type="text"
                 				        class="form-control"  
                         				required="required" 

@@ -107,6 +107,9 @@ define([
 						field: 'applyTime',
 						align: 'center',
 						formatter: function(val) {
+							if(val===null) {
+								return '-'
+							}
 							return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
 						}
 					}, {
@@ -116,6 +119,9 @@ define([
 						field: 'auditTime',
 						align: 'center',
 						formatter: function(val) {
+							if(val===null) {
+								return '-'
+							}
 							return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
 						}
 					}, {
@@ -125,15 +131,9 @@ define([
 						field: 'reviewTime',
 						align: 'center',
 						formatter: function(val) {
-							return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
-						}
-					}, {
-						field: 'accesser',
-						align: 'center'
-					}, {
-						field: 'accessTime',
-						align: 'center',
-						formatter: function(val) {
+							if(val===null) {
+								return '-'
+							}
 							return util.table.formatter.timestampToDate(val, 'YYYY-MM-DD HH:mm:ss')
 						}
 					}, {
