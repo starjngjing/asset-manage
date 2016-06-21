@@ -117,6 +117,7 @@ define([
 									contentType: 'form'
 								}, function(result) {
 									var data = result.data;
+									data.guarRatio = data.guarRatio * 100.0
 									//								$$.detailAutoFix($('#editTargetForm'), data); // 自动填充详情
 									$$.formAutoFix($('#editCashToolForm'), data); // 自动填充表单
 									$('#editCashToolModal').modal('show');
@@ -148,6 +149,8 @@ define([
 								}, function(result) {
 									if (result.errorCode == 0) {
 										var data = result.data;
+										if (data.guarRatio)
+											data.guarRatio = data.guarRatio * 100.0 + '%'; //保本比例格式化
 										$$.detailAutoFix($('#detCashToolForm'), data); // 自动填充详情
 										$$.formAutoFix($('#detCashToolForm'), data); // 自动填充表单
 										$('#cashToolDetailModal').modal('show');
@@ -166,7 +169,7 @@ define([
 				// 初始化表单验证
 			util.form.validator.init($("#addCashToolForm"));
 			util.form.validator.init($("#editCashToolForm"));
-				// 新建标的按钮点击事件
+			// 新建标的按钮点击事件
 			$('#cashToolAdd').on('click', function() {
 					$('#addCashToolForm').resetForm();
 					$('#addCashToolModal').modal('show')
@@ -181,30 +184,30 @@ define([
 				})
 				//编辑现金管理工具按钮
 			$('#editCashTool').on('click', function() {
-				editCashTool();
-			})
-			//新建 是否保本选项判断
-			$('#addIsGuarFund').change(function(){
-				if($(this).val() == 'Y'){
-					$('#addGuarPeriod').removeAttr("readonly")
-					$('#addGuarRatio').removeAttr("readonly")
-				}else{
-					$('#addGuarPeriod').val('');
-					$('#addGuarPeriod').attr("readonly","readonly")
-					$('#addGuarRatio').val('');
-					$('#addGuarRatio').attr("readonly","readonly")
-				}
-			})
-			//编辑 是否保本选项判断
-			$('#editIsGuarFund').change(function(){
-				if($(this).val() == 'Y'){
+					editCashTool();
+				})
+				//新建 是否保本选项判断
+			$('#addIsGuarFund').change(function() {
+					if ($(this).val() == 'Y') {
+						$('#addGuarPeriod').removeAttr("readonly")
+						$('#addGuarRatio').removeAttr("readonly")
+					} else {
+						$('#addGuarPeriod').val('');
+						$('#addGuarPeriod').attr("readonly", "readonly")
+						$('#addGuarRatio').val('');
+						$('#addGuarRatio').attr("readonly", "readonly")
+					}
+				})
+				//编辑 是否保本选项判断
+			$('#editIsGuarFund').change(function() {
+				if ($(this).val() == 'Y') {
 					$('#editGuarPeriod').removeAttr("readonly")
 					$('#editGuarRatio').removeAttr("readonly")
-				}else{
+				} else {
 					$('#editGuarPeriod').val('');
-					$('#editGuarPeriod').attr("readonly","readonly")
+					$('#editGuarPeriod').attr("readonly", "readonly")
 					$('#editGuarRatio').val('');
-					$('#editGuarRatio').attr("readonly","readonly")
+					$('#editGuarRatio').attr("readonly", "readonly")
 				}
 			})
 

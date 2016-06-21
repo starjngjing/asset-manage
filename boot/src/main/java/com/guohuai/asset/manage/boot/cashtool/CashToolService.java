@@ -9,11 +9,11 @@
  */
 package com.guohuai.asset.manage.boot.cashtool;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import com.guohuai.asset.manage.boot.cashtool.log.CashToolLogService;
 import com.guohuai.asset.manage.boot.enums.CashToolEventType;
 import com.guohuai.asset.manage.component.util.DateUtil;
-import com.guohuai.asset.manage.component.util.StringUtil;
 
 /**
  * <p>
@@ -108,11 +107,13 @@ public class CashToolService {
 	 */
 	public CashTool createInvestment(CashToolManageForm form) {
 		CashTool entity = new CashTool();
-		if (StringUtils.isEmpty(form.getOid())) {
-			entity.setOid(StringUtil.uuid());
-		}
 		try {
 			BeanUtils.copyProperties(form, entity);
+			// 保本比例 百分比转小数
+			if (form.getGuarRatio() != null) {
+				BigDecimal decimal = form.getGuarRatio().divide(new BigDecimal(100));
+				entity.setGuarRatio(decimal);
+			}
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,7 +149,7 @@ public class CashToolService {
 	 */
 	public void check(String oid, String state, String operator) {
 		CashTool cashTool = this.findByOid(oid);
-		if(null == cashTool || !CashTool.CASHTOOL_STATE_pretrial.equals(cashTool.getState())){
+		if (null == cashTool || !CashTool.CASHTOOL_STATE_pretrial.equals(cashTool.getState())) {
 			throw new RuntimeException();
 		}
 		cashTool.setState(state);
