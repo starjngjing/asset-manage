@@ -325,6 +325,8 @@ define([
 							$("#ccpWarrantyLevelForm").validator('destroy')
 							util.form.validator.init($("#ccpWarrantyLevelForm"));
 							$('#ccpWarrantyLevelModal').modal('show');
+							
+							$(document.ccpWarrantyLevelForm.wlevel).off();
 						},
 						'click .item-delete': function(e, value, row) {
 							$("#deleteCcpWarrantyExpireConfirmTitle").html("确定删除风险等级配置？");
@@ -382,6 +384,11 @@ define([
 				$("#ccpWarrantyLevelForm").validator('destroy')
 				util.form.validator.init($("#ccpWarrantyLevelForm"));
 				$('#ccpWarrantyLevelModal').modal('show');
+				
+				$(document.ccpWarrantyLevelForm.wlevel).off().on('change', function() {
+					$(document.ccpWarrantyLevelForm.name).val($(this).find("option:selected").text());
+				});
+				$(document.ccpWarrantyLevelForm.wlevel).change()
 			});
 
 			$('#ccpWarrantyLevelSubmit').on('click', function() {

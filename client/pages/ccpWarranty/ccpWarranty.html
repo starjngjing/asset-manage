@@ -438,10 +438,22 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<div class="form-group">
+												<label>风险等级</label>
+												<select name="wlevel" class="form-control input-sm" placeholder="风险等级" required data-error="风险等级不能为空" >
+													<option value="LOW">低</option>
+													<option value="MID">中</option>
+													<option value="HIGH">高</option>
+												</select>
+												<div class="help-block with-errors text-red"></div>												
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
 												<label>风险等级名称</label>
-												<input type="text" name="name" class="form-control input-sm" placeholder="风险等级名称" maxlength="32" required data-error="风险等级名称不能为空" />
+												<input type="text" name="name" class="form-control input-sm" placeholder="风险等级名称" maxlength="5" required data-error="风险等级名称不能为空" />
 												<div class="help-block with-errors text-red"></div>
-												<input type="hidden" name="oid"/>
 											</div>
 										</div>
 									</div>
@@ -482,6 +494,7 @@
 											</div>
 										</div>
 									</div>
+									<input type="hidden" name="oid"/>
 								</form>
 							</div>
 							<!-- 模态窗底部 -->

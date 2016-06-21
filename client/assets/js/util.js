@@ -111,72 +111,89 @@ define([
          * @param {Object} val
          */
         convertRisk:function(val){
-          // -,0.4)低风险
-          // [0.4,0.6)中风险
-          // [0.6,+)高风险
-          var str = '';
-          var className = '';
-          if(!val){
-            str = '无'
-            className = 'bg-green'
-          }else if (val < 0.4) {
-            str = '低'
-            className = 'bg-blue'
-          } else if (0.4 <= val && val < 0.6) {
-            str = '中'
-            className = 'bg-yellow'
-          } else {
-            str = '高'
-            className = 'bg-red'
-          }
-          return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
+        	var str = '', className = '';
+			var wl = this.getWarrantyLevel(val);
+			console.info(wl)
+			if(wl) {
+				return this.convertRiskLevel(wl.wlevel, wl.name);
+			} else {
+				return this.convertRiskLevel(null);
+			}			
+			return str;
+        },
+        /**
+         * 根据分数值获取风险等级配置项
+         * @param {Object} val
+         */
+        getWarrantyLevel: function(val) {
+        	if(val === null || val === undefined || val.toString().trim() === '')return null;
+        	var warrantyLevel = config.warrantyLevel;
+			if (warrantyLevel) {
+				for (var i = 0; i < warrantyLevel.length; i++) {
+					var item = warrantyLevel[i];
+					var f0 = item.coverLow, f1 = item.coverHigh;
+					var min = item.lowFactor, max = item.highFactor;
+					if (!max || max === '∞') {
+						if (f0 === '[') {
+							if(val >= min)
+								return item;
+						} else {
+							if(val > min)
+								return item;
+						}
+					} else if (!min || min === '∞') {
+						if (f1 === ']') {
+							if(val <= max)
+								return item;
+						} else {
+							if(val < max)
+								return item;
+						}
+					} else {
+						if(f0 === '[') {
+							if(f1 === ']') {
+								if(min <= val && val <= max)
+									return item;
+							} else {
+								if(min <= val && val < max)
+									return item;
+							}
+						} else {
+							if(f1 === ']') {
+								if(min < val && val <= max)
+									return item;
+							} else {
+								if(min < val && val < max)
+									return item;
+							}
+						}
+					}
+				}
+			}
+			return null;
         },
         /**
          * 格式化风险等级
-         * @param {Object} val
+         * @param {Object} val  风险等级
+         * @param {Object} display 显示名称
          */
-        convertRiskLevel:function(val){
+        convertRiskLevel: function(val, display) {
           // 'LOW' || 'L'  低风险
           // 'MID' || 'M'  中风险
           // 'HIGH' || 'H' 高风险
           var str = '';
           var className = '';
           if(!val || val === 'NONE'){
-            str = '无'
+            str = display || '无'
             className = 'bg-green'
           }else if (val === 'LOW' || val === 'L') {
-            str = '低'
+            str = display || '低'
             className = 'bg-blue'
           } else if (val === 'MID' || val === 'M') {
-            str = '中'
+            str = display || '中'
             className = 'bg-yellow'
           } else {
-            str = '高'
-            className = 'bg-red'
-          }
-          return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';
-        },
-        /**
-         * 格式化风险等级
-         * @param {Object} val
-         */
-        convertRiskLevelStrs:function(val,strs){
-          // 'LOW' || 'L'  低风险
-          // 'MID' || 'M'  中风险
-          // 'HIGH' || 'H' 高风险
-          var str = '';
-          var className = '';
-          if(!val || val === 'NONE'){
-            str = '无'
-            className = 'bg-green'
-          }else if (val === 'LOW' || val === 'L') {
-            str = strs
-            className = 'bg-blue'
-          } else if (val === 'MID' || val === 'M') {
-            str = strs
-            className = 'bg-yellow'
-          } else {
-            str = strs
+            str = display || '高'
             className = 'bg-red'
           }
           return '<span style="padding: 1px 15px;" class="' + className + '">' + str + '</span>';

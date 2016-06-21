@@ -52,6 +52,8 @@ public class RiskWarningOptionsForm {
 	public static class Option {
 
 		@NotNull
+		@NotEmpty
+		@NotBlank
 		@Enumerations(values = { "", "NONE", "LOW", "MID", "HIGH" })
 		private String wlevel;
 		private String param0;
