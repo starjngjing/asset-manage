@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +34,8 @@ public class CCPWarrantyLevel implements Serializable {
 	private static final long serialVersionUID = -7004355457279663226L;
 
 	@Id
+	@GenericGenerator(name = "uuid", strategy = "uuid.hex")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid")
 	private String oid;
 	private String name;
 	private String coverLow;

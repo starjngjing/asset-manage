@@ -439,7 +439,7 @@
 										<div class="col-sm-12">
 											<div class="form-group">
 												<label>风险等级名称</label>
-												<input type="text" name="name" class="form-control input-sm" placeholder="风险等级名称" maxlength="32" required />
+												<input type="text" name="name" class="form-control input-sm" placeholder="风险等级名称" maxlength="32" required data-error="风险等级名称不能为空" />
 												<div class="help-block with-errors text-red"></div>
 												<input type="hidden" name="oid"/>
 											</div>
@@ -458,7 +458,7 @@
 														</div>
 														<div class="col-xs-7">
 															<div class="form-group">
-																<div class="input-group range"><input name="lowFactor" type="text" class="form-control input-sm" maxlength="60" data-validpositive="true" data-validfloat="3.4" data-error="风险系数区间必须为前2位后4位小数" required></div>
+																<div class="input-group range"><input name="lowFactor" type="text" class="form-control input-sm" maxlength="60" required data-validpositive="true" data-validfloat="3.4" data-error="风险系数区间必须为前2位后4位小数"></div>
 																<div class="help-block with-errors text-red"></div>
 															</div>
 														</div>
@@ -487,7 +487,7 @@
 							<!-- 模态窗底部 -->
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-								<button id="ccpWarrantyLevelSubmit" type="button" class="btn btn-primary btn-submit">保 存</button>
+								<button id="ccpWarrantyLevelSubmit" type="button" class="btn btn-primary btn-submit ccpWarrantyLevelSubmit">保 存</button>
 							</div>
 						</div>
 					</div>

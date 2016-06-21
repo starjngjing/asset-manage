@@ -109,9 +109,6 @@ define([
 				})
 			});
 
-
-
-
 			$('#ccpWarrantyModeTable').bootstrapTable({
 
 				ajax: function(origin) {
@@ -283,8 +280,7 @@ define([
 					}
 				}]
 			});
-			
-			
+
 			$('#ccpWarrantyLevelTable').bootstrapTable({
 				ajax: function(origin) {
 					http.post(config.api.system.config.ccp.warrantyLevel.search, {
@@ -304,7 +300,7 @@ define([
 				}, {
 					//field: 'Factor',
 					formatter: function(val, row) {
-						return '<i>' + row.coverLow + (row.lowFactor || '∞') + ', ' + (row.highFactor || '∞') + row.coverHigh + '</i>';
+						return '<i>' + row.coverLow + (row.lowFactor == 0 || row.lowFactor ? row.lowFactor : '∞') + ', ' + (row.highFactor == 0 || row.highFactor ? row.highFactor : '∞') + row.coverHigh + '</i>';
 					}
 				}, {
 					align: 'center',
@@ -324,14 +320,14 @@ define([
 					},
 					events: {
 						'click .item-update': function(e, value, row) {
-							$$.formAutoFix($('#ccpRiskLevelForm'), row);
+							$$.formAutoFix($('#ccpWarrantyLevelForm'), row);
 							// 重置和初始化表单验证
-							$("#ccpRiskLevelForm").validator('destroy')
-							util.form.validator.init($("#ccpRiskLevelForm"));
-							$('#ccpRiskLevelModal').modal('show');
+							$("#ccpWarrantyLevelForm").validator('destroy')
+							util.form.validator.init($("#ccpWarrantyLevelForm"));
+							$('#ccpWarrantyLevelModal').modal('show');
 						},
 						'click .item-delete': function(e, value, row) {
-							$("#deleteCcpWarrantyExpireConfirmTitle").html("确定删除担保期限权数配置？");
+							$("#deleteCcpWarrantyExpireConfirmTitle").html("确定删除风险等级配置？");
 							$$.confirm({
 								container: $('#deleteCcpWarrantyExpireModal'),
 								trigger: this,
@@ -342,7 +338,7 @@ define([
 										},
 										contentType: 'form'
 									}, function(result) {
-										$('#ccpWarrantyExpireTable').bootstrapTable('refresh');
+										$('#ccpWarrantyLevelTable').bootstrapTable('refresh');
 									})
 								}
 							})
@@ -377,14 +373,17 @@ define([
 					}
 				})
 			});
-			
+
 			$('#ccpWarrantyLevelAdd').on('click', function() {
+				$('#ccpWarrantyLevelForm').resetForm(); // 先清理表单
+				$(document.ccpWarrantyLevelForm.oid).removeAttr('value'); // 清理隐藏域oid
+
 				// 重置和初始化表单验证
-				$("#ccpRiskLevelForm").validator('destroy')
-				util.form.validator.init($("#ccpRiskLevelForm"));
+				$("#ccpWarrantyLevelForm").validator('destroy')
+				util.form.validator.init($("#ccpWarrantyLevelForm"));
 				$('#ccpWarrantyLevelModal').modal('show');
 			});
-			
+
 			$('#ccpWarrantyLevelSubmit').on('click', function() {
 				if (!$('#ccpWarrantyLevelForm').validator('doSubmitCheck')) return
 				$('#ccpWarrantyLevelForm').ajaxSubmit({
