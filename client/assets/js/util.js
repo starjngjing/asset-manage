@@ -113,7 +113,6 @@ define([
         convertRisk:function(val){
         	var str = '', className = '';
 			var wl = this.getWarrantyLevel(val);
-			console.info(wl)
 			if(wl) {
 				return this.convertRiskLevel(wl.wlevel, wl.name);
 			} else {
