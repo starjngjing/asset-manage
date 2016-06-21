@@ -126,10 +126,10 @@ define([
          */
         getWarrantyLevel: function(val) {
         	if(val === null || val === undefined || val.toString().trim() === '')return null;
-        	var warrantyLevel = config.warrantyLevel;
-			if (warrantyLevel) {
-				for (var i = 0; i < warrantyLevel.length; i++) {
-					var item = warrantyLevel[i];
+        	var levelOptions = config.warrantyLevelOptions;
+			if (levelOptions) {
+				for (var i = 0; i < levelOptions.length; i++) {
+					var item = levelOptions[i];
 					var f0 = item.coverLow, f1 = item.coverHigh;
 					var min = item.lowFactor, max = item.highFactor;
 					if (!max || max === '∞') {
