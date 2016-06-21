@@ -291,14 +291,21 @@ define([
 					})
 				},
 				columns: [{
-					field: 'oid',
+					align: 'center',
 					formatter: function(val, row, index) {
 						return index + 1
 					}
 				}, {
+					align: 'center',
+					field: 'wlevel',
+					formatter: function(val, row, index) {
+						return util.table.formatter.convertRiskLevel(val);
+					}
+				}, {
+					align: 'center',
 					field: 'name'
 				}, {
-					//field: 'Factor',
+					align: 'center',
 					formatter: function(val, row) {
 						return '<i>' + row.coverLow + (row.lowFactor == 0 || row.lowFactor ? row.lowFactor : '∞') + ', ' + (row.highFactor == 0 || row.highFactor ? row.highFactor : '∞') + row.coverHigh + '</i>';
 					}
