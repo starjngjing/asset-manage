@@ -54,24 +54,33 @@ define([
 				}, { // 最新流通份额
 					field: 'circulationShares',
 					formatter: function(val) {
+//						if (val)
+//							return (val / 10000) + '万';
+						return val;
+					}
+				}, { // 持有份额
+					field: 'holdAmount',
+					formatter: function(val) {
 						return val;
 					}
 				}, { // 7日年化收益率
 					field: 'weeklyYield',
 					formatter: function(val) {
 						if (val)
-							return val.toFixed(2) + "%";
+							return (val * 100).toFixed(2) + "%";
+						return val;
+					}
+				}, { // 万份收益
+					field: 'dailyProfit',
+					formatter: function(val) {
+						if (val)
+							return val.toFixed(2) + '元';
 						return val;
 					}
 				}, { // 状态
 					field: 'state',
 					formatter: function(val) {
 						return util.enum.transform('cashtoolStates', val);
-					}
-				}, { // 持有份额
-					field: 'holdAmount',
-					formatter: function(val) {
-						return val;
 					}
 				}, {
 					//              field: 'operator',
@@ -107,7 +116,7 @@ define([
 							}, function(result) {
 								if (result.errorCode == 0) {
 									var data = result.data;
-									$$.detailAutoFix($('#cashToolDetailModal'), data); // 自动填充详情
+									$$.detailAutoFix($('#cashToolDetailModal'), formatCashTool(data)); // 自动填充详情
 									$('#cashToolDetailModal').modal('show');
 								} else {
 									alert('查询失败');
@@ -140,28 +149,18 @@ define([
 							cashtool = row;
 
 							$('#revenueTable').bootstrapTable('refresh');
+							
+							row.cashtoolOid = row.oid; // 手动为 cashtoolOid 赋值
+							
+							$(document.cashToolRevenueForm.cashtoolOid).val(row.oid);
+							
+							$$.detailAutoFix($('#cashToolDetail'), row); // 自动填充详情
+//							$$.formAutoFix($('#cashToolRevenueForm'), row); // 自动填充表单
 
 							// 重置和初始化表单验证
 							$("#cashToolRevenueForm").validator('destroy')
 							util.form.validator.init($("#cashToolRevenueForm"));
 
-							http.post(config.api.cashtoolDetQuery, {
-									data: {
-										oid: row.oid
-									},
-									contentType: 'form'
-								},
-								function(obj) {
-									var data = obj.data;
-									if (!data) {
-										toastr.error('现金管理工具详情数据不存在', '错误信息', {
-											timeOut: 10000
-										});
-									}
-									data.cashtoolOid = data.oid; // 手动为 cashtoolOid 赋值
-									$$.detailAutoFix($('#cashToolDetail'), data); // 自动填充详情
-									$$.formAutoFix($('#cashToolRevenueForm'), data); // 自动填充表单
-								});
 							$('#cashToolRevenueModal').modal('show');
 						}
 
@@ -205,12 +204,17 @@ define([
 
 				}, { // 万份收益
 					field: 'dailyProfit',
-
+					formatter: function(val, row, index) {
+						if (val)
+							return val.toFixed(2) + '元';
+						return val;
+					}
 				}, { // 7日年化收益
 					field: 'weeklyYield',
 					formatter: function(val, row, index) {
 						if (val)
-							return val.toFixed(2) + "%";
+							return (val * 100).toFixed(2) + "%";
+						return val;
 					}
 				}, { // 录入时间
 					field: 'createTime',
@@ -263,6 +267,22 @@ define([
 				revenuePageOptions.page = parseInt(val.offset / val.limit) + 1
 
 				return val
+			}
+
+			/**
+			 * 格式化现金管理工具
+			 * @param {Object} t
+			 */
+			function formatCashTool(t) {
+				if (t) {
+					var t2 = {};
+					$.extend(t2, t); //合并对象，修改第一个对象
+					t2.guarRatio = t2.guarRatio ? (t2.guarRatio * 100).toFixed(2) + '%' : ""; // 保本比例（%）
+					t2.weeklyYield = t2.weeklyYield ? (t2.weeklyYield * 100).toFixed(2) + '%' : ""; // 保本比例（%）
+
+					return t2;
+				}
+				return t;
 			}
 
 		}

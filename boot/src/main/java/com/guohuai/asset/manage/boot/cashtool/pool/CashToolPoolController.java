@@ -153,6 +153,18 @@ public class CashToolPoolController extends BaseController {
 			});
 		}
 		
+		// 持有份额
+		String holdAmount = request.getParameter("holdAmount");
+		if (StringUtils.isNotBlank(holdAmount)) {
+			spec = Specifications.where(spec).and(new Specification<CashTool>() {
+				@Override
+				public Predicate toPredicate(Root<CashTool> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					Section<CashTool> section = new Section<CashTool>(holdAmount);
+					return section.build(root, cb, "holdAmount");
+				}
+			});
+		}
+		
 		// 7日年化收益率
 		String weeklyYield = request.getParameter("weeklyYield");
 		if (StringUtils.isNotBlank(weeklyYield)) {

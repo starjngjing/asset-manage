@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -21,11 +22,13 @@ public class CCPWarrantyLevelForm {
 	@NotNull
 	@NotBlank
 	@NotEmpty
+	@Size(max = 32)
 	private String name;
 
 	@NotNull
 	@NotBlank
 	@NotEmpty
+	@Size(max = 10)
 	private String coverLow;
 	@Digits(integer = 4, fraction = 4)
 	private BigDecimal lowFactor;
@@ -34,6 +37,7 @@ public class CCPWarrantyLevelForm {
 	@NotNull
 	@NotBlank
 	@NotEmpty
+	@Size(max = 10)
 	private String coverHigh;
 
 }

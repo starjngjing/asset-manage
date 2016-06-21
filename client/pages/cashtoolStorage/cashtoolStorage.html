@@ -48,26 +48,39 @@
 								<div class="form-group">
 									<label>最新流通份额</label>
 									<select name="circulationShares" class="form-control input-sm">
-                    <option value="" selected>不限</option>
-                    <option value="-1000000">小于100万</option>
-                    <option value=":1000000-10000000">100万 - 1000万</option>
-                    <option value=":1000000-100000000">1000万 - 1亿</option>
-                    <option value=":100000000-1000000000">1亿 - 10亿</option>
-                    <option value=":1000000000-">大于10亿</option>
-                  </select>
+					                	<option value="" selected>不限</option>
+					                	<option value="-1000000">小于100万</option>
+					                	<option value=":1000000-10000000">100万 - 1000万</option>
+					                	<option value=":10000000-100000000">1000万 - 1亿</option>
+					                	<option value=":100000000-1000000000">1亿 - 10亿</option>
+					                	<option value=":1000000000-">大于10亿</option>
+					                </select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>持有份额</label>
+									<select name="holdAmount" class="form-control input-sm">
+					                	<option value="" selected>不限</option>
+					                	<option value="-1000000">小于100万</option>
+					                	<option value=":1000000-10000000">100万 - 1000万</option>
+					                	<option value=":10000000-100000000">1000万 - 1亿</option>
+					                	<option value=":100000000-1000000000">1亿 - 10亿</option>
+					                	<option value=":1000000000-">大于10亿</option>
+					                </select>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label>7日年化收益率</label>
 									<select name="weeklyYield" class="form-control input-sm">
-                    <option value="" selected>不限</option>
-                    <option value="-3">小于3%</option>
-                    <option value=":3-6">3% - 6%</option>
-                    <option value=":6-10">6% - 10%</option>
-                    <option value=":10-15">10% - 15%</option>
-                    <option value=":15-">大于15%</option>
-                  </select>
+                    					<option value="" selected>不限</option>
+					                    <option value="-0.03">小于3%</option>
+					                    <option value=":0.03-0.06">3% - 6%</option>
+					                    <option value=":0.06-0.10">6% - 10%</option>
+					                    <option value=":0.10-0.15">10% - 15%</option>
+					                    <option value=":0.15-">大于15%</option>
+                  					</select>
 								</div>
 							</div>
 						</div>
@@ -80,9 +93,10 @@
 								<th>基金名称</th>
 								<th>基金类型</th>
 								<th>最新流通份额</th>
-								<th>7日年化收益率</th>
-								<th>状态</th>
 								<th>持有份额</th>
+								<th>7日年化收益率</th>
+								<th>万份收益</th>
+								<th>状态</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -156,7 +170,7 @@
 							<th>编号</th>
 							<th>交易日</th>
 							<th>万份收益</th>
-							<th>7日年化收益</th>
+							<th>7日年化收益率</th>
 							<th>录入时间</th>
 							<th>操作员</th>
 						</tr>
@@ -183,7 +197,10 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>万份收益</label>
-								<input name="dailyProfit" type="text" class="form-control input-sm" placeholder="万份收益" required data-error="万份收益不能为空">
+								<div class="input-group input-group-sm">									
+									<input name="dailyProfit" type="text" class="form-control input-sm" placeholder="万份收益" required data-error="万份收益不能为空">
+									<span class="input-group-addon">元</span>
+								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -193,7 +210,7 @@
 							<div class="form-group">
 								<label>7日年化收益率</label>
 								<div class="input-group input-group-sm">
-									<input name="weeklyYield" type="text" class="form-control input-sm" placeholder="7日年化收益率" required data-validfloat="3.2" data-error="7日年化收益率不能为空且最大为3位整数2位小数">
+									<input name="weeklyYield" type="text" class="form-control input-sm" placeholder="7日年化收益率" required data-validfloat="3.5" data-error="7日年化收益率不能为空且最大为3位整数5位小数">
 									<span class="input-group-addon">%</span>
 								</div>
 								<div class="help-block with-errors text-red"></div>
@@ -278,7 +295,7 @@
 					</div>
 					<div class="col-sm-6">
 						<dl class="dl-horizontal">
-							<dt>是否isFof</dt>
+							<dt>是否Fof</dt>
 							<dd>
 								<div data-detail-fetch="isFof" data-enum-transform="booleanSelect"></div>
 							</dd>

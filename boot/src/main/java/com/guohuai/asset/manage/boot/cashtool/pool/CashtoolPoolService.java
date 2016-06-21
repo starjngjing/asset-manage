@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.cashtool.pool;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -101,6 +102,12 @@ public class CashtoolPoolService {
 		
 		CashToolRevenue cr = new CashToolRevenue();
 		BeanUtils.copyProperties(form, cr);
+		BigDecimal weeklyYield = form.getWeeklyYield();
+		// 七日化收益 百分比转小数
+		if (weeklyYield != null) {
+			weeklyYield = weeklyYield.divide(new BigDecimal(100));
+			cr.setWeeklyYield(weeklyYield);
+		}
 
 		CashTool cashTool = this.cashtoolDao.findOne(cashtoolOid);
 		if (null == cashTool)
