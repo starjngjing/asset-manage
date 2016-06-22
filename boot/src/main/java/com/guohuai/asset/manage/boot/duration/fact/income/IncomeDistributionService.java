@@ -130,7 +130,7 @@ public class IncomeDistributionService {
 			//上一收益分配日
 			if(lastIncomeEvent!=null) {
 				resp.setLastIncomeDate(DateUtil.format(lastIncomeEvent.getBaseDate()));
-				resp.setIncomeDays(DateUtil.getDaysBetween(DateUtil.getCurrDate(), new java.util.Date(lastIncomeEvent.getBaseDate().getTime())));//收益分配天数
+				resp.setIncomeDays(DateUtil.getDaysBetween(DateUtil.getCurrDate(), new java.util.Date(lastIncomeEvent.getBaseDate().getTime()))-1);//收益分配天数
 			} else {
 				resp.setLastIncomeDate("");
 				resp.setIncomeDays(1);//收益分配天数
@@ -194,7 +194,7 @@ public class IncomeDistributionService {
 			@Override
 			public Predicate toPredicate(Root<IncomeEvent> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.and(cb.equal(root.get("assetPool").get("oid").as(String.class), assetPoolOid), 
-						cb.equal(root.get("baseDate").as(Date.class), new Date(new java.util.Date().getTime())));
+						cb.lessThan(root.get("baseDate").as(Date.class), new Date(new java.util.Date().getTime())));
 			}
 		};
 		Specification<IncomeEvent> statusSpec = new Specification<IncomeEvent>() {
