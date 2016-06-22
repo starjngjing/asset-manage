@@ -338,7 +338,7 @@ define([
 						return true
 					}
 					var target = $el.attr('data-validdateafter')
-					return DateTime.parse(value) >= DateTime.parse(target)
+					return Date.parse(value) >= Date.parse($(target).val().trim())
 				}
 
 			},
