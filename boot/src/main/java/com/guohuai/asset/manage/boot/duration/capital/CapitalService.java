@@ -19,6 +19,7 @@ import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
 import com.guohuai.asset.manage.boot.duration.order.OrderService;
 import com.guohuai.asset.manage.boot.duration.order.fund.FundAuditEntity;
 import com.guohuai.asset.manage.component.util.StringUtil;
+import com.guohuai.asset.manage.component.web.view.PageResp;
 
 /**
  * 存续期--账户服务接口
@@ -106,7 +107,7 @@ public class CapitalService {
 	 * @return
 	 */
 	@Transactional
-	public Object[] getCapitalListByPid(String pid, Pageable pageable) {
+	public PageResp<CapitalForm> getCapitalListByPid(String pid, Pageable pageable) {
 		List<CapitalForm> formList = Lists.newArrayList();
 		Page<CapitalEntity> list = capitalDao.findByOid(pid, pageable);
 		if (null != list.getContent() && !list.getContent().isEmpty()) {
@@ -140,11 +141,11 @@ public class CapitalService {
 			}
 		}
 		
-		Object[] obj = new Object[2];
-		obj[0] = list.getTotalElements();
-		obj[1] = formList;
+		PageResp<CapitalForm> rep = new PageResp<>();
+		rep.setTotal(list.getTotalElements());
+		rep.setRows(formList);
 		
-		return obj;
+		return rep;
 	}
 	
 	/**
