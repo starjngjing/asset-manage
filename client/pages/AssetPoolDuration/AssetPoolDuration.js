@@ -149,7 +149,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (marketAdjustListPageOptions.page - 1) * marketAdjustListPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -560,7 +560,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (accountDetailPageOptions.page - 1) * accountDetailPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -789,7 +789,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (orderingToolPageOptions.page - 1) * orderingToolPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -1151,7 +1151,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (toolPageOptions.page - 1) * toolPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -1393,7 +1393,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (orderingTrustPageOptions.page - 1) * orderingTrustPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -2432,7 +2432,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (trustPageOptions.page - 1) * trustPageOptions.rows + index + 1
 					}
 				}, 
 				{
@@ -3140,7 +3140,7 @@ define([
 			function getProfitDistributeQueryParams(val) {
 				pdListPageOptions.rows = val.limit
 				pdListPageOptions.page = parseInt(val.offset / val.limit) + 1
-				pdListPageOptions.assetPoolOid = document.searchForm.assetPoolName.value.trim()
+				pdListPageOptions.assetPoolOid = pageState.pid
 				return val
 			}
 			
@@ -3167,7 +3167,7 @@ define([
 					width: 60,
 					align: 'center',
 					formatter: function(val, row, index) {
-						return index + 1
+						return (pdListPageOptions.number - 1) * pdListPageOptions.size + index + 1
 					}
 				}, 
 				{
@@ -3354,12 +3354,23 @@ define([
 					contentType: 'form'
 				}, function(result) {
 					if (result.errorCode == 0) {
+						var data = result
 						util.form.reset($('#profitDistributeForm'))
+						$("#profitDistributeForm").validator('destroy')
 						var form = document.profitDistributeForm
 						form.assetpoolOid.value = pageState.pid
 						
-						$$.detailAutoFix(modal, result)
-						$$.formAutoFix($(form), result) // 自动填充表单
+						$$.detailAutoFix(modal, data)
+						$$.formAutoFix($(form), data) // 自动填充表单
+						
+						document.profitDistributeForm.incomeDaysIn.value = data.incomeDays
+						if(data.lastIncomeDate=='') {
+							$('#incomeDaysStrRowDiv').hide()
+							$('#incomeDaysRowDiv').show()
+						} else {
+							$('#incomeDaysStrRowDiv').show()
+							$('#incomeDaysRowDiv').hide()
+						}
 						util.form.validator.init($('#profitDistributeForm'))
 						modal.modal('show')
 					} else {
@@ -3442,7 +3453,6 @@ define([
 					incomeCalcBasis = 365
 				}
 				
-				
 				var productDistributionIncome = productAnnualYield*productTotalScale*incomeDays/incomeCalcBasis/100//产品范畴 分配收益1
 				
 				var receiveIncome = 0
@@ -3459,6 +3469,58 @@ define([
 				var millionCopiesIncome = productAnnualYield/incomeCalcBasis*10000//万份收益 试算结果
 				
 				document.profitDistributeForm.productDistributionIncome.value = productDistributionIncome.toFixed(2)
+				document.profitDistributeForm.undisIncome.value = undisIncome.toFixed(2)//未分配收益 试算结果
+				document.profitDistributeForm.receiveIncome.value = receiveIncome.toFixed(2)//应收投资收益 试算结果
+				document.profitDistributeForm.totalScale.value = totalScale.toFixed(2)//产品总规模 试算结果
+				document.profitDistributeForm.annualYield.value = productAnnualYield.toFixed(2)//年化收益率 试算结果
+				document.profitDistributeForm.millionCopiesIncome.value = millionCopiesIncome.toFixed(4)//万份收益 试算结果
+				
+			})
+			
+			// 分收益分配天数输入框input事件绑定
+			$(document.profitDistributeForm.incomeDaysIn).on('input', function() {
+				var incomeDays = parseInt(this.value) || 0 //收益分配天数
+				
+				document.profitDistributeForm.incomeDays.value = incomeDays
+				var productDistributionIncome = parseFloat(document.profitDistributeForm.productDistributionIncome.value) || 0 //产品范畴 分配收益1
+				var productTotalScale = parseFloat(document.profitDistributeForm.productTotalScale.value)//产品范畴 产品总规模 1
+				var productRewardBenefit = parseFloat(document.profitDistributeForm.productRewardBenefit.value)//产品范畴 产品奖励收益 
+				var incomeCalcBasis = parseInt(document.profitDistributeForm.incomeCalcBasis.value)//计算基础
+				var apUndisIncome = parseFloat(document.profitDistributeForm.apUndisIncome.value)//未分配收益 资产池范畴
+				
+				if(isNaN(apUndisIncome)){
+					apUndisIncome = 0
+				}
+				if(isNaN(productTotalScale)) {
+					productTotalScale = 0
+				}
+				if(isNaN(productRewardBenefit)) {
+					productRewardBenefit = 0
+				}
+				if(isNaN(incomeCalcBasis)) {
+					incomeCalcBasis = 365
+				}
+				
+				var productAnnualYield = 0//产品范畴 年化收益率
+				if(!isNaN(productTotalScale) && productTotalScale!=0) {
+					productAnnualYield = productDistributionIncome/productTotalScale*incomeCalcBasis/incomeDays*100
+				}
+				
+				var receiveIncome = 0
+				var undisIncome = apUndisIncome-productRewardBenefit-productDistributionIncome//未分配收益 试算结果
+				if(isNaN(undisIncome)) {
+					undisIncome = 0
+				}
+				
+				if(undisIncome<0) {
+					receiveIncome = Math.abs(undisIncome)
+					undisIncome = 0
+				}
+				
+				var totalScale = productTotalScale+productRewardBenefit+productDistributionIncome//产品总规模 试算结果
+				var millionCopiesIncome = productAnnualYield/incomeCalcBasis*10000//万份收益 试算结果
+				
+				document.profitDistributeForm.productAnnualYield.value = productAnnualYield.toFixed(2)//年化收益率 产品范畴
 				document.profitDistributeForm.undisIncome.value = undisIncome.toFixed(2)//未分配收益 试算结果
 				document.profitDistributeForm.receiveIncome.value = receiveIncome.toFixed(2)//应收投资收益 试算结果
 				document.profitDistributeForm.totalScale.value = totalScale.toFixed(2)//产品总规模 试算结果

@@ -125,7 +125,7 @@
               <table id="marketAdjustTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>基准日</th>
                     <th>份额(万份)</th>
                     <th>单位净值</th>
@@ -144,7 +144,7 @@
               <table id="profitDistributeTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>基准日</th>
                     <th>资产池名称</th>
                     <th>产品名称</th>
@@ -289,7 +289,7 @@
               <table id="orderingToolTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>名称</th>
                     <th>类型</th>
                     <th>万份收益</th>
@@ -308,7 +308,7 @@
               <table id="toolTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>名称</th>
                     <th>类型</th>
                     <th>万份收益</th>
@@ -341,7 +341,7 @@
               <table id="orderingTrustTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>名称</th>
                     <th>预计年化收益(%)</th>
                     <th>成立日</th>
@@ -363,7 +363,7 @@
               <table id="trustTable" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>序号</th>
                     <th>名称</th>
                     <th>预计年化收益(%)</th>
                     <th>成立日</th>
@@ -3016,7 +3016,7 @@
                 <table id="accountDetailTable" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th></th>
+                      <th>序号</th>
                       <th>科目</th>
                       <th>创建日期</th>
                       <th>操作类型</th>
@@ -3630,11 +3630,34 @@
 							</dd>
 						</dl>
 					</div>
-					<div class="row">	
+					<div class="row" id="incomeDaysStrRowDiv">	
 						<dl class="dl-horizontal">
 							<dt>收益分配天数:</dt>
 							<dd>
 								<div data-detail-fetch="incomeDaysStr"></div>
+							</dd>
+						</dl>
+					</div>
+					<div class="row" id="incomeDaysRowDiv">	
+						<dl class="dl-horizontal">
+							<dt>收益分配天数:</dt>
+							<dd>
+								<!--<div class="col-sm-6">-->
+									<div class="form-group">
+        	      		<div class="input-group input-group-sm">
+	        	      		<input id="incomeDaysIn"
+	        	      			name="incomeDaysIn" 
+	        	      			type="text"
+	        	      			class="form-control"  
+			        	      	required="required" 
+	  		      	      	data-validfloat="12" 
+	      		  	      	data-validint="0-240"
+            		        data-error="收益分配天数应该大于0小于366">
+	              		  <span class="input-group-addon">天</span>
+				            </div>
+    			    	    <div class="help-block with-errors text-red"></div>
+      	  			  </div>
+								<!--</div>-->
 							</dd>
 						</dl>
 					</div>

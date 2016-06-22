@@ -96,14 +96,14 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空">
+								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空" maxlength="32">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空">
+								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空" maxlength="32">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -133,7 +133,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资方向</label>
-								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向">
+								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向" maxlength="32">
 							</div>
 						</div>
 					</div>
@@ -236,7 +236,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>评级机构</label>
-								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构">
+								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -287,7 +287,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>收益说明</label>
-								<textarea name="expArorDesc" rows="3" class="form-control input-sm" placeholder="收益说明" style="resize:none"></textarea>
+								<textarea name="expArorDesc" rows="3" class="form-control input-sm" placeholder="收益说明" style="resize:none" ></textarea>
 							</div>
 						</div>
 					</div>
@@ -296,7 +296,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>优势说明</label>
-								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明" style="resize:none"></textarea>
+								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -305,7 +305,7 @@
 						<div class="col-sm-9">
 							<div class="form-group">
 								<label>融资方</label>
-								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方">
+								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-3">
@@ -322,7 +322,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>融资方简介</label>
-								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介" style="resize:none"></textarea>
+								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -330,13 +330,13 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>担保方</label>
-								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方">
+								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>担保方简介</label>
-								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介" style="resize:none"></textarea>
+								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -345,7 +345,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>资金用途</label>
-								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途" style="resize:none"></textarea>
+								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -354,7 +354,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>还款说明</label>
-								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明" style="resize:none"></textarea>
+								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -363,7 +363,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>风控措施</label>
-								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施" style="resize:none"></textarea>
+								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -399,14 +399,14 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的编号</label>
-								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空">
+								<input name="sn" type="text" class="form-control input-sm" placeholder="标的编号" required data-error="标的编号不能为空" maxlength="32">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>标的名称</label>
-								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空">
+								<input name="name" type="text" class="form-control input-sm" placeholder="标的名称" required data-error="标的名称不能为空" maxlength="32">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -436,7 +436,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资方向</label>
-								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向">
+								<input name="investment" type="text" class="form-control input-sm" placeholder="投资方向" maxlength="32">
 							</div>
 						</div>
 					</div>
@@ -539,7 +539,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>评级机构</label>
-								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构">
+								<input name="ratingAgency" type="text" class="form-control input-sm" placeholder="评级机构" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -590,7 +590,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>收益说明</label>
-								<textarea name="expArorDesc" rows="3" class="form-control input-sm" placeholder="收益说明" style="resize:none"></textarea>
+								<textarea name="expArorDesc" rows="3" class="form-control input-sm" placeholder="收益说明" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -599,7 +599,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>优势说明</label>
-								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明" style="resize:none"></textarea>
+								<textarea name="superiority" rows="3" class="form-control input-sm" placeholder="优势说明" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -608,7 +608,7 @@
 						<div class="col-sm-9">
 							<div class="form-group">
 								<label>融资方</label>
-								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方">
+								<input name="financer" type="text" class="form-control input-sm" placeholder="融资方" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-3">
@@ -625,7 +625,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>融资方简介</label>
-								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介" style="resize:none"></textarea>
+								<textarea name="financerDesc" rows="3" class="form-control input-sm" placeholder="融资方简介" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -633,13 +633,13 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>担保方</label>
-								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方">
+								<input name="warrantor" type="text" class="form-control input-sm" placeholder="担保方" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>担保方简介</label>
-								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介" style="resize:none"></textarea>
+								<textarea name="warrantorDesc" rows="3" class="form-control input-sm" placeholder="担保方简介" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -648,7 +648,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>资金用途</label>
-								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途" style="resize:none"></textarea>
+								<textarea name="usages" rows="3" class="form-control input-sm" placeholder="资金用途" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -657,7 +657,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>还款说明</label>
-								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明" style="resize:none"></textarea>
+								<textarea name="repayment" rows="3" class="form-control input-sm" placeholder="还款说明" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
@@ -666,7 +666,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>风控措施</label>
-								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施" style="resize:none"></textarea>
+								<textarea name="risk" rows="3" class="form-control input-sm" placeholder="风控措施" style="resize:none" maxlength="1024"></textarea>
 							</div>
 						</div>
 					</div>
