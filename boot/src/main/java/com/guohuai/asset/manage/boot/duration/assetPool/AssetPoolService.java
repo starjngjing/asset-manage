@@ -38,6 +38,7 @@ import com.guohuai.asset.manage.boot.duration.order.trust.TrustService;
 import com.guohuai.asset.manage.component.util.BigDecimalUtil;
 import com.guohuai.asset.manage.component.util.DateUtil;
 import com.guohuai.asset.manage.component.util.StringUtil;
+import com.guohuai.asset.manage.component.web.view.PageResp;
 
 /**
  * 存续期--资产池服务接口
@@ -91,7 +92,8 @@ public class AssetPoolService {
 			entity.setCashtoolRate(BigDecimalUtil.formatForDivide100(form.getCashtoolRate()));
 			entity.setTargetRate(BigDecimalUtil.formatForDivide100(form.getTargetRate()));
 			entity.setCashFactRate(BigDecimalUtil.Num1);
-			entity.setState(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01"));
+			entity.setState("ASSETPOOLSTATE_01");
+			entity.setSPV(form.getSPV());
 			entity.setCreater(uid);
 			entity.setCreateTime(DateUtil.getSqlCurrentDate());
 			
@@ -128,7 +130,7 @@ public class AssetPoolService {
 	 * @return
 	 */
 	@Transactional
-	public Object[] getAllList(Specification<AssetPoolEntity> spec, Pageable pageable) {
+	public PageResp<AssetPoolForm> getAllList(Specification<AssetPoolEntity> spec, Pageable pageable) {
 		List<AssetPoolForm> formList = Lists.newArrayList();
 		Page<AssetPoolEntity> entityList = assetPoolDao.findAll(spec, pageable);
 		AssetPoolForm form = null;
@@ -137,21 +139,22 @@ public class AssetPoolService {
 				form = new AssetPoolForm();
 				try {
 					BeanUtils.copyProperties(form, entity);
-					form.setState(entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01")) 
-							?  "0" 
-									: entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02")) 
-									? "1" : "-1");
+//					form.setState(entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_01")) 
+//							?  "0" 
+//									: entity.getState().equals(AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_02")) 
+//									? "1" : "-1");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				formList.add(form);
 			}
 		}
-		Object[] obj = new Object[2];
-		obj[0] = entityList.getTotalElements();
-		obj[1] = formList;
 		
-		return obj;
+		PageResp<AssetPoolForm> rep = new PageResp<AssetPoolForm>();
+		rep.setRows(formList);
+		rep.setTotal(entityList.getTotalElements());
+		
+		return rep;
 	}
 	
 	/**

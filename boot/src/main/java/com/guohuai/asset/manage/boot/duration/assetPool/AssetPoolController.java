@@ -2,11 +2,6 @@ package com.guohuai.asset.manage.boot.duration.assetPool;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
+import com.guohuai.asset.manage.boot.duration.capital.CapitalForm;
 import com.guohuai.asset.manage.boot.duration.capital.CapitalService;
 import com.guohuai.asset.manage.component.web.BaseController;
+import com.guohuai.asset.manage.component.web.view.PageResp;
 import com.guohuai.asset.manage.component.web.view.Response;
+
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 
 
 /**
@@ -76,8 +77,11 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAll(@RequestParam(required = false) String name,
-			@RequestParam(required = false) String state,
+	public @ResponseBody ResponseEntity<PageResp<AssetPoolForm>> getAll(
+			@And({
+				@Spec(params = "name", path = "name", spec = Like.class),
+				@Spec(params = "state", path = "state", spec = Equal.class)
+			})Specification<AssetPoolEntity> spec,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int rows,
 			@RequestParam(required = false, defaultValue = "createTime") String sortField,
@@ -86,28 +90,9 @@ public class AssetPoolController extends BaseController {
 		if (!"desc".equals(sort)) {
 			sortDirection = Direction.ASC;
 		}
-		Specification<AssetPoolEntity> spec = new Specification<AssetPoolEntity>() {
-			@Override
-			public Predicate toPredicate(Root<AssetPoolEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> list = Lists.newArrayList();
-				if (null != name && !"".equals(name)) {
-					list.add(cb.like(root.get("name").as(String.class), "%" + name + "%"));
-				}
-				if (null != state && !"".equals(state)) {
-					list.add(cb.equal(root.get("state").as(String.class), AssetPoolEntity.PoolState.get(state)));
-				} else {
-					list.add(cb.notEqual(root.get("state").as(String.class), AssetPoolEntity.PoolState.get("ASSETPOOLSTATE_04")));
-				}
-				Predicate[] p = new Predicate[list.size()];
-				return cb.and(list.toArray(p));
-			}
-		};
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
-		Object[] obj = assetPoolService.getAllList(spec, pageable);
-		Response r = new Response();
-		r.with("rows", obj[1]);
-		r.with("total", obj[0]);
-		return new ResponseEntity<Response>(r, HttpStatus.OK);
+		PageResp<AssetPoolForm> rep = assetPoolService.getAllList(spec, pageable);
+		return new ResponseEntity<PageResp<AssetPoolForm>>(rep, HttpStatus.OK);
 	}
 
 	/**
@@ -191,7 +176,7 @@ public class AssetPoolController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllCapitalList", method = { RequestMethod.POST })
-	public @ResponseBody ResponseEntity<Response> getAllCapitalList(String pid,
+	public @ResponseBody ResponseEntity<PageResp<CapitalForm>> getAllCapitalList(String pid,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "10") int rows,
 			@RequestParam(required = false, defaultValue = "createTime") String sortField,
@@ -202,11 +187,8 @@ public class AssetPoolController extends BaseController {
 		}
 		Pageable pageable = new PageRequest(page - 1, rows, new Sort(new Order(sortDirection, sortField)));
 		pid = assetPoolService.getPid(pid);
-		Object[] obj = capitalService.getCapitalListByPid(pid, pageable);
-		Response r = new Response();
-		r.with("rows", obj[1]);
-		r.with("total", obj[0]);
-		return new ResponseEntity<Response>(r, HttpStatus.OK);
+		PageResp<CapitalForm> rep = capitalService.getCapitalListByPid(pid, pageable);
+		return new ResponseEntity<PageResp<CapitalForm>>(rep, HttpStatus.OK);
 	}
 	
 	/**
