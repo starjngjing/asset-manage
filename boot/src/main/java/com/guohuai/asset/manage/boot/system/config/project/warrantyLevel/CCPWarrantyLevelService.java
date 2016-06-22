@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.guohuai.asset.manage.component.exception.AMPException;
+import com.guohuai.asset.manage.component.util.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,7 @@ public class CCPWarrantyLevelService {
 		CCPWarrantyLevel level = new CCPWarrantyLevel();
 		BeanUtils.copyProperties(form, level);
 		if(StringUtils.isBlank(level.getOid())){
-			level.setOid(null);
+			level.setOid(StringUtil.uuid());
 			log.debug("新增风险等级配置");
 		} else {
 			log.debug("修改风险等级配置");			
