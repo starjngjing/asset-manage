@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.guohuai.asset.manage.boot.duration.assetPool.AssetPoolService;
+import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.BaseController;
 import com.guohuai.asset.manage.component.web.view.BaseResp;
 import com.guohuai.asset.manage.component.web.view.PageResp;
@@ -32,6 +35,8 @@ public class IncomeDistributionController extends BaseController {
 	
 	@Autowired
 	private IncomeDistributionService incomeService;
+	@Autowired
+	private AssetPoolService poolService;
 	
 	/**
 	 * 收益分配弹出框详情查询
@@ -98,6 +103,12 @@ public class IncomeDistributionController extends BaseController {
 			rows = 1;
 		}
 		
+		String pid = null;
+		if(StringUtil.isEmpty(assetPoolOid)) {
+			pid = poolService.getPid("");
+		}
+		final String apOid = StringUtil.isEmpty(assetPoolOid)==false?assetPoolOid:pid;
+		
 		Direction sortDirection = Direction.DESC;
 		if (!"desc".equals(order)) {
 			sortDirection = Direction.ASC;
@@ -106,7 +117,7 @@ public class IncomeDistributionController extends BaseController {
 			@Override
 			public Predicate toPredicate(Root<IncomeAllocate> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.and(cb.notEqual(root.get("incomeEvent").get("status").as(String.class), IncomeEvent.STATUS_Delete),
-						cb.equal(root.get("incomeEvent").get("assetPool").get("oid").as(String.class), assetPoolOid));
+						cb.equal(root.get("incomeEvent").get("assetPool").get("oid").as(String.class), apOid));
 			}
 		};
 		spec = Specifications.where(spec);
