@@ -290,6 +290,12 @@ define([
 						origin.success(rlt)
 					})
 				},
+				onLoadSuccess:function(data){
+					/**
+		            * 获取风险等级配置值信息存到config中，并首次全局初始化
+		            */
+		            util.initWarrantyLevelOptions(data);
+				},
 				columns: [{
 					align: 'center',
 					formatter: function(val, row, index) {

@@ -4,8 +4,9 @@
  */
 
 define([
+  'http',
   'config'
-],function (config) {
+],function (http, config) {
   return {
     /**
      * table操作实用工具
@@ -427,6 +428,25 @@ define([
   			pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
   		}
   		return pwd;
-  	}
+  	},
+    /**
+     * 获取风险等级配置值信息存到config中，并首次全局初始化
+     * @param {Object} data 数据
+     */
+    initWarrantyLevelOptions: function(data) {
+    	if(!data) {
+          /**
+           * 获取风险等级配置值信息存到config中，并首次全局初始化
+           */
+          http.post(config.api.system.config.ccp.warrantyLevel.search, {
+            contentType: 'form'
+          }, function (data) {
+          	if(data)
+          		config.warrantyLevelOptions = data;
+          })
+      	} else {
+      		config.warrantyLevelOptions = data;
+      	}
+    }
   }
 })
