@@ -117,7 +117,7 @@ public class ProductController extends BaseController {
 	/**
 	 * 产品明细
 	 * @param oid 产品类型的oid
-	 * @return {@link ResponseEntity<ProductRep>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 * @return {@link ResponseEntity<ProductDetailResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
 	 */
 	@RequestMapping(value = "/detail", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody

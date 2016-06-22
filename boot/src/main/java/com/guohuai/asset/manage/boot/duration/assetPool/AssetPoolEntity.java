@@ -113,6 +113,8 @@ public class AssetPoolEntity implements Serializable {
 	private String operator;
 	// 估值基准日
 	private Date baseDate;
+	// SPV
+	private String SPV;
 	// 创建日期
 	private Timestamp createTime;
 	// 更新日期

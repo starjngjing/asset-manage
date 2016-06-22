@@ -168,57 +168,8 @@ define([
 							return util.table.formatter.generateButton(buttons);
 						},
 						events: {
-							'click .item-detail': function(e, value, row) {
-								http.post(config.api.productDetail, {
-									data: {
-										oid: row.oid
-									},
-									contentType: 'form'
-								}, function(result) {
-									if (result.errorCode == 0) {
-										var data = result;
-
-										switch (data.typeOid) {
-											case 'PRODUCTTYPE_01':
-												$('#detailProductType01Area').show()
-												$('#detailProductType02Area').hide()
-												break
-											case 'PRODUCTTYPE_02':
-												$('#detailProductType02Area').show()
-												$('#detailProductType01Area').hide()
-												break
-										}
-
-										var productDetailInvestFiles = []
-										if (data.investFiles != null && data.investFiles.length > 0) {
-											for (var i = 0; i < data.investFiles.length; i++) {
-												productDetailInvestFiles.push(data.investFiles[i])
-											}
-										}
-										$('#productDetailInvestFileTable').bootstrapTable('load', productDetailInvestFiles)
-
-										var productDetailFiles = []
-										if (data.files != null && data.files.length > 0) {
-											for (var i = 0; i < data.files.length; i++) {
-												productDetailFiles.push(data.files[i])
-											}
-										}
-										$('#productDetailFileTable').bootstrapTable('load', productDetailFiles)
-
-										var productRewards = []
-										if (data.rewards != null && data.rewards.length > 0) {
-											for (var i = 0; i < data.rewards.length; i++) {
-												productRewards.push(data.rewards[i])
-											}
-										}
-										$('#productRewardTable').bootstrapTable('load', productRewards)
-
-										$$.detailAutoFix($('#productDetailModal'), data); // 自动填充详情
-										$('#productDetailModal').modal('show');
-									} else {
-										alert(查询失败);
-									}
-								})
+							'click .item-detail': function(e, val, row) {
+								util.nav.dispatch('productDetail', 'id=' + row.oid)
 							}
 						}
 					}, ]

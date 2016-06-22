@@ -105,19 +105,16 @@ define([
 					field: 'state',
 					formatter: function(val) {
 						var className = ''
-						var str = ''
-						switch (parseInt(val)) {
-							case 0:
+						var str = util.enum.transform('ASSETPOOLSTATE', val)
+						switch (val) {
+							case 'ASSETPOOLSTATE_01':
 								className = 'text-yellow'
-								str = '未审核'
 								break
-							case 1:
+							case 'ASSETPOOLSTATE_02':
 								className = 'text-green'
-								str = '存续期'
 								break
-							case -1:
+							case 'ASSETPOOLSTATE_01':
 								className = 'text-red'
-								str = '未通过'
 								break
 						}
 						return '<span class="' + className + '">' + str + '</span>'
@@ -299,6 +296,10 @@ define([
 
 			// 新增资产池按钮点击事件
 			$('#assetPoolAdd').on('click', function() {
+				var oid = 111
+				var name = SPV
+				var SPVSelectOptions = '<option value="' + oid + '">' + name + '</option>'
+				$('#SPV').html(SPVSelectOptions)
 				$('#addAssetPoolModal').modal('show')
 			})
 			// 新增/修改资产池表单验证初始化

@@ -1,5 +1,7 @@
 package com.guohuai.asset.manage.boot.product;
 
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -22,12 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.guohuai.asset.manage.component.util.StringUtil;
 import com.guohuai.asset.manage.component.web.view.PageResp;
+import com.guohuai.asset.manage.component.web.view.Response;
 
 import io.swagger.annotations.Api;
 
-@Api("产品操作相关接口")
+@Api("存续期产品操作相关接口")
 @RestController
 @RequestMapping(value = "/ams/product/duration", produces = "application/json")
 public class ProductDurationController {
@@ -98,4 +102,40 @@ public class ProductDurationController {
 		PageResp<ProductLogListResp> rep = this.productDurationService.durationList(spec, pageable);
 		return new ResponseEntity<PageResp<ProductLogListResp>>(rep, HttpStatus.OK);
 	}
+	
+	/**
+	 * 获取存续期产品的名称列表，包含id
+	 * @return
+	 */
+	@RequestMapping(value = "/productNameList", method = { RequestMethod.POST })
+	public @ResponseBody ResponseEntity<Response> getAllNameList() {
+		Specification<Product> spec = new Specification<Product>() {
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.equal(root.get("isDeleted").as(String.class), Product.NO), cb.equal(root.get("auditState").as(String.class), Product.AUDIT_STATE_Reviewed));
+			}
+		};
+		spec = Specifications.where(spec);
+		
+		List<JSONObject> jsonList = productDurationService.productNameList(spec);
+		Response r = new Response();
+		r.with("rows", jsonList);
+		return new ResponseEntity<Response>(r, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 *  查询存续期产品默认一个产品
+	 * @param oid 产品类型的oid
+	 * @return {@link ResponseEntity<ProductDetailResp>} ,如果返回的errCode属性等于0表示成功，否则表示失败，失败原因在errMessage里面体现 
+	 */
+	@RequestMapping(value = "/getProductByOid", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity<ProductDetailResp> detail(@RequestParam String oid) {
+		ProductDetailResp pr = null;
+		pr = this.productDurationService.getProductByOid(oid);
+		return new ResponseEntity<ProductDetailResp>(pr, HttpStatus.OK);
+	}
+	
+	
 }

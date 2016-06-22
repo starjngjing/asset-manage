@@ -87,15 +87,16 @@ public class Product implements Serializable {
 //	public static final String AUDIT_STATE_Approval = "APPROVAL";// 批准
 	public static final String AUDIT_STATE_Reject = "REJECT";// 驳回
 
-	public static final int OPEN_Off = 0;
-	public static final int OPEN_On = 1;
-
 	public static final String STEMS_Userdefine = "USERDEFINE";// 前端添加
 	public static final String STEMS_Plateform = "PLATEFORM";// 后台添加
 
 	public static final String DATE_TYPE_ManualInput = "MANUALINPUT";// 固定时间(手动录入时间)
 	public static final String DATE_TYPE_FirstRackTime = "FIRSTRACKTIME";// ;与首次上架时间同时
-
+	
+	public static final String APPLY_STATUS_ApplyOff = "APPLY_ON";//开启申购申请 开启赎回申请 
+	public static final String APPLY_STATUS_ApplyOn = "APPLY_OFF";//关闭申购申请 关闭赎回申请
+	public static final String APPLY_STATUS_None = "NONE";//无: NONE
+	
 	@Id
 	private String oid;// 产品序号
 
@@ -206,7 +207,7 @@ public class Product implements Serializable {
 	private BigDecimal expArorSec = new BigDecimal(0);
 
 	/**
-	 * 募集总份额
+	 * 募集总份额(产品可售头寸)
 	 */
 	private BigDecimal raisedTotalNumber = new BigDecimal(0);
 	/**
@@ -347,11 +348,11 @@ public class Product implements Serializable {
 	 */
 	private String auditState;
 	/**
-	 * 当前份额
+	 * 当前份额(投资者持有份额)
 	 */
 	private BigDecimal currentVolume = new BigDecimal(0);
 	/**
-	 * 已募份额
+	 * 已募份额(累计申购份额)
 	 */
 	private BigDecimal collectedVolume = new BigDecimal(0);
 	/**
@@ -359,7 +360,7 @@ public class Product implements Serializable {
 	 */
 	private Integer purchaseNum = 0;
 	/**
-	 * 锁定已募份额
+	 * 锁定已募份额(申购冻结金额)
 	 */
 	private BigDecimal lockCollectedVolume = new BigDecimal(0);
 
@@ -394,7 +395,7 @@ public class Product implements Serializable {
 	private Date newestProfitConfirmDate;
 
 	/**
-	 * 最大可售份额
+	 * 最高可售份额(申请的)
 	 */
 	private BigDecimal maxSaleVolume;
 
@@ -406,6 +407,12 @@ public class Product implements Serializable {
 	 * 开放赎回期
 	 */
 	private String isOpenRemeed;
+	/**
+	 * 申购申请状态
+	 */
 	private String purchaseApplyStatus;
+	/**
+	 * 赎回申请状态
+	 */
 	private String redeemApplyStatus;
 }

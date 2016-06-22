@@ -1,10 +1,15 @@
 <!-- 页面头部 -->
 <section class="content-header">
-	<h1>产品详情</h1>
+	<h1>产品存续期详情</h1>
 	<ol class="breadcrumb">
-		<li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> 产品管理</a></li>
-		<li class="active">产品详情</li>
-	</ol>
+    	<li><a href="javascript:void(0)"><i class="fa fa-home"></i> 产品管理</a></li>
+    	<li><a href="javascript:void(0)" data-jump-to="productDuration"><i class="fa fa-dashboard"></i> 产品运营管理</a></li>
+    	<li class="active">产品存续期详情</li>
+  </ol>
+  <form id="searchForm" name="searchForm" method="post" style="position: absolute; top: 12px; left: 200px;">
+    <select name="productName" class="form-control input-sm"></select>
+  </form>
+  
 </section>
 
 <!-- 主要内容 -->
@@ -14,100 +19,37 @@
 			<div class="row">
 				<div class="col-md-3 col-sm-6">
 					<dl class="dl-horizontal">
-						<dt>渠道标识：</dt>
+						<dt>产品编号：</dt>
 						<dd>
-							<div data-detail-fetch="channelId"></div>
+							<div data-detail-fetch="productCode"></div>
 						</dd>
 					</dl>
 				</div>
 				<div class="col-md-3 col-sm-6">
 					<dl class="dl-horizontal">
-						<dt>渠道名称：</dt>
+						<dt>产品名称：</dt>
 						<dd>
-							<div data-detail-fetch="channelName"></div>
+							<div data-detail-fetch="productName"></div>
 						</dd>
 					</dl>
 				</div>
 				<div class="col-md-3 col-sm-6">
 					<dl class="dl-horizontal">
-						<dt>渠道费率(%)：</dt>
+						<dt>产品类型：</dt>
 						<dd>
-							<div data-detail-fetch="channelFee"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>接入方式：</dt>
-						<dd>
-							<div data-detail-fetch="joinType" data-enum-transform="joinTypes"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>渠道机构：</dt>
-						<dd>
-							<div data-detail-fetch="partner"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>渠道联系人：</dt>
-						<dd>
-							<div data-detail-fetch="channelContactName"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>渠道联系人邮箱：</dt>
-						<dd>
-							<div data-detail-fetch="channelEmail"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>渠道联系人电话：</dt>
-						<dd>
-							<div data-detail-fetch="channelPhone"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>渠道状态：</dt>
-						<dd>
-							<div data-detail-fetch="channelStatus" data-enum-transform="channelStatus"></div>
-						</dd>
-					</dl>
-				</div>
-
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>审核状态：</dt>
-						<dd>
-							<div data-detail-fetch="approvelStatus" data-enum-transform="approveStatus"></div>
-						</dd>
-					</dl>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<dl class="dl-horizontal">
-						<dt>删除状态：</dt>
-						<dd>
-							<div data-detail-fetch="deleteStatus" data-enum-transform="delStatus"></div>
+							<div data-detail-fetch="productType"></div>
 						</dd>
 					</dl>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<button class="btn btn-default btn-sm">运营申请</button>
-					<button class="btn btn-default btn-sm">可售份额申请</button>
-					<button class="btn btn-default btn-sm">发行渠道申请</button>
-					<button class="btn btn-default btn-sm">投资协议申请</button>
+					<button id="openPurchase" class="btn btn-default btn-sm">开启申购申请</button>
+					<button id="closePurchase" class="btn btn-default btn-sm">关闭申购申请</button>
+					<button id="openRemeed" class="btn btn-default btn-sm">开启赎回申请</button>
+					<button id="closeRemeed" class="btn btn-default btn-sm">关闭赎回申请</button>
+					<button id="availbleSaleVolume" class="btn btn-default btn-sm">可售份额申请</button>
+					<button id="channelApply" class="btn btn-default btn-sm">发行渠道申请</button>
 				</div>
 			</div>
 		</div>
@@ -116,16 +58,16 @@
 		<!-- tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation" class="active">
-				<a href="#tabpanel1" role="tab" data-toggle="tab">运营申请</a>
+				<a href="#tabpanel1" role="tab" data-toggle="tab">申购申请</a>
 			</li>
 			<li role="presentation">
-				<a href="#tabpanel2" role="tab" data-toggle="tab">可售份额申请</a>
+				<a href="#tabpanel2" role="tab" data-toggle="tab">赎回申请</a>
 			</li>
 			<li role="presentation">
-				<a href="#tabpanel3" role="tab" data-toggle="tab">发行渠道申请</a>
+				<a href="#tabpanel3" role="tab" data-toggle="tab">可售份额申请</a>
 			</li>
 			<li role="presentation">
-				<a href="#tabpanel4" role="tab" data-toggle="tab">投资协议申请</a>
+				<a href="#tabpanel4" role="tab" data-toggle="tab">发行渠道申请</a>
 			</li>
 		</ul>
 		<!-- tab panels -->
@@ -193,3 +135,21 @@
 		</div>
 	</div>
 </section>
+
+<!-- 操作confirm窗 使用 $$.confirm 初始化 -->
+<div id="doConfirm" class="popover func-delete-popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">提示</h3>
+  <div class="popover-content">
+	  <p id="confirmTitle"></p>
+	  <p id="confirmTitle1"></p>
+	  <div class="popover-btn clearfix">
+	    <div class="unit">
+	      <button class="btn btn-block btn-primary accept">确 定</button>
+	    </div>
+	    <div class="unit">
+	      <button class="btn btn-block btn-default cancel">取 消</button>
+	    </div>
+	  </div>
+	</div>
+</div>

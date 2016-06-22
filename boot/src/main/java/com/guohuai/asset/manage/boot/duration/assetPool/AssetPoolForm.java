@@ -75,6 +75,8 @@ public class AssetPoolForm implements Serializable {
 	private BigDecimal shares;
 	// 今日单位净值
 	private BigDecimal nav;
+	// SPV
+	private String SPV;
 	// 创建日期
 	private Timestamp createTime;
 	// 更新日期

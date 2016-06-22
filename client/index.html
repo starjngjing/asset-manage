@@ -211,11 +211,13 @@
                     <i class="fa fa-circle-o"></i> 产品复核管理
                   </a>
                 </li>
+                <!--
                 <li>
                   <a href="javascript:void(0)" data-gh-route="productAccess">
                     <i class="fa fa-circle-o"></i> 产品准入管理
                   </a>
                 </li>
+                -->
                 <li>
                   <a href="javascript:void(0)" data-gh-route="productDuration">
                     <i class="fa fa-circle-o"></i> 产品运营管理
@@ -619,13 +621,7 @@
           /**
            * 获取风险等级配置值信息存到config中，并首次全局初始化
            */
-          http.post(config.api.system.config.ccp.warrantyLevel.search, {
-            contentType: 'form'
-          }, function (data) {
-          	if (data) {
-              config.warrantyLevelOptions = data
-            }
-          })
+          util.initWarrantyLevelOptions();
 
           /**
            * 登出

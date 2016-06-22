@@ -95,7 +95,6 @@
                    data-minlength="2"
                    maxlength="50"
                    data-error="资产池名称必须在2-50个字符以内" required>
-
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
@@ -104,7 +103,6 @@
                    class="form-control input-sm"
                    placeholder="请输入资产池规模"
                    data-validint="0-100000000" required>
-
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
@@ -114,12 +112,10 @@
                     style="width: 100%;"
                     data-enum-fetch="TARGETTYPE"
                     required></select>
-
             <div class="help-block with-errors text-red"></div>
           </div>
           <div class="form-group">
             <label>银行存款比例</label>
-
             <div class="input-group input-group-sm">
               <input name="cashRate" type="text"
                      class="form-control input-sm"
@@ -132,7 +128,6 @@
           </div>
           <div class="form-group">
             <label>现金管理类工具比例</label>
-
             <div class="input-group input-group-sm">
               <input name="cashtoolRate" type="text"
                      class="form-control input-sm"
@@ -145,7 +140,6 @@
           </div>
           <div class="form-group">
             <label>投资标的比例</label>
-
             <div class="input-group input-group-sm">
               <input name="targetRate" type="text"
                      class="form-control input-sm"
@@ -156,6 +150,10 @@
             </div>
             <div class="help-block with-errors text-red"></div>
           </div>
+          <div class="form-group">
+          	<label>SPV</label>
+          	<select id="SPV" name="SPV" class="form-control input-sm"></select>
+        	</div>
         </form>
       </div>
       <!-- 模态窗底部 -->
