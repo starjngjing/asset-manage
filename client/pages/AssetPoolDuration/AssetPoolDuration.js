@@ -376,7 +376,7 @@ define([
 					assetPoolOptions += '<option value="' + item.oid + '">' + item.name + '</option>'
 				})
 				$(select).html(assetPoolOptions)
-				pageState.pid = document.searchForm.assetPoolName.value
+//				pageState.pid = document.searchForm.assetPoolName.value
 				pageInit(pageState, http, config)
 			})
 			
@@ -3132,14 +3132,9 @@ define([
 			
 			// 收益分配记录 表格配置
 			var pdListPageOptions = {
-				page: 1,
-				rows: 10,
-				assetPoolOid: ''
-			}
-			var pdListPageOptions = {
 				number: 1,
 				size: 10,
-				assetPoolOid: ''
+				assetPoolOid: pageState.pid
 			}
 			
 			function getProfitDistributeQueryParams(val) {

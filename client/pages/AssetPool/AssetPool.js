@@ -39,31 +39,54 @@ define([
 				}, 
 				{ 
 					// 资产规模
-					field: 'scale'
+					field: 'scale',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
 				}, 
 				{ 
 					// 现金比例
-					field: 'cashFactRate'
+					field: 'cashFactRate',
+					formatter: function(val) {
+						return parseInt(val) * 100
+					}
 				}, 
 				{ 
 					// 货币基金（现金类管理工具）比例
-					field: 'cashtoolFactRate'
+					field: 'cashtoolFactRate',
+					formatter: function(val) {
+						return parseInt(val) * 100
+					}
+
 				}, 
 				{ 
 					// 信托（计划）比例
-					field: 'targetFactRate'
+					field: 'targetFactRate',
+					formatter: function(val) {
+						return parseInt(val) * 100
+					}
+
 				}, 
 				{ 
 					// 可用现金
-					field: 'cashPosition'
+					field: 'cashPosition',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
 				}, 
 				{ 
 					// 冻结资金
-					field: 'freezeCash'
+					field: 'freezeCash',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
 				}, 
 				{ 
 					// 在途资金
-					field: 'transitCash'
+					field: 'transitCash',
+					formatter: function(val) {
+						return parseInt(val) / 10000
+					}
 				}, 
 				{ 
 					// 当日收益计算状态
@@ -194,17 +217,15 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
+								var result = json.result
 								var scopeStr = ''
 								json.result.scopes.forEach(function(item) {
 									scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
 								})
-								json.result.scopeStr = scopeStr
-								json.result.scale = json.result.scale / 10000 + '\t万元'
-								json.result.cashRate = json.result.cashRate * 100 + '\t%'
-								json.result.cashtoolRate = json.result.cashtoolRate * 100 + '\t%'
-								json.result.targetRate = json.result.targetRate * 100 + '\t%'
+								result.scopeStr = scopeStr
+								result = resultDataFormat(result)
 								$('#modal-footer').show()
-								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
+								$$.detailAutoFix($('#auditAssetPoolModal'), result)
 								$('#auditAssetPoolModal').modal('show')
 							})
 						},
@@ -216,7 +237,12 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
-								$$.formAutoFix($('#updateAssetPoolForm'), json.result)
+								var result = json.result
+								result.scale = result.scale / 10000
+								result.cashRate = result.cashRate * 100
+								result.cashtoolRate = result.cashtoolRate * 100
+								result.targetRate = result.targetRate * 100
+								$$.formAutoFix($('#updateAssetPoolForm'), result)
 								$(document.updateAssetPoolForm.scopes).val(json.result.scopes).trigger('change')
 								$('#updateAssetPoolModal').modal('show')
 							})
@@ -229,17 +255,15 @@ define([
 								},
 								contentType: 'form'
 							}, function(json) {
+								var result = json.result
 								var scopeStr = ''
 								json.result.scopes.forEach(function(item) {
 									scopeStr += util.enum.transform('TARGETTYPE', item) + ' '
 								})
-								json.result.scopeStr = scopeStr
-								json.result.scale = json.result.scale / 10000 + '\t万元'
-								json.result.cashRate = json.result.cashRate * 100 + '\t%'
-								json.result.cashtoolRate = json.result.cashtoolRate * 100 + '\t%'
-								json.result.targetRate = json.result.targetRate * 100 + '\t%'
+								result.scopeStr = scopeStr
+								result = resultDataFormat(result)
 								$('#modal-footer').hide()
-								$$.detailAutoFix($('#auditAssetPoolModal'), json.result)
+								$$.detailAutoFix($('#auditAssetPoolModal'), result)
 								$('#auditAssetPoolModal').modal('show')
 							})
 						},
@@ -375,5 +399,22 @@ define([
 				return !(percentage > 100)
 			}
 		}
+	}
+
+	// 格式化数据
+	function resultDataFormat(result) {
+		if (result.scale) {
+			result.scale = result.scale / 10000 + '\t万元'
+		}
+		if (result.cashRate) {
+			result.cashRate = result.cashRate * 100 + '\t%'
+		}
+		if (result.cashtoolRate) {
+			result.cashtoolRate = result.cashtoolRate * 100 + '\t%'
+		}
+		if (result.targetRate) {
+			result.targetRate = result.targetRate * 100 + '\t%'
+		}
+		return result
 	}
 })
