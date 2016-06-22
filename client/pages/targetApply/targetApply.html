@@ -186,7 +186,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集截至日不能为空">
+									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集截至日不能为空且必须大于等于募集起始日" data-validdateafter="#createCollectStartDate">
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
@@ -198,8 +198,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" data-validdateafter="#createCollectEndDate" data-error="拟成立日必须大于等于募集起始日">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>
@@ -489,7 +490,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="募集截至日不能为空">
+									<input id='createCollectEndDate' name="collectEndDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required required data-error="募集截至日不能为空且必须大于等于募集起始日" data-validdateafter="#createCollectStartDate">
 								</div>
 								<div class="help-block with-errors text-red"></div>
 							</div>
@@ -501,8 +502,9 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD">
+									<input name="expSetDate" type="text" class="form-control datepicker" placeholder="请选择日期" data-date-format="YYYY-MM-DD" required data-error="拟成立日必须大于等于募集截至日" data-validdateafter="#createCollectEndDate">
 								</div>
+								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 					</div>

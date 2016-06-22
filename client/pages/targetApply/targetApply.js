@@ -477,19 +477,11 @@ define([
 
 			//新建标的按钮点击事件
 			$('#addTargetSubmit').on('click', function() {
-				if (Date.parse($('#createCollectStartDate').val()) > Date.parse($('#createCollectEndDate').val())) {
-					alert('募集起始日不能大于募集截止日');
-					return
-				}
 				saveTarget();
 			})
 
 			//修改标的按钮点击事件
 			$('#editTargetSubmit').on('click', function() {
-				if (Date.parse($('#editCollectStartDate').val()) > Date.parse($('#editCollectEndDate').val())) {
-					alert('募集起始日不能大于募集截止日');
-					return
-				}
 				editTarget();
 			})
 
