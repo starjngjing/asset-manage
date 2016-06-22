@@ -99,14 +99,14 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金代码</label>
-								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码" required data-error="基金代码不能为空">
+								<input name="ticker" type="text" class="form-control input-sm" placeholder="基金代码" required data-error="基金代码不能为空" maxlength="32">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金名称</label>
-								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称" required data-error="基金名称不能为空">
+								<input name="secShortName" type="text" class="form-control input-sm" placeholder="基金名称" required data-error="基金名称不能为空" maxlength="64">
 								<div class="help-block with-errors text-red"></div>
 							</div>
 						</div>
@@ -122,19 +122,19 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资对象</label>
-								<input name="investee" type="text" class="form-control input-sm" placeholder="投资对象">
+								<input name="investee" type="text" class="form-control input-sm" placeholder="投资对象" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>运作模式</label>
-								<input name="operationMode" type="text" class="form-control input-sm" placeholder="运作模式">
+								<input name="operationMode" type="text" class="form-control input-sm" placeholder="运作模式" maxlength="32">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>业绩比较基准</label>
-								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
+								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准" maxlength="1024">
 							</div>
 						</div>
 					</div>
@@ -188,7 +188,7 @@
 							<div class="form-group">
 								<label>保本周期</label>
 								<div class="input-group input-group-sm">
-									<input id="addGuarPeriod" name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
+									<input id="addGuarPeriod" name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期" data-validint='1-99999' data-error="保本周期必须为正整数">
 									<span class="input-group-addon">月</span>
 								</div>
 							</div>
@@ -207,13 +207,13 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>交易所代码</label>
-								<input name="exchangeCd" type="text" class="form-control input-sm" placeholder="交易所代码">
+								<input name="exchangeCd" type="text" class="form-control input-sm" placeholder="交易所代码" maxlength="32">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金管理人编码</label>
-								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码">
+								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码" maxlength="64">
 							</div>
 						</div>
 					</div>
@@ -221,19 +221,19 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金管理人名称</label>
-								<input name="managementFullName" type="text" class="form-control input-sm" placeholder="基金管理人名称">
+								<input name="managementFullName" type="text" class="form-control input-sm" placeholder="基金管理人名称" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金托管人编码</label>
-								<input name="custodian" type="text" class="form-control input-sm" placeholder="基金托管人编码">
+								<input name="custodian" type="text" class="form-control input-sm" placeholder="基金托管人编码" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金托管人名称</label>
-								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称">
+								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称" maxlength="64">
 							</div>
 						</div>
 					</div>
@@ -241,19 +241,19 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资领域</label>
-								<input name="investField" type="text" class="form-control input-sm" placeholder="投资领域">
+								<input name="investField" type="text" class="form-control input-sm" placeholder="投资领域" maxlength="1024">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资目标</label>
-								<input name="investTarget" type="text" class="form-control input-sm" placeholder="投资目标">
+								<input name="investTarget" type="text" class="form-control input-sm" placeholder="投资目标" maxlength="1024">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金经理</label>
-								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理">
+								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理" maxlength="64">
 							</div>
 						</div>
 					</div>
@@ -268,7 +268,7 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>分红方式</label>
-								<input name="dividendType" type="text" class="form-control input-sm" placeholder="分红方式">
+								<input name="dividendType" type="text" class="form-control input-sm" placeholder="分红方式" maxlength="1024">
 							</div>
 						</div>
 					</div>
@@ -323,19 +323,19 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资对象</label>
-								<input name="investee" type="text" class="form-control input-sm" placeholder="投资对象">
+								<input name="investee" type="text" class="form-control input-sm" placeholder="投资对象" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>运作模式</label>
-								<input name="operationMode" type="text" class="form-control input-sm" placeholder="运作模式">
+								<input name="operationMode" type="text" class="form-control input-sm" placeholder="运作模式" maxlength="32">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>业绩比较基准</label>
-								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准">
+								<input name="perfBenchmark" type="text" class="form-control" placeholder="业绩比较基准" maxlength="1024">
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -385,7 +385,7 @@
 							<div class="form-group">
 								<label>保本周期</label>
 								<div class="input-group input-group-sm">
-									<input id='editGuarPeriod' name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期">
+									<input id='editGuarPeriod' name="guarPeriod" type="text" class="form-control input-sm" placeholder="保本周期" data-validint='1-99999' data-error="保本周期必须为正整数">
 									<span class="input-group-addon">月</span>
 								</div>
 							</div>
@@ -402,49 +402,49 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>交易所代码</label>
-								<input name="exchangeCd" type="text" class="form-control input-sm" placeholder="交易所代码">
+								<input name="exchangeCd" type="text" class="form-control input-sm" placeholder="交易所代码" maxlength="32">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金管理人编码</label>
-								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码">
+								<input name="managementCompany" type="text" class="form-control input-sm" placeholder="基金管理人编码" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金管理人名称</label>
-								<input name="managementFullName" type="text" class="form-control input-sm" placeholder="基金管理人名称">
+								<input name="managementFullName" type="text" class="form-control input-sm" placeholder="基金管理人名称" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金托管人编码</label>
-								<input name="custodian" type="text" class="form-control input-sm" placeholder="基金托管人编码">
+								<input name="custodian" type="text" class="form-control input-sm" placeholder="基金托管人编码" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金托管人名称</label>
-								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称">
+								<input name="custodianFullName" type="text" class="form-control input-sm" placeholder="基金托管人名称" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资领域</label>
-								<input name="investField" type="text" class="form-control input-sm" placeholder="投资领域">
+								<input name="investField" type="text" class="form-control input-sm" placeholder="投资领域" maxlength="1024">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>投资目标</label>
-								<input name="investTarget" type="text" class="form-control input-sm" placeholder="投资目标">
+								<input name="investTarget" type="text" class="form-control input-sm" placeholder="投资目标" maxlength="1024">
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label>基金经理</label>
-								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理">
+								<input name="managerName" type="text" class="form-control input-sm" placeholder="基金经理" maxlength="64">
 							</div>
 						</div>
 						<div class="col-sm-4">
