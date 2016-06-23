@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,10 +25,17 @@ public class CCPWarrantyLevelController extends BaseController {
 	private CCPWarrantyLevelService CCPWarrantyLevelService;
 
 	@RequestMapping(value = "/save", method = { RequestMethod.GET, RequestMethod.POST })
-	public @ResponseBody ResponseEntity<CCPWarrantyLevel> create(@Valid CCPWarrantyLevelForm form) {
+	public @ResponseBody ResponseEntity<CCPWarrantyLevel> save(@Valid CCPWarrantyLevelForm form) {
 		super.checkLogin();
 		CCPWarrantyLevel warrantyExpire = this.CCPWarrantyLevelService.save(form);
 		return new ResponseEntity<CCPWarrantyLevel>(warrantyExpire, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/saveList", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResponseEntity<List<CCPWarrantyLevel>> saveList(@Valid @RequestBody CCPWarrantyLevelOptionsForm form) {
+		super.checkLogin();
+		List<CCPWarrantyLevel> entityList = this.CCPWarrantyLevelService.save(form);
+		return new ResponseEntity<List<CCPWarrantyLevel>>(entityList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })

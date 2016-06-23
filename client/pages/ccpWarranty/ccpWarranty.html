@@ -409,9 +409,9 @@
 										<thead>
 											<tr>
 												<th>编号</th>
-												<th>风险等级</th>
-												<th>风险等级名称</th>
-												<th>风险系数区间</th>
+												<th>等级</th>
+												<th>名称</th>
+												<th>系数区间</th>
 												<th>操作</th>
 											</tr>
 										</thead>
@@ -423,7 +423,7 @@
 				</section>
 
 				<div id="ccpWarrantyLevelModal" class="modal fade" tabindex="-1" role="dialog">
-					<div class="modal-dialog" role="document">
+					<div class="modal-dialog modal-lg" role="document">
 						<div class="modal-content">
 							<!-- 模态窗头部 -->
 							<div class="modal-header">
@@ -433,8 +433,9 @@
 								<h4 class="modal-title">风险等级配置</h4>
 							</div>
 							<!-- 模态窗内容体 -->
-							<div class="modal-body">
+							<div class="modal-body" id="warrantyLevelOptionsDiv">
 								<!-- 新增/编辑事件表单 -->
+											<!--
 								<form id="ccpWarrantyLevelForm" name="ccpWarrantyLevelForm" method="post">
 									<div class="row">
 										<div class="col-sm-12">
@@ -493,10 +494,13 @@
 													</div>
 												</div>
 											</div>
+											
 										</div>
 									</div>
 									<input type="hidden" name="oid"/>
 								</form>
+									-->
+								<div id="warrantyLevelFormOptions"></div>
 							</div>
 							<!-- 模态窗底部 -->
 							<div class="modal-footer">

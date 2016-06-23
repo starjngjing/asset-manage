@@ -390,21 +390,34 @@ define([
 			});
 
 			$('#ccpWarrantyLevelAdd').on('click', function() {
+				/*
 				$('#ccpWarrantyLevelForm').resetForm(); // 先清理表单
 				$(document.ccpWarrantyLevelForm.oid).removeAttr('value'); // 清理隐藏域oid
 
 				// 重置和初始化表单验证
 				$("#ccpWarrantyLevelForm").validator('destroy')
 				util.form.validator.init($("#ccpWarrantyLevelForm"));
-				$('#ccpWarrantyLevelModal').modal('show');
 				
 				$(document.ccpWarrantyLevelForm.wlevel).off().on('change', function() {
 					$(document.ccpWarrantyLevelForm.name).val($(this).find("option:selected").text());
 				});
 				$(document.ccpWarrantyLevelForm.wlevel).change()
+				*/
+				$('#warrantyLevelFormOptions').empty();
+				http.post(config.api.system.config.ccp.warrantyLevel.search, {
+		            contentType: 'form'
+		          }, function (data) {
+		          	if(data){
+		          		$.each(data, function(i, item) {
+			          		$('#warrantyLevelFormOptions').append(initWarrantyLevel(i, item));
+		          		});
+		          	}
+		          })
+				$('#ccpWarrantyLevelModal').modal('show');
 			});
 
 			$('#ccpWarrantyLevelSubmit').on('click', function() {
+				/*
 				if (!$('#ccpWarrantyLevelForm').validator('doSubmitCheck')) return
 				$('#ccpWarrantyLevelForm').ajaxSubmit({
 					url: config.api.system.config.ccp.warrantyLevel.save,
@@ -414,7 +427,63 @@ define([
 						$('#ccpWarrantyLevelTable').bootstrapTable('refresh');
 					}
 				})
+				*/
+				var res = [];// 各个form校验结果
+				var x = $('#warrantyLevelFormOptions').children(); // 指标项配置
+				for (var i = 0; i < x.length; i++) {
+					var frm = x[i];
+					res.push($(frm).validator('doSubmitCheck')); // 校验指标项配置form
+				}
+				for (var i = 0; i < res.length; i++) {
+					if(!res[i])return false;
+				}
+				var json = {
+					options: []
+				};
+				$.each(x, function(i, v) { // 遍历指标项配置
+					var ov = {};
+					$.each($(v).serializeArray(), function(i, v) {
+						ov[v.name] = v.value;
+					});
+					json.options.push(ov);
+				});
+				http.post(config.api.system.config.ccp.warrantyLevel.saveList, {
+					data: JSON.stringify(json)
+				}, function(result) {
+					$('#warrantyLevelFormOptions').empty();
+					$('#ccpWarrantyLevelModal').modal('hide');
+					$('#ccpWarrantyLevelTable').bootstrapTable('refresh');
+				});
 			});
+			
+			function initWarrantyLevel(i, item) {
+				if(item) {
+						var form = $('<form id="' + i + 'WarrantyLevelForm"></form');
+						var row = $('<div class="row"></div>');
+						row.appendTo(form);
+						var x0 = $('<div class="col-sm-6 col-xs-6"> <div class="row"> <div class="col-xs-4"> <div class="form-group"> <div class="input-group"> <div id="levelName" class="input-group-addon">等级</div> <select name="wlevel" class="form-control input-sm" placeholder="风险等级" required data-error="风险等级不能为空" disabled> <option value="LOW" '+(item.wlevel==="LOW"?"selected":"")+'>低</option> <option value="MID" '+(item.wlevel==="MID"?"selected":"")+'>中</option> <option value="HIGH" '+(item.wlevel==="HIGH"?"selected":"")+'>高</option> </select> </div> <div class="help-block with-errors text-red"></div> </div> </div> <div class="col-xs-8"> <div class="form-group"> <div class="input-group"> <div id="levelName" class="input-group-addon">名称</div> <input name="name" type="text" class="form-control input-sm" maxlength="5" data-error="风险等级显示名称"> </div> <div class="help-block with-errors text-red"></div> </div> </div> </div> </div>');
+						x0.appendTo(row);
+						
+						var x1 = $('<div class="col-sm-3 col-xs-3"> <div class="row"> <div class="col-xs-5"> <div class="form-group"><select name="coverLow" class="form-control input-sm" required><option value="[">[</option><option value="(">(</option></select> <div class="help-block with-errors text-red"></div> </div> </div> <div class="col-xs-7"> <div class="form-group"> <div class="input-group"><input name="lowFactor" type="text" class="form-control input-sm" maxlength="60" required data-validpositive="true" data-validfloat="3.4" data-error="风险系数区间必须为前2位后4位小数"></div> <div class="help-block with-errors text-red"></div> </div> </div> </div> </div>');
+						x1.appendTo(row);
+						
+						var x2 = $('<div class="col-sm-3 col-xs-3"> <div class="row"> <div class="col-xs-7"> <div class="form-group"> <div class="input-group range"><input name="highFactor" type="text" class="form-control input-sm" maxlength="64" data-validpositive="true" data-validfloat="3.4" data-error="风险系数区间必须为前2位后4位小数"></div> <div class="help-block with-errors text-red"></div> </div> </div> <div class="col-xs-5" > <div class="form-group"><select name="coverHigh" class="form-control input-sm" required><option value="]">]</option><option value=")">)</option></select> <div class="help-block with-errors text-red"></div> </div> </div> </div> </div>');
+						x2.appendTo(row);
+						
+						var l = $('<input type="hidden" name="wlevel" />');
+						l.appendTo(form);
+						
+						var id = $('<input type="hidden" name="oid" />');
+						id.appendTo(form);
+						
+						$$.formAutoFix($(form), item);
+						$(form).validator('destroy');
+						util.form.validator.init($(form));
+					
+					return form;
+				}
+				return null;
+			}
 
 		}
 	}

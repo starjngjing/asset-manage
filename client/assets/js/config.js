@@ -166,6 +166,7 @@ define(function() {
 						},
 						warrantyLevel: { // 风险等级配置
 							save: this.host + "/ams/system/ccp/warrantyLevel/save",
+							saveList: this.host + "/ams/system/ccp/warrantyLevel/saveList",
 							delete: this.host + "/ams/system/ccp/warrantyLevel/delete",
 							search: this.host + "/ams/system/ccp/warrantyLevel/search"
 						}

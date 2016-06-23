@@ -1,5 +1,6 @@
 package com.guohuai.asset.manage.boot.system.config.project.warrantyLevel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.guohuai.asset.manage.component.exception.AMPException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,30 @@ public class CCPWarrantyLevelService {
 		CCPWarrantyLevel warrantyExpire = this.cCPWarrantyLevelDao.save(level);
 
 		return warrantyExpire;
+
+	}
+	
+	@Transactional
+	public List<CCPWarrantyLevel> save(CCPWarrantyLevelOptionsForm form) {
+		List<CCPWarrantyLevelOptionsForm.Option> list = form.getOptions();
+		log.info("保存集合===>" + JSON.toJSONString(list));
+		if (null != list) {
+			List<CCPWarrantyLevel> entityList = new ArrayList<>(list.size());
+			for (CCPWarrantyLevelOptionsForm.Option option : list) {
+				CCPWarrantyLevel level = new CCPWarrantyLevel();
+				BeanUtils.copyProperties(option, level);
+				if (StringUtils.isBlank(level.getOid())) {
+					level.setOid(null);
+					log.debug("新增风险等级配置");
+				} else {
+					log.debug("修改风险等级配置");
+				}
+				CCPWarrantyLevel warrantyExpire = this.cCPWarrantyLevelDao.save(level);
+				entityList.add(warrantyExpire);
+			}
+			return entityList;
+		}
+		return null;
 
 	}
 
