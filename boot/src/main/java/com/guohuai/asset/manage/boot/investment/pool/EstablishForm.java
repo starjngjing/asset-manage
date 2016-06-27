@@ -44,6 +44,10 @@ public class EstablishForm implements Serializable {
 
 	@NotNull(message = "投资标的成立日期不能为空")
 	private Date setDate;
+	@NotNull(message = "收益起始日不能为空")
+	private Date incomeStartDate;
+	@NotNull(message = "收益截止日不能为空")
+	private Date incomeEndDate;
 
 	@NotNull(message = "投资标的收益起始日期不能为空")
 	private Date arorFirstDate;
