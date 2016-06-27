@@ -54,11 +54,12 @@ define([
 				}, { // 最新流通份额
 					field: 'circulationShares',
 					formatter: function(val) {
-//						if (val)
-//							return (val / 10000) + '万';
+						if (val)
+							return val.toFixed(2) + '元';
 						return val;
 					}
 				}, { // 持有份额
+					visible:false,
 					field: 'holdAmount',
 					formatter: function(val) {
 						return val;
