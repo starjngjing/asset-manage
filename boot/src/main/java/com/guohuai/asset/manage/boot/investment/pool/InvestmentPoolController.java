@@ -119,8 +119,8 @@ public class InvestmentPoolController extends BaseController {
 					Expression<String> exp_state = root.get("state").as(String.class);					
 					predicate.add(cb.not(exp_state.in(new Object[] { Investment.INVESTMENT_STATUS_invalid })));
 					
-					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
-					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
+//					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+//					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
 					
 					Expression<BigDecimal> expHa = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.gt(expHa, new BigDecimal(0)); //持有金额大于0: holdAmount > 0 		
@@ -130,8 +130,8 @@ public class InvestmentPoolController extends BaseController {
 					predicate.add(cb.not(exp_state.in(new Object[] { Investment.INVESTMENT_STATUS_invalid })));
 //					predicate.add(cb.equal(root.get("state").as(String.class), Investment.INVESTMENT_STATUS_collecting));
 					
-					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
-					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
+//					Expression<String> exp_lifeState = root.get("lifeState").as(String.class);					
+//					predicate.add(exp_lifeState.in(new Object[] {  Investment.INVESTMENT_LIFESTATUS_STAND_UP })); //已经成立
 					
 					Expression<BigDecimal> exp = root.get("holdAmount").as(BigDecimal.class);
 					Predicate p = cb.or(cb.isNull(exp), cb.le(exp, new BigDecimal(0))); //持有金额为空或者大于0: holdAmount is null or holdAmount < 0
